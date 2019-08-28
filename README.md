@@ -11,8 +11,6 @@
   </a>
 </p>
 
-<h1></h1>
-
 ## Installation guide
 
 * set up vhost and start webserver and mysql-server
