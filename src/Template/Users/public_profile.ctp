@@ -1,49 +1,9 @@
 <?php
-    use App\Controller\Component\StringComponent;
+use App\Controller\Component\StringComponent;
 ?>
 
 <div class="top-wrapper">
-	<div class="left-wrapper">
-		<?php echo $this->Html->getUserProfileImage($user); ?>
-	</div>
-	<div class="right-wrapper">
-		<?php
-		    echo '<div class="public-name-wrapper">';
-    		    if ($user->firstname . ' ' . $user->lastname != $user->nick) {
-	   	           echo $user->firstname . ' ' . $user->lastname;
-    		    }
-		    echo '</div>';
-		    
-		    echo $this->element('heading', ['first' => $user->nick]);
-		    
-		    if ($user->email) {
-		        echo StringComponent::hide_email($user->email, 'button gray');
-		    }
-		    
-            echo '<div class="address-wrapper">';
-                $addressString = '';
-                if ($user->street != '') {
-                    $addressString .= str_replace("\r\n", ', ', $user->street);
-                }
-                if ($user->zip != '') {
-                    if ($addressString != '') {
-                        $addressString .= ', ';
-                    }
-                    $addressString .= $user->zip;
-                }
-                if ($user->city != '') {
-                    $addressString .= ' ' . $user->city;
-                }
-                if ($user->country_code != '') {
-                    if ($addressString != '') {
-                        $addressString .= ' / ';
-                    }
-                    $addressString .= $user->country_code;
-                }
-                echo $addressString;
-            echo '</div>';
-        ?>
-	</div>
+	<?php echo $this->element('users/publicUser', ['user' => $user, 'headingTag' => 'h1', 'linkToProfile' => false]); ?>
 </div>
 
 <div class="bottom-wrapper">
@@ -57,7 +17,7 @@
         			}
     			    if (!empty($user->skills)) {
                         foreach($user->skills as $skill) {
-                            echo '<a href="javascript:void(0);" title="'.h($skill->name).'" class="button">'.h($skill->name).'</a>';
+                            echo '<a href="'.$this->Html->urlSkillDetail($skill->id, StringComponent::slugify($skill->name)).'" title="'.h($skill->name).'" class="button">'.h($skill->name).'</a>';
                         }
     			    }
                 ?>

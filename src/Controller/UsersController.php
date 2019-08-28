@@ -2,21 +2,23 @@
 
 namespace App\Controller;
 
+use App\Controller\Component\StringComponent;
 use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\Mailer\Email;
 use Cake\Http\Exception\NotFoundException;
+use Cake\ORM\Query;
 use Cake\ORM\TableRegistry;
 
 class UsersController extends AppController
 {
-
+    
     public function __construct($request = null, $response = null)
     {
         parent::__construct($request, $response);
         $this->User = TableRegistry::getTableLocator()->get('Users');
     }
-
+    
     public function isAuthorized($user)
     {
         switch($this->request->getParam('action')) {
@@ -44,9 +46,85 @@ class UsersController extends AppController
             'registerRepairhelper',
             'registerOrga',
             'activate',
-            'publicProfile'
+            'publicProfile',
+            'all'
         ]);
         
+    }
+    
+    public function all()
+    {
+        
+        $skillId = 0;
+        if (isset($this->getRequest()->getParam('pass')[0])) {
+            $skillId = (int) $this->getRequest()->getParam('pass')[0];
+            $this->Skill = TableRegistry::getTableLocator()->get('Skills');
+            $skill = $this->Skill->find('all', [
+                'conditions' => [
+                    'Skills.id' => $skillId,
+                    'Skills.status' => APP_ON
+                ]
+            ])->first();
+            $this->set('skill', $skill);
+        }
+        
+        $conditions = [
+            'Users.status' => APP_ON
+        ];
+        
+        if ($this->getRequest()->getQuery('zip') != '') {
+            $conditions[] = 'LEFT(Users.zip, 1) = ' . (int) $this->getRequest()->getQuery('zip');
+        }
+        
+        $users = $this->User->find('all', [
+            'conditions' => $conditions,
+            'contain' => [
+                'Skills' => [
+                    'fields' => [
+                        'UsersSkills.user_uid'
+                    ]
+                ]
+            ]
+        ]);
+        
+        if ($skillId > 0) {
+            $users->matching('Skills', function(Query $q) use ($skillId) {
+                return $q->where(['Skills.id' => $skillId]);
+            });
+        }
+        
+        $users = $this->paginate($users, [
+            'sortWhitelist' => [
+                'Users.created', 'Users.zip', 'Users.nick'
+            ],
+            'order' => [
+                'Users.created' => 'DESC'
+            ]
+        ]);
+        
+        foreach($users as $user) {
+            $user = $this->User->privatizeData([$user])[0];
+        }
+        $this->set('users', $users);
+        
+        if ($skillId > 0) {
+            $correctSlug = Configure::read('AppConfig.htmlHelper')->urlSkillDetail($skillId, $skill->name);
+            if ($correctSlug != Configure::read('AppConfig.htmlHelper')->urlSkillDetail($skillId, StringComponent::removeIdFromSlug($this->getRequest()->getParam('pass')[0]))) {
+                $this->redirect($correctSlug);
+                return;
+            }
+        }
+        
+        $this->Skill = TableRegistry::getTableLocator()->get('Skills');
+        $skillsForDropdown = $this->Skill->getForDropdown();
+        $skillsForDropdown['-1'] = 'Alle anzeigen';
+        asort($skillsForDropdown);
+        $this->set('skillsForDropdown', $skillsForDropdown);
+        
+        $metaTags = [
+            'title' => 'Aktive'
+        ];
+        $this->set('metaTags', $metaTags);
     }
     
     public function publicProfile()
@@ -87,7 +165,7 @@ class UsersController extends AppController
             'title' => ($user->firstname . $user->lastname != '' ? 'Profil von ' . $user->name : 'Profil')
         ];
         $this->set('metaTags', $metaTags);
-
+        
     }
     
     public function welcome() {
@@ -100,7 +178,7 @@ class UsersController extends AppController
         $this->set('metaTags', $metaTags);
         
     }
-
+    
     public function neuesPasswortAnfordern()
     {
         $metaTags = [
@@ -130,7 +208,7 @@ class UsersController extends AppController
                 $email = new Email('default');
                 $email->viewBuilder()->setTemplate('new_password_request');
                 $email->setSubject('Neues Passwort für '. Configure::read('AppConfig.htmlHelper')->getHostName())
-                    ->setViewVars([
+                ->setViewVars([
                     'password' => $newPassword,
                     'user' => $user
                 ]);
@@ -166,7 +244,7 @@ class UsersController extends AppController
                 'private' => $this->User->getDefaultPrivateFields()
             ],
             ['validate' => false]
-        );
+            );
         
         $this->_profil($user, false, false);
         
@@ -266,9 +344,9 @@ class UsersController extends AppController
         $this->set('isMyProfile', $isMyProfile);
         $this->set('isEditMode', $isEditMode);
         
-
+        
     }
-
+    
     public function profil($userUid=null)
     {
         
@@ -321,7 +399,7 @@ class UsersController extends AppController
         $this->set('metaTags', $metaTags);
         
     }
-
+    
     public function passwortAendern()
     {
         
@@ -360,7 +438,7 @@ class UsersController extends AppController
         
         $this->set('user', $user);
     }
-
+    
     public function forum()
     {
         if (Configure::read('AppConfig.fluxBbForumEnabled')) {
@@ -370,7 +448,7 @@ class UsersController extends AppController
             throw new NotFoundException();
         }
     }
-
+    
     public function login()
     {
         $metaTags = [
@@ -528,7 +606,7 @@ class UsersController extends AppController
                             'email' => $this->request->getData('Users.email'),
                             'plz' => $this->request->getData('Users.zip'),
                         ]
-                    );
+                        );
                     $this->CptNewsletter->save($newsletter);
                 }
             }
@@ -553,7 +631,7 @@ class UsersController extends AppController
         ];
         $this->set('metaTags', $metaTags);
     }
-
+    
     public function logout()
     {
         if (Configure::read('AppConfig.fluxBbForumEnabled')) {

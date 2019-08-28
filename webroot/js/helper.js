@@ -28,6 +28,16 @@ MappedRepairEvents.Helper = {
         }
         $('#header #login-box').css('right', newRight + 'px');
     }
+    
+    ,initSkillFilter : function() {
+        $('select#skills').on('change', function() {
+            var url = '/aktive'; 
+            if ($(this).val() > 0) {
+                url = '/aktive/' + $(this).val() + '-' + $.slugify($(this).find('option:selected').text());
+            }
+            document.location.href = url;
+        });
+    }
 
     /**
      * Returns a function, that, as long as it continues to be invoked, will not
