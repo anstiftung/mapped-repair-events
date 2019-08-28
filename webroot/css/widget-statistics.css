@@ -1,0 +1,146 @@
+html, body {
+    font-family: 'Open Sans', arial, helvetica, sans-serif;
+    font-size: 13px;
+    color: #727374;
+    background-color: transparent;
+    margin: 0;
+}
+select {
+    background: #fff;
+}
+h2 {
+    margin: 0;
+    margin-bottom: 5px;
+    font-size: 18px;
+}
+h2 a {
+	text-decoration: none;
+}
+h2 a:hover {
+	color: #727374;
+}
+.input,
+span {
+	float: left;
+	margin-right: 5px;
+}
+span {
+	line-height: 26px;
+}
+.input input {
+    border-radius: 3px;
+    border: 1px solid #DFDFDF;
+    padding: 6px;
+    width: 68px;
+    background-color: white;
+    margin-bottom: 5px;
+}
+#reset {
+    float: left;
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+}
+
+#chartCategories {
+	margin-top: 10px;
+	float: left;
+}
+p.info {
+	clear: both;
+	float: left;
+}
+.input.select select {
+    padding: 5px;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -khtml-border-radius: 3px;
+    -webkit-border-radius: 3px;
+}
+
+.material-footprint-wrapper {
+    float: left;
+    clear: both;
+    text-align: center;
+    width: 100%;
+}
+.material-footprint-wrapper span {
+	float: none;
+}
+.material-footprint-wrapper .img-wrapper {
+	position: relative;
+}
+.material-footprint-wrapper b {
+    position: absolute;
+    top: -5px;
+    right: 0;
+    left: 0;
+    margin-right: auto;
+    margin-left: auto;
+    color: #000;
+}
+.material-footprint-wrapper.small b {
+	top: -7px;
+}
+.material-footprint-wrapper span.info-text {
+	margin-top: 10px;
+	line-height: 16px;
+}
+.material-footprint-wrapper img {
+    width: 80px;
+    margin-bottom: -5px;
+}
+.material-footprint-wrapper .amount-persons-per-year {
+	display: none;
+}
+
+.carbon-footprint-wrapper {
+    float:left;
+    clear:both;
+    margin-top:10px;
+}
+.carbon-footprint-wrapper img {
+    float: left;
+    width: 100px;
+    margin-top: 17px;
+}
+.carbon-footprint-wrapper .line {
+    float: left;
+    height: 25px;
+    margin-top: 15px;
+    text-align: center;
+    margin-left: 15px;
+    margin-right: 5px;
+    border-bottom: 2px dotted #000;
+    width: 0;
+}
+.carbon-footprint-wrapper span.info-text {
+    display: none;
+    float: none;
+    line-height: 25px;
+}
+.carbon-footprint-wrapper.small span.info-text {
+	line-height: 16px;
+}
+
+.carbon-footprint-wrapper.small {
+    margin-bottom: 15px;
+}
+.carbon-footprint-wrapper.small img {
+    width: 70px;
+    margin-top: 10px;
+}
+.carbon-footprint-wrapper.small .line {
+    height: 12px;
+}
+.carbon-footprint-wrapper.small span.info-text {
+	display: block;
+	clear: both;
+    line-height: 17px;
+    margin-top: -5px;
+    text-align: center;
+}
+
+/* would only be needed for iphone */
+.chartjs-render-monitor {
+	width: 100% ! important;
+}

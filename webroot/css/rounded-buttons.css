@@ -1,0 +1,69 @@
+/* START rounded buttons */
+button, .button, input[type=submit] {
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -khtml-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    background: #f2f2f2;
+    padding: 5px 11px;
+    text-align: center;
+    cursor: pointer;
+    border: 0 none;
+    color: #333;
+    font-weight: 700;
+}
+
+.eindrittel .button {
+    background-color: #4D8EA2;
+    font-size: 20px;
+}
+
+button.rounded,
+a.button,
+.button {
+    margin: 0px 0px;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -khtml-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    line-height: 20px ! important;
+    background-color: #4D8EA2;
+    padding: 6px 8px;
+    text-align: center;
+    cursor: pointer;
+    color: #fff;
+    border: 0 none;
+    font-weight: 700 !important;
+}
+
+button.rounded:hover, button:hover, .button:hover, a.button:hover, input[type=submit]:hover {
+    background-color: #77B1C5 !important;
+    text-decoration: none;
+}
+
+button.rounded:visited,
+button:visited,
+.button:visited,
+a.button:visited,
+input[type=submit]:visited {
+    background: #4D8EA2;
+    color: #fff;
+    text-decoration: none;
+}
+
+button::-moz-focus-inner {
+    border: none;
+}
+
+button.gray, a.button.gray {
+    background-color: #f2f2f2;
+    color: #999;
+}
+button.rounded.gray:hover,
+button.gray:hover,
+.button.gray:hover,
+a.button.gray:hover,
+input[type=submit].gray:hover {
+    color: #fff ! important;
+}
+/* END rounded buttons */

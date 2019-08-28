@@ -1,0 +1,118 @@
+.fc-row .fc-content-skeleton td {
+	border-color: #ddd ! important;
+}
+.fc td.fc-today {
+    border-style: double; /* overcome neighboring borders */
+    background-color: #f8fbc5 !important
+}
+.fc td.fc-day.fc-has-event.hover,
+.fc td.fc-day.fc-has-event.selected {
+    background-image: url(/img/gotdatedetail.png) ! important;
+}
+.fc-day-grid-container {
+	height: auto ! important;
+}
+.fc-day.fc-has-event, .fc-day-number {
+	cursor: pointer;
+}
+
+
+.fc-past.fc-day-number {
+    background-color: transparent !important;
+}
+
+.fc-has-event {
+    margin: 10%;
+    background-color: transparent !important;
+    background-position: center 55% ! important;
+    background-image: url(/img/gotdate.png) ! important;
+    background-repeat: no-repeat ! important;
+}
+
+.fc-past {
+    background-color: #f2f2f2 !important;
+}
+
+div#calEvents {
+    background-color: #e7e995;
+    min-height: 180px;
+    display: none;
+}
+
+#calEvents {
+    color: black !important;
+    font-size: 12px;
+}
+
+.calEvent:hover {
+    background: #fff;
+    text-decoration: none ! important;
+}
+
+div#selectedDate {
+    margin: 20px 0 5px 0;
+    font-weight: bold;
+    font-size: 20px;
+    color: #4D8EA2;
+}
+
+.roundedsmall {
+    width: 75px;
+    height: 75px;
+    border-radius: 75px;
+    -webkit-border-radius: 75px;
+    -moz-border-radius: 75px;
+}
+
+.imgevent {
+    margin: 0px 10px 5px 0px;
+    float: left;
+}
+
+.eventtitel {
+    font-weight: bold;
+}
+
+.deleteEvent {
+    float: right;
+    margin-top: 5px;
+}
+
+.deleteEvent a:hover {
+    color: darkred ! important;
+}
+.deleteEvent a {
+    padding: 6px 4px ! important;
+}
+.deleteEvent a:not(:first-child) {
+    margin-left: 5px ! important;
+}
+
+#worknews-email {
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -khtml-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    background: #f2f2f2;
+    padding: 5px 11px;
+    border: 1px solid #ccc;
+}
+
+#workshop-detail .mapevent {
+    float: right;
+    margin: 0px 0px 10px 20px;
+}
+#workshop-detail .fc-has-event {
+    background-image: url(/img/gotdatedetail.png) ! important;
+}
+
+#workshop-detail .fc-has-event.offline {
+    background-image: url(/img/gotdatedraft.png);
+}
+
+#workshop-detail .fc-unthemed .fc-today {
+    background-color: #d7cbdf !important;
+}
+.fc-basic-view .fc-week-number, .fc-basic-view .fc-day-number {
+	padding: 1px 2px 0 0;
+}

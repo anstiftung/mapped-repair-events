@@ -1,0 +1,110 @@
+/*-------------- Navigation -------------------*/
+#navadmin {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
+    width: 80%;
+    margin-top: 7px;
+    margin-left: 25px;
+}
+
+#login-box {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-right: 20px;
+    float: right;
+    position: static;
+}
+
+#navadmin>a {
+    display: none;
+}
+
+#navadmin li {
+    position: relative;
+}
+
+#navadmin li a {
+    color: #333;
+    display: block;
+    background: #4D8EA2;
+    border-radius: 5px;
+}
+
+#navadmin span:after {
+    width: 0;
+    height: 0;
+    border: 0.313em solid transparent; /* 5 */
+    border-bottom: none;
+    border-top-color: #fff;
+    content: '';
+    vertical-align: middle;
+    display: inline-block;
+    position: relative;
+    right: -0.313em; /* 5 */
+}
+
+/* first level */
+#navadmin>ul {
+    width: 100%;
+    padding: 0%;
+    margin: 0px auto;
+    height: 40px;
+    float: left;
+}
+
+#navadmin>ul>li {
+    margin-right: 2px;
+    margin-top: 2px;
+    display: block;
+    float: left;
+}
+
+#navadmin>ul>li>a {
+    padding: 15px 10px;
+    display: block;
+    width: 82px;
+    font-size: 15px;
+    text-align: center;
+    font-weight: normal;
+    color: #fff;
+}
+#navadmin>ul>li>a.two-lines {
+    padding-top: 9px;
+    padding-bottom:7px;
+}
+
+#navadmin>ul>li:not ( :last-child ) > a {
+    border-right: 1px solid transparent;
+}
+
+#navadmin>ul>li:hover>a, #navadmin>ul:not ( :hover ) > li>a.active {
+    background-color: #ccc ! important;
+}
+
+/* second level */
+#navadmin li ul {
+    background-color: #fff;
+    display: none;
+    position: absolute;
+    top: 100%;
+    width: 222px;
+    padding: 0% 0%;
+    margin: 0%;
+}
+
+#navadmin li:hover ul {
+    display: block;
+    left: 0;
+    right: 0;
+}
+
+#navadmin li ul a {
+    font-size: 1.25em; /* 20 */
+    border-top: 1px solid #f2f2f2;
+    color: #666;
+    padding: 10px 5px; /* 15 (20) */
+}
+
+#navadmin li ul li a:hover, #navadmin li ul:not ( :hover ) li.active a {
+    background-color: #f2f2f2;
+}

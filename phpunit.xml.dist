@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit
+    colors="true"
+    processIsolation="false"
+    stopOnFailure="false"
+    verbose="true"
+    bootstrap="./tests/bootstrap.php"
+    >
+    <php>
+        <ini name="memory_limit" value="-1"/>
+        <ini name="apc.enable_cli" value="1"/>
+    </php>
+
+    <!-- Add any additional test suites you want to run here -->
+    <testsuites>
+        
+        <testsuite name="App">
+            <file>tests/TestCase/src/View/Helper/MyHtmlHelperTest.php</file>
+        </testsuite>
+        
+    </testsuites>
+
+    <!-- Ignore vendor tests in code coverage reports -->
+    <filter>
+        <whitelist>
+            <directory suffix=".php">./src/</directory>
+            <directory suffix=".php">./plugins/*/src/</directory>
+        </whitelist>
+    </filter>
+</phpunit>

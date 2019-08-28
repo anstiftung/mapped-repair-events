@@ -1,0 +1,277 @@
+# LANGUAGE translation of CakePHP Application
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2015-06-11 21:38+0200\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: /Plugin/DebugKit/Console/Command/BenchmarkShell.php:41;41;41
+msgid "-> Testing :url"
+msgstr ""
+
+#: /Plugin/DebugKit/Console/Command/BenchmarkShell.php:67;67;67
+msgid "Total Requests made: :requests"
+msgstr ""
+
+#: /Plugin/DebugKit/Console/Command/BenchmarkShell.php:68;68;68
+msgid "Total Time elapsed: :duration (seconds)"
+msgstr ""
+
+#: /Plugin/DebugKit/Console/Command/BenchmarkShell.php:72;72;72
+msgid "Requests/Second: :rps req/sec"
+msgstr ""
+
+#: /Plugin/DebugKit/Console/Command/BenchmarkShell.php:76;76;76
+msgid "Average request time: :average-time seconds"
+msgstr ""
+
+#: /Plugin/DebugKit/Console/Command/BenchmarkShell.php:80;80;80
+msgid "Standard deviation of average request time: :std-dev"
+msgstr ""
+
+#: /Plugin/DebugKit/Console/Command/BenchmarkShell.php:84;84;84
+msgid "Longest/shortest request: :longest sec/:shortest sec"
+msgstr ""
+
+#: /Plugin/DebugKit/Console/Command/BenchmarkShell.php:134;134;134
+msgid "Allows you to obtain some rough benchmarking statistics"
+msgstr ""
+
+#: /Plugin/DebugKit/Console/Command/BenchmarkShell.php:139;139;139
+msgid "The URL to request."
+msgstr ""
+
+#: /Plugin/DebugKit/Console/Command/BenchmarkShell.php:144;144;144
+msgid "Number of iterations to perform."
+msgstr ""
+
+#: /Plugin/DebugKit/Console/Command/BenchmarkShell.php:148;148;148
+msgid "Maximum total time for all iterations, in seconds."
+msgstr ""
+
+#: /Plugin/DebugKit/Console/Command/BenchmarkShell.php:152;152;152
+msgid "Example Use: `cake benchmark --n 10 --t 100 http://localhost/testsite`. "
+msgstr ""
+
+#: /Plugin/DebugKit/Controller/Component/ToolbarComponent.php:159;159;159
+msgid "Component initialization"
+msgstr ""
+
+#: /Plugin/DebugKit/Controller/Component/ToolbarComponent.php:281;281;281
+msgid "Controller action"
+msgstr ""
+
+#: /Plugin/DebugKit/Controller/Component/ToolbarComponent.php:284;284;284
+msgid "Controller action start"
+msgstr ""
+
+#: /Plugin/DebugKit/Controller/Component/ToolbarComponent.php:304;304;304
+msgid "Processing toolbar state"
+msgstr ""
+
+#: /Plugin/DebugKit/Controller/Component/ToolbarComponent.php:327;327;327
+msgid "Processing toolbar data"
+msgstr ""
+
+#: /Plugin/DebugKit/Controller/Component/ToolbarComponent.php:362;362;362
+msgid "Controller render start"
+msgstr ""
+
+#: /Plugin/DebugKit/Controller/Component/ToolbarComponent.php:446;446;446
+msgid "Could not load DebugToolbar panel %s"
+msgstr ""
+
+#: /Plugin/DebugKit/Lib/DebugTimer.php:128;128;128
+msgid "Core Processing (Derived from $_SERVER[\"REQUEST_TIME\"])"
+msgstr ""
+
+#: /Plugin/DebugKit/Lib/FireCake.php:310;310;310
+msgid "Headers already sent in %s on line %s. Cannot send log data to FirePHP."
+msgstr ""
+
+#: /Plugin/DebugKit/Lib/FireCake.php:331;331;331
+msgid "Incorrect parameter count for FireCake::fb()"
+msgstr ""
+
+#: /Plugin/DebugKit/Lib/FireCake.php:410;410;410
+msgid "Maximum number (99,999) of messages reached!"
+msgstr ""
+
+#: /Plugin/DebugKit/View/Elements/debug_toolbar.ctp:23;23;23
+msgid "There are no active panels. You must enable a panel to see its output."
+msgstr ""
+
+#: /Plugin/DebugKit/View/Elements/environment_panel.ctp:20;20;20
+msgid "App Constants"
+msgstr ""
+
+#: /Plugin/DebugKit/View/Elements/environment_panel.ctp:36;36;36
+msgid "CakePHP Constants"
+msgstr ""
+
+#: /Plugin/DebugKit/View/Elements/environment_panel.ctp:52;52;52
+msgid "PHP Environment"
+msgstr ""
+
+#: /Plugin/DebugKit/View/Elements/environment_panel.ctp:70;70;70
+msgid "Hidef Environment"
+msgstr ""
+
+#: /Plugin/DebugKit/View/Elements/history_panel.ctp:19;19;19
+msgid "Request History"
+msgstr ""
+
+#: /Plugin/DebugKit/View/Elements/history_panel.ctp:21;21;21
+msgid "No previous requests logged."
+msgstr ""
+
+#: /Plugin/DebugKit/View/Elements/history_panel.ctp:23;23;23
+msgid "previous requests available"
+msgstr ""
+
+#: /Plugin/DebugKit/View/Elements/history_panel.ctp:25;25;25
+msgid "Restore to current request"
+msgstr ""
+
+#: /Plugin/DebugKit/View/Elements/include_panel.ctp:19;19;19
+msgid "Included Files"
+msgstr ""
+
+#: /Plugin/DebugKit/View/Elements/log_panel.ctp:19;19;19
+msgid "Logs"
+msgstr ""
+
+#: /Plugin/DebugKit/View/Elements/log_panel.ctp:27;27;27
+msgid "Time"
+msgstr ""
+
+#: /Plugin/DebugKit/View/Elements/log_panel.ctp:27;27;27
+#: /Plugin/DebugKit/View/Elements/timer_panel.ctp:42;66;42;66;42;66
+msgid "Message"
+msgstr ""
+
+#: /Plugin/DebugKit/View/Elements/log_panel.ctp:38;38;38
+msgid "There were no log entries made this request"
+msgstr ""
+
+#: /Plugin/DebugKit/View/Elements/request_panel.ctp:19;19;19
+msgid "Request"
+msgstr ""
+
+#: /Plugin/DebugKit/View/Elements/request_panel.ctp:27;27;27
+msgid "No post data."
+msgstr ""
+
+#: /Plugin/DebugKit/View/Elements/request_panel.ctp:36;36;36
+msgid "No querystring data."
+msgstr ""
+
+#: /Plugin/DebugKit/View/Elements/request_panel.ctp:49;49;49
+msgid "Current Route"
+msgstr ""
+
+#: /Plugin/DebugKit/View/Elements/session_panel.ctp:19;19;19
+msgid "Session"
+msgstr ""
+
+#: /Plugin/DebugKit/View/Elements/sql_log_panel.ctp:24;24;24
+msgid "Sql Logs"
+msgstr ""
+
+#: /Plugin/DebugKit/View/Elements/sql_log_panel.ctp:39;39;39
+msgid "No query logs when debug < 2."
+msgstr ""
+
+#: /Plugin/DebugKit/View/Elements/sql_log_panel.ctp:41;41;41
+msgid "No query logs."
+msgstr ""
+
+#: /Plugin/DebugKit/View/Elements/sql_log_panel.ctp:45;45;45
+msgid "Total Time: %s ms <br />Total Queries: %s queries"
+msgstr ""
+
+#: /Plugin/DebugKit/View/Elements/sql_log_panel.ctp:54;54;54
+msgid "Query Explain:"
+msgstr ""
+
+#: /Plugin/DebugKit/View/Elements/sql_log_panel.ctp:57;57;57
+msgid "Click an \"Explain\" link above, to see the query explanation."
+msgstr ""
+
+#: /Plugin/DebugKit/View/Elements/sql_log_panel.ctp:63;63;63
+msgid "No active database connections"
+msgstr ""
+
+#: /Plugin/DebugKit/View/Elements/timer_panel.ctp:35;35;35
+msgid "Memory"
+msgstr ""
+
+#: /Plugin/DebugKit/View/Elements/timer_panel.ctp:38;38;38
+msgid "Peak Memory Use"
+msgstr ""
+
+#: /Plugin/DebugKit/View/Elements/timer_panel.ctp:42;42;42
+msgid "Memory use"
+msgstr ""
+
+#: /Plugin/DebugKit/View/Elements/timer_panel.ctp:55;55;55
+msgid "Timers"
+msgstr ""
+
+#: /Plugin/DebugKit/View/Elements/timer_panel.ctp:57;57;57
+msgid "%s (ms)"
+msgstr ""
+
+#: /Plugin/DebugKit/View/Elements/timer_panel.ctp:58;58;58
+msgid "Total Request Time:"
+msgstr ""
+
+#: /Plugin/DebugKit/View/Elements/timer_panel.ctp:67;67;67
+msgid "Time in ms"
+msgstr ""
+
+#: /Plugin/DebugKit/View/Elements/timer_panel.ctp:68;68;68
+msgid "Graph"
+msgstr ""
+
+#: /Plugin/DebugKit/View/Elements/variables_panel.ctp:19;19;19
+msgid "View Variables"
+msgstr ""
+
+#: /Plugin/DebugKit/View/Helper/DebugTimerHelper.php:45;45;45
+msgid "Rendering View"
+msgstr ""
+
+#: /Plugin/DebugKit/View/Helper/DebugTimerHelper.php:60;60;60
+msgid "Rendering %s"
+msgstr ""
+
+#: /Plugin/DebugKit/View/Helper/DebugTimerHelper.php:86;86;86
+msgid "View render complete"
+msgstr ""
+
+#: /Plugin/DebugKit/View/Helper/HtmlToolbarHelper.php:230;230;230
+msgid "Explain"
+msgstr ""
+
+#: /Plugin/DebugKit/View/Helper/SimpleGraphHelper.php:80;80;80
+msgid "Starting %sms into the request, taking %sms"
+msgstr ""
+
+#: /Plugin/DebugKit/View/Helper/TidyHelper.php:99;99;99
+msgid "No markup errors found"
+msgstr ""
+
+#: /Plugin/DebugKit/View/Helper/ToolbarHelper.php:189;189;189
+msgid "maybe slow"
+msgstr ""
+

@@ -1,0 +1,6 @@
+form .required label:not(.no-required):after {
+    color: red;
+    content: '*';
+    display:inline;
+    margin-left:2px;
+}

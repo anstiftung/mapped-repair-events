@@ -1,0 +1,208 @@
+#right .box {
+    margin: 0px;
+    padding: 10px;
+    width: 128px;
+    background-color: #FCFCFC;
+    line-height: 22px;
+    float: left;
+}
+#right span.head {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 2px;
+    color: #FFFFFF;
+    float: left;
+}
+#right .box.teaser {
+    text-align: center;
+    padding: 0;
+}
+#right .box.teaser p {
+    padding: 10px;
+    padding-top: 0;
+    padding-bottom: 5px;
+}
+#right .box.teaser a {
+    display: block;
+}
+#right .box.teaser a:hover span.head {
+    color: #BF272D ! important;
+}
+#right .box.teaser span.head {
+    text-align: left;
+    float: left;
+    height: 15px;
+    padding: 10px;
+    padding-left: 28px;
+    padding-top: 11px;
+    height: 13px;
+}
+#right .box.teaser img {
+    border: 10px solid white;
+    border-bottom-width: 5px;
+    float: left;
+}
+#right .box.teaser a.bottom:hover img {
+    border-color: #F99C1C;
+}
+#right .box.teaser a.bottom:hover span.text {
+    background-color: #F99C1C;
+    color: #ffffff;
+}
+#right .box.teaser,
+#right .box.ort-suche {
+    width: 148px;
+    background: #FCFCFC url(/img/right/bg-box.gif) no-repeat right top;
+    line-height: 15px;
+}
+#right .box.dingdesmonats span.head {
+    background: url(/img/right/extra.gif) no-repeat left top;
+    padding-left: 32px;
+}
+#right .box.twitter span.head {
+    background: url(/img/right/twitter.png) no-repeat 5px 6px;
+    padding-left: 32px;
+    margin-bottom: 5px;
+}
+#right .box.workshop span.head {
+    background: url(/img/right/werkstatt.gif) no-repeat left top;
+    padding-left: 32px;
+}
+#right .box.workshop-search span.head,
+#right .box.ort-suche span.head {
+    background: url(/img/right/lupe.gif) no-repeat -2px top;
+    padding-left: 22px;
+}
+#right .box span.text {
+    padding: 0 5px 5px 5px;
+    float: left;
+    text-align: center;
+    width: 138px;
+}
+#right .box.twitter {
+    text-align: left;
+    float: left;
+}
+#right .box.twitter a.more-link {
+    float: right;
+    margin-bottom: 5px;
+    margin-right: 5px;
+}
+#right .box.twitter div {
+    padding: 0px 5px 5px 5px;
+}
+#right .box.twitter div a {
+    display: inline;
+}
+#right .box ul {
+    list-style: circle outside none;
+    padding: 5px;
+    margin: 5px 0 5px 15px;
+    float: left;
+    text-align: left;
+}
+#right .box.ort-suche img {
+    border: 10px solid white;
+    border-bottom-width: 5px;
+}
+#right .box.ort-suche a {
+    display: block;
+}
+#right .box.ort-suche a:hover img {
+    border-color: #F99C1C;
+}
+#right .box.ort-suche a:hover p {
+    background-color: #F99C1C;
+    color: #ffffff;
+}
+
+#right .box.ort-suche span.head {
+    padding: 10px;
+    padding-left: 28px;
+}
+#right .box.ort-suche p {
+    padding: 10px;
+    padding-top: 0px;
+    padding-bottom: 5px;
+    text-align: center;
+}
+#right .box.ort-suche {
+    line-height: 15px;
+    padding: 0;
+    width: 148px;
+}
+#right .box .input input[type="text"] {
+    width: 120px;
+    color: #999;
+}
+#right .box.ort-suche .input input[type="text"] {
+    margin-left: 10px;
+}
+#right .box.filter .input input[type="text"] {
+    margin-bottom: 10px;
+}
+#right .box.filter .input select {
+    width: 128px ! important;
+    margin-bottom: 5px;
+}
+#right .box button {
+    float: right;
+}
+#right .box.ort-suche button {
+    margin: 10px;
+}
+#right .box.filter button {
+    margin-top: 5px;
+}
+#right .box.filter {
+    background: #FCFCFC url(/img/right/bg-filter.gif) no-repeat right top;
+}
+#right.workshops-search {
+    display: none;
+}
+#right.workshops-search #flashMessage {
+    display: none;
+}
+#right.workshops-search .box,
+#right.coaches-search .box {
+    line-height: normal;
+}
+#right .box.filter label {
+    font-weight: bold;
+    margin-bottom: 3px;
+    float: left;
+    background: #F99C1C;
+    padding: 2px;
+    margin-top: 8px;
+    color: white;
+}
+
+#right.workshops-search .categories-dropdown-wrapper {
+    display: none;
+}
+
+#right #tagsDropdown {
+    float: left;
+    margin-top: -10px;
+    display: none;
+    width: 128px;
+}
+
+#right #tagsDropdown a {
+    display: block;
+    background-color: #DFDFDF;
+    color: #727374;
+    padding: 3px;
+}
+
+#right #tagsDropdown a:hover {
+    background-color: #F99C1C;
+    color: white;
+}
+
+#workshopSearchLoader {
+    position: absolute;
+    left: 27px;
+    bottom: 10px;
+    display: none;
+}

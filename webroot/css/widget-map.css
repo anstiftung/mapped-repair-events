@@ -1,0 +1,207 @@
+body, html {
+    overflow: hidden;
+}
+body {
+	line-height: 1;
+	font-family: 'Open Sans', arial, helvetica, sans-serif;
+	font-size: 13px;
+	color: #727374;
+	background-color: #f2f2f2;
+	margin: 0px;
+	text-rendering: optimizeSpeed;
+}
+
+.sc {
+	clear: both;
+	height: 0px;
+	font-size: 0px;
+	background-color: transparent;
+}
+
+#search {
+  width: 55px;
+}
+#search, #reset {
+	float: left;
+	margin-right: 10px;
+}
+
+.plattform-link {
+	float: left;
+	text-decoration: none;
+	padding: 1px ! important;
+}
+
+.plattform-link span {
+	float: left;
+	margin-top: 5px;
+	font-weight: normal;
+	padding-right: 5px;
+}
+
+.plattform-link img {
+	background-color: #fff;
+	border-radius: 3px;
+	width: 30px;
+	height: 30px;
+	margin-right: 3px;
+	float: left;
+}
+
+.wss {
+	float: left;
+	margin: 0px 5px 0px 5px;
+	line-height: 30px;
+}
+
+.right {
+	width: 100%;
+	margin: 0px auto;
+	padding: 0px;
+}
+
+span.wss, div.input input, button, a.button {
+	margin-top: 3px ! important;
+}
+
+.box.filter {
+	z-index: 1000;
+	text-align: center;
+	line-height: 40px;
+	float: left;
+	padding-bottom: 3px;
+	padding-left: 3px;
+}
+
+.box.filter .input {
+	float: left;
+	margin-top: 1px;
+}
+.filter select {
+	padding: 5px;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-khtml-border-radius: 3px;
+	-webkit-border-radius: 3px;
+}
+
+#workshopSearchAddress {
+	float: left;
+	margin-right: 10px; padding-top : 7px ! important;
+	padding-bottom: 6px ! important;
+	padding-top: 6px ! important;
+}
+
+input[type=text]:focus,
+input[type=email]:focus,
+textarea:focus,
+.setfocus {
+	padding: 5px;
+	margin: 5px 1px 3px 0px;
+}
+
+.input input, .input textarea, .input select {
+	border-radius: 3px;
+	border: 1px solid #DFDFDF;
+	padding: 5px;
+	width: 175px;
+	background-color: white;
+}
+
+input[readonly="readonly"] {
+	background-color: #EFEFEF;
+	padding: 5px;
+}
+
+.input.error input, .input.error select, .input.error textarea {
+	background: #FFCFCF;
+	border-color: #666666;
+	padding: 5px;
+}
+
+.error-message {
+	color: red;
+	margin-left: 118px;
+	margin-top: 2px;
+}
+
+/* MAPS STUFF */
+#content  #mapContainer,
+#content #map {
+	margin: 0px;
+	padding: 0px;
+	display: block;
+    height: 100%;
+}
+#content #mapContainer {
+	float: left;
+	background: url(/img/ajax-loader.gif) no-repeat 50% 50%;
+}
+
+#workshopSearchLoader {
+	background: #ffffff url(/img/ajax-loader.gif) no-repeat 50% 50%;
+	position: absolute;
+	width: 32px;
+	height: 32px;
+	z-index: 9999;
+	left: 50% !important;
+	top: 50%;
+	display: none;
+	padding: 1.5%;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+}
+
+.google-map-bubble {
+	font-size: 14px;
+	line-height: 22px;
+	float: left;
+}
+
+.google-map-bubble a {
+	font-weight: bold;
+}
+
+/* START flash message box */
+#flashMessage {
+	line-height: 18px;
+	padding: 10px 15px;
+	margin: 0px auto 15px auto;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-khtml-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	width: 70%;
+	display: block;
+	font-weight: 700;
+}
+
+#flashMessage.success {
+	background: #4D8EA2;
+	color: white;
+}
+
+#flashMessage.error {
+	background: darkred;
+	color: white;
+}
+
+#flashMessage.error a {
+	color: #333;
+}
+
+#flashMessage .closer {
+	float: right;
+}
+
+#flashMessage.red {
+	padding: 10px;
+	border-top: 3px solid darkred;
+	border-bottom: 3px solid darkred;
+	text-indent: 10px;
+	background-color: #f2f2f2;
+	width: auto !important;
+	margin: 0px auto;
+	text-align: center
+}

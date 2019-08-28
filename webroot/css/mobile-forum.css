@@ -1,0 +1,51 @@
+.pun .blocktable .tc2,
+.pun .blocktable .tc3,
+.pun .blocktable .tcmod,
+.pun .blocktable th,
+.pun .blockpost h2,
+#punsearch #vf h2,
+.pun .blockpost h2 a {
+    font-weight: normal ! important;
+}
+
+/* date in post */
+.pun .blockpost h2 b a {
+	position: absolute;
+	right: 50px;
+	top: 7px;
+}
+#brdmenu {
+    margin-top: 0px;
+}
+#brdmain h2 {
+	position: static ! important;
+	white-space: normal ! important;
+}
+.pun .blocktable .tc2,
+.pun .blocktable .tc3,
+.pun .blocktable .tc4 {
+	word-break: break-all;
+}
+
+.pun .blockpost .postleft,
+.pun .blockpost .postfootleft {
+	width: 15% ! important;
+}
+
+.pun .blockpost .postbody, .pun .blockpost .postfoot {
+	margin-right: -30% ! important;
+}
+.pun .blockpost .postleft, .pun .blockpost .postfootleft {
+	margin-left: -30% ! important;
+}
+.pun .blockpost .postright {
+	padding: 2% ! important;
+	width: 66% ! important;
+}
+
+#search > div.inform > fieldset > legend {
+	width: auto ! important;
+	float: left;
+	padding-left: 12px ! important;
+	padding-bottom: 12px ! important;
+}

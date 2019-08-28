@@ -1,0 +1,33 @@
+body {
+    font-family: arial, helvetica, sans-serif;
+    font-size: 12px;
+    color: #727374;
+}
+
+a, a:visited, a:active {
+    text-decoration: none;
+    color: #BF272D;
+}
+a:hover { color: #F99C1C; }
+
+h1 {
+    margin: 5px 0px 10px 0px;
+    font-weight: bold;
+    font-size: 20px;
+    color: #bf272d;
+    text-align: left;
+}
+h2 {
+    margin-bottom: 10px;
+    margin-top: 20px;
+    color: #bf272d;
+    font-size: 16px;
+}
+
+#object-edit-icon {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+}
+
+.sc { clear: both; height: 0px; font-size: 0px; background-color: transparent; }

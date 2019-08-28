@@ -1,0 +1,748 @@
+@media (max-width: 767px) {
+
+	html, body {
+	    overflow-y: auto;
+	}
+	html.iphone,
+	html.iphone body {
+	   height: auto ! important;
+	   width: auto ! important;
+	}
+	#tabs {
+	   margin-top: 3px;
+	}
+	#tabs.ui-tabs .ui-tabs-nav li {
+	   border-bottom-width: 1px;
+	   border-top-width: 0;
+	}
+	#tabs.ui-tabs .ui-tabs-nav li:nth-of-type(1),
+	#tabs.ui-tabs .ui-tabs-nav li:nth-of-type(2) {
+	   border-top-width: 1px;
+	}
+	#UserRegIntroWrapper .user-role-wrapper {
+	  padding-left:0;
+	}
+	#UserRegIntroWrapper .half .button {
+	  width: 95%;
+	  float: left;
+	}
+	body.workshops.home .left,
+	body.workshops.home .right,
+	body.workshops.detail .right {
+		width: 100%;
+	}
+	body.users .profile .categories-checkbox-wrapper,
+	#eventEditForm .categories-checkbox-wrapper,
+	body.users .profile .groups-checkbox-wrapper,
+	body.users.publicProfile .right-wrapper,
+	body.users.publicProfile .about-me-wrapper,
+	body.users.publicProfile .bottom-wrapper,
+	body.users.publicProfile #sklill_icons,
+	body.users.publicProfile #content,
+	.featherlight-inner.help-layer {
+	   width: 100%;
+	}
+	body.users.publicProfile .top-wrapper,
+	body.users.publicProfile #content {
+       padding-left: 10%;
+       padding-right: 10%;
+    }
+	body.users.publicProfile .top-wrapper {
+	   margin-top: 20px;
+	   margin-left: -10%;
+	   margin-right: -10%;
+	}
+	body.users.publicProfile .bottom-wrapper {
+	   margin: 0;
+	}
+	body.workshops.detail .left {
+		display: none;
+	}
+	body.workshops.detail .workshop-detail-header {
+	    margin-top: 10px;
+	}
+	body.workshops.detail article {
+		max-height: none;
+	}
+	body.workshops.detail a.btn.edit {
+	    margin: 0;
+	    margin-top: 5px;
+	}
+	body.workshops.detail img.detail-image {
+		max-width: 20%;
+		height: auto;
+	}
+	body.workshops.detail .address-wrapper article img {
+		max-width: 100% ! important;
+	}
+	body.workshops.detail .right {
+		text-align: left;
+	}
+	body.workshops.detail .widget-link.events {
+	   float: left;
+	   margin: 0;
+	}
+	body.workshops.detail .events-on-your-website-link {
+		margin: 0;
+		float: left;
+		width: 100%;
+		font-size: 12px;
+		margin-bottom: 5px;
+	}
+	body.workshops.detail .add-event-link {
+		float: left;
+		margin-bottom: 10px;
+	}
+	body.workshops.detail #calEvents {
+		display: block ! important;
+		text-align: left;
+		background-color: transparent ! important;
+	}
+	body.workshops.detail div.calEvent:hover {
+	    text-decoration: none ! important;
+	}
+	body.workshops.detail .calEvent.online {
+	    visibility: visible ! important;
+	    display: block ! important;
+	}
+	body.workshops.detail .calEvent div.onoffline {
+		margin-top: 0 ! important;
+	}
+	#workshop-detail .calEvent {
+		background-color: #d7cbdf;
+	}
+	body.workshops.detail .eventBox {
+		background-color: rgba(215,203,223,0.8); ! important;
+	}
+	body.workshops.detail .eventBox .button {
+	    clear: both;
+		float: right;
+		margin-bottom: 5px;
+	}
+	body.workshops.detail .mapevent {
+		width: 96%;
+	}
+	body.workshops.detail h2 {
+		text-align: left;
+		margin-top: 15px;
+	}
+	.right .ckeditor-edit img,
+	.ckeditor-edit iframe {
+	    max-width: 100% ! important;
+	}
+	body.workshops.detail .address-wrapper a {
+		word-break: break-all;
+	}
+	
+	body.posts.detail #content {
+	  margin-top: 10px ! important;
+	}
+	body.posts.detail #content h1 {
+	  margin-left: 0;
+	}
+	body.posts.detail .left,
+	body.posts.detail .right,
+	body.posts.detail .left .image-wrapper,
+	body.posts.detail .left .image-wrapper img {
+	  width: 100%;
+	}
+	body.posts.detail .left {
+	  display: none; /* shown by repini.Helper.adaptPostDetail() */
+	}
+	body.posts.detail .left .image-wrapper {
+	  margin-right: 0;
+	}
+	/* right area of images not shown - just remove padding and it works */
+	body.posts.detail .featherlight .featherlight-content {
+	  padding: 0;
+	  border-bottom: 0;
+	}
+	.featherlight .featherlight-close-icon {
+	  top: 2px;
+	  right: 2px;
+	}
+	.featherlight .featherlight-inner {
+	  padding: 2px;
+	}
+    .featherlight .featherlight-image {
+        width: 100% ! important;
+        height: auto ! important;
+    }
+	.featherlight .legend {
+	  margin-left: 2px;
+	  margin-right: 2px;
+	  bottom: 2px;
+	}
+	#logoouter {
+		margin-top: 7px;
+	}
+	#logoouter img {
+		max-width: 85%;
+		height: auto;
+	}
+	#header {
+		min-height: 77px;
+	}
+	#login-box {
+		margin-right: 0px;
+		position: absolute;
+		right: 5px ! important;
+		top: -12px;
+	}
+	body.workshops.home .cycle-slideshow {
+	    width: auto ! important; /* using percent here breaks swiping */
+	    display: none;
+	}
+	
+	.blog-detail div.text-wrapper img {
+		margin-left: 0;
+		margin-right: 10px;
+		margin-bottom: 0px;
+		width: 25%;
+		min-width: auto;
+	}
+	body.blogs.detail #content {
+	    width: 100%;
+	    padding: 10px;
+	}
+	.blog-detail h1 {
+		max-width: 95%; /* rss link should not reach into h1 if it is long */
+	}
+	
+	#workshops-home .news-box {
+		width: 100%;
+		padding: 0;
+		padding-bottom: 10px;
+		margin-top: -10px;
+		height: auto;
+	}
+	#workshops-home .news-box .inner {
+		position: static;
+		width: 100%;
+		transform: inherit;
+	}
+	#workshops-home .news-box .number {
+		clear: left;
+		width: 11%;
+		margin-left: 10px;
+	}
+	#workshops-home .news-box a.header {
+	    margin-left: 20px;
+	    padding-top: 15px;
+	}
+	#workshops-home .news-box .row {
+	    width: 75%;
+	    margin-left: 5%;
+	}
+	#workshops-home .cycle-slideshow {
+		height: auto;
+		padding: 0;
+	}
+	/* height is defined in repini.MobileFrontend.adaptTeaserButtonSize() */
+	#workshops-home .teaser-buttons {
+	    display: none;
+	}
+	#workshops-home .teaser-buttons a {
+		margin-right: 10px;
+	}
+	
+	#workshops-home .teaser-buttons a:nth-of-type(2),
+	#workshops-home .teaser-buttons a:nth-of-type(4) {
+		margin-right: 0;
+	}
+	
+	#workshops-home .about-us-box a {
+	    width: 53vh;
+	    height: 26vh;
+	    margin-top: 10px;
+	    margin-bottom: 20px;
+	}
+	
+	#footer {
+		padding-bottom: 10px;
+	}
+	#workshops-home #search,
+	#workshops-home #reset {
+		margin-left: 3px;
+	}
+	#workshops-home #workshopSearchAddress {
+		width: 30%;
+		margin: 0;
+	}
+	.fc-basic-view tbody .fc-row {
+		min-height: auto;
+	}
+	td.fc-has-event span.event-count {
+		margin-top: 16px;
+	}
+	.fc-row table,
+	.fc-row.fc-widget-content {
+		height: 42px ! important;
+	}
+	div#selectedDate {
+		margin-top: 10px;
+	}
+	div#calEvents {
+		min-height: inherit;
+		margin-bottom: 10px;
+	}
+	#workshops-home .find-events-box input[type="text"] {
+		width: 90px;
+	}
+	.find-events-box {
+		margin-top: 10px ! important;
+		display: block ! important;
+	}
+	body.workshops.home .left.calendar {
+		margin-bottom: -20px;
+	}
+	
+	#workshops-home .workshops-box .row .inner {
+		width: 100%;
+		margin-left: 2%;
+		left: 0;
+	}
+	#workshops-home .workshops-box .row span.info {
+		width: 87%;
+		margin-left: -36%;
+	}
+	#workshops-home .workshops-box .row img {
+		margin-left: -1%;
+	}
+	#workshops-home .workshops-box .row img.height-adapted {
+		margin-left: 1%;
+		margin-top: 1%;
+	}
+	body.workshops.all .left,
+	body.events.all .left {
+		width: 100%;
+		padding-right: 0;
+	}
+	body.events.all input[type="text"],
+	body.workshops.all input[type="text"] {
+		width: 32%;
+	}
+	body.workshops.all .item-wrapper,
+	body.events.all .item-wrapper {
+	}
+	body.workshops.all .item-wrapper img.detail-image,
+	body.events.all .item-wrapper img.detail-image {
+		width: 20%;
+		height: auto;
+	}
+	body.workshops.all .item-wrapper .title,
+	body.events.all .item-wrapper .title {
+		font-size: 15px;
+		line-height: 19px;
+	}
+	body.workshops.all div.pagination, 
+	body.events.all div.pagination {
+		margin-bottom: 0;
+	}
+	
+	body.events #eventEditForm {
+		width: 100%;
+	}
+	body.workshops div.admin div.edit,
+	body.events div.admin div.edit,
+	body.info_sheets div.admin div.edit {
+		width: 100%;
+	    margin: 0;
+	}
+	body.workshops div.admin div.edit label,
+	body.events div.admin div.edit label,
+	body.info_sheets div.admin div.edit label {
+		width: 100%;
+	}
+	#infoSheetEditForm .form-fields-checkbox-wrapper,
+	#infoSheetEditForm .form-fields-checkbox-wrapper .input.radio {
+	   width: 100%;
+	}
+	body.events #eventEditForm .input label {
+		width: 100%;
+		margin-left: 5px;
+		margin-bottom: 5px;
+	}
+	body.users .profile .groups-checkbox-wrapper .input.select label {
+	    margin-left: -3px;
+	    margin-right: 0;
+	}
+	body.workshops div.admin .url-edit-field-wrapper label {
+	    width: 110px ! important;
+	    float: right;
+	    margin-left: 5px;
+	}
+	body.users .profile .categories-checkbox-wrapper,
+	#eventEditForm .categories-checkbox-wrapper div.input.select div.checkbox,
+	body.users .profile .input.is-private {
+	    width: 100%;
+	}
+	body.users .profile .input label {
+	    margin-bottom: 5px;
+	}
+	body.users .profile .error-message {
+		margin-left: 5px;
+	}
+	body.users .profile .input.textarea label.private {
+		margin-top: -140px;
+	}
+	
+	#eventEditForm .date-time-wrapper .input.text label {
+		width: 55px;
+		min-width: 55px;
+	}
+	#eventEditForm div.input.text.long input,
+	#eventEditForm .input input
+	.input textarea, .input select {
+		width: 90%;
+		min-width: 90%;
+		max-width: 90%;
+	}
+	#eventEditForm .date-time-wrapper .input input {
+		width: 105px;
+		min-width: 105px;
+		max-width: 105px;
+	}
+	#eventEditForm .input.checkbox label,
+	#workshopEditForm .input.checkbox label {
+	   padding-left: 0px;
+	}
+    #eventEditForm, div.admin div.edit .error-message,
+    #workshopEditForm div.admin div.edit .error-message {
+        margin-left: 0px;
+    }
+	
+	body.events #eventEditForm .input.time select {
+	    min-width: 55px ! important;
+	    max-width: 55px ! important;
+	}
+	
+	body.events #eventEditForm .date-time-wrapper .input.text {
+		width: 200px;
+	}
+	body.events #eventEditForm .add-image-button {
+		margin-left: 5px;
+	}
+	
+	body.users.profil .input.textarea,
+	#workshopEditForm .input.textarea,
+	#eventEditForm .input.textarea {
+		width: 100% ! important;
+	}
+	body.users.profil .input textarea,
+	#workshopEditForm .input textarea,
+	#eventEditForm .input textarea {
+		width: 95%;
+	}
+	body.events #eventEditForm .input.checkbox label {
+		width: 87% ! important;
+	}
+	body.users.profil #content,
+	body.workshops.applyAsUser #content,
+	body.workshops.verwalten #content,
+	body.events.myEvents #content {
+		overflow-x: auto; /* if tables become more than 100% due to unbreakable long words in tds */
+	}
+	body.events.myEvents .toggle-link.heading {
+	   float: left;
+	}
+	body.events.myEvents .add-event {
+	   float: left;
+	   margin-bottom: 10px;
+	   margin-top: 0;
+	}
+	body.users.welcome .left-wrapper {
+		float: left;
+	}
+	body.users.welcome #profile {
+		float: left;
+		margin-top: 30px;
+		border: none;
+		width: 100%;
+		padding: 0;
+	}
+	.ui-widget-content {
+	    margin-left: 0 ! important;
+	    margin-right: 0 ! important;
+	}
+	.ui-tabs .ui-tabs-panel {
+		padding-left: 0 ! important;
+		padding-right: 0 ! important;
+	}
+	.ui-tabs .ui-tabs-nav {
+		padding: 0;
+	}
+	.ui-tabs .ui-tabs-nav li {
+		margin: 0 ! important;
+		padding: 0 ! important;
+		width: 49%;
+	}
+	.ui-tabs .ui-tabs-nav li:nth-of-type(odd) {
+		margin-right: 2px ! important;
+	}
+	
+	.featherlight-content .mini-upload-form {
+		width: 100%;
+		max-width: 300px;
+	}
+	.featherlight-content button.cancel {
+		margin-left: 0;
+	}
+	#framedContent .buttonSubmit {
+		float: left;
+	}
+	.icon_gruenden,
+	.icon_repair,
+	.icon_idee,
+	.icon_raum,
+	.icon_sicherheit,
+	.icon_material,
+	.icon_links {
+		width: 50px;
+		height: 50px;
+		border-radius: 50px;
+		margin-right: 20px;
+		margin-bottom: 5px;
+		margin-top: 20px;
+		background-size: 50px;
+	}
+	.icon_gruenden {
+	    margin-top: 50px;
+	}
+	
+	body.users.intro .icondrittel {
+		width: 45px;
+		height: 45px;
+		border-radius: 45px;
+		background-size: 35px;
+		border-width: 10px;
+	}
+	body.users.intro .eindrittel h1,
+	body.users.intro .eindrittel p,
+	body.users.intro .eindrittel ul {
+		margin-top: -20px;
+	}
+	body.users.intro #IntroWrapper .eindrittel ul {
+		margin-bottom: 20px;
+	}
+	body.users.intro #IntroWrapper .eindrittel .button {
+		font-size: 18px;
+	}
+	.mobile-full-width {
+		width: 100%;
+		float: left;
+	}
+	body.users.intro .eindrittel .description {
+		display: none;
+	}
+	
+	body.workshops.detail .sklill_icon.small {
+	    width: 32px;
+	    height: 32px;
+	    background-size: 32px 32px;
+	}
+	body.newsletters.index form strong {
+		margin-bottom: 5px;
+		float: left;
+	}
+	body.newsletters.index form .nlep2 {
+		width: 81px;
+	}
+	body.newsletters.index form label {
+		line-height: 25px;
+	}
+	body.users .profile {
+	    width: 100%;	
+	}
+	
+	#flashMessage {
+		margin-top: 10px;
+	}
+	body.workshops.verwalten a.add-workshop {
+		float: none;
+	}
+	button.blink {
+		float: left;
+	}
+	#band-cookies {
+	   width: 100%;
+	   text-align: center;
+	}
+	#band-cookies a {
+	    margin-left: 0 ! important;
+        color: #999 ! important;
+        background-color: #f2f2f2 ! important;
+    }
+	body.pages.detail.statistik .text-wrapper,
+	body.pages.detail.statistik h1 {
+	    margin-left: 0;
+	}
+	body.pages.detail.statistik iframe {
+	    width: 100%;
+	}
+	body.pages.detail .text-wrapper img,
+	body.posts.detail .text-wrapper img {
+	  width: 100% ! important;
+	  height: auto ! important;
+	}
+	
+    .js #menu {
+        display: none;
+    }
+    #nav {
+        display: none;
+    }
+    
+    @media (orientation:landscape) {
+        #nav.mobile {
+           width: 33%;
+        }
+    }
+    
+    #navToggle {
+        float: left;
+        width: 20px; /* avoid jumping if icon not yet loaded */
+        display: block;
+        cursor: pointer;
+        padding: 5px 10px;
+        background-color: #4D8EA2;
+        padding: 5px 8px 1px 8px;
+        margin-top: 22px;
+        margin-left: 5px;
+        color: #fff;
+        font-weight: bold;
+        font-size: 22px;
+        line-height: 28px;
+        -webkit-border-radius: 2.5px;
+        -moz-border-radius: 2.5px;
+        border-radius: 2.5px;
+    }
+    #navToggle:before {
+        content: url(/img/nav-icon.png);
+        float: left;
+    }
+
+    /* first level */
+    #nav>ul {
+        height: auto;
+        display: none;
+        position: absolute;
+        left: 0;
+        right: 0;
+    }
+    #nav:target>ul {
+        display: block;
+    }
+    #nav>ul>li {
+        width: 100%;
+        float: none;
+        border-bottom: 1px solid #4D8EA2;
+        background-color: #fff !important;
+        padding: 0px !important;
+    }
+    #nav ul li a {
+        text-align: left ! important;
+        height: auto;
+        padding: 3px 5px !important;
+    }
+    #nav ul  li:not ( :last-child ) > a {
+        border: none;
+    }
+
+    /* second level */
+    #nav li ul {
+        position: static;
+    }
+    #nav ul.mainmenu li:last-child {
+        max-width: 100%;
+        position: static;
+        z-index: auto
+    }
+
+    /* #################### second level */
+    #nav ul.submenu {
+        width: 100% !important;
+        display: block;
+        position: relative;
+        padding: 0%;
+        margin: 0px 0px 0px 0px;
+        left: auto;
+        height: auto;
+        background-color: white;
+        border-top: none;
+    }
+    #nav ul.mainmenu li ul.submenu li {
+        float: left;
+        width: 100% !important;
+        border-right: 0px solid black;
+        margin: 0px auto;
+        border-left: none ! important;
+    }
+    #nav li ul.submenu li a {
+        line-height: 15px !important;
+        font-size: 10px;
+        color: #999;
+        padding: 0px 5px;
+        height: 100%;
+        float: left;
+    }
+    #nav li ul.submenu  li a:hover,
+    #nav li ul.submenu  li.active a {
+        color: #4D8EA2;
+        background-color: transparent
+    }
+    #nav ul.mainmenu {
+	    overflow: initial;
+	}
+    #nav ul.mainmenu li a {
+	    padding: 0px 5px;
+	    height: 100%;
+	    font-size: 14px;
+	    line-height: 23px !important;
+	    text-align: center;
+	}
+	#nav  ul.submenu {
+	    width: 550px !important;
+	    display: block;
+	    position: relative;
+	    padding: 0%;
+	    margin: 2px 0px 0px 0px;
+	    left: -358px;
+	    height: 28px;
+	    background-color: white;
+	}
+	
+	#nav.mobile ul.submenu {
+	    position: static;
+	    padding-left: 10%;
+	    width: 90% ! important;
+	    margin-top: 2px;
+	    margin-bottom: 8px;
+	}
+	#nav.mobile ul.submenu li a {
+	    font-size: 13px;
+	    line-height: 15px ! important;
+	}
+	
+    @media (orientation: portrait) {
+    
+	    .fc-day-grid-container {
+	        height: auto ! important; /* avoid scrolling of calendar on mobile devices */
+	    }
+	    
+	    #workshops-home .workshops-box .row span.info {
+	        width: 70%;
+	        margin-left: -25%;
+	    }
+	    
+	    #workshops-home .workshops-box .row img {
+	        margin-left: 0;
+	        margin-top: 1%;
+	    }
+	    
+	    #workshops-home .workshops-box .row img.height-adapted {
+	       margin-left: 24%;
+	    }
+    
+    }	
+}

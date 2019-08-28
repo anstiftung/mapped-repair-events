@@ -1,0 +1,42 @@
+html, body {
+    font-family: 'Open Sans', arial, helvetica, sans-serif;
+    font-size: 13px;
+    color: #727374;
+    background-color: transparent;
+}
+
+#title {
+    font-weight:bold;
+    font-size:15px;
+    margin-bottom:10px;
+}
+
+#prev, #next {
+    cursor:pointer;
+    margin:5px 0;
+    display: none;
+}
+
+.item {
+    padding:3px;
+    cursor:pointer;
+    display: none;
+}
+
+.item:last-child {
+    margin-bottom:0px;
+}
+
+.item:hover {
+    background-color:#f2f2f2;
+}
+
+.namedate {
+    font-weight:bold;
+}
+
+.truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

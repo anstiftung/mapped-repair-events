@@ -1,0 +1,277 @@
+/*----------------------------
+    The file upload form
+-----------------------------*/
+
+
+.upload{
+    font-family:'PT Sans Narrow', sans-serif;
+    background-color:#373a3d;
+
+    background-image:-webkit-linear-gradient(top, #373a3d, #313437);
+    background-image:-moz-linear-gradient(top, #373a3d, #313437);
+    background-image:linear-gradient(top, #373a3d, #313437);
+
+    width:250px;
+    padding:30px;
+    border-radius:3px;
+
+    margin:200px auto 100px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.drop {
+    background: rgba(0,100,0,0.3);
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    border: 1px solid #006400;
+    border-radius: 3px;
+    border-image: url('../img/mini-upload-form/border-image.png') 25 repeat;
+    text-align: center;
+    font-size:16px;
+    font-weight:bold;
+    color:#006400;
+}
+
+.drop a.upload-button {
+    background-color:#006400;
+    padding:12px 26px;
+    color:#fff;
+    font-size:14px;
+    border-radius:2px;
+    cursor:pointer;
+    display:inline-block;
+    margin-top:0;
+    line-height:1;
+}
+
+.drop a.upload-button :hover{
+    opacity: 0.8;
+    color: #fff;
+}
+
+.drop input{
+    display:none;
+}
+
+.upload ul{
+    list-style:none;
+    margin:0 -30px;
+    border-top:1px solid #2b2e31;
+    border-bottom:1px solid #3d4043;
+}
+
+.upload ul li{
+
+    background-color:#333639;
+
+    background-image:-webkit-linear-gradient(top, #333639, #303335);
+    background-image:-moz-linear-gradient(top, #333639, #303335);
+    background-image:linear-gradient(top, #333639, #303335);
+
+    border-top:1px solid #3d4043;
+    border-bottom:1px solid #2b2e31;
+    padding:15px;
+    height: 52px;
+
+    position: relative;
+}
+
+.upload ul li input{
+    display: none;
+}
+
+.upload ul li p{
+    width: 144px;
+    overflow: hidden;
+    white-space: nowrap;
+    color: #EEE;
+    font-size: 16px;
+    font-weight: bold;
+    position: absolute;
+    top: 20px;
+    left: 100px;
+}
+
+.upload ul li i{
+    font-weight: normal;
+    font-style:normal;
+    color:#7f7f7f;
+    display:block;
+}
+
+.upload ul li canvas{
+    top: 15px;
+    left: 32px;
+    position: absolute;
+}
+
+.upload ul li span{
+    width: 15px;
+    height: 12px;
+    background: url('../img/mini-upload-form/icons.png') no-repeat;
+    position: absolute;
+    top: 34px;
+    right: 33px;
+    cursor:pointer;
+}
+
+.upload ul li.working span{
+    height: 16px;
+    background-position: 0 -12px;
+}
+
+.upload ul li.error p{
+    color:red;
+}
+
+/* adaptions rep-ini */
+
+.featherlight .featherlight-content {
+	overflow-x: hidden;
+}
+form.mini-upload-form {
+    display: none ! important;
+}
+.featherlight-content .mini-upload-form {
+    display: block ! important;
+    padding-bottom: 10px;
+    width: 300px;
+}
+.featherlight-content .mini-upload-form.multiple {
+    width: 800px;
+}
+.admin.edit form .image-count {
+  line-height: 30px;
+  float: right;
+  margin-right: 225px;
+  
+}
+.featherlight-content .mini-upload-form .drop {
+    min-height: 100px;
+}
+.featherlight-content .mini-upload-form.multiple .drop {
+    width: 300px;
+    margin: 0 auto;
+    margin-bottom: 10px;
+}
+.featherlight-content .mini-upload-form.multiple ul.images-container li.image-container {
+    width: 247px;
+    float: left;
+    margin-right: 3px;
+    margin-bottom: 3px;
+    height: 231px;
+    border: 1px solid #ccc;
+    padding: 3px;
+    position: relative;
+}
+.featherlight-content .mini-upload-form.multiple ul.images-container li.image-container input {
+    width: 239px;
+    padding: 5px;
+    margin-top: 1px;
+}
+.featherlight-content .mini-upload-form.multiple ul.images-container li.image-container img.uploadedFile {
+    width: 239px;
+    height: auto;
+    max-height: 190px;
+    object-fit: scale-down;
+}
+.featherlight-content .mini-upload-form .drop .info-text {
+    font-size: 13px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    line-height: 16px;
+}
+.featherlight-content .mini-upload-form  ul.uploads-container li {
+    background: rgba(0,100,0,0.3);
+    list-style-type: none;
+    margin-bottom: 5px;
+    padding: 5px;
+    padding-bottom: 0;
+}
+.featherlight-content .mini-upload-form  ul.uploads-container li p {
+    float: right;
+    margin-top: 17px;
+}
+.featherlight-content .mini-upload-form .drop img.existingImage,
+.featherlight-content .mini-upload-form .drop img.uploadedFile {
+    width: 100%;
+    margin-bottom: 10px;
+    float: left;
+}
+
+.featherlight-content .mini-upload-form .modify-icon {
+    position: absolute;
+    top: 35px;
+    border: 1px solid transparent;
+    padding: 2px;
+    line-height: 10px;
+}
+
+.featherlight-content .mini-upload-form .modify-icon:hover {
+    border: 1px solid black;
+    background: white;
+}
+
+.featherlight-content .mini-upload-form .img-rotate-acw {
+    left: 40px;
+}
+.featherlight-content .mini-upload-form .img-rotate-cw {
+    left: 73px;
+}
+.featherlight-content .mini-upload-form .img-delete {
+    right: 40px;
+}
+
+.featherlight-content .mini-upload-form.multiple .modify-icon {
+	top: 2px;
+}
+.featherlight-content .mini-upload-form.multiple .img-rotate-acw {
+    left: 2px;
+}
+.featherlight-content .mini-upload-form.multiple .img-rotate-cw {
+    left: 31px;
+}
+.featherlight-content .mini-upload-form.multiple .img-delete {
+    right: 2px;
+}
+.featherlight-content img.ajax-loader {
+    margin-left: 27px;
+    visibility: hidden;
+}
+.featherlight-content .form-buttons button.cancel {
+    float: right;
+    margin-left: 26px;
+}
+.featherlight-content .form-buttons button[disabled="disabled"] {
+    opacity: 0.65; 
+    cursor: not-allowed;    
+}
+.featherlight-content .form-buttons button {
+    padding: 10px;
+}
+.featherlight-content .form-buttons button.save {
+    background-color: #4D8EA2 ! important;
+    color: #fff ! important;
+    float: left;
+}
+.featherlight-content .form-buttons button.cancel {
+	background-color: #f2f2f2 ! important;
+	color: #999 ! important;
+    float: right;
+}
+.featherlight-content .form-buttons button:hover {
+	background: yellow ! important;
+	color: #333 ! important;
+}
+.ui-front {
+	z-index: 11000 !important;
+}
+.ui-dialog {
+    z-index: 9999999999 !important;
+    background-color: #999 ! important;
+    border: 1px solid #000;
+}
+.ui-dialog-content,
+.ui-dialog-buttonpane {
+	background-color: #fff ! important;
+}

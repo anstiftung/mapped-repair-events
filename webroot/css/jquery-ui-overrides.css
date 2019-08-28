@@ -1,0 +1,39 @@
+.ui-widget,
+.ui-widget select {
+    font-family: 'Open Sans', arial, helvetica;
+}
+.ui-tabs .ui-widget-header {
+	background: transparent;
+	border: none;
+}
+.ui-widget-content {
+	border: none ! important;
+	color: #727374;
+	font-size: 13px;
+	line-height: 17px;
+}
+.ui-state-default, .ui-widget-content .ui-state-default,
+.ui-widget-header .ui-state-default {
+	border: 1px solid #ccc;
+}
+.ui-widget-header li a {
+	font-size: 13px;
+}
+.ui-widget-header li {
+	border-radius: 0;
+}
+.ui-widget.ui-widget-content {
+	border: none;
+}
+.ui-tabs .ui-tabs-nav,
+.ui-tabs2 .ui-tabs-nav {
+    border-bottom: 2px dotted black;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.ui-tabs .ui-tabs-nav li.ui-tabs-active,
+.ui-tabs2 .ui-tabs-nav li.ui-tabs-active {
+	margin-bottom: -3px;
+	padding-bottom: 3px;
+}

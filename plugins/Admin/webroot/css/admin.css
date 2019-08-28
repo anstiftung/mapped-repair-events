@@ -1,0 +1,201 @@
+/* START admin layout änderungen */
+body, html {
+    font-family: 'Open Sans', arial, helvetica;
+    font-size: 13px;
+    color: #727374;
+    background-color: #f2f2f2;
+    margin: 0px auto;
+    padding: 0;
+    width: 100%;
+}
+h1 {
+    margin-top: -40px;
+}
+#wrapper {
+    max-width: 100%;
+    margin: 0px auto;
+    background: #fff;
+}
+.sort a {
+	margin-left: 0;
+}
+#content {
+    position: relative;
+    float: left;
+    background: white;
+    padding: 1%;
+    width: 98%;
+    display: block;
+    margin-top: 90px;
+}
+
+a {
+    color: green;
+}
+#flashMessage {
+	margin-top: 26px;
+	margin-bottom: 50px;
+}
+#header {
+    background: white;
+    padding: 0%;
+    position: fixed;
+    display: block;
+    margin: 0px auto;
+    z-index: 7000;
+}
+
+#nav {
+    width: auto;
+    margin: 0px;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
+}
+
+.input select {
+    width: auto;
+    max-width: 300px;
+}
+
+/* START admin list */
+div.admin #admin-list-form label {
+    float: left;
+    margin-right: 5px;
+    margin-top: 5px;
+}
+
+div.admin #admin-list-form .input {
+    float: left;
+    margin-right: 5px;
+}
+
+div.admin #admin-list-form div.left {
+    margin-top: -3px;
+    margin-right: 10px;
+}
+
+div.admin div.list a.active {
+    color: #4C4C4C;
+}
+
+div.admin div.list tr.status-offline td
+    {
+    color: gray;
+    text-decoration: line-through;
+}
+
+div.admin div.list a.new-link {
+    position: absolute;
+    top: 0px;
+    right: 19px;
+}
+
+div.admin div.list a.email-link {
+    position: absolute;
+    top: 0px;
+    right: 47px;
+}
+
+div.admin div.list div.pagination {
+    margin-bottom: -7px;
+}
+/* END admin list */
+#content div.import-feeds, #content div.import-feeds h1, #content div.import-feeds div.item,
+    #content div.import-feeds h2 {
+    width: 700px;
+}
+
+#content div.import-feeds {
+    padding: 10px 0;
+    margin: 0 auto;
+    line-height: 22px;
+}
+
+#content div.import-feeds h2 {
+    margin-top: 10px;
+    margin-bottom: 0;
+    float: left;
+}
+
+#content div.import-feeds div.description {
+    float: left;
+}
+
+#content div.import-feeds div.enclosures {
+    float: left;
+    border: 1px solid #ccccca;
+    margin-top: 5px;
+    padding: 5px;
+    width: 688px;
+}
+
+#content div.import-feeds div.enclosure {
+    margin-right: 5px;
+    margin-bottom: 5px;
+    float: left;
+}
+
+#content div.import-feeds span.date {
+    margin-right: 10px;
+}
+
+#content div.import-feeds a.feed-url {
+    display: block;
+}
+
+.categories.edit form {
+	width: 100%;
+}
+
+#content div.import-feeds div.item {
+    padding-bottom: 10px;
+    float: left;
+    border-bottom: 1px solid #CCCCCA;
+}
+
+#content div.import-feeds div.item button {
+    float: right;
+    margin-top: 10px;
+}
+
+.userTableLink:visited {
+    color: #4D8EA2;
+}
+
+.wsAddUser, .wsRemoveUser, .wsMakeOwner {
+    cursor: pointer;
+    font-weight: bold;
+    color: #4D8EA2;
+    margin-left: 10px;
+}
+
+.wsAddUser:hover, .wsRemoveUser:hover, .wsMakeOwner:hover {
+    text-decoration: underline;
+    color: black;
+}
+
+.wsAddUser::before, .wsRemoveUser::before, .wsMakeOwner::before {
+    content: ' \00bb  ';
+}
+
+.alreadyAdded::before {
+    content: '\2713  ';
+}
+
+ul.jquery-ui-icon {
+    margin: 0;
+    float: left;
+}
+
+#postsEdit #cbskillsreg {
+    clear: both;
+}
+#postsEdit #cbskillsreg > label {
+    clear: both;
+    font-weight: bold;
+    width: 100%;
+}
+
+.url-edit-field {
+  float: left;
+}
