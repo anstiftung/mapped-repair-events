@@ -39,6 +39,8 @@
 * **Helper**: mapped-repair-events-helper@mailinator.com PW: OSTestHelper
 
 <h1 align="center">
-  <img src="https://anstiftung.de/images/anstiftung-logo.svg" alt="anstiftung" />
+  <a href="https://www.anstiftung.de">
+    <img src="https://anstiftung.de/images/anstiftung-logo.svg" alt="anstiftung" />
+  </a>
 </h1>
 
