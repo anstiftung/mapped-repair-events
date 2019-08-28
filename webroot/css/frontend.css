@@ -3067,7 +3067,8 @@ body.users.all .public-user-wrapper .button.gray {
 }
 body.users.publicProfile .button.gray.workshop {
     margin-right: 5px;
-    margin-bottom: 0;
+    margin-bottom: 5px;
+    float: left;
 }
 .public-user-wrapper .public-name-wrapper {
     height: 28px;

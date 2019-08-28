@@ -80,7 +80,7 @@ echo $this->element('highlightNavi', ['main' => 'Aktive']);
     if (!empty($user->workshops)) {
         echo '<strong>';
             echo __('This user is working for the following Repair Initiatives');
-        echo '</strong><br />';
+        echo '</strong><br /><br />';
     ?>
         <div class="workshop-link-wrapper">
     		<?php foreach($user->workshops as $workshop) { ?>
