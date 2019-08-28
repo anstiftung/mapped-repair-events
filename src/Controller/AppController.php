@@ -22,6 +22,7 @@ use Cake\Datasource\ConnectionManager;
 use Cake\Event\Event;
 use Cake\I18n\Time;
 use Cake\Http\Exception\NotFoundException;
+use Cake\Http\Exception\ServiceUnavailableException;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
@@ -397,11 +398,15 @@ class AppController extends Controller
     
     protected function getLatLngFromGeoCodingService($addressString) {
         
+        if (Configure::read('googleMapApiKey') == '') {
+            throw new ServiceUnavailableException('googleMapApiKey not defined');
+        }
+        
         $lat = 'ungültig';
         $lng = 'ungültig';
         
         $addressString = Configure::read('AppConfig.htmlHelper')->replaceAddressAbbreviations($addressString);
-        $geocode = file_get_contents('https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyBS0AF6QYHZlLENfchPQTBAfIJ9GZ6PUAk&address=' . urlencode($addressString));
+        $geocode = file_get_contents('https://maps.googleapis.com/maps/api/geocode/json?key='.Configure::read('googleMapApiKey').'&address=' . urlencode($addressString));
         $output = json_decode($geocode);
         
         if ($output->status == 'OK' && empty($output->results[0]->partial_match)) {
