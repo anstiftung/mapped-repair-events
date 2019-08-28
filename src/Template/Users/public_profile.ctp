@@ -1,5 +1,6 @@
 <?php
 use App\Controller\Component\StringComponent;
+echo $this->element('highlightNavi', ['main' => 'Aktive']);
 ?>
 
 <div class="top-wrapper">
