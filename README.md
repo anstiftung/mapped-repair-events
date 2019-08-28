@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img src="https://open-source.reparatur-initiativen.de/img/core/logo.jpg" alt="Mapped repair events">
+  <img src="https://open-source.reparatur-initiativen.de/img/core/logo.jpg" alt="Mapped repair events" />
 </h1>
 
 <h4 align="center">A platform for mapped repair events</h4>
@@ -37,3 +37,8 @@
 * **Admin**: mapped-repair-events-admin@mailinator.com PW: OSTestAdmin
 * **Orga**: mapped-repair-events-orga@mailinator.com PW: OSTestOrga
 * **Helper**: mapped-repair-events-helper@mailinator.com PW: OSTestHelper
+
+<h1 align="center">
+  <img src="https://anstiftung.de/images/anstiftung-logo.svg" alt="anstiftung" />
+</h1>
+
