@@ -2,7 +2,7 @@
   <img src="https://open-source.reparatur-initiativen.de/img/core/logo.jpg" alt="Mapped repair events" />
 </h1>
 
-<h4 align="center">A platform for mapped repair events</h4>
+<h4 align="center">Mapped repair events. A platform for community repair.</h4>
 
 <p align="center">
   <a href="LICENSE">
