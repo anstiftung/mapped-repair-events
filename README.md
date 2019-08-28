@@ -13,7 +13,7 @@
 
 <h1></h1>
 
-# Installation guide
+## Installation guide
 
 * set up vhost and start webserver and mysql-server
 * clone repository from github
@@ -22,17 +22,17 @@
 * run `$ composer install --optimize-autoloader`
 * run `$ npm --prefix ./webroot install ./webroot`
 * Enable cronjob (once a day): `bin/cake SendWorknewsNotification`
-* **If you have questions, please [https://github.com/anstiftung/mapped-repair-events/issues/new](create a new issue) on github**
+* **If you have questions, please [create a new issue](https://github.com/anstiftung/mapped-repair-events/issues/new) on github**
 
-# Netzwerk Reparatur-Initiativen
+## Netzwerk Reparatur-Initiativen
 * [https://www.reparatur-initiativen.de/](https://www.reparatur-initiativen.de/)
 
-# Demo page
+## Demo page
 * [https://open-source.reparatur-initiativen.de/](https://open-source.reparatur-initiativen.de/)
 * the demo page is without user generated content
 * [Login data for demo page](https://open-source.reparatur-initiativen.de/post/test-logins)
 
-## Login data demo page
+### Login data demo page
 
 * **Admin**: mapped-repair-events-admin@mailinator.com PW: OSTestAdmin
 * **Orga**: mapped-repair-events-orga@mailinator.com PW: OSTestOrga
