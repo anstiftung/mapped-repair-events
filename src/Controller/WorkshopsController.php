@@ -248,16 +248,6 @@ class WorkshopsController extends AppController
             $addCategories = true;
         }
         
-        if (!empty($this->request->getQuery('keyword'))) {
-            $keyword = strtolower(trim($this->request->getQuery('keyword')));
-            if ($keyword !== '' && $keyword !== 'null') {
-                $searchCondition = 'NOT (';
-                $searchCondition .= $this->Workshop->getKeywordSearchConditions($keyword);
-                $searchCondition .= ')';
-                $conditions[] = $searchCondition;
-            }
-        }
-        
         $eventsAssociation = $this->Workshop->getAssociation('Events');
         $eventsAssociation->setConditions([
             'Events.status >=' . APP_OFF,
@@ -288,7 +278,17 @@ class WorkshopsController extends AppController
                 ],
                 'Users.Groups'
             ]
-        ])->toArray();
+        ]);
+        
+        
+        if (!empty($this->request->getQuery('keyword'))) {
+            $keyword = strtolower(trim($this->request->getQuery('keyword')));
+            if ($keyword !== '' && $keyword !== 'null') {
+                $workshops->where($this->Workshop->getKeywordSearchConditions($keyword, true));
+            }
+        }
+        
+        $workshops = $workshops->toArray();
         
         $this->Category = TableRegistry::getTableLocator()->get('Categories');
         $categories = $this->Category->getMainCategoriesForFrontend();
@@ -1011,15 +1011,6 @@ class WorkshopsController extends AppController
             'Workshops.status' => APP_ON
         ];
         
-        $keyword = '';
-        
-        if (!empty($this->request->getQuery('keyword'))) {
-            $keyword = strtolower(trim($this->request->getQuery('keyword')));
-            $searchCondition = '(' . $this->Workshop->getKeywordSearchConditions($keyword) . ')';
-            $conditions[] = $searchCondition;
-        }
-        $this->set('keyword', $keyword);
-        
         $query = $this->Workshop->find('all', [
             'conditions' => $conditions,
             'contain' => [
@@ -1027,6 +1018,13 @@ class WorkshopsController extends AppController
                 'Events'
             ]
         ]);
+        
+        $keyword = '';
+        if (!empty($this->request->getQuery('keyword'))) {
+            $keyword = strtolower(trim($this->request->getQuery('keyword')));
+            $query->where($this->Workshop->getKeywordSearchConditions($keyword, false));
+        }
+        $this->set('keyword', $keyword);
         
         $workshops = $this->paginate($query, [
             'sortWhitelist' => [

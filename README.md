@@ -27,8 +27,7 @@
 
 ## Demo page
 * [https://open-source.reparatur-initiativen.de/](https://open-source.reparatur-initiativen.de/)
-* the demo page is without user generated content
-* [Login data for demo page](https://open-source.reparatur-initiativen.de/post/test-logins)
+* [Login data - credentials](https://open-source.reparatur-initiativen.de/post/test-logins)
 
 ### Login data demo page
 
