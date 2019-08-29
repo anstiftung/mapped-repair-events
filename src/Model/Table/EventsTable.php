@@ -63,11 +63,18 @@ class EventsTable extends AppTable
         return $validator;
     }
     
-    public function getKeywordSearchConditions($keyword) {
-        $searchCondition = 'Events.zip LIKE "'.$keyword.'%" '; // SIC! if = is used, strange results happen...
-        $searchCondition .= 'OR Workshops.name LIKE "'.$keyword.'%" ';
-        $searchCondition .= 'OR Events.ort LIKE "'.$keyword.'%" ';
-        return $searchCondition;
+    public function getKeywordSearchConditions($keyword, $negate) {
+        return function ($exp, $query) use ($keyword, $negate) {
+            $result = $exp->or_([
+                'Events.zip LIKE' => $keyword . '%',
+                'Workshops.name LIKE' => $keyword . '%',
+                'Events.ort LIKE' => $keyword . '%',
+            ]);
+            if ($negate) {
+                $result = $exp->not($result);
+            }
+            return $result;
+        };
     }
     
     public function getListConditions() {

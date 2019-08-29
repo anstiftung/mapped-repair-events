@@ -431,19 +431,6 @@ class EventsController extends AppController
         
         $allParamsEmpty = empty($this->request->getQuery('keyword'));
         
-        $searchCondition = '';
-        
-        if (!empty($this->request->getQuery('keyword'))) {
-            $keyword = strtolower(trim($this->request->getQuery('keyword')));
-            if ($keyword !== '' && $keyword !== 'null') {
-                $searchCondition .= '(' . $this->Event->getKeywordSearchConditions($keyword) . ')';
-            }
-        }
-        
-        if (! $allParamsEmpty) {
-            $conditions[] = 'NOT (' . $searchCondition . ')';
-        }
-        
         $events = $this->Event->find('all', [
             'conditions' => $conditions,
             'fields' => $this->Event->getListFields(),
@@ -453,6 +440,17 @@ class EventsController extends AppController
                 'Categories'
             ]
         ])->distinct(['Events.uid']);
+        
+        if (!empty($this->request->getQuery('keyword'))) {
+            $keyword = strtolower(trim($this->request->getQuery('keyword')));
+            if ($keyword !== '' && $keyword !== 'null') {
+                $events->where($this->Event->getKeywordSearchConditions($keyword, false));
+            }
+        }
+        
+        if (! $allParamsEmpty) {
+            $events->where($this->Event->getKeywordSearchConditions($keyword, true));
+        }
         
         if (!empty($this->request->getQuery('categories'))) {
             $categories = explode(',', $this->request->getQuery('categories'));
@@ -483,14 +481,6 @@ class EventsController extends AppController
         $this->set('metaTags', $metaTags);
         
         $conditions = $this->Event->getListConditions();
-        $keyword = '';
-        
-        if (!empty($this->request->getQuery('keyword'))) {
-            $keyword = strtolower(trim($this->request->getQuery('keyword')));
-            $searchCondition = '(' . $this->Event->getKeywordSearchConditions($keyword) . ')';
-            $conditions[] = $searchCondition;
-        }
-        $this->set('keyword', $keyword);
         
         $selectedCategories = !empty($this->request->getQuery('categories')) ? explode(',', $this->request->getQuery('categories')) : [];
         $this->set('selectedCategories', $selectedCategories);
@@ -551,15 +541,22 @@ class EventsController extends AppController
         }
         $this->set('preparedCategories', $preparedCategories);
         
+        $query = $this->Events->find('all', [
+            'conditions' => $conditions,
+        ])->distinct(['Events.uid']);
+        
+        $keyword = '';
+        if (!empty($this->request->getQuery('keyword'))) {
+            $keyword = strtolower(trim($this->request->getQuery('keyword')));
+            $query->where($this->Event->getKeywordSearchConditions($keyword, false));
+        }
+        $this->set('keyword', $keyword);
+        
         $resetCategoriesUrl = '/reparatur-termine';
         if ($keyword != '') {
             $resetCategoriesUrl = '/reparatur-termine?keyword=' . $keyword;
         }
         $this->set('resetCategoriesUrl', $resetCategoriesUrl);
-        
-        $query = $this->Events->find('all', [
-            'conditions' => $conditions,
-        ])->distinct(['Events.uid']);
         
         if (!empty($this->request->getQuery('categories'))) {
             $categories = explode(',', $this->request->getQuery('categories'));

@@ -241,13 +241,18 @@ class WorkshopsTable extends AppTable
         return $userFound;
     }
     
-    public function getKeywordSearchConditions($keyword) {
-        
-        $searchCondition = 'Workshops.zip LIKE "' . $keyword . '%" ';
-        $searchCondition .= 'OR Workshops.name LIKE "' . $keyword . '%" ';
-        $searchCondition .= 'OR Workshops.city LIKE "' . $keyword . '%" ';
-        return $searchCondition;
-        
+    public function getKeywordSearchConditions($keyword, $negate) {
+        return function ($exp, $query) use ($keyword, $negate) {
+            $result = $exp->or_([
+                'Workshops.city LIKE' => $keyword . '%',
+                'Workshops.zip LIKE' => $keyword . '%',
+                'Workshops.name LIKE' => $keyword . '%',
+            ]);
+            if ($negate) {
+                $result = $exp->not($result);
+            }
+            return $result;
+        };
     }
     
     public function getLatestWorkshops() {
