@@ -504,7 +504,6 @@ class UsersController extends AppController
     {
         
         $this->loadComponent('Register');
-        $this->set('antiSpamComponent', $this->Register->AntiSpam);
         
         $this->Country = TableRegistry::getTableLocator()->get('Countries');
         $this->set('countries', $this->Country->getForDropdown());
@@ -517,6 +516,12 @@ class UsersController extends AppController
         $user = $this->User->newEntity();
         
         if (! empty($this->request->getData())) {
+            
+            if (!empty($this->getRequest()->getData()) && ($this->getRequest()->getData('antiSpam') == '' || $this->getRequest()->getData('antiSpam') < 3)) {
+                $this->AppFlash->setFlashError('S-p-a-m-!');
+                $this->redirect('/');
+                return;
+            }
             
             if ($this->request->getData('Users.i_want_to_receive_the_newsletter')) {
                 $this->loadComponent('CptNewsletter');

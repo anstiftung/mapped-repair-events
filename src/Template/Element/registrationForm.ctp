@@ -1,11 +1,6 @@
 <div class="ViewsWrapper">
 
 <?php
-    echo $this->element('formAntiSpam', [
-        'formId' => 'UserReg' . $userGroup,
-        'table' => 'User',
-        'antiSpamComponent' => $antiSpamComponent
-    ]);
     echo $this->element('highlightNavi', [
         'main' => 'Registrieren'
     ]);

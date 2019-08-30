@@ -48,18 +48,6 @@ abstract class AppTable extends Table
                 
     }
     
-    public function addFormAntiSpamKeyValidationRule(Validator $validator)
-    {
-        $validator->add('MappedRepairEvents_fask', 'FormAntiSpamKey', [
-            'rule' => function ($value, $context) {
-                $session = new AppSession();
-                return $value == $session->read('FormAntiSpamKey');
-            },
-            'message' => 'Es ist ein Fehler aufgetreten.'
-        ]);
-        return $validator;
-    }
-    
     public function addUrlValidation(Validator $validator)
     {
         $validator->notEmptyString('url', 'Bitte trage einen Slug ein.');
