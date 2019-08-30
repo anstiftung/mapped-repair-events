@@ -209,7 +209,6 @@ class UsersTable extends AppTable
             'rule' => array('custom', ZIP_REGEX),
             'message' => 'Die PLZ ist nicht gültig.'
         ]);
-        $validator = $this->addFormAntiSpamKeyValidationRule($validator);
         return $validator;
         
     }

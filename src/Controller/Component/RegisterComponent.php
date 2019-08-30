@@ -13,7 +13,6 @@ class RegisterComponent extends AppComponent
 
     public $components = [
         'AppFlash',
-        'AntiSpam',
         'FluxBb'
     ];
 

@@ -11,7 +11,6 @@ define('APP_NONE', 0);
 define('APP_REFUSED', -1);
 define('APP_NOT_REFUSED', '>-1');
 
-define('ANTI_SPAM_KEY_LENGTH', 20);
 define('WEBMASTER_TOOL_KEY', '');
 define('JS_NAMESPACE', 'MappedRepairEvents');
 

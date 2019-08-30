@@ -15,6 +15,28 @@ MappedRepairEvents.Helper = {
         MappedRepairEvents.Detect.setIsMobile();
     }
 
+    /**
+     * http://stackoverflow.com/questions/8472/practical-non-image-based-captcha-approaches?lq=1
+     */
+    ,updateAntiSpamField: function (form, id) {
+    
+        if ($('#antiSpam' + id).length == 0) {
+            var inputField = $('<input />').attr('id', 'antiSpam' + id).attr('name', 'antiSpam').attr('type', 'hidden');
+            $('#UserReg' + id).prepend(inputField);
+        }
+        var a = document.getElementById('antiSpam' + id);
+        if (isNaN(a.value) == true) {
+            a.value = 0;
+        } else {
+            a.value = parseInt(a.value) + 1;
+        }
+    
+        setTimeout(function () {
+            MappedRepairEvents.Helper.updateAntiSpamField(form, id);
+        }, 1000);
+    }   
+
+
     ,initLoginBoxLayoutListener : function() {
         $(window).on('resize orientationchange', function() {
             MappedRepairEvents.Helper.setLoginBoxLayout();
@@ -331,7 +353,10 @@ MappedRepairEvents.Helper = {
     
     initRegistration : function() {
         
-        // remove double ids because form is rendered twice - all labels are clickable 
+        this.updateAntiSpamField($('#UserReg7'), 7);
+        this.updateAntiSpamField($('#UserReg9'), 9);
+        
+        // remove double ids because form is rendered twice - all labels are clickable
         var multipleCheckbox = $('.fcph .categories-checkbox-wrapper .checkbox');
         multipleCheckbox.find('label').removeAttr('for');
         multipleCheckbox.find('input').removeAttr('id');
