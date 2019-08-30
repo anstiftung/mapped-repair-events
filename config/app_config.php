@@ -6,10 +6,6 @@ define('TAB', "\t");
 define('APP_ON', 1);
 define('APP_OFF', 0);
 define('APP_DELETED', -1);
-define('APP_OK', 1);
-define('APP_NONE', 0);
-define('APP_REFUSED', -1);
-define('APP_NOT_REFUSED', '>-1');
 
 define('WEBMASTER_TOOL_KEY', '');
 define('JS_NAMESPACE', 'MappedRepairEvents');
