@@ -5,8 +5,8 @@
 <h4 align="center">Mapped repair events. A platform for community repair.</h4>
 
 <p align="center">
-  <a href="https://travis-ci.org/anstiftung/mappped-repair-events">
-    <img src="https://travis-ci.org/anstiftung/mappped-repair-events.svg"
+  <a href="https://travis-ci.org/anstiftung/mapped-repair-events">
+    <img src="https://travis-ci.org/anstiftung/mapped-repair-events.svg"
          alt="Build status">
   </a>
   <a href="LICENSE">
