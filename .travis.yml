@@ -7,7 +7,8 @@ php:
 
 before_script:
   - composer install --optimize-autoloader
-
+  - mv ./config/app_custom.default.php ./config/app_custom.php
+  
 script:
   - vendor/bin/phpstan analyze -c phpstan.neon --no-interaction --no-progress
   - vendor/bin/phpunit --stderr
