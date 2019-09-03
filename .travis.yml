@@ -7,7 +7,6 @@ php:
 
 before_script:
   - composer install --optimize-autoloader
-  - npm --prefix ./webroot install ./webroot
 
 script:
   - vendor/bin/phpstan analyze -c phpstan.neon --no-interaction --no-progress
