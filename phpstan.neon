@@ -6,3 +6,5 @@ parameters:
         - src
     autoload_files:
         - tests/bootstrap.php
+    excludes_analyse:
+        - src/Controller/Component/FluxBbComponent.php
