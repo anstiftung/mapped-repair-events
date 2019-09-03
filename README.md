@@ -5,6 +5,10 @@
 <h4 align="center">Mapped repair events. A platform for community repair.</h4>
 
 <p align="center">
+  <a href="https://travis-ci.org/anstiftung/mappped-repair-events">
+    <img src="https://travis-ci.org/anstiftung/mappped-repair-events.svg"
+         alt="Build status">
+  </a>
   <a href="LICENSE">
     <img src="https://img.shields.io/github/license/anstiftung/mapped-repair-events"
          alt="Software license">
@@ -21,6 +25,14 @@
 * run `$ npm --prefix ./webroot install ./webroot`
 * Enable cronjob (once a day): `bin/cake SendWorknewsNotification`
 * **If you have questions, please [create a new issue](https://github.com/anstiftung/mapped-repair-events/issues/new) on github**
+
+## Requirements
+* Server with shell access and cronjobs
+* Apache with `mod_rewrite`
+* PHP >= 7.3
+* MySQL >= 5.6
+* Node.js and npm ([installation](https://www.npmjs.com/get-npm)) developer packages
+* Composer ([installation](https://getcomposer.org/download/)) developer packages
 
 ## Netzwerk Reparatur-Initiativen
 * [https://www.reparatur-initiativen.de/](https://www.reparatur-initiativen.de/)

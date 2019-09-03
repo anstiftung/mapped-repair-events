@@ -16,11 +16,6 @@ class RootsTable extends Table
         $this->setPrimaryKey('uid');
     }
 
-    /**
-     *
-     * @param UID $uid
-     * @return object_type bzw. Tabellen-Name wie 'destinations', 'coursedescriptions'
-     */
     public function getType($uid)
     {
         $data = $this->get($uid);
