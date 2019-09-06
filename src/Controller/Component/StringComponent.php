@@ -160,7 +160,7 @@ class StringComponent extends Component
     {
         return htmlspecialchars($text, ENT_COMPAT, 'UTF-8');
     }
-
+    
     // $str: The anchor string that will be altered
     // $relValue: The rel attribute values you wish to have attached to the anchor
     public static function makeNoFollow(&$str, $relValue = 'nofollow')
