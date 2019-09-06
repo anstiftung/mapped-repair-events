@@ -137,7 +137,6 @@ class StringComponent extends Component
     public static function prepareTextForHTML($text) {
         
         //		$text = self::htmlentities($text);
-        $text = self::convertPlainLinkToHtmlLink($text);
         $text = nl2br($text);
         
         //		$arraySearch  = array('[b]', '[/b]');
@@ -157,61 +156,11 @@ class StringComponent extends Component
         return $text;
     }
     
-    
-    /**
-     *
-     * @author lpo
-     *         prepare text to be written in HTML
-     * @param
-     *            string
-     * @return entities clean string
-     */
     public static function textForHTML($text)
     {
         return htmlspecialchars($text, ENT_COMPAT, 'UTF-8');
     }
-    
-    /**
-     */
-    public static function prepareTextForTextarea($text)
-    {
-        $text = self::convertPlainLinkToPlainHtml($text);
-        
-        return $text;
-    }
-    
-    /**
-     * replaces
-     * [http://www.biomio.dk|biomio|komm hier zur biomio homepage|nofollow] OR [http://www.biomio.dk|biomio|komm hier zur biomio homepage] => <a title="komm hier zur biomio homepage" href="http://www.biomio.dk">biomio</a>
-     * [http://www.biomio.dk|biomio|komm hier zur biomio homepage|follow] => <a rel="nofollow" title="komm hier zur biomio homepage" href="http://www.biomio.dk">biomio</a>
-     * http://www.google.de => <a href="/redirect/www.google.de" target="_blank">www.google.de</a>
-     * erkennt auch mehrere links in einem string
-     *
-     * @param
-     *            string
-     * @return string
-     */
-    public static function convertPlainLinkToHtmlLink($string)
-    {
-        
-        // not compatible with php7
-        return $string;
-        
-        $url = 'https?:\/\/[\w-?,%&;#~=+\.\/\@:\[\]]+';
-        $seoUrl = '(\[)+https?:\/\/[\w-?,%&;#~=+\.\/\@:\[\]]+(\|+([a-zA-Z0-9 äöüÄÖÜß\-\_\#\+\*\.\,]+){1,3})+(\])+';
-        
-        $replacedString = preg_replace([
-            '/(' . $seoUrl . ')/iem',
-            '/(' . $url . ')$/iem',
-            '/(' . $url . ')(\s)/iem'
-        ], [
-            "self::_convertSeoLinkHelper('\\1')",
-            "self::convertPlainLinkHelper('\\1')",
-            "self::convertPlainLinkHelper('\\1').'\\2'"
-        ], $string);
-        return $replacedString;
-    }
-    
+
     // $str: The anchor string that will be altered
     // $relValue: The rel attribute values you wish to have attached to the anchor
     public static function makeNoFollow(&$str, $relValue = 'nofollow')
@@ -226,20 +175,6 @@ class StringComponent extends Component
         }
         $str = preg_replace($pattern, $replace, $str);
         return $str;
-    }
-    
-    /**
-     */
-    public static function convertPlainLinkToPlainHtml($string)
-    {
-        $seoUrl = '(\[)+https?:\/\/[\w-?,%&;#~=+\.\/\@:\[\]]+(\|+([a-zA-Z0-9 äöüÄÖÜß\-\_\#\+\*\.\,]+){1,3})+(\])+';
-        
-        $replacedString = preg_replace([
-            '/(' . $seoUrl . ')/iem'
-        ], [
-            "self::_convertToPlainHtml('\\1')"
-        ], $string);
-        return $replacedString;
     }
     
     /**
