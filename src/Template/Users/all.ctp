@@ -15,14 +15,14 @@
 
 <?php
     echo '<div class="skills-wrapper">';
-    echo $this->Form->control('skills', [
-        'type' => 'select',
-        'label' => false,
-        'empty' => 'Alle anzeigen',
-        'options' => $skillsForDropdown,
-        'value' => isset($skill) ? $skill->id : ''
-    ]);
-    echo '<label>Suche nach bestimmtem Schlagwort</label>';
+        echo '<label>Suche nach bestimmtem Schlagwort</label>';
+        echo $this->Form->control('skills', [
+            'type' => 'select',
+            'label' => false,
+            'empty' => 'Alle anzeigen',
+            'options' => $skillsForDropdown,
+            'value' => isset($skill) ? $skill->id : ''
+        ]);
     echo '</div>';
 ?>
 <div class="sc"></div>

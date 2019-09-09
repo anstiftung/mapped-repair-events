@@ -3150,7 +3150,8 @@ body.users.all h1,
 body.skills h1 {
     padding-bottom: 10px;
     padding-left: 50px;
-    line-height: 44px;
+    line-height: 45px;
+    margin-top: 15px;
 }
 body.skills.all h1 {
     padding-left: 42px;
@@ -3160,17 +3161,19 @@ body.skills.all .dotted-line-full-width {
 }
 body.users.all h1 {
     float: left;
-    width: 40%;
+    width: 845px;
 }
 body.users.all .skills-wrapper {
     float: right;
-    width: 50%;
+    width: 265px;
     margin-top: 10px;
+    margin-bottom: 10px;
 }
 body.users.all .skills-wrapper label {
     float: right;
-    margin-right: 10px;
-    margin-top: 10px;
+    margin-right: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 body.users.all .skills-wrapper .input.select {
     float: right;
