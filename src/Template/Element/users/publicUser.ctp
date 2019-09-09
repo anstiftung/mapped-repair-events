@@ -33,7 +33,7 @@
 		    echo '</' . $headingTag . '>';
 		    
 		    if ($user->email) {
-		        echo StringComponent::hide_email($user->email, 'button gray');
+		        echo StringComponent::hide_email($user->email, 'email', false);
 		    }
 		    
             echo '<div class="address-wrapper">';

@@ -828,7 +828,7 @@ class StringComponent extends Component
     /**
      * http://www.maurits.vdschee.nl/php_hide_email/
      */
-    public static function hide_email($email, $class = '')
+    public static function hide_email($email, $class = '', $renderAsLink = true)
     {
         $classHtml = '';
         if ($class != '') {
@@ -839,12 +839,17 @@ class StringComponent extends Component
         $key = str_shuffle($character_set);
         $cipher_text = '';
         $id = 'e' . rand(1, 999999999);
+        if ($renderAsLink) {
+            $tag = '<a ' . $classHtml . 'href=\\"mailto:"+d+"\\">"+d+"</a>';
+        } else {
+            $tag = '<span ' . $classHtml . '>"+d+"</span>';
+        }
         for ($i = 0; $i < strlen($email); $i += 1)
             $cipher_text .= @$key[strpos($character_set, $email[$i])];
             
             $script = 'var a="' . $key . '";var b=a.split("").sort().join("");var c="' . $cipher_text . '";var d="";';
             $script .= 'for(var e=0;e<c.length;e++)d+=b.charAt(a.indexOf(c.charAt(e)));';
-            $script .= 'document.getElementById("' . $id . '").innerHTML="<a ' . $classHtml . 'href=\\"mailto:"+d+"\\">"+d+"</a>"';
+            $script .= 'document.getElementById("' . $id . '").innerHTML="'.$tag.'";';
             $script = "eval(\"" . str_replace([
                 "\\",
                 '"'

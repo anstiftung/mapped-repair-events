@@ -3047,7 +3047,7 @@ body.users.all .public-user-wrapper .right-wrapper {
 .public-user-wrapper .address-wrapper {
     float: left;
     line-height: 15px;
-    margin-top: 10px;
+    margin-top: 5px;
     margin-bottom: 10px;
     clear: both;
 }
@@ -3056,14 +3056,11 @@ body.users.all .public-user-wrapper .right-wrapper {
     margin-bottom: 10px;
     float: left;
 }
-body.users.all .public-user-wrapper .button.gray {
+body.users.all .public-user-wrapper .email {
     max-width: 202px;
     word-break: break-all;
     font-size: 12px;
-    padding: 4px;
-    margin-top: 5px;
-    margin-bottom: 0;
-    line-height: 14px ! important;
+    float: left;
 }
 body.users.publicProfile .button.gray.workshop {
     margin-right: 5px;
