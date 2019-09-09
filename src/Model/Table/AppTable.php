@@ -96,20 +96,6 @@ abstract class AppTable extends Table
         return $patchedEntity;
     }
 
-    public function findAll(Query $query, array $options)
-    {
-        $query->where([
-            $query->getRepository()->getAlias() . '.uid IS NOT NULL'
-        ]);
-        if ($query->getRepository()->hasField('url')) {
-            $query->where([
-                $query->getRepository()->getAlias() . '.url IS NOT NULL'
-            ]);
-        }
-        $query->sql(); // join data error if not called...
-        return $query;
-    }
-
     public function beforeSave($event, $entity, $options)
     {
         
