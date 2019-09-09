@@ -151,6 +151,8 @@ class UsersController extends AppController
                 'Skills',
                 'Workshops' => [
                     'fields' => [
+                        'Workshops.url',
+                        'Workshops.name',
                         'UsersWorkshops.user_uid'
                     ]
                 ]
