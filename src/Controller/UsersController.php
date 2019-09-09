@@ -78,7 +78,7 @@ class UsersController extends AppController
         ];
         
         if ($this->getRequest()->getQuery('zip') != '') {
-            $conditions[] = 'LEFT(Users.zip, 1) = ' . (int) $this->getRequest()->getQuery('zip');
+            $conditions['LEFT(Users.zip, 1) = '] = (int) $this->getRequest()->getQuery('zip');
         }
         
         $users = $this->User->find('all', [
