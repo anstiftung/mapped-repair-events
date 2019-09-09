@@ -3027,22 +3027,29 @@ body.users.publicProfile #sklill_icons {
     margin-right: 15px;
     margin-bottom: 15px;
 }
+a.public-user-wrapper:hover {
+	background-color: #f5f5f5;
+}
+.public-user-wrapper span {
+	color: #727374;
+}
 .public-user-wrapper .left-wrapper {
     width: 210px;
     float: left;
 }
 body.users.all .public-user-wrapper {
-    height: 150px;
+    height: 130px;
+    padding: 10px;
 }
 body.users.all .public-user-wrapper .left-wrapper {
     width: 125px;
 }
 .public-user-wrapper .right-wrapper {
-    width: 300px;
+    width: 280px;
     float: left;
 }
 body.users.all .public-user-wrapper .right-wrapper {
-    width: 205px;
+    width: 185px;
 }
 .public-user-wrapper .address-wrapper {
     float: left;
@@ -3057,7 +3064,7 @@ body.users.all .public-user-wrapper .right-wrapper {
     float: left;
 }
 body.users.all .public-user-wrapper .email {
-    max-width: 202px;
+    max-width: 182px;
     word-break: break-all;
     font-size: 12px;
     float: left;
