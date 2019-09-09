@@ -26,12 +26,16 @@
 ?>
 <div class="sc"></div>
 
+<div class="dotted-line-full-width"></div>
+
 <?php if (isset($skill)) {
     echo $this->element('users/userFilter', ['urlMethod' => 'urlSkillDetail', 'skill' => $skill]);
 } else {
     echo $this->element('users/userFilter', ['urlMethod' => 'urlUsers']);
 }
 ?>
+
+<div class="dotted-line-full-width"></div>
 
 <div class="page-wrapper">
     <?php

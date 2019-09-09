@@ -5,6 +5,8 @@ echo $this->element('highlightNavi', ['main' => 'Wissen & Können']);
 
 <h1>Alle Kenntnisse &amp; Interessen (<?php echo count($skills); ?>)</h1>
 
+<div class="dotted-line-full-width"></div>
+
 <?php
 foreach($skills as $letter => $letterSkills) {
     

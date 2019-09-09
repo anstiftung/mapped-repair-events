@@ -3131,12 +3131,8 @@ body.users.all .user-wrapper {
     margin-right: 10px;
 }
 body.users.all .zip-wrapper {
-    border: 2px dotted #000;
-    border-left: none;
-    border-right: none;
     padding-top: 10px;
-    padding-bottom: 10px;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     padding-left: 50px;
 }
 body.users.all .zip-wrapper a {
@@ -3157,8 +3153,10 @@ body.skills h1 {
     line-height: 44px;
 }
 body.skills.all h1 {
-    border-bottom: 2px dotted #000;
     padding-left: 42px;
+}
+body.skills.all .dotted-line-full-width {
+	margin-bottom: 15px;
 }
 body.users.all h1 {
     float: left;
