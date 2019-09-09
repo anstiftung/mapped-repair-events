@@ -3152,7 +3152,7 @@ body.skills h1 {
     padding-left: 50px;
     line-height: 44px;
 }
-body.skills h1 {
+body.skills.all h1 {
     border-bottom: 2px dotted #000;
     padding-left: 42px;
 }
