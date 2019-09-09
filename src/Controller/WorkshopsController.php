@@ -297,7 +297,6 @@ class WorkshopsController extends AppController
             ]
         ]);
         
-        
         if (!empty($this->request->getQuery('keyword'))) {
             $keyword = strtolower(trim($this->request->getQuery('keyword')));
             if ($keyword !== '' && $keyword !== 'null') {
@@ -533,10 +532,10 @@ class WorkshopsController extends AppController
         $this->processWorknewsAddForm($workshop);
         
         $this->User = TableRegistry::getTableLocator()->get('Users');
-        $orgaTeam = $this->User->privatizeData($this->Workshop->getOrgaTeam($workshop));
+        $orgaTeam = $this->Workshop->getOrgaTeam($workshop);
         $this->set('orgaTeam', $orgaTeam);
         
-        $team = $this->User->privatizeData($this->Workshop->getTeam($workshop));
+        $team = $this->Workshop->getTeam($workshop);
         $this->set('team', $team);
         
         $this->set('groups', Configure::read('AppConfig.htmlHelper')->getUserGroupsForWorkshopDetail());

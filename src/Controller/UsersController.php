@@ -110,10 +110,6 @@ class UsersController extends AppController
                 'Users.created' => 'DESC'
             ]
         ]);
-        
-        foreach($users as $user) {
-            $user = $this->User->privatizeData([$user])[0];
-        }
         $this->set('users', $users);
         
         if ($skillId > 0) {
@@ -164,8 +160,6 @@ class UsersController extends AppController
         if (empty($user)) {
             throw new NotFoundException('user not found');
         }
-        
-        $user = $this->User->privatizeData([$user])[0];
         $this->set('user', $user);
         
         $metaTags = [
@@ -386,6 +380,7 @@ class UsersController extends AppController
                 'Skills'
             ]
         ])->first();
+        $user->revertPrivatizeData();
         
         if (empty($user)) {
             throw new NotFoundException('user not found');

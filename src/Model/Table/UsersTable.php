@@ -291,20 +291,6 @@ class UsersTable extends AppTable
         return $validator;
     }
     
-    public function privatizeData($users)
-    {
-        foreach($users as &$user) {
-            $privateFields = explode(',',  $user->private);
-            $privateFields = str_replace('-', '_', $privateFields);
-            foreach($user->getVisible() as $property) {
-                if (in_array($property, $privateFields)) {
-                    $user->$property = '';
-                }
-            }
-        }
-        return $users;
-    }
-
     public function newPasswordEqualsValidator($value, $context)
     {
         return $context['data']['password_new_1'] == $context['data']['password_new_2'];
