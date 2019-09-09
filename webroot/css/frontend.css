@@ -3183,7 +3183,7 @@ body.skills h1 a {
     cursor: default;
 }
 body.skills.all .letter {
-    font-size: 20px;
+    font-size: 22px;
     float: left;
     width: 40px;
     color: #4D8EA2;
@@ -3204,19 +3204,19 @@ body.skills.all .skills a {
     font-weight: normal;
 }
 body.skills.all .skills a.skill-10 {
-    font-size: 12px;
-}
-body.skills.all .skills a.skill-20 {
     font-size: 14px;
 }
-body.skills.all .skills a.skill-30 {
+body.skills.all .skills a.skill-20 {
     font-size: 16px;
 }
-body.skills.all .skills a.skill-40 {
+body.skills.all .skills a.skill-30 {
     font-size: 18px;
 }
+body.skills.all .skills a.skill-40 {
+    font-size: 20px;
+}
 body.skills.all .skills a.skill-50 {
-    font-size: 22px;
+    font-size: 24px;
 }
 body.workshops.verwalten small,
 #workshop-detail small {
