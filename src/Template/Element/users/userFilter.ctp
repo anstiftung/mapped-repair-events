@@ -14,7 +14,7 @@
     	           $url = $this->Html->urlSkillDetail($skill->id, $skill->name, $i);
     	           $unfilteredUrl = $this->Html->urlSkillDetail($skill->id, $skill->name);
     	       }
-    	       echo '<a class="'.join(' ', $class).'" href="'.$url.'">PLZ ' . $i . ' ...</a>';
+    	       echo '<a class="'.join(' ', $class).'" href="'.$url.'">PLZ ' . $i . ' ...</a> | ';
     	   }
     	?>
     	<a href="<?php echo $unfilteredUrl; ?>">alle anzeigen</a>
@@ -22,8 +22,8 @@
 	<div class="sort">
       Sortieren nach:
       	<?php
-          	echo $this->Paginator->sort('Users.created', 'Datum');
-          	echo $this->Paginator->sort('Users.zip', 'PLZ');
+          	echo $this->Paginator->sort('Users.created', 'Datum') . ' | ';
+          	echo $this->Paginator->sort('Users.zip', 'PLZ') . ' | ';
           	echo $this->Paginator->sort('Users.nick', 'Nick');
         ?>
     </div>
