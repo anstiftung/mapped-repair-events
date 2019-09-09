@@ -39,6 +39,7 @@ class SkillsController extends AppController
                         'UsersSkills.skill_id',
                     ],
                     'conditions' => [
+                        'FIND_IN_SET("skills", Users.private) = ' => 0,
                         'Users.status' => APP_ON
                     ]
                 ]

@@ -81,6 +81,9 @@ class UsersController extends AppController
             $conditions['LEFT(Users.zip, 1) = '] = (int) $this->getRequest()->getQuery('zip');
             $conditions['FIND_IN_SET("zip", Users.private) = '] = 0;
         }
+        if ($skillId > 0) {
+            $conditions['FIND_IN_SET("skills", Users.private) = '] = 0;
+        }
         
         $users = $this->User->find('all', [
             'conditions' => $conditions,
