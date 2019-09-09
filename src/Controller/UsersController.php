@@ -65,6 +65,11 @@ class UsersController extends AppController
                     'Skills.status' => APP_ON
                 ]
             ])->first();
+                
+            if (empty($skill)) {
+                throw new NotFoundException('skill not found');
+            }
+            
             $this->set('skill', $skill);
         }
         
