@@ -7,6 +7,7 @@ use Cake\Datasource\ConnectionManager;
 use Cake\Event\Event;
 use Cake\I18n\Time;
 use Cake\Mailer\Email;
+use Cake\Http\Exception\ForbiddenException;
 use Cake\Http\Exception\NotFoundException;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
@@ -208,6 +209,10 @@ class WorkshopsController extends AppController
 
     public function ajaxGetAllWorkshopsForMap() {
         
+        if (!$this->request->is('ajax')) {
+            throw new ForbiddenException();
+        }
+        
         $this->RequestHandler->renderAs($this, 'json');
         
         $keyword = '';
@@ -269,14 +274,26 @@ class WorkshopsController extends AppController
                     $q->select($eventFields);
                     return $q;
                 },
-                'Events.Categories',
-                'OwnerUsers',
-                'Users' => [
+                'Events.Categories' => [
                     'fields' => [
-                        'UsersWorkshops.workshop_uid'
+                        'EventsCategories.event_uid',
+                        'Categories.id',
+                        'Categories.name',
+                        'Categories.icon'
                     ]
                 ],
-                'Users.Groups'
+                'Users' => [
+                    'fields' => [
+                        'UsersWorkshops.workshop_uid',
+                        'Users.uid' // necessary to retrieve Users.Groups
+                    ]
+                ],
+                'Users.Groups' => [
+                    'fields' => [
+                        'UsersGroups.user_uid',
+                        'Groups.id'
+                    ]
+                ]
             ]
         ]);
         
@@ -299,50 +316,6 @@ class WorkshopsController extends AppController
             
             $hasModifyPermissions = $this->AppAuth->isAdmin() || $this->Workshop->isUserInOrgaTeam($this->AppAuth->user(), $workshop);
             $i = 0;
-            
-            foreach($workshop->users as $user) {
-                unset($user->email);
-                unset($user->firstname);
-                unset($user->lastname);
-                unset($user->about_me);
-                unset($user->website);
-                unset($user->street);
-                unset($user->zip);
-                unset($user->country_code);
-                unset($user->city);
-                unset($user->phone);
-                unset($user->facebook_username);
-                unset($user->twitter_username);
-                unset($user->additional_contact);
-                unset($user->feed_url);
-                unset($user->privacy_policy_accepted);
-                unset($user->confirm);
-                unset($user->private);
-                unset($user->created);
-                unset($user->updated);
-                unset($user->updated_by);
-            }
-
-            unset($workshop->owner_user->email);
-            unset($workshop->owner_user->firstname);
-            unset($workshop->owner_user->lastname);
-            unset($workshop->owner_user->about_me);
-            unset($workshop->owner_user->website);
-            unset($workshop->owner_user->street);
-            unset($workshop->owner_user->zip);
-            unset($workshop->owner_user->country_code);
-            unset($workshop->owner_user->city);
-            unset($workshop->owner_user->phone);
-            unset($workshop->owner_user->facebook_username);
-            unset($workshop->owner_user->twitter_username);
-            unset($workshop->owner_user->additional_contact);
-            unset($workshop->owner_user->feed_url);
-            unset($workshop->owner_user->privacy_policy_accepted);
-            unset($workshop->owner_user->confirm);
-            unset($workshop->owner_user->private);
-            unset($workshop->owner_user->created);
-            unset($workshop->owner_user->updated);
-            unset($workshop->owner_user->updated_by);
             
             foreach ($workshop->events as &$event) {
                 
