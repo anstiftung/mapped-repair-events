@@ -3032,6 +3032,7 @@ a.public-user-wrapper:hover {
 }
 .public-user-wrapper span {
 	color: #727374;
+	font-weight: normal;
 }
 .public-user-wrapper .left-wrapper {
     width: 210px;
