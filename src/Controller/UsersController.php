@@ -121,8 +121,7 @@ class UsersController extends AppController
         }
         
         $this->Skill = TableRegistry::getTableLocator()->get('Skills');
-        $skillsForDropdown = $this->Skill->getForDropdown();
-        $skillsForDropdown = array_merge(['-1' => 'Alle anzeigen'], $skillsForDropdown);
+        $skillsForDropdown = $this->Skill->getForDropdown(false);
         $this->set('skillsForDropdown', $skillsForDropdown);
         
         $metaTags = [
@@ -389,7 +388,7 @@ class UsersController extends AppController
         }
         
         $this->Skill = TableRegistry::getTableLocator()->get('Skills');
-        $skillsForDropdown = $this->Skill->getForDropdown();
+        $skillsForDropdown = $this->Skill->getForDropdown(true);
         $this->set('skillsForDropdown', $skillsForDropdown);
         
         $this->_profil($user, $isMyProfile, true);

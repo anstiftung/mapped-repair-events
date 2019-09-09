@@ -18,6 +18,7 @@
     echo $this->Form->control('skills', [
         'type' => 'select',
         'label' => false,
+        'empty' => 'Alle anzeigen',
         'options' => $skillsForDropdown,
         'value' => isset($skill) ? $skill->id : ''
     ]);

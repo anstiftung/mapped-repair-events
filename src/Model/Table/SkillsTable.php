@@ -61,10 +61,19 @@ class SkillsTable extends Table
     /**
      * @return array
      */
-    public function getForDropdown()
+    public function getForDropdown($includeOffline)
     {
         
+        $conditions = [
+            'Skills.status' => APP_ON
+        ];
+        if ($includeOffline) {
+            $conditions = [
+                'Skills.status >= ' => APP_OFF
+            ];
+        }
         $skills = $this->find('all', [
+            'conditions' => $conditions,
             'fields' => [
                 'Skills.id',
                 'Skills.name'
