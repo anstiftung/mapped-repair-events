@@ -44,4 +44,6 @@
             echo $this->element('users/publicUser', ['user' => $user, 'headingTag' => 'h2', 'linkToProfile' => true]);
         }
     ?>
+    <div class="sc"></div>
+    <a class="button" href="<?php echo $this->Html->urlSkills(); ?>">Zurück zur Übersicht</a>
 </div>

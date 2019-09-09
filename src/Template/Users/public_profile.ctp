@@ -90,4 +90,6 @@ echo $this->element('highlightNavi', ['main' => 'Aktive']);
             <?php } ?>
     	</div>
     <?php } ?>
+    
+    <a style="margin-top:10px;float:left;" class="button" href="<?php echo $this->Html->urlUsers(); ?>">Mehr Aktive anzeigen</a>
 </div>
