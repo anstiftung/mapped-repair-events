@@ -66,6 +66,11 @@ class EventsController extends AdminAppController
                 'Events.created' => 'DESC'
             ]
         ]);
+        foreach($objects as $object) {
+            if ($object->owner_user) {
+                $object->owner_user->revertPrivatizeData();
+            }
+        }
         $this->set('objects', $objects->toArray());
         
         $this->User = TableRegistry::getTableLocator()->get('Users');

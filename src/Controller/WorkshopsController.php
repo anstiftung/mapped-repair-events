@@ -495,11 +495,7 @@ class WorkshopsController extends AppController
             'Countries',
             'Metatags',
             'OwnerUsers',
-            'Users' => [
-                'fields' => [
-                    'UsersWorkshops.workshop_uid'
-                ]
-            ],
+            'Users',
             'Users.Groups'
         ];
         
@@ -659,11 +655,7 @@ class WorkshopsController extends AppController
                 'Workshops.status > ' => APP_DELETED
             ],
             'contain' => [
-                'Users' => [
-                    'fields' => [
-                        'UsersWorkshops.workshop_uid'
-                    ]
-                ]
+                'Users'
             ]
         ]);
         
@@ -675,6 +667,9 @@ class WorkshopsController extends AppController
             });
         }
         $workshop = $query->first();
+        foreach($workshop->users as $user) {
+            $user->revertPrivatizeData();
+        }
         
         if (empty($workshop) || empty($workshop->{$preparedType['pluralized']})) {
             throw new NotFoundException('workshopUid: ' . $workshopUid . ' no ' . $type . '-workshop relation with userUid ' . $userUid . ' or not logged in as admin');
@@ -793,11 +788,7 @@ class WorkshopsController extends AppController
                         'Workshops.status > ' => APP_DELETED
                     ],
                     'contain' => [
-                        'Users' => [
-                            'fields' => [
-                                'UsersWorkshops.workshop_uid'
-                            ]
-                        ],
+                        'Users',
                         'Users.Groups'
                     ]
                 ])->first();
@@ -917,11 +908,7 @@ class WorkshopsController extends AppController
                 'Workshops.status > ' => APP_DELETED
             ],
             'contain' => [
-                'Users' => [
-                    'fields' => [
-                        'UsersWorkshops.workshop_uid'
-                    ]
-                ],
+                'Users',
                 'Users.Groups'
             ]
         ])->first();

@@ -133,11 +133,7 @@ class WorkshopsTable extends AppTable
                 'Workshops.status > ' . $workshopStatus
             ],
             'contain' => [
-                'Users' => [
-                    'fields' => [
-                        'UsersWorkshops.workshop_uid'
-                    ]
-                ],
+                'Users',
                 'Users.Groups'
             ],
             'order' => [
@@ -214,11 +210,7 @@ class WorkshopsTable extends AppTable
                 'Workshops.status >= ' . APP_OFF
             ],
             'contain' => [
-                'Users' => [
-                    'fields' => [
-                        'UsersWorkshops.workshop_uid'
-                    ]
-                ],
+                'Users',
                 'Users.Groups'
             ]
         ])->first();
