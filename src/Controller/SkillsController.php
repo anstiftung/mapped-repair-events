@@ -35,11 +35,8 @@ class SkillsController extends AppController
             ],
             'contain' => [
                 'Users' => [
-                    'fields' => [
-                        'UsersSkills.skill_id',
-                    ],
                     'conditions' => [
-                        'FIND_IN_SET("skills", Users.private) = ' => 0,
+                        'FIND_IN_SET("skills", "Users.private") = ' => 0,
                         'Users.status' => APP_ON
                     ]
                 ]
