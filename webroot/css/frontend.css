@@ -3148,7 +3148,7 @@ body.users.all .sort a {
     margin-left: 0;
 }
 body.users.all h1,
-body.skills h1 {
+body.skills.all h1 {
     padding-bottom: 10px;
     padding-left: 50px;
     line-height: 45px;
@@ -3180,7 +3180,7 @@ body.users.all .skills-wrapper .input.select {
     float: right;
 }
 body.users.all h1 a,
-body.skills h1 a {
+body.skills.all h1 a {
     cursor: default;
 }
 body.skills.all .letter {
