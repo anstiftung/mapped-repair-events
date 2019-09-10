@@ -324,6 +324,7 @@ class UsersTable extends AppTable
         
         $preparedUsers = [];
         foreach($users as $user) {
+            $user->revertPrivatizeData();
             $preparedUsers[$user->uid] = $user->name . ' (' . $user->nick . ')';
         }
         

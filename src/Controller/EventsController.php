@@ -139,8 +139,10 @@ class EventsController extends AppController
         
         foreach($workshops as $workshop) {
             $workshop->infoSheetCount = 0;
-            foreach($workshop->events as $event) {
-                $workshop->infoSheetCount += count($event->info_sheets);
+            if (!empty($workshop->events)) {
+                foreach($workshop->events as $event) {
+                    $workshop->infoSheetCount += count($event->info_sheets);
+                }
             }
         }
         

@@ -57,6 +57,10 @@ class InfoSheetsController extends AdminAppController
             ]
         ]);
         
+        foreach($objects as $object) {
+            $object->owner_user->revertPrivatizeData();
+        }
+        
         $this->set('objects', $objects->toArray());
         
         $this->User = TableRegistry::getTableLocator()->get('Users');

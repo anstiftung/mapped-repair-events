@@ -140,6 +140,11 @@ class WorkshopsTable extends AppTable
                 'Workshops.name' => 'ASC'
             ]
         ]);
+        foreach($workshops as $workshop) {
+            foreach($workshop->users as $user) {
+                $user->revertPrivatizeData();
+            }
+        }
         return $workshops;
     }
     
