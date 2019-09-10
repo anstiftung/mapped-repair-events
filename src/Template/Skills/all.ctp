@@ -31,7 +31,7 @@ foreach($skills as $letter => $letterSkills) {
                     $class = 'skill-10';
                     break;
             }
-            echo '<a href="'.$this->Html->urlSkillDetail($skill->id, StringComponent::slugify($skill->name)).'" class="'.$class.'" title="Schlagwort '.count($skill->users).'x vergeben">' . $skill->name . '</a>';
+            echo '<a href="'.$this->Html->urlSkillDetail($skill->id, StringComponent::slugify($skill->name)).'" class="'.$class.'">' . $skill->name . '</a>';
         }
     echo '</div>';
     
