@@ -23,7 +23,6 @@
       Sortieren nach:
       	<?php
           	echo $this->Paginator->sort('Users.created', 'Datum') . ' | ';
-          	echo $this->Paginator->sort('Users.zip', 'PLZ') . ' | ';
           	echo $this->Paginator->sort('Users.nick', 'Nick');
         ?>
     </div>

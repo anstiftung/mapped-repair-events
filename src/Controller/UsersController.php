@@ -104,7 +104,7 @@ class UsersController extends AppController
         
         $users = $this->paginate($users, [
             'sortWhitelist' => [
-                'Users.created', 'Users.zip', 'Users.nick'
+                'Users.created', 'Users.nick'
             ],
             'order' => [
                 'Users.created' => 'DESC'
