@@ -3151,7 +3151,6 @@ body.users.all h1,
 body.skills.all h1 {
     padding-bottom: 10px;
     padding-left: 50px;
-    line-height: 45px;
     margin-top: 15px;
 }
 body.skills.all h1 {
@@ -3163,6 +3162,7 @@ body.skills.all .dotted-line-full-width {
 body.users.all h1 {
     float: left;
     width: 845px;
+    line-height: 45px;
 }
 body.users.all .skills-wrapper {
     float: right;
