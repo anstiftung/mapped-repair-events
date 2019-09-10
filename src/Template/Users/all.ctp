@@ -45,5 +45,5 @@
         }
     ?>
     <div class="sc"></div>
-    <a class="button" href="<?php echo $this->Html->urlSkills(); ?>">Zurück zur Übersicht</a>
+    <a class="button" style="float:left;" href="<?php echo $this->Html->urlSkills(); ?>">Zurück zur Übersicht</a>
 </div>
