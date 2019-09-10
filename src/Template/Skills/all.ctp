@@ -13,19 +13,18 @@ foreach($skills as $letter => $letterSkills) {
     echo '<div class="letter">' . $letter . '</div>';
     echo '<div class="skills">';
         foreach($letterSkills as $skill) {
-//             $count = count($skill->users);
-            $count = rand(1, 60);
+            $count = count($skill->users);
             switch($count) {
-                case ($count > 50):
+                case ($count > 16):
                     $class = 'skill-50';
                     break;
-                case ($count > 40):
+                case ($count > 8):
                     $class = 'skill-40';
                     break;
-                case ($count > 30):
+                case ($count > 4):
                     $class = 'skill-30';
                     break;
-                case ($count > 20):
+                case ($count > 2):
                     $class = 'skill-20';
                     break;
                 default:
