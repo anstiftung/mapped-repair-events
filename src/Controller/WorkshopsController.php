@@ -793,6 +793,10 @@ class WorkshopsController extends AppController
                     ]
                 ])->first();
                 
+                foreach($workshop->users as $user) {
+                    $user->revertPrivatizeData();
+                }
+                
                 $email = new Email('default');
                 $email->viewBuilder()->setTemplate('workshop_application');
                 $email->setSubject($subject)
@@ -912,6 +916,10 @@ class WorkshopsController extends AppController
                 'Users.Groups'
             ]
         ])->first();
+        
+        foreach($workshop->users as $user) {
+            $user->revertPrivatizeData();
+        }
         
         if (!($this->AppAuth->isAdmin() || $this->Workshop->isUserInOrgaTeam($user->first(), $workshop))) {
             throw new NotFoundException('user ' . $this->AppAuth->getUserUid() .  ' ist not associated with workshop ' . $workshopUid);
