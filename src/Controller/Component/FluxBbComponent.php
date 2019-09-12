@@ -87,29 +87,6 @@ class FluxBbComponent extends AppComponent
         $this->connection->execute($query);
     }
 
-    /**
-     * sollte nur einmal aufgerufen werden, zum initialen user-import
-     */
-    /*
-    public function migrateUserTable()
-    {
-        $users = $this->User->find('all', [
-            'fields' => [
-                'Users.uid',
-                'Users.name',
-                'Users.email'
-            ]
-        ]);
-        
-        foreach ($users as $user) {
-            $fluxUser = $this->getFluxUser($user->uid);
-            if (empty($fluxUser)) {
-                $this->register($user->name, $user->email);
-            }
-        }
-    }
-    */
-
     public function insert($userUid, $username, $email)
     {
         $fluxUser = $this->getFluxUser($userUid);
