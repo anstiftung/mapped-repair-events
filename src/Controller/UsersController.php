@@ -200,6 +200,7 @@ class UsersController extends AppController
                         'Users.email' => $this->request->getData('Users.email')
                     ]
                 ]) ->first();
+                $user->revertPrivatizeData();
                 
                 $newPassword = $this->User->setNewPassword($user->uid);
                 
@@ -427,6 +428,7 @@ class UsersController extends AppController
         
         if (!($user->hasErrors())) {
             $user = $this->User->get($this->AppAuth->getUserUid());
+            $user->revertPrivatizeData();
             $user2save = [
                 'password' => $this->request->getData('Users.password_new_1')
             ];
@@ -518,6 +520,7 @@ class UsersController extends AppController
                 'Users.confirm' => $this->request->getParam('pass')['0']
             ])
         ])->first();
+        $user->revertPrivatizeData();
         
         if (empty($user)) {
             $this->AppFlash->setFlashError(__('Invalid activation code.'));
@@ -531,6 +534,7 @@ class UsersController extends AppController
                 'Groups'
             ]
         ]);
+        $user->revertPrivatizeData();
         $user2save = [
             'confirm' => 'ok',
             'status' => APP_ON
