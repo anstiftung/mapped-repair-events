@@ -987,6 +987,10 @@ class WorkshopsController extends AppController
     
     public function ajaxGetWorkshopDetail($workshopUid) {
         
+        if (!$this->request->is('ajax')) {
+            throw new ForbiddenException();
+        }
+        
         $this->RequestHandler->renderAs($this, 'json');
         
         $this->Workshop = TableRegistry::getTableLocator()->get('Workshops');

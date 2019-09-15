@@ -426,6 +426,11 @@ class EventsController extends AppController
     
     public function ajaxGetAllEventsForMap()
     {
+        
+        if (!$this->request->is('ajax')) {
+            throw new ForbiddenException();
+        }
+        
         $this->RequestHandler->renderAs($this, 'json');
         
         $keyword = '';
