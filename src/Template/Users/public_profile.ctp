@@ -7,6 +7,8 @@ echo $this->element('highlightNavi', ['main' => 'Aktive']);
 	<?php echo $this->element('users/publicUser', ['user' => $user, 'headingTag' => 'h1', 'linkToProfile' => false]); ?>
 </div>
 
+<div class="dotted-line-full-width"></div>
+
 <div class="bottom-wrapper">
     <?php if ($user->about_me != '' || !empty($user->skills)) { ?>
     	<div class="about-me-wrapper">

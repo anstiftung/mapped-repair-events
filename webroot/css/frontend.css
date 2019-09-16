@@ -3016,7 +3016,12 @@ body.users.publicProfile .top-wrapper {
     float: left;
     padding-bottom: 20px;
     margin-bottom: 20px;
-    border-bottom: 2px dotted black;
+}
+body.users.publicProfile .dotted-line-full-width {
+	margin-top: 0px;
+	float: left;
+	margin-left: -50px;
+	margin-bottom: 15px;
 }
 body.users.publicProfile .bottom-wrapper,
 body.users.publicProfile #sklill_icons {
