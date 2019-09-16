@@ -124,6 +124,12 @@ class UsersController extends AppController
             'title' => 'Aktive'
         ];
         $this->set('metaTags', $metaTags);
+        
+        $overviewLink = Configure::read('AppConfig.htmlHelper')->urlUsers();
+        if (preg_match('`/kenntnisse`', $this->referer())) {
+            $overviewLink = Configure::read('AppConfig.htmlHelper')->urlSkills();
+        }
+        $this->set('overviewLink', $overviewLink);
     }
     
     public function publicProfile()
