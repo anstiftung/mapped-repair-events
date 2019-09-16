@@ -339,6 +339,7 @@ class UsersTable extends AppTable
                 'Users.status >= ' . APP_DELETED
             ]
         ]);
+        $user->revertPrivatizeData();
         $data = ['password' => $newPassword];
         $entity = $this->patchEntity($user, $data);
         $this->save($entity);
