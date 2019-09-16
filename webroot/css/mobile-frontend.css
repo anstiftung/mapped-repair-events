@@ -42,7 +42,8 @@
 	body.users.publicProfile #content,
 	.featherlight-inner.help-layer,
 	.public-user-wrapper,
-	body.users.all h1 {
+	body.users.all h1,
+	body.skills.all .skills {
 	   width: 100%;
 	}
 	body.users.all .public-user-wrapper {
@@ -64,6 +65,9 @@
     body.users.all h1,
     body.users.all .zip-wrapper {
         padding-left: 0px;
+    }
+    body.users.all .zip-wrapper a {
+        line-height: 20px;
     }
 	body.users.publicProfile .top-wrapper,
 	body.users.publicProfile #content {
