@@ -352,6 +352,9 @@ class InternController extends AdminAppController
                 ]
             ]
         );
+        if ($objectType == 'users') {
+            $entity->revertPrivatizeData();
+        }
         $entity = $this->$objectClass->patchEntity($entity, [$statusType => $value]);
         if ($this->$objectClass->save($entity)) {
             die(json_encode([
