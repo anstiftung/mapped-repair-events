@@ -54,7 +54,7 @@ class UsersController extends AppController
     
     public function all()
     {
-        
+
         $skillId = 0;
         if (isset($this->getRequest()->getParam('pass')[0])) {
             $skillId = (int) $this->getRequest()->getParam('pass')[0];
