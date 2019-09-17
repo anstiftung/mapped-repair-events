@@ -26,12 +26,14 @@ return [
         'default' => [
             'host' => '127.0.0.1',
             'username' => 'root',
-            'password' => ''
+            'password' => '',
+            'database' => 'db_default'
         ],
         'test' => [
             'host' => '127.0.0.1',
             'username' => 'root',
-            'password' => ''
+            'password' => '',
+            'database' => 'db_test'
         ],
     ],
     
