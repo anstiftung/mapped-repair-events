@@ -91,6 +91,12 @@ class BrandsController extends AdminAppController
             ]
         ]);
         
+        foreach($objects as $object) {
+            if ($object->owner_user) {
+                $object->owner_user->revertPrivatizeData();
+            }
+        }
+        
         $this->set('objects', $objects->toArray());
         
         $metaTags = [

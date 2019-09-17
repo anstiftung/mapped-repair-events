@@ -98,6 +98,12 @@ class CategoriesController extends AdminAppController
         
         $objects = $this->paginate($query);
         
+        foreach($objects as $object) {
+            if ($object->owner_user) {
+                $object->owner_user->revertPrivatizeData();
+            }
+        }
+        
         $this->set('objects', $objects->toArray());
         
         $metaTags = [
