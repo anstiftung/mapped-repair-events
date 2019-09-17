@@ -9,9 +9,9 @@ services:
   - mysql
 
 before_install:
- - mysql -e CREATE DATABASE db_default;
+ - mysql -e 'CREATE DATABASE db_default;'
  - mysql db_default < ./config/sql/database.sql;
- - mysql -e CREATE DATABASE db_test;
+ - mysql -e 'CREATE DATABASE db_test;'
 
 before_script:
   - composer install --optimize-autoloader
