@@ -43,6 +43,25 @@ if (Configure::read('AppConfig.fluxBbForumEnabled')) {
     array_splice($menu[3]['children'], count($menu[3]['children']), 0, $forum);
 }
 
+// add aktive link as last child in 5th main menu item
+$userMenu[] = [
+    'name' => 'Aktive',
+    'slug' => $this->Html->urlUsers()
+];
+$tagCloud[] = [
+    'name' => 'Kenntnisse & Interessen',
+    'slug' => $this->Html->urlSkills()
+];
+if (!empty($menu[5])) {
+    array_splice($menu[5]['children'], count($menu[5]['children']), 0, $userMenu);
+    // add tagCloud link as last child in 5th main menu item
+    array_splice($menu[5]['children'], count($menu[5]['children']), 0, $tagCloud);
+} else {
+    // add to main menu if 5th menu item is empty
+    $menu[] = $userMenu[0];
+    $menu[] = $tagCloud[0];
+}
+
 echo $this->Menu->render($menu, ['id' => 'menu', 'class' => 'mainmenu']);
 
 ?>

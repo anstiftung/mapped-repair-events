@@ -1,50 +1,13 @@
 <?php
-    use App\Controller\Component\StringComponent;
+use App\Controller\Component\StringComponent;
+echo $this->element('highlightNavi', ['main' => 'Aktive']);
 ?>
 
 <div class="top-wrapper">
-	<div class="left-wrapper">
-		<?php echo $this->Html->getUserProfileImage($user); ?>
-	</div>
-	<div class="right-wrapper">
-		<?php
-		    echo '<div class="public-name-wrapper">';
-    		    if ($user->firstname . ' ' . $user->lastname != $user->nick) {
-	   	           echo $user->firstname . ' ' . $user->lastname;
-    		    }
-		    echo '</div>';
-		    
-		    echo $this->element('heading', ['first' => $user->nick]);
-		    
-		    if ($user->email) {
-		        echo StringComponent::hide_email($user->email, 'button gray');
-		    }
-		    
-            echo '<div class="address-wrapper">';
-                $addressString = '';
-                if ($user->street != '') {
-                    $addressString .= str_replace("\r\n", ', ', $user->street);
-                }
-                if ($user->zip != '') {
-                    if ($addressString != '') {
-                        $addressString .= ', ';
-                    }
-                    $addressString .= $user->zip;
-                }
-                if ($user->city != '') {
-                    $addressString .= ' ' . $user->city;
-                }
-                if ($user->country_code != '') {
-                    if ($addressString != '') {
-                        $addressString .= ' / ';
-                    }
-                    $addressString .= $user->country_code;
-                }
-                echo $addressString;
-            echo '</div>';
-        ?>
-	</div>
+	<?php echo $this->element('users/publicUser', ['user' => $user, 'headingTag' => 'h1', 'linkToProfile' => false]); ?>
 </div>
+
+<div class="dotted-line-full-width"></div>
 
 <div class="bottom-wrapper">
     <?php if ($user->about_me != '' || !empty($user->skills)) { ?>
@@ -57,7 +20,7 @@
         			}
     			    if (!empty($user->skills)) {
                         foreach($user->skills as $skill) {
-                            echo '<a href="javascript:void(0);" title="'.h($skill->name).'" class="button">'.h($skill->name).'</a>';
+                            echo '<a href="'.$this->Html->urlSkillDetail($skill->id, StringComponent::slugify($skill->name)).'" title="'.h($skill->name).'" class="button">'.h($skill->name).'</a>';
                         }
     			    }
                 ?>
@@ -119,7 +82,7 @@
     if (!empty($user->workshops)) {
         echo '<strong>';
             echo __('This user is working for the following Repair Initiatives');
-        echo '</strong><br />';
+        echo '</strong><br /><br />';
     ?>
         <div class="workshop-link-wrapper">
     		<?php foreach($user->workshops as $workshop) { ?>
@@ -129,4 +92,6 @@
             <?php } ?>
     	</div>
     <?php } ?>
+    
+    <a style="clear:both;margin-top:10px;float:left;" class="button" href="<?php echo $this->Html->urlUsers(); ?>">Mehr Aktive anzeigen</a>
 </div>

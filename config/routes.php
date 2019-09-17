@@ -102,6 +102,10 @@ Router::scope('/', function (RouteBuilder $routes) {
     
     $routes->connect('/rss-termine', ['controller' => 'events', 'action' => 'feed']);
     
+    $routes->connect('/aktive', ['controller' => 'users', 'action' => 'all']);
+    $routes->connect('/aktive/*', ['controller' => 'users', 'action' => 'all']);
+    $routes->connect('/kenntnisse', ['controller' => 'skills', 'action' => 'all']);
+    
     $routes->connect('/laufzettel/add/*', ['controller'=>'infoSheets', 'action'=>'add']);
     $routes->connect('/laufzettel/edit/*', ['controller'=>'infoSheets', 'action'=>'edit']);
     $routes->connect('/laufzettel/delete/*', ['controller'=>'infoSheets', 'action'=>'delete']);
@@ -139,3 +143,4 @@ Router::scope('/', function (RouteBuilder $routes) {
      */
     $routes->fallbacks(DashedRoute::class);
 });
+    

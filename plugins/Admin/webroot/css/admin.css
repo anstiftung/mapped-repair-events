@@ -17,7 +17,7 @@ h1 {
     background: #fff;
 }
 .sort a {
-	margin-left: 0;
+    margin-left: 0;
 }
 #content {
     position: relative;
@@ -33,8 +33,8 @@ a {
     color: green;
 }
 #flashMessage {
-	margin-top: 26px;
-	margin-bottom: 50px;
+    margin-top: 26px;
+    margin-bottom: 50px;
 }
 #header {
     background: white;
@@ -86,14 +86,14 @@ div.admin div.list tr.status-offline td
 
 div.admin div.list a.new-link {
     position: absolute;
-    top: 0px;
-    right: 19px;
+    top: -25px;
+    right: 5px;
 }
 
 div.admin div.list a.email-link {
     position: absolute;
-    top: 0px;
-    right: 47px;
+    top: -25px;
+    right: 35px;
 }
 
 div.admin div.list div.pagination {
@@ -144,7 +144,7 @@ div.admin div.list div.pagination {
 }
 
 .categories.edit form {
-	width: 100%;
+    width: 100%;
 }
 
 #content div.import-feeds div.item {

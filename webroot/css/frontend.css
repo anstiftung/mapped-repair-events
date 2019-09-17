@@ -28,7 +28,7 @@ a:link,
 a:active,
 a:visited,
 a#urlHelpLink {
-	font-weight: bold;
+    font-weight: bold;
     text-decoration: none;
     color: #4D8EA2;
 }
@@ -38,7 +38,7 @@ a#urlHelpLink:hover {
     color: #4D8EA2;
 }
 a.disabled {
-	opacity: 0.5;
+    opacity: 0.5;
 }
 a:hover img {
     background-color: transparent !important
@@ -49,11 +49,11 @@ a.vg:visited {
 }
 #login-box a,
 .address-wrapper a {
-	font-weight: normal;
+    font-weight: normal;
 }
 div.jqibox {
-	margin-top: 10%;
-	z-index: 10000 ! important;
+    margin-top: 10%;
+    z-index: 10000 ! important;
 }
 div.jqi .jqimessage{ 
     padding: 10px; 
@@ -63,7 +63,7 @@ div.jqi .jqimessage{
 }
 div.jqi .jqibuttons button,
 div.jqi .jqibuttons button:hover {
-	color: #333 ! important;
+    color: #333 ! important;
 }
 div.jqi{ 
     width: 400px; 
@@ -152,10 +152,10 @@ hr {
     margin-top: 30px;
 }
 #workshopApply div.input.select {
-	float: left;  
+    float: left;  
 }
 #workshopApply div.input.select label {
-	display: none;
+    display: none;
 }
 #wrapper,
 #header {
@@ -163,9 +163,9 @@ hr {
 }
 #wrapper {
     margin: 0px auto;
-	-moz-box-shadow:0 0 6px 0 rgba(0,0,0,.47);
-	-webkit-box-shadow:0 0 6px 0 rgba(0,0,0,.47);
-	box-shadow:0 0 6px 0 rgba(0,0,0,.47);
+    -moz-box-shadow:0 0 6px 0 rgba(0,0,0,.47);
+    -webkit-box-shadow:0 0 6px 0 rgba(0,0,0,.47);
+    box-shadow:0 0 6px 0 rgba(0,0,0,.47);
 }
 #header {
     background: white;
@@ -190,8 +190,8 @@ hr {
     margin-left: 15px;
 }
 #logo {
-	width: 75px;
-	height: 75px; 
+    width: 75px;
+    height: 75px; 
 }
 #claim {
     float: left;
@@ -252,11 +252,11 @@ hr {
 
 body.pages.detail.statistik .text-wrapper,
 body.pages.detail.statistik h1 {
-	margin-left: 17%;
+    margin-left: 17%;
 }
 body.pages.detail.statistik iframe {
-	width: 75%;
-	margin-top: 15px;
+    width: 75%;
+    margin-top: 15px;
 }
 body.workshops.home .cycle-pager {
     text-align: center;
@@ -284,8 +284,8 @@ body.workshops.home .box.filter #search {
   width: 55px;
 }
 body.workshops.home h2 {
-	color: #c8d218;
-	margin-top: 5px;
+    color: #c8d218;
+    margin-top: 5px;
 }
 #search, #reset {
     float: right;
@@ -337,7 +337,7 @@ body.newsletters.index .error-message {
   text-align: right;
 }
 i.fa-border {
-	background-color: #fff;
+    background-color: #fff;
     border-radius: 3px;
     padding: 5px 6px;
     border-color: #ccc; 
@@ -347,7 +347,7 @@ a:hover i.fa-border {
 }
 i.fa-trash-alt,
 i.fa-times {
-	color: red;
+    color: red;
 }
 .half {
     width: 365px;
@@ -418,8 +418,8 @@ a.icon-link-text {
     margin-bottom: 5px;
 }
 table.list a.icon-link-text {
-	font-size: 12px;
-	font-weight: normal;
+    font-size: 12px;
+    font-weight: normal;
 }
 #calendar {
     margin: 0px 0px 0px 0px;
@@ -427,10 +427,10 @@ table.list a.icon-link-text {
 }
 td.fc-has-event span.event-count {
     display: none;
-	display: block;
-	text-align: center;
-	color: #fff;
-	margin-top: 21px;
+    display: block;
+    text-align: center;
+    color: #fff;
+    margin-top: 21px;
 } 
 .filter select {
     padding: 5px;
@@ -468,18 +468,18 @@ td.fc-has-event span.event-count {
     width: 304px;
 }
 .ui-tooltip {
-	line-height: 20px;
+    line-height: 20px;
 }
 .ui-tooltip ul {
-	list-style: disc;
+    list-style: disc;
 }
 .ui-tooltip li {
     float: left;
-	margin-left: 15px;
+    margin-left: 15px;
     margin-bottom: 10px;
 }
 .ui-tooltip li:last-child {
-	margin-bottom: 0;
+    margin-bottom: 0;
 }
 input[type=text]:focus,
 input[type=email]:focus,
@@ -507,33 +507,33 @@ textarea:focus,
     float: left;
 }
 body.workshops.edit .checkbox {
-	padding: 0px;
+    padding: 0px;
 }
 body.workshops.detail #calDottedLine {
-	width: 535px;
+    width: 535px;
 }
 body.workshops.detail .skill-icon-wrapper {
-	margin-bottom: 10px;
-	clear: both;
-	float: left;
+    margin-bottom: 10px;
+    clear: both;
+    float: left;
 }
 body.workshops.detail .widget-link {
     float: right;
-    font-size: 11px;	
+    font-size: 11px;    
 }
 body.workshops.detail .widget-link.events {
-	margin: 6px -8px 0px 20px;
+    margin: 6px -8px 0px 20px;
 }
 body.workshops.detail .widget-link.statistics {
-	margin-right: -20px;
+    margin-right: -20px;
 }
 body.workshops.detail .add-event-link {
     float: right;
     margin-top: 5px;
 }
 body.workshops.detail a.btn.edit {
-	float:left;
-	margin:8px 0px 0px 15px;
+    float:left;
+    margin:8px 0px 0px 15px;
 }
 
 div.calEvent {
@@ -573,7 +573,7 @@ div.calEvent:hover {
     background-color: #d7cbdf !important;
 }
 body.workshops.detail .calEvent {
-	display: none ! important;
+    display: none ! important;
 }
 #workshop-detail .eventBox {
     padding: 10px 10px 5px 10px;
@@ -583,21 +583,21 @@ body.workshops.detail .calEvent {
     display: block ! important;
 }
 .force-show iframe {
-	height: 0;
+    height: 0;
 }
 .force-show div {
-	display: none;
+    display: none;
 }
 
 #workshop-detail div {
     line-height: 14px;
 }
 #workshop-detail .input.email .error-message {
-	clear: both;
-	margin-left: 10px;
-	float: left;
-	margin-top: 10px;
-	margin-bottom: 10px;
+    clear: both;
+    margin-left: 10px;
+    float: left;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 #workshop-detail div#selectedDate {
     color: #B57CDB;
@@ -680,7 +680,7 @@ b.hint {
   margin-bottom: 10px;
 }
 body.users.delete h1 {
-	margin-bottom: 20px;
+    margin-bottom: 20px;
 }
 /* private */
 body.users .profile .input label {
@@ -690,33 +690,31 @@ body.users .profile .input label {
     float: left;
     font-weight: normal
 }
-body.users.profil .skills-wrapper {
-}
 body.users .profile .input.textarea label:not(.private) {
-	width: 100%;
-	margin-bottom: 10px;
+    width: 100%;
+    margin-bottom: 10px;
 }
 body.users .profile .small-textarea label:not(.private) {
     width: 116px ! important;
 }
 body.users.profil textarea {
-	width: 80%;
-	height: 100px;
+    width: 80%;
+    height: 100px;
 }
 body.users.profil .small-textarea textarea {
-	width: 200px;
+    width: 200px;
 }
 body.users.profil .skills-wrapper .select2-container {
-	width: 100% ! important;
-	margin-bottom: 20px;
-	margin-top: 5px;
+    width: 100% ! important;
+    margin-bottom: 20px;
+    margin-top: 5px;
 }
 body.users.profil .skills-wrapper .select2-container--default .select2-selection--multiple {
     border-color: #aaa ! important;
 }
 body.users.profil .select2-container .select2-search--inline,
 body.users.profil .select2-search__field {
-	margin-top: 6px;
+    margin-top: 6px;
 }
 body.users .profile .categories-checkbox-wrapper .input label,
 #eventEditForm .categories-checkbox-wrapper .input label,
@@ -725,33 +723,33 @@ body.users .profile .categories-checkbox-wrapper .input label,
 }
 #infoSheetEditForm .form-fields-checkbox-wrapper .input.select,
 #infoSheetEditForm .form-fields-checkbox-wrapper .input.radio {
-	width: 215px;
+    width: 215px;
 }
 #infoSheetEditForm fieldset {
-	border: 1px solid #ccc;
-	border-radius: 5px;
-	margin-bottom: 10px;
-	padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    padding: 10px;
 }
 #infoSheetEditForm .gender-radio-button-wrapper .input label:not(:first-of-type) {
-	width: 100px ! important;
+    width: 100px ! important;
 }
 #infoSheetEditForm .gender-radio-button-wrapper .input label:not(:first-of-type) input {
     float: left;
     margin-top: 0;
 }
 #infoSheetEditForm .edit.column-1 {
-	width: 1140px;
+    width: 1140px;
 }
 #infoSheetEditForm .edit.column-2 {
-	width: 560px;
+    width: 560px;
 }
 div.admin div.edit.column-1 label,
 div.admin div.edit.column-2 label {
     width: 225px ! important;
 }
 div.admin div.edit.column-1 .dependent-form-field:not(.no_repair_reason_text_wrapper) {
-	width: 370px ! important;
+    width: 370px ! important;
 }
 div.admin div.edit.column-1 .dependent-form-field .input.radio,
 div.admin div.edit.column-1 .dependent-form-field .input.radio label {
@@ -762,7 +760,7 @@ div.admin div.edit.column-1 .dependent-form-field .input.radio label {
     font-size: 16px;
 }
 div.admin div.edit.column-1 textarea {
-	width: 863px;
+    width: 863px;
 }
 #infoSheetEditForm .power_supply,
 #infoSheetEditForm .defect_found_reason,
@@ -770,10 +768,10 @@ div.admin div.edit.column-1 textarea {
 #infoSheetEditForm .no_repair_reason,
 #infoSheetEditForm .device_must_not_be_used_anymore,
 #infoSheetEditForm .no_repair_reason_text_wrapper {
-	display: none;
+    display: none;
 }
 #infoSheetEditForm .no_repair_reason_text_wrapper {
-	float: left;
+    float: left;
 }
 #infoSheetEditForm .input.radio {
     margin-top: 5px;
@@ -786,17 +784,17 @@ div.admin div.edit.column-1 textarea {
 
 #eventEditForm .input.checkbox label,
 #workshopEditForm .input.checkbox label {
-	padding-left: 105px;
-	width: 317px;
-	line-height: 24px;
+    padding-left: 105px;
+    width: 317px;
+    line-height: 24px;
 }
 #eventEditForm .input.checkbox label {
-	padding-left: 95px;
+    padding-left: 95px;
 }
 #eventEditForm .input.checkbox input,
 #workshopEditForm .input.checkbox input {
-	float: left;
-	margin-right: 10px;
+    float: left;
+    margin-right: 10px;
 }
 body.users .profile .groups-checkbox-wrapper .input label {
   width: auto;
@@ -815,7 +813,7 @@ body.users .profile .input.is-private {
   width: 465px;
 }
 body.users .profile .input.textarea.is-private {
-	width: 100%;
+    width: 100%;
 }
 body.users .profile .small-textarea .input.textarea.is-private {
     width: 465px;
@@ -935,48 +933,48 @@ body.users .profile .input select {
 }
 
 #eventEditForm {
-	text-align: left;
-	margin: 0 0 10px 0;
-	width: 800px;
+    text-align: left;
+    margin: 0 0 10px 0;
+    width: 800px;
 }
 #eventEditForm h1 {
-	margin-bottom: 20px;
+    margin-bottom: 20px;
 }
 #eventEditForm .input textarea {
-	width: 625px;
-	height: 50px;
-	vertical-align: top;
+    width: 625px;
+    height: 50px;
+    vertical-align: top;
 }
 #eventEditForm .date-time-wrapper {
-	margin-bottom: 20px;
-	float: left;
+    margin-bottom: 20px;
+    float: left;
 }
 #eventEditForm .date-time-wrapper .input.text {
     width: 235px;
     margin-right: 10px;
 }
 #eventEditForm .date-time-wrapper .input {
-	float: left;
-	width: 150px;
+    float: left;
+    width: 150px;
 }
 #eventEditForm .date-time-wrapper .input label {
-	float: left;
-	line-height: 28px;
+    float: left;
+    line-height: 28px;
 }
 #eventEditForm .date-time-wrapper .input.time label {
     width: 24px;
     min-width: 24px;
 }
 #eventEditForm .date-time-wrapper .input.time {
-	width: 165px;
+    width: 165px;
 }
 #eventEditForm .date-time-wrapper .input input {
-	width: 85px;
+    width: 85px;
 }
 #eventEditForm #cbskillsreg div.checkbox {
-	float: left;
-	width: 185px;
-	margin: 0;
+    float: left;
+    width: 185px;
+    margin: 0;
 }
 #eventEditForm label[for="events-renotify"] {
   width: 100%;
@@ -988,14 +986,14 @@ body.users .profile .input select {
   margin-right: 5px;
 }
 body.events .ajaxLoader {
-	float: right;
-	margin-left: 10px;
-	display: none;
+    float: right;
+    margin-left: 10px;
+    display: none;
 }
 body.events a.apply-workshop-data-button {
-	float: right;
-	margin-left: 20px;
-	margin-right: 45px;
+    float: right;
+    margin-left: 20px;
+    margin-right: 45px;
 }
 
 .nlep {
@@ -1044,7 +1042,7 @@ body.events a.apply-workshop-data-button {
     margin: 5px 0px;
 }
 div.cke div {
-	margin: 0 ! important;
+    margin: 0 ! important;
 }
 .ViewsWrapper .input label,
 #ViewsWrapper .input label,
@@ -1057,17 +1055,17 @@ div.cke div {
     text-align: right
 }
 #ViewsWrapper .input label {
-	width: 150px;
-	text-align: left;
+    width: 150px;
+    text-align: left;
 }
 div.input.checkbox.long .checkbox {
-	float: left;
+    float: left;
 }
 div.input.text.long input {
-	width: 625px;
+    width: 625px;
 }
 div.input.checkbox.long label {
-	float: right;
+    float: right;
     width: 95% ! important;
     line-height: 16px;
 }
@@ -1142,46 +1140,46 @@ a.toggle-link.heading {
     display: block;
 }
 body.events.myEvents h2 {
-	margin-left: 20px;
-	margin-top: 10px ! important;
-	margin-bottom: 10px ! important;
+    margin-left: 20px;
+    margin-top: 10px ! important;
+    margin-bottom: 10px ! important;
 }
 body.events.myEvents h2.offline,
 body.events.myEvents a.toggle-link.offline {
-	color: gray;
+    color: gray;
 }
 body.events.myEvents .add-event {
   float: right;
   margin-top: -30px;
 }
 body.events.myEvents tr.subtable-container {
-	display: none;
+    display: none;
 }
 body.events.myEvents table.info-sheet {
-	width: 700px;
-	margin-left: 15px;
-	font-style: italic;
+    width: 700px;
+    margin-left: 15px;
+    font-style: italic;
 }
 body.events.myEvents table .icon img {
-	margin-top: 4px;
+    margin-top: 4px;
 }
 body.events.myEvents table .add-info-sheet {
-	float: right;
+    float: right;
 }
 body.events.myEvents table:not(.info-sheet) tr th:first-of-type {
-	width: 80px;
+    width: 80px;
 }
 body.events.myEvents table .toggle-link-for-subtable {
-	float: left;
-	margin: 0 ! important;
-	margin-top: 9px ! important;
+    float: left;
+    margin: 0 ! important;
+    margin-top: 9px ! important;
 }
 body.events.myEvents div.workshop-content-wrapper {
-	display: none;
-	margin-bottom: 10px;
+    display: none;
+    margin-bottom: 10px;
 }
 body.events.myEvents .dotted-line {
-	clear: both;
+    clear: both;
 }
 body.workshops.verwalten div.dotted-line {
   margin-top: 30px;
@@ -1217,7 +1215,7 @@ div.checkbox label {
   line-height: 20px;
 }
 .input.time select {
-	width: 55px ! important;
+    width: 55px ! important;
 }
 .input textarea {
     height: 50px;
@@ -1241,10 +1239,10 @@ input[readonly="readonly"] {
 }
 
 strong.info {
-	float: left;
-	line-height: 16px;
-	margin-bottom: 5px;
-	width: 100%;
+    float: left;
+    line-height: 16px;
+    margin-bottom: 5px;
+    width: 100%;
 }
 
 /* Werstätten / workshops detail page */
@@ -1331,7 +1329,7 @@ div[id*="collapse"] a:visited {
     margin-top: 10px;
 }
 .orgaansprech a:hover {
-	opacity: .7;
+    opacity: .7;
 }
 .workshop-detail-header {
     height: 40px;
@@ -1406,20 +1404,20 @@ div.map-detail #mapContainer.big {
     clear: left
 }
 #band-cookies {
-	width: 400px;
-	text-align: left;
-	line-height: 20px;
+    width: 400px;
+    text-align: left;
+    line-height: 20px;
 }
 #band-cookies a {
-	margin-left: 0;
+    margin-left: 0;
 }
 #band-cookies #band-cookies-ok {
-	color: #999 ! important;
-	background-color: #f2f2f2 ! important;
-	text-decoration: none;
-	margin-left: 100px;
-	margin-top: 10px;
-	margin-bottom: 10px;
+    color: #999 ! important;
+    background-color: #f2f2f2 ! important;
+    text-decoration: none;
+    margin-left: 100px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 body.blogs.detail #content {
     width: 760px;
@@ -1433,10 +1431,10 @@ body.blogs.detail .text-wrapper {
   clear: both;
 }
 body.blogs.detail h1 {
-	float: left;
+    float: left;
 }
 .blog-detail .sciconrss {
-	margin-top: 0;
+    margin-top: 0;
 }
 .blog-detail .postteaser {
     width: auto;
@@ -1479,7 +1477,7 @@ div.ckeditor-text,
 }
 .ckeditor-text img,
 .ckeditor-text iframe {
-	max-width: 1160px;
+    max-width: 1160px;
     float: left;
     margin: 2px 10px 20px 0px;
 }
@@ -1521,7 +1519,7 @@ iframe .rc,
 }
 /* MAPS STUFF */
 #workshops-home #mapContainer {
-	position: relative;
+    position: relative;
 }
 #workshops-home #mapContainer,
 #workshops-home #map {
@@ -1531,11 +1529,11 @@ iframe .rc,
     padding: 0px;
 }
 #workshops-home #mapHomeInfoBox {
-	position: absolute;
-	right: 0;
-	bottom: 50px;
-	opacity: 0.9;
-	z-index: 1000;
+    position: absolute;
+    right: 0;
+    bottom: 50px;
+    opacity: 0.9;
+    z-index: 1000;
 }
 #workshops-home #mapContainer {
     float: left;
@@ -1557,7 +1555,7 @@ iframe .rc,
 }
 
 #calDottedLine {
-	display: none;
+    display: none;
 }
 .dotted-line,
 .dotted-line-full-width {
@@ -1572,12 +1570,12 @@ iframe .rc,
 }
 
 #workshops-home .find-events-box {
-	display: none;
-	margin-top: 29px;
-	text-align: center;
+    display: none;
+    margin-top: 29px;
+    text-align: center;
     min-height: 180px;
-	background-color: #F5F5F5;
-	position: relative;
+    background-color: #F5F5F5;
+    position: relative;
 }
 @-moz-document url-prefix() { 
   #workshops-home .find-events-box {
@@ -1602,27 +1600,27 @@ iframe .rc,
     text-align: center;
 }
 #workshops-home .find-events-box h3 {
-	color: #74b3c5;
-	font-size: 26px;
-	padding: 10px 30px;
-	text-transform: none;
-	line-height: 30px;
+    color: #74b3c5;
+    font-size: 26px;
+    padding: 10px 30px;
+    text-transform: none;
+    line-height: 30px;
 }
 #workshops-home .find-events-box input {
-	width: 100px;
+    width: 100px;
 }
 #workshops-home .find-events-box label {
-	font-weight: bold;
-	color: #000;
+    font-weight: bold;
+    color: #000;
 }
 #workshops-home .find-events-box input[type="text"] {
-	padding: 5px ! important;
-	border: 1px solid #ddd;
+    padding: 5px ! important;
+    border: 1px solid #ddd;
 }
 #teaser-buttons-dotted-line-top {
-	float: left;
-	margin-bottom: 10px;
-	margin-top: 10px;
+    float: left;
+    margin-bottom: 10px;
+    margin-top: 10px;
 }
 #teaser-buttons-dotted-line-bottom {
     float: left;
@@ -1630,7 +1628,7 @@ iframe .rc,
     margin-bottom: 10px;
 }
 #workshops-home .teaser-buttons {
-	float: left;
+    float: left;
 }
 #workshops-home #calEvents,
 #workshops-home .find-events-box,
@@ -1644,21 +1642,21 @@ iframe .rc,
     transition: all 0.3s ease-in;
 }
 #workshops-home a.teaser-button {
-	float: left;
-	display: block;
-	height: 133px;
-	background-position: 0 0;
-	background-repeat: no-repeat;
-	background-size: cover;
-	width: 280px;
-	margin-right: 15px;
-	margin-bottom: 10px;
+    float: left;
+    display: block;
+    height: 133px;
+    background-position: 0 0;
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 280px;
+    margin-right: 15px;
+    margin-bottom: 10px;
 }
 #workshops-home a.teaser-button:not(.no-hover):hover {
     background-position: 0 -135px;
 }
 #workshops-home .teaser-buttons a:nth-of-type(1) {
-	background-image: url(/img/home/teaser-button-1.jpg);
+    background-image: url(/img/home/teaser-button-1.jpg);
 }
 #workshops-home .teaser-buttons a:nth-of-type(2) {
     background-image: url(/img/home/teaser-button-2.jpg);
@@ -1672,8 +1670,8 @@ iframe .rc,
     margin-right: 0;
 }
 #workshops-home .about-us-box a {
-	height: 283px;
-	width: 573px;
+    height: 283px;
+    width: 573px;
     background-size: cover;
     background-image: url(/img/home/about-us.jpg);
 }
@@ -1682,42 +1680,42 @@ iframe .rc,
 }
 
 #workshops-home .cycle-slideshow {
-	border: 1px solid #ddd;
-	padding: 20px 0;
-	height: 440px;
-	float: left;
-	margin-bottom: 20px;
+    border: 1px solid #ddd;
+    padding: 20px 0;
+    height: 440px;
+    float: left;
+    margin-bottom: 20px;
 }
 #workshops-home .cycle-slideshow img {
-	width: 573px;
+    width: 573px;
 }
 #workshops-home .news-box {
-	background-color: #e3d3e9;
-	float: left;
-	height: 442px;
-	text-align: left;
-	padding: 20px;
-	position: relative;
-	width: 535px;
+    background-color: #e3d3e9;
+    float: left;
+    height: 442px;
+    text-align: left;
+    padding: 20px;
+    position: relative;
+    width: 535px;
 }
 #workshops-home .news-box .inner {
-	width: 570px;
-	position: absolute;
+    width: 570px;
+    position: absolute;
     top: 50%;
     -webkit-transform: translateY(-50%);
     transform: translateY(-50%);
 }
 #workshops-home .news-box .number {
-	color: #fff;
-	font-size: 65px;
-	font-style: italic;
-	font-weight: 300;
-	width: 70px;
-	margin-right: 10px;
-	float: left;
+    color: #fff;
+    font-size: 65px;
+    font-style: italic;
+    font-weight: 300;
+    width: 70px;
+    margin-right: 10px;
+    float: left;
 }
 #workshops-home .news-box .row {
-	border-bottom: 2px dotted #000;
+    border-bottom: 2px dotted #000;
     color: #000;
     font-size: 12px;
     line-height: 17px;
@@ -1729,15 +1727,15 @@ iframe .rc,
     margin-bottom: 10px;
 }
 #workshops-home .news-box .row span.read-more {
-	font-weight: bold;
+    font-weight: bold;
 }
 #workshops-home .news-box .row:nth-child(7) {
-	border-bottom: none;
-	margin-bottom: 0;
-	padding-bottom: 0;
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
 }
 #workshops-home .news-box .row b {
-	font-size: 16px;
+    font-size: 16px;
 }
 #workshops-home .news-box .row:hover {
     color: #fff;
@@ -1755,40 +1753,40 @@ iframe .rc,
     text-decoration: none;
 }
 #workshops-home .workshops-box {
-	text-align: left;
-	position: relative;
+    text-align: left;
+    position: relative;
 }
 #workshops-home .workshops-box .header {
-	text-transform: uppercase;
-	color: #000;
-	font-size: 24px;
-	width: 100%;
-	display: block;
-	margin-bottom: 10px;
-	margin-left: 20px;
+    text-transform: uppercase;
+    color: #000;
+    font-size: 24px;
+    width: 100%;
+    display: block;
+    margin-bottom: 10px;
+    margin-left: 20px;
 }
 #workshops-home .workshops-box .header span {
-	float: right;
-	text-transform: initial;
-	font-size: 14px;
-	margin-top: 10px;
-	margin-right: 20px;
+    float: right;
+    text-transform: initial;
+    font-size: 14px;
+    margin-top: 10px;
+    margin-right: 20px;
 }
 #workshops-home .workshops-box .header:hover {
-	text-decoration: none;
+    text-decoration: none;
     color: #B9B9B9;
 }
 #workshops-home .workshops-box .row {
-	width: 100%;
+    width: 100%;
     display: block;
-	border-top: 2px dotted #000;
-	color: #000;
-	float: left;
-	height: 81px;
-	position: relative;
+    border-top: 2px dotted #000;
+    color: #000;
+    float: left;
+    height: 81px;
+    position: relative;
 }
 #workshops-home .workshops-box .row:hover {
-	background-color: #f2f2f2;
+    background-color: #f2f2f2;
 }
 #workshops-home .workshops-box .row .inner {
     width: 580px;
@@ -1800,13 +1798,13 @@ iframe .rc,
     transform: translateY(-50%);
 }
 #workshops-home .workshops-box .row img {
-	float: left;
-	margin-right: 20px;
-	margin-left: 20px;
-	width: 70px;
+    float: left;
+    margin-right: 20px;
+    margin-left: 20px;
+    width: 70px;
 }
 #workshops-home .workshops-box .row span.info {
-	font-size: 15px;
+    font-size: 15px;
     width: 470px;
     margin-left: -180px;
     left: 50%;
@@ -1817,23 +1815,23 @@ iframe .rc,
     line-height: 20px;
 }
 #workshops-home .workshops-box .row span.address {
-	color: #B9B9B9;
+    color: #B9B9B9;
 }
 #login-box {
-	position: absolute;
-	right: 20px;
-	top: 12px;
-	background: #fff;
-	padding-bottom: 2px;
-	padding-left: 10px;
+    position: absolute;
+    right: 20px;
+    top: 12px;
+    background: #fff;
+    padding-bottom: 2px;
+    padding-left: 10px;
 }
 #anmelden-link {
-	margin-top: 20px;
-	font-size: 20px;
-	padding: 10px 12px;
+    margin-top: 20px;
+    font-size: 20px;
+    padding: 10px 12px;
 }
 #login-box a {
-	color: #333;
+    color: #333;
 }
 #login-box .top,
 #login-box .bottom {
@@ -1908,11 +1906,11 @@ iframe .rc,
 }
 .rsslink-wrapper i,
 .socialicons i {
-	font-size: 27px;
+    font-size: 27px;
 }
 .rsslink-wrapper a:hover i,
 .socialicons a:hover i {
-	color: #77B1C5;
+    color: #77B1C5;
 }
 /* START rounded buttons */
 
@@ -1982,12 +1980,12 @@ button.gray:hover,
 .button.gray:hover,
 a.button.gray:hover,
 input[type=submit].gray:hover {
-	color: #fff ! important;
+    color: #fff ! important;
 }
 button.violet,
 a.button.violet {
-	background-color: #74b3c5;
-	color: #fff;
+    background-color: #74b3c5;
+    color: #fff;
 }
 /* END rounded buttons */
 
@@ -2001,8 +1999,8 @@ a.button.violet {
 }
 .user-reg .categories-checkbox-wrapper,
 #cbskillsxtra {
-	text-align: left;
-	padding: 5px 15px;
+    text-align: left;
+    padding: 5px 15px;
 }
 body.users .profile .categories-checkbox-wrapper,
 #infoSheetEditForm .form-fields-checkbox-wrapper,
@@ -2014,7 +2012,7 @@ body.users .profile .groups-checkbox-wrapper {
   float: left;
 }
 #infoSheetEditForm .edit.column-1 .form-fields-checkbox-wrapper {
-	width: 374px;
+    width: 374px;
 }
 #eventEditForm .categories-checkbox-wrapper,
 #workshopEditForm .categories-checkbox-wrapper {
@@ -2046,14 +2044,14 @@ body.users .profile .groups-checkbox-wrapper .input.select.error {
 }
 
 #cbskillsxtra textarea {
-	width: 95%;
+    width: 95%;
 }
 .user-reg .categories-checkbox-wrapper > div.input > label,
 body.users .profile .categories-checkbox-wrapper > div.input > label,
 #eventEditForm .categories-checkbox-wrapper > div.input > label {
-	font-weight: bold;
-	margin-bottom: 15px;
-	float: left;
+    font-weight: bold;
+    margin-bottom: 15px;
+    float: left;
 }
 .user-reg .checkbox {
     margin: 0px auto;
@@ -2101,7 +2099,7 @@ body.users .profile input.buttonSubmit {
     margin-top: 5px;
 }
 #userwelcome h1 {
-	margin-bottom: 15px;
+    margin-bottom: 15px;
 }
 #userwelcome .left-wrapper {
   text-align: left;
@@ -2246,7 +2244,7 @@ div.addthis_toolbox a {
     color: white;
 }
 #flashMessage .closer:hover i {
-	opacity: 0.7;
+    opacity: 0.7;
 }
 #flashMessage.error a {
     color: #333;
@@ -2257,7 +2255,7 @@ div.addthis_toolbox a {
     right: 5px;
 }
 #flashMessage .closer i {
-	color: #fff;
+    color: #fff;
 }
 #flashMessage.red {
     padding: 10px;
@@ -2343,7 +2341,7 @@ div.pagination span a:hover {
     color: #333 ! important;
 }
 div.pagination span.current {
-	background-color: transparent;
+    background-color: transparent;
 }
 div.pagination span.next {
     border-right: none;
@@ -2417,9 +2415,9 @@ div.pagination div.numbers {
     float: left;
 }
 #upload-form .uploadifyQueue {
-	float: left;
-	margin-bottom: 15px;
-	width: 100%;
+    float: left;
+    margin-bottom: 15px;
+    width: 100%;
 }
 #upload-form #upload-container img {
     width: 100px;
@@ -2427,8 +2425,8 @@ div.pagination div.numbers {
     margin: -9px 5px 10px 5px;
 }
 #upload-form #upload-container #delete-image-button {
-	float: left;
-	margin-top: -9px;
+    float: left;
+    margin-top: -9px;
 }
 #upload-form object {
     float: left;
@@ -2653,7 +2651,7 @@ body.workshops.detail a.show-more-link {
     line-height: 46px !important
 }
 body.workshops.detail article.full {
-	display: none;
+    display: none;
 }
 #unlockEditPageLink {
   color: #fff ! important;
@@ -2749,8 +2747,8 @@ body.workshops.detail article.full {
     cursor: help;
 }
 .rsslink-wrapper {
-	float: right;
-	margin-top: 5px;
+    float: right;
+    margin-top: 5px;
 }
 .rsslink {
     text-align: center;
@@ -2823,7 +2821,7 @@ body.workshops.detail article.full {
     height: 100px;
 }
 .drei-d-reparatur {
-	background-image: url(/img/icons-skills/3d-reparatur.png);
+    background-image: url(/img/icons-skills/3d-reparatur.png);
     width: 100px;
     height: 100px;
 }
@@ -2837,17 +2835,17 @@ body.workshops.detail article.full {
     background-repeat: no-repeat;
 }
 .profilWorkshops h2 {
-	margin-top: 10px;
-	float: left;
-	width: 100%;
+    margin-top: 10px;
+    float: left;
+    width: 100%;
 }
 #UserRoles .checkbox {
-	padding: 0;
-	margin-right: 10px;
+    padding: 0;
+    margin-right: 10px;
 }
 .profilWorkshops {
-	margin-bottom: 10px;
-	float: left;
+    margin-bottom: 10px;
+    float: left;
 }
 .profilWorkshops a.workshop-link {
     font-size: 18px;
@@ -2857,7 +2855,7 @@ body.workshops.detail article.full {
 
 
 body.statistics.detail #content h1 {
-	margin-bottom: 10px;
+    margin-bottom: 10px;
 }
 body.statistics.detail #content .input,
 body.statistics.detail #content span {
@@ -2875,7 +2873,7 @@ body.statistics.detail #content .input input {
     background-color: white;
 }
 body.statistics.detail #content  #search {
-	float: left;
+    float: left;
 }
 body.events.all input[type="text"],
 body.workshops.all input[type="text"] {
@@ -2918,7 +2916,7 @@ body.events.all .item-wrapper img.detail-image {
     margin: 0 20px 5px 0;
 }
 body.workshops.all .item-wrapper img.detail-image {
-	margin-bottom: 10px;
+    margin-bottom: 10px;
 }
 body.workshops.all .left .top,
 body.events.all .left .top {
@@ -2954,21 +2952,21 @@ body.events.all #footer {
     z-index: 1100;
 }
 body.events.all #category-icons {
-	float: left;
-	margin-bottom: 10px;
+    float: left;
+    margin-bottom: 10px;
 }
 body.events.all #category-icons a.button {
-	float: left;
-	margin-top: 6px;
-	margin-left: 5px;
+    float: left;
+    margin-top: 6px;
+    margin-left: 5px;
 }
 body.events.all #category-icons a.not-selected,
 body.events.all #category-icons a.selected:hover {
-	opacity: 0.2;
+    opacity: 0.2;
 }
 body.events.all #category-icons a.not-selected:hover,
 body.events.all #category-icons a:hover {
-	opacity: 1;
+    opacity: 1;
 }
 
 body.events.all .lstCatNew {
@@ -2993,9 +2991,9 @@ body.users.publicProfile .workshop-link-wrapper {
 }
 body.users.publicProfile #content i.fab,
 body.users.publicProfile #content i.fas {
-	font-size: 24px;
-	float: left;
-	margin-right: 10px;
+    font-size: 24px;
+    float: left;
+    margin-right: 10px;
 }
 body.users.publicProfile img.rounded {
     width: 150px;
@@ -3005,88 +3003,227 @@ body.users.publicProfile img.rounded {
     -moz-border-radius: 150px;
 }
 body.users.publicProfile #content {
-	padding-left: 50px;
-	padding-right: 50px;
-	width: 1100px;
-	line-height: 17px;
+    padding-left: 50px;
+    padding-right: 50px;
+    width: 1100px;
+    line-height: 17px;
 }
 body.users.publicProfile .top-wrapper {
-	padding-left: 50px;
-	padding-right: 50px;
-	margin-left: -50px;
-	margin-right: -50px;
+    padding-left: 50px;
+    padding-right: 50px;
+    margin-left: -50px;
+    margin-right: -50px;
+    float: left;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+}
+body.users.publicProfile .dotted-line-full-width {
+	margin-top: 0px;
 	float: left;
-	padding-bottom: 20px;
-	margin-bottom: 30px;
-	border-bottom: 2px dotted black;
+	margin-left: -50px;
+	margin-bottom: 15px;
 }
 body.users.publicProfile .bottom-wrapper,
 body.users.publicProfile #sklill_icons {
-	width: 500px;
+    width: 500px;
 }
-body.users.publicProfile .left-wrapper {
-	width: 200px;
-	float: left;
+.public-user-wrapper {
+    float: left;
+    margin-right: 15px;
+    margin-bottom: 15px;
 }
-body.users.publicProfile .right-wrapper {
-	width: 900px;
-	float: left;
+a.public-user-wrapper:hover {
+	background-color: #f5f5f5;
 }
-body.users.publicProfile .address-wrapper {
-	float: left;
-	margin-top: 10px;
-	margin-bottom: 10px;
-	clear: both;
+.public-user-wrapper span {
+	color: #727374;
+	font-weight: normal;
 }
-body.users.publicProfile .button.gray {
-	margin-top: 10px;
-	margin-bottom: 10px;
-	float: left;
+.public-user-wrapper .left-wrapper {
+    width: 210px;
+    float: left;
+}
+body.users.all .public-user-wrapper {
+    height: 130px;
+    padding: 10px;
+}
+body.users.all .public-user-wrapper .left-wrapper {
+    width: 125px;
+}
+.public-user-wrapper .right-wrapper {
+    width: 280px;
+    float: left;
+}
+body.users.all .public-user-wrapper .right-wrapper {
+    width: 185px;
+}
+.public-user-wrapper .address-wrapper {
+    float: left;
+    line-height: 15px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    clear: both;
+    width: 100%;
+}
+.public-user-wrapper .button.gray {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    float: left;
+}
+body.users.all .public-user-wrapper .email {
+    max-width: 182px;
+    word-break: break-all;
+    font-size: 12px;
+    float: left;
 }
 body.users.publicProfile .button.gray.workshop {
-	margin-right: 5px;
-	margin-bottom: 0;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    float: left;
 }
-body.users.publicProfile .public-name-wrapper {
-	height: 28px;
+.public-user-wrapper .public-name-wrapper {
+    height: 28px;
     font-weight: bold;
     font-size: 24px;
     line-height: 28px;
     margin-bottom: -5px;
 }
+body.users.all .public-user-wrapper .public-name-wrapper {
+    font-size: 16px;
+    margin-top: 5px;
+    line-height: 22px;
+    min-height: 28px;
+    height: auto;
+}
+body.users.all .page-wrapper {
+    padding: 10px 60px;
+}
 body.users.publicProfile .about-me-wrapper {
-	float: left;
-	width: 500px;
+    float: left;
+    width: 500px;
 }
 body.users.publicProfile .about-me-wrapper b {
-	color: #4D8EA2;
-	font-size: 24px;
-	margin-bottom: 15px;
-	float: left;
-	width: 100%;
+    color: #4D8EA2;
+    font-size: 24px;
+    margin-bottom: 15px;
+    float: left;
+    width: 100%;
 }
 body.users.publicProfile ul {
-	list-style-type: disc;
-	margin-left: 20px;
-	margin-top: 10px;
-	margin-bottom: 20px;
+    list-style-type: disc;
+    margin-left: 20px;
+    margin-top: 10px;
+    margin-bottom: 20px;
 }
 body.users.publicProfile ul li {
-	line-height: 25px;
+    line-height: 25px;
 }
 body.users.publicProfile .about-me-wrapper .about-me-content {
-	background-color: #f2f2f2;
-	padding: 10px;
-	color: #4D8EA2;
-	float: left;
-	border-radius: 5px;
-	width: 100%;
-	line-height: 19px;
+    background-color: #f2f2f2;
+    padding: 10px;
+    color: #4D8EA2;
+    float: left;
+    border-radius: 5px;
+    width: 100%;
+    line-height: 19px;
 }
 body.users.publicProfile .about-me-wrapper .button {
-	margin-right: 5px;
-	margin-bottom: 5px;
-	float: left;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    float: left;
+}
+body.users.all .user-wrapper {
+    float:left;
+    margin-bottom: 10px;
+    margin-right: 10px;
+}
+body.users.all .zip-wrapper {
+    padding-top: 10px;
+    margin-bottom: 10px;
+    padding-left: 50px;
+}
+body.users.all .zip-wrapper a {
+    margin-right: 5px;
+    margin-left: 5px;
+}
+body.users.all .zip-wrapper .zip a.active {
+    text-decoration: underline;
+}
+body.users.all .sort a {
+    color: #4D8EA2;
+    margin-left: 0;
+}
+body.users.all h1,
+body.skills.all h1 {
+    padding-bottom: 10px;
+    padding-left: 50px;
+    margin-top: 15px;
+}
+body.skills.all h1 {
+    padding-left: 42px;
+}
+body.skills.all .dotted-line-full-width {
+	margin-bottom: 15px;
+}
+body.users.all h1 {
+    float: left;
+    width: 845px;
+    line-height: 45px;
+}
+body.users.all .skills-wrapper {
+    float: right;
+    width: 265px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+body.users.all .skills-wrapper label {
+    float: right;
+    margin-right: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+body.users.all .skills-wrapper .input.select {
+    float: right;
+}
+body.users.all h1 a,
+body.skills.all h1 a {
+    cursor: default;
+}
+body.skills.all .letter {
+    font-size: 22px;
+    float: left;
+    width: 40px;
+    color: #4D8EA2;
+    clear: both;
+    font-weight: bold;
+}
+body.skills.all .skills {
+    float: left;
+    width: 1120px;
+}
+body.skills.all .letter,
+body.skills.all .skills {
+    line-height: 30px;
+}
+body.skills.all .skills a {
+    margin-right: 5px;
+    display: inline-flex;
+    font-weight: normal;
+}
+body.skills.all .skills a.skill-10 {
+    font-size: 14px;
+}
+body.skills.all .skills a.skill-20 {
+    font-size: 16px;
+}
+body.skills.all .skills a.skill-30 {
+    font-size: 18px;
+}
+body.skills.all .skills a.skill-40 {
+    font-size: 20px;
+}
+body.skills.all .skills a.skill-50 {
+    font-size: 24px;
 }
 body.workshops.verwalten small,
 #workshop-detail small {
@@ -3099,8 +3236,8 @@ body.events.all .lstCatNew.sklill_icon.small {
     margin-top: 5px;
 }
 body.events.all .lstCatNew.sklill_icon.small.elektro {
-	margin-left: -2px;
-	margin-bottom: 10px;
+    margin-left: -2px;
+    margin-bottom: 10px;
 }
 body.events.all .lstCatNew.selected {
     opacity: 1;
@@ -3110,7 +3247,7 @@ body.events.all .lstCatNew.not-selected {
 }
 
 .fc-row.fc-widget-content {
-	height: 54px ! important;
+    height: 54px ! important;
 }
 
 body.workshops.home .left {
@@ -3123,7 +3260,7 @@ body.workshops.home .right {
     width: 575px;
 }
 body.users.intro #IntroWrapper {
-	margin-top: 15px;
+    margin-top: 15px;
 }
 
 
@@ -3153,16 +3290,16 @@ div.admin div.edit .error-message {
 }
 div.admin div.edit.column-1 .error-message,
 div.admin div.edit.column-2 .error-message {
-	margin-left: 230px;
+    margin-left: 230px;
 }
 #infoSheetEditForm .input.radio .error-message {
-	margin-left: 0px;
-	margin-top: 5px;
-	float: left;
+    margin-left: 0px;
+    margin-top: 5px;
+    float: left;
 }
 div.admin div.categories-edit {
-	width: 620px;
-	float: left;
+    width: 620px;
+    float: left;
 }
 div.admin div.ckeditor-edit {
     float: left;
@@ -3194,7 +3331,7 @@ div.admin div.edit span.fake-input {
     width: 283px;
 }
 div.admin div.edit span.fake-input {
-	float: left;
+    float: left;
 }
 
 div.admin div.edit div.multiple-checkboxes-wrapper {
@@ -3239,7 +3376,7 @@ div.admin div.edit div.input.select div.checkbox {
     width: 244px;
 }
 div.admin div.edit.categories-edit div.input.select div.checkbox {
-	width: 201px;
+    width: 201px;
 }
 div.admin div.edit div.input.select div.checkbox, div.admin div.edit div.input.select label,
     div.admin div.edit div.input.select input {
@@ -3392,13 +3529,13 @@ div.admin.edit .iframe-preview-heading {
 #infoSheetEditForm .add-subcategory,
 #infoSheetEditForm .add-brand,
 body.users.profil .add-skill {
-	display: none;
+    display: none;
 }
 .select2-add-subcategory-button,
 .select2-add-brand-button,
 .select2-add-skill-button {
-	display: block;
-	margin-top: 5px ! important;
+    display: block;
+    margin-top: 5px ! important;
 }
 
 @media (max-width: 767px) {

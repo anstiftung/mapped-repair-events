@@ -48,11 +48,7 @@ class WorkshopsController extends AdminAppController
             'contain' => [
                 'Countries',
                 'OwnerUsers',
-                'Users' => [
-                    'fields' => [
-                        'UsersWorkshops.workshop_uid'
-                    ]
-                ]
+                'Users'
             ]
         ]);
         
@@ -67,6 +63,12 @@ class WorkshopsController extends AdminAppController
         $this->InfoSheet = TableRegistry::getTableLocator()->get('InfoSheets');
         foreach($objects as $object) {
             $object->workshop_info_sheets_count = $this->InfoSheet->workshopInfoSheetsCount($object->uid);
+            foreach($object->users as $user) {
+                $user->revertPrivatizeData();
+            }
+            if ($object->owner_user) {
+                $object->owner_user->revertPrivatizeData();
+            }
         }
         
         $this->set('objects', $objects->toArray());

@@ -1,16 +1,24 @@
 <?php
 namespace App\Controller\Component;
 
-use App\Utility\HtmlCutString;
 use Cake\Controller\Component; // for unit tests
 use Cake\Core\Configure;
 use Cake\Utility\Text;
 
 class StringComponent extends Component
 {
-
+    
     public $seoLinkArray = [];
-
+    
+    /**
+     * @param string $string
+     * @return string
+     */
+    public static function removeIdFromSlug($string)
+    {
+        return preg_replace('/^([\d]+)-(.*)$/', '$2', $string);
+    }
+    
     public static function cleanStringForRssFeedDescription($string) {
         $string = htmlspecialchars(strip_tags($string, ALLOWED_TAGS_CKEDITOR_USER));
         return $string;
@@ -31,7 +39,7 @@ class StringComponent extends Component
     /**
      * Checks if a string is ASCII
      * returns false if any character found not in 0-255
-     * 
+     *
      * @param string $string
      * @return boolean
      */
@@ -39,43 +47,43 @@ class StringComponent extends Component
     {
         return (preg_match('/^[\\x00-\\x7A]*$/', $string));
     }
-
+    
     public static function getUniqueMailinatorEmailAddress()
     {
         return strtolower(self::createRandomString(20) . '-repini@mailinator.com');
     }
-
+    
     /**
-	 * 	Tests if a string is utf8 encoded.
-	 * 	This will use the iconv support if installed/compiled with php, which
-	 * 	is much faster than the regular expression match that is performed if
-	 * 	iconv is not installed.
-	 * 	This function is from O'Reilly - Building Scalable Websites
-	 *  @param	string	$string
-	 * 	@return boolean
-	 */
-	public static function isUtf8($string) {
-		if (function_exists('iconv')) {
-			return (iconv('UTF-8', 'UTF-8', $string) == $string);
-		} else {
-			$regexp = '[\xC0-\xDF](^\x80-\xBF]|$)'.
-				'|[\xE0-\xEF].{0,1}([^\x80-\xBF]|$)'.
-				'|[\xF0-\xF7].{0,2}([^\x80-\xBF]|$)'.
-				'|[\xF8-\xFB].{0,3}([^\x80-\xBF]|$)'.
-				'|[\xFC-\xFD].{0,4}([^\x80-\xBF]|$)'.
-				'|[\xFE-\xFE].{0,5}([^\x80-\xBF]|$)'.
-				'|[\x00-\x7F][\x80-\xBF]'.
-				'|[\xC0-\xDF].[\x80-\xBF]'.
-				'|[\xE0-\xEF]..[\x80-\xBF]'.
-				'|[\xF0-\xF7]...[\x80-\xBF]'.
-				'|[\xF8-\xFB]....[\x80-\xBF]'.
-				'|[\xFC-\xFD].....[\x80-\xBF]'.
-				'|[\xFE-\xFE]......[\x80-\xBF]'.
-				'|^[\x80-\xBF]';
-			return preg_match('!'.$regexp.'!', $string);
-		}
-	}
-
+     * 	Tests if a string is utf8 encoded.
+     * 	This will use the iconv support if installed/compiled with php, which
+     * 	is much faster than the regular expression match that is performed if
+     * 	iconv is not installed.
+     * 	This function is from O'Reilly - Building Scalable Websites
+     *  @param	string	$string
+     * 	@return boolean
+     */
+    public static function isUtf8($string) {
+        if (function_exists('iconv')) {
+            return (iconv('UTF-8', 'UTF-8', $string) == $string);
+        } else {
+            $regexp = '[\xC0-\xDF](^\x80-\xBF]|$)'.
+                '|[\xE0-\xEF].{0,1}([^\x80-\xBF]|$)'.
+                '|[\xF0-\xF7].{0,2}([^\x80-\xBF]|$)'.
+                '|[\xF8-\xFB].{0,3}([^\x80-\xBF]|$)'.
+                '|[\xFC-\xFD].{0,4}([^\x80-\xBF]|$)'.
+                '|[\xFE-\xFE].{0,5}([^\x80-\xBF]|$)'.
+                '|[\x00-\x7F][\x80-\xBF]'.
+                '|[\xC0-\xDF].[\x80-\xBF]'.
+                '|[\xE0-\xEF]..[\x80-\xBF]'.
+                '|[\xF0-\xF7]...[\x80-\xBF]'.
+                '|[\xF8-\xFB]....[\x80-\xBF]'.
+                '|[\xFC-\xFD].....[\x80-\xBF]'.
+                '|[\xFE-\xFE]......[\x80-\xBF]'.
+                '|^[\x80-\xBF]';
+            return preg_match('!'.$regexp.'!', $string);
+        }
+    }
+    
     /**
      * Removes characters from the beginning of a string if they are found
      * <code>
@@ -83,7 +91,7 @@ class StringComponent extends Component
      * // will echo 'your wife is easy'
      * echo StringComponent::compareCut($string, 'my example', 'your wife');
      * </code>
-     * 
+     *
      * @param
      *            string
      * @param
@@ -99,7 +107,7 @@ class StringComponent extends Component
         }
         return $replace . mb_substr($haystack, $findLength);
     }
-
+    
     /**
      * Replaces HTML-Signs into HTML Entities
      * This function was introduced because htmlenties from php encoded
@@ -119,7 +127,7 @@ class StringComponent extends Component
         ]);
         return $replaced;
     }
-
+    
     /**
      * Prepares text for output on the website
      * - replaces html entities
@@ -152,7 +160,7 @@ class StringComponent extends Component
     {
         return htmlspecialchars($text, ENT_COMPAT, 'UTF-8');
     }
-
+    
     // $str: The anchor string that will be altered
     // $relValue: The rel attribute values you wish to have attached to the anchor
     public static function makeNoFollow(&$str, $relValue = 'nofollow')
@@ -168,10 +176,10 @@ class StringComponent extends Component
         $str = preg_replace($pattern, $replace, $str);
         return $str;
     }
-
+    
     /**
      * Truncates a string
-     * 
+     *
      * @param string $string
      * @param integer $length
      * @param string $end
@@ -181,37 +189,37 @@ class StringComponent extends Component
     {
         if (strlen($string) <= $length)
             return $string;
-        $truncated = '';
-        $strLength = mb_strlen($string, 'UTF-8');
-        if (strlen($end) == 0 || ! $calculateWithEndString) {
-            $lengthToCut = $length;
-        } else {
-            $lengthToCut = $length - mb_strlen($end, 'UTF-8');
-        }
-        $lastSpace = 0;
-        for ($i = 0; $i < $strLength; $i ++) {
-            $char = mb_substr($string, $i, 1, 'UTF-8');
-            if ($calculateWidths) {
-                $lengthToCut += self::charWidth($char);
+            $truncated = '';
+            $strLength = mb_strlen($string, 'UTF-8');
+            if (strlen($end) == 0 || ! $calculateWithEndString) {
+                $lengthToCut = $length;
+            } else {
+                $lengthToCut = $length - mb_strlen($end, 'UTF-8');
             }
-            if (preg_match('/\s/', $char)) {
-                $lastSpace = $i;
+            $lastSpace = 0;
+            for ($i = 0; $i < $strLength; $i ++) {
+                $char = mb_substr($string, $i, 1, 'UTF-8');
+                if ($calculateWidths) {
+                    $lengthToCut += self::charWidth($char);
+                }
+                if (preg_match('/\s/', $char)) {
+                    $lastSpace = $i;
+                }
+                if ($i >= $lengthToCut) {
+                    break;
+                }
             }
-            if ($i >= $lengthToCut) {
-                break;
+            if ($lastSpace == 0 or $force == true) {
+                $truncated = mb_substr($string, 0, $lengthToCut, 'UTF-8');
+            } else {
+                $truncated = mb_substr($string, 0, $lastSpace, 'UTF-8');
             }
-        }
-        if ($lastSpace == 0 or $force == true) {
-            $truncated = mb_substr($string, 0, $lengthToCut, 'UTF-8');
-        } else {
-            $truncated = mb_substr($string, 0, $lastSpace, 'UTF-8');
-        }
-        return $truncated . $end;
+            return $truncated . $end;
     }
-
+    
     /**
      * Adds some line breaks if the lines are to long
-     * 
+     *
      * @param string $string
      * @param integer $length
      * @param boolean $force
@@ -221,40 +229,40 @@ class StringComponent extends Component
     {
         if (strlen($string) <= $length)
             return $string;
-        $strLength = mb_strlen($string, 'UTF-8');
-        $intag = false;
-        $charsSinceLastBreak = 0;
-        $wrapped = '';
-        $lengthToCut = $length;
-        for ($i = 0; $i < $strLength; $i ++) {
-            $char = mb_substr($string, $i, 1, 'UTF-8');
-            if ($char == '<')
-                $intag = true;
-            if ($calculateWidths) {
-                $lengthToCut += self::charWidth($char);
+            $strLength = mb_strlen($string, 'UTF-8');
+            $intag = false;
+            $charsSinceLastBreak = 0;
+            $wrapped = '';
+            $lengthToCut = $length;
+            for ($i = 0; $i < $strLength; $i ++) {
+                $char = mb_substr($string, $i, 1, 'UTF-8');
+                if ($char == '<')
+                    $intag = true;
+                    if ($calculateWidths) {
+                        $lengthToCut += self::charWidth($char);
+                    }
+                    if (! $intag) {
+                        if (preg_match('/[\s+]/', $char)) {
+                            $charsSinceLastBreak = 0;
+                            $lengthToCut = $length;
+                        } elseif ($charsSinceLastBreak >= $lengthToCut) {
+                            $charsSinceLastBreak = 0;
+                            $wrapped .= LF;
+                            $lengthToCut = $length;
+                        } else {}
+                        $charsSinceLastBreak ++;
+                    }
+                    if ($char == '>')
+                        $intag = false;
+                        $wrapped .= $char;
             }
-            if (! $intag) {
-                if (preg_match('/[\s+]/', $char)) {
-                    $charsSinceLastBreak = 0;
-                    $lengthToCut = $length;
-                } elseif ($charsSinceLastBreak >= $lengthToCut) {
-                    $charsSinceLastBreak = 0;
-                    $wrapped .= LF;
-                    $lengthToCut = $length;
-                } else {}
-                $charsSinceLastBreak ++;
-            }
-            if ($char == '>')
-                $intag = false;
-            $wrapped .= $char;
-        }
-        return $wrapped;
+            return $wrapped;
     }
-
+    
     /**
      * Characters have different width.
      * some are very broad, some a thin.
-     * 
+     *
      * @param string $char
      * @return integer
      */
@@ -274,11 +282,11 @@ class StringComponent extends Component
             return 0;
         }
     }
-
+    
     /**
      * Implodes a String like php native function does but can handle
      * objects in the array and multiple dimensions
-     * 
+     *
      * @param string $glue
      * @param
      *            array(mixed)
@@ -288,30 +296,30 @@ class StringComponent extends Component
     {
         if (count($pieces) == 0)
             return '';
-        $return = '';
-        foreach ($pieces as $piece) {
-            if (is_array($piece)) {
-                $return .= self::implode($glue, $piece);
-            } elseif (is_object($piece)) {
-                $return .= $piece->__toString() . $glue;
-            } else {
-                $return .= $piece . $glue;
+            $return = '';
+            foreach ($pieces as $piece) {
+                if (is_array($piece)) {
+                    $return .= self::implode($glue, $piece);
+                } elseif (is_object($piece)) {
+                    $return .= $piece->__toString() . $glue;
+                } else {
+                    $return .= $piece . $glue;
+                }
             }
-        }
-        return substr($return, 0, - strlen($glue));
+            return substr($return, 0, - strlen($glue));
     }
-
+    
     public static function createPassword()
     {
         return mb_strtolower(self::createRandomString(15));
     }
-
+    
     public static function createConfirmationCode($email)
     {
         $confirmationCode = mb_strtolower(substr(md5($email), 0, 5) . StringComponent::createRandomString(5));
         return $confirmationCode;
     }
-
+    
     public static function decodeConfirmationCode($emailAndConfirmationCodeHash)
     {
         $emailHash = substr($emailAndConfirmationCodeHash, 0, 5);
@@ -324,7 +332,7 @@ class StringComponent extends Component
         
         return $return;
     }
-
+    
     /**
      * Probability of two exact Random Strings, with a-zA-Z0-9 is:
      * (25+25+10)^(25+25+10)
@@ -340,7 +348,7 @@ class StringComponent extends Component
      * @param
      *            integer length of the string
      * @return string generated string
-     *        
+     *
      */
     public static function createRandomString($length = 8, $salt = null)
     {
@@ -361,7 +369,7 @@ class StringComponent extends Component
         }
         return $string;
     }
-
+    
     /**
      * create an md5 hash of the gien string
      * returns the with number given amount of characters
@@ -369,7 +377,7 @@ class StringComponent extends Component
      * @param
      *            string
      * @return string (16 characters - the first 8 from string(email) hash and the first 8 from number (userid))
-     *        
+     *
      */
     public static function createMd5Hash($sString, $iNumber)
     {
@@ -382,7 +390,7 @@ class StringComponent extends Component
         
         return $sReturn;
     }
-
+    
     /**
      * create an md5 hash of the gien string
      * returns the with number given amount of characters
@@ -396,10 +404,10 @@ class StringComponent extends Component
     {
         return md5($sString, false);
     }
-
+    
     /**
      * Strips all breaks from a string
-     * 
+     *
      * @param string $string
      * @param string $replace
      *            Replace with this string
@@ -408,7 +416,7 @@ class StringComponent extends Component
     {
         return preg_replace('/([\\r|\\n]|\\<br\\>|\\<br \\/\\>|\\<p\\>|\\<p \\/\\>)/', $replace, $string);
     }
-
+    
     /**
      * Removes all non-alpha numerical charachters
      *
@@ -419,10 +427,10 @@ class StringComponent extends Component
     {
         return preg_replace('/([^\w])/', "", $string);
     }
-
+    
     /**
      * replaces umlauts and sz
-     * 
+     *
      * @return string cleaned string
      */
     public static function replaceUmlauts($string)
@@ -447,11 +455,11 @@ class StringComponent extends Component
         ];
         return str_replace($arraySearch, $arrayRepalce, $string);
     }
-
+    
     /**
      * original character should be kept
      * http://de.wikipedia.org/wiki/Diakritisches_Zeichen
-     * 
+     *
      * @return string cleaned string
      */
     public static function replaceDiacriticCharacters($string)
@@ -461,11 +469,11 @@ class StringComponent extends Component
         $replace = explode(",", "c,s,t,ae,oe,a,c,e,i,o,u,y,a,e,i,o,u,y,a,e,i,o,u,y,a,e,i,o,u,y,c,e,r,s,z,a,u,o,e,i,o,u,a,n,a,u");
         return str_replace($search, $replace, $string);
     }
-
+    
     /**
      * only leaves characters from $whitelist and deletes all other characters
      * because of utf-8 reg ex 'w' can not be used
-     * 
+     *
      * @return string cleaned string
      */
     public static function cleanFromNonUrlConformCharacters($string)
@@ -518,15 +526,15 @@ class StringComponent extends Component
         }
         if (empty($returnString))
             return '';
-        return $returnString;
+            return $returnString;
     }
-
+    
     /**
      * only leaves characters from $whitelist and deletes all other characters
      * because of utf-8 reg ex 'w' can not be used
-     * 
+     *
      * @return string cleaned string
-     *        
+     *
      */
     public static function cleanFromNonGOODCharacters($string)
     {
@@ -656,9 +664,9 @@ class StringComponent extends Component
         }
         if (empty($returnString))
             return 'tip';
-        return $returnString;
+            return $returnString;
     }
-
+    
     /**
      *
      * http://stackoverflow.com/questions/5305879/automatic-clean-and-seo-friendly-url-slugs
@@ -693,7 +701,7 @@ class StringComponent extends Component
     {
         return self::slugify($string, '-', false);
     }
-
+    
     /**
      * @param string $string
      * @return string
@@ -708,7 +716,7 @@ class StringComponent extends Component
         return substr($string, 0, 1).str_repeat('*', $len - 2).substr($string, $len - 1, 1);
         
     }
-
+    
     public static function cutHtmlString($text, $length = 100, $ending = '...', $exact = false, $considerHtml = true)
     {
         if ($considerHtml) {
@@ -801,7 +809,7 @@ class StringComponent extends Component
         $truncate = Configure::read('AppConfig.htmlHelper')->trimAndRemoveEmptyTags($truncate);
         return $truncate;
     }
-
+    
     public static function isUrlRelative($url)
     {
         if (preg_match('/https?\:\/\//', $url)) {
@@ -809,18 +817,18 @@ class StringComponent extends Component
         }
         return true;
     }
-
+    
     public static function getStrippedTextForBoxes($text)
     {
         $text = strip_tags($text, '<b>');
         $text = Text::truncate($text, 100);
         return $text;
     }
-
+    
     /**
      * http://www.maurits.vdschee.nl/php_hide_email/
      */
-    public static function hide_email($email, $class = '')
+    public static function hide_email($email, $class = '', $renderAsLink = true)
     {
         $classHtml = '';
         if ($class != '') {
@@ -831,21 +839,26 @@ class StringComponent extends Component
         $key = str_shuffle($character_set);
         $cipher_text = '';
         $id = 'e' . rand(1, 999999999);
+        if ($renderAsLink) {
+            $tag = '<a ' . $classHtml . 'href=\\"mailto:"+d+"\\">"+d+"</a>';
+        } else {
+            $tag = '<span ' . $classHtml . '>"+d+"</span>';
+        }
         for ($i = 0; $i < strlen($email); $i += 1)
             $cipher_text .= @$key[strpos($character_set, $email[$i])];
-        
-        $script = 'var a="' . $key . '";var b=a.split("").sort().join("");var c="' . $cipher_text . '";var d="";';
-        $script .= 'for(var e=0;e<c.length;e++)d+=b.charAt(a.indexOf(c.charAt(e)));';
-        $script .= 'document.getElementById("' . $id . '").innerHTML="<a ' . $classHtml . 'href=\\"mailto:"+d+"\\">"+d+"</a>"';
-        $script = "eval(\"" . str_replace([
-            "\\",
-            '"'
-        ], [
-            "\\\\",
-            '\"'
-        ], $script) . "\")";
-        $script = '<script type="text/javascript">/*<![CDATA[*/' . $script . '/*]]>*/</script>';
-        
-        return '<span id="' . $id . '">[javascript protected email address]</span>' . $script;
+            
+            $script = 'var a="' . $key . '";var b=a.split("").sort().join("");var c="' . $cipher_text . '";var d="";';
+            $script .= 'for(var e=0;e<c.length;e++)d+=b.charAt(a.indexOf(c.charAt(e)));';
+            $script .= 'document.getElementById("' . $id . '").innerHTML="'.$tag.'";';
+            $script = "eval(\"" . str_replace([
+                "\\",
+                '"'
+            ], [
+                "\\\\",
+                '\"'
+            ], $script) . "\")";
+            $script = '<script type="text/javascript">/*<![CDATA[*/' . $script . '/*]]>*/</script>';
+            
+            return '<span id="' . $id . '">[javascript protected email address]</span>' . $script;
     }
 }

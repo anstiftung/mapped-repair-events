@@ -200,6 +200,11 @@ class PostsController extends AdminAppController
                 'Posts.publish' => 'DESC'
             ]
         ]);
+        foreach($objects as $object) {
+            if ($object->owner_user) {
+                $object->owner_user->revertPrivatizeData();
+            }
+        }
         $this->set('objects', $objects->toArray());
         $this->set('blogs', $this->Blog->getForDropdown());
         $this->set('users', $this->User->getForDropdown());

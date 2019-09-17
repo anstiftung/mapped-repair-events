@@ -6,7 +6,7 @@ use Cake\Validation\Validator;
 
 class SkillsTable extends Table
 {
-
+    
     public $allowedBasicHtmlFields = [];
     public $name_de = 'Kenntnis';
     
@@ -14,6 +14,14 @@ class SkillsTable extends Table
     {
         $this->addBehavior('Timestamp');
         parent::initialize($config);
+        $this->belongsToMany('Users', [
+            'through' => 'UsersSkills',
+            'foreignKey' => 'skill_id',
+            'targetForeignKey' => 'user_uid',
+            'sort' => [
+                'Users.nick' => 'ASC'
+            ]
+        ]);
         $this->belongsTo('OwnerUsers', [
             'className' => 'Users',
             'foreignKey' => 'owner'
@@ -53,10 +61,19 @@ class SkillsTable extends Table
     /**
      * @return array
      */
-    public function getForDropdown()
+    public function getForDropdown($includeOffline)
     {
         
+        $conditions = [
+            'Skills.status' => APP_ON
+        ];
+        if ($includeOffline) {
+            $conditions = [
+                'Skills.status >= ' => APP_OFF
+            ];
+        }
         $skills = $this->find('all', [
+            'conditions' => $conditions,
             'fields' => [
                 'Skills.id',
                 'Skills.name'

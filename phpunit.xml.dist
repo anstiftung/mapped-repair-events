@@ -11,20 +11,25 @@
         <ini name="apc.enable_cli" value="1"/>
     </php>
 
-    <!-- Add any additional test suites you want to run here -->
     <testsuites>
-        
         <testsuite name="App">
-            <file>tests/TestCase/src/View/Helper/MyHtmlHelperTest.php</file>
+            <directory>./tests/TestCase/</directory>
         </testsuite>
-        
-    </testsuites>
+    </testsuites> 
 
-    <!-- Ignore vendor tests in code coverage reports -->
     <filter>
         <whitelist>
             <directory suffix=".php">./src/</directory>
             <directory suffix=".php">./plugins/*/src/</directory>
         </whitelist>
     </filter>
+    
+    <listeners>
+        <listener class="Cake\TestSuite\Fixture\FixtureInjector">
+            <arguments>
+                <object class="Cake\TestSuite\Fixture\FixtureManager" />
+            </arguments>
+        </listener>
+    </listeners>
+    
 </phpunit>

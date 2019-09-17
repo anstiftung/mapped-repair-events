@@ -133,17 +133,18 @@ class WorkshopsTable extends AppTable
                 'Workshops.status > ' . $workshopStatus
             ],
             'contain' => [
-                'Users' => [
-                    'fields' => [
-                        'UsersWorkshops.workshop_uid'
-                    ]
-                ],
+                'Users',
                 'Users.Groups'
             ],
             'order' => [
                 'Workshops.name' => 'ASC'
             ]
         ]);
+        foreach($workshops as $workshop) {
+            foreach($workshop->users as $user) {
+                $user->revertPrivatizeData();
+            }
+        }
         return $workshops;
     }
     
@@ -214,11 +215,7 @@ class WorkshopsTable extends AppTable
                 'Workshops.status >= ' . APP_OFF
             ],
             'contain' => [
-                'Users' => [
-                    'fields' => [
-                        'UsersWorkshops.workshop_uid'
-                    ]
-                ],
+                'Users',
                 'Users.Groups'
             ]
         ])->first();

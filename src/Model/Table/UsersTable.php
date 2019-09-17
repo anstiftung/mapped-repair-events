@@ -291,20 +291,6 @@ class UsersTable extends AppTable
         return $validator;
     }
     
-    public function privatizeData($users)
-    {
-        foreach($users as &$user) {
-            $privateFields = explode(',',  $user->private);
-            $privateFields = str_replace('-', '_', $privateFields);
-            foreach($user->getVisible() as $property) {
-                if (in_array($property, $privateFields)) {
-                    $user->$property = '';
-                }
-            }
-        }
-        return $users;
-    }
-
     public function newPasswordEqualsValidator($value, $context)
     {
         return $context['data']['password_new_1'] == $context['data']['password_new_2'];
@@ -338,6 +324,7 @@ class UsersTable extends AppTable
         
         $preparedUsers = [];
         foreach($users as $user) {
+            $user->revertPrivatizeData();
             $preparedUsers[$user->uid] = $user->name . ' (' . $user->nick . ')';
         }
         
@@ -352,6 +339,7 @@ class UsersTable extends AppTable
                 'Users.status >= ' . APP_DELETED
             ]
         ]);
+        $user->revertPrivatizeData();
         $data = ['password' => $newPassword];
         $entity = $this->patchEntity($user, $data);
         $this->save($entity);

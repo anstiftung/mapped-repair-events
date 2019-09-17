@@ -8,6 +8,31 @@ class User extends Entity
 {
     
     protected $_virtual = ['name'];
+    public $privatize = true;
+    
+    public function __construct(array $properties = [], array $options = [])
+    {
+        parent::__construct($properties, $options);
+        $this->privatizeData($this);
+    }
+    
+    public function revertPrivatizeData()
+    {
+        foreach($this->extractOriginalChanged($this->getVisible()) as $property => $value) {
+            $this->$property = $value; 
+        }
+    }
+    
+    public function privatizeData(&$user)
+    {
+        $privateFields = explode(',',  $user->private);
+        $privateFields = str_replace('-', '_', $privateFields);
+        foreach($user->getVisible() as $property) {
+            if (in_array($property, $privateFields)) {
+                $user->$property = null;
+            }
+        }
+    }
     
     protected function _getName()
     {

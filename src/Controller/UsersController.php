@@ -2,21 +2,23 @@
 
 namespace App\Controller;
 
+use App\Controller\Component\StringComponent;
 use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\Mailer\Email;
 use Cake\Http\Exception\NotFoundException;
+use Cake\ORM\Query;
 use Cake\ORM\TableRegistry;
 
 class UsersController extends AppController
 {
-
+    
     public function __construct($request = null, $response = null)
     {
         parent::__construct($request, $response);
         $this->User = TableRegistry::getTableLocator()->get('Users');
     }
-
+    
     public function isAuthorized($user)
     {
         switch($this->request->getParam('action')) {
@@ -44,9 +46,90 @@ class UsersController extends AppController
             'registerRepairhelper',
             'registerOrga',
             'activate',
-            'publicProfile'
+            'publicProfile',
+            'all'
         ]);
         
+    }
+    
+    public function all()
+    {
+
+        $skillId = 0;
+        if (isset($this->getRequest()->getParam('pass')[0])) {
+            $skillId = (int) $this->getRequest()->getParam('pass')[0];
+            $this->Skill = TableRegistry::getTableLocator()->get('Skills');
+            $skill = $this->Skill->find('all', [
+                'conditions' => [
+                    'Skills.id' => $skillId,
+                    'Skills.status' => APP_ON
+                ]
+            ])->first();
+                
+            if (empty($skill)) {
+                throw new NotFoundException('skill not found');
+            }
+            
+            $this->set('skill', $skill);
+        }
+        
+        $conditions = [
+            'Users.status' => APP_ON
+        ];
+        
+        if ($this->getRequest()->getQuery('zip') != '') {
+            $conditions['LEFT(Users.zip, 1) = '] = (int) $this->getRequest()->getQuery('zip');
+            $conditions['FIND_IN_SET("zip", private) = '] = 0; // Users.private would be converted to users.private on prod so leave it out!
+        }
+        if ($skillId > 0) {
+            $conditions['FIND_IN_SET("skills", private) = '] = 0; // Users.private would be converted to users.private on prod so leave it out!
+        }
+        
+        $users = $this->User->find('all', [
+            'conditions' => $conditions,
+            'contain' => [
+                'Skills'
+            ]
+        ]);
+        
+        if ($skillId > 0) {
+            $users->matching('Skills', function(Query $q) use ($skillId) {
+                return $q->where(['Skills.id' => $skillId]);
+            });
+        }
+        
+        $users = $this->paginate($users, [
+            'sortWhitelist' => [
+                'Users.created', 'Users.nick'
+            ],
+            'order' => [
+                'Users.created' => 'DESC'
+            ]
+        ]);
+        $this->set('users', $users);
+        
+        if ($skillId > 0) {
+            $correctSlug = Configure::read('AppConfig.htmlHelper')->urlSkillDetail($skillId, $skill->name);
+            if ($correctSlug != Configure::read('AppConfig.htmlHelper')->urlSkillDetail($skillId, StringComponent::removeIdFromSlug($this->getRequest()->getParam('pass')[0]))) {
+                $this->redirect($correctSlug);
+                return;
+            }
+        }
+        
+        $this->Skill = TableRegistry::getTableLocator()->get('Skills');
+        $skillsForDropdown = $this->Skill->getForDropdown(false);
+        $this->set('skillsForDropdown', $skillsForDropdown);
+        
+        $metaTags = [
+            'title' => 'Aktive'
+        ];
+        $this->set('metaTags', $metaTags);
+        
+        $overviewLink = Configure::read('AppConfig.htmlHelper')->urlUsers();
+        if (preg_match('`/kenntnisse`', $this->referer())) {
+            $overviewLink = Configure::read('AppConfig.htmlHelper')->urlSkills();
+        }
+        $this->set('overviewLink', $overviewLink);
     }
     
     public function publicProfile()
@@ -70,6 +153,8 @@ class UsersController extends AppController
                 'Skills',
                 'Workshops' => [
                     'fields' => [
+                        'Workshops.url',
+                        'Workshops.name',
                         'UsersWorkshops.user_uid'
                     ]
                 ]
@@ -79,15 +164,13 @@ class UsersController extends AppController
         if (empty($user)) {
             throw new NotFoundException('user not found');
         }
-        
-        $user = $this->User->privatizeData([$user])[0];
         $this->set('user', $user);
         
         $metaTags = [
             'title' => ($user->firstname . $user->lastname != '' ? 'Profil von ' . $user->name : 'Profil')
         ];
         $this->set('metaTags', $metaTags);
-
+        
     }
     
     public function welcome() {
@@ -100,7 +183,7 @@ class UsersController extends AppController
         $this->set('metaTags', $metaTags);
         
     }
-
+    
     public function neuesPasswortAnfordern()
     {
         $metaTags = [
@@ -123,6 +206,7 @@ class UsersController extends AppController
                         'Users.email' => $this->request->getData('Users.email')
                     ]
                 ]) ->first();
+                $user->revertPrivatizeData();
                 
                 $newPassword = $this->User->setNewPassword($user->uid);
                 
@@ -130,7 +214,7 @@ class UsersController extends AppController
                 $email = new Email('default');
                 $email->viewBuilder()->setTemplate('new_password_request');
                 $email->setSubject('Neues Passwort für '. Configure::read('AppConfig.htmlHelper')->getHostName())
-                    ->setViewVars([
+                ->setViewVars([
                     'password' => $newPassword,
                     'user' => $user
                 ]);
@@ -166,7 +250,7 @@ class UsersController extends AppController
                 'private' => $this->User->getDefaultPrivateFields()
             ],
             ['validate' => false]
-        );
+            );
         
         $this->_profil($user, false, false);
         
@@ -266,9 +350,9 @@ class UsersController extends AppController
         $this->set('isMyProfile', $isMyProfile);
         $this->set('isEditMode', $isEditMode);
         
-
+        
     }
-
+    
     public function profil($userUid=null)
     {
         
@@ -301,13 +385,14 @@ class UsersController extends AppController
                 'Skills'
             ]
         ])->first();
+        $user->revertPrivatizeData();
         
         if (empty($user)) {
             throw new NotFoundException('user not found');
         }
         
         $this->Skill = TableRegistry::getTableLocator()->get('Skills');
-        $skillsForDropdown = $this->Skill->getForDropdown();
+        $skillsForDropdown = $this->Skill->getForDropdown(true);
         $this->set('skillsForDropdown', $skillsForDropdown);
         
         $this->_profil($user, $isMyProfile, true);
@@ -321,7 +406,7 @@ class UsersController extends AppController
         $this->set('metaTags', $metaTags);
         
     }
-
+    
     public function passwortAendern()
     {
         
@@ -349,6 +434,7 @@ class UsersController extends AppController
         
         if (!($user->hasErrors())) {
             $user = $this->User->get($this->AppAuth->getUserUid());
+            $user->revertPrivatizeData();
             $user2save = [
                 'password' => $this->request->getData('Users.password_new_1')
             ];
@@ -360,7 +446,7 @@ class UsersController extends AppController
         
         $this->set('user', $user);
     }
-
+    
     public function forum()
     {
         if (Configure::read('AppConfig.fluxBbForumEnabled')) {
@@ -370,7 +456,7 @@ class UsersController extends AppController
             throw new NotFoundException();
         }
     }
-
+    
     public function login()
     {
         $metaTags = [
@@ -440,6 +526,7 @@ class UsersController extends AppController
                 'Users.confirm' => $this->request->getParam('pass')['0']
             ])
         ])->first();
+        $user->revertPrivatizeData();
         
         if (empty($user)) {
             $this->AppFlash->setFlashError(__('Invalid activation code.'));
@@ -453,6 +540,7 @@ class UsersController extends AppController
                 'Groups'
             ]
         ]);
+        $user->revertPrivatizeData();
         $user2save = [
             'confirm' => 'ok',
             'status' => APP_ON
@@ -533,7 +621,7 @@ class UsersController extends AppController
                             'email' => $this->request->getData('Users.email'),
                             'plz' => $this->request->getData('Users.zip'),
                         ]
-                    );
+                        );
                     $this->CptNewsletter->save($newsletter);
                 }
             }
@@ -558,7 +646,7 @@ class UsersController extends AppController
         ];
         $this->set('metaTags', $metaTags);
     }
-
+    
     public function logout()
     {
         if (Configure::read('AppConfig.fluxBbForumEnabled')) {

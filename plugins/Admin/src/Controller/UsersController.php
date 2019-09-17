@@ -73,6 +73,7 @@ class UsersController extends AdminAppController
                 'Groups',
                 'Workshops' => [
                     'fields' => [
+                        'Workshops.name',
                         'UsersWorkshops.user_uid'
                     ]
                 ],
@@ -87,6 +88,9 @@ class UsersController extends AdminAppController
                 'Users.created' => 'DESC'
             ]
         ]);
+        foreach($objects->toArray() as &$object) {
+            $object->revertPrivatizeData();
+        }
         $this->set('objects', $objects->toArray());
         
         $this->Workshop = TableRegistry::getTableLocator()->get('Workshops');

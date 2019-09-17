@@ -26,11 +26,12 @@
 	  width: 95%;
 	  float: left;
 	}
+	body.users.all .page-wrapper {
+	   padding: 0;
+	}
 	body.workshops.home .left,
 	body.workshops.home .right,
-	body.workshops.detail .right {
-		width: 100%;
-	}
+	body.workshops.detail .right,
 	body.users .profile .categories-checkbox-wrapper,
 	#eventEditForm .categories-checkbox-wrapper,
 	body.users .profile .groups-checkbox-wrapper,
@@ -39,9 +40,35 @@
 	body.users.publicProfile .bottom-wrapper,
 	body.users.publicProfile #sklill_icons,
 	body.users.publicProfile #content,
-	.featherlight-inner.help-layer {
+	.featherlight-inner.help-layer,
+	.public-user-wrapper,
+	body.users.all h1,
+	body.skills.all .skills {
 	   width: 100%;
 	}
+	body.users.all .public-user-wrapper {
+	   padding: 10px 0;
+	}
+	body.users.all .public-user-wrapper .left-wrapper {
+	   width: 34%;
+	}
+    body.users.all .public-user-wrapper .right-wrapper {
+       width: 63%;
+       margin-left: 3%;
+    }
+    body.users.all .skills-wrapper {
+        margin-top: -20px;
+    }
+    body.users.all h1 {
+        display: grid;
+    }
+    body.users.all h1,
+    body.users.all .zip-wrapper {
+        padding-left: 0px;
+    }
+    body.users.all .zip-wrapper a {
+        line-height: 20px;
+    }
 	body.users.publicProfile .top-wrapper,
 	body.users.publicProfile #content {
        padding-left: 10%;

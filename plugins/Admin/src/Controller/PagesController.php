@@ -90,6 +90,11 @@ class PagesController extends AdminAppController
                 'ParentPages.position' => 'ASC',
             ]
         ]);
+        foreach($objects as $object) {
+            if ($object->owner_user) {
+                $object->owner_user->revertPrivatizeData();
+            }
+        }
         $this->set('objects', $objects->toArray());
     }
 }

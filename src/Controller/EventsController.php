@@ -6,6 +6,7 @@ use Cake\Event\Event;
 use Cake\I18n\Date;
 use Cake\I18n\Time;
 use Cake\Mailer\Email;
+use Cake\Http\Exception\ForbiddenException;
 use Cake\Http\Exception\NotFoundException;
 use Cake\ORM\TableRegistry;
 
@@ -139,8 +140,10 @@ class EventsController extends AppController
         
         foreach($workshops as $workshop) {
             $workshop->infoSheetCount = 0;
-            foreach($workshop->events as $event) {
-                $workshop->infoSheetCount += count($event->info_sheets);
+            if (!empty($workshop->events)) {
+                foreach($workshop->events as $event) {
+                    $workshop->infoSheetCount += count($event->info_sheets);
+                }
             }
         }
         
@@ -424,6 +427,11 @@ class EventsController extends AppController
     
     public function ajaxGetAllEventsForMap()
     {
+        
+        if (!$this->request->is('ajax')) {
+            throw new ForbiddenException();
+        }
+        
         $this->RequestHandler->renderAs($this, 'json');
         
         $keyword = '';

@@ -297,7 +297,6 @@ class WorkshopsController extends AppController
             ]
         ]);
         
-        
         if (!empty($this->request->getQuery('keyword'))) {
             $keyword = strtolower(trim($this->request->getQuery('keyword')));
             if ($keyword !== '' && $keyword !== 'null') {
@@ -496,11 +495,7 @@ class WorkshopsController extends AppController
             'Countries',
             'Metatags',
             'OwnerUsers',
-            'Users' => [
-                'fields' => [
-                    'UsersWorkshops.workshop_uid'
-                ]
-            ],
+            'Users',
             'Users.Groups'
         ];
         
@@ -533,10 +528,10 @@ class WorkshopsController extends AppController
         $this->processWorknewsAddForm($workshop);
         
         $this->User = TableRegistry::getTableLocator()->get('Users');
-        $orgaTeam = $this->User->privatizeData($this->Workshop->getOrgaTeam($workshop));
+        $orgaTeam = $this->Workshop->getOrgaTeam($workshop);
         $this->set('orgaTeam', $orgaTeam);
         
-        $team = $this->User->privatizeData($this->Workshop->getTeam($workshop));
+        $team = $this->Workshop->getTeam($workshop);
         $this->set('team', $team);
         
         $this->set('groups', Configure::read('AppConfig.htmlHelper')->getUserGroupsForWorkshopDetail());
@@ -660,11 +655,7 @@ class WorkshopsController extends AppController
                 'Workshops.status > ' => APP_DELETED
             ],
             'contain' => [
-                'Users' => [
-                    'fields' => [
-                        'UsersWorkshops.workshop_uid'
-                    ]
-                ]
+                'Users'
             ]
         ]);
         
@@ -676,6 +667,9 @@ class WorkshopsController extends AppController
             });
         }
         $workshop = $query->first();
+        foreach($workshop->users as $user) {
+            $user->revertPrivatizeData();
+        }
         
         if (empty($workshop) || empty($workshop->{$preparedType['pluralized']})) {
             throw new NotFoundException('workshopUid: ' . $workshopUid . ' no ' . $type . '-workshop relation with userUid ' . $userUid . ' or not logged in as admin');
@@ -794,14 +788,14 @@ class WorkshopsController extends AppController
                         'Workshops.status > ' => APP_DELETED
                     ],
                     'contain' => [
-                        'Users' => [
-                            'fields' => [
-                                'UsersWorkshops.workshop_uid'
-                            ]
-                        ],
+                        'Users',
                         'Users.Groups'
                     ]
                 ])->first();
+                
+                foreach($workshop->users as $user) {
+                    $user->revertPrivatizeData();
+                }
                 
                 $email = new Email('default');
                 $email->viewBuilder()->setTemplate('workshop_application');
@@ -918,14 +912,14 @@ class WorkshopsController extends AppController
                 'Workshops.status > ' => APP_DELETED
             ],
             'contain' => [
-                'Users' => [
-                    'fields' => [
-                        'UsersWorkshops.workshop_uid'
-                    ]
-                ],
+                'Users',
                 'Users.Groups'
             ]
         ])->first();
+        
+        foreach($workshop->users as $user) {
+            $user->revertPrivatizeData();
+        }
         
         if (!($this->AppAuth->isAdmin() || $this->Workshop->isUserInOrgaTeam($user->first(), $workshop))) {
             throw new NotFoundException('user ' . $this->AppAuth->getUserUid() .  ' ist not associated with workshop ' . $workshopUid);
@@ -992,6 +986,10 @@ class WorkshopsController extends AppController
     }
     
     public function ajaxGetWorkshopDetail($workshopUid) {
+        
+        if (!$this->request->is('ajax')) {
+            throw new ForbiddenException();
+        }
         
         $this->RequestHandler->renderAs($this, 'json');
         
