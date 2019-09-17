@@ -45,7 +45,9 @@ class SkillsController extends AppController
         
         $preparedSkills = [];
         foreach($skills as $skill) {
-            $preparedSkills[strtoupper(substr($skill->name, 0, 1))][] = $skill;
+            if (count($skill->users) > 0) {
+                $preparedSkills[strtoupper(substr($skill->name, 0, 1))][] = $skill;
+            }
         }
         $this->set('skills', $preparedSkills);
     }

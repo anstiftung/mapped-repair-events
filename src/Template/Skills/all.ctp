@@ -14,6 +14,9 @@ foreach($skills as $letter => $letterSkills) {
     echo '<div class="skills">';
         foreach($letterSkills as $skill) {
             $count = count($skill->users);
+            if ($count == 0) {
+                continue;
+            }
             switch($count) {
                 case ($count > 16):
                     $class = 'skill-50';
@@ -27,7 +30,7 @@ foreach($skills as $letter => $letterSkills) {
                 case ($count > 2):
                     $class = 'skill-20';
                     break;
-                default:
+                case ($count > 0):
                     $class = 'skill-10';
                     break;
             }

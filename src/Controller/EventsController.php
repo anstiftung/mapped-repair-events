@@ -6,6 +6,7 @@ use Cake\Event\Event;
 use Cake\I18n\Date;
 use Cake\I18n\Time;
 use Cake\Mailer\Email;
+use Cake\Http\Exception\ForbiddenException;
 use Cake\Http\Exception\NotFoundException;
 use Cake\ORM\TableRegistry;
 
