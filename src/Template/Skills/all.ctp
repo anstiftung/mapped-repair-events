@@ -3,7 +3,7 @@ use App\Controller\Component\StringComponent;
 echo $this->element('highlightNavi', ['main' => 'Wissen & Können']);
 ?>
 
-<h1>Alle Kenntnisse &amp; Interessen (<?php echo count($skills); ?>)</h1>
+<h1>Alle Kenntnisse &amp; Interessen (<?php echo $skillCount; ?>)</h1>
 
 <div class="dotted-line-full-width"></div>
 
@@ -12,6 +12,7 @@ foreach($skills as $letter => $letterSkills) {
     
     echo '<div class="letter">' . $letter . '</div>';
     echo '<div class="skills">';
+    $i = 0;
         foreach($letterSkills as $skill) {
             $count = count($skill->users);
             if ($count == 0) {

@@ -44,12 +44,15 @@ class SkillsController extends AppController
         ]);
         
         $preparedSkills = [];
+        $skillCount = 0;
         foreach($skills as $skill) {
             if (count($skill->users) > 0) {
                 $preparedSkills[strtoupper(substr($skill->name, 0, 1))][] = $skill;
+                $skillCount++;
             }
         }
         $this->set('skills', $preparedSkills);
+        $this->set('skillCount', $skillCount);
     }
 }
 ?>
