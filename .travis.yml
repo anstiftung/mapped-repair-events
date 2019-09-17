@@ -18,6 +18,8 @@ before_script:
   - composer install --optimize-autoloader
   - cp ./config/travis/app_custom.php ./config/app_custom.php
   - bash ./bin/cake migrations migrate
+  - npm --prefix ./webroot install ./webroot
+  - bash ./bin/cake asset_compress build
   
 script:
   - vendor/bin/phpstan analyze -c phpstan.neon --no-interaction --no-progress
