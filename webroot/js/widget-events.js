@@ -7,9 +7,11 @@ MappedRepairEvents.WidgetEvents = {
                 var eventHtml = '';
                 if (data.workshops[0] && data.workshops[0].Workshop.Events) {
                     var currentDate = new Date().toJSON().slice(0,10);
+                    var j = 0;
                     for(var i=0;i < data.workshops[0].Workshop.Events.length;i++) {
                         var event = data.workshops[0].Workshop.Events[i];
                         if (event.datumstart_formatted >= currentDate) {
+                            j++;
                             eventHtml += '<div class="item">';
                             eventHtml += '<div onclick="window.open(\'' + window.location.protocol + '//' + window.location.hostname + event.directurl +'\', \'_blank\');">';
                             eventHtml += '<div class="namedate truncate">' + MappedRepairEvents.Helper.niceDate(event.datumstart_formatted) + ' | ' + event.eventname + '</div>';
@@ -22,8 +24,8 @@ MappedRepairEvents.WidgetEvents = {
                     eventHtml = 'Es wurden leider keine Reparaturtermine gefunden.';
                 }
                 $('#items').html(eventHtml);
-                $('#title').append(' (' + i + ')');
-                MappedRepairEvents.WidgetEvents.initNavigation(i, num);
+                $('#title').append(' (' + j + ')');
+                MappedRepairEvents.WidgetEvents.initNavigation(j, num);
             }
         );
         
@@ -56,7 +58,7 @@ MappedRepairEvents.WidgetEvents = {
 
         }
         
-        if (itemCount > 0 && itemCount > num) {
+        if ((itemCount > 0 && itemCount > num) || itemCount == num) {
             $('.item').slice(0, num).show();
         }
     }
