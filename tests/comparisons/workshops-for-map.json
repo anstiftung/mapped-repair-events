@@ -1,0 +1,32 @@
+{
+    "status": 1,
+    "message": "ok",
+    "workshops": [
+        {
+            "Workshop": {
+                "uid": 2,
+                "url": "test-workshop",
+                "lat": 0,
+                "lng": 0,
+                "name": "Test Workshop",
+                "street": "",
+                "zip": "",
+                "city": "",
+                "owner": 0,
+                "users": [
+                    {
+                        "uid": 1,
+                        "groups": [
+                            {
+                                "id": 7
+                            }
+                        ],
+                        "name": ""
+                    }
+                ],
+                "country": null,
+                "Events": []
+            }
+        }
+    ]
+}
