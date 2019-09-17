@@ -17,7 +17,14 @@ if ($linkToProfile) {
 	<?php
 	    echo '<span class="public-name-wrapper">';
 		    if ($user->firstname . ' ' . $user->lastname != $user->nick) {
-   	           echo $user->firstname . ' ' . $user->lastname;
+		       $name = [];
+		       if ($user->firstname != '') {
+       	           $name[] = $user->firstname;
+		       }
+   	           if ($user->lastname != '') {
+   	               $name[] = $user->lastname;
+   	           }
+   	           echo join(' ', $name);
 		    }
 	    echo '</span>';
 	    
