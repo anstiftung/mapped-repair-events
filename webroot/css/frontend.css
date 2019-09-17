@@ -3063,6 +3063,7 @@ body.users.all .public-user-wrapper .right-wrapper {
     margin-top: 5px;
     margin-bottom: 10px;
     clear: both;
+    width: 100%;
 }
 .public-user-wrapper .button.gray {
     margin-top: 10px;
