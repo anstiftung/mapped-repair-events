@@ -9,7 +9,6 @@ use Cake\Mailer\Email;
 use Cake\Http\Exception\NotFoundException;
 use Cake\ORM\Query;
 use Cake\ORM\TableRegistry;
-use Cake\Utility\Security;
 
 class UsersController extends AppController
 {
@@ -55,7 +54,7 @@ class UsersController extends AppController
     
     public function all()
     {
-        pr(hash('sha256', Security::randomBytes(64)));
+
         $skillId = 0;
         if (isset($this->getRequest()->getParam('pass')[0])) {
             $skillId = (int) $this->getRequest()->getParam('pass')[0];
