@@ -27,5 +27,5 @@ class GroupsFixture extends TestFixture
           ],
       ];
       
- }
- ?>
+}
+?>

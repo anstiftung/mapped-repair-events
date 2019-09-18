@@ -15,5 +15,5 @@ class UsersCategoriesFixture extends TestFixture
           ],
       ];
       
- }
- ?>
+}
+?>

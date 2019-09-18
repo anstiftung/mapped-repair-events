@@ -41,4 +41,4 @@ class UsersFixture extends TestFixture
           ]
       ];
 }
- ?>
+?>

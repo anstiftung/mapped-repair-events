@@ -15,5 +15,5 @@ class UsersSkillsFixture extends TestFixture
           ],
       ];
       
- }
- ?>
+}
+?>

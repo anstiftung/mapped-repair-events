@@ -13,5 +13,5 @@ class SkillsFixture extends TestFixture
               'name' => 'Open Source'
           ]
       ];
- }
- ?>
+}
+?>

@@ -3,6 +3,7 @@
 namespace App\Test\TestCase\Controller;
 
 use App\Test\Fixture\UsersFixture;
+use App\Test\TestCase\Traits\UserAssertionsTrait;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
@@ -10,7 +11,8 @@ use Cake\TestSuite\TestCase;
 class UsersControllerTest extends TestCase
 {
     use IntegrationTestTrait;
-
+    use UserAssertionsTrait;
+    
     public $fixtures = [
         'app.Categories',
         'app.Groups',
@@ -27,7 +29,7 @@ class UsersControllerTest extends TestCase
     public function testAll()
     {
         $this->get('/aktive');
-        $this->doUserAssertions();
+        $this->doUserPrivacyAssertions();
         $users = $this->viewVariable('users');
         $this->assertEquals(2, count($users));
     }
@@ -35,7 +37,7 @@ class UsersControllerTest extends TestCase
     public function testPublicProfileFieldsPrivate()
     {
         $this->get('/users/profile/1');
-        $this->doUserAssertions();
+        $this->doUserPrivacyAssertions();
         $this->assertResponseContains('<h1>JohnDoe</h1>');
         $this->assertResponseNotContains('Weitere Kontaktmöglichkeiten');
         $this->assertResponseNotContains('my-additional@email.com');
@@ -50,15 +52,6 @@ class UsersControllerTest extends TestCase
         $this->assertResponseRegExp('`'.preg_quote('[javascript protected email address]</span>').'`');
         $this->assertResponseContains('<span class="address-wrapper">Test Street 4, 66546</span>');
         $this->assertResponseContains('>Weitere Kontaktmöglichkeiten</b><ul><li>my-additional@email.com</li>');
-    }
-    
-    private function doUserAssertions()
-    {
-        $this->assertResponseOk();
-        $this->assertResponseNotEmpty();
-        $this->assertResponseNotContains('<span class="public-name-wrapper">John Doe</span>');
-        $this->assertResponseNotContains('<span class="public-name-wrapper">John</span>');
-        $this->assertResponseNotContains('<span class="public-name-wrapper">Doe</span>');
     }
     
 }

@@ -17,5 +17,5 @@ class CategoriesFixture extends TestFixture
           ]
       ];
       
- }
- ?>
+}
+?>

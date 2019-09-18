@@ -8,4 +8,4 @@ class EventsFixture extends TestFixture
 {
     public $import = ['table' => 'events', 'connection' => 'default'];
 }
- ?>
+?>

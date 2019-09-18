@@ -17,5 +17,5 @@ class WorkshopsFixture extends TestFixture
           ]
       ];
       
- }
- ?>
+}
+?>
