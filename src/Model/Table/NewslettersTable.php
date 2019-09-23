@@ -22,7 +22,7 @@ class NewslettersTable extends Table
             'provider' => 'table',
             'message' => 'Diese E-Mail-Adresse wird bereits verwendet.'
         ]);
-        $validator->allowEmpty('plz');
+        $validator->allowEmptyString('plz');
         $validator->add('plz', 'validFormat', [
             'rule' => ['custom', ZIP_REGEX],
             'message' => 'Die PLZ ist nicht gültig.'

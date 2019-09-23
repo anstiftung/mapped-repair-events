@@ -89,7 +89,7 @@ class WorkshopsTable extends AppTable
         $validator->minLength('name', 2, 'Bitte gib einen gültigen Namen an.');
         $validator = $this->addBlockedWorkshopSlugsValidationRule($validator);
         $validator->url('website', 'Bitte trage eine gültige Url ein.');
-        $validator->allowEmpty('website');
+        $validator->allowEmptyString('website');
         $validator->email('email', false, 'Bitte trage eine gültige E-Mail ein.');
         $validator->notEmptyString('email', 'Bitte trage deine E-Mail-Adresse ein.');
         return $validator;

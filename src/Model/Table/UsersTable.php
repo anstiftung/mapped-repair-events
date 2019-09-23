@@ -195,7 +195,7 @@ class UsersTable extends AppTable
         $validator->minLength('firstname', 2, 'Mindestens 2 Zeichen bitte.');
         $validator->notEmptyString('lastname', 'Bitte trage deinen Nachnamen ein.');
         $validator->minLength('lastname', 2, 'Mindestens 2 Zeichen bitte.');
-        $validator->allowEmpty('city');
+        $validator->allowEmptyString('city');
         $validator->minLength('city', 2, 'Mindestens 2 Zeichen bitte.');
         $validator->notEmptyString('email', 'Bitte trage deine E-Mail-Adresse ein.');
         $validator->email('email', false, 'Die E-Mail-Adresse ist ungültig.');

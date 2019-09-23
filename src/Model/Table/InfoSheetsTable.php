@@ -35,9 +35,9 @@ class InfoSheetsTable extends AppTable
         $validator->notEmptyString('device_name', 'Bitte trage ein, um welches Gerät es sich handelt.');
         $validator->minLength('device_name', 2, 'Mindestens 2 Zeichen bitte.');
         $validator = $this->getNumberRangeValidator($validator, 'device_age', 0, 120);
-        $validator->allowEmpty('device_age');
+        $validator->allowEmptyString('device_age');
         $validator = $this->getNumberRangeValidator($validator, 'visitor_age', 0, 120);
-        $validator->allowEmpty('visitor_age');
+        $validator->allowEmptyString('visitor_age');
         
         // add subcategories
         $validator->notEmptyString('new_subcategory_parent_id', 'Bitte wähle die Oberkategorie aus.', function($context) {
@@ -62,7 +62,7 @@ class InfoSheetsTable extends AppTable
         $validator->maxLength('defect_description', 1000, 'Maximal 1.000 Zeichen bitte.');
         $validator->notEmptyString('defect_found', 'Wurde der Fehler gefunden?');
                         
-        $validator->allowEmpty('no_repair_reason_text');
+        $validator->allowEmptyString('no_repair_reason_text');
         $validator->maxLength('no_repair_reason_text', 200, 'Maximal 200 Zeichen bitte.');
         
         $validator->notEmptyString('defect_found_reason', 'Bitte gib Details zur Reparatur an.', function($context) {
