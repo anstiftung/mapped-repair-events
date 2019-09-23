@@ -34,18 +34,7 @@ class RegisterComponent extends AppComponent
         
         $userEntity = $this->User->newEntity($user, ['validate' => 'Registration']);
         $result = $this->User->save($userEntity);
-        
-        if (! isset($user['Users']['password'])) {
-            $password = $this->User->setNewPassword($result->uid);
-        } else {
-            // only from unit test
-            $password = $user['Users']['password'];
-            $userPassword = [
-                'password' => $user['Users']['password']
-            ];
-            $userEntity = $this->User->patchEntity($result, $userPassword);
-            $result = $this->User->save($userEntity);
-        }
+        $password = $this->User->setNewPassword($result->uid);
 
         $email = new Email('default');
         $email->viewBuilder()->setTemplate('registration_successful');
@@ -55,11 +44,7 @@ class RegisterComponent extends AppComponent
             'data' => $user
         ]);
         
-        if (Configure::read('debug')) {
-            $email->setTo(Configure::read('AppConfig.debugMailAddress'));
-        } else {
-            $email->setTo($user['Users']['email']);
-        }
+        $email->setTo($user['Users']['email']);
         
         if ($email->send()) {
             $this->AppFlash->setFlashMessage('Deine Registrierung war erfolgreich. Bitte überprüfe dein E-Mail-Konto um deine E-Mail-Adresse zu bestätigen.');
