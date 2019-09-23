@@ -4,6 +4,7 @@ namespace App\Test\TestCase\Controller;
 
 use App\Test\Fixture\UsersFixture;
 use App\Test\TestCase\Traits\UserAssertionsTrait;
+use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\StringCompareTrait;
@@ -45,7 +46,7 @@ class WorkshopsControllerTest extends TestCase
     
     public function testWorkshopDetail()
     {
-        $this->get('/test-workshop');
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlWorkshopDetail('test-workshop'));
         $this->assertResponseOk();
         $this->assertResponseNotEmpty();
         $this->doUserPrivacyAssertions();

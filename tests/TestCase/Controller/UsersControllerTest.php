@@ -4,6 +4,7 @@ namespace App\Test\TestCase\Controller;
 
 use App\Test\Fixture\UsersFixture;
 use App\Test\TestCase\Traits\UserAssertionsTrait;
+use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\EmailTrait;
 use Cake\TestSuite\IntegrationTestTrait;
@@ -32,7 +33,7 @@ class UsersControllerTest extends TestCase
 
     public function testAll()
     {
-        $this->get('/aktive');
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlUsers());
         $this->doUserPrivacyAssertions();
         $users = $this->viewVariable('users');
         $this->assertEquals(2, count($users));
@@ -40,7 +41,7 @@ class UsersControllerTest extends TestCase
     
     public function testPublicProfileFieldsPrivate()
     {
-        $this->get('/users/profile/1');
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlUserProfile(1));
         $this->doUserPrivacyAssertions();
         $this->assertResponseContains('<h1>JohnDoe</h1>');
         $this->assertResponseNotContains('Weitere Kontaktmöglichkeiten');
@@ -50,7 +51,7 @@ class UsersControllerTest extends TestCase
     
     public function testPublicProfileFieldsNotPrivate()
     {
-        $this->get('/users/profile/3');
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlUserProfile(3));
         $this->assertResponseContains('<h1>MaxMuster</h1>');
         $this->assertResponseContains('<span class="public-name-wrapper">Max Muster</span>');
         $this->assertResponseRegExp('`'.preg_quote('[javascript protected email address]</span>').'`');
@@ -62,7 +63,7 @@ class UsersControllerTest extends TestCase
     {
         $uniqueEmail = 'johndoeA@example.com';
         $this->post(
-            '/registrierung/organisatorin',
+            Configure::read('AppConfig.htmlHelper')->urlRegisterOrga(),
             [
                 'antiSpam' => 100,
                 'Users' => [
@@ -75,7 +76,6 @@ class UsersControllerTest extends TestCase
         );
         
         $this->assertRedirectContains('/');
-        echo $this->_response;
         
         $this->User = TableRegistry::getTableLocator()->get('Users');
         $user = $this->User->find('all', [
@@ -96,6 +96,46 @@ class UsersControllerTest extends TestCase
         $this->assertMailSentTo($uniqueEmail);
         $this->assertMailContains('Passwort');
         
+    }
+    
+    public function testRegisterValidationsEmpty()
+    {
+        $this->post(
+            Configure::read('AppConfig.htmlHelper')->urlRegisterOrga(),
+            [
+                'antiSpam' => 100,
+                'Users' => [
+                    'nick' => '',
+                    'firstname' => '',
+                    'lastname' => '',
+                    'email' => '',
+                    'zip' => '',
+                    'privacy_policy_accepted' => 0
+                ]
+            ]
+        );
+        $this->assertResponseContains('Bitte trage deinen Nickname ein.');
+        $this->assertResponseContains('Bitte trage deinen Vornamen ein.');
+        $this->assertResponseContains('Bitte trage deinen Nachnamen ein.');
+        $this->assertResponseContains('Bitte trage deine E-Mail-Adresse ein.');
+        $this->assertResponseContains('Bitte trage deine PLZ ein.');
+        $this->assertResponseContains('Bitte akzeptiere die Datenschutzbestimmungen.');
+        $this->assertNoRedirect();
+    }
+
+    public function testRegisterValidationsEmail()
+    {
+        $this->post(
+            Configure::read('AppConfig.htmlHelper')->urlRegisterOrga(),
+            [
+                'antiSpam' => 100,
+                'Users' => [
+                    'email' => 'johndoe@example.com',
+                ]
+            ]
+        );
+        $this->assertResponseContains('Diese E-Mail-Adresse wird bereits verwendet.');
+        $this->assertNoRedirect();
     }
     
 }
