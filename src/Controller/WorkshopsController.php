@@ -917,8 +917,8 @@ class WorkshopsController extends AppController
             ]
         ])->first();
         
-        foreach($workshop->users as $user) {
-            $user->revertPrivatizeData();
+        foreach($workshop->users as $workshopUser) {
+            $workshopUser->revertPrivatizeData();
         }
         
         if (!($this->AppAuth->isAdmin() || $this->Workshop->isUserInOrgaTeam($user->first(), $workshop))) {
