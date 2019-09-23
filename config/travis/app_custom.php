@@ -17,7 +17,9 @@ return [
     'Email' => [
         'default' => [
             'transport' => 'default',
-            'from' => [],
+            'from' => [
+                'test@example.com'
+            ],
             'emailFormat' => 'text',
             'charset' => 'utf-8'
         ]
