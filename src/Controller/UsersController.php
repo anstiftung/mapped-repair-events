@@ -526,7 +526,6 @@ class UsersController extends AppController
                 'Users.confirm' => $this->request->getParam('pass')['0']
             ])
         ])->first();
-        $user->revertPrivatizeData();
         
         if (empty($user)) {
             $this->AppFlash->setFlashError(__('Invalid activation code.'));
