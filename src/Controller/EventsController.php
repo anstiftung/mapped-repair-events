@@ -452,7 +452,7 @@ class EventsController extends AppController
         ])->distinct(['Events.uid']);
         
         if (!empty($this->request->getQuery('keyword'))) {
-            $keyword = strtolower(trim($this->request->getQuery('keyword')));
+            $keyword = h(strtolower(trim($this->request->getQuery('keyword'))));
             if ($keyword !== '' && $keyword !== 'null') {
                 $events->where($this->Event->getKeywordSearchConditions($keyword, false));
             }
@@ -463,7 +463,7 @@ class EventsController extends AppController
         }
         
         if (!empty($this->request->getQuery('categories'))) {
-            $categories = explode(',', $this->request->getQuery('categories'));
+            $categories = explode(',', h($this->request->getQuery('categories')));
             if (!empty($categories)) {
                 $events->notMatching('Categories', function(\Cake\ORM\Query $q) use ($categories) {
                     return $q->where([
@@ -492,7 +492,7 @@ class EventsController extends AppController
         
         $conditions = $this->Event->getListConditions();
         
-        $selectedCategories = !empty($this->request->getQuery('categories')) ? explode(',', $this->request->getQuery('categories')) : [];
+        $selectedCategories = !empty($this->request->getQuery('categories')) ? explode(',', h($this->request->getQuery('categories'))) : [];
         $this->set('selectedCategories', $selectedCategories);
         
         $this->Category = TableRegistry::getTableLocator()->get('Categories');
@@ -534,7 +534,7 @@ class EventsController extends AppController
             if (empty($this->request->getQuery('keyword'))) {
                 $newUrl = '?' . $newUrl;
             } else {
-                $newUrl = '?keyword=' . $this->request->getQuery('keyword') . '&' . $newUrl;
+                $newUrl = '?keyword=' . h($this->request->getQuery('keyword')) . '&' . $newUrl;
             }
             
             $newUrl = str_replace('//', '/', $newUrl);
@@ -557,7 +557,7 @@ class EventsController extends AppController
         
         $keyword = '';
         if (!empty($this->request->getQuery('keyword'))) {
-            $keyword = strtolower(trim($this->request->getQuery('keyword')));
+            $keyword = h(strtolower(trim($this->request->getQuery('keyword'))));
             $query->where($this->Event->getKeywordSearchConditions($keyword, false));
         }
         $this->set('keyword', $keyword);
@@ -569,7 +569,7 @@ class EventsController extends AppController
         $this->set('resetCategoriesUrl', $resetCategoriesUrl);
         
         if (!empty($this->request->getQuery('categories'))) {
-            $categories = explode(',', $this->request->getQuery('categories'));
+            $categories = explode(',', h($this->request->getQuery('categories')));
             if (!empty($categories)) {
                 $query->matching('Categories', function(\Cake\ORM\Query $q) use ($categories) {
                     return $q->where([

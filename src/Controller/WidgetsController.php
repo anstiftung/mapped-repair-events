@@ -298,19 +298,19 @@ class WidgetsController extends AppController
     {
         $dateFrom = '01.01.2010';
         if (!empty($this->request->getQuery('dateTo') && Configure::read('AppConfig.timeHelper')->validateDate($this->request->getQuery('dateFrom')))) {
-            $dateFrom = $this->request->getQuery('dateFrom');
+            $dateFrom = h($this->request->getQuery('dateFrom'));
         }
         $this->set('dateFrom', $dateFrom);
         
         $dateTo = date('d.m.Y');
         if (!empty($this->request->getQuery('dateTo') && Configure::read('AppConfig.timeHelper')->validateDate($this->request->getQuery('dateTo')))) {
-            $dateTo = $this->request->getQuery('dateTo');
+            $dateTo = h($this->request->getQuery('dateTo'));
         }
         $this->set('dateTo', $dateTo);
         
         $showWorkshopName = true;
         if (in_array('showWorkshopName', array_keys($this->request->getQueryParams()))) {
-            $showWorkshopName = $this->request->getQuery('showWorkshopName') == 1 ? true : false;
+            $showWorkshopName = h($this->request->getQuery('showWorkshopName')) == 1 ? true : false;
         }
         $this->set('showWorkshopName', $showWorkshopName);
     
@@ -329,7 +329,7 @@ class WidgetsController extends AppController
         $defaultDataSource = 'all';
         if (!empty($this->request->getQuery('defaultDataSource'))) {
             if (in_array($this->request->getQuery('defaultDataSource'), array_keys($dataSources))) {
-                $defaultDataSource = $this->request->getQuery('defaultDataSource');
+                $defaultDataSource = h($this->request->getQuery('defaultDataSource'));
             }
         }
         $this->set('defaultDataSource', $defaultDataSource);
@@ -337,19 +337,19 @@ class WidgetsController extends AppController
         $dataSource = $defaultDataSource;
         if (!empty($this->request->getQuery('dataSource'))) {
             if (in_array($this->request->getQuery('dataSource'), array_keys($dataSources))) {
-                $dataSource = $this->request->getQuery('dataSource');
+                $dataSource = h($this->request->getQuery('dataSource'));
             }
         }
         $this->set('dataSource', $dataSource);
         
         $month = '';
         if (!empty($this->request->getQuery('month'))) {
-            $month = $this->request->getQuery('month')['month'];
+            $month = h($this->request->getQuery('month'))['month'];
         }
         
         $year = '';
         if (!empty($this->request->getQuery('year'))) {
-            $year = $this->request->getQuery('year')['year'];
+            $year = h($this->request->getQuery('year'))['year'];
         }
         
         if ($month != '' && $year == '') {
@@ -366,37 +366,37 @@ class WidgetsController extends AppController
         
         $showDonutChart = true;
         if (in_array('showDonutChart', array_keys($this->request->getQueryParams()))) {
-            $showDonutChart = $this->request->getQuery('showDonutChart') == 1 ? true : false;
+            $showDonutChart = h($this->request->getQuery('showDonutChart')) == 1 ? true : false;
         }
         $this->set('showDonutChart', $showDonutChart);
         
         $showBarChart = true;
         if (in_array('showBarChart', array_keys($this->request->getQueryParams()))) {
-            $showBarChart = $this->request->getQuery('showBarChart') == 1 ? true : false;
+            $showBarChart = h($this->request->getQuery('showBarChart')) == 1 ? true : false;
         }
         $this->set('showBarChart', $showBarChart);
         
         $backgroundColorOk = Configure::read('AppConfig.widgetHelper')->getDefaultChartBackgroundColorOk();
         if (!empty($this->request->getQuery('backgroundColorOk')) && $this->validateHtmlColor($this->request->getQuery('backgroundColorOk'))) {
-            $backgroundColorOk = $this->validateHtmlColor($this->request->getQuery('backgroundColorOk'));
+            $backgroundColorOk = $this->validateHtmlColor(h($this->request->getQuery('backgroundColorOk')));
         }
         $this->set('backgroundColorOk', $backgroundColorOk);
         
         $backgroundColorNotOk = Configure::read('AppConfig.widgetHelper')->getDefaultChartBackgroundColorNotOk();
         if (!empty($this->request->getQuery('backgroundColorNotOk')) && $this->validateHtmlColor($this->request->getQuery('backgroundColorNotOk'))) {
-            $backgroundColorNotOk = $this->validateHtmlColor($this->request->getQuery('backgroundColorNotOk'));
+            $backgroundColorNotOk = $this->validateHtmlColor(h($this->request->getQuery('backgroundColorNotOk')));
         }
         $this->set('backgroundColorNotOk', $backgroundColorNotOk);
         
         $borderColorOk = Configure::read('AppConfig.widgetHelper')->getDefaultChartBorderColorOk();
         if (!empty($this->request->getQuery('borderColorOk')) && $this->validateHtmlColor($this->request->getQuery('borderColorOk'))) {
-            $borderColorOk = $this->validateHtmlColor($this->request->getQuery('borderColorOk'));
+            $borderColorOk = $this->validateHtmlColor(h($this->request->getQuery('borderColorOk')));
         }
         $this->set('borderColorOk', $borderColorOk);
         
         $borderColorNotOk = Configure::read('AppConfig.widgetHelper')->getDefaultChartBorderColorNotOk();
         if (!empty($this->request->getQuery('borderColorNotOk')) && $this->validateHtmlColor($this->request->getQuery('borderColorNotOk'))) {
-            $borderColorNotOk = $this->validateHtmlColor($this->request->getQuery('borderColorNotOk'));
+            $borderColorNotOk = $this->validateHtmlColor(h($this->request->getQuery('borderColorNotOk')));
         }
         $this->set('borderColorNotOk', $borderColorNotOk);
     }

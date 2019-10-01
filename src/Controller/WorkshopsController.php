@@ -298,7 +298,7 @@ class WorkshopsController extends AppController
         ]);
         
         if (!empty($this->request->getQuery('keyword'))) {
-            $keyword = strtolower(trim($this->request->getQuery('keyword')));
+            $keyword = h(strtolower(trim($this->request->getQuery('keyword'))));
             if ($keyword !== '' && $keyword !== 'null') {
                 $workshops->where($this->Workshop->getKeywordSearchConditions($keyword, true));
             }
@@ -1036,7 +1036,7 @@ class WorkshopsController extends AppController
         
         $keyword = '';
         if (!empty($this->request->getQuery('keyword'))) {
-            $keyword = strtolower(trim($this->request->getQuery('keyword')));
+            $keyword = h(strtolower(trim($this->request->getQuery('keyword'))));
             $query->where($this->Workshop->getKeywordSearchConditions($keyword, false));
         }
         $this->set('keyword', $keyword);
