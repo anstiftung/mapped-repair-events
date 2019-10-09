@@ -10,4 +10,8 @@ SELECT
 FROM
     events e
 JOIN workshops w ON e.workshop_uid = w.uid
-WHERE (e.datumstart BETWEEN '2019-10-18' AND '2019-10-20');
+WHERE
+    (e.datumstart BETWEEN '2019-10-18' AND '2019-10-20')
+AND e.status = 1
+AND w.status = 1
+;
