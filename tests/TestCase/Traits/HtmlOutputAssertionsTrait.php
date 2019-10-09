@@ -2,10 +2,10 @@
 
 namespace App\Test\TestCase\Traits;
 
-trait PageErrorAssertionsTrait
+trait HtmlOutputAssertionsTrait
 {
     
-    private function doAssertPagesForErrors()
+    private function doAssertHtmlOutput()
     {
         
         $notRegexp = [

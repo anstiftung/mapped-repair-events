@@ -2,16 +2,16 @@
 
 namespace App\Test\TestCase\Controller;
 
-use App\Test\TestCase\Traits\PageErrorAssertionsTrait;
+use App\Test\TestCase\Traits\HtmlOutputAssertionsTrait;
 use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
 
-class PagesControllerTest extends TestCase
+class HtmlOutputTest extends TestCase
 {
     use IntegrationTestTrait;
-    use PageErrorAssertionsTrait;
+    use HtmlOutputAssertionsTrait;
     
     public $fixtures = [
         'app.Categories',
@@ -38,7 +38,7 @@ class PagesControllerTest extends TestCase
         ];
         foreach($testUrls as $testUrl) {
             $this->get($testUrl);
-            $this->doAssertPagesForErrors($testUrls);
+            $this->doAssertHtmlOutput($testUrls);
         }
     }
 }
