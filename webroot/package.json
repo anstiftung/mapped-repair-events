@@ -14,7 +14,7 @@
     "install": "bash ../bin/cake npm_post_install"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.10.2",
+    "@fortawesome/fontawesome-free": "^5.11.2",
     "blueimp-file-upload": "^10.2.0",
     "chart.js": "^2.8.0",
     "chart.piecelabel.js": "^0.15.0",
@@ -24,7 +24,7 @@
     "featherlight": "^1.7.14",
     "fullcalendar": "^3.10.1",
     "jQuery-Impromptu": "https://github.com/trentrichardson/jQuery-Impromptu/tarball/master",
-    "jquery": "^3.4.0",
+    "jquery": "^3.4.1",
     "jquery-knob": "https://github.com/aterrien/jQuery-Knob/tarball/master",
     "jquery-slugify": "^1.2.5",
     "jquery.cycle2": "^2.1.7",
@@ -38,6 +38,6 @@
     "speakingurl": "^14.0.1"
   },
   "devDependencies": {
-    "eslint": "^6.2.2"
+    "eslint": "^6.5.1"
   }
 }
