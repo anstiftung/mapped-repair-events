@@ -2,6 +2,7 @@
 
 namespace App\Test\TestCase\Controller;
 
+use App\Test\TestCase\Traits\LogFileAssertionsTrait;
 use App\Test\TestCase\Traits\UserAssertionsTrait;
 use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
@@ -14,6 +15,7 @@ class UsersControllerTest extends TestCase
     use IntegrationTestTrait;
     use UserAssertionsTrait;
     use EmailTrait;
+    use LogFileAssertionsTrait;
     
     public $fixtures = [
         'app.Categories',
