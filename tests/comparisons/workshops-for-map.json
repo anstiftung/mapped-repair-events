@@ -25,7 +25,24 @@
                     }
                 ],
                 "country": null,
-                "Events": []
+                "Events": [
+                    {
+                        "workshop_uid": 2,
+                        "uid": 6,
+                        "status": 1,
+                        "strasse": "",
+                        "zip": "",
+                        "ort": "",
+                        "categories": [],
+                        "datumstart_formatted": "2040-01-01",
+                        "uhrzeitstart_formatted": "00:00",
+                        "uhrzeitend_formatted": "00:00",
+                        "wurl": "test-workshop",
+                        "eventname": "Test Workshop",
+                        "hasModifyPermissions": false,
+                        "directurl": "\/test-workshop?event=6,2040-01-01#datum"
+                    }
+                ]
             }
         }
     ]

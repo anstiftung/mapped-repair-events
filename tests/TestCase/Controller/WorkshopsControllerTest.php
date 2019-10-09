@@ -21,6 +21,7 @@ class WorkshopsControllerTest extends TestCase
         'app.Categories',
         'app.Countries',
         'app.Events',
+        'app.EventsCategories',
         'app.Groups',
         'app.InfoSheets',
         'app.Metatags',

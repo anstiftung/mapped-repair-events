@@ -13,11 +13,11 @@ $menu = [
         'children' => [
             [
                 'name' => 'Termine',
-                'slug' => '/reparatur-termine'
+                'slug' => $this->Html->urlEvents()
             ],
             [
                 'name' => 'Orte',
-                'slug' => '/orte'
+                'slug' => $this->Html->urlWorkshops()
             ],
         ]
     ]

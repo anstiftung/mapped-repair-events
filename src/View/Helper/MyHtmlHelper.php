@@ -422,6 +422,14 @@ class MyHtmlHelper extends HtmlHelper {
     {
         return '/kenntnisse';
     }
+    function urlWorkshops()
+    {
+        return '/orte';
+    }
+    function urlEvents()
+    {
+        return '/reparatur-termine';
+    }
     function urlSkillDetail($id, $name, $zip=-1)
     {
         $url = '/aktive/' . $id . '-' . StringComponent::slugify($name);

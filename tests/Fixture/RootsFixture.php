@@ -29,6 +29,10 @@ class RootsFixture extends TestFixture
             'uid' => 5,
             'type' => 'pages'
         ],
+        [
+            'uid' => 6,
+            'type' => 'events'
+        ],
     ];
 }
 ?>

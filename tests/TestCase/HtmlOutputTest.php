@@ -20,6 +20,7 @@ class HtmlOutputTest extends TestCase
         'app.Categories',
         'app.Countries',
         'app.Events',
+        'app.EventsCategories',
         'app.Groups',
         'app.InfoSheets',
         'app.Metatags',
@@ -73,5 +74,18 @@ class HtmlOutputTest extends TestCase
         $this->doAssertHtmlOutput();
     }
 
+    public function testWorkshops()
+    {
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlWorkshops());
+        $this->doAssertHtmlOutput();
+    }
+
+    public function testEvents()
+    {
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlEvents());
+        $this->doAssertHtmlOutput();
+        $this->assertResponseContains('<div class="numbers">1 Termin gefunden</div>');
+        $this->assertResponseContains('href="/test-workshop?event=6,2040-01-01#datum"');
+    }
 }
 ?>
