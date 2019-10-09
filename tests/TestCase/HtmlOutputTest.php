@@ -26,8 +26,11 @@ class HtmlOutputTest extends TestCase
         'app.Pages',
         'app.Photos',
         'app.Posts',
+        'app.Skills',
         'app.Users',
+        'app.UsersCategories',
         'app.UsersGroups',
+        'app.UsersSkills',
         'app.UsersWorkshops',
         'app.Worknews',
         'app.Workshops',
@@ -55,6 +58,18 @@ class HtmlOutputTest extends TestCase
     public function testPageDetail()
     {
         $this->get(Configure::read('AppConfig.htmlHelper')->urlPageDetail('test-page'));
+        $this->doAssertHtmlOutput();
+    }
+    
+    public function testUsers()
+    {
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlUsers());
+        $this->doAssertHtmlOutput();
+    }
+    
+    public function testUserProfile()
+    {
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlUserProfile(1));
         $this->doAssertHtmlOutput();
     }
 
