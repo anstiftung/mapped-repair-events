@@ -68,8 +68,8 @@ class UsersControllerTest extends TestCase
             [
                 'antiSpam' => 100,
                 'Users' => [
-                    'nick' => 'JohnDoeA',
-                    'firstname' => 'John',
+                    'nick' => 'JohnDoeA<img onerror="alert();" />',
+                    'firstname' => 'John<img onerror="alert();" />',
                     'lastname' => 'DoeA',
                     'email' => $uniqueEmail
                 ]
@@ -89,6 +89,8 @@ class UsersControllerTest extends TestCase
         ])->first();
         
         $this->assertEquals($user->uid, 7);
+        $this->assertEquals($user->nick, 'JohnDoeA');
+        $this->assertEquals($user->firstname, 'John');
         $this->assertEquals(count($user->groups), 1);
         $this->assertEquals($user->groups[0]->id, GROUPS_ORGA);
         $this->assertNotEquals($user->groups[0]->id, GROUPS_REPAIRHELPER);

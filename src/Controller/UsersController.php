@@ -590,8 +590,6 @@ class UsersController extends AppController
     public function register($userGroup=GROUPS_REPAIRHELPER)
     {
         
-        $this->loadComponent('Register');
-        
         $this->Country = TableRegistry::getTableLocator()->get('Countries');
         $this->set('countries', $this->Country->getForDropdown());
         
@@ -620,7 +618,7 @@ class UsersController extends AppController
                             'email' => $this->request->getData('Users.email'),
                             'plz' => $this->request->getData('Users.zip'),
                         ]
-                        );
+                    );
                     $this->CptNewsletter->save($newsletter);
                 }
             }
@@ -629,7 +627,32 @@ class UsersController extends AppController
             $user = $this->User->patchEntity($user, $this->request->getData(), ['validate' => 'Registration']);
             
             if (!($user->hasErrors())) {
-                $this->Register->register($this->request->getData());
+                
+                $user = $this->request->getData();
+                $user['Users']['confirm'] = md5(StringComponent::createRandomString());
+                $user['Users']['status'] = APP_OFF;
+                $user['Users']['private'] = $this->User->getDefaultPrivateFields();
+                $userEntity = $this->User->newEntity($user, ['validate' => 'Registration']);
+                
+                $userEntity = $this->stripTagsFromFields($userEntity, 'User');
+                
+                $result = $this->User->save($userEntity);
+                $password = $this->User->setNewPassword($result->uid);
+                
+                $email = new Email('default');
+                $email->viewBuilder()->setTemplate('registration_successful');
+                $email->setSubject('Deine Registrierung bei '. Configure::read('AppConfig.htmlHelper')->getHostName())
+                ->setViewVars([
+                    'password' => $password,
+                    'data' => $user
+                ]);
+                
+                $email->setTo($user['Users']['email']);
+                
+                if ($email->send()) {
+                    $this->AppFlash->setFlashMessage('Deine Registrierung war erfolgreich. Bitte überprüfe dein E-Mail-Konto um deine E-Mail-Adresse zu bestätigen.');
+                }
+                
                 $this->redirect(Configure::read('AppConfig.htmlHelper')->urlLogin());
             } else {
                 $this->AppFlash->setFlashError('Es sind Fehler aufgetreten.');

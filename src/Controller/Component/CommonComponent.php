@@ -26,7 +26,7 @@ class CommonComponent extends AppComponent {
 		
 		if ($this->controller->getRequest()->getData()) {
 		    
-		    $newData = $this->trimDeep($request->getData());
+		    $newData = $this->trimAndSanitizeDeep($request->getData());
 		    foreach ($newData as $k => $v) {
 		        if ($request->getData($k) !== $v) {
 		            $request = $request->withData($k, $v);
@@ -34,13 +34,13 @@ class CommonComponent extends AppComponent {
 		    }
 		}
 		if ($request->getQuery()) {
-		    $queryData = $this->trimDeep($request->getQuery());
+		    $queryData = $this->trimAndSanitizeDeep($request->getQuery());
 		    if ($queryData !== $request->getQuery()) {
 		        $request = $request->withQueryParams($queryData);
 		    }
 		}
 		if ($request->getParam('pass')) {
-		    $passData = $this->trimDeep($request->getParam('pass'));
+		    $passData = $this->trimAndSanitizeDeep($request->getParam('pass'));
 		    if ($passData !== $request->getParam('pass')) {
 		        $request = $request->withParam('pass', $passData);
 		    }
@@ -55,20 +55,25 @@ class CommonComponent extends AppComponent {
 	}
 	
 	/**
-	 * Trim recursively
+	 * Trim and sanitize recursively
 	 *
 	 * @param string|array|null $value
 	 * @param bool $transformNullToString
 	 * @return array|string
 	 */
-	private function trimDeep($value, $transformNullToString = false) {
+	private function trimAndSanitizeDeep($value, $transformNullToString = false) {
+	    
+	    $config = \HTMLPurifier_Config::createDefault();
+	    $config->set('Cache.SerializerPath', TMP . 'cache' . DS . 'html_purifier');
+	    $purifier = new \HTMLPurifier($config);
+	    
 	    if (is_array($value)) {
 	        foreach ($value as $k => $v) {
-	            $value[$k] = $this->trimDeep($v, $transformNullToString);
+	            $value[$k] = $this->trimAndSanitizeDeep($v, $transformNullToString);
 	        }
 	        return $value;
 	    }
-	    return ($value === null && !$transformNullToString) ? $value : trim($value);
+	    return ($value === null && !$transformNullToString) ? $value : trim($purifier->purify($value));
 	}
 
 }
