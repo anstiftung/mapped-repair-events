@@ -86,7 +86,7 @@ class UsersControllerTest extends TestCase
             ]
         ])->first();
         
-        $this->assertEquals($user->uid, 4);
+        $this->assertEquals($user->uid, 6);
         $this->assertEquals(count($user->groups), 1);
         $this->assertEquals($user->groups[0]->id, GROUPS_ORGA);
         $this->assertNotEquals($user->groups[0]->id, GROUPS_REPAIRHELPER);

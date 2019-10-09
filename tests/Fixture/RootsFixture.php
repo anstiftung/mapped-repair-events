@@ -20,7 +20,15 @@ class RootsFixture extends TestFixture
         [
             'uid' => 3,
             'type' => 'users'
-        ]
+        ],
+        [
+            'uid' => 4,
+            'type' => 'posts'
+        ],
+        [
+            'uid' => 5,
+            'type' => 'pages'
+        ],
     ];
 }
 ?>

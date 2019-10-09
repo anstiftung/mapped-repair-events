@@ -14,6 +14,7 @@ class HtmlOutputTest extends TestCase
     use HtmlOutputAssertionsTrait;
     
     public $fixtures = [
+        'app.Blogs',
         'app.Categories',
         'app.Countries',
         'app.Events',
@@ -21,6 +22,7 @@ class HtmlOutputTest extends TestCase
         'app.InfoSheets',
         'app.Metatags',
         'app.Pages',
+        'app.Photos',
         'app.Posts',
         'app.Users',
         'app.UsersGroups',
@@ -30,16 +32,29 @@ class HtmlOutputTest extends TestCase
         'app.WorkshopsCategories'
     ];
     
-    public function testAllPublicUrls()
+    public function testHome()
     {
-        $testUrls = [
-            '/',
-            Configure::read('AppConfig.htmlHelper')->urlWorkshopDetail('test-workshop')
-        ];
-        foreach($testUrls as $testUrl) {
-            $this->get($testUrl);
-            $this->doAssertHtmlOutput($testUrls);
-        }
+        $this->get('/');
+        $this->doAssertHtmlOutput();
     }
+    
+    public function testWorkshopDetail()
+    {
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlWorkshopDetail('test-workshop'));
+        $this->doAssertHtmlOutput();
+    }
+
+    public function testPostDetail()
+    {
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlPostDetail('test-post'));
+        $this->doAssertHtmlOutput();
+    }
+    
+    public function testPageDetail()
+    {
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlPageDetail('test-page'));
+        $this->doAssertHtmlOutput();
+    }
+
 }
 ?>
