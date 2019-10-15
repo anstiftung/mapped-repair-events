@@ -26,12 +26,15 @@ class FileAndEmailLog extends FileLog
     private function sendEmailWithErrorInformation($message)
     {
         
-        $ignoredExceptionsRegex = '/(MissingController|MissingAction|RecordNotFound|NotFound)Exception|(Workshops\/rss\/home\.ctp)|(RssHelper is deprecated)|(UsersController::publicProfile())/';
-        if (preg_match($ignoredExceptionsRegex, $message)) {
-            return false;
-        }
-        
-        if (preg_match(preg_quote('`{"results":[{"address_components"`'), $message)) {
+        $ignoredExceptionsRegex = [
+           '(MissingController|MissingAction|RecordNotFound|NotFound)Exception',
+           'Workshops\/rss\/home\.ctp',
+           'RssHelper is deprecated',
+           'UsersController::publicProfile()',
+           'workshops\/ajaxGetAllWorkshopsForMap',
+            preg_quote('{"results":[{"address_components"')
+        ];
+        if (preg_match('`' . join('|', $ignoredExceptionsRegex) . '`', $message)) {
             return false;
         }
         
