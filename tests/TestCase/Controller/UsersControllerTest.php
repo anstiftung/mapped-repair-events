@@ -71,7 +71,9 @@ class UsersControllerTest extends TestCase
                     'nick' => 'JohnDoeA<img onerror="alert();" />',
                     'firstname' => 'John<img onerror="alert();" />',
                     'lastname' => 'DoeA',
-                    'email' => $uniqueEmail
+                    'zip' => '12345',
+                    'email' => $uniqueEmail,
+                    'privacy_policy_accepted' => 1
                 ]
             ]
         );
@@ -101,7 +103,19 @@ class UsersControllerTest extends TestCase
         
     }
     
-    public function testRegisterValidationsEmpty()
+    public function testRegisterValidationsNoData()
+    {
+        $this->post(
+            Configure::read('AppConfig.htmlHelper')->urlRegisterOrga(),
+            [
+                'antiSpam' => 100
+            ]
+        );
+        $this->assertEmptyData();
+        $this->assertNoRedirect();
+    }
+
+    public function testRegisterValidationsEmptyData()
     {
         $this->post(
             Configure::read('AppConfig.htmlHelper')->urlRegisterOrga(),
@@ -117,15 +131,10 @@ class UsersControllerTest extends TestCase
                 ]
             ]
         );
-        $this->assertResponseContains('Bitte trage deinen Nickname ein.');
-        $this->assertResponseContains('Bitte trage deinen Vornamen ein.');
-        $this->assertResponseContains('Bitte trage deinen Nachnamen ein.');
-        $this->assertResponseContains('Bitte trage deine E-Mail-Adresse ein.');
-        $this->assertResponseContains('Bitte trage deine PLZ ein.');
-        $this->assertResponseContains('Bitte akzeptiere die Datenschutzbestimmungen.');
+        $this->assertEmptyData();
         $this->assertNoRedirect();
     }
-
+    
     public function testRegisterValidationsEmail()
     {
         $this->post(
@@ -139,6 +148,15 @@ class UsersControllerTest extends TestCase
         );
         $this->assertResponseContains('Diese E-Mail-Adresse wird bereits verwendet.');
         $this->assertNoRedirect();
+    }
+    
+    private function assertEmptyData()
+    {
+        $this->assertResponseContains('Bitte trage deinen Nickname ein.');
+        $this->assertResponseContains('Bitte trage deinen Vornamen ein.');
+        $this->assertResponseContains('Bitte trage deinen Nachnamen ein.');
+        $this->assertResponseContains('Bitte trage deine PLZ ein.');
+        $this->assertResponseContains('Bitte akzeptiere die Datenschutzbestimmungen.');
     }
     
 }

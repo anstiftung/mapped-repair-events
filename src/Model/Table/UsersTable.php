@@ -183,32 +183,45 @@ class UsersTable extends AppTable
     
     public function validationDefault(Validator $validator)
     {
+        $validator->requirePresence('privacy_policy_accepted', true, 'Bitte akzeptiere die Datenschutzbestimmungen.');
         $validator->equals('privacy_policy_accepted', 1, 'Bitte akzeptiere die Datenschutzbestimmungen.');
-        $validator->minLength('nick', 2, 'Mindestens 2 Zeichen bitte.');
+        
         $validator->notEmptyString('nick', 'Bitte trage deinen Nickname ein.');
+        $validator->requirePresence('nick', true, 'Bitte trage deinen Nickname ein.');
+        $validator->minLength('nick', 2, 'Mindestens 2 Zeichen bitte (Nickname).');
         $validator->add('nick', 'unique', [
             'rule' => 'validateUnique',
             'provider' => 'table',
             'message' => 'Dieser Nickname wird bereits verwendet.'
         ]);
+        
         $validator->notEmptyString('firstname', 'Bitte trage deinen Vornamen ein.');
-        $validator->minLength('firstname', 2, 'Mindestens 2 Zeichen bitte.');
+        $validator->requirePresence('firstname', true, 'Bitte trage deinen Vornamen ein.');
+        $validator->minLength('firstname', 2, 'Mindestens 2 Zeichen bitte (Vorname).');
+        
         $validator->notEmptyString('lastname', 'Bitte trage deinen Nachnamen ein.');
-        $validator->minLength('lastname', 2, 'Mindestens 2 Zeichen bitte.');
+        $validator->requirePresence('lastname', true, 'Bitte trage deinen Nachnamen ein.');
+        $validator->minLength('lastname', 2, 'Mindestens 2 Zeichen bitte (Nachname).');
+        
         $validator->allowEmptyString('city');
-        $validator->minLength('city', 2, 'Mindestens 2 Zeichen bitte.');
+        $validator->minLength('city', 2, 'Mindestens 2 Zeichen bitte (Ort).');
+        
         $validator->notEmptyString('email', 'Bitte trage deine E-Mail-Adresse ein.');
+        $validator->requirePresence('email', true, 'Bitte trage deine E-Mail-Adresse ein.');
         $validator->email('email', false, 'Die E-Mail-Adresse ist ungültig.');
         $validator->add('email', 'unique', [
             'rule' => 'validateUnique',
             'provider' => 'table',
             'message' => 'Diese E-Mail-Adresse wird bereits verwendet.'
         ]);
+        
+        $validator->requirePresence('zip', true, 'Bitte trage deine PLZ ein.');
         $validator->notEmptyString('zip', 'Bitte trage deine PLZ ein.');
         $validator->add('zip', 'validFormat', [
             'rule' => array('custom', ZIP_REGEX),
             'message' => 'Die PLZ ist nicht gültig.'
         ]);
+        
         return $validator;
         
     }
