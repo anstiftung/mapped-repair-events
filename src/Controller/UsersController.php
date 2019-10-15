@@ -544,7 +544,7 @@ class UsersController extends AppController
             'confirm' => 'ok',
             'status' => APP_ON
         ];
-        $entity = $this->User->patchEntity($user, $user2save);
+        $entity = $this->User->patchEntity($user, $user2save, ['validate' => false]);
         $this->User->save($entity);
         
         $this->AppAuth->setUser($user->toArray()); // toArray is important for forum to avoid __PHP_Incomplete_Class Object

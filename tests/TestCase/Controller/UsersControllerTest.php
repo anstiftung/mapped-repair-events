@@ -17,10 +17,20 @@ class UsersControllerTest extends TestCase
     use EmailTrait;
     use LogFileAssertionsTrait;
     
+    private $validUserData = [
+        'nick' => 'JohnDoeA<img onerror="alert();" />',
+        'firstname' => 'John<img onerror="alert();" />',
+        'lastname' => 'DoeA',
+        'zip' => '12345',
+        'email' => 'johndoeA@example.com',
+        'privacy_policy_accepted' => 1
+    ];
+    
     public $fixtures = [
         'app.Categories',
         'app.Countries',
         'app.Groups',
+        'app.Newsletters',
         'app.Pages',
         'app.Roots',
         'app.Skills',
@@ -62,44 +72,35 @@ class UsersControllerTest extends TestCase
     
     public function testRegisterOrga()
     {
-        $uniqueEmail = 'johndoeA@example.com';
         $this->post(
             Configure::read('AppConfig.htmlHelper')->urlRegisterOrga(),
             [
                 'antiSpam' => 100,
-                'Users' => [
-                    'nick' => 'JohnDoeA<img onerror="alert();" />',
-                    'firstname' => 'John<img onerror="alert();" />',
-                    'lastname' => 'DoeA',
-                    'zip' => '12345',
-                    'email' => $uniqueEmail,
-                    'privacy_policy_accepted' => 1
-                ]
+                'Users' => $this->validUserData
             ]
         );
         
         $this->assertRedirectContains('/');
         
-        $this->User = TableRegistry::getTableLocator()->get('Users');
-        $user = $this->User->find('all', [
-            'conditions' => [
-                'Users.email' => $uniqueEmail
-            ],
-            'contain' => [
-                'Groups'
-            ]
-        ])->first();
+        $user = $this->getRegisteredUser();
         
         $this->assertEquals($user->uid, 7);
         $this->assertEquals($user->nick, 'JohnDoeA');
+        $this->assertEquals($user->email, $this->validUserData['email']);
         $this->assertEquals($user->firstname, 'John');
         $this->assertEquals(count($user->groups), 1);
         $this->assertEquals($user->groups[0]->id, GROUPS_ORGA);
         $this->assertNotEquals($user->groups[0]->id, GROUPS_REPAIRHELPER);
         
         $this->assertMailCount(1);
-        $this->assertMailSentTo($uniqueEmail);
+        $this->assertMailSentTo($this->validUserData['email']);
         $this->assertMailContains('Passwort');
+        
+        $this->get('/users/activate/' . $user->confirm);
+        $user = $this->getRegisteredUser();
+        
+        $this->assertEquals($user->confirm, 'ok');
+        $this->assertRedirectContains(Configure::read('AppConfig.htmlHelper')->urlUserHome());
         
     }
     
@@ -148,6 +149,55 @@ class UsersControllerTest extends TestCase
         );
         $this->assertResponseContains('Diese E-Mail-Adresse wird bereits verwendet.');
         $this->assertNoRedirect();
+    }
+    
+    public function testRegisterNewsletter()
+    {
+        $this->validUserData['i_want_to_receive_the_newsletter'] = 1;
+        $this->post(
+            Configure::read('AppConfig.htmlHelper')->urlRegisterOrga(),
+            [
+                'antiSpam' => 100,
+                'Users' => $this->validUserData
+            ]
+        );
+        $newsletter = $this->getNewsletterData();
+        $this->assertEquals(1, count($newsletter));
+        $this->assertNotEquals('ok', $newsletter[0]->confirm);
+        
+        $user = $this->getRegisteredUser();
+        $this->get('/users/activate/' . $user->confirm);
+        
+        $newsletter = $this->getNewsletterData();
+        $this->assertEquals('ok', $newsletter[0]->confirm);
+        $this->assertMailCount(2);
+        
+    }
+    
+    private function getNewsletterData()
+    {
+        $this->Newsletter = TableRegistry::getTableLocator()->get('Newsletters');
+        $newsletter = $this->Newsletter->find('all', [
+            'conditions' => [
+                'Newsletters.email' => $this->validUserData['email']
+            ]
+        ])->toArray();
+        return $newsletter;
+    }
+        
+    private function getRegisteredUser()
+    {
+        $this->User = TableRegistry::getTableLocator()->get('Users');
+        $user = $this->User->find('all', [
+            'conditions' => [
+                'Users.email' => $this->validUserData['email']
+            ],
+            'contain' => [
+                'Groups'
+            ]
+        ])->first();
+        $user->revertPrivatizeData();
+        return $user;
     }
     
     private function assertEmptyData()
