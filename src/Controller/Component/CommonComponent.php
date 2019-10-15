@@ -65,6 +65,12 @@ class CommonComponent extends AppComponent {
 	    
 	    $config = \HTMLPurifier_Config::createDefault();
 	    $config->set('Cache.SerializerPath', TMP . 'cache' . DS . 'html_purifier');
+	    $config->set('HTML.SafeIframe', true);
+	    if ($this->controller->AppAuth->isAdmin()) {
+	        $config->set('URI.SafeIframeRegexp', '%(.*)%');
+	    } else {
+	        $config->set('URI.SafeIframeRegexp', '%^(https?:)?//(www\.youtube(?:-nocookie)?\.com/embed/|player\.vimeo\.com/video/)%');
+	    }
 	    $purifier = new \HTMLPurifier($config);
 	    
 	    if (is_array($value)) {
