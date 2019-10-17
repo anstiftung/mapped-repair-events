@@ -224,11 +224,8 @@ class UsersController extends AppController
                 } else {
                     $email->setTo($this->request->getData('Users.email'));
                 }
-                if ($email->send()) {
-                    $this->AppFlash->setFlashMessage('Dir wurde ein neues Passwort zugeschickt.');
-                } else {
-                    $this->AppFlash->setFlashError('Das Versenden des neuen Passwortes ist fehlgeschlagen.');
-                }
+                $email->send();
+                $this->AppFlash->setFlashMessage('Dir wurde ein neues Passwort zugeschickt.');
                 
                 $this->set('password', $newPassword);
                 $this->set('user', $user);
@@ -634,7 +631,6 @@ class UsersController extends AppController
                 $userEntity = $this->User->newEntity($user, ['validate' => 'Registration']);
                 
                 $userEntity = $this->stripTagsFromFields($userEntity, 'User');
-                
                 $result = $this->User->save($userEntity);
                 $password = $this->User->setNewPassword($result->uid);
                 

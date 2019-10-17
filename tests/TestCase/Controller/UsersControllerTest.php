@@ -89,6 +89,7 @@ class UsersControllerTest extends TestCase
         $this->assertEquals($user->email, $this->validUserData['email']);
         $this->assertEquals($user->firstname, 'John');
         $this->assertEquals(count($user->groups), 1);
+        $this->assertNotEquals($user->password, null);
         $this->assertEquals($user->groups[0]->id, GROUPS_ORGA);
         $this->assertNotEquals($user->groups[0]->id, GROUPS_REPAIRHELPER);
         

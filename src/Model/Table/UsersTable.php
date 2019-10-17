@@ -352,7 +352,7 @@ class UsersTable extends AppTable
         ]);
         $user->revertPrivatizeData();
         $data = ['password' => $newPassword];
-        $entity = $this->patchEntity($user, $data);
+        $entity = $this->patchEntity($user, $data, ['validate' => false]);
         $this->save($entity);
         return $newPassword;
     }

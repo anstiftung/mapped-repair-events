@@ -7,4 +7,4 @@ Hier ist es: <?php echo $password; ?>
 
 
 Du kannst dich hier einloggen:
-https://<?php echo $_SERVER['SERVER_NAME'] . Configure::read('AppConfig.htmlHelper')->urlLogin('/users/passwortAendern'); ?>
+<?php echo Configure::read('AppConfig.serverName') . Configure::read('AppConfig.htmlHelper')->urlLogin('/users/passwortAendern'); ?>
