@@ -438,12 +438,11 @@ class UsersController extends AppController
             $user2save = [
                 'password' => $this->request->getData('Users.password_new_1')
             ];
-            $entity = $this->User->patchEntity($user, $user2save);
+            $entity = $this->User->patchEntity($user, $user2save, ['validate' => false]);
             $this->User->save($entity);
             $this->AppFlash->setFlashMessage('Dein Passwort wurde erfolgreich geändert.');
             $this->redirect('/');
         }
-        
         $this->set('user', $user);
     }
     

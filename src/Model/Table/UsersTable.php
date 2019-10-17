@@ -249,8 +249,6 @@ class UsersTable extends AppTable
 
     public function validationChangePassword(Validator $validator)
     {
-        $validator = $this->validationDefault($validator);
-        
         $validator->add('password', 'oldPasswordCheck', [
             'rule' => function ($value, $context) {
                 $loggedUser = $this->find('all', [
