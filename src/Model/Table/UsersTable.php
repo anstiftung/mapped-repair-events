@@ -161,6 +161,8 @@ class UsersTable extends AppTable
     public function validationRegistration(Validator $validator)
     {
         $validator = $this->validationDefault($validator);
+        $validator->requirePresence('privacy_policy_accepted', true, 'Bitte akzeptiere die Datenschutzbestimmungen.');
+        $validator->equals('privacy_policy_accepted', 1, 'Bitte akzeptiere die Datenschutzbestimmungen.');
         $validator = $this->addGroupsValidation($validator, Configure::read('AppConfig.htmlHelper')->getUserGroupsForRegistration(), false);
         return $validator;
     }
@@ -183,8 +185,6 @@ class UsersTable extends AppTable
     
     public function validationDefault(Validator $validator)
     {
-        $validator->requirePresence('privacy_policy_accepted', true, 'Bitte akzeptiere die Datenschutzbestimmungen.');
-        $validator->equals('privacy_policy_accepted', 1, 'Bitte akzeptiere die Datenschutzbestimmungen.');
         
         $validator->notEmptyString('nick', 'Bitte trage deinen Nickname ein.');
         $validator->requirePresence('nick', true, 'Bitte trage deinen Nickname ein.');

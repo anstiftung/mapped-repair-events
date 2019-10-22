@@ -247,7 +247,7 @@ class UsersController extends AppController
                 'private' => $this->User->getDefaultPrivateFields()
             ],
             ['validate' => false]
-            );
+        );
         
         $this->_profil($user, false, false);
         
@@ -311,8 +311,7 @@ class UsersController extends AppController
             // END save user generated skills
             
             $user = $this->User->patchEntity($user, $this->request->getData(), ['validate' => 'UserEdit' . ($this->AppAuth->isAdmin() ? 'Admin' : 'User')]);
-            $errors = $user->getErrors();
-            if (empty($errors)) {
+            if (!$user->hasErrors()) {
                 $this->User->save($user);
                 
                 // update own profile
