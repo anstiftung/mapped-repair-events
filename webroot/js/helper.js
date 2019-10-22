@@ -725,7 +725,6 @@ MappedRepairEvents.Helper = {
     },
     
     appendCssFile : function(file) {
-        console.log(file);
         $('head').append('<link rel="stylesheet" type="text/css" href="/' + file + '.css" />');
     },
     
