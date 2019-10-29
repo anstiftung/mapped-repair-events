@@ -47,6 +47,7 @@ return [
         'debugMailAddress' => 'office@example.com',
         'notificationMailAddress' => 'office@example.com',
         'fluxBbForumEnabled' => false,
+        'additionalBlogCategoryEnabled' => false,
         'serverName' => 'http://www.example.org',
         'additionalBlogCategoryName' => 'Kategorie 2',
         'tmpWwwDir' => '/tmp',

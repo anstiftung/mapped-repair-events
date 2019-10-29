@@ -25,7 +25,7 @@ $menu = [
 
 $menu = array_merge($menu, $this->Menu->buildPageMenu($pagesForHeader));
 
-if (!empty($menu[2])) {
+if (Configure::read('AppConfig.additionalBlogCategoryEnabled') && !empty($menu[2])) {
     // add additionalBlogCategory as last child in 3rd main menu item
     $additionalBlogCategory[] = [
         'name' => Configure::read('AppConfig.additionalBlogCategoryName'),
