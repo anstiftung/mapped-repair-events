@@ -2,6 +2,7 @@
 
 namespace App\Test\TestCase\Controller;
 
+use App\Test\TestCase\Traits\LoadAllFixturesTrait;
 use App\Test\TestCase\Traits\LogFileAssertionsTrait;
 use App\Test\TestCase\Traits\UserAssertionsTrait;
 use Cake\Core\Configure;
@@ -16,6 +17,7 @@ class UsersControllerTest extends TestCase
     use UserAssertionsTrait;
     use EmailTrait;
     use LogFileAssertionsTrait;
+    use LoadAllFixturesTrait;
     
     private $validUserData = [
         'nick' => 'JohnDoeA<img onerror="alert();" />',
@@ -26,22 +28,6 @@ class UsersControllerTest extends TestCase
         'privacy_policy_accepted' => 1
     ];
     
-    public $fixtures = [
-        'app.Categories',
-        'app.Countries',
-        'app.Groups',
-        'app.Newsletters',
-        'app.Pages',
-        'app.Roots',
-        'app.Skills',
-        'app.Users',
-        'app.UsersCategories',
-        'app.UsersGroups',
-        'app.UsersSkills',
-        'app.UsersWorkshops',
-        'app.Workshops'
-    ];
-
     public function testAll()
     {
         $this->get(Configure::read('AppConfig.htmlHelper')->urlUsers());

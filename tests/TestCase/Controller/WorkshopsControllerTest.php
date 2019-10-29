@@ -2,10 +2,10 @@
 
 namespace App\Test\TestCase\Controller;
 
+use App\Test\TestCase\Traits\LoadAllFixturesTrait;
 use App\Test\TestCase\Traits\LogFileAssertionsTrait;
 use App\Test\TestCase\Traits\UserAssertionsTrait;
 use Cake\Core\Configure;
-use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\StringCompareTrait;
 use Cake\TestSuite\TestCase;
@@ -16,23 +16,7 @@ class WorkshopsControllerTest extends TestCase
     use UserAssertionsTrait;
     use StringCompareTrait;
     use LogFileAssertionsTrait;
-    
-    public $fixtures = [
-        'app.Categories',
-        'app.Countries',
-        'app.Events',
-        'app.EventsCategories',
-        'app.Groups',
-        'app.InfoSheets',
-        'app.Metatags',
-        'app.Pages',
-        'app.Users',
-        'app.UsersGroups',
-        'app.UsersWorkshops',
-        'app.Worknews',
-        'app.Workshops',
-        'app.WorkshopsCategories'
-    ];
+    use LoadAllFixturesTrait;
 
     public function testAjaxGetAllWorkshopsForMap()
     {
