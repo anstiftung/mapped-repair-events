@@ -469,7 +469,7 @@ MappedRepairEvents.Map.prototype = {
                    
                     var search_point = L.latLng(parseFloat(data[0]['lat']), parseFloat(data[0]['lon']));
                
-                    var radiusInKilometer = 20;
+                    var radiusInKilometer = 15;
                     var radiusFromPoint = radiusInKilometer * 1000;
                    
                     $.each(MappedRepairEvents.MapObject.objects, function(i, object) {
