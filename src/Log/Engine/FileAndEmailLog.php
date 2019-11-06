@@ -2,10 +2,10 @@
 namespace App\Log\Engine;
 
 use Cake\Mailer\Email;
-use App\Network\AppSession;
 use Cake\Core\Configure;
 use Cake\Log\Engine\FileLog;
 use Cake\Network\Exception\SocketException;
+use Cake\Routing\Router;
 use Cake\Utility\Text;
 
 class FileAndEmailLog extends FileLog
@@ -38,7 +38,7 @@ class FileAndEmailLog extends FileLog
             return false;
         }
         
-        $session = new AppSession();
+        $session = Router::getRequest()->getSession();
         $loggedUser = [];
         if ($session->read('Auth.User.uid') !== null) {
             $loggedUser = $session->read('Auth');

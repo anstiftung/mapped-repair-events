@@ -21,10 +21,10 @@ class DetectsController extends AppController
         $this->set('data', [
             'status' => 0,
             'width' => $this->request->getData('width'),
-            'viewChanged' => $this->Session->check('isMobile') && $this->Session->read('isMobile') != $isMobile,
+            'viewChanged' => $this->request->getSession()->check('isMobile') && $this->request->getSession()->read('isMobile') != $isMobile,
             'isMobile' => $isMobile
         ]);
-        $this->Session->write('isMobile', $isMobile);
+        $this->request->getSession()->write('isMobile', $isMobile);
         $this->set('_serialize', 'data');
         
     }

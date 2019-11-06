@@ -14,7 +14,6 @@
  */
 namespace App\Controller;
 
-use App\Network\AppSession;
 use Cake\Cache\Cache;
 use Cake\Controller\Controller;
 use Cake\Core\Configure;
@@ -78,8 +77,6 @@ class AppController extends Controller
         $this->loadComponent('AppFlash', [
             'clear' => true
         ]);
-        
-        $this->Session = new AppSession();
         
         $this->loadComponent('AppAuth', [
             'logoutRedirect' => '/',
@@ -163,13 +160,13 @@ class AppController extends Controller
             $this->FluxBb->login($this->AppAuth->getUserUid());
         }
         
-        if (!$this->Session->check('isMobile')) {
+        if (!$this->request->getSession()->check('isMobile')) {
             $detect = new Mobile_Detect();
             $isMobile = false;
             if ($detect->isMobile() && !$detect->isTablet()) {
                 $isMobile = true;
             }
-            $this->Session->write('isMobile', $isMobile); // default value
+            $this->request->getSession()->write('isMobile', $isMobile); // default value
         }
         
     }
