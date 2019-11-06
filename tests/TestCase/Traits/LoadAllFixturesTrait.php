@@ -15,6 +15,7 @@ trait LoadAllFixturesTrait
         'app.FormFieldOptions',
         'app.Groups',
         'app.InfoSheets',
+        'app.InfoSheetsFormFieldOptions',
         'app.Metatags',
         'app.Newsletters',
         'app.Pages',
