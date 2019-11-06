@@ -25,26 +25,6 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `adressbooks`
---
-
-DROP TABLE IF EXISTS `adressbooks`;
-CREATE TABLE `adressbooks` (
-  `_id` int(8) NOT NULL,
-  `uid` int(8) UNSIGNED DEFAULT NULL,
-  `name` varchar(55) DEFAULT NULL,
-  `telefon` varchar(33) NOT NULL,
-  `kommentar` text NOT NULL,
-  `email` varchar(33) NOT NULL,
-  `created` datetime NOT NULL,
-  `modified` datetime NOT NULL,
-  `status` int(1) NOT NULL DEFAULT '1',
-  `approval` int(1) NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
 -- Tabellenstruktur für Tabelle `blocked_workshop_slugs`
 --
 
