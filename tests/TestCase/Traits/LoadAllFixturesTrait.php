@@ -6,15 +6,20 @@ trait LoadAllFixturesTrait
 {
     
     public $fixtures = [
+        'app.Brands',
         'app.Categories',
         'app.Countries',
         'app.Events',
         'app.EventsCategories',
+        'app.FormFields',
+        'app.FormFieldOptions',
         'app.Groups',
         'app.InfoSheets',
         'app.Metatags',
         'app.Newsletters',
         'app.Pages',
+        'app.Posts',
+        'app.Photos',
         'app.Roots',
         'app.Skills',
         'app.Users',
