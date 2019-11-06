@@ -58,7 +58,6 @@ class InfoSheetsControllerTest extends TestCase
         $this->assertResponseContains('Bitte trage ein, um welches Gerät es sich handelt.');
         $this->assertResponseContains('Bitte wähle eine Kategorie aus.');
         $this->assertResponseContains('Wurde der Fehler gefunden?');
-        echo $this->_response;
     }
     
     public function testAddInfoSheetOk()
