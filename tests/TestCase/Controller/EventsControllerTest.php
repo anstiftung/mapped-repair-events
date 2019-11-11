@@ -8,6 +8,7 @@ use App\Test\TestCase\Traits\LoginTrait;
 use App\Test\TestCase\Traits\UserAssertionsTrait;
 use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
+use Cake\TestSuite\EmailTrait;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\StringCompareTrait;
 use Cake\TestSuite\TestCase;
@@ -18,6 +19,7 @@ class EventsControllerTest extends TestCase
     use LoginTrait;
     use IntegrationTestTrait;
     use UserAssertionsTrait;
+    use EmailTrait;
     use StringCompareTrait;
     use LogFileAssertionsTrait;
     use LoadAllFixturesTrait;
@@ -28,7 +30,7 @@ class EventsControllerTest extends TestCase
     {
         $this->newEventData = [
             'eventbeschreibung' => 'description',
-            'datumstart' => new FrozenDate('2020-01-01'),
+            'datumstart' => '',
             'uhrzeitstart' => '09:00',
             'uhrzeitend' => '20:00',
             'veranstaltungsort' => 'Room 1',
@@ -63,6 +65,7 @@ class EventsControllerTest extends TestCase
         $this->assertResponseContains('Bitte trage die PLZ ein.');
         $this->assertResponseContains('Die Eingabe muss eine Zahl zwischen -90 und 90 sein.');
         $this->assertResponseContains('Die Eingabe muss eine Zahl zwischen -180 und 180 sein.');
+        $this->assertResponseContains('Bitte trage ein Datum ein.');
     }
     
     public function testAddEventOk()
@@ -70,6 +73,7 @@ class EventsControllerTest extends TestCase
         $this->loadNewEventData();
         $this->loginAsOrga();
         $this->newEventData['eventbeschreibung'] = 'description</title></script><img src=n onerror=alert("x")>';
+        $this->newEventData['datumstart'] = new FrozenDate('2020-01-01');
         $this->newEventData['ort'] = 'Berlin';
         $this->newEventData['strasse'] = 'Demo Street 1';
         $this->newEventData['zip'] = '10999';
@@ -95,6 +99,9 @@ class EventsControllerTest extends TestCase
         $this->assertEquals($events[1]->strasse, $this->newEventData['strasse']);
         $this->assertEquals($events[1]->categories[0]->id, $this->newEventData['categories']['_ids'][0]);
         $this->assertEquals($events[1]->owner, 1);
+        
+        $this->assertMailCount(0);
+        
     }
     
 }

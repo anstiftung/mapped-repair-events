@@ -364,7 +364,7 @@ class EventsController extends AppController
                 $this->request = $this->request->withData('Events.datumstart', new Time($this->request->getData('Events.datumstart')));
             }
             
-            $patchedEntity = $this->Event->getPatchedEntityForAdminEdit($event, $this->request->getData(), $this->useDefaultValidation);
+            $patchedEntity = $this->Event->getPatchedEntityForAdminEdit($event, $this->request->getData(), true);
             
             // keep this line here!!!
             $sendNotificationMails = $patchedEntity->isDirty('status') && $patchedEntity->status;
