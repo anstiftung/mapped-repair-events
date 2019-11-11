@@ -257,10 +257,6 @@ class EventsController extends AppController
     public function add($preselectedWorkshopUid)
     {
         
-        if ($preselectedWorkshopUid === null) {
-            throw new NotFoundException;
-        }
-        
         $event = $this->Event->newEntity(
             [
                 'status' => APP_ON,
@@ -353,7 +349,6 @@ class EventsController extends AppController
         $this->setReferer();
         
         if (!empty($this->request->getData())) {
-            
             if (!$this->request->getData('Events.use_custom_coordinates')) {
                 $addressString = $this->request->getData('Events.strasse') . ', ' . $this->request->getData('Events.zip') . ' ' . $this->request->getData('Events.ort') . ', ' . $this->request->getData('Events.country');
                 $coordinates = $this->getLatLngFromGeoCodingService($addressString);
