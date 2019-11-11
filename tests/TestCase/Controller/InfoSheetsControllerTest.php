@@ -87,6 +87,7 @@ class InfoSheetsControllerTest extends TestCase
         $this->assertEquals(1, count($infoSheets));
         $this->assertEquals($infoSheets[0]->device_name, $this->newInfoSheetData['device_name']);
         $this->assertEquals($infoSheets[0]->defect_description, $this->newInfoSheetData['defect_description']);
+        $this->assertEquals($infoSheets[0]->owner, 1);
     }
     
 }
