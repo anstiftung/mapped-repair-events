@@ -15,20 +15,33 @@ MappedRepairEvents.Helper = {
         MappedRepairEvents.Detect.setIsMobile();
     }
 
-    ,bindAddDateButton : function(dateHtml) {
-        var button = $('.add-date-button');
+    ,bindAddAndRemoveDateButton : function(dateHtml) {
+        
+        // remove select2 which is already initialized - it causes problems when the html is copied and pasted
+        $('.date-time-wrapper select').select2('destroy');
+        
+        var addDateButton = $('a.add-date-button');
         dateHtml =
             '<div class="row">'
                 + dateHtml
                 + '<a class="remove-date-button" title="Termin löschen" href="javascript:void(0);"><i class="fa fa-minus-circle"></i></a>'
             + '</div>';
         
-        button.on('click', function() {
+        addDateButton.on('click', function() {
             $(this).closest('.date-time-wrapper').append(dateHtml);
-            MappedRepairEvents.Helper.beautifyDropdowns();
-            $('a.remove-date-button').off('click').on('click', function() {
+            $('a.remove-date-button').on('click', function() {
                 $(this).closest('.row').remove();
+                MappedRepairEvents.Helper.reinitalizeDateWrappers();
             });
+            MappedRepairEvents.Helper.reinitalizeDateWrappers();
+        });
+
+    }
+    
+    ,reinitalizeDateWrappers : function() {
+        $('.date-time-wrapper .row .input.text label').each(function(i) {
+            var newIndex = i + 2;
+            $(this).html('Datum #' + newIndex);
         });
     }
 

@@ -1,9 +1,9 @@
 <?php
 use Cake\Core\Configure;
 
-    $dateHtml = $this->Form->control('Events.datumstart',  ['type' => 'text', 'label' => __('Add Event: Start Date'), 'value' => !empty($event->datumstart) ? $event->datumstart->i18nFormat(Configure::read('DateFormat.de.DateLong2')) : '']);
-    $dateHtml .= $this->Form->control('Events.uhrzeitstart', ['type' => 'time', 'label' => __('Add Event: Start Time'), 'timeFormat' => 24, 'empty' => '--']);
-    $dateHtml .= $this->Form->control('Events.uhrzeitend', ['type' => 'time', 'label' => __('Add Event: End Time'), 'timeFormat' => 24, 'empty' => '--']);
+    $dateHtml = $this->Form->control('Events.datumstart',  ['id' => 'events-datumstart-1', 'type' => 'text', 'label' => __('Add Event: Start Date') . ' #1', 'value' => !empty($event->datumstart) ? $event->datumstart->i18nFormat(Configure::read('DateFormat.de.DateLong2')) : '']);
+    $dateHtml .= $this->Form->control('Events.uhrzeitstart', ['id' => 'events-uhrzeistart-1', 'type' => 'time', 'label' => __('Add Event: Start Time'), 'timeFormat' => 24, 'empty' => '--']);
+    $dateHtml .= $this->Form->control('Events.uhrzeitend', ['id' => 'events-uhrzeitend-1', 'type' => 'time', 'label' => __('Add Event: End Time'), 'timeFormat' => 24, 'empty' => '--']);
     
     if ($isEditMode) {
         $this->element('addScript', ['script' =>
@@ -11,7 +11,7 @@ use Cake\Core\Configure;
         ]);
     } else {
         $this->element('addScript', ['script' =>
-            JS_NAMESPACE.".Helper.bindAddDateButton('".$dateHtml."');"
+            JS_NAMESPACE.".Helper.bindAddAndRemoveDateButton('".$dateHtml."');"
         ]);
     }
     if ($this->request->getSession()->read('isMobile')) {
