@@ -69,9 +69,9 @@ use Cake\Core\Configure;
         ]).'<br />';
         
         echo '<div class="date-time-wrapper">';
-            echo $this->Form->control('Events.datumstart',  array('type' => 'text', 'label' => __('Add Event: Start Date'), 'value' => $event->datumstart->i18nFormat(Configure::read('DateFormat.de.DateLong2'))));
-            echo $this->Form->control('Events.uhrzeitstart', array('type' => 'time', 'label' => __('Add Event: Start Time'), 'timeFormat' => 24));
-            echo $this->Form->control('Events.uhrzeitend', array('type' => 'time', 'label' => __('Add Event: End Time'), 'timeFormat' => 24));
+        echo $this->Form->control('Events.datumstart',  array('type' => 'text', 'label' => __('Add Event: Start Date'), 'value' => !empty($event->datumstart) ? $event->datumstart->i18nFormat(Configure::read('DateFormat.de.DateLong2')) : ''));
+            echo $this->Form->control('Events.uhrzeitstart', array('type' => 'time', 'label' => __('Add Event: Start Time'), 'timeFormat' => 24, 'empty' => '--'));
+            echo $this->Form->control('Events.uhrzeitend', array('type' => 'time', 'label' => __('Add Event: End Time'), 'timeFormat' => 24, 'empty' => '--'));
         echo '</div>';
         echo '<div class="sc"></div>';
 

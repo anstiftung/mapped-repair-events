@@ -13,6 +13,7 @@ use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\StringCompareTrait;
 use Cake\TestSuite\TestCase;
 use Cake\I18n\FrozenDate;
+use Cake\I18n\FrozenTime;
 
 class EventsControllerTest extends TestCase
 {
@@ -31,8 +32,8 @@ class EventsControllerTest extends TestCase
         $this->newEventData = [
             'eventbeschreibung' => 'description',
             'datumstart' => '',
-            'uhrzeitstart' => '09:00',
-            'uhrzeitend' => '20:00',
+            'uhrzeitstart' => '',
+            'uhrzeitend' => '',
             'veranstaltungsort' => 'Room 1',
             'strasse' => '',
             'zip' => '',
@@ -66,6 +67,8 @@ class EventsControllerTest extends TestCase
         $this->assertResponseContains('Die Eingabe muss eine Zahl zwischen -90 und 90 sein.');
         $this->assertResponseContains('Die Eingabe muss eine Zahl zwischen -180 und 180 sein.');
         $this->assertResponseContains('Bitte trage ein Datum ein.');
+        $this->assertResponseContains('Bitte trage eine von-Uhrzeit ein.');
+        $this->assertResponseContains('Bitte trage eine bis-Uhrzeit ein.');
     }
     
     public function testAddEventOk()
@@ -73,12 +76,14 @@ class EventsControllerTest extends TestCase
         $this->loadNewEventData();
         $this->loginAsOrga();
         $this->newEventData['eventbeschreibung'] = 'description</title></script><img src=n onerror=alert("x")>';
-        $this->newEventData['datumstart'] = new FrozenDate('2020-01-01');
+        $this->newEventData['datumstart'] = '01.01.2020';
         $this->newEventData['ort'] = 'Berlin';
         $this->newEventData['strasse'] = 'Demo Street 1';
         $this->newEventData['zip'] = '10999';
         $this->newEventData['lat'] = '48,1291558';
         $this->newEventData['lng'] = '11,3626812';
+        $this->newEventData['uhrzeitstart'] = '10:00';
+        $this->newEventData['uhrzeitend'] = '20:00';
         $this->post(
             Configure::read('AppConfig.htmlHelper')->urlEventNew(2),
             [
@@ -97,6 +102,9 @@ class EventsControllerTest extends TestCase
         $this->assertEquals(2, count($events));
         $this->assertEquals($events[1]->eventbeschreibung, 'description');
         $this->assertEquals($events[1]->strasse, $this->newEventData['strasse']);
+        $this->assertEquals($events[1]->datumstart, new FrozenDate($this->newEventData['datumstart']));
+        $this->assertEquals($events[1]->uhrzeitstart, new FrozenTime($this->newEventData['uhrzeitstart']));
+        $this->assertEquals($events[1]->uhrzeitend, new FrozenTime($this->newEventData['uhrzeitend']));
         $this->assertEquals($events[1]->categories[0]->id, $this->newEventData['categories']['_ids'][0]);
         $this->assertEquals($events[1]->owner, 1);
         

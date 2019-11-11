@@ -260,10 +260,7 @@ class EventsController extends AppController
         $event = $this->Event->newEntity(
             [
                 'status' => APP_ON,
-                'workshop_uid' => $preselectedWorkshopUid,
-                'datumstart' => Date::now(),
-                'uhrzeitstart' => new Time('00:00'),
-                'uhrzeitend' => new Time('00:00')
+                'workshop_uid' => $preselectedWorkshopUid
             ],
             ['validate' => false]
         );

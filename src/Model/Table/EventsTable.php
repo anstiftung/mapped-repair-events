@@ -37,6 +37,8 @@ class EventsTable extends AppTable
         $validator = $this->getNumberRangeValidator($validator, 'lng', -180, 180);
         $validator->notEmptyString('workshop_uid', 'Bitte wähle eine Initiative aus.');
         $validator->notEmptyDate('datumstart', 'Bitte trage ein Datum ein.');
+        $validator->notEmptyTime('uhrzeitstart', 'Bitte trage eine von-Uhrzeit ein.');
+        $validator->notEmptyTime('uhrzeitend', 'Bitte trage eine bis-Uhrzeit ein.');
         $invalidCoordinateMessage = 'Die Adresse wurde nicht gefunden. Bitte ändere sie oder lege die Koordinaten selbst fest.';
         $validator->numeric('lat', $invalidCoordinateMessage);
         $validator->numeric('lng', $invalidCoordinateMessage);
