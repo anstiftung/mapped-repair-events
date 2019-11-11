@@ -3,7 +3,6 @@ namespace App\Controller;
 
 use Cake\Core\Configure;
 use Cake\Event\Event;
-use Cake\I18n\Date;
 use Cake\I18n\Time;
 use Cake\Mailer\Email;
 use Cake\Http\Exception\ForbiddenException;
@@ -346,6 +345,10 @@ class EventsController extends AppController
         $this->setReferer();
         
         if (!empty($this->request->getData())) {
+            
+            pr($this->request->getData());
+            exit;
+            
             if (!$this->request->getData('Events.use_custom_coordinates')) {
                 $addressString = $this->request->getData('Events.strasse') . ', ' . $this->request->getData('Events.zip') . ' ' . $this->request->getData('Events.ort') . ', ' . $this->request->getData('Events.country');
                 $coordinates = $this->getLatLngFromGeoCodingService($addressString);
