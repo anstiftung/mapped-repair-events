@@ -15,6 +15,23 @@ MappedRepairEvents.Helper = {
         MappedRepairEvents.Detect.setIsMobile();
     }
 
+    ,bindAddDateButton : function(dateHtml) {
+        var button = $('.add-date-button');
+        dateHtml =
+            '<div class="row">'
+                + dateHtml
+                + '<a class="remove-date-button" title="Termin löschen" href="javascript:void(0);"><i class="fa fa-minus-circle"></i></a>'
+            + '</div>';
+        
+        button.on('click', function() {
+            $(this).closest('.date-time-wrapper').append(dateHtml);
+            MappedRepairEvents.Helper.beautifyDropdowns();
+            $('a.remove-date-button').off('click').on('click', function() {
+                $(this).closest('.row').remove();
+            });
+        });
+    }
+
     /**
      * http://stackoverflow.com/questions/8472/practical-non-image-based-captcha-approaches?lq=1
      */

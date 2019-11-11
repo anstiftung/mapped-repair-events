@@ -3291,6 +3291,13 @@ div.admin div.edit .error-message {
 body.events div.admin div.edit .input.time .error-message {
 	margin-left: 0;
 }
+body.events.add .date-time-wrapper .fa {
+    line-height: 35px;
+    font-size: 20px;
+}
+body.events.add .date-time-wrapper .fa-minus-circle {
+	color: red;
+}
 div.admin div.edit.column-1 .error-message,
 div.admin div.edit.column-2 .error-message {
     margin-left: 230px;

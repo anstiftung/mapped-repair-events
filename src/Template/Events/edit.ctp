@@ -1,9 +1,17 @@
 <?php
 use Cake\Core\Configure;
 
+    $dateHtml = $this->Form->control('Events.datumstart',  ['type' => 'text', 'label' => __('Add Event: Start Date'), 'value' => !empty($event->datumstart) ? $event->datumstart->i18nFormat(Configure::read('DateFormat.de.DateLong2')) : '']);
+    $dateHtml .= $this->Form->control('Events.uhrzeitstart', ['type' => 'time', 'label' => __('Add Event: Start Time'), 'timeFormat' => 24, 'empty' => '--']);
+    $dateHtml .= $this->Form->control('Events.uhrzeitend', ['type' => 'time', 'label' => __('Add Event: End Time'), 'timeFormat' => 24, 'empty' => '--']);
+    
     if ($isEditMode) {
         $this->element('addScript', ['script' =>
             JS_NAMESPACE.".Helper.doCurrentlyUpdatedActions(".$isCurrentlyUpdated.");"
+        ]);
+    } else {
+        $this->element('addScript', ['script' =>
+            JS_NAMESPACE.".Helper.bindAddDateButton('".$dateHtml."');"
         ]);
     }
     if ($this->request->getSession()->read('isMobile')) {
@@ -68,9 +76,10 @@ use Cake\Core\Configure;
         ]).'<br />';
         
         echo '<div class="date-time-wrapper">';
-        echo $this->Form->control('Events.datumstart',  ['type' => 'text', 'label' => __('Add Event: Start Date'), 'value' => !empty($event->datumstart) ? $event->datumstart->i18nFormat(Configure::read('DateFormat.de.DateLong2')) : '']);
-            echo $this->Form->control('Events.uhrzeitstart', ['type' => 'time', 'label' => __('Add Event: Start Time'), 'timeFormat' => 24, 'empty' => '--']);
-            echo $this->Form->control('Events.uhrzeitend', ['type' => 'time', 'label' => __('Add Event: End Time'), 'timeFormat' => 24, 'empty' => '--']);
+            echo $dateHtml;
+            if (!$isEditMode) {
+                echo '<a class="add-date-button" title="Termin hinzufügen" href="javascript:void(0);"><i class="fa fa-plus-circle"></i></a>';
+            }
         echo '</div>';
         echo '<div class="sc"></div>';
 
