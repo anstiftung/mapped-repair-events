@@ -2,26 +2,25 @@
 use Cake\Core\Configure;
 
     if ($isEditMode) {
-        $this->element('addScript', array('script' =>
+        $this->element('addScript', ['script' =>
             JS_NAMESPACE.".Helper.doCurrentlyUpdatedActions(".$isCurrentlyUpdated.");"
-        ));
+        ]);
     }
     if ($this->request->getSession()->read('isMobile')) {
         $this->element('addScript', ['script' =>
             JS_NAMESPACE.".MobileFrontend.putSaveAndCancelButtonToEndOfForm();
         "]);
     }
-    $this->element('addScript', array('script' => 
+    $this->element('addScript', ['script' => 
         JS_NAMESPACE.".Helper.bindCancelButton(".$event->uid.");".
         JS_NAMESPACE.".Helper.layoutEditButtons();".
         JS_NAMESPACE.".Helper.initCustomCoordinatesCheckbox('#events-use-custom-coordinates');
         $('.edit .apply-workshop-data-button').on('click', function() { ".
             JS_NAMESPACE.".Helper.bindApplyWorkshopButton($(this));
         });
-            
-    "));
+    "]);
     
-    echo $this->element('datepicker', array('fields' => array('events-datumstart')));
+    echo $this->element('datepicker', ['fields' => ['events-datumstart']]);
 ?>
 
 
@@ -39,13 +38,13 @@ use Cake\Core\Configure;
         echo $this->Form->hidden('referer', ['value' => $referer]);
         
         if (!$isEditMode && isset($preselectedWorkshopUid)) {
-            echo $this->Form->control('Events.workshop_uid', array(
+            echo $this->Form->control('Events.workshop_uid', [
                 'type' => 'select',
                 'options' => $workshopsForDropdown,
                 'default' => $preselectedWorkshopUid,
                 'empty' => '== Initiative auswählen ==',
                 'label' => __('Workshop')
-            ));
+            ]);
         }
         
         if (!empty($event->workshop->name)) {
@@ -69,26 +68,26 @@ use Cake\Core\Configure;
         ]).'<br />';
         
         echo '<div class="date-time-wrapper">';
-        echo $this->Form->control('Events.datumstart',  array('type' => 'text', 'label' => __('Add Event: Start Date'), 'value' => !empty($event->datumstart) ? $event->datumstart->i18nFormat(Configure::read('DateFormat.de.DateLong2')) : ''));
-            echo $this->Form->control('Events.uhrzeitstart', array('type' => 'time', 'label' => __('Add Event: Start Time'), 'timeFormat' => 24, 'empty' => '--'));
-            echo $this->Form->control('Events.uhrzeitend', array('type' => 'time', 'label' => __('Add Event: End Time'), 'timeFormat' => 24, 'empty' => '--'));
+        echo $this->Form->control('Events.datumstart',  ['type' => 'text', 'label' => __('Add Event: Start Date'), 'value' => !empty($event->datumstart) ? $event->datumstart->i18nFormat(Configure::read('DateFormat.de.DateLong2')) : '']);
+            echo $this->Form->control('Events.uhrzeitstart', ['type' => 'time', 'label' => __('Add Event: Start Time'), 'timeFormat' => 24, 'empty' => '--']);
+            echo $this->Form->control('Events.uhrzeitend', ['type' => 'time', 'label' => __('Add Event: End Time'), 'timeFormat' => 24, 'empty' => '--']);
         echo '</div>';
         echo '<div class="sc"></div>';
 
-        echo $this->Form->control('Events.eventbeschreibung', array('label' => __('Add Event: event description'))).'<br />';
+        echo $this->Form->control('Events.eventbeschreibung', ['label' => __('Add Event: event description')]).'<br />';
         
         if (!$isEditMode && isset($preselectedWorkshopUid)) {
             echo '<br /><br />';
             echo '<a class="button apply-workshop-data-button" href="javascript:void(0);">Profildaten übernehmen</a><img class="ajaxLoader" src="/img/ajax-loader.gif" width="32" height="32" />';
         }
         
-        echo $this->Form->control('Events.veranstaltungsort', array('div' => 'input text long', 'type' => 'text','label' => __('Add Event: Venue'))).'<br />';
+        echo $this->Form->control('Events.veranstaltungsort', ['div' => 'input text long', 'type' => 'text','label' => __('Add Event: Venue')]).'<br />';
         
-        echo $this->Form->control('Events.strasse', array('type' => 'text','label' => __('Add Event: Street and Number'))).'<br />';
+        echo $this->Form->control('Events.strasse', ['type' => 'text','label' => __('Add Event: Street and Number')]).'<br />';
         
-        echo $this->Form->control('Events.zip', array('type' => 'text','label' => __('Add Event: Zip Code'))).'<br />';
-        echo $this->Form->control('Events.ort', array('type' => 'text','label' => __('Add Event: City'))).'<br />';
-        echo $this->Form->control('Events.land', array('type' => 'text','label' => __('Add Event: Country'))).'<br />';
+        echo $this->Form->control('Events.zip', ['type' => 'text','label' => __('Add Event: Zip Code')]).'<br />';
+        echo $this->Form->control('Events.ort', ['type' => 'text','label' => __('Add Event: City')]).'<br />';
+        echo $this->Form->control('Events.land', ['type' => 'text','label' => __('Add Event: Country')]).'<br />';
         
         echo $this->Form->control('Events.use_custom_coordinates', ['type' => 'checkbox', 'label' => 'Koordinaten selbst festlegen?']).'<br />';
         echo '<div class="custom-coordinates-wrapper">';
@@ -107,7 +106,7 @@ use Cake\Core\Configure;
         <div class="sc"></div>'; 
 
         if ($isEditMode) {
-            echo $this->Form->control('Events.renotify', array('type' => 'checkbox', 'label' => 'Ich habe diesen Termin überarbeitet und möchte, dass alle Interessenten darüber nochmals informiert werden.')).'<br />';
+            echo $this->Form->control('Events.renotify', ['type' => 'checkbox', 'label' => 'Ich habe diesen Termin überarbeitet und möchte, dass alle Interessenten darüber nochmals informiert werden.']).'<br />';
         }
         
         echo $this->element('hint', [
