@@ -346,9 +346,6 @@ class EventsController extends AppController
         
         if (!empty($this->request->getData())) {
             
-            pr($this->request->getData());
-            exit;
-            
             if (!$this->request->getData('Events.use_custom_coordinates')) {
                 $addressString = $this->request->getData('Events.strasse') . ', ' . $this->request->getData('Events.zip') . ' ' . $this->request->getData('Events.ort') . ', ' . $this->request->getData('Events.country');
                 $coordinates = $this->getLatLngFromGeoCodingService($addressString);

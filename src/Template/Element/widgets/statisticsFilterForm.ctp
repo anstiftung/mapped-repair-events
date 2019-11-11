@@ -39,13 +39,13 @@
         }
         
         if (isset($dateFrom) && isset($dateTo)) {
-            echo $this->element('datepicker', ['fields' => ['datefrom', 'dateto']]);
+            echo $this->element('datepicker');
             if (!$this->request->getSession()->read('isMobile')) {
                 echo '<span>Zeitraum: </span>';
             }
-            echo $this->Form->control('dateFrom',  ['type' => 'text', 'label' => '', 'value' => $dateFrom]);
+            echo $this->Form->control('dateFrom',  ['type' => 'text', 'label' => '', 'value' => $dateFrom, 'class' => 'datepicker-input']);
             echo '<span>bis</span>';
-            echo $this->Form->control('dateTo',  ['type' => 'text', 'label' => '', 'value' => $dateTo]);
+            echo $this->Form->control('dateTo',  ['type' => 'text', 'label' => '', 'value' => $dateTo, 'class' => 'datepicker-input']);
         }
         if (!empty($dataSources)) {
             echo $this->Form->control('dataSource',  ['type' => 'select', 'label' => '', 'options' => $dataSources, 'value' => $dataSource]);

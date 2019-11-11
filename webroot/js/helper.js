@@ -28,7 +28,9 @@ MappedRepairEvents.Helper = {
             + '</div>';
         
         addDateButton.on('click', function() {
-            $(this).closest('.date-time-wrapper').append(dateHtml);
+            var wrapper = $(this).closest('.date-time-wrapper');
+            wrapper.append(dateHtml);
+            wrapper.find('.datepicker-input').datepicker();
             $('a.remove-date-button').on('click', function() {
                 $(this).closest('.row').remove();
                 MappedRepairEvents.Helper.reinitalizeDateWrappers();

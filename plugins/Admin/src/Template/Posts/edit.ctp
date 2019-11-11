@@ -7,7 +7,7 @@ use Cake\Core\Configure;
         JS_NAMESPACE.".Helper.layoutEditButtons();
     "));
     echo $this->element('highlightNavi', ['main' => 'Posts']);
-    echo $this->element('datepicker', ['fields' => ['posts-publish']]);
+    echo $this->element('datepicker');
 ?>
 
 <div class="admin edit">
