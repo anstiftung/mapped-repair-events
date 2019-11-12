@@ -1,19 +1,6 @@
 <?php
 use Cake\Core\Configure;
 
-    $dateHtml  = $this->Form->control('Events.datumstart',  ['class' => 'datepicker-input', 'id' => '', 'name' => 'Events[datumstart][]', 'type' => 'text', 'label' => __('Add Event: Start Date') . ' #1', 'value' => !empty($event->datumstart) ? $event->datumstart->i18nFormat(Configure::read('DateFormat.de.DateLong2')) : '']);
-    $dateHtml .= $this->Form->control('Events.uhrzeitstart', ['id' => '', 'type' => 'time', 'name' => 'Events[uhrzeitstart][]', 'label' => __('Add Event: Start Time'), 'timeFormat' => 24, 'empty' => '--']);
-    $dateHtml .= $this->Form->control('Events.uhrzeitend', ['id' => '', 'type' => 'time', 'name' => 'Events[uhrzeitend][]', 'label' => __('Add Event: End Time'), 'timeFormat' => 24, 'empty' => '--']);
-    
-    if ($isEditMode) {
-        $this->element('addScript', ['script' =>
-            JS_NAMESPACE.".Helper.doCurrentlyUpdatedActions(".$isCurrentlyUpdated.");"
-        ]);
-    } else {
-        $this->element('addScript', ['script' =>
-            JS_NAMESPACE.".Helper.bindAddAndRemoveDateButton('".$dateHtml."');"
-        ]);
-    }
     if ($this->request->getSession()->read('isMobile')) {
         $this->element('addScript', ['script' =>
             JS_NAMESPACE.".MobileFrontend.putSaveAndCancelButtonToEndOfForm();
@@ -74,6 +61,19 @@ use Cake\Core\Configure;
             ,'label' => 'Terminbild'
         ]).'<br />';
         
+        $dateHtml  = $this->Form->control('Events.datumstart',  ['class' => 'datepicker-input', 'id' => '', 'name' => 'Events[datumstart][]', 'type' => 'text', 'label' => __('Add Event: Start Date') . ' #1', 'value' => !empty($event->datumstart) ? $event->datumstart->i18nFormat(Configure::read('DateFormat.de.DateLong2')) : '']);
+        $dateHtml .= $this->Form->control('Events.uhrzeitstart', ['id' => '', 'type' => 'time', 'name' => 'Events[uhrzeitstart][]', 'label' => __('Add Event: Start Time'), 'timeFormat' => 24, 'empty' => '--']);
+        $dateHtml .= $this->Form->control('Events.uhrzeitend', ['id' => '', 'type' => 'time', 'name' => 'Events[uhrzeitend][]', 'label' => __('Add Event: End Time'), 'timeFormat' => 24, 'empty' => '--']);
+        
+        if ($isEditMode) {
+            $this->element('addScript', ['script' =>
+                JS_NAMESPACE.".Helper.doCurrentlyUpdatedActions(".$isCurrentlyUpdated.");"
+            ]);
+        } else {
+            $this->element('addScript', ['script' =>
+                JS_NAMESPACE.".Helper.bindAddAndRemoveDateButton('".$dateHtml."');"
+            ]);
+        }
         echo '<div class="date-time-wrapper">';
             echo $dateHtml;
             if (!$isEditMode) {
