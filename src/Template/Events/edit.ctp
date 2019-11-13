@@ -62,8 +62,8 @@ use Cake\Core\Configure;
         ]).'<br />';
         
         $dateHtml  = $this->Form->control('Events.datumstart',  ['class' => 'datepicker-input', 'id' => '', 'name' => 'Events[datumstart][]', 'type' => 'text', 'label' => __('Add Event: Start Date') . ' #1', 'value' => !empty($event->datumstart) ? $event->datumstart->i18nFormat(Configure::read('DateFormat.de.DateLong2')) : '']);
-        $dateHtml .= $this->Form->control('Events.uhrzeitstart', ['id' => '', 'type' => 'time', 'name' => 'Events[uhrzeitstart_tmp][]', 'label' => __('Add Event: Start Time'), 'timeFormat' => 24, 'empty' => '--']);
-        $dateHtml .= $this->Form->control('Events.uhrzeitend', ['id' => '', 'type' => 'time', 'name' => 'Events[uhrzeitend_tmp][]', 'label' => __('Add Event: End Time'), 'timeFormat' => 24, 'empty' => '--']);
+        $dateHtml .= $this->Form->control('Events.uhrzeitstart', ['id' => '', 'type' => 'time', 'name' => 'Events[uhrzeitstart][]', 'label' => __('Add Event: Start Time'), 'timeFormat' => 24, 'empty' => '--']);
+        $dateHtml .= $this->Form->control('Events.uhrzeitend', ['id' => '', 'type' => 'time', 'name' => 'Events[uhrzeitend][]', 'label' => __('Add Event: End Time'), 'timeFormat' => 24, 'empty' => '--']);
         
         if ($isEditMode) {
             $this->element('addScript', ['script' =>

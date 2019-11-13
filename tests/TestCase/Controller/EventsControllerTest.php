@@ -31,21 +31,9 @@ class EventsControllerTest extends TestCase
     {
         $this->newEventData = [
             'eventbeschreibung' => 'description',
-            'datumstart' => [
-                0 => ''
-            ],
-            'uhrzeitstart_tmp' => [
-                0 => [
-                    'hour' => '',
-                    'minute' => ''
-                ]
-            ],
-            'uhrzeitend_tmp' => [
-                0 => [
-                    'hour' => '',
-                    'minute' => ''
-                ]
-            ],
+            'datumstart' => '',
+            'uhrzeitstart' => '',
+            'uhrzeitend' => '',
             'veranstaltungsort' => 'Room 1',
             'strasse' => '',
             'zip' => '',
@@ -88,16 +76,14 @@ class EventsControllerTest extends TestCase
         $this->loadNewEventData();
         $this->loginAsOrga();
         $this->newEventData['eventbeschreibung'] = 'description</title></script><img src=n onerror=alert("x")>';
-        $this->newEventData['datumstart'][0] = '01.01.2020';
+        $this->newEventData['datumstart'] = '01.01.2020';
         $this->newEventData['ort'] = 'Berlin';
         $this->newEventData['strasse'] = 'Demo Street 1';
         $this->newEventData['zip'] = '10999';
         $this->newEventData['lat'] = '48,1291558';
         $this->newEventData['lng'] = '11,3626812';
-        $this->newEventData['uhrzeitstart_tmp'][0]['hour'] = '10';
-        $this->newEventData['uhrzeitstart_tmp'][0]['minute'] = '00';
-        $this->newEventData['uhrzeitend_tmp'][0]['hour'] = '20';
-        $this->newEventData['uhrzeitend_tmp'][0]['minute'] = '00';
+        $this->newEventData['uhrzeitstart'] = '10:00';
+        $this->newEventData['uhrzeitend'] = '20:00';
         $this->post(
             Configure::read('AppConfig.htmlHelper')->urlEventNew(2),
             [
@@ -116,9 +102,9 @@ class EventsControllerTest extends TestCase
         $this->assertEquals(2, count($events));
         $this->assertEquals($events[1]->eventbeschreibung, 'description');
         $this->assertEquals($events[1]->strasse, $this->newEventData['strasse']);
-        $this->assertEquals($events[1]->datumstart, new FrozenDate($this->newEventData['datumstart'][0]));
-        $this->assertEquals($events[1]->uhrzeitstart, new FrozenTime($this->newEventData['uhrzeitstart_tmp'][0]['hour'] . ':' . $this->newEventData['uhrzeitstart_tmp'][0]['minute']));
-        $this->assertEquals($events[1]->uhrzeitend, new FrozenTime($this->newEventData['uhrzeitend_tmp'][0]['hour'] . ':' . $this->newEventData['uhrzeitend_tmp'][0]['minute']));
+        $this->assertEquals($events[1]->datumstart, new FrozenDate($this->newEventData['datumstart']));
+        $this->assertEquals($events[1]->uhrzeitstart, new FrozenTime($this->newEventData['uhrzeitstart']));
+        $this->assertEquals($events[1]->uhrzeitend, new FrozenTime($this->newEventData['uhrzeitend']));
         $this->assertEquals($events[1]->categories[0]->id, $this->newEventData['categories']['_ids'][0]);
         $this->assertEquals($events[1]->owner, 1);
         

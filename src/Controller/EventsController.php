@@ -357,15 +357,9 @@ class EventsController extends AppController
                 $this->request = $this->request->withData('Events.lng', str_replace(',', '.', $this->request->getData('Events.lng')));
             }
             
-            $datestart = null;
-            if ($this->request->getData('Events.datumstart.0')) {
-                $datestart = new Time($this->request->getData('Events.datumstart.0'));
+            if ($this->request->getData('Events.datumstart')) {
+                $this->request = $this->request->withData('Events.datumstart', new Time($this->request->getData('Events.datumstart')));
             }
-            $this->request = $this->request->withData('Events.datumstart', $datestart);
-            $this->request = $this->request->withData('Events.uhrzeitstart.hour', $this->request->getData('Events.uhrzeitstart_tmp.0.hour'));
-            $this->request = $this->request->withData('Events.uhrzeitstart.minute', $this->request->getData('Events.uhrzeitstart_tmp.1.minute'));
-            $this->request = $this->request->withData('Events.uhrzeitend.hour', $this->request->getData('Events.uhrzeitend_tmp.0.hour'));
-            $this->request = $this->request->withData('Events.uhrzeitend.minute', $this->request->getData('Events.uhrzeitend_tmp.1.minute'));
             
             $patchedEntity = $this->Event->getPatchedEntityForAdminEdit($event, $this->request->getData(), true);
             
