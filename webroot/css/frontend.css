@@ -966,7 +966,7 @@ body.users .profile .input select {
     min-width: 34px;
 }
 #eventEditForm .date-time-wrapper .input.time {
-    width: 165px;
+    width: 200px;
 }
 #eventEditForm .date-time-wrapper .input input {
     width: 85px;
