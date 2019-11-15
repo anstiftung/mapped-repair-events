@@ -791,6 +791,10 @@ div.admin div.edit.column-1 textarea {
 #eventEditForm .input.checkbox label {
     padding-left: 95px;
 }
+#eventEditForm label[for="0-renotify"] {
+	padding-left: 0 ! important;
+	width: 100% ! important;
+}
 #eventEditForm .input.checkbox input,
 #workshopEditForm .input.checkbox input {
     float: left;
