@@ -419,9 +419,10 @@ class EventsController extends AppController
                 if (count($events) == 1) {
                     $message = 'Termin';
                 }
-                $message .= ' erfolgreich gespeichert.';
+                $message = count($events) . ' ' . $message . ' erfolgreich gespeichert.';
                 $this->AppFlash->setFlashMessage($message);
                 $this->redirect($this->request->getData()['referer']);
+                return $events;
             }
             
         }
