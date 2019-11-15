@@ -2276,23 +2276,29 @@ body.workshops.home .right #flashMessage {
 }
 div.hint {
     line-height: 18px;
-    padding: 1% 5%;
+    padding: 1% 2%;
     font-weight: normal;
     border-radius: 3px;
     -moz-border-radius: 3px;
     -khtml-border-radius: 3px;
     -webkit-border-radius: 3px;
-    display: block;
+    display: flex;
+    align-items: center;
     border: 1px solid #ccc;
     min-height: 40px;
     clear: both;
     margin-bottom: 15px;
+    width: 100%;
 }
 div.hint h1 {
     font-size: 44px;
     float: left;
     margin: 7px 15px 5px 5px;
     font-weight: normal
+}
+div.hint p {
+	float: left;
+	width: 100%;
 }
 .ui-widget-content:not(.ui-datepicker) a:not(.button) {
     margin: 5px 0px;

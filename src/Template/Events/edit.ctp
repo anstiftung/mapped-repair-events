@@ -78,6 +78,12 @@ $this->element('addScript', ['script' =>
                 ,'label' => 'Terminbild'
             ]).'<br />';
             
+            if (!$isEditMode) {
+                echo $this->element('hint', [
+                    'content' => 'Durch Klicken auf das Plus-Zeichen rechts kannst du mehrere Termine auf einmal erstellen.<br />Nach dem Speichern kannst du sie wie gewohnt einzeln bearbeiten.'
+                ]);
+            }
+            
             echo '<div class="date-time-wrapper">';
             
             $i++;
