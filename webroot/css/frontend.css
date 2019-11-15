@@ -3288,8 +3288,11 @@ div.admin div.edit .error-message {
     margin-top: 5px;
     line-height: 15px;
 }
+body.events div.admin div.edit .date-time-wrapper .error-message {
+	margin-left: 79px;
+}
 body.events div.admin div.edit .input.time .error-message {
-	margin-left: 0;
+    margin-left: 0;
 }
 body.events.add .date-time-wrapper .row {
 	float: left;
