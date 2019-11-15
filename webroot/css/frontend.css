@@ -2296,10 +2296,6 @@ div.hint h1 {
     margin: 7px 15px 5px 5px;
     font-weight: normal
 }
-div.hint p {
-	float: left;
-	width: 100%;
-}
 .ui-widget-content:not(.ui-datepicker) a:not(.button) {
     margin: 5px 0px;
     color: #4D8EA2;
