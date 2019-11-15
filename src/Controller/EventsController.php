@@ -213,7 +213,7 @@ class EventsController extends AppController
         $patchedEntity = $this->Event->patchEntity(
             $this->Event->get($eventUid),
             ['status' => APP_DELETED]
-            );
+        );
         
         if ($this->Event->save($patchedEntity)) {
             $this->AppFlash->setFlashMessage('Der Termin wurde erfolgreich gelöscht.');
@@ -333,7 +333,28 @@ class EventsController extends AppController
         $this->setIsCurrentlyUpdated($event->uid);
         $this->set('metaTags', ['title' => 'Termin bearbeiten']);
         $this->set('editFormUrl', Configure::read('AppConfig.htmlHelper')->urlEventEdit($event->uid));
-        $this->_edit([$event], true);
+        $patchedEntities = $this->_edit([$event], true);
+        
+        $patchedEntity = $patchedEntities[0];
+        
+        // only send notfications if status was changed from off to on
+        $sendNotificationMails = $event->status == APP_OFF && $patchedEntity->status == APP_ON;
+        
+        // never send notification mail on add! this is done in cronjob SendWorknewsNotificationShell
+        // if event is edited and renotify is active, send mail to subscriber
+        if (!empty($event->workshop)) {
+            $workshop = $event->workshop;
+            $sendNotificationMails |= $patchedEntity->renotify;
+        }
+        
+        // notify subscribers
+        if (isset($workshop) && $sendNotificationMails) {
+            $this->Worknews = TableRegistry::getTableLocator()->get('Worknews');
+            $subscribers = $this->Worknews->getSubscribers($patchedEntity->workshop_uid);
+            if (!empty($subscribers)) {
+                $this->Worknews->sendNotifications($subscribers, 'Termin geändert: ' . $workshop->name, 'event_changed', $workshop, $patchedEntity);
+            }
+        }
     }
     
     private function _edit($events, $isEditMode)
@@ -366,11 +387,15 @@ class EventsController extends AppController
                     $data['lat'] = str_replace(',', '.', $data['lat']);
                     $data['lng'] = str_replace(',', '.', $data['lng']);
                 }
+                if ($isEditMode) {
+                    $data['uid'] = $events[0]->uid;
+                }
                 $preparedData[] = $data;
                 $i++;
             }
             
             $events = $this->Event->patchEntities($events[0], $preparedData);
+            
             $hasErrors = false;
             foreach($events as $event) {
                 if ($event->hasErrors()) {
@@ -390,64 +415,21 @@ class EventsController extends AppController
                         $eventModel->save($event, ['atomic' => false]);
                     }
                 });
-                    $message = 'Termine';
-                    if (count($events) == 1) {
-                        $message = 'Termin';
-                    }
-                    $message .= ' erfolgreich gespeichert.';
-                    $this->redirect($this->request->getData()['referer']);
+                $message = 'Termine';
+                if (count($events) == 1) {
+                    $message = 'Termin';
+                }
+                $message .= ' erfolgreich gespeichert.';
+                $this->AppFlash->setFlashMessage($message);
+                $this->redirect($this->request->getData()['referer']);
             }
-            
-            //             $events = [];
-            //             foreach($patchedEntities as $patchedEntity) {
-            
-                // keep this line here!!!
-                //                 $sendNotificationMails = $patchedEntity->isDirty('status') && $patchedEntity->status;
-                
-                //                 $errors = $patchedEntity->getErrors();
-                
-                //                 if (empty($errors)) {
-                
-                //                     $patchedEntity = $this->patchEntityWithCurrentlyUpdatedFields($patchedEntity);
-                //                     $entity = $this->stripTagsFromFields($patchedEntity, 'Event');
-                
-                //                     if ($this->Event->save($entity)) {
-                
-                //                         $this->AppFlash->setFlashMessage($this->Event->name_de . ' erfolgreich gespeichert.');
-                
-                //                         // no workshop set in add mode
-                //                         // never send notification mail on add! @see SendWorknewsNotificationShell
-                //                         // if event is edited and renotify is active, do send mail
-                //                         if (!empty($patchedEntity->workshop)) {
-                //                             $workshop = $patchedEntity->workshop;
-                //                             $sendNotificationMails |= $patchedEntity->renotify;
-                //                         }
-                
-                //                         // START notify subscribers
-                //                         if (isset($workshop) && $sendNotificationMails) {
-                //                             $this->Worknews = TableRegistry::getTableLocator()->get('Worknews');
-                //                             $subscribers = $this->Worknews->getSubscribers($patchedEntity->workshop_uid);
-                //                             if (!empty($subscribers)) {
-                //                                 $this->Worknews->sendNotifications($subscribers, 'Termin geändert: ' . $workshop->name, 'event_changed', $workshop, $patchedEntity);
-                //                             }
-                //                         }
-                //                         // END notify subscribers
-                
-                //                     } else {
-                //                         $this->AppFlash->setFlashError($this->Event->name_de . ' <b>nicht</b>erfolgreich gespeichert.');
-                //                     }
-            
-                //                 }
-            
-                //                 $events[] = $patchedEntity;
-            
-                //             }
             
         }
         
         $this->set('events', $events);
         $this->set('isEditMode', $isEditMode);
         $this->render('edit');
+        return $events;
         
     }
     

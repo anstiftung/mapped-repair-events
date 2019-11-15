@@ -98,11 +98,13 @@ abstract class AppTable extends Table
     public function beforeSave($event, $entity, $options)
     {
         
-        $session = Router::getRequest()->getSession();
-        if ($session->read('Auth.User.uid') !== null) {
-            $this->loggedUserUid = $session->read('Auth.User.uid');
+        $request = Router::getRequest();
+        if ($request) {
+            $session = $request->getSession();
+            if ($session->read('Auth.User.uid') !== null) {
+                $this->loggedUserUid = $session->read('Auth.User.uid');
+            }
         }
-        
         if ($entity->isNew()) {
             
             /*

@@ -114,14 +114,18 @@ class EventsControllerTest extends TestCase
     
     public function testEditEventWithoutNotifications()
     {
-        $this->markTestSkipped();
         $this->doTestEditForm(false);
         $this->assertMailCount(0);
     }
     
     public function testEditEventWithNotifications()
     {
-        $this->markTestSkipped();
+        $this->Event = TableRegistry::getTableLocator()->get('Events');
+        $patchedEntity = $this->Event->patchEntity(
+            $this->Event->get(6),
+            ['status' => APP_OFF]
+        );
+        $this->Event->save($patchedEntity);
         $this->doTestEditForm(true);
         $this->assertMailCount(1);
         $this->assertMailSentTo('worknews-test@example.com');
@@ -146,6 +150,7 @@ class EventsControllerTest extends TestCase
             'use_custom_coordinates' => $event->use_custom_coordinates,
             'lat' => $event->lat,
             'lng' => $event->lng,
+            'status' => APP_ON,
             'renotify' => $renotify
         ];
         
