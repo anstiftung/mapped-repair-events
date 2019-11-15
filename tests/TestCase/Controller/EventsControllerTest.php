@@ -112,5 +112,63 @@ class EventsControllerTest extends TestCase
         
     }
     
+    public function testEditEventWithoutNotifications()
+    {
+        $this->doTestEditForm(false);
+        $this->assertMailCount(0);
+    }
+    
+    public function testEditEventWithNotifications()
+    {
+        $this->doTestEditForm(true);
+        $this->assertMailCount(1);
+        $this->assertMailSentTo('worknews-test@example.com');
+    }
+    
+    private function doTestEditForm($renotify)
+    {
+        $this->Event = TableRegistry::getTableLocator()->get('Events');
+        $event = $this->Event->find('all', [
+            'conditions' => [
+                'Events.uid' => 6
+            ]
+        ])->first();
+        $event->datumstart = $event->datumstart->i18nFormat(Configure::read('DateFormat.de.DateLong2'));
+        
+        $eventForPost = [
+            'eventbeschreibung' => 'new description',
+            'strasse' => 'new street',
+            'datumstart' => '02.01.2030',
+            'uhrzeitstart' => '10:00',
+            'uhrzeitend' => '11:00',
+            'use_custom_coordinates' => $event->use_custom_coordinates,
+            'lat' => $event->lat,
+            'lng' => $event->lng,
+            'renotify' => $renotify
+        ];
+        
+        $this->loginAsOrga();
+        $this->post(
+            Configure::read('AppConfig.htmlHelper')->urlEventEdit($event->uid),
+            [
+                'referer' => '/',
+                'Events' => $eventForPost
+            ]
+        );
+        
+        $event = $this->Event->find('all', [
+            'conditions' => [
+                'Events.uid' => 6
+            ]
+        ])->first();
+        
+        $this->assertEquals($event->eventbeschreibung, $eventForPost['eventbeschreibung']);
+        $this->assertEquals($event->strasse, $eventForPost['strasse']);
+        $this->assertEquals($event->datumstart, new FrozenDate($eventForPost['datumstart']));
+        $this->assertEquals($event->uhrzeitstart, new FrozenTime($eventForPost['uhrzeitstart']));
+        $this->assertEquals($event->uhrzeitend, new FrozenTime($eventForPost['uhrzeitend']));
+        
+    }
+    
 }
 ?>
