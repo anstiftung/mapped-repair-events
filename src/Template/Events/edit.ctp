@@ -61,7 +61,7 @@ $this->element('addScript', ['script' =>
             if (!empty($event->workshop->name)) {
                 echo '<div class="input">';
                 echo '<label>' . Configure::read('AppConfig.initiativeNameSingular').'</label>';
-                echo $event->workshop->name;
+                echo '<b style="margin-top:-2px;float:left;">'.$event->workshop->name.'</b>';
                 echo '</div>';
             }
             
