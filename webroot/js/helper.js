@@ -15,35 +15,47 @@ MappedRepairEvents.Helper = {
         MappedRepairEvents.Detect.setIsMobile();
     }
 
-    ,bindAddAndRemoveDateButton : function(dateHtml) {
+    ,bindAddDateButton : function(dateHtml) {
         
         // remove select2 which is already initialized - it causes problems when the html is copied and pasted
         $('.date-time-wrapper select').select2('destroy');
         
         var addDateButton = $('a.add-date-button');
-        dateHtml =
-            '<div class="row">'
-                + dateHtml
-                + '<a class="remove-date-button" title="Termin löschen" href="javascript:void(0);"><i class="fa fa-minus-circle"></i></a>'
-            + '</div>';
         
         addDateButton.on('click', function() {
             var wrapper = $(this).closest('.date-time-wrapper');
             wrapper.append(dateHtml);
-            wrapper.find('.datepicker-input').datepicker();
-            $('a.remove-date-button').on('click', function() {
-                $(this).closest('.row').remove();
-                MappedRepairEvents.Helper.reinitalizeDateWrappers();
-            });
+            MappedRepairEvents.Helper.bindRemoveDateButton();
             MappedRepairEvents.Helper.reinitalizeDateWrappers();
+            wrapper.find('.datepicker-input').datepicker();
         });
 
     }
     
+    ,bindRemoveDateButton : function() {
+        $('a.remove-date-button').off('click').on('click', function() {
+            $(this).closest('.row').remove();
+            MappedRepairEvents.Helper.reinitalizeDateWrappers();
+        });
+    }
+    
     ,reinitalizeDateWrappers : function() {
         $('.date-time-wrapper .row .input.text label').each(function(i) {
-            var newIndex = i + 2;
-            $(this).html('Datum #' + newIndex);
+            var newIndex = i;
+            var newLabel = newIndex + 1;
+            $(this).html('Datum #' + newLabel);
+            $(this).attr('for', $(this).attr('for').replace(/0/, newIndex));
+        });
+        $('.date-time-wrapper .row .input.text input').each(function(i) {
+            var newIndex = i;
+            $(this).attr('id', $(this).attr('id').replace(/0/, newIndex));
+            $(this).attr('name', $(this).attr('name').replace(/0/, newIndex));
+        });
+        $('.date-time-wrapper .row').each(function(i) {
+            var newIndex = i;
+            $(this).find('.input.time select').each(function() {
+                $(this).attr('name', $(this).attr('name').replace(/0/, newIndex));
+            });
         });
     }
 
@@ -817,7 +829,7 @@ MappedRepairEvents.Helper = {
     
     bindApplyWorkshopButton : function(button) {
         
-        var workshopUid = button.closest('form').find('#events-workshop-uid').val();
+        var workshopUid = button.closest('form').find('#0-workshop-uid').val();
         
         if (workshopUid == 0) {
             alert('Bitte wähle eine Initiative aus.');
@@ -829,12 +841,12 @@ MappedRepairEvents.Helper = {
         MappedRepairEvents.Helper.ajaxCall('/workshops/ajaxGetWorkshopDetail/' + workshopUid, {}, {
             onOk : function(data) {
                 $('.ajaxLoader').hide();
-                $('#events-veranstaltungsort').val(data.workshop.adresszusatz);
-                $('#events-strasse').val(data.workshop.street);
-                $('#events-zip').val(data.workshop.zip);
-                $('#events-ort').val(data.workshop.city);
-                $('#events-land').val(data.workshop.country.name_de);
-                var useCustomCoordinatesCheckbox = $('#events-use-custom-coordinates');
+                $('#0-veranstaltungsort').val(data.workshop.adresszusatz);
+                $('#0-strasse').val(data.workshop.street);
+                $('#0-zip').val(data.workshop.zip);
+                $('#0-ort').val(data.workshop.city);
+                $('#0-land').val(data.workshop.country.name_de);
+                var useCustomCoordinatesCheckbox = $('#0-use-custom-coordinates');
                 if (data.workshop.use_custom_coordinates) {
                     useCustomCoordinatesCheckbox.prop('checked', true);
                 } else {
@@ -842,13 +854,13 @@ MappedRepairEvents.Helper = {
                 }
                 var wrapper = $('.custom-coordinates-wrapper');
                 MappedRepairEvents.Helper.toggleCheckboxWrapper(useCustomCoordinatesCheckbox, wrapper);
-                $('#events-lat').val(data.workshop.lat);
-                $('#events-lng').val(data.workshop.lng);
+                $('#0-lat').val(data.workshop.lat);
+                $('#0-lng').val(data.workshop.lng);
                 
                 $('.categories-checkbox-wrapper select').prop('checked', false);
                 for(var i in data.workshop.categories) {
                     var categoryId = data.workshop.categories[i].id;
-                    $('#events-categories-ids-' + categoryId).prop('checked', true);
+                    $('#0-categories-ids-' + categoryId).prop('checked', true);
                 }
                 
             },
