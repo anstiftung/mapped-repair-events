@@ -3310,6 +3310,7 @@ body.events.add .date-time-wrapper .fa {
 }
 body.events.add .date-time-wrapper .fa-minus-circle {
 	color: red;
+	margin-right: 5px;
 }
 div.admin div.edit.column-1 .error-message,
 div.admin div.edit.column-2 .error-message {
