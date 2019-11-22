@@ -40,18 +40,19 @@ MappedRepairEvents.Helper = {
     }
     
     ,reinitalizeDateWrappers : function() {
-        $('.date-time-wrapper .row .input.text label').each(function(i) {
+        var row = $('.date-time-wrapper .row');
+        row.find('.input.text label').each(function(i) {
             var newIndex = i;
             var newLabel = newIndex + 1;
             $(this).html('Datum #' + newLabel);
             $(this).attr('for', $(this).attr('for').replace(/0/, newIndex));
         });
-        $('.date-time-wrapper .row .input.text input').each(function(i) {
+        row.find('.input.text input').each(function(i) {
             var newIndex = i;
             $(this).attr('id', $(this).attr('id').replace(/0/, newIndex));
             $(this).attr('name', $(this).attr('name').replace(/0/, newIndex));
         });
-        $('.date-time-wrapper .row').each(function(i) {
+        row.each(function(i) {
             var newIndex = i;
             $(this).find('.input.time select').each(function() {
                 $(this).attr('name', $(this).attr('name').replace(/0/, newIndex));
