@@ -27,6 +27,26 @@ MappedRepairEvents.Helper = {
             wrapper.append(dateHtml);
             MappedRepairEvents.Helper.bindRemoveDateButton();
             MappedRepairEvents.Helper.reinitalizeDateWrappers();
+            
+            // set default values of new from first row 
+            var row = $('.date-time-wrapper .row');
+            row.last().find('.input.text input').val(
+                row.first().find('.input.text input').val()
+            );
+            row.last().each(function(i) {
+                var newIndex = i;
+                $(this).find('.input.time select').each(function() {
+                    var nameWithoutIndexLastRow = $(this).attr('name').replace(/\d+/, '');
+                    var lastRow = $(this);
+                    row.first().find('.input.time select').each(function() {
+                        var nameWithoutIndexFirstRow = $(this).attr('name').replace(/\d+/, '');
+                        if (nameWithoutIndexLastRow == nameWithoutIndexFirstRow) {
+                            lastRow.val($(this).val());
+                        }
+                    });
+                });
+            });
+            
         });
 
     }
