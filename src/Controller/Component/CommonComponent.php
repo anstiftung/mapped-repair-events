@@ -66,6 +66,7 @@ class CommonComponent extends AppComponent {
 	    $config = \HTMLPurifier_Config::createDefault();
 	    $config->set('Cache.SerializerPath', TMP . 'cache' . DS . 'html_purifier');
 	    $config->set('HTML.SafeIframe', true);
+	    $config->set('Attr.AllowedFrameTargets', ['_blank']);
 	    if ($this->controller->AppAuth->isAdmin()) {
 	        $config->set('URI.SafeIframeRegexp', '%(.*)%');
 	    } else {
