@@ -27,7 +27,6 @@ MappedRepairEvents.Helper = {
             wrapper.append(dateHtml);
             MappedRepairEvents.Helper.bindRemoveDateButton();
             MappedRepairEvents.Helper.reinitalizeDateWrappers();
-            wrapper.find('.datepicker-input').datepicker();
         });
 
     }
@@ -45,19 +44,21 @@ MappedRepairEvents.Helper = {
             var newIndex = i;
             var newLabel = newIndex + 1;
             $(this).html('Datum #' + newLabel);
-            $(this).attr('for', $(this).attr('for').replace(/0/, newIndex));
+            $(this).attr('for', $(this).attr('for').replace(/\d+/, newIndex));
         });
         row.find('.input.text input').each(function(i) {
             var newIndex = i;
-            $(this).attr('id', $(this).attr('id').replace(/0/, newIndex));
-            $(this).attr('name', $(this).attr('name').replace(/0/, newIndex));
+            $(this).attr('id', $(this).attr('id').replace(/\d+/, newIndex));
+            $(this).attr('name', $(this).attr('name').replace(/\d+/, newIndex));
         });
         row.each(function(i) {
             var newIndex = i;
             $(this).find('.input.time select').each(function() {
-                $(this).attr('name', $(this).attr('name').replace(/0/, newIndex));
+                $(this).attr('name', $(this).attr('name').replace(/\d+/, newIndex));
             });
         });
+        row.find('.datepicker-input').datepicker('destroy');
+        row.find('.datepicker-input').datepicker();
     }
 
     /**
