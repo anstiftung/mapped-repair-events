@@ -48,14 +48,20 @@ $this->element('addScript', ['script' =>
 
             if ($i > 0) continue;
             
-            if (!$isEditMode && isset($preselectedWorkshopUid)) {
-                echo $this->Form->control($i.'.workshop_uid', [
-                    'type' => 'select',
-                    'options' => $workshopsForDropdown,
-                    'default' => $preselectedWorkshopUid,
-                    'empty' => '== Initiative auswählen ==',
-                    'label' => __('Workshop')
-                ]);
+            if (isset($preselectedWorkshopUid)) {
+                if (!empty($workshopsForDropdown)) {
+                    // add mode
+                    echo $this->Form->control($i.'.workshop_uid', [
+                        'type' => 'select',
+                        'options' => $workshopsForDropdown,
+                        'default' => $preselectedWorkshopUid,
+                        'empty' => '== Initiative auswählen ==',
+                        'label' => __('Workshop')
+                    ]);
+                } else {
+                    // duplicate mode
+                    echo $this->Form->hidden($i.'.workshop_uid', ['value' => $preselectedWorkshopUid]);
+                }
             }
             
             if (!empty($event->workshop->name)) {

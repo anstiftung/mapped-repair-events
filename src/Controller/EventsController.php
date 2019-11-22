@@ -262,7 +262,7 @@ class EventsController extends AppController
                 'workshop_uid' => $preselectedWorkshopUid
             ],
             ['validate' => false]
-            );
+        );
         
         $this->set('metaTags', ['title' => 'Termin erstellen']);
         
@@ -304,7 +304,8 @@ class EventsController extends AppController
         $this->setIsCurrentlyUpdated($event->uid);
         $this->set('metaTags', ['title' => 'Termin duplizieren']);
         $this->set('editFormUrl', Configure::read('AppConfig.htmlHelper')->urlEventNew($event->workshop_uid));
-        $this->_edit($event, false);
+        $this->set('preselectedWorkshopUid', $event->workshop_uid);
+        $this->_edit([$event], false);
         $this->render('edit');
     }
     
