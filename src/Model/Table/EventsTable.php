@@ -33,7 +33,12 @@ class EventsTable extends AppTable
     
     public function validationDefault(Validator $validator)
     {
-        $validator = $this->validationAdmin($validator);
+        $validator = $this->getNumberRangeValidator($validator, 'lat', -90, 90);
+        $validator = $this->getNumberRangeValidator($validator, 'lng', -180, 180);
+        $validator->notEmptyString('workshop_uid', 'Bitte wähle eine Initiative aus.');
+        $validator->notEmptyDate('datumstart', 'Bitte trage ein Datum ein.');
+        $validator->notEmptyTime('uhrzeitstart', 'Bitte trage eine von-Uhrzeit ein.');
+        $validator->notEmptyTime('uhrzeitend', 'Bitte trage eine bis-Uhrzeit ein.');
         $invalidCoordinateMessage = 'Die Adresse wurde nicht gefunden. Bitte ändere sie oder lege die Koordinaten selbst fest.';
         $validator->numeric('lat', $invalidCoordinateMessage);
         $validator->numeric('lng', $invalidCoordinateMessage);
@@ -51,15 +56,6 @@ class EventsTable extends AppTable
             'rule' => array('custom', ZIP_REGEX),
             'message' => 'Die PLZ ist nicht gültig.'
         ]);
-        return $validator;
-    }
-    
-    public function validationAdmin(Validator $validator)
-    {
-        $validator = $this->getNumberRangeValidator($validator, 'lat', -90, 90);
-        $validator = $this->getNumberRangeValidator($validator, 'lng', -180, 180);
-        $validator->notEmptyString('workshop_uid', 'Bitte wähle eine Initiative aus.');
-        $validator->notEmptyString('datumstart', 'Bitte trage das Datum ein.');
         return $validator;
     }
     

@@ -3,8 +3,7 @@ namespace App\Controller;
 
 use Cake\Core\Configure;
 use Cake\Event\Event;
-use Cake\I18n\Date;
-use Cake\I18n\Time;
+use Cake\I18n\FrozenTime;
 use Cake\Mailer\Email;
 use Cake\Http\Exception\ForbiddenException;
 use Cake\Http\Exception\NotFoundException;
@@ -110,12 +109,12 @@ class EventsController extends AppController
         $workshops->contain([
             'Events.InfoSheets.OwnerUsers',
             'Events.InfoSheets.Brands' => function($q) {
-                return $q->select($this->Workshop->Events->InfoSheets->Brands);
+            return $q->select($this->Workshop->Events->InfoSheets->Brands);
             },
             'Events.InfoSheets.Categories' => function($q) {
-                return $q->select($this->Workshop->Events->InfoSheets->Categories);
+            return $q->select($this->Workshop->Events->InfoSheets->Categories);
             }
-        ]);
+            ]);
         
         $this->Workshop->getAssociation('Events')->setConditions(['Events.status > ' . APP_DELETED])
         ->setSort([
@@ -257,20 +256,14 @@ class EventsController extends AppController
     public function add($preselectedWorkshopUid)
     {
         
-        if ($preselectedWorkshopUid === null) {
-            throw new NotFoundException;
-        }
-        
         $event = $this->Event->newEntity(
             [
                 'status' => APP_ON,
-                'workshop_uid' => $preselectedWorkshopUid,
-                'datumstart' => Date::now(),
-                'uhrzeitstart' => new Time('00:00'),
-                'uhrzeitend' => new Time('00:00')
+                'workshop_uid' => $preselectedWorkshopUid
             ],
             ['validate' => false]
         );
+        
         $this->set('metaTags', ['title' => 'Termin erstellen']);
         
         $this->Workshop = TableRegistry::getTableLocator()->get('Workshops');
@@ -285,7 +278,7 @@ class EventsController extends AppController
         $this->set('preselectedWorkshopUid', $preselectedWorkshopUid);
         $this->set('editFormUrl', Configure::read('AppConfig.htmlHelper')->urlEventNew($preselectedWorkshopUid));
         
-        $this->_edit($event, false);
+        $this->_edit([$event], false);
         
         // assures rendering of success message on redirected page and NOT before and then not showing it
         if (empty($this->request->getData())) {
@@ -311,7 +304,8 @@ class EventsController extends AppController
         $this->setIsCurrentlyUpdated($event->uid);
         $this->set('metaTags', ['title' => 'Termin duplizieren']);
         $this->set('editFormUrl', Configure::read('AppConfig.htmlHelper')->urlEventNew($event->workshop_uid));
-        $this->_edit($event, false);
+        $this->set('preselectedWorkshopUid', $event->workshop_uid);
+        $this->_edit([$event], false);
         $this->render('edit');
     }
     
@@ -340,90 +334,104 @@ class EventsController extends AppController
         $this->setIsCurrentlyUpdated($event->uid);
         $this->set('metaTags', ['title' => 'Termin bearbeiten']);
         $this->set('editFormUrl', Configure::read('AppConfig.htmlHelper')->urlEventEdit($event->uid));
-        $this->_edit($event, true);
+        $patchedEntities = $this->_edit([$event], true);
+        
+        $patchedEntity = $patchedEntities[0];
+        
+        // only send notfications if status was changed from off to on
+        $sendNotificationMails = $event->status == APP_OFF && $patchedEntity->status == APP_ON;
+        
+        // never send notification mail on add! this is done in cronjob SendWorknewsNotificationShell
+        // if event is edited and renotify is active, send mail to subscriber
+        if (!empty($event->workshop)) {
+            $workshop = $event->workshop;
+            $sendNotificationMails |= $patchedEntity->renotify;
+        }
+        
+        // notify subscribers
+        if (isset($workshop) && $sendNotificationMails) {
+            $this->Worknews = TableRegistry::getTableLocator()->get('Worknews');
+            $subscribers = $this->Worknews->getSubscribers($patchedEntity->workshop_uid);
+            if (!empty($subscribers)) {
+                $this->Worknews->sendNotifications($subscribers, 'Termin geändert: ' . $workshop->name, 'event_changed', $workshop, $patchedEntity);
+            }
+        }
     }
     
-    private function _edit($event, $isEditMode)
+    private function _edit($events, $isEditMode)
     {
         $this->Category = TableRegistry::getTableLocator()->get('Categories');
         $this->set('categories', $this->Category->getForDropdown(APP_ON));
         
-        $this->set('uid', $event->uid);
+        $this->set('uid', $events[0]->uid);
         
         $this->setReferer();
         
         if (!empty($this->request->getData())) {
-            
-            if (!$this->request->getData('Events.use_custom_coordinates')) {
-                $addressString = $this->request->getData('Events.strasse') . ', ' . $this->request->getData('Events.zip') . ' ' . $this->request->getData('Events.ort') . ', ' . $this->request->getData('Events.country');
-                $coordinates = $this->getLatLngFromGeoCodingService($addressString);
-                $this->request = $this->request->withData('Events.lat', $coordinates['lat']);
-                $this->request = $this->request->withData('Events.lng', $coordinates['lng']);
+            $i = 0;
+            $preparedData = [];
+            foreach($this->request->getData() as $data) {
+                if (!is_array($data)) {
+                    continue; // skip referer
+                }
+                $data = array_merge($this->request->getData()[0], $data);
+                if ($data['datumstart']) {
+                    $data['datumstart'] = new FrozenTime($data['datumstart']);
+                }
+                if (!$data['use_custom_coordinates']) {
+                    $addressString = $data['strasse'] . ', ' . $data['zip'] . ' ' . $data['ort'] . ', ' . $data['land'];
+                    $coordinates = $this->getLatLngFromGeoCodingService($addressString);
+                    $data['lat'] = $coordinates['lat'];
+                    $data['lng'] = $coordinates['lng'];
+                }
+                if (!empty($data['use_custom_coordinates'])) {
+                    $data['lat'] = str_replace(',', '.', $data['lat']);
+                    $data['lng'] = str_replace(',', '.', $data['lng']);
+                }
+                if ($isEditMode) {
+                    $data['uid'] = $events[0]->uid;
+                }
+                $preparedData[] = $data;
+                $i++;
             }
-            if ($this->request->getData('Events.use_custom_coordinates')) {
-                $this->request = $this->request->withData('Events.lat', str_replace(',', '.', $this->request->getData('Events.lat')));
-                $this->request = $this->request->withData('Events.lng', str_replace(',', '.', $this->request->getData('Events.lng')));
+            
+            $events = $this->Event->patchEntities($events[0], $preparedData);
+            
+            $hasErrors = false;
+            foreach($events as $event) {
+                if ($event->hasErrors()) {
+                    $hasErrors |= true;
+                }
             }
             
-            if ($this->request->getData('Events.datumstart')) {
-                $this->request = $this->request->withData('Events.datumstart', new Time($this->request->getData('Events.datumstart')));
-            }
-            
-            $patchedEntity = $this->Event->getPatchedEntityForAdminEdit($event, $this->request->getData(), $this->useDefaultValidation);
-            
-            // keep this line here!!!
-            $sendNotificationMails = $patchedEntity->isDirty('status') && $patchedEntity->status;
-            
-            $errors = $patchedEntity->getErrors();
-            
+            $errors = $events[0]->getErrors();
             if (isset($errors['lat']) && isset($errors['lat']['numeric'])) {
                 $this->AppFlash->setFlashError($errors['lat']['numeric']);
             }
             
-            if (empty($errors)) {
-                
-                $patchedEntity = $this->patchEntityWithCurrentlyUpdatedFields($patchedEntity);
-                $entity = $this->stripTagsFromFields($patchedEntity, 'Event');
-                
-                if ($this->Event->save($entity)) {
-                    
-                    $this->AppFlash->setFlashMessage($this->Event->name_de . ' erfolgreich gespeichert.');
-                    
-                    // no workshop set in add mode
-                    // never send notification mail on add! @see SendWorknewsNotificationShell
-                    // if event is edited and renotify is active, do send mail
-                    if (!empty($patchedEntity->workshop)) {
-                        $workshop = $patchedEntity->workshop;
-                        $sendNotificationMails |= $patchedEntity->renotify;
+            if (!$hasErrors) {
+                $eventModel = $this->Event;
+                $this->Event->getConnection()->transactional(function () use ($eventModel, $events) {
+                    foreach ($events as $event) {
+                        $eventModel->save($event, ['atomic' => false]);
                     }
-                    
-                    // START notify subscribers
-                    if (isset($workshop) && $sendNotificationMails) {
-                        $this->Worknews = TableRegistry::getTableLocator()->get('Worknews');
-                        $subscribers = $this->Worknews->getSubscribers($patchedEntity->workshop_uid);
-                        if (!empty($subscribers)) {
-                            $this->Worknews->sendNotifications($subscribers, 'Termin geändert: ' . $workshop->name, 'event_changed', $workshop, $patchedEntity);
-                        }
-                    }
-                    // END notify subscribers
-                    
-                    $this->redirect($this->request->getData()['referer']);
-                    
-                } else {
-                    $this->AppFlash->setFlashError($this->Event->name_de . ' <b>nicht</b>erfolgreich gespeichert.');
+                });
+                $message = 'Termine';
+                if (count($events) == 1) {
+                    $message = 'Termin';
                 }
-                                
-            } else {
-                $event = $patchedEntity;
+                $message = count($events) . ' ' . $message . ' erfolgreich gespeichert.';
+                $this->AppFlash->setFlashMessage($message);
+                $this->redirect($this->request->getData()['referer']);
+                return $events;
             }
+            
         }
         
-        $this->set('event', $event);
+        $this->set('events', $events);
         $this->set('isEditMode', $isEditMode);
-        
-        if (!empty($errors)) {
-            $this->render('edit');
-        }
+        $this->render('edit');
+        return $events;
         
     }
     

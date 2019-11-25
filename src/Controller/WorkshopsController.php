@@ -501,7 +501,7 @@ class WorkshopsController extends AppController
         
         // mobile version does not include calendar and only shows bound events
         // it's the calendar component that fetches the workshop's events
-        if ($this->Session->read('isMobile')) {
+        if ($this->request->getSession()->read('isMobile')) {
             $eventsAssociation = $this->Workshop->getAssociation('Events');
             $eventsAssociation->setConditions([
                 'DATE_FORMAT(Events.datumstart, \'%Y-%m-%d\') >= DATE_FORMAT(NOW(), \'%Y-%m-%d\')',
@@ -536,7 +536,7 @@ class WorkshopsController extends AppController
         
         $this->set('groups', Configure::read('AppConfig.htmlHelper')->getUserGroupsForWorkshopDetail());
         
-        if ($this->Session->read('isMobile') && !empty($categories)) {
+        if ($this->request->getSession()->read('isMobile') && !empty($categories)) {
             $i = 0;
             foreach($workshop->events as $event) {
                 $workshop->events[$i]->eventname = $workshop->name;

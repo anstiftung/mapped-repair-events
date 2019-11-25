@@ -791,6 +791,10 @@ div.admin div.edit.column-1 textarea {
 #eventEditForm .input.checkbox label {
     padding-left: 95px;
 }
+#eventEditForm label[for="0-renotify"] {
+	padding-left: 0 ! important;
+	width: 100% ! important;
+}
 #eventEditForm .input.checkbox input,
 #workshopEditForm .input.checkbox input {
     float: left;
@@ -962,11 +966,11 @@ body.users .profile .input select {
     line-height: 28px;
 }
 #eventEditForm .date-time-wrapper .input.time label {
-    width: 24px;
-    min-width: 24px;
+    width: 34px;
+    min-width: 34px;
 }
 #eventEditForm .date-time-wrapper .input.time {
-    width: 165px;
+    width: 200px;
 }
 #eventEditForm .date-time-wrapper .input input {
     width: 85px;
@@ -2272,17 +2276,19 @@ body.workshops.home .right #flashMessage {
 }
 div.hint {
     line-height: 18px;
-    padding: 1% 5%;
+    padding: 1% 2%;
     font-weight: normal;
     border-radius: 3px;
     -moz-border-radius: 3px;
     -khtml-border-radius: 3px;
     -webkit-border-radius: 3px;
-    display: block;
+    display: flex;
+    align-items: center;
     border: 1px solid #ccc;
     min-height: 40px;
     clear: both;
     margin-bottom: 15px;
+    width: 100%;
 }
 div.hint h1 {
     font-size: 44px;
@@ -3287,6 +3293,24 @@ div.admin div.edit .error-message {
     margin-left: 136px;
     margin-top: 5px;
     line-height: 15px;
+}
+body.events div.admin div.edit .date-time-wrapper .error-message {
+	margin-left: 79px;
+}
+body.events div.admin div.edit .input.time .error-message {
+    margin-left: 0;
+}
+body.events.add .date-time-wrapper .row {
+	float: left;
+	width: 100%;
+}
+body.events.add .date-time-wrapper .fa {
+    line-height: 35px;
+    font-size: 20px;
+}
+body.events.add .date-time-wrapper .fa-minus-circle {
+	color: red;
+	margin-right: 5px;
 }
 div.admin div.edit.column-1 .error-message,
 div.admin div.edit.column-2 .error-message {

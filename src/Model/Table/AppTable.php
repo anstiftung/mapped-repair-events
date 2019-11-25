@@ -2,10 +2,9 @@
 namespace App\Model\Table;
 
 use App\Controller\Component\StringComponent;
-use App\Network\AppSession;
-use Cake\ORM\Query;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
+use Cake\Routing\Router;
 use Cake\Validation\Validator;
 
 abstract class AppTable extends Table
@@ -99,11 +98,13 @@ abstract class AppTable extends Table
     public function beforeSave($event, $entity, $options)
     {
         
-        $session = new AppSession();
-        if ($session->read('Auth.User.uid') !== null) {
-            $this->loggedUserUid = $session->read('Auth.User.uid');
+        $request = Router::getRequest();
+        if ($request) {
+            $session = $request->getSession();
+            if ($session->read('Auth.User.uid') !== null) {
+                $this->loggedUserUid = $session->read('Auth.User.uid');
+            }
         }
-        
         if ($entity->isNew()) {
             
             /*

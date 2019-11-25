@@ -7,5 +7,14 @@ use Cake\TestSuite\Fixture\TestFixture;
 class WorknewsFixture extends TestFixture
 {
     public $import = ['table' => 'worknews', 'connection' => 'default'];
+    
+    public $records = [
+        [
+            'workshop_uid' => 2,
+            'email' => 'worknews-test@example.com',
+            'confirm' => 'ok'
+        ]
+    ];
+    
 }
 ?>

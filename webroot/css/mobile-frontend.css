@@ -415,8 +415,8 @@
 	}
 	
 	#eventEditForm .date-time-wrapper .input.text label {
-		width: 55px;
-		min-width: 55px;
+		width: 75px;
+		min-width: 75px;
 	}
 	#eventEditForm div.input.text.long input,
 	#eventEditForm .input input
@@ -426,10 +426,13 @@
 		max-width: 90%;
 	}
 	#eventEditForm .date-time-wrapper .input input {
-		width: 105px;
-		min-width: 105px;
-		max-width: 105px;
+		width: 80px;
+		min-width: 80px;
+		max-width: 80px;
 	}
+	#eventEditForm .date-time-wrapper .input.time {
+		width: 165px;
+	}	
 	#eventEditForm .input.checkbox label,
 	#workshopEditForm .input.checkbox label {
 	   padding-left: 0px;
@@ -438,6 +441,20 @@
     #workshopEditForm div.admin div.edit .error-message {
         margin-left: 0px;
     }
+	body.events div.admin div.edit .date-time-wrapper .error-message {
+		margin-left: 86px;
+	}   
+	body.events div.admin div.edit .input.time .error-message {
+		margin-left: 45px;
+	}
+	body.events div.admin div.edit .date-time-wrapper .row {
+	   padding-top: 5px;
+	   padding-bottom: 5px;
+	   border-bottom: 1px solid #ccc;
+	}
+	body.events div.admin div.edit .date-time-wrapper .row:last-child {
+	   border-bottom: none;
+	}
 	
 	body.events #eventEditForm .input.time select {
 	    min-width: 55px ! important;
@@ -611,6 +628,10 @@
 	body.posts.detail .text-wrapper img {
 	  width: 100% ! important;
 	  height: auto ! important;
+	}
+	
+	div.hint {
+	    width: 96%;
 	}
 	
     .js #menu {
