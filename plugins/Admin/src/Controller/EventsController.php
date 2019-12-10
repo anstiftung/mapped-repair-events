@@ -47,7 +47,8 @@ class EventsController extends AdminAppController
         parent::index();
         
         $conditions = [
-            'Events.status > ' . APP_DELETED
+            'Workshops.status' => APP_ON,
+            'DATE(Events.datumstart) >= DATE(NOW())'
         ];
         $conditions = array_merge($this->conditions, $conditions);
         
@@ -63,7 +64,7 @@ class EventsController extends AdminAppController
         
         $objects = $this->paginate($query, [
             'order' => [
-                'Events.created' => 'DESC'
+                'Events.updated' => 'DESC'
             ]
         ]);
         foreach($objects as $object) {

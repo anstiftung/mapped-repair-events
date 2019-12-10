@@ -16,7 +16,7 @@ echo $this->Html->createMenuEntry(array(
 ));
 echo $this->Html->createMenuEntry(array(
     'name' => 'Termine',
-    'url' => '/admin/events/index',
+    'url' => '/admin/events/index?val-status=1&key-status',
     'level' => 'main'
 ));
 echo $this->Html->createMenuEntry(array(
