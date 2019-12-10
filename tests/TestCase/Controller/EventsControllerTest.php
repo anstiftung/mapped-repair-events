@@ -139,7 +139,6 @@ class EventsControllerTest extends TestCase
                 'Events.uid' => 6
             ]
         ])->first();
-        $event->datumstart = $event->datumstart->i18nFormat(Configure::read('DateFormat.de.DateLong2'));
         
         $eventForPost = [
             'eventbeschreibung' => 'new description',
