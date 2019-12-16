@@ -144,8 +144,8 @@ use Cake\Utility\Inflector;
             
             echo $this->AssetCompress->script('_frontend' . ($this->request->getSession()->read('isMobile') ? '_mobile' : ''), ['raw' => Configure::read('debug')]);
             
-            echo $this->Html->script('/node_modules/ckeditor/ckeditor');
-            echo $this->Html->script('/node_modules/ckeditor/adapters/jquery');
+            echo $this->Html->script('/node_modules/ckeditor4/ckeditor');
+            echo $this->Html->script('/node_modules/ckeditor4/adapters/jquery');
             
             // add script BEFORE all scripts that are loaded in views (block)
             echo $this->Html->scriptBlock(
