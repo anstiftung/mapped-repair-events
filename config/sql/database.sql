@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 07. Jan 2020 um 15:16
+-- Erstellungszeit: 07. Jan 2020 um 15:21
 -- Server-Version: 5.7.27-log
 -- PHP-Version: 7.4.1
 
@@ -25,8 +25,8 @@ SET time_zone = "+00:00";
 DROP TABLE IF EXISTS `blocked_workshop_slugs`;
 CREATE TABLE `blocked_workshop_slugs` (
   `id` int(11) NOT NULL,
-  `url` varchar(255) NOT NULL,
-  `status` tinyint(4) NOT NULL
+  `url` varchar(255) DEFAULT NULL,
+  `status` tinyint(4) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -78,9 +78,9 @@ INSERT INTO `blocked_workshop_slugs` (`id`, `url`, `status`) VALUES
 DROP TABLE IF EXISTS `blogs`;
 CREATE TABLE `blogs` (
   `id` int(8) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `text` text NOT NULL,
-  `url` varchar(255) NOT NULL
+  `name` varchar(255) DEFAULT NULL,
+  `text` text,
+  `url` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -100,11 +100,11 @@ INSERT INTO `blogs` (`id`, `name`, `text`, `url`) VALUES
 DROP TABLE IF EXISTS `brands`;
 CREATE TABLE `brands` (
   `id` int(8) NOT NULL,
-  `name` varchar(100) COLLATE utf8_bin NOT NULL,
-  `status` smallint(6) NOT NULL,
+  `name` varchar(100) COLLATE utf8_bin DEFAULT NULL,
+  `status` smallint(6) DEFAULT NULL,
   `owner` int(10) UNSIGNED DEFAULT NULL,
-  `created` datetime NOT NULL,
-  `modified` datetime NOT NULL
+  `created` datetime DEFAULT NULL,
+  `modified` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
@@ -1277,18 +1277,18 @@ INSERT INTO `brands` (`id`, `name`, `status`, `owner`, `created`, `modified`) VA
 DROP TABLE IF EXISTS `categories`;
 CREATE TABLE `categories` (
   `id` int(11) NOT NULL,
-  `name` varchar(100) COLLATE utf8_bin NOT NULL,
-  `icon` varchar(255) COLLATE utf8_bin NOT NULL,
+  `name` varchar(100) COLLATE utf8_bin DEFAULT NULL,
+  `icon` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `visible_on_platform` tinyint(4) UNSIGNED NOT NULL DEFAULT '1',
   `carbon_footprint` decimal(6,2) UNSIGNED NOT NULL DEFAULT '0.00',
   `material_footprint` decimal(8,2) UNSIGNED NOT NULL DEFAULT '0.00',
   `parent_id` int(11) DEFAULT NULL,
-  `lft` int(11) NOT NULL,
-  `rght` int(11) NOT NULL,
-  `status` smallint(6) NOT NULL,
+  `lft` int(11) DEFAULT NULL,
+  `rght` int(11) DEFAULT NULL,
+  `status` smallint(6) DEFAULT NULL,
   `owner` int(10) UNSIGNED DEFAULT NULL,
-  `created` datetime NOT NULL,
-  `modified` datetime NOT NULL
+  `created` datetime DEFAULT NULL,
+  `modified` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
@@ -1669,9 +1669,9 @@ INSERT INTO `categories` (`id`, `name`, `icon`, `visible_on_platform`, `carbon_f
 DROP TABLE IF EXISTS `countries`;
 CREATE TABLE `countries` (
   `code` char(2) CHARACTER SET utf8 NOT NULL,
-  `name_en` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `name_de` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `rank` int(4) NOT NULL
+  `name_en` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `name_de` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `rank` int(4) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -1933,30 +1933,30 @@ DROP TABLE IF EXISTS `events`;
 CREATE TABLE `events` (
   `_id` int(8) NOT NULL,
   `uid` int(8) UNSIGNED DEFAULT NULL,
-  `eventbeschreibung` text NOT NULL,
-  `datumstart` date NOT NULL,
-  `uhrzeitstart` time NOT NULL,
-  `uhrzeitend` time NOT NULL,
-  `veranstaltungsort` varchar(99) NOT NULL,
-  `strasse` varchar(255) NOT NULL,
-  `zip` varchar(10) NOT NULL,
-  `ort` varchar(99) NOT NULL,
-  `author` varchar(99) NOT NULL,
-  `land` varchar(99) NOT NULL,
-  `lat` double NOT NULL,
-  `lng` double NOT NULL,
+  `eventbeschreibung` text,
+  `datumstart` date DEFAULT NULL,
+  `uhrzeitstart` time DEFAULT NULL,
+  `uhrzeitend` time DEFAULT NULL,
+  `veranstaltungsort` varchar(99) DEFAULT NULL,
+  `strasse` varchar(255) DEFAULT NULL,
+  `zip` varchar(10) DEFAULT NULL,
+  `ort` varchar(99) DEFAULT NULL,
+  `author` varchar(99) DEFAULT NULL,
+  `land` varchar(99) DEFAULT NULL,
+  `lat` double DEFAULT '0',
+  `lng` double DEFAULT '0',
   `use_custom_coordinates` tinyint(4) UNSIGNED NOT NULL DEFAULT '0',
-  `image` varchar(150) NOT NULL,
-  `image_alt_text` varchar(255) NOT NULL,
-  `status` smallint(6) NOT NULL,
-  `owner` int(8) UNSIGNED NOT NULL,
-  `created` datetime NOT NULL,
-  `updated` datetime NOT NULL,
-  `updated_by` int(8) UNSIGNED NOT NULL,
-  `currently_updated_by` int(8) UNSIGNED NOT NULL,
-  `currently_updated_start` datetime NOT NULL,
-  `lang` varchar(3) NOT NULL,
-  `workshop_uid` int(8) UNSIGNED NOT NULL
+  `image` varchar(150) DEFAULT NULL,
+  `image_alt_text` varchar(255) DEFAULT NULL,
+  `status` smallint(6) DEFAULT NULL,
+  `owner` int(8) UNSIGNED DEFAULT NULL,
+  `created` datetime DEFAULT NULL,
+  `updated` datetime DEFAULT NULL,
+  `updated_by` int(8) UNSIGNED DEFAULT NULL,
+  `currently_updated_by` int(8) UNSIGNED DEFAULT NULL,
+  `currently_updated_start` datetime DEFAULT NULL,
+  `lang` varchar(3) DEFAULT NULL,
+  `workshop_uid` int(8) UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -1980,8 +1980,8 @@ CREATE TABLE `events_categories` (
 DROP TABLE IF EXISTS `form_fields`;
 CREATE TABLE `form_fields` (
   `id` int(11) NOT NULL,
-  `name` varchar(100) NOT NULL,
-  `identifier` varchar(255) NOT NULL,
+  `name` varchar(100) DEFAULT NULL,
+  `identifier` varchar(255) DEFAULT NULL,
   `status` int(11) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -2006,10 +2006,10 @@ INSERT INTO `form_fields` (`id`, `name`, `identifier`, `status`) VALUES
 DROP TABLE IF EXISTS `form_field_options`;
 CREATE TABLE `form_field_options` (
   `id` int(11) NOT NULL,
-  `form_field_id` int(10) UNSIGNED NOT NULL,
-  `value` int(10) UNSIGNED NOT NULL,
-  `name` varchar(100) NOT NULL,
-  `rank` int(10) UNSIGNED NOT NULL,
+  `form_field_id` int(10) UNSIGNED DEFAULT NULL,
+  `value` int(10) UNSIGNED DEFAULT NULL,
+  `name` varchar(100) DEFAULT NULL,
+  `rank` int(10) UNSIGNED DEFAULT NULL,
   `status` tinyint(4) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -2052,7 +2052,7 @@ INSERT INTO `form_field_options` (`id`, `form_field_id`, `value`, `name`, `rank`
 DROP TABLE IF EXISTS `groups`;
 CREATE TABLE `groups` (
   `id` int(8) NOT NULL,
-  `name` varchar(255) NOT NULL
+  `name` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -2093,7 +2093,7 @@ CREATE TABLE `info_sheets` (
   `uid` int(8) UNSIGNED DEFAULT NULL,
   `visitor_age` int(10) DEFAULT NULL,
   `visitor_gender` varchar(1) DEFAULT NULL,
-  `device_name` varchar(255) NOT NULL,
+  `device_name` varchar(255) DEFAULT NULL,
   `device_age` int(10) UNSIGNED DEFAULT NULL,
   `defect_description` text NOT NULL,
   `defect_found` tinyint(4) UNSIGNED DEFAULT NULL,
@@ -2101,17 +2101,17 @@ CREATE TABLE `info_sheets` (
   `repair_postponed_reason` tinyint(4) UNSIGNED DEFAULT NULL,
   `no_repair_reason` tinyint(4) UNSIGNED DEFAULT NULL,
   `device_must_not_be_used_anymore` tinyint(4) UNSIGNED DEFAULT NULL,
-  `no_repair_reason_text` varchar(200) NOT NULL,
-  `status` smallint(6) NOT NULL,
-  `owner` int(8) UNSIGNED NOT NULL,
-  `created` datetime NOT NULL,
-  `updated` datetime NOT NULL,
-  `updated_by` int(8) UNSIGNED NOT NULL,
-  `currently_updated_by` int(8) UNSIGNED NOT NULL,
-  `currently_updated_start` datetime NOT NULL,
-  `event_uid` int(8) UNSIGNED NOT NULL,
-  `category_id` int(10) NOT NULL,
-  `brand_id` int(10) UNSIGNED NOT NULL
+  `no_repair_reason_text` varchar(200) DEFAULT NULL,
+  `status` smallint(6) DEFAULT NULL,
+  `owner` int(8) UNSIGNED DEFAULT NULL,
+  `created` datetime DEFAULT NULL,
+  `updated` datetime DEFAULT NULL,
+  `updated_by` int(8) UNSIGNED DEFAULT NULL,
+  `currently_updated_by` int(8) UNSIGNED DEFAULT NULL,
+  `currently_updated_start` datetime DEFAULT NULL,
+  `event_uid` int(8) UNSIGNED DEFAULT NULL,
+  `category_id` int(10) DEFAULT NULL,
+  `brand_id` int(10) UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -2135,10 +2135,10 @@ CREATE TABLE `info_sheets_form_field_options` (
 DROP TABLE IF EXISTS `metatags`;
 CREATE TABLE `metatags` (
   `id` int(10) UNSIGNED NOT NULL,
-  `object_uid` int(10) UNSIGNED NOT NULL,
-  `title` varchar(255) NOT NULL,
-  `description` varchar(255) NOT NULL,
-  `keywords` varchar(255) NOT NULL
+  `object_uid` int(10) UNSIGNED DEFAULT NULL,
+  `title` varchar(255) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `keywords` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -2150,9 +2150,9 @@ CREATE TABLE `metatags` (
 DROP TABLE IF EXISTS `newsletters`;
 CREATE TABLE `newsletters` (
   `id` int(255) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `plz` varchar(8) NOT NULL,
-  `created` datetime NOT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `plz` varchar(8) DEFAULT NULL,
+  `created` datetime DEFAULT NULL,
   `confirm` text NOT NULL,
   `unsub` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -2168,21 +2168,21 @@ CREATE TABLE `pages` (
   `_id` int(8) NOT NULL,
   `uid` int(8) UNSIGNED DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
-  `text` text NOT NULL,
+  `text` text,
   `url` varchar(255) DEFAULT NULL,
-  `status` smallint(6) NOT NULL,
-  `owner` int(8) UNSIGNED NOT NULL,
-  `created` datetime NOT NULL,
-  `updated` datetime NOT NULL,
-  `updated_by` int(8) UNSIGNED NOT NULL,
-  `currently_updated_by` int(8) UNSIGNED NOT NULL,
-  `currently_updated_start` datetime NOT NULL,
-  `lang` varchar(3) NOT NULL,
-  `position` int(10) UNSIGNED NOT NULL,
+  `status` smallint(6) DEFAULT NULL,
+  `owner` int(8) UNSIGNED DEFAULT NULL,
+  `created` datetime DEFAULT NULL,
+  `updated` datetime DEFAULT NULL,
+  `updated_by` int(8) UNSIGNED DEFAULT NULL,
+  `currently_updated_by` int(8) UNSIGNED DEFAULT NULL,
+  `currently_updated_start` datetime DEFAULT NULL,
+  `lang` varchar(3) DEFAULT NULL,
+  `position` int(10) UNSIGNED DEFAULT NULL,
   `menu_type` varchar(255) NOT NULL DEFAULT 'no-menu',
-  `parent_uid` int(10) UNSIGNED NOT NULL,
-  `lft` int(10) NOT NULL,
-  `rght` int(10) NOT NULL
+  `parent_uid` int(10) UNSIGNED DEFAULT NULL,
+  `lft` int(10) DEFAULT NULL,
+  `rght` int(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -2209,6 +2209,13 @@ CREATE TABLE `phinxlog` (
   `breakpoint` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Daten für Tabelle `phinxlog`
+--
+
+INSERT INTO `phinxlog` (`version`, `migration_name`, `start_time`, `end_time`, `breakpoint`) VALUES
+(20200107095607, 'SqlModeFixes', '2020-01-07 14:20:46', '2020-01-07 14:20:56', 0);
+
 -- --------------------------------------------------------
 
 --
@@ -2220,17 +2227,17 @@ CREATE TABLE `photos` (
   `_id` int(8) NOT NULL,
   `uid` int(8) UNSIGNED DEFAULT NULL,
   `object_uid` int(8) UNSIGNED DEFAULT NULL,
-  `object_type` enum('pages','posts','workshops','events') CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `object_type` enum('pages','posts','workshops','events') CHARACTER SET ascii COLLATE ascii_bin DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
   `text` text NOT NULL,
   `rank` int(8) UNSIGNED DEFAULT NULL,
-  `status` smallint(6) NOT NULL,
-  `owner` int(8) UNSIGNED NOT NULL,
-  `created` datetime NOT NULL,
-  `updated` datetime NOT NULL,
-  `updated_by` int(8) UNSIGNED NOT NULL,
-  `currently_updated_by` int(8) UNSIGNED NOT NULL,
-  `currently_updated_start` datetime NOT NULL
+  `status` smallint(6) DEFAULT NULL,
+  `owner` int(8) UNSIGNED DEFAULT NULL,
+  `created` datetime DEFAULT NULL,
+  `updated` datetime DEFAULT NULL,
+  `updated_by` int(8) UNSIGNED DEFAULT NULL,
+  `currently_updated_by` int(8) UNSIGNED DEFAULT NULL,
+  `currently_updated_start` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -2245,20 +2252,20 @@ CREATE TABLE `posts` (
   `uid` int(8) UNSIGNED DEFAULT NULL,
   `blog_id` int(8) UNSIGNED DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
-  `text` text NOT NULL,
-  `url` varchar(255) NOT NULL,
-  `city` varchar(255) NOT NULL,
-  `author` varchar(255) NOT NULL,
-  `image` varchar(150) NOT NULL,
-  `image_alt_text` varchar(255) NOT NULL,
-  `publish` date NOT NULL,
-  `status` smallint(6) NOT NULL,
-  `owner` int(8) UNSIGNED NOT NULL,
-  `created` datetime NOT NULL,
-  `updated` datetime NOT NULL,
-  `updated_by` int(8) UNSIGNED NOT NULL,
-  `currently_updated_by` int(8) UNSIGNED NOT NULL,
-  `currently_updated_start` datetime NOT NULL
+  `text` text,
+  `url` varchar(255) DEFAULT NULL,
+  `city` varchar(255) DEFAULT NULL,
+  `author` varchar(255) DEFAULT NULL,
+  `image` varchar(150) DEFAULT NULL,
+  `image_alt_text` varchar(255) DEFAULT NULL,
+  `publish` date DEFAULT NULL,
+  `status` smallint(6) DEFAULT NULL,
+  `owner` int(8) UNSIGNED DEFAULT NULL,
+  `created` datetime DEFAULT NULL,
+  `updated` datetime DEFAULT NULL,
+  `updated_by` int(8) UNSIGNED DEFAULT NULL,
+  `currently_updated_by` int(8) UNSIGNED DEFAULT NULL,
+  `currently_updated_start` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -2270,7 +2277,7 @@ CREATE TABLE `posts` (
 DROP TABLE IF EXISTS `roots`;
 CREATE TABLE `roots` (
   `uid` int(8) UNSIGNED NOT NULL,
-  `object_type` enum('pages','users','posts','workshops','events','coaches','votings','photos','info_sheets') CHARACTER SET ascii COLLATE ascii_bin NOT NULL
+  `object_type` enum('pages','users','posts','workshops','events','coaches','votings','photos','info_sheets') CHARACTER SET ascii COLLATE ascii_bin DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -2364,11 +2371,11 @@ INSERT INTO `roots` (`uid`, `object_type`) VALUES
 DROP TABLE IF EXISTS `skills`;
 CREATE TABLE `skills` (
   `id` int(11) NOT NULL,
-  `name` varchar(100) COLLATE utf8_bin NOT NULL,
-  `status` smallint(6) NOT NULL,
+  `name` varchar(100) COLLATE utf8_bin DEFAULT NULL,
+  `status` smallint(6) DEFAULT NULL,
   `owner` int(10) UNSIGNED DEFAULT NULL,
-  `created` datetime NOT NULL,
-  `modified` datetime NOT NULL
+  `created` datetime DEFAULT NULL,
+  `modified` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- --------------------------------------------------------
@@ -2380,10 +2387,10 @@ CREATE TABLE `skills` (
 DROP TABLE IF EXISTS `third_party_statistics`;
 CREATE TABLE `third_party_statistics` (
   `id` int(11) NOT NULL,
-  `category_id` int(10) UNSIGNED NOT NULL,
-  `date_from` date NOT NULL,
-  `date_to` date NOT NULL,
-  `repaired` int(10) UNSIGNED NOT NULL
+  `category_id` int(10) UNSIGNED DEFAULT NULL,
+  `date_from` date DEFAULT NULL,
+  `date_to` date DEFAULT NULL,
+  `repaired` int(10) UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -2397,33 +2404,33 @@ CREATE TABLE `users` (
   `_id` int(8) NOT NULL,
   `uid` int(8) UNSIGNED DEFAULT NULL,
   `password` char(60) DEFAULT NULL,
-  `email` varchar(255) NOT NULL,
+  `email` varchar(255) DEFAULT NULL,
   `nick` varchar(25) DEFAULT NULL,
   `firstname` varchar(100) DEFAULT NULL,
   `lastname` varchar(100) DEFAULT NULL,
-  `about_me` varchar(999) NOT NULL,
-  `website` varchar(255) NOT NULL,
+  `about_me` varchar(999) DEFAULT NULL,
+  `website` varchar(255) DEFAULT NULL,
   `zip` varchar(10) DEFAULT NULL,
-  `street` varchar(255) NOT NULL,
-  `city` varchar(255) NOT NULL,
-  `country_code` char(2) NOT NULL,
-  `phone` varchar(24) NOT NULL,
-  `twitter_username` varchar(99) NOT NULL,
-  `feed_url` varchar(99) NOT NULL,
-  `facebook_username` varchar(99) NOT NULL,
-  `additional_contact` varchar(255) NOT NULL,
-  `status` smallint(6) NOT NULL,
-  `owner` int(8) UNSIGNED NOT NULL,
-  `created` datetime NOT NULL,
-  `updated` datetime NOT NULL,
-  `updated_by` int(8) UNSIGNED NOT NULL,
-  `currently_updated_by` int(8) UNSIGNED NOT NULL,
-  `currently_updated_start` datetime NOT NULL,
-  `image` varchar(255) NOT NULL,
-  `image_alt_text` varchar(99) NOT NULL,
-  `lang` varchar(3) NOT NULL,
-  `private` text NOT NULL,
-  `confirm` text NOT NULL,
+  `street` varchar(255) DEFAULT NULL,
+  `city` varchar(255) DEFAULT NULL,
+  `country_code` char(2) DEFAULT NULL,
+  `phone` varchar(24) DEFAULT NULL,
+  `twitter_username` varchar(99) DEFAULT NULL,
+  `feed_url` varchar(99) DEFAULT NULL,
+  `facebook_username` varchar(99) DEFAULT NULL,
+  `additional_contact` varchar(255) DEFAULT NULL,
+  `status` smallint(6) DEFAULT NULL,
+  `owner` int(8) UNSIGNED DEFAULT NULL,
+  `created` datetime DEFAULT NULL,
+  `updated` datetime DEFAULT NULL,
+  `updated_by` int(8) UNSIGNED DEFAULT NULL,
+  `currently_updated_by` int(8) UNSIGNED DEFAULT NULL,
+  `currently_updated_start` datetime DEFAULT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `image_alt_text` varchar(99) DEFAULT NULL,
+  `lang` varchar(3) DEFAULT NULL,
+  `private` text,
+  `confirm` text,
   `privacy_policy_accepted` tinyint(4) UNSIGNED NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -2473,8 +2480,8 @@ DROP TABLE IF EXISTS `users_workshops`;
 CREATE TABLE `users_workshops` (
   `user_uid` int(8) NOT NULL,
   `workshop_uid` int(8) NOT NULL,
-  `created` datetime NOT NULL,
-  `approved` datetime NOT NULL
+  `created` datetime DEFAULT NULL,
+  `approved` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -2488,10 +2495,10 @@ CREATE TABLE `worknews` (
   `id` int(255) NOT NULL,
   `workshop_uid` int(8) NOT NULL,
   `email` varchar(255) NOT NULL,
-  `created` datetime NOT NULL,
-  `modified` datetime NOT NULL,
-  `confirm` text NOT NULL,
-  `unsub` text NOT NULL
+  `created` datetime DEFAULT NULL,
+  `modified` datetime DEFAULT NULL,
+  `confirm` text,
+  `unsub` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -2505,37 +2512,37 @@ CREATE TABLE `workshops` (
   `_id` int(8) NOT NULL,
   `uid` int(8) UNSIGNED DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
-  `text` text NOT NULL,
-  `url` varchar(255) NOT NULL,
-  `zip` varchar(10) NOT NULL,
-  `street` varchar(255) NOT NULL,
-  `city` varchar(255) NOT NULL,
-  `adresszusatz` varchar(255) NOT NULL,
-  `country_code` char(2) NOT NULL,
-  `email` varchar(255) NOT NULL,
+  `text` text,
+  `url` varchar(255) DEFAULT NULL,
+  `zip` varchar(10) DEFAULT NULL,
+  `street` varchar(255) DEFAULT NULL,
+  `city` varchar(255) DEFAULT NULL,
+  `adresszusatz` varchar(255) DEFAULT NULL,
+  `country_code` char(2) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
   `website` varchar(255) DEFAULT NULL,
-  `feed_url` varchar(255) NOT NULL,
-  `twitter_username` varchar(255) NOT NULL,
-  `facebook_username` varchar(255) NOT NULL,
-  `additional_contact` varchar(255) NOT NULL,
-  `image` varchar(150) NOT NULL,
-  `image_alt_text` varchar(255) NOT NULL,
+  `feed_url` varchar(255) DEFAULT NULL,
+  `twitter_username` varchar(255) DEFAULT NULL,
+  `facebook_username` varchar(255) DEFAULT NULL,
+  `additional_contact` varchar(255) DEFAULT NULL,
+  `image` varchar(150) DEFAULT NULL,
+  `image_alt_text` varchar(255) DEFAULT NULL,
   `use_custom_coordinates` tinyint(4) UNSIGNED NOT NULL DEFAULT '0',
-  `lat` double NOT NULL,
-  `lng` double NOT NULL,
-  `traeger` varchar(255) NOT NULL,
-  `rechtsform` varchar(255) NOT NULL,
-  `rechtl_vertret` varchar(255) NOT NULL,
+  `lat` double DEFAULT '0',
+  `lng` double DEFAULT '0',
+  `traeger` varchar(255) DEFAULT NULL,
+  `rechtsform` varchar(255) DEFAULT NULL,
+  `rechtl_vertret` varchar(255) DEFAULT NULL,
   `show_statistics` tinyint(3) UNSIGNED NOT NULL DEFAULT '1',
-  `status` smallint(6) NOT NULL,
-  `owner` int(8) UNSIGNED NOT NULL,
-  `created` datetime NOT NULL,
-  `updated` datetime NOT NULL,
-  `updated_by` int(8) UNSIGNED NOT NULL,
-  `currently_updated_by` int(8) UNSIGNED NOT NULL,
-  `currently_updated_start` datetime NOT NULL,
-  `lang` varchar(3) NOT NULL,
-  `other_users` text NOT NULL
+  `status` smallint(6) DEFAULT NULL,
+  `owner` int(8) UNSIGNED DEFAULT NULL,
+  `created` datetime DEFAULT NULL,
+  `updated` datetime DEFAULT NULL,
+  `updated_by` int(8) UNSIGNED DEFAULT NULL,
+  `currently_updated_by` int(8) UNSIGNED DEFAULT NULL,
+  `currently_updated_start` datetime DEFAULT NULL,
+  `lang` varchar(3) DEFAULT NULL,
+  `other_users` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -2860,7 +2867,7 @@ ALTER TABLE `roots`
 -- AUTO_INCREMENT für Tabelle `skills`
 --
 ALTER TABLE `skills`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT für Tabelle `third_party_statistics`
