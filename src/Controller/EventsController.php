@@ -561,7 +561,7 @@ class EventsController extends AppController
         
         $query = $this->Events->find('all', [
             'conditions' => $conditions,
-        ])->distinct(['Events.uid']);
+        ]);
         
         $keyword = '';
         if (!empty($this->request->getQuery('keyword'))) {
