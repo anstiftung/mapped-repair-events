@@ -5,7 +5,6 @@ namespace App\Test\TestCase\Controller;
 use App\Test\TestCase\Traits\HtmlOutputAssertionsTrait;
 use App\Test\TestCase\Traits\LogFileAssertionsTrait;
 use Cake\Core\Configure;
-use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
 
