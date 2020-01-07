@@ -174,7 +174,9 @@ if (!isset($hideDeleteLink) || !$hideDeleteLink) {
                                 }
                             } else {
                                     if (isset($splittedField[1])) {
-                                        $value = $object->{$splittedField[0]}[$splittedField[1]];
+                                        if (!is_null($object->{$splittedField[0]})) {
+                                            $value = $object->{$splittedField[0]}[$splittedField[1]];
+                                        }
                                     } else {
                                         $value = $object[$splittedField[0]];
                                     }                            
