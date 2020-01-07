@@ -77,7 +77,9 @@ class MyHtmlHelper extends HtmlHelper {
         $result .= ' km mit dem Flugzeug';
         
         if (isset($humanUnderstandableComparisonString)) {
-            $result .= ', entspricht ca. ' . $this->roundUpToAny($humanUnderstandableComparisonFactor, 2) . 'x ' . $humanUnderstandableComparisonString;
+            $result .= ', entspricht ca. ' . $this->Number->format(
+                $this->roundUpToAny($humanUnderstandableComparisonFactor, 2)
+            ) . 'x ' . $humanUnderstandableComparisonString;
         }
         
         return $result;
