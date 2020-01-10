@@ -67,6 +67,7 @@ class CommonComponent extends AppComponent {
 	    $config->set('Cache.SerializerPath', TMP . 'cache' . DS . 'html_purifier');
 	    $config->set('HTML.SafeIframe', true);
 	    $config->set('Attr.AllowedFrameTargets', ['_blank']);
+	    $config->set('Attr.EnableID', true); // enables anchors: <a name="xxx">Text</a>
 	    if ($this->controller->AppAuth->isAdmin()) {
 	        $config->set('URI.SafeIframeRegexp', '%(.*)%');
 	    } else {
