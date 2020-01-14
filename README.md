@@ -52,4 +52,3 @@
     <img src="https://anstiftung.de/images/anstiftung-logo.svg" alt="anstiftung" />
   </a>
 </h1>
-
