@@ -149,6 +149,7 @@ class UsersControllerTest extends TestCase
                 ]
             ]
         );
+        echo $this->_response;
         $this->assertResponseContains('Der Server-Name ist nicht gültig.');
         $this->assertNoRedirect();
     }
