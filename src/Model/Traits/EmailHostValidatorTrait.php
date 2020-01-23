@@ -16,6 +16,9 @@ trait EmailHostValidatorTrait {
     }
     
     public function validateEmailHostExisting($email) {
+        if (!function_exists('curl_version')) {
+            return true;
+        }
         $url = explode('@', $email)[1];
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_HEADER, true);    // we want headers
