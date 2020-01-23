@@ -1,12 +1,15 @@
 <?php
 
 namespace App\Model\Table;
+use App\Model\Traits\EmailHostValidatorTrait;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
 class NewslettersTable extends Table
 {
  
+    use EmailHostValidatorTrait;
+    
     public function initialize(array $config)
     {
         parent::initialize($config);
@@ -22,6 +25,7 @@ class NewslettersTable extends Table
             'provider' => 'table',
             'message' => 'Diese E-Mail-Adresse wird bereits verwendet.'
         ]);
+        $validator = $this->addValidEmailHost($validator);
         $validator->allowEmptyString('plz');
         $validator->add('plz', 'validFormat', [
             'rule' => ['custom', ZIP_REGEX],

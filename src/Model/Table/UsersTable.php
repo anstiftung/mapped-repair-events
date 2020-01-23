@@ -2,6 +2,7 @@
 namespace App\Model\Table;
 
 use App\Controller\Component\StringComponent;
+use App\Model\Traits\EmailHostValidatorTrait;
 use Cake\Auth\DefaultPasswordHasher;
 use Cake\Core\Configure;
 use Cake\Validation\Validator;
@@ -10,6 +11,8 @@ use Cake\ORM\TableRegistry;
 class UsersTable extends AppTable
 {
 
+    use EmailHostValidatorTrait;
+    
     public $name_de = 'User';
 
     public $allowedBasicHtmlFields = [
@@ -214,6 +217,7 @@ class UsersTable extends AppTable
             'provider' => 'table',
             'message' => 'Diese E-Mail-Adresse wird bereits verwendet.'
         ]);
+        $validator = $this->addValidEmailHost($validator);
         
         $validator->requirePresence('zip', true, 'Bitte trage deine PLZ ein.');
         $validator->notEmptyString('zip', 'Bitte trage deine PLZ ein.');
