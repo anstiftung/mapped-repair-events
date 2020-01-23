@@ -24,7 +24,7 @@ class UsersControllerTest extends TestCase
         'firstname' => 'John<img onerror="alert();" />',
         'lastname' => 'DoeA',
         'zip' => '12345',
-        'email' => 'johndoeA@example.com',
+        'email' => 'johndoeA@mailinator.com',
         'privacy_policy_accepted' => 1
     ];
     
@@ -130,7 +130,7 @@ class UsersControllerTest extends TestCase
             [
                 'antiSpam' => 100,
                 'Users' => [
-                    'email' => 'johndoe@example.com',
+                    'email' => 'johndoe@mailinator.com',
                 ]
             ]
         );

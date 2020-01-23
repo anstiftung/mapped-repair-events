@@ -128,7 +128,7 @@ class EventsControllerTest extends TestCase
         $this->Event->save($patchedEntity);
         $this->doTestEditForm(true);
         $this->assertMailCount(1);
-        $this->assertMailSentTo('worknews-test@example.com');
+        $this->assertMailSentTo('worknews-test@mailinator.com');
     }
     
     private function doTestEditForm($renotify)
