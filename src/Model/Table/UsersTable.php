@@ -207,7 +207,7 @@ class UsersTable extends AppTable
         $validator->minLength('city', 2, 'Mindestens 2 Zeichen bitte (Ort).');
         
         $validator->notEmptyString('email', 'Bitte trage deine E-Mail-Adresse ein.');
-        $validator->requirePresence('email', true, 'Bitte trage eine E-Mail-Adresse ein.');
+        $validator->requirePresence('email', true, 'Bitte trage deine E-Mail-Adresse ein.');
         $validator->email('email', true, 'Bitte trage eine gültige E-Mail-Adresse ein.');
         $validator->add('email', 'unique', [
             'rule' => 'validateUnique',
