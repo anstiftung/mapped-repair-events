@@ -3,6 +3,7 @@ dist: xenial
 
 php:
   - 7.3
+  - 7.4
 
 services:
   - mysql
@@ -11,7 +12,6 @@ before_install:
  - mysql -e 'CREATE DATABASE db_default;'
  - mysql db_default < ./config/sql/database.sql;
  - mysql -e 'CREATE DATABASE db_test;'
- - mysql -e 'SET GLOBAL sql_mode = "NO_ENGINE_SUBSTITUTION";'
 
 before_script:
   - composer install --optimize-autoloader
