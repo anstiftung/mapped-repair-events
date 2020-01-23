@@ -138,6 +138,21 @@ class UsersControllerTest extends TestCase
         $this->assertNoRedirect();
     }
     
+    public function testRegisterValidationsEmailHost()
+    {
+        $this->post(
+            Configure::read('AppConfig.htmlHelper')->urlRegisterOrga(),
+            [
+                'antiSpam' => 100,
+                'Users' => [
+                    'email' => 'johndoe@example.com',
+                ]
+            ]
+        );
+        $this->assertResponseContains('Der Server-Name ist nicht gültig.');
+        $this->assertNoRedirect();
+    }
+    
     public function testRegisterNewsletter()
     {
         $this->validUserData['i_want_to_receive_the_newsletter'] = 1;
