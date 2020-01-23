@@ -140,10 +140,6 @@ class UsersControllerTest extends TestCase
     
     public function testRegisterValidationsEmailHost()
     {
-        if (!function_exists('curl_version')) {
-            $this->markTestSkipped('curl not available');
-        }
-        
         $this->post(
             Configure::read('AppConfig.htmlHelper')->urlRegisterOrga(),
             [
@@ -153,6 +149,7 @@ class UsersControllerTest extends TestCase
                 ]
             ]
         );
+        echo $this->_response;
         $this->assertResponseContains('Der Server-Name ist nicht gültig.');
         $this->assertNoRedirect();
     }
