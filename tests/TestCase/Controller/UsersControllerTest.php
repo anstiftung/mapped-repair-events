@@ -145,11 +145,10 @@ class UsersControllerTest extends TestCase
             [
                 'antiSpam' => 100,
                 'Users' => [
-                    'email' => 'johndoe@example.com',
+                    'email' => 'johndoe@gadsfadsewcadfaees.com',
                 ]
             ]
         );
-        echo $this->_response;
         $this->assertResponseContains('Der Server-Name ist nicht gültig.');
         $this->assertNoRedirect();
     }
