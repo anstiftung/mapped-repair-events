@@ -2,7 +2,6 @@
 namespace App\Model\Table;
 
 use App\Controller\Component\StringComponent;
-use App\Model\Traits\EmailHostValidatorTrait;
 use Cake\Auth\DefaultPasswordHasher;
 use Cake\Core\Configure;
 use Cake\Validation\Validator;
@@ -11,8 +10,6 @@ use Cake\ORM\TableRegistry;
 class UsersTable extends AppTable
 {
 
-    use EmailHostValidatorTrait;
-    
     public $name_de = 'User';
 
     public $allowedBasicHtmlFields = [
@@ -210,14 +207,13 @@ class UsersTable extends AppTable
         $validator->minLength('city', 2, 'Mindestens 2 Zeichen bitte (Ort).');
         
         $validator->notEmptyString('email', 'Bitte trage deine E-Mail-Adresse ein.');
-        $validator->requirePresence('email', true, 'Bitte trage deine E-Mail-Adresse ein.');
-        $validator->email('email', false, 'Die E-Mail-Adresse ist ungültig.');
+        $validator->requirePresence('email', true, 'Bitte trage eine E-Mail-Adresse ein.');
+        $validator->email('email', true, 'Bitte trage eine gültige E-Mail-Adresse ein.');
         $validator->add('email', 'unique', [
             'rule' => 'validateUnique',
             'provider' => 'table',
             'message' => 'Diese E-Mail-Adresse wird bereits verwendet.'
         ]);
-        $validator = $this->addValidEmailHost($validator);
         
         $validator->requirePresence('zip', true, 'Bitte trage deine PLZ ein.');
         $validator->notEmptyString('zip', 'Bitte trage deine PLZ ein.');

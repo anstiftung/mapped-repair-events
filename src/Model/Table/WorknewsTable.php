@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Model\Table;
-use App\Model\Traits\EmailHostValidatorTrait;
 use Cake\Core\Configure;
 use Cake\Mailer\Email;
 use Cake\ORM\Table;
@@ -10,8 +9,6 @@ use Cake\Validation\Validator;
 class WorknewsTable extends Table
 {
  
-    use EmailHostValidatorTrait;
-    
     public function initialize(array $config)
     {
         parent::initialize($config);
@@ -23,14 +20,13 @@ class WorknewsTable extends Table
     
     public function validationDefault(Validator $validator)
     {
-        $validator->email('email', false, 'Bitte trage eine gültige E-Mail ein.');
+        $validator->email('email', true, 'Bitte trage eine gültige E-Mail-Adresse ein.');
         $validator->notEmptyString('email', 'Bitte trage deine E-Mail-Adresse ein.');
         $validator->add('email', 'unique', [
             'rule' => ['validateUnique', ['scope' => 'workshop_uid']],
             'provider' => 'table',
             'message' => 'Diese E-Mail-Adresse wird bereits verwendet.'
         ]);
-        $validator = $this->addValidEmailHost($validator);
         return $validator;
     }
     

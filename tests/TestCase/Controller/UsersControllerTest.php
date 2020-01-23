@@ -138,7 +138,7 @@ class UsersControllerTest extends TestCase
         $this->assertNoRedirect();
     }
     
-    public function testRegisterValidationsEmailHost()
+    public function testRegisterValidationsMxRecord()
     {
         $this->post(
             Configure::read('AppConfig.htmlHelper')->urlRegisterOrga(),
@@ -149,7 +149,7 @@ class UsersControllerTest extends TestCase
                 ]
             ]
         );
-        $this->assertResponseContains('Der Server-Name ist nicht gültig.');
+        $this->assertResponseContains('Bitte trage eine gültige E-Mail-Adresse ein.');
         $this->assertNoRedirect();
     }
     

@@ -1,15 +1,12 @@
 <?php
 namespace App\Model\Table;
 
-use App\Model\Traits\EmailHostValidatorTrait;
 use Cake\Validation\Validator;
 use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
 
 class WorkshopsTable extends AppTable
 {
-
-    use EmailHostValidatorTrait;
     
     public $name_de = '';
 
@@ -93,8 +90,7 @@ class WorkshopsTable extends AppTable
         $validator = $this->addBlockedWorkshopSlugsValidationRule($validator);
         $validator->url('website', 'Bitte trage eine gültige Url ein.');
         $validator->allowEmptyString('website');
-        $validator->email('email', false, 'Bitte trage eine gültige E-Mail ein.');
-        $validator = $this->addValidEmailHost($validator);
+        $validator->email('email', true, 'Bitte trage eine gültige E-Mail-Adresse ein.');
         $validator->notEmptyString('email', 'Bitte trage deine E-Mail-Adresse ein.');
         return $validator;
     }
