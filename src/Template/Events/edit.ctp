@@ -60,7 +60,7 @@ $this->element('addScript', ['script' =>
                     ]);
                 } else {
                     // duplicate mode
-                    echo $this->Form->hidden($i.'.workshop_uid', ['value' => $preselectedWorkshopUid]);
+                    echo $this->Form->hidden($i.'.workshop_uid', ['value' => $preselectedWorkshopUid, 'id' => '0-workshop-uid']);
                 }
             }
             
