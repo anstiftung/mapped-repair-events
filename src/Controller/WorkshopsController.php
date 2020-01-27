@@ -1006,7 +1006,7 @@ class WorkshopsController extends AppController
             ]
         ])->first();
         $this->set([
-            'status' => 1,
+            'status' => 0,
             'message' => 'ok',
             'workshop' => $workshop,
         ]);
