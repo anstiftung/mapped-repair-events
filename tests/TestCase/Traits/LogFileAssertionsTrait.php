@@ -6,7 +6,7 @@ use Cake\Filesystem\File;
 trait LogFileAssertionsTrait
 {
     
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->resetLogs();
@@ -23,7 +23,7 @@ trait LogFileAssertionsTrait
         $this->getLogFile('error')->write('');
     }
     
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
         $this->assertLogFilesForErrors();

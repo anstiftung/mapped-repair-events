@@ -37,9 +37,7 @@
                 $action .= '/?login='.$this->request->getQuery('login');
             }
             
-            echo $this->Form->create('User', ['url' => $action]);
-            
-    	    echo $this->Form->create('User', ['url' => $action]);
+            echo $this->Form->create($loggedUser, ['url' => $action]);
     	    echo $this->Form->control('email', ['label' =>  __('Loginbox:Email'), 'value' => '']);
     	    echo $this->Form->control('password', ['label' => __('Loginbox:Pass'), 'value' => '']);
 		?> 

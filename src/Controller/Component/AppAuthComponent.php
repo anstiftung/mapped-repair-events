@@ -12,7 +12,8 @@ class AppAuthComponent extends AuthComponent {
     
     public $controller;
     
-    public function flash($message) {
+    public function flash($message): void
+    {
         $this->AppFlash->setFlashError($message);
     }
 
