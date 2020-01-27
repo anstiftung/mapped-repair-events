@@ -394,8 +394,8 @@ class EventsController extends AppController
                 $preparedData[] = $data;
                 $i++;
             }
-            
-            $events = $this->Event->patchEntities($events[0], $preparedData);
+
+            $events = $this->Event->patchEntities($events, $preparedData);
             
             $hasErrors = false;
             foreach($events as $event) {
