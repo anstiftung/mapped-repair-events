@@ -191,7 +191,7 @@ class UsersController extends AppController
         ];
         $this->set('metaTags', $metaTags);
         
-        $user = $this->User->newEntity();
+        $user = $this->User->newEntity([]);
         
         if (! empty($this->request->getData())) {
             
@@ -411,14 +411,14 @@ class UsersController extends AppController
         ];
         $this->set('metaTags', $metaTags);
         
-        $user = $this->User->newEntity();
+        $user = $this->User->newEntity([]);
         $this->set('user', $user);
         
         if (empty($this->request->getData())) {
             return;
         }
         
-        $user = $this->User->newEntity();
+        $user = $this->User->newEntity([]);
         $this->set('user', $user);
         
         $userUid = $this->AppAuth->getUserUid();
@@ -593,7 +593,7 @@ class UsersController extends AppController
         
         $this->set('groups', Configure::read('AppConfig.htmlHelper')->getUserGroupsForRegistration());
         
-        $user = $this->User->newEntity();
+        $user = $this->User->newEntity([]);
         
         if (! empty($this->request->getData())) {
             
