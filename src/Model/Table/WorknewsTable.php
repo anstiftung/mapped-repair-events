@@ -2,7 +2,7 @@
 
 namespace App\Model\Table;
 use Cake\Core\Configure;
-use Cake\Mailer\Email;
+use Cake\Mailer\Mailer;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
@@ -46,7 +46,7 @@ class WorknewsTable extends Table
     
     public function sendNotifications($subscribers, $subject, $template, $workshop, $event)
     {
-        $email = new Email('default');
+        $email = new Mailer('default');
         $email->viewBuilder()->setTemplate($template);
         foreach ($subscribers as $subscriber) {
             $email->setTo($subscriber->email)

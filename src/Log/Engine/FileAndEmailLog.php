@@ -1,7 +1,7 @@
 <?php
 namespace App\Log\Engine;
 
-use Cake\Mailer\Email;
+use Cake\Mailer\Mailer;
 use Cake\Core\Configure;
 use Cake\Log\Engine\FileLog;
 use Cake\Network\Exception\SocketException;
@@ -42,7 +42,7 @@ class FileAndEmailLog extends FileLog
         
         $subject = 'ErrorLog RepIni: ' . Text::truncate($message, 90) . ' ' . date('Y-m-d H:i:s');
         try {
-            $email = new Email('default');
+            $email = new Mailer('default');
             $email->viewBuilder()->setTemplate('debug');
             $email->setTo(Configure::read('AppConfig.debugMailAddress'))
             ->setEmailFormat('html')

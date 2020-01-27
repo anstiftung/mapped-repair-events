@@ -6,7 +6,7 @@ use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
 use Cake\Event\EventInterface;
 use Cake\I18n\Time;
-use Cake\Mailer\Email;
+use Cake\Mailer\Mailer;
 use Cake\Http\Exception\ForbiddenException;
 use Cake\Http\Exception\NotFoundException;
 use Cake\ORM\TableRegistry;
@@ -436,7 +436,7 @@ class WorkshopsController extends AppController
             if (!($worknews->hasErrors())) {
                 $this->Worknews->save($worknews);
                 
-                $email = new Email('default');
+                $email = new Mailer('default');
                 $email->viewBuilder()->setTemplate('activate_worknews');
                 $email->setSubject(__('Please activate your worknews subscription'))
                     ->setViewVars([
@@ -692,7 +692,7 @@ class WorkshopsController extends AppController
         $this->connection->execute($query, $params);
         
         /* START email-versand an anfrage-steller */
-        $email = new Email('default');
+        $email = new Mailer('default');
         $email->viewBuilder()->setTemplate('workshop_application_approved');
         $email->setSubject('Deine Anfrage zur Mitarbeit wurde bestätigt.')
             ->setViewVars([
@@ -797,7 +797,7 @@ class WorkshopsController extends AppController
                     $user->revertPrivatizeData();
                 }
                 
-                $email = new Email('default');
+                $email = new Mailer('default');
                 $email->viewBuilder()->setTemplate('workshop_application');
                 $email->setSubject($subject)
                     ->setViewVars([
@@ -930,7 +930,7 @@ class WorkshopsController extends AppController
         $this->Workshop->save($entity);
         
         // send email to orga users and admin
-        $email = new Email('default');
+        $email = new Mailer('default');
         $email->viewBuilder()->setTemplate('workshop_deleted');
         $email->setSubject(Configure::read('AppConfig.initiativeNameSingular') . ' "'.$workshop->name.'" erfolgreich gelöscht')
             ->setViewVars([

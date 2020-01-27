@@ -4,7 +4,7 @@ namespace App\Controller;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use Cake\I18n\FrozenTime;
-use Cake\Mailer\Email;
+use Cake\Mailer\Mailer;
 use Cake\Http\Exception\ForbiddenException;
 use Cake\Http\Exception\NotFoundException;
 use Cake\ORM\TableRegistry;
@@ -229,7 +229,7 @@ class EventsController extends AppController
                 ]);
 
                 if (!empty($subscribers)) {
-                    $email = new Email('default');
+                    $email = new Mailer('default');
                     $email->viewBuilder()->setTemplate('event_deleted');
                     foreach ($subscribers as $subscriber) {
                         $email->setTo($subscriber->email)
