@@ -9,7 +9,7 @@ class EventsCategoriesFixture extends TestFixture
 {
     public $import = ['table' => 'events_categories', 'connection' => 'default'];
     
-    public function init()
+    public function init(): void
     {
         $this->records = [
             [

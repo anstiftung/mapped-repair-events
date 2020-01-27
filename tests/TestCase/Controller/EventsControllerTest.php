@@ -2,7 +2,7 @@
 
 namespace App\Test\TestCase\Controller;
 
-use App\Test\TestCase\Traits\LoadAllFixturesTrait;
+use App\Test\TestCase\AppTestCase;
 use App\Test\TestCase\Traits\LogFileAssertionsTrait;
 use App\Test\TestCase\Traits\LoginTrait;
 use App\Test\TestCase\Traits\UserAssertionsTrait;
@@ -11,11 +11,10 @@ use Cake\ORM\TableRegistry;
 use Cake\TestSuite\EmailTrait;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\StringCompareTrait;
-use Cake\TestSuite\TestCase;
 use Cake\I18n\FrozenDate;
 use Cake\I18n\FrozenTime;
 
-class EventsControllerTest extends TestCase
+class EventsControllerTest extends AppTestCase
 {
     use LoginTrait;
     use IntegrationTestTrait;
@@ -23,7 +22,6 @@ class EventsControllerTest extends TestCase
     use EmailTrait;
     use StringCompareTrait;
     use LogFileAssertionsTrait;
-    use LoadAllFixturesTrait;
     
     private $newEventData;
     

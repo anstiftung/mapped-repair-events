@@ -111,7 +111,7 @@ class EventsTable extends AppTable
         ];
     }
     
-    public function findAll(Query $query, array $options)
+    public function findAll(Query $query, array $options): Query
     {
         return $query->formatResults(function (\Cake\Collection\CollectionInterface $results) {
             

@@ -364,12 +364,12 @@ class WorkshopsController extends AppController
             
         }
         
-        $this->set('data', [
+        $this->set([
             'status' => 1,
             'message' => 'ok',
             'workshops' => $preparedWorkshops
         ]);
-        $this->set('_serialize', 'data');
+        $this->viewBuilder()->setOption('serialize', ['status', 'message', 'workshops']);
         
     }
     
@@ -1005,12 +1005,13 @@ class WorkshopsController extends AppController
                 'Categories'
             ]
         ])->first();
-        $this->set('data', [
-            'status' => 0,
+        $this->set([
+            'status' => 1,
             'message' => 'ok',
-            'workshop' => $workshop
+            'workshop' => $workshop,
         ]);
-        $this->set('_serialize', 'data');
+        $this->viewBuilder()->setOption('serialize', ['status', 'message', 'workshop']);
+        
     }
 
     public function all() {

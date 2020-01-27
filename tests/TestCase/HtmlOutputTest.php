@@ -2,40 +2,17 @@
 
 namespace App\Test\TestCase\Controller;
 
+use App\Test\TestCase\AppTestCase;
 use App\Test\TestCase\Traits\HtmlOutputAssertionsTrait;
 use App\Test\TestCase\Traits\LogFileAssertionsTrait;
 use Cake\Core\Configure;
 use Cake\TestSuite\IntegrationTestTrait;
-use Cake\TestSuite\TestCase;
 
-class HtmlOutputTest extends TestCase
+class HtmlOutputTest extends AppTestCase
 {
     use IntegrationTestTrait;
     use HtmlOutputAssertionsTrait;
     use LogFileAssertionsTrait;
-    
-    public $fixtures = [
-        'app.Blogs',
-        'app.Categories',
-        'app.Countries',
-        'app.Events',
-        'app.EventsCategories',
-        'app.Groups',
-        'app.InfoSheets',
-        'app.Metatags',
-        'app.Pages',
-        'app.Photos',
-        'app.Posts',
-        'app.Skills',
-        'app.Users',
-        'app.UsersCategories',
-        'app.UsersGroups',
-        'app.UsersSkills',
-        'app.UsersWorkshops',
-        'app.Worknews',
-        'app.Workshops',
-        'app.WorkshopsCategories'
-    ];
     
     public function testHome()
     {

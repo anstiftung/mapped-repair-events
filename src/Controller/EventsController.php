@@ -480,12 +480,12 @@ class EventsController extends AppController
                 });
             }
         }
-        $this->set('data', [
+        $this->set([
             'status' => 1,
             'message' => 'ok',
             'events' => $this->combineEventsForMap($events)
         ]);
-        $this->set('_serialize', 'data');
+        $this->viewBuilder()->setOption('serialize', ['status', 'message', 'events']);
     }
     
     function all()

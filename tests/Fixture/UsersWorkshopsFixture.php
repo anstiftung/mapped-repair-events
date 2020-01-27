@@ -9,7 +9,7 @@ class UsersWorkshopsFixture extends TestFixture
 {
     public $import = ['table' => 'users_workshops', 'connection' => 'default'];
     
-    public function init()
+    public function init(): void
     {
         $this->records = [
             [

@@ -2,6 +2,7 @@
 
 namespace App\Test\TestCase\Controller;
 
+use App\Test\TestCase\AppTestCase;
 use App\Test\TestCase\Traits\LoadAllFixturesTrait;
 use App\Test\TestCase\Traits\LogFileAssertionsTrait;
 use App\Test\TestCase\Traits\LoginTrait;
@@ -10,16 +11,14 @@ use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\StringCompareTrait;
-use Cake\TestSuite\TestCase;
 
-class InfoSheetsControllerTest extends TestCase
+class InfoSheetsControllerTest extends AppTestCase
 {
     use LoginTrait;
     use IntegrationTestTrait;
     use UserAssertionsTrait;
     use StringCompareTrait;
     use LogFileAssertionsTrait;
-    use LoadAllFixturesTrait;
     
     private $newInfoSheetData = [
         'visitor_gender' => 'm',
