@@ -1,14 +1,14 @@
 <?php
 namespace App\Controller;
 
-use Cake\Event\Event;
+use Cake\Event\EventInterface;
 use Cake\ORM\TableRegistry;
 use Cake\Http\Exception\NotFoundException;
 
 class SitemapsController extends AppController
 {
 
-    public function beforeFilter(Event $event)
+    public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);
         $this->AppAuth->allow([

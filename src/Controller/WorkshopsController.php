@@ -4,7 +4,7 @@ namespace App\Controller;
 use App\Controller\Component\StringComponent;
 use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
-use Cake\Event\Event;
+use Cake\Event\EventInterface;
 use Cake\I18n\Time;
 use Cake\Mailer\Email;
 use Cake\Http\Exception\ForbiddenException;
@@ -15,7 +15,7 @@ use Cake\Utility\Inflector;
 class WorkshopsController extends AppController
 {
 
-    public function beforeFilter(Event $event) {
+    public function beforeFilter(EventInterface $event) {
         
         parent::beforeFilter($event);
         $this->Workshop = TableRegistry::getTableLocator()->get('Workshops');

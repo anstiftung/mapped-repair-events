@@ -14,7 +14,7 @@
  */
 namespace App\Controller;
 
-use Cake\Event\Event;
+use Cake\Event\EventInterface;
 
 /**
  * Error Handling Controller
@@ -24,7 +24,7 @@ use Cake\Event\Event;
 class ErrorController extends AppController
 {
 
-    public function beforeRender(Event $event)
+    public function beforeRender(EventInterface $event)
     {
         $this->viewBuilder()->setTemplatePath('Error');
         parent::beforeRender($event);

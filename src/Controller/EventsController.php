@@ -2,7 +2,7 @@
 namespace App\Controller;
 
 use Cake\Core\Configure;
-use Cake\Event\Event;
+use Cake\Event\EventInterface;
 use Cake\I18n\FrozenTime;
 use Cake\Mailer\Email;
 use Cake\Http\Exception\ForbiddenException;
@@ -12,7 +12,7 @@ use Cake\ORM\TableRegistry;
 class EventsController extends AppController
 {
     
-    public function beforeFilter(Event $event) {
+    public function beforeFilter(EventInterface $event) {
         
         parent::beforeFilter($event);
         $this->Event = TableRegistry::getTableLocator()->get('Events');
@@ -227,7 +227,7 @@ class EventsController extends AppController
                         'Worknews.confirm' => 'ok'
                     ]
                 ]);
-                
+
                 if (!empty($subscribers)) {
                     $email = new Email('default');
                     $email->viewBuilder()->setTemplate('event_deleted');

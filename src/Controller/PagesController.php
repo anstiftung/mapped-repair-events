@@ -17,7 +17,7 @@ namespace App\Controller;
 use Cake\Core\Configure;
 use Cake\Http\Exception\NotFoundException;
 use Cake\ORM\TableRegistry;
-use Cake\Event\Event;
+use Cake\Event\EventInterface;
 
 /**
  * Static content controller
@@ -29,7 +29,7 @@ use Cake\Event\Event;
 class PagesController extends AppController
 {
 
-    public function beforeFilter(Event $event)
+    public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);
         $this->AppAuth->allow([

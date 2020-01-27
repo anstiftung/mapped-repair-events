@@ -9,7 +9,7 @@ use Cake\ORM\TableRegistry;
 class ThirdPartyStatisticsTable extends Table
 {
 
-    public function initialize(array $config)
+    public function initialize(array $config): void
     {
         parent::initialize($config);
     }

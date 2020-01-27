@@ -15,7 +15,7 @@ class EventsTable extends AppTable
         'eventbeschreibung'
     ];
     
-    public function initialize(array $config)
+    public function initialize(array $config): void
     {
         parent::initialize($config);
         $this->belongsTo('Workshops', [
@@ -31,7 +31,7 @@ class EventsTable extends AppTable
         ]);
     }
     
-    public function validationDefault(Validator $validator)
+    public function validationDefault(Validator $validator): \Cake\Validation\Validator
     {
         $validator = $this->getNumberRangeValidator($validator, 'lat', -90, 90);
         $validator = $this->getNumberRangeValidator($validator, 'lng', -180, 180);

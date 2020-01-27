@@ -9,7 +9,7 @@ use Cake\Validation\Validator;
 class WorknewsTable extends Table
 {
  
-    public function initialize(array $config)
+    public function initialize(array $config): void
     {
         parent::initialize($config);
         $this->setPrimaryKey('id');
@@ -18,7 +18,7 @@ class WorknewsTable extends Table
         ]);
     }
     
-    public function validationDefault(Validator $validator)
+    public function validationDefault(Validator $validator): \Cake\Validation\Validator
     {
         $validator->email('email', true, 'Bitte trage eine gültige E-Mail-Adresse ein.');
         $validator->notEmptyString('email', 'Bitte trage deine E-Mail-Adresse ein.');

@@ -16,7 +16,7 @@ abstract class AppTable extends Table
     
     public $loggedUserUid = 0;
 
-    public function initialize(array $config)
+    public function initialize(array $config): void
     {
         $this->setPrimaryKey('uid');
         
@@ -70,7 +70,7 @@ abstract class AppTable extends Table
         return $validator;
     }
     
-    public function validationDefault(Validator $validator)
+    public function validationDefault(Validator $validator): \Cake\Validation\Validator
     {
         $validator = $this->validationAdmin($validator);
         return $validator;
@@ -95,7 +95,7 @@ abstract class AppTable extends Table
         return $patchedEntity;
     }
 
-    public function beforeSave($event, $entity, $options)
+    public function beforeSave(EventInterface $event, $entity, $options)
     {
         
         $request = Router::getRequest();

@@ -8,7 +8,7 @@ class PagesTable extends AppTable
 
     public $name_de = 'Seite';
 
-    public function initialize(array $config)
+    public function initialize(array $config): void
     {
         parent::initialize($config);
         $this->belongsTo('ParentPages', [

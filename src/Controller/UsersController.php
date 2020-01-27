@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Controller\Component\StringComponent;
 use Cake\Core\Configure;
-use Cake\Event\Event;
+use Cake\Event\EventInterface;
 use Cake\Mailer\Email;
 use Cake\Http\Exception\NotFoundException;
 use Cake\ORM\Query;
@@ -35,7 +35,7 @@ class UsersController extends AppController
         
     }
     
-    public function beforeFilter(Event $event)
+    public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);
         $this->AppAuth->allow([

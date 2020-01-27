@@ -10,7 +10,7 @@ class SkillsTable extends Table
     public $allowedBasicHtmlFields = [];
     public $name_de = 'Kenntnis';
     
-    public function initialize(array $config)
+    public function initialize(array $config): void
     {
         $this->addBehavior('Timestamp');
         parent::initialize($config);
@@ -28,7 +28,7 @@ class SkillsTable extends Table
         ]);
     }
     
-    public function validationDefault(Validator $validator)
+    public function validationDefault(Validator $validator): \Cake\Validation\Validator
     {
         $validator->notEmptyString('name', 'Bitte trage den Namen ein.');
         return $validator;

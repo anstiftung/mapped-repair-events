@@ -3,14 +3,14 @@ namespace App\Controller;
 
 use App\Controller\Component\StringComponent;
 use Cake\Core\Configure;
-use Cake\Event\Event;
+use Cake\Event\EventInterface;
 use Cake\Http\Exception\NotFoundException;
 use Cake\ORM\TableRegistry;
 
 class InfoSheetsController extends AppController
 {
     
-    public function beforeFilter(Event $event) {
+    public function beforeFilter(EventInterface $event) {
         
         parent::beforeFilter($event);
         $this->InfoSheet = TableRegistry::getTableLocator()->get('InfoSheets');

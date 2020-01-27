@@ -4,14 +4,14 @@ namespace App\Controller;
 
 use stdClass;
 use Cake\Core\Configure;
-use Cake\Event\Event;
+use Cake\Event\EventInterface;
 use Cake\Http\Exception\NotFoundException;
 use Cake\ORM\TableRegistry;
 
 class WidgetsController extends AppController
 {
     
-    public function beforeFilter(Event $event) {
+    public function beforeFilter(EventInterface $event) {
         
         parent::beforeFilter($event);
         $this->AppAuth->allow([
@@ -531,13 +531,13 @@ class WidgetsController extends AppController
     
     private function statisticsGlobalRepaired($month, $year, $backgroundColorOk, $backgroundColorNotOk, $borderColorOk, $borderColorNotOk)
     {
-        
+
         $dates = $this->getDateFromByMonthAndYear($month, $year);
         $dateFrom = $dates['dateFrom'];
         $dateTo = $dates['dateTo'];
-        
+
         $this->InfoSheet = TableRegistry::getTableLocator()->get('InfoSheets');
-        
+
         $dataRepaired = $this->InfoSheet->getRepaired($dateFrom, $dateTo);
         $dataNotRepaired = $this->InfoSheet->getNotRepaired($dateFrom, $dateTo);
         $this->set('statisticsRepairedData', [

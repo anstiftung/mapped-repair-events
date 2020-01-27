@@ -18,7 +18,7 @@ use Cake\Cache\Cache;
 use Cake\Controller\Controller;
 use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
-use Cake\Event\Event;
+use Cake\Event\EventInterface;
 use Cake\I18n\Time;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Http\Exception\ServiceUnavailableException;
@@ -61,7 +61,7 @@ class AppController extends Controller
      *
      * @return void
      */
-    public function initialize()
+    public function initialize(): void
     {
         
         parent::initialize();
@@ -129,7 +129,7 @@ class AppController extends Controller
      * @param \Cake\Event\Event $event
      * @return \Cake\Http\Response|null
      */
-    public function beforeFilter(Event $event)
+    public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);
         
@@ -171,7 +171,7 @@ class AppController extends Controller
         
     }
     
-    public function beforeRender(Event $event)
+    public function beforeRender(EventInterface $event)
     {
         
         parent::beforeRender($event);
