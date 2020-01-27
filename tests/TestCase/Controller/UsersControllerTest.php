@@ -24,7 +24,7 @@ class UsersControllerTest extends TestCase
         'firstname' => 'John<img onerror="alert();" />',
         'lastname' => 'DoeA',
         'zip' => '12345',
-        'email' => 'johndoeA@example.com',
+        'email' => 'johndoeA@mailinator.com',
         'privacy_policy_accepted' => 1
     ];
     
@@ -130,11 +130,26 @@ class UsersControllerTest extends TestCase
             [
                 'antiSpam' => 100,
                 'Users' => [
-                    'email' => 'johndoe@example.com',
+                    'email' => 'johndoe@mailinator.com',
                 ]
             ]
         );
         $this->assertResponseContains('Diese E-Mail-Adresse wird bereits verwendet.');
+        $this->assertNoRedirect();
+    }
+    
+    public function testRegisterValidationsMxRecord()
+    {
+        $this->post(
+            Configure::read('AppConfig.htmlHelper')->urlRegisterOrga(),
+            [
+                'antiSpam' => 100,
+                'Users' => [
+                    'email' => 'johndoe@gadsfadsewcadfaees.com',
+                ]
+            ]
+        );
+        $this->assertResponseContains('Bitte trage eine gültige E-Mail-Adresse ein.');
         $this->assertNoRedirect();
     }
     

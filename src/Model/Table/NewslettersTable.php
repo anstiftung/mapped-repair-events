@@ -6,7 +6,7 @@ use Cake\Validation\Validator;
 
 class NewslettersTable extends Table
 {
- 
+    
     public function initialize(array $config)
     {
         parent::initialize($config);
@@ -15,7 +15,7 @@ class NewslettersTable extends Table
     
     public function validationDefault(Validator $validator)
     {
-        $validator->email('email', false, 'Bitte trage eine gültige E-Mail ein.');
+        $validator->email('email', true, 'Bitte trage eine gültige E-Mail-Adresse ein.');
         $validator->notEmptyString('email', 'Bitte trage deine E-Mail-Adresse ein.');
         $validator->add('email', 'unique', [
             'rule' => 'validateUnique',

@@ -11,7 +11,7 @@ class WorknewsFixture extends TestFixture
     public $records = [
         [
             'workshop_uid' => 2,
-            'email' => 'worknews-test@example.com',
+            'email' => 'worknews-test@mailinator.com',
             'confirm' => 'ok'
         ]
     ];

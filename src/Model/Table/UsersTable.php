@@ -208,7 +208,7 @@ class UsersTable extends AppTable
         
         $validator->notEmptyString('email', 'Bitte trage deine E-Mail-Adresse ein.');
         $validator->requirePresence('email', true, 'Bitte trage deine E-Mail-Adresse ein.');
-        $validator->email('email', false, 'Die E-Mail-Adresse ist ungültig.');
+        $validator->email('email', true, 'Bitte trage eine gültige E-Mail-Adresse ein.');
         $validator->add('email', 'unique', [
             'rule' => 'validateUnique',
             'provider' => 'table',

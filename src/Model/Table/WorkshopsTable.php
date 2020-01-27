@@ -7,7 +7,7 @@ use Cake\ORM\TableRegistry;
 
 class WorkshopsTable extends AppTable
 {
-
+    
     public $name_de = '';
 
     public $allowedBasicHtmlFields = [
@@ -90,7 +90,7 @@ class WorkshopsTable extends AppTable
         $validator = $this->addBlockedWorkshopSlugsValidationRule($validator);
         $validator->url('website', 'Bitte trage eine gültige Url ein.');
         $validator->allowEmptyString('website');
-        $validator->email('email', false, 'Bitte trage eine gültige E-Mail ein.');
+        $validator->email('email', true, 'Bitte trage eine gültige E-Mail-Adresse ein.');
         $validator->notEmptyString('email', 'Bitte trage deine E-Mail-Adresse ein.');
         return $validator;
     }

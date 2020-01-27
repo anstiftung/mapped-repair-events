@@ -9,7 +9,7 @@ trait LoginTrait
     
     protected function loginAsOrga()
     {
-        $orgaUserEmail = 'johndoe@example.com';
+        $orgaUserEmail = 'johndoe@mailinator.com';
         $this->User = TableRegistry::getTableLocator()->get('Users');
         $user = $this->User->find('all', [
             'conditions' => [
