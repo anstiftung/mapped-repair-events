@@ -33,20 +33,6 @@ MappedRepairEvents.Helper = {
             row.last().find('.input.text input').val(
                 row.first().find('.input.text input').val()
             );
-            row.last().each(function(i) {
-                var newIndex = i;
-                $(this).find('.input.time select').each(function() {
-                    var nameWithoutIndexLastRow = $(this).attr('name').replace(/\d+/, '');
-                    var lastRow = $(this);
-                    row.first().find('.input.time select').each(function() {
-                        var nameWithoutIndexFirstRow = $(this).attr('name').replace(/\d+/, '');
-                        if (nameWithoutIndexLastRow == nameWithoutIndexFirstRow) {
-                            lastRow.val($(this).val());
-                        }
-                    });
-                });
-            });
-            
         });
 
     }
@@ -60,20 +46,24 @@ MappedRepairEvents.Helper = {
     
     ,reinitalizeDateWrappers : function() {
         var row = $('.date-time-wrapper .row');
+        // date label
         row.find('.input.text label').each(function(i) {
             var newIndex = i;
             var newLabel = newIndex + 1;
             $(this).html('Datum #' + newLabel);
             $(this).attr('for', $(this).attr('for').replace(/\d+/, newIndex));
         });
+        // date field
         row.find('.input.text input').each(function(i) {
             var newIndex = i;
             $(this).attr('id', $(this).attr('id').replace(/\d+/, newIndex));
             $(this).attr('name', $(this).attr('name').replace(/\d+/, newIndex));
         });
+        // time fields
         row.each(function(i) {
             var newIndex = i;
-            $(this).find('.input.time select').each(function() {
+            $(this).find('.input.time input').each(function() {
+                $(this).attr('id', $(this).attr('id').replace(/\d+/, newIndex));
                 $(this).attr('name', $(this).attr('name').replace(/\d+/, newIndex));
             });
         });

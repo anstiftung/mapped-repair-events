@@ -975,6 +975,9 @@ body.users .profile .input select {
 #eventEditForm .date-time-wrapper .input input {
     width: 85px;
 }
+#eventEditForm .date-time-wrapper .input.time input {
+    width: 90px;
+}
 #eventEditForm #cbskillsreg div.checkbox {
     float: left;
     width: 185px;
