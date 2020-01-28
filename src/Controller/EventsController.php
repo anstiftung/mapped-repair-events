@@ -397,7 +397,8 @@ class EventsController extends AppController
                 if ($isEditMode) {
                     $data['uid'] = $events[0]->uid;
                 }
-                $patchedEvents[] = $this->Event->patchEntity($events[0], $data);
+                $event = clone($events[0]);
+                $patchedEvents[] = $this->Event->patchEntity($event, $data);
                 $i++;
             }
 
