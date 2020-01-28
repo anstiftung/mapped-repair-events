@@ -24,6 +24,7 @@ class AppTestCase extends TestCase
         'app.Photos',
         'app.Roots',
         'app.Skills',
+        'app.ThirdPartyStatistics',
         'app.Users',
         'app.UsersCategories',
         'app.UsersGroups',
