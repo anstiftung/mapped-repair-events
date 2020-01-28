@@ -176,12 +176,13 @@ class WidgetsController extends AppController
         
         $metaTags = ['title' => 'Globale Statistik'];
         $this->set('metaTags', $metaTags);
-        
-        if ($this->viewVars['showBarChart']) {
-            $this->statisticsGlobalCategories($this->viewVars['month'], $this->viewVars['year'], $this->viewVars['backgroundColorOk'], $this->viewVars['backgroundColorNotOk'], $this->viewVars['borderColorOk'], $this->viewVars['borderColorNotOk'], $this->viewVars['dataSource']);
+        $showBarChart = $this->viewBuilder()->getVar('showBarChart');
+        if ($showBarChart) {
+            $this->statisticsGlobalCategories($this->viewBuilder()->getVar('month'), $this->viewBuilder()->getVar('year'), $this->viewBuilder()->getVar('backgroundColorOk'), $this->viewBuilder()->getVar('backgroundColorNotOk'), $this->viewBuilder()->getVar('borderColorOk'), $this->viewBuilder()->getVar('borderColorNotOk'), $this->viewBuilder()->getVar('dataSource'));
         }
-        if ($this->viewVars['showDonutChart']) {
-            $this->statisticsGlobalRepaired($this->viewVars['month'], $this->viewVars['year'], $this->viewVars['backgroundColorOk'], $this->viewVars['backgroundColorNotOk'], $this->viewVars['borderColorOk'], $this->viewVars['borderColorNotOk']);
+        $showDonutChart = $this->viewBuilder()->getVar('showDonutChart');
+        if ($showDonutChart) {
+            $this->statisticsGlobalRepaired($this->viewBuilder()->getVar('month'), $this->viewBuilder()->getVar('year'), $this->viewBuilder()->getVar('backgroundColorOk'), $this->viewBuilder()->getVar('backgroundColorNotOk'), $this->viewBuilder()->getVar('borderColorOk'), $this->viewBuilder()->getVar('borderColorNotOk'));
         }
     
     }
@@ -210,11 +211,13 @@ class WidgetsController extends AppController
         $metaTags = ['title' => 'Statistik für ' . $workshop->name];
         $this->set('metaTags', $metaTags);
         
-        if ($this->viewVars['showBarChart']) {
-            $this->statisticsWorkshopCategories($workshop->uid, $this->viewVars['dateFrom'], $this->viewVars['dateTo'], $this->viewVars['backgroundColorOk'], $this->viewVars['backgroundColorNotOk'], $this->viewVars['borderColorOk'], $this->viewVars['borderColorNotOk']);
+        $showBarChart = $this->viewBuilder()->getVar('showBarChart');
+        if ($showBarChart) {
+            $this->statisticsWorkshopCategories($workshop->uid, $this->viewBuilder()->getVar('dateFrom'), $this->viewBuilder()->getVar('dateTo'), $this->viewBuilder()->getVar('backgroundColorOk'), $this->viewBuilder()->getVar('backgroundColorNotOk'), $this->viewBuilder()->getVar('borderColorOk'), $this->viewBuilder()->getVar('borderColorNotOk'));
         }
-        if ($this->viewVars['showDonutChart']) {
-            $this->statisticsWorkshopRepaired($workshop->uid, $this->viewVars['dateFrom'], $this->viewVars['dateTo'], $this->viewVars['backgroundColorOk'], $this->viewVars['backgroundColorNotOk'], $this->viewVars['borderColorOk'], $this->viewVars['borderColorNotOk']);
+        $showDonutChart = $this->viewBuilder()->getVar('showDonutChart');
+        if ($showDonutChart) {
+            $this->statisticsWorkshopRepaired($workshop->uid, $this->viewBuilder()->getVar('dateFrom'), $this->viewBuilder()->getVar('dateTo'), $this->viewBuilder()->getVar('backgroundColorOk'), $this->viewBuilder()->getVar('backgroundColorNotOk'), $this->viewBuilder()->getVar('borderColorOk'), $this->viewBuilder()->getVar('borderColorNotOk'));
         }
         
         $this->set('workshop', $workshop);
@@ -265,7 +268,7 @@ class WidgetsController extends AppController
             'datasets' => $categoriesDatasets
         ]);
         
-        $this->setBarChartHasData($this->viewVars['statisticsCategoriesData']);
+        $this->setBarChartHasData($this->viewBuilder()->getVar('statisticsCategoriesData'));
         
     }
     
@@ -290,7 +293,7 @@ class WidgetsController extends AppController
             ]
         ]);
         
-        $this->setDonutChartHasData($this->viewVars['statisticsRepairedData']);
+        $this->setDonutChartHasData($this->viewBuilder()->getVar('statisticsRepairedData'));
         
     }
     
@@ -525,7 +528,7 @@ class WidgetsController extends AppController
         $this->set('carbonFootprintSum', $carbonFootprintSum);
         $this->set('materialFootprintSum', $materialFootprintSum);
         
-        $this->setBarChartHasData($this->viewVars['statisticsCategoriesData']);
+        $this->setBarChartHasData($this->viewBuilder()->getVar('statisticsCategoriesData'));
         
     }
     
@@ -555,7 +558,7 @@ class WidgetsController extends AppController
         ]);
         
         // not yet sure if only pie chart should EVER be shown in global stats
-//         $this->setDonutChartHasData($this->viewVars['statisticsRepairedData']);
+//         $this->setDonutChartHasData($this->viewBuilder()->getVar('statisticsRepairedData'));
         
     }
     
