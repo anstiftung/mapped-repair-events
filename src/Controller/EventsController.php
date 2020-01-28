@@ -369,7 +369,7 @@ class EventsController extends AppController
         
         if (!empty($this->request->getData())) {
             $i = 0;
-            $preparedData = [];
+            $patchedEvents = [];
             foreach($this->request->getData() as $data) {
                 if (!is_array($data)) {
                     continue; // skip referer
@@ -377,6 +377,12 @@ class EventsController extends AppController
                 $data = array_merge($this->request->getData()[0], $data);
                 if ($data['datumstart']) {
                     $data['datumstart'] = new FrozenTime($data['datumstart']);
+                }
+                if ($data['uhrzeitstart']) {
+                    $data['uhrzeitstart'] = new FrozenTime($data['uhrzeitstart']);
+                }
+                if ($data['uhrzeitend']) {
+                    $data['uhrzeitend'] = new FrozenTime($data['uhrzeitend']);
                 }
                 if (!$data['use_custom_coordinates']) {
                     $addressString = $data['strasse'] . ', ' . $data['zip'] . ' ' . $data['ort'] . ', ' . $data['land'];
@@ -391,11 +397,11 @@ class EventsController extends AppController
                 if ($isEditMode) {
                     $data['uid'] = $events[0]->uid;
                 }
-                $preparedData[] = $data;
+                $patchedEvents[] = $this->Event->patchEntity($events[0], $data);
                 $i++;
             }
 
-            $events = $this->Event->patchEntities($events, $preparedData);
+            $events = $patchedEvents;
             
             $hasErrors = false;
             foreach($events as $event) {
