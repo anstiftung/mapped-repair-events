@@ -39,7 +39,7 @@ $this->element('addScript', ['script' =>
    </form>
         
     <?php
-    $paginationParams = ['objectNameSingular' => 'Termin', 'objectNamePlural' => 'Reparaturtermine'];
+    $paginationParams = ['objectNameSingular' => 'Reparaturtermin', 'objectNamePlural' => 'Reparaturtermine'];
     echo $this->element('pagination', $paginationParams);
 
     echo '</div>'; // div.top

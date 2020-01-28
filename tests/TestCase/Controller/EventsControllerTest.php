@@ -142,6 +142,18 @@ class EventsControllerTest extends AppTestCase
         $this->assertMailSentTo('worknews-test@mailinator.com');
     }
     
+    public function testAjaxGetAllEventsForMap()
+    {
+        $this->configRequest([
+            'headers' => [
+                'X_REQUESTED_WITH' => 'XMLHttpRequest'
+            ]
+        ]);
+        $this->_compareBasePath = ROOT . DS . 'tests' . DS . 'comparisons' . DS;
+        $this->get('/events/ajaxGetAllEventsForMap');
+        $this->assertSameAsFile('events-for-map.json', $this->_response);
+    }
+    
     private function doTestEditForm($renotify)
     {
         $this->Event = TableRegistry::getTableLocator()->get('Events');
