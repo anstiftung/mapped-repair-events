@@ -91,14 +91,14 @@ class HtmlOutputTest extends TestCase
     {
         $this->get(Configure::read('AppConfig.htmlHelper')->urlEvents() . '?categories=87');
         $this->doAssertHtmlOutput();
-        $this->assertResponseContains('<div class="numbers">1 Termin gefunden</div>');
+        $this->assertResponseContains('<div class="numbers">1 Reparaturermin gefunden</div>');
     }
     
     public function testEventsWithCategoryFilterNotFound()
     {
         $this->get(Configure::read('AppConfig.htmlHelper')->urlEvents() . '?categories=88');
         $this->doAssertHtmlOutput();
-        $this->assertResponseContains('<div class="numbers">0 Termine gefunden</div>');
+        $this->assertResponseContains('<div class="numbers">0 Reparaturermine gefunden</div>');
     }
 
 }
