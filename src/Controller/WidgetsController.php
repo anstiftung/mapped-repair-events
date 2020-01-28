@@ -481,7 +481,7 @@ class WidgetsController extends AppController
             foreach($categoriesIds as $index => $categoryId) {
                 foreach($thirdPartyPreparedSums as $thirdPartyPreparedSum) {
                     $carbonFootprintSum += $this->Category->calculateCarbonFootprint($thirdPartyPreparedSum['repaired'], $categoriesCarbonFootprint[$index]);
-                    $materialFootprintSum += $this->Category->calculateMaterialFootprint($thirdPartyPreparedSum['repaired'], $categoriesCarbonFootprint[$index]);
+                    $materialFootprintSum += $this->Category->calculateMaterialFootprint($thirdPartyPreparedSum['repaired'], $categoriesMaterialFootprint[$index]);
                     if ($categoryId == $thirdPartyPreparedSum['id']) {
                         @$categoriesDataRepaired[$index] += $thirdPartyPreparedSum['repaired'];
                         continue;
