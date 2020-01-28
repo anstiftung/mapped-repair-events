@@ -56,6 +56,12 @@ class HtmlOutputTest extends AppTestCase
         $this->doAssertHtmlOutput();
     }
 
+    public function testStatisticsGlobal()
+    {
+        $this->get('/widgets/statisticsGlobal');
+        $this->doAssertHtmlOutput();
+    }
+    
     public function testEvents()
     {
         $this->get(Configure::read('AppConfig.htmlHelper')->urlEvents());
