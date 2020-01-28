@@ -25,7 +25,7 @@ if (!isset($hideDeleteLink) || !$hideDeleteLink) {
 
         <?php
         if (! isset($heading)) {
-            $heading = ucfirst($this->request->getParams('controller'));
+            $heading = ucfirst($this->request->getParam('controller'));
         }
         $paginatorParams = $this->Paginator->params();
         $heading .= $count = ' (' . $paginatorParams['count'] . ')';
