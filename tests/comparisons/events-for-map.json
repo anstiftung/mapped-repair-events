@@ -19,7 +19,27 @@
                 "eventbeschreibung": "description",
                 "uniquePlace": "01d2de4fd7",
                 "directurl": "test-workshop?event=6,2040-01-01",
-                "categories": [],
+                "categories": [
+                    {
+                        "id": 87,
+                        "name": "Elektro Sonstiges",
+                        "icon": "elektro",
+                        "visible_on_platform": 1,
+                        "carbon_footprint": 0,
+                        "material_footprint": 0,
+                        "parent_id": null,
+                        "lft": null,
+                        "rght": null,
+                        "status": 1,
+                        "owner": null,
+                        "created": null,
+                        "modified": null,
+                        "_joinData": {
+                            "event_uid": 6,
+                            "category_id": 87
+                        }
+                    }
+                ],
                 "datumstart_formatted": "2040-01-01",
                 "uhrzeitstart_formatted": "09:00",
                 "uhrzeitend_formatted": "18:00"
@@ -46,7 +66,27 @@
                     "eventbeschreibung": "description",
                     "uniquePlace": "01d2de4fd7",
                     "directurl": "test-workshop?event=6,2040-01-01",
-                    "categories": [],
+                    "categories": [
+                        {
+                            "id": 87,
+                            "name": "Elektro Sonstiges",
+                            "icon": "elektro",
+                            "visible_on_platform": 1,
+                            "carbon_footprint": 0,
+                            "material_footprint": 0,
+                            "parent_id": null,
+                            "lft": null,
+                            "rght": null,
+                            "status": 1,
+                            "owner": null,
+                            "created": null,
+                            "modified": null,
+                            "_joinData": {
+                                "event_uid": 6,
+                                "category_id": 87
+                            }
+                        }
+                    ],
                     "datumstart_formatted": "2040-01-01",
                     "uhrzeitstart_formatted": "09:00",
                     "uhrzeitend_formatted": "18:00"
