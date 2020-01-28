@@ -33,7 +33,20 @@
                         "strasse": null,
                         "zip": null,
                         "ort": null,
-                        "categories": [],
+                        "categories": [
+                            {
+                                "id": 87,
+                                "name": "Elektro Sonstiges",
+                                "icon": "elektro",
+                                "_joinData": {
+                                    "event_uid": 6,
+                                    "category_id": 87
+                                },
+                                "EventsCategories": {
+                                    "event_uid": 6
+                                }
+                            }
+                        ],
                         "datumstart_formatted": "2040-01-01",
                         "uhrzeitstart_formatted": "09:00",
                         "uhrzeitend_formatted": "18:00",
