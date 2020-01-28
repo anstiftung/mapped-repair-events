@@ -33,6 +33,14 @@ MappedRepairEvents.Helper = {
             row.last().find('.input.text input').val(
                 row.first().find('.input.text input').val()
             );
+            row.last().find('.input.time input').each(function(i) {
+                var id = '#0-uhrzeitend';
+                if (i == 0) {
+                    id = '#0-uhrzeitstart';
+                }
+                $(this).val($(id).val());
+            });
+            
         });
 
     }
