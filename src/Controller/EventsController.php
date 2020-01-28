@@ -457,7 +457,8 @@ class EventsController extends AppController
                 'Workshops',
                 'Categories'
             ]
-        ])->distinct(['Events.uid']);
+        ]);
+        $events->distinct($this->Event->getListFields());
         
         if (!empty($this->request->getQuery('keyword'))) {
             $keyword = h(strtolower(trim($this->request->getQuery('keyword'))));
@@ -586,6 +587,8 @@ class EventsController extends AppController
                 });
             }
         }
+        $query->distinct($this->Events->getListFields());
+        
         $events = $this->paginate($query, [
             'fields' => $this->Event->getListFields(),
             'order' => $this->Event->getListOrder(),
@@ -594,6 +597,7 @@ class EventsController extends AppController
                 'Categories'
             ]
         ]);
+        
         $this->set('events', $events);
         
         // $events needs to be cloned, because unset($e['workshop']); in combineEventsForMap would also remove it from $events

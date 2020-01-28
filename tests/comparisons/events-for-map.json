@@ -1,0 +1,57 @@
+{
+    "status": 1,
+    "message": "ok",
+    "events": [
+        {
+            "Event": {
+                "uid": 6,
+                "lat": 1.1,
+                "lng": 1.2,
+                "datumstart": "2040-01-01T00:00:00+00:00",
+                "uhrzeitstart": "2020-01-28T09:00:00+01:00",
+                "uhrzeitend": "2020-01-28T18:00:00+01:00",
+                "strasse": null,
+                "zip": null,
+                "ort": null,
+                "image": null,
+                "image_alt_text": null,
+                "owner": 1,
+                "eventbeschreibung": "description",
+                "uniquePlace": "01d2de4fd7",
+                "directurl": "test-workshop?event=6,2040-01-01",
+                "categories": [],
+                "datumstart_formatted": "2040-01-01",
+                "uhrzeitstart_formatted": "09:00",
+                "uhrzeitend_formatted": "18:00"
+            },
+            "Workshop": {
+                "name": "Test Workshop",
+                "image": null,
+                "url": "test-workshop"
+            },
+            "Events": [
+                {
+                    "uid": 6,
+                    "lat": 1.1,
+                    "lng": 1.2,
+                    "datumstart": "2040-01-01T00:00:00+00:00",
+                    "uhrzeitstart": "2020-01-28T09:00:00+01:00",
+                    "uhrzeitend": "2020-01-28T18:00:00+01:00",
+                    "strasse": null,
+                    "zip": null,
+                    "ort": null,
+                    "image": null,
+                    "image_alt_text": null,
+                    "owner": 1,
+                    "eventbeschreibung": "description",
+                    "uniquePlace": "01d2de4fd7",
+                    "directurl": "test-workshop?event=6,2040-01-01",
+                    "categories": [],
+                    "datumstart_formatted": "2040-01-01",
+                    "uhrzeitstart_formatted": "09:00",
+                    "uhrzeitend_formatted": "18:00"
+                }
+            ]
+        }
+    ]
+}
