@@ -103,9 +103,11 @@ $this->element('addScript', ['script' =>
             
                 $indexForLabel = $i + 1;
                 echo $this->Form->control($i.'.datumstart',  ['class' => 'datepicker-input', 'type' => 'text', 'label' => __('Add Event: Start Date') . ' #' . $indexForLabel, 'value' => !empty($event->datumstart) ? $event->datumstart->i18nFormat(Configure::read('DateFormat.de.DateLong2')) : '']);
-                echo $this->Form->control($i.'.uhrzeitstart', ['label' => __('Add Event: Start Time'), 'step' => 0]);
-                echo $this->Form->control($i.'.uhrzeitend', ['label' => __('Add Event: End Time'), 'step' => 0]);
-            
+                echo '<div class="time-fields-wrapper">';
+                    echo $this->Form->control($i.'.uhrzeitstart', ['label' => __('Add Event: Start Time'), 'step' => 0]);
+                    echo $this->Form->control($i.'.uhrzeitend', ['label' => __('Add Event: End Time'), 'step' => 0]);
+                echo '</div>';
+                
                 if (!$isEditMode) {
                     if ($i == 0) {
                         echo '<a class="add-date-button" title="Termin hinzufügen" href="javascript:void(0);"><i class="fa fa-plus-circle"></i></a>';
