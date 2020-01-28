@@ -103,8 +103,8 @@ $this->element('addScript', ['script' =>
             
                 $indexForLabel = $i + 1;
                 echo $this->Form->control($i.'.datumstart',  ['class' => 'datepicker-input', 'type' => 'text', 'label' => __('Add Event: Start Date') . ' #' . $indexForLabel, 'value' => !empty($event->datumstart) ? $event->datumstart->i18nFormat(Configure::read('DateFormat.de.DateLong2')) : '']);
-                echo $this->Form->control($i.'.uhrzeitstart', ['label' => __('Add Event: Start Time'), 'timeFormat' => 24]);
-                echo $this->Form->control($i.'.uhrzeitend', ['label' => __('Add Event: End Time'), 'timeFormat' => 24]);
+                echo $this->Form->control($i.'.uhrzeitstart', ['label' => __('Add Event: Start Time'), 'step' => 0]);
+                echo $this->Form->control($i.'.uhrzeitend', ['label' => __('Add Event: End Time'), 'step' => 0]);
             
                 if (!$isEditMode) {
                     if ($i == 0) {
