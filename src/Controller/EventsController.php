@@ -641,6 +641,8 @@ class EventsController extends AppController
         $eventsForMap1 = [];
         
         foreach ($events as $event) {
+            unset($event->uhrzeitstart);
+            unset($event->uhrzeitend);
             $preparedWorkshop = [];
             if ($event->workshop) {
                 $tmpWorkshop = $event->workshop;
