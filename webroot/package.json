@@ -33,7 +33,7 @@
     "moment": "^2.24.0",
     "prunecluster": "^2.1.0",
     "scrolltofixed": "^1.0.6",
-    "select2": "^4.0.12",
+    "select2": "^4.0.13",
     "slidebars": "^2.0.2",
     "speakingurl": "^14.0.1"
   },
