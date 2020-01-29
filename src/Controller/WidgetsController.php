@@ -347,12 +347,12 @@ class WidgetsController extends AppController
         
         $month = '';
         if (!empty($this->request->getQuery('month'))) {
-            $month = h($this->request->getQuery('month'))['month'];
+            $month = h($this->request->getQuery('month'));
         }
         
         $year = '';
         if (!empty($this->request->getQuery('year'))) {
-            $year = h($this->request->getQuery('year'))['year'];
+            $year = h($this->request->getQuery('year'));
         }
         
         if ($month != '' && $year == '') {

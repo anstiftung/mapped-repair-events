@@ -33,9 +33,7 @@
             echo '</div>';
         }
         if (isset($month)) {
-            echo '<div class="input select">';
-                echo $this->Form->month('month', ['val' => $month, 'empty' => 'Monat: alle']);
-            echo '</div>';
+            echo $this->Form->control('month', ['type' => 'select', 'label' => '', 'val' => $month, 'options' => $this->Time->getMonths(), 'empty' => 'Monat: alle']);
         }
         
         if (isset($dateFrom) && isset($dateTo)) {
