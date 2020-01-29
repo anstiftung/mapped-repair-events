@@ -3308,6 +3308,9 @@ body.events.add .date-time-wrapper .row {
 	float: left;
 	width: 100%;
 }
+body.events.add .date-time-wrapper .row .time-fields-wrapper {
+	float: left;
+}
 body.events.add .date-time-wrapper .fa {
     line-height: 35px;
     font-size: 20px;
