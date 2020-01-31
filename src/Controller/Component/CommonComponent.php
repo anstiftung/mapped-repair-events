@@ -63,6 +63,11 @@ class CommonComponent extends AppComponent {
 	 */
 	private function trimAndSanitizeDeep($value, $transformNullToString = false) {
 	    
+	    // Laminas\Diactoros\UploadedFile
+	    if (is_object($value)) {
+	        return $value;
+	    }
+	    
 	    $config = \HTMLPurifier_Config::createDefault();
 	    $config->set('Cache.SerializerPath', TMP . 'cache' . DS . 'html_purifier');
 	    $config->set('HTML.SafeIframe', true);
