@@ -3,12 +3,12 @@ Eine von dir abonnierte <?php echo Configure::read('AppConfig.initiativeNameSing
 
 Klicke hier für aktuelle Reparaturtermine der Initiative:
 
-<?php echo $domain,$url; ?>
+<?php echo Configure::read('AppConfig.serverName') . url; ?>
 
 
 <?php echo __('To remove your email from the subscription list, you can click here:');?>
 
-<?php echo $domain,'/initiativen/newsunsub/',$unsub; ?>
+<?php echo Configure::read('AppConfig.serverName') . '/initiativen/newsunsub/' . $unsub; ?>
 
 
 Danke.

@@ -45,7 +45,6 @@ class NewslettersController extends AppController {
                 $email->viewBuilder()->setTemplate('activate_newsletter');
                 $email->setSubject(__('Please activate your newsletter subscription'))
                 ->setViewVars([
-                    'domain' => Configure::read('App.fullBaseUrl'),
                     'confirmationCode' => $this->CptNewsletter->getConfirmationCode(),
                     'unsubscribeCode' => $this->CptNewsletter->getUnsubscribeCode()
                 ])->setTo($this->request->getData('Newsletters.email'));

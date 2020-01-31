@@ -440,7 +440,6 @@ class WorkshopsController extends AppController
                 $email->viewBuilder()->setTemplate('activate_worknews');
                 $email->setSubject(__('Please activate your worknews subscription'))
                     ->setViewVars([
-                        'domain' => Configure::read('App.fullBaseUrl'),
                         'workshop' => $workshop,
                         'confirmationCode' => $confirmationCode,
                         'unsubscribeCode' => $unsubscribeCode

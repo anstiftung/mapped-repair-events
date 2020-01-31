@@ -235,7 +235,6 @@ class EventsController extends AppController
                         $email->setTo($subscriber->email)
                         ->setSubject('Termin gelöscht')
                         ->setViewVars([
-                            'domain' => Configure::read('App.fullBaseUrl'),
                             'url' => Configure::read('AppConfig.htmlHelper')->urlWorkshopDetail($event->workshop->url),
                             'unsub' => $subscriber->unsub
                         ]);
