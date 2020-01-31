@@ -3308,7 +3308,7 @@ body.events.add .date-time-wrapper .row {
 	float: left;
 	width: 100%;
 }
-body.events.add .date-time-wrapper .row .time-fields-wrapper {
+body.events .date-time-wrapper .row .time-fields-wrapper {
 	float: left;
 }
 body.events.add .date-time-wrapper .fa {

@@ -276,6 +276,7 @@ class EventsController extends AppController
         $this->set('workshopsForDropdown', $this->Workshop->transformForDropdown($workshops));
         $this->set('preselectedWorkshopUid', $preselectedWorkshopUid);
         $this->set('editFormUrl', Configure::read('AppConfig.htmlHelper')->urlEventNew($preselectedWorkshopUid));
+        $this->set('isDuplicateMode', false);
         
         $this->_edit([$event], false);
         
@@ -305,6 +306,7 @@ class EventsController extends AppController
         $this->set('editFormUrl', Configure::read('AppConfig.htmlHelper')->urlEventNew($event->workshop_uid));
         $this->set('preselectedWorkshopUid', $event->workshop_uid);
         $this->_edit([$event], false);
+        $this->set('isDuplicateMode', true);
         $this->render('edit');
     }
     
@@ -333,6 +335,7 @@ class EventsController extends AppController
         $this->setIsCurrentlyUpdated($event->uid);
         $this->set('metaTags', ['title' => 'Termin bearbeiten']);
         $this->set('editFormUrl', Configure::read('AppConfig.htmlHelper')->urlEventEdit($event->uid));
+        $this->set('isDuplicateMode', false);
         $patchedEntities = $this->_edit([$event], true);
         
         $patchedEntity = $patchedEntities[0];

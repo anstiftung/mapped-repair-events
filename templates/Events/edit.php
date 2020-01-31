@@ -58,11 +58,12 @@ $this->element('addScript', ['script' =>
                         'empty' => '== Initiative auswählen ==',
                         'label' => __('Workshop')
                     ]);
-                } else {
-                    // duplicate mode
+                }
+                if ($isDuplicateMode) {
                     echo $this->Form->hidden($i.'.workshop_uid', ['value' => $preselectedWorkshopUid, 'id' => '0-workshop-uid']);
                 }
             }
+            
             
             if (!empty($event->workshop->name)) {
                 echo '<div class="input">';
@@ -84,7 +85,7 @@ $this->element('addScript', ['script' =>
                 ,'label' => 'Terminbild'
             ]).'<br />';
             
-            if (!$isEditMode) {
+            if (!$isEditMode && !$isDuplicateMode) {
                 echo $this->element('hint', [
                     'content' => 'Durch Klicken auf das Plus-Zeichen rechts kannst du mehrere Termine auf einmal erstellen.<br />Nach dem Speichern kannst du sie wie gewohnt einzeln bearbeiten.'
                 ]);
@@ -108,7 +109,7 @@ $this->element('addScript', ['script' =>
                     echo $this->Form->control($i.'.uhrzeitend', ['label' => __('Add Event: End Time'), 'step' => 0]);
                 echo '</div>';
                 
-                if (!$isEditMode) {
+                if (!$isEditMode && !$isDuplicateMode) {
                     if ($i == 0) {
                         echo '<a class="add-date-button" title="Termin hinzufügen" href="javascript:void(0);"><i class="fa fa-plus-circle"></i></a>';
                     } else {
