@@ -109,6 +109,12 @@ class WorkshopsTable extends AppTable
                 'UsersWorkshops.approved <> \'0000-00-00 00:00:00\''
             ]);
         });
+        // revertPrivatizeData needs to be called again (although already applied in getWorkshopsWithUsers)
+        foreach($workshops as $workshop) {
+            foreach($workshop->users as $user) {
+                $user->revertPrivatizeData();
+            }
+        }
         return $workshops;
     }
     
