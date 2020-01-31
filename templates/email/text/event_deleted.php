@@ -3,7 +3,7 @@ Eine von dir abonnierte <?php echo Configure::read('AppConfig.initiativeNameSing
 
 Klicke hier für aktuelle Reparaturtermine der Initiative:
 
-<?php echo Configure::read('AppConfig.serverName') . url; ?>
+<?php echo Configure::read('AppConfig.serverName') .$url; ?>
 
 
 <?php echo __('To remove your email from the subscription list, you can click here:');?>

@@ -270,8 +270,12 @@ class AppController extends Controller
     
     public function setReferer()
     {
-        $referer = $this->request->getData('referer') ?? $_SERVER['HTTP_REFERER'] ?? '/';
-        $this->set('referer', $referer);
+        $this->set('referer', $this->getReferer());
+    }
+    
+    public function getReferer()
+    {
+        return $this->request->getData('referer') ?? $_SERVER['HTTP_REFERER'] ?? '/';
     }
 
     /**

@@ -154,6 +154,21 @@ class EventsControllerTest extends AppTestCase
         $this->assertSameAsFile('events-for-map.json', $this->_response);
     }
     
+    public function testDeleteEvent()
+    {
+        $this->loginAsOrga();
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlEventDelete(6));
+        $this->Event = TableRegistry::getTableLocator()->get('Events');
+        $event = $this->Event->find('all', [
+            'conditions' => [
+                'Events.uid' => 6
+            ]
+        ])->first();
+        $this->assertEquals($event->status, APP_DELETED);
+        $this->assertMailCount(1);
+        $this->assertMailSentTo('worknews-test@mailinator.com');
+    }
+    
     private function doTestEditForm($renotify)
     {
         $this->Event = TableRegistry::getTableLocator()->get('Events');
