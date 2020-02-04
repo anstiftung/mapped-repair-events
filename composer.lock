@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "45aa0888e0aee6fdc18e563e9714c462",
+    "content-hash": "d5a342b5ffb4a627ce2bcc243dc0a2b3",
     "packages": [
         {
             "name": "aura/intl",
@@ -351,6 +351,56 @@
                 "tls"
             ],
             "time": "2020-01-13T10:02:55+00:00"
+        },
+        {
+            "name": "dereuromark/cakephp-feed",
+            "version": "2.0.0-beta",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dereuromark/cakephp-feed.git",
+                "reference": "e5698d16f0262367fcbbc440371addac9c1ef230"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dereuromark/cakephp-feed/zipball/e5698d16f0262367fcbbc440371addac9c1ef230",
+                "reference": "e5698d16f0262367fcbbc440371addac9c1ef230",
+                "shasum": ""
+            },
+            "require": {
+                "cakephp/cakephp": "^4.0.0",
+                "php": ">=7.2"
+            },
+            "require-dev": {
+                "fig-r/psr2r-sniffer": "dev-master"
+            },
+            "type": "cakephp-plugin",
+            "autoload": {
+                "psr-4": {
+                    "Feed\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mark Scherer",
+                    "homepage": "https://www.dereuromark.de",
+                    "role": "Author"
+                }
+            ],
+            "description": "A CakePHP plugin containing a RssView to generate RSS feeds.",
+            "homepage": "https://github.com/dereuromark/cakephp-feed",
+            "keywords": [
+                "atom",
+                "cakephp",
+                "feed",
+                "plugin",
+                "rss",
+                "view"
+            ],
+            "time": "2019-12-31T17:38:43+00:00"
         },
         {
             "name": "ezyang/htmlpurifier",
@@ -973,7 +1023,7 @@
             "time": "2019-09-18T18:44:20+00:00"
         },
         {
-            "name": "natxet/cssmin",
+            "name": "natxet/CssMin",
             "version": "v3.0.6",
             "source": {
                 "type": "git",

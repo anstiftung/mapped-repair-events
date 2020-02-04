@@ -1,13 +1,7 @@
 <?php
 use Cake\Core\Configure;
 
-$this->set('channelData', [
-    'title' => Configure::read('AppConfig.titleSuffix') . ' Reparaturtermine',
-    'link' => $this->Url->build('/', true),
-    'description' => 'RSS-Feed vom ' . Configure::read('AppConfig.titleSuffix'),
-    'language' => 'de-DE'
-]);
-
+$items = [];
 foreach ($events as $event) {
     
     $link = $this->Html->urlEventDetail($event->workshop->url, $event->uid, $event->datumstart);
@@ -33,13 +27,22 @@ foreach ($events as $event) {
         'exact'  => true,
         'html'   => true,
     ]);
-    echo  $this->Rss->item([], [
+    $items[] = [
         'title' => $event->workshop->name,
         'link' => $link,
         'guid' => ['url' => $link, 'isPermaLink' => 'true'],
         'description' => $body,
         'pubDate' => $event->datumstart->i18nFormat(Configure::read('DateFormat.de.DateLong2'))
-    ]);
+    ];
 }
+
+$this->set('channelData', [
+    'title' => Configure::read('AppConfig.titleSuffix') . ' Reparaturtermine',
+    'link' => $this->Url->build('/', ['fullBase' => true]),
+    'description' => 'RSS-Feed vom ' . Configure::read('AppConfig.titleSuffix'),
+    'language' => 'de-DE',
+    'items' => $items
+]);
+
 
 ?>

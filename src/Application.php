@@ -56,6 +56,8 @@ class Application extends BaseApplication
             'autoload' => true
         ]);
         
+        $this->addPlugin('Feed', ['bootstrap' => true]);
+        
     }
     
     public function routes(RouteBuilder $routes): void

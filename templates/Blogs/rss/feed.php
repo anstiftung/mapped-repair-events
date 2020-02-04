@@ -1,13 +1,7 @@
 <?php
 use Cake\Core\Configure;
 
-$this->set('channelData', [
-    'title' => Configure::read('AppConfig.titleSuffix'),
-    'link' => $this->Url->build('/', true),
-    'description' => 'Neues von den Initiativen auf ' . Configure::read('AppConfig.titleSuffix'),
-    'language' => 'de-DE'
-]);
-
+$items = [];
 foreach ($posts as $post) {
     
     $link = $this->Html->urlPostDetail($post->url);
@@ -21,13 +15,21 @@ foreach ($posts as $post) {
         'exact'  => true,
         'html'   => true,
     ]);
-    echo  $this->Rss->item([], [
+    $items[] = [
         'title' => $post->name,
         'link' => $link,
         'guid' => ['url' => $link, 'isPermaLink' => 'true'],
         'description' => $body,
         'pubDate' => $post->publish->i18nFormat(Configure::read('DateFormat.de.DateLong2'))
-    ]);
+    ];
 }
+
+$this->set('channelData', [
+    'title' => Configure::read('AppConfig.titleSuffix'),
+    'link' => $this->Url->build('/', ['fullBase' => true]),
+    'description' => 'Neues von den Initiativen auf ' . Configure::read('AppConfig.titleSuffix'),
+    'language' => 'de-DE',
+    'items' => $items
+]);
 
 ?>

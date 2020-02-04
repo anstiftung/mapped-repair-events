@@ -18,7 +18,8 @@
         "tedivm/jshrink": "^1.3",
         "intervention/image": "2.*",
         "studio-42/elfinder": "^2.1",
-        "ezyang/htmlpurifier": "^4.11"
+        "ezyang/htmlpurifier": "^4.11",
+        "dereuromark/cakephp-feed": "2.0.0-beta"
     },
     "require-dev": {
         "psy/psysh": "@stable",
