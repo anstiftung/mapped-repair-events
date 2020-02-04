@@ -305,8 +305,8 @@ class EventsController extends AppController
         $this->set('metaTags', ['title' => 'Termin duplizieren']);
         $this->set('editFormUrl', Configure::read('AppConfig.htmlHelper')->urlEventNew($event->workshop_uid));
         $this->set('preselectedWorkshopUid', $event->workshop_uid);
-        $this->_edit([$event], false);
         $this->set('isDuplicateMode', true);
+        $this->_edit([$event], false);
         $this->render('edit');
     }
     
