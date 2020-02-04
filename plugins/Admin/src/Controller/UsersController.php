@@ -1,8 +1,7 @@
 <?php
 namespace Admin\Controller;
 
-use App\Controller\Component\StringComponent;
-use Cake\Event\Event;
+use Cake\Event\EventInterface;
 use Cake\ORM\TableRegistry;
 
 class UsersController extends AdminAppController
@@ -21,7 +20,7 @@ class UsersController extends AdminAppController
         $this->Group = TableRegistry::getTableLocator()->get('Groups');
     }
 
-    public function beforeFilter(Event $event)
+    public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);
         

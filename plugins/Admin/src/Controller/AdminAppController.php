@@ -2,7 +2,7 @@
 namespace Admin\Controller;
 
 use App\Controller\AppController;
-use Cake\Event\Event;
+use Cake\Event\EventInterface;
 use Cake\Cache\Cache;
 use Cake\ORM\Query;
 use Cake\Utility\Inflector;
@@ -38,7 +38,7 @@ class AdminAppController extends AppController
         return parent::isAuthorized($user);
     }
 
-    public function beforeFilter(Event $event)
+    public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);
         

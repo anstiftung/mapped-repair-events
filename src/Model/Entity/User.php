@@ -36,8 +36,8 @@ class User extends Entity
     
     protected function _getName()
     {
-        if (isset($this->_properties['firstname']) && isset($this->_properties['lastname'])) {
-            return $this->_properties['firstname'] . ' ' . $this->_properties['lastname'];
+        if (isset($this->_fields['firstname']) && isset($this->_fields['lastname'])) {
+            return $this->_fields['firstname'] . ' ' . $this->_fields['lastname'];
         }
         return '';
     }

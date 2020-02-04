@@ -1,7 +1,7 @@
 <?php
 namespace App\Controller;
 
-use Cake\Event\Event;
+use Cake\Event\EventInterface;
 use Cake\Http\Exception\NotFoundException;
 use Cake\ORM\TableRegistry;
 
@@ -15,7 +15,7 @@ class BlogsController extends AppController
         ]
     ];
     
-    public function beforeFilter(Event $event)
+    public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);
         $this->AppAuth->allow([

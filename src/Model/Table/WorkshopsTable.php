@@ -17,7 +17,7 @@ class WorkshopsTable extends AppTable
         'street'
     ];
 
-    public function initialize(array $config)
+    public function initialize(array $config): void
     {
         parent::initialize($config);
         
@@ -56,7 +56,7 @@ class WorkshopsTable extends AppTable
         ]);
     }
     
-    public function validationDefault(Validator $validator)
+    public function validationDefault(Validator $validator): \Cake\Validation\Validator
     {
         $validator = $this->validationAdmin($validator);
         $invalidCoordinateMessage = 'Die Adresse wurde nicht gefunden. Bitte ändere sie oder lege die Koordinaten selbst fest.';
@@ -109,6 +109,12 @@ class WorkshopsTable extends AppTable
                 'UsersWorkshops.approved <> \'0000-00-00 00:00:00\''
             ]);
         });
+        // revertPrivatizeData needs to be called again (although already applied in getWorkshopsWithUsers)
+        foreach($workshops as $workshop) {
+            foreach($workshop->users as $user) {
+                $user->revertPrivatizeData();
+            }
+        }
         return $workshops;
     }
     

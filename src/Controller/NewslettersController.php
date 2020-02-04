@@ -3,14 +3,14 @@
 namespace App\Controller;
 
 use Cake\Core\Configure;
-use Cake\Event\Event;
-use Cake\Mailer\Email;
+use Cake\Event\EventInterface;
+use Cake\Mailer\Mailer;
 use Cake\Http\Exception\NotFoundException;
 use Cake\ORM\TableRegistry;
 
 class NewslettersController extends AppController {
     
-    public function beforeFilter(Event $event) {
+    public function beforeFilter(EventInterface $event) {
         
         parent::beforeFilter($event);
         $this->AppAuth->allow([
@@ -41,11 +41,10 @@ class NewslettersController extends AppController {
             if (empty($newsletter->getErrors())) {
                 $this->CptNewsletter->save($newsletter);
                 
-                $email = new Email('default');
+                $email = new Mailer('default');
                 $email->viewBuilder()->setTemplate('activate_newsletter');
                 $email->setSubject(__('Please activate your newsletter subscription'))
                 ->setViewVars([
-                    'domain' => Configure::read('App.fullBaseUrl'),
                     'confirmationCode' => $this->CptNewsletter->getConfirmationCode(),
                     'unsubscribeCode' => $this->CptNewsletter->getUnsubscribeCode()
                 ])->setTo($this->request->getData('Newsletters.email'));
@@ -129,7 +128,7 @@ class NewslettersController extends AppController {
             $this->Newsletter->get($newsletter->id)
             );
         
-        $email = new Email('default');
+        $email = new Mailer('default');
         $email->viewBuilder()->setTemplate('activated_newsletter_notification');
         $email->setSubject('Neue E-Mailadresse ausgetragen')
         ->setViewVars([

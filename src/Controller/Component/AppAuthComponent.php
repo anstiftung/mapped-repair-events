@@ -4,6 +4,7 @@ namespace App\Controller\Component;
 
 use Cake\Controller\Component\AuthComponent;
 use Cake\ORM\TableRegistry;
+use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
 
 class AppAuthComponent extends AuthComponent {
@@ -12,7 +13,44 @@ class AppAuthComponent extends AuthComponent {
     
     public $controller;
     
-    public function flash($message) {
+    
+    /**
+     * also private data of logged user is needed sometimes (internally)
+     */
+    public function user(?string $key = null)
+    {
+        $userFromSession = parent::user();
+        
+        if (!empty($userFromSession)) {
+            
+            $userModel = TableRegistry::getTableLocator()->get('Users');
+            $user = $userModel->find('all', [
+                'conditions' => [
+                    'Users.uid' => $userFromSession['uid'],
+                    'Users.status > ' . APP_DELETED
+                ],
+                'contain' => [
+                    'Groups',
+                    'Categories',
+                    'Skills'
+                ]
+            ])->first();
+            $user->revertPrivatizeData();
+            
+            if ($key === null) {
+                return $user;
+            }
+            
+            return Hash::get($user, $key);
+        
+        }
+        
+        return null;
+        
+    }
+    
+    public function flash($message): void
+    {
         $this->AppFlash->setFlashError($message);
     }
 

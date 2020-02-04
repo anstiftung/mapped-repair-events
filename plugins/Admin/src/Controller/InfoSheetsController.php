@@ -1,7 +1,7 @@
 <?php
 namespace Admin\Controller;
 
-use Cake\Event\Event;
+use Cake\Event\EventInterface;
 use Cake\ORM\TableRegistry;
 
 class InfoSheetsController extends AdminAppController
@@ -13,7 +13,7 @@ class InfoSheetsController extends AdminAppController
         $this->InfoSheet = TableRegistry::getTableLocator()->get('InfoSheets');
     }
 
-    public function beforeFilter(Event $event)
+    public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);
         

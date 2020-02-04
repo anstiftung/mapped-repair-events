@@ -8,7 +8,7 @@ class FormFieldOptionsFixture extends TestFixture
 {
     public $import = ['table' => 'form_field_options', 'connection' => 'default'];
     
-    public function init()
+    public function init(): void
     {
         $this->records = [
             [

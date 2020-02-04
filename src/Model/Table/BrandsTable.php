@@ -9,7 +9,7 @@ class BrandsTable extends Table
     public $allowedBasicHtmlFields = [];
     public $name_de = 'Marke';
     
-    public function initialize(array $config)
+    public function initialize(array $config): void
     {
         $this->addBehavior('Timestamp');
         parent::initialize($config);

@@ -2,7 +2,7 @@
 
 namespace App\Test\TestCase\Controller;
 
-use App\Test\TestCase\Traits\LoadAllFixturesTrait;
+use App\Test\TestCase\AppTestCase;
 use App\Test\TestCase\Traits\LogFileAssertionsTrait;
 use App\Test\TestCase\Traits\LoginTrait;
 use App\Test\TestCase\Traits\UserAssertionsTrait;
@@ -11,11 +11,10 @@ use Cake\ORM\TableRegistry;
 use Cake\TestSuite\EmailTrait;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\StringCompareTrait;
-use Cake\TestSuite\TestCase;
 use Cake\I18n\FrozenDate;
 use Cake\I18n\FrozenTime;
 
-class EventsControllerTest extends TestCase
+class EventsControllerTest extends AppTestCase
 {
     use LoginTrait;
     use IntegrationTestTrait;
@@ -23,7 +22,6 @@ class EventsControllerTest extends TestCase
     use EmailTrait;
     use StringCompareTrait;
     use LogFileAssertionsTrait;
-    use LoadAllFixturesTrait;
     
     private $newEventData;
     
@@ -71,24 +69,32 @@ class EventsControllerTest extends TestCase
         $this->assertResponseContains('Bitte trage eine bis-Uhrzeit ein.');
     }
     
-    public function testAddEventOk()
+    public function testAddEventsOk()
     {
         $this->loadNewEventData();
         $this->loginAsOrga();
         $this->newEventData['eventbeschreibung'] = 'description</title></script><img src=n onerror=alert("x")>';
-        $this->newEventData['datumstart'] = '01.01.2020';
         $this->newEventData['ort'] = 'Berlin';
         $this->newEventData['strasse'] = 'Demo Street 1';
         $this->newEventData['zip'] = '10999';
         $this->newEventData['lat'] = '48,1291558';
         $this->newEventData['lng'] = '11,3626812';
+        $this->newEventData['datumstart'] = '01.01.2020';
         $this->newEventData['uhrzeitstart'] = '10:00';
         $this->newEventData['uhrzeitend'] = '20:00';
+        
+        $newEventData2 = [
+            'datumstart' => '01.02.2020',
+            'uhrzeitstart' => '12:00',
+            'uhrzeitend' => '22:00',
+        ];
+        
         $this->post(
             Configure::read('AppConfig.htmlHelper')->urlEventNew(2),
             [
                 'referer' => '/',
-                $this->newEventData
+                $this->newEventData,
+                $newEventData2
             ]
         );
         $this->assertResponseNotContains('error');
@@ -99,7 +105,8 @@ class EventsControllerTest extends TestCase
                 'Categories',
             ]
         ])->toArray();
-        $this->assertEquals(2, count($events));
+        
+        $this->assertEquals(3, count($events));
         $this->assertEquals($events[1]->eventbeschreibung, 'description<img src="n" alt="n" />');
         $this->assertEquals($events[1]->strasse, $this->newEventData['strasse']);
         $this->assertEquals($events[1]->datumstart, new FrozenDate($this->newEventData['datumstart']));
@@ -107,6 +114,10 @@ class EventsControllerTest extends TestCase
         $this->assertEquals($events[1]->uhrzeitend, new FrozenTime($this->newEventData['uhrzeitend']));
         $this->assertEquals($events[1]->categories[0]->id, $this->newEventData['categories']['_ids'][0]);
         $this->assertEquals($events[1]->owner, 1);
+        
+        $this->assertEquals($events[2]->datumstart, new FrozenDate($newEventData2['datumstart']));
+        $this->assertEquals($events[2]->uhrzeitstart, new FrozenTime($newEventData2['uhrzeitstart']));
+        $this->assertEquals($events[2]->uhrzeitend, new FrozenTime($newEventData2['uhrzeitend']));
         
         $this->assertMailCount(0);
         
@@ -141,6 +152,21 @@ class EventsControllerTest extends TestCase
         $this->_compareBasePath = ROOT . DS . 'tests' . DS . 'comparisons' . DS;
         $this->get('/events/ajaxGetAllEventsForMap');
         $this->assertSameAsFile('events-for-map.json', $this->_response);
+    }
+    
+    public function testDeleteEvent()
+    {
+        $this->loginAsOrga();
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlEventDelete(6));
+        $this->Event = TableRegistry::getTableLocator()->get('Events');
+        $event = $this->Event->find('all', [
+            'conditions' => [
+                'Events.uid' => 6
+            ]
+        ])->first();
+        $this->assertEquals($event->status, APP_DELETED);
+        $this->assertMailCount(1);
+        $this->assertMailSentTo('worknews-test@mailinator.com');
     }
     
     private function doTestEditForm($renotify)

@@ -12,7 +12,7 @@ class CategoriesTable extends Table
     public $allowedBasicHtmlFields = [];
     public $name_de = 'Kategorie';
     
-    public function initialize(array $config)
+    public function initialize(array $config): void
     {
         $this->addBehavior('Tree');
         $this->addBehavior('Timestamp');
@@ -27,7 +27,7 @@ class CategoriesTable extends Table
         ]);
     }
     
-    public function validationDefault(Validator $validator)
+    public function validationDefault(Validator $validator): \Cake\Validation\Validator
     {
         $validator->notEmptyString('name', 'Bitte trage den Namen ein.');
         return $validator;

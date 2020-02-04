@@ -2,9 +2,9 @@
 namespace App\Controller;
 
 use Cake\Core\Configure;
-use Cake\Event\Event;
+use Cake\Event\EventInterface;
 use Cake\I18n\FrozenTime;
-use Cake\Mailer\Email;
+use Cake\Mailer\Mailer;
 use Cake\Http\Exception\ForbiddenException;
 use Cake\Http\Exception\NotFoundException;
 use Cake\ORM\TableRegistry;
@@ -12,7 +12,7 @@ use Cake\ORM\TableRegistry;
 class EventsController extends AppController
 {
     
-    public function beforeFilter(Event $event) {
+    public function beforeFilter(EventInterface $event) {
         
         parent::beforeFilter($event);
         $this->Event = TableRegistry::getTableLocator()->get('Events');
@@ -227,15 +227,14 @@ class EventsController extends AppController
                         'Worknews.confirm' => 'ok'
                     ]
                 ]);
-                
+
                 if (!empty($subscribers)) {
-                    $email = new Email('default');
+                    $email = new Mailer('default');
                     $email->viewBuilder()->setTemplate('event_deleted');
                     foreach ($subscribers as $subscriber) {
                         $email->setTo($subscriber->email)
                         ->setSubject('Termin gelöscht')
                         ->setViewVars([
-                            'domain' => Configure::read('App.fullBaseUrl'),
                             'url' => Configure::read('AppConfig.htmlHelper')->urlWorkshopDetail($event->workshop->url),
                             'unsub' => $subscriber->unsub
                         ]);
@@ -249,7 +248,7 @@ class EventsController extends AppController
             $this->AppFlash->setErrorMessage('Beim Löschen ist ein Fehler aufgetreten');
         }
         
-        $this->redirect($this->request->referer());
+        $this->redirect($this->request->referer(false));
         
     }
     
@@ -277,6 +276,7 @@ class EventsController extends AppController
         $this->set('workshopsForDropdown', $this->Workshop->transformForDropdown($workshops));
         $this->set('preselectedWorkshopUid', $preselectedWorkshopUid);
         $this->set('editFormUrl', Configure::read('AppConfig.htmlHelper')->urlEventNew($preselectedWorkshopUid));
+        $this->set('isDuplicateMode', false);
         
         $this->_edit([$event], false);
         
@@ -306,6 +306,7 @@ class EventsController extends AppController
         $this->set('editFormUrl', Configure::read('AppConfig.htmlHelper')->urlEventNew($event->workshop_uid));
         $this->set('preselectedWorkshopUid', $event->workshop_uid);
         $this->_edit([$event], false);
+        $this->set('isDuplicateMode', true);
         $this->render('edit');
     }
     
@@ -334,6 +335,7 @@ class EventsController extends AppController
         $this->setIsCurrentlyUpdated($event->uid);
         $this->set('metaTags', ['title' => 'Termin bearbeiten']);
         $this->set('editFormUrl', Configure::read('AppConfig.htmlHelper')->urlEventEdit($event->uid));
+        $this->set('isDuplicateMode', false);
         $patchedEntities = $this->_edit([$event], true);
         
         $patchedEntity = $patchedEntities[0];
@@ -369,7 +371,7 @@ class EventsController extends AppController
         
         if (!empty($this->request->getData())) {
             $i = 0;
-            $preparedData = [];
+            $patchedEvents = [];
             foreach($this->request->getData() as $data) {
                 if (!is_array($data)) {
                     continue; // skip referer
@@ -377,6 +379,12 @@ class EventsController extends AppController
                 $data = array_merge($this->request->getData()[0], $data);
                 if ($data['datumstart']) {
                     $data['datumstart'] = new FrozenTime($data['datumstart']);
+                }
+                if ($data['uhrzeitstart']) {
+                    $data['uhrzeitstart'] = new FrozenTime($data['uhrzeitstart']);
+                }
+                if ($data['uhrzeitend']) {
+                    $data['uhrzeitend'] = new FrozenTime($data['uhrzeitend']);
                 }
                 if (!$data['use_custom_coordinates']) {
                     $addressString = $data['strasse'] . ', ' . $data['zip'] . ' ' . $data['ort'] . ', ' . $data['land'];
@@ -391,11 +399,12 @@ class EventsController extends AppController
                 if ($isEditMode) {
                     $data['uid'] = $events[0]->uid;
                 }
-                $preparedData[] = $data;
+                $event = clone($events[0]);
+                $patchedEvents[] = $this->Event->patchEntity($event, $data);
                 $i++;
             }
-            
-            $events = $this->Event->patchEntities($events[0], $preparedData);
+
+            $events = $patchedEvents;
             
             $hasErrors = false;
             foreach($events as $event) {
@@ -481,12 +490,12 @@ class EventsController extends AppController
                 });
             }
         }
-        $this->set('data', [
+        $this->set([
             'status' => 1,
             'message' => 'ok',
             'events' => $this->combineEventsForMap($events)
         ]);
-        $this->set('_serialize', 'data');
+        $this->viewBuilder()->setOption('serialize', ['status', 'message', 'events']);
     }
     
     function all()
@@ -634,6 +643,8 @@ class EventsController extends AppController
         $eventsForMap1 = [];
         
         foreach ($events as $event) {
+            unset($event->uhrzeitstart);
+            unset($event->uhrzeitend);
             $preparedWorkshop = [];
             if ($event->workshop) {
                 $tmpWorkshop = $event->workshop;

@@ -16,7 +16,7 @@ class UsersTable extends AppTable
         'street'
     ];
 
-    public function initialize(array $config)
+    public function initialize(array $config): void
     {
         parent::initialize($config);
         
@@ -183,7 +183,7 @@ class UsersTable extends AppTable
         return $validator;
     }
     
-    public function validationDefault(Validator $validator)
+    public function validationDefault(Validator $validator): \Cake\Validation\Validator
     {
         
         $validator->notEmptyString('nick', 'Bitte trage deinen Nickname ein.');

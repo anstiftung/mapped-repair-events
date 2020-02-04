@@ -106,11 +106,11 @@ MappedRepairEvents.WidgetStatistics = {
             if (form.find('input[name="defaultDataSource"]').length > 0) {
                 form.find('#datasource').val(form.find('input[name="defaultDataSource"]'));
             }
-            if (form.find('select[name="month\[month\]"]').length > 0) {
-                form.find('select[name="month\[month\]"]').val('');
+            if (form.find('select[name="month"]').length > 0) {
+                form.find('select[name="month"]').val('');
             }
-            if (form.find('select[name="year\[year\]"]').length > 0) {
-                form.find('select[name="year\[year\]"]').val('');
+            if (form.find('select[name="year"]').length > 0) {
+                form.find('select[name="year"]').val('');
             }
             
         });

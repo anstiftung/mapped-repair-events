@@ -6,7 +6,7 @@ use Cake\ORM\Table;
 class UsersWorkshopsTable extends Table
 {
 
-    public function initialize(array $config)
+    public function initialize(array $config): void
     {
         parent::initialize($config);
         $this->setPrimaryKey([

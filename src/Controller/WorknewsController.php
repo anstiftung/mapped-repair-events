@@ -2,14 +2,14 @@
 
 namespace App\Controller;
 
-use Cake\Event\Event;
+use Cake\Event\EventInterface;
 use Cake\I18n\Time;
 use Cake\Http\Exception\NotFoundException;
 use Cake\ORM\TableRegistry;
 
 class WorknewsController extends AppController {
 
-    public function beforeFilter(Event $event) {
+    public function beforeFilter(EventInterface $event) {
         
         parent::beforeFilter($event);
         $this->AppAuth->allow([

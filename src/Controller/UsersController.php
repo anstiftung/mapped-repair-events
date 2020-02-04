@@ -4,8 +4,8 @@ namespace App\Controller;
 
 use App\Controller\Component\StringComponent;
 use Cake\Core\Configure;
-use Cake\Event\Event;
-use Cake\Mailer\Email;
+use Cake\Event\EventInterface;
+use Cake\Mailer\Mailer;
 use Cake\Http\Exception\NotFoundException;
 use Cake\ORM\Query;
 use Cake\ORM\TableRegistry;
@@ -35,7 +35,7 @@ class UsersController extends AppController
         
     }
     
-    public function beforeFilter(Event $event)
+    public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);
         $this->AppAuth->allow([
@@ -191,7 +191,7 @@ class UsersController extends AppController
         ];
         $this->set('metaTags', $metaTags);
         
-        $user = $this->User->newEntity();
+        $user = $this->User->newEntity([]);
         
         if (! empty($this->request->getData())) {
             
@@ -211,7 +211,7 @@ class UsersController extends AppController
                 $newPassword = $this->User->setNewPassword($user->uid);
                 
                 // send email
-                $email = new Email('default');
+                $email = new Mailer('default');
                 $email->viewBuilder()->setTemplate('new_password_request');
                 $email->setSubject('Neues Passwort für '. Configure::read('AppConfig.htmlHelper')->getHostName())
                 ->setViewVars([
@@ -411,14 +411,14 @@ class UsersController extends AppController
         ];
         $this->set('metaTags', $metaTags);
         
-        $user = $this->User->newEntity();
+        $user = $this->User->newEntity([]);
         $this->set('user', $user);
         
         if (empty($this->request->getData())) {
             return;
         }
         
-        $user = $this->User->newEntity();
+        $user = $this->User->newEntity([]);
         $this->set('user', $user);
         
         $userUid = $this->AppAuth->getUserUid();
@@ -489,7 +489,7 @@ class UsersController extends AppController
         $this->setReferer();
         
         if (!empty($this->request->getData())) {
-            $email = new Email('default');
+            $email = new Mailer('default');
             $email->viewBuilder()->setTemplate('user_delete_request');
             $email->setTo(Configure::read('AppConfig.notificationMailAddress'))
             ->setSubject('User "'.$this->AppAuth->getUserNick().'" möchte gelöscht werden')
@@ -593,7 +593,7 @@ class UsersController extends AppController
         
         $this->set('groups', Configure::read('AppConfig.htmlHelper')->getUserGroupsForRegistration());
         
-        $user = $this->User->newEntity();
+        $user = $this->User->newEntity([]);
         
         if (! empty($this->request->getData())) {
             
@@ -633,7 +633,7 @@ class UsersController extends AppController
                 $result = $this->User->save($userEntity);
                 $password = $this->User->setNewPassword($result->uid);
                 
-                $email = new Email('default');
+                $email = new Mailer('default');
                 $email->viewBuilder()->setTemplate('registration_successful');
                 $email->setSubject('Deine Registrierung bei '. Configure::read('AppConfig.htmlHelper')->getHostName())
                 ->setViewVars([

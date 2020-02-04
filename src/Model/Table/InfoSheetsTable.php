@@ -10,7 +10,7 @@ class InfoSheetsTable extends AppTable
 
     public $name_de = 'Laufzettel';
     
-    public function initialize(array $config)
+    public function initialize(array $config): void
     {
         parent::initialize($config);
         $this->belongsTo('Events', [
@@ -29,7 +29,7 @@ class InfoSheetsTable extends AppTable
         ]);
     }
     
-    public function validationDefault(Validator $validator)
+    public function validationDefault(Validator $validator): \Cake\Validation\Validator
     {
         $validator->notEmptyString('category_id', 'Bitte wähle eine Kategorie aus.');
         $validator->notEmptyString('device_name', 'Bitte trage ein, um welches Gerät es sich handelt.');

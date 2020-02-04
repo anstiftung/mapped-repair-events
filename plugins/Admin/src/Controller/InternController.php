@@ -73,10 +73,10 @@ class InternController extends AdminAppController
         $this->autoRender = false;
         
         // check if uploaded file is image file
-        $formatInfo = getimagesize($this->request->getData('upload.tmp_name'));
+        $upload = $this->getRequest()->getData('upload');
         
         // non-image files will return false
-        if ($formatInfo === false || ! in_array($formatInfo['mime'], [
+        if (!in_array($upload->getClientMediaType(), [
             'image/jpeg',
             'image/png',
             'image/gif'
@@ -88,10 +88,11 @@ class InternController extends AdminAppController
             ]));
         }
         
-        $extension = $this->getExtension($formatInfo['mime']);
+        $extension = strtolower(pathinfo($upload->getClientFilename(), PATHINFO_EXTENSION));
         $filename = StringComponent::createRandomString(10) . '.' . $extension;
         $filenameWithPath = Configure::read('AppConfig.tmpUploadImagesDir') . '/' . $filename;
-        Image::make($this->request->getData('upload.tmp_name'))
+        $upload->moveTo(WWW_ROOT . $filenameWithPath);
+        Image::make(WWW_ROOT . $filenameWithPath)
             ->widen(Configure::read('AppConfig.tmpUploadFileSize'))
             ->save(WWW_ROOT . $filenameWithPath);
         

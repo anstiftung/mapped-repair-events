@@ -2,7 +2,7 @@
 namespace Admin\Controller;
 
 use Cake\Core\Configure;
-use Cake\Event\Event;
+use Cake\Event\EventInterface;
 use Cake\ORM\TableRegistry;
 
 class EventsController extends AdminAppController
@@ -14,7 +14,7 @@ class EventsController extends AdminAppController
         $this->Event = TableRegistry::getTableLocator()->get('Events');
     }
 
-    public function beforeFilter(Event $event)
+    public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);
         

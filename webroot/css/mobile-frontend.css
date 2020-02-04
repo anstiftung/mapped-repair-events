@@ -431,8 +431,12 @@
 		max-width: 80px;
 	}
 	#eventEditForm .date-time-wrapper .input.time {
-		width: 165px;
-	}	
+		width: 145px;
+		margin-right: 3px;
+	}
+    #eventEditForm .date-time-wrapper .time-fields-wrapper {
+        margin-left: 41px;
+    }
 	#eventEditForm .input.checkbox label,
 	#workshopEditForm .input.checkbox label {
 	   padding-left: 0px;

@@ -4,9 +4,9 @@ namespace App\Controller;
 use App\Controller\Component\StringComponent;
 use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
-use Cake\Event\Event;
+use Cake\Event\EventInterface;
 use Cake\I18n\Time;
-use Cake\Mailer\Email;
+use Cake\Mailer\Mailer;
 use Cake\Http\Exception\ForbiddenException;
 use Cake\Http\Exception\NotFoundException;
 use Cake\ORM\TableRegistry;
@@ -15,7 +15,7 @@ use Cake\Utility\Inflector;
 class WorkshopsController extends AppController
 {
 
-    public function beforeFilter(Event $event) {
+    public function beforeFilter(EventInterface $event) {
         
         parent::beforeFilter($event);
         $this->Workshop = TableRegistry::getTableLocator()->get('Workshops');
@@ -364,12 +364,12 @@ class WorkshopsController extends AppController
             
         }
         
-        $this->set('data', [
+        $this->set([
             'status' => 1,
             'message' => 'ok',
             'workshops' => $preparedWorkshops
         ]);
-        $this->set('_serialize', 'data');
+        $this->viewBuilder()->setOption('serialize', ['status', 'message', 'workshops']);
         
     }
     
@@ -436,11 +436,10 @@ class WorkshopsController extends AppController
             if (!($worknews->hasErrors())) {
                 $this->Worknews->save($worknews);
                 
-                $email = new Email('default');
+                $email = new Mailer('default');
                 $email->viewBuilder()->setTemplate('activate_worknews');
                 $email->setSubject(__('Please activate your worknews subscription'))
                     ->setViewVars([
-                        'domain' => Configure::read('App.fullBaseUrl'),
                         'workshop' => $workshop,
                         'confirmationCode' => $confirmationCode,
                         'unsubscribeCode' => $unsubscribeCode
@@ -692,7 +691,7 @@ class WorkshopsController extends AppController
         $this->connection->execute($query, $params);
         
         /* START email-versand an anfrage-steller */
-        $email = new Email('default');
+        $email = new Mailer('default');
         $email->viewBuilder()->setTemplate('workshop_application_approved');
         $email->setSubject('Deine Anfrage zur Mitarbeit wurde bestätigt.')
             ->setViewVars([
@@ -797,7 +796,7 @@ class WorkshopsController extends AppController
                     $user->revertPrivatizeData();
                 }
                 
-                $email = new Email('default');
+                $email = new Mailer('default');
                 $email->viewBuilder()->setTemplate('workshop_application');
                 $email->setSubject($subject)
                     ->setViewVars([
@@ -930,7 +929,7 @@ class WorkshopsController extends AppController
         $this->Workshop->save($entity);
         
         // send email to orga users and admin
-        $email = new Email('default');
+        $email = new Mailer('default');
         $email->viewBuilder()->setTemplate('workshop_deleted');
         $email->setSubject(Configure::read('AppConfig.initiativeNameSingular') . ' "'.$workshop->name.'" erfolgreich gelöscht')
             ->setViewVars([
@@ -1005,12 +1004,13 @@ class WorkshopsController extends AppController
                 'Categories'
             ]
         ])->first();
-        $this->set('data', [
+        $this->set([
             'status' => 0,
             'message' => 'ok',
-            'workshop' => $workshop
+            'workshop' => $workshop,
         ]);
-        $this->set('_serialize', 'data');
+        $this->viewBuilder()->setOption('serialize', ['status', 'message', 'workshop']);
+        
     }
 
     public function all() {

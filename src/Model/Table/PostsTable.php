@@ -8,7 +8,7 @@ class PostsTable extends AppTable
 
     public $name_de = 'Post';
 
-    public function initialize(array $config)
+    public function initialize(array $config): void
     {
         parent::initialize($config);
         $this->belongsTo('Blogs');
@@ -24,7 +24,7 @@ class PostsTable extends AppTable
         ]);
     }
 
-    public function validationDefault(Validator $validator)
+    public function validationDefault(Validator $validator): \Cake\Validation\Validator
     {
         $validator = $this->validationAdmin($validator);
         $validator->minLength('city', 2, 'Bitte trage einen Ort ein.');

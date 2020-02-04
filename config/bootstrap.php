@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -30,15 +32,15 @@ require __DIR__ . '/paths.php';
 require CORE_PATH . 'config' . DS . 'bootstrap.php';
 
 use Cake\Cache\Cache;
-use Cake\Console\ConsoleErrorHandler;
 use Cake\Core\Configure;
 use Cake\Core\Configure\Engine\PhpConfig;
 use Cake\Database\Type;
 use Cake\Datasource\ConnectionManager;
+use Cake\Error\ConsoleErrorHandler;
 use Cake\Error\ErrorHandler;
 use Cake\Http\ServerRequest;
 use Cake\Log\Log;
-use Cake\Mailer\Email;
+use Cake\Mailer\Mailer;
 use Cake\Mailer\TransportFactory;
 use Cake\Utility\Security;
 
@@ -59,25 +61,24 @@ try {
 }
 
 /*
- * Load an environment local configuration file.
- * You can use a file like app_local.php to provide local overrides to your
- * shared configuration.
+ * Load an environment local configuration file to provide overrides to your configuration.
+ * Notice: For security reasons app_local.php will not be included in your git repo.
  */
 Configure::load('app_custom', 'default');
 
 /*
- * disable caching if debug is on
+ * When debug = true the metadata cache should only last
+ * for a short time.
  */
 if (Configure::read('debug')) {
     Cache::disable();
 }
 
 /*
- * Set server timezone to UTC. You can change it to another timezone of your
- * choice but using UTC makes time calculations / conversions easier.
+ * Set the default server timezone. Using UTC makes time calculations / conversions easier.
  * Check http://php.net/manual/en/timezones.php for list of valid timezone strings.
  */
-date_default_timezone_set('Europe/Berlin');
+date_default_timezone_set(Configure::read('App.defaultTimezone'));
 
 /*
  * Configure the mbstring extension to use the correct encoding.
@@ -110,18 +111,17 @@ if ($isCli) {
 /*
  * Set the full base URL.
  * This URL is used as the base of all absolute links.
- *
- * If you define fullBaseUrl in your config file you can remove this.
  */
-if (!Configure::read('App.fullBaseUrl')) {
+$fullBaseUrl = Configure::read('App.fullBaseUrl');
+if (!$fullBaseUrl) {
     $s = null;
     if (env('HTTPS')) {
         $s = 's';
     }
-
+    
     $httpHost = env('HTTP_HOST');
     if (isset($httpHost)) {
-        Configure::write('App.fullBaseUrl', 'http' . $s . '://' . $httpHost);
+        $fullBaseUrl = 'http' . $s . '://' . $httpHost;
     }
     unset($httpHost, $s);
 }
@@ -129,38 +129,36 @@ if (!Configure::read('App.fullBaseUrl')) {
 Cache::setConfig(Configure::consume('Cache'));
 ConnectionManager::setConfig(Configure::consume('Datasources'));
 TransportFactory::setConfig(Configure::consume('EmailTransport'));
-Email::setConfig(Configure::consume('Email'));
+Mailer::setConfig(Configure::consume('Email'));
 Log::setConfig(Configure::consume('Log'));
-Security::setSalt(Configure::consume('Security.salt'));
 
-/*
- * The default crypto extension in 3.0 is OpenSSL.
- * If you are migrating from 2.x uncomment this code to
- * use a more compatible Mcrypt based implementation
- */
-//Security::engine(new \Cake\Utility\Crypto\Mcrypt());
+if (!is_null(Configure::read('Security.salt'))) {
+    Security::setSalt(Configure::consume('Security.salt'));
+}
 
 /*
  * Setup detectors for mobile and tablet.
  */
 ServerRequest::addDetector('mobile', function ($request) {
     $detector = new \Detection\MobileDetect();
-
+    
     return $detector->isMobile();
 });
 ServerRequest::addDetector('tablet', function ($request) {
     $detector = new \Detection\MobileDetect();
-
+    
     return $detector->isTablet();
 });
 
 /*
- * Enable immutable time objects in the ORM.
+ * You can set whether the ORM uses immutable or mutable Time types.
+ * The default changed in 4.0 to immutable types. You can uncomment
+ * below to switch back to mutable types.
  *
  * You can enable default locale format parsing by adding calls
  * to `useLocaleParser()`. This enables the automatic conversion of
  * locale specific date formats. For details see
- * @link https://book.cakephp.org/3.0/en/core-libraries/internationalization-and-localization.html#parsing-localized-datetime-data
+ * @link https://book.cakephp.org/4/en/core-libraries/internationalization-and-localization.html#parsing-localized-datetime-data
  */
 Type::build('time')
     ->useImmutable();
@@ -182,5 +180,5 @@ Type::build('timestamp')
 //Inflector::rules('transliteration', ['/å/' => 'aa']);
 
 locale_set_default('de');
-setlocale(LC_ALL, 'de_DE.UTF-8');
+setlocale(LC_CTYPE, 'de_DE.UTF-8');
 mb_internal_encoding('UTF-8');

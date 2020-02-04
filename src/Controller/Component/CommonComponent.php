@@ -2,7 +2,7 @@
 
 namespace App\Controller\Component;
 
-use Cake\Event\Event;
+use Cake\Event\EventInterface;
 
 /**
  * A component included in every app to take care of common stuff.
@@ -20,7 +20,7 @@ class CommonComponent extends AppComponent {
 	 * @param \Cake\Event\Event $event
 	 * @return void
 	 */
-	public function startup(Event $event) {
+	public function startup(EventInterface $event) {
 		
 		$request = $this->controller->getRequest();
 		
@@ -62,6 +62,11 @@ class CommonComponent extends AppComponent {
 	 * @return array|string
 	 */
 	private function trimAndSanitizeDeep($value, $transformNullToString = false) {
+	    
+	    // Laminas\Diactoros\UploadedFile
+	    if (is_object($value)) {
+	        return $value;
+	    }
 	    
 	    $config = \HTMLPurifier_Config::createDefault();
 	    $config->set('Cache.SerializerPath', TMP . 'cache' . DS . 'html_purifier');

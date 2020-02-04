@@ -2,22 +2,20 @@
 
 namespace App\Test\TestCase\Controller;
 
-use App\Test\TestCase\Traits\LoadAllFixturesTrait;
+use App\Test\TestCase\AppTestCase;
 use App\Test\TestCase\Traits\LogFileAssertionsTrait;
 use App\Test\TestCase\Traits\UserAssertionsTrait;
 use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\EmailTrait;
 use Cake\TestSuite\IntegrationTestTrait;
-use Cake\TestSuite\TestCase;
 
-class UsersControllerTest extends TestCase
+class UsersControllerTest extends AppTestCase
 {
     use IntegrationTestTrait;
     use UserAssertionsTrait;
     use EmailTrait;
     use LogFileAssertionsTrait;
-    use LoadAllFixturesTrait;
     
     private $validUserData = [
         'nick' => 'JohnDoeA<img onerror="alert();" />',

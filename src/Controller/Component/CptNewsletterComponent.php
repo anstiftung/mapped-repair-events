@@ -4,7 +4,7 @@ namespace App\Controller\Component;
 use Cake\Controller\ComponentRegistry;
 use Cake\Core\Configure;
 use Cake\I18n\Time;
-use Cake\Mailer\Email;
+use Cake\Mailer\Mailer;
 use Cake\ORM\TableRegistry;
 
 class CptNewsletterComponent extends AppComponent
@@ -81,7 +81,7 @@ class CptNewsletterComponent extends AppComponent
             )
         );
         
-        $email = new Email('default');
+        $email = new Mailer('default');
         $email->viewBuilder()->setTemplate('activated_newsletter_notification');
         $email->setSubject('Neue E-Mailadresse eingetragen')
         ->setViewVars([

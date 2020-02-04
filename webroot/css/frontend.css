@@ -955,7 +955,7 @@ body.users .profile .input select {
 }
 #eventEditForm .date-time-wrapper .input.text {
     width: 235px;
-    margin-right: 10px;
+    margin-right: 60px;
 }
 #eventEditForm .date-time-wrapper .input {
     float: left;
@@ -974,6 +974,10 @@ body.users .profile .input select {
 }
 #eventEditForm .date-time-wrapper .input input {
     width: 85px;
+}
+#eventEditForm .date-time-wrapper .input.time input {
+    width: 68px;
+    padding: 3px;
 }
 #eventEditForm #cbskillsreg div.checkbox {
     float: left;
@@ -3303,6 +3307,9 @@ body.events div.admin div.edit .input.time .error-message {
 body.events.add .date-time-wrapper .row {
 	float: left;
 	width: 100%;
+}
+body.events .date-time-wrapper .row .time-fields-wrapper {
+	float: left;
 }
 body.events.add .date-time-wrapper .fa {
     line-height: 35px;

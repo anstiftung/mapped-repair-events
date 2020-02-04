@@ -1,10 +1,13 @@
 <?php
 /**
- * Routes configuration
+ * Routes configuration.
  *
  * In this file, you set up routes to your controllers and their actions.
  * Routes are very important mechanism that allows you to freely connect
  * different URLs to chosen controllers and their actions (functions).
+ *
+ * It's loaded within the context of `Application::routes()` method which
+ * receives a `RouteBuilder` instance `$builder` as method argument.
  *
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -19,11 +22,11 @@
  */
 
 use Cake\Core\Configure;
+use Cake\Routing\Route\DashedRoute;
 use Cake\Routing\RouteBuilder;
 use Cake\Routing\Router;
-use Cake\Routing\Route\DashedRoute;
 
-/**
+/*
  * The default class to use for all routes
  *
  * The following route classes are supplied with CakePHP and are appropriate
@@ -39,98 +42,92 @@ use Cake\Routing\Route\DashedRoute;
  * Note that `Route` does not do any inflections on URLs which will result in
  * inconsistently cased URLs when used with `:plugin`, `:controller` and
  * `:action` markers.
- *
  */
 Router::defaultRouteClass(DashedRoute::class);
 
-Router::scope('/', function (RouteBuilder $routes) {
+Router::scope('/', function (RouteBuilder $builder) {
     
-    $routes->setExtensions(['html', 'rss', 'xml']);
+    $builder->setExtensions(['html', 'rss', 'xml']);
     
-    /**
-     * Here, we are connecting '/' (base path) to a controller called 'Pages',
-     * its action called 'display', and we pass a param to select the view file
-     * to use (in this case, src/Template/Pages/home.ctp)...
-     */
-    $routes->connect('/sitemap', ['controller' => 'sitemaps', 'action' => 'index']);
+    $builder->connect('/sitemap', ['controller' => 'sitemaps', 'action' => 'index']);
     
-    $routes->connect('/', ['controller'=>'workshops', 'action'=>'home']);
+    $builder->connect('/', ['controller'=>'workshops', 'action'=>'home']);
     
-    $routes->connect('/feed', ['controller' => 'blogs', 'action' => 'feed']); // url for "neuigkeiten"
-    $routes->connect('/feed/:blogUrl', ['controller' => 'blogs', 'action' => 'feed'], ['blogUrl' => Configure::read('AppConfig.htmlHelper')->getAdditionalBlogCategoryUrl()]); // sic! no "neuigkeiten"
+    $builder->connect('/feed', ['controller' => 'blogs', 'action' => 'feed']); // url for "neuigkeiten"
+    $builder->connect('/feed/:blogUrl', ['controller' => 'blogs', 'action' => 'feed'], ['blogUrl' => Configure::read('AppConfig.htmlHelper')->getAdditionalBlogCategoryUrl()]); // sic! no "neuigkeiten"
     
-    $routes->connect('/initiativen/newsact/*', ['controller'=>'worknews', 'action'=>'worknewsActivate']);
-    $routes->connect('/initiativen/newsunsub/*', ['controller'=>'worknews', 'action'=>'worknewsUnsubscribe']);
+    $builder->connect('/initiativen/newsact/*', ['controller'=>'worknews', 'action'=>'worknewsActivate']);
+    $builder->connect('/initiativen/newsunsub/*', ['controller'=>'worknews', 'action'=>'worknewsUnsubscribe']);
     
-    $routes->connect('/initiativen/verwalten', ['controller'=>'workshops', 'action'=>'verwalten']);
-    $routes->connect('/initiativen/mitmachen', ['controller'=>'workshops', 'action'=>'applyAsUser']);
-    $routes->connect('/meine-termine', ['controller'=>'events', 'action'=>'myEvents']);
-    $routes->connect('/initiativen/anlegen', ['controller'=>'workshops', 'action'=>'add']);
-    $routes->connect('/initiativen/bearbeiten/*', ['controller'=>'workshops', 'action'=>'edit']);
-    $routes->connect('/initiativen/loeschen/*', ['controller'=>'workshops', 'action'=>'delete']);
+    $builder->connect('/initiativen/verwalten', ['controller'=>'workshops', 'action'=>'verwalten']);
+    $builder->connect('/initiativen/mitmachen', ['controller'=>'workshops', 'action'=>'applyAsUser']);
+    $builder->connect('/meine-termine', ['controller'=>'events', 'action'=>'myEvents']);
+    $builder->connect('/initiativen/anlegen', ['controller'=>'workshops', 'action'=>'add']);
+    $builder->connect('/initiativen/bearbeiten/*', ['controller'=>'workshops', 'action'=>'edit']);
+    $builder->connect('/initiativen/loeschen/*', ['controller'=>'workshops', 'action'=>'delete']);
     
-    $routes->connect('/orte/*', ['controller'=>'workshops', 'action'=>'all']);
-    $routes->connect('/orte', ['controller'=>'workshops', 'action'=>'all']);
+    $builder->connect('/orte/*', ['controller'=>'workshops', 'action'=>'all']);
+    $builder->connect('/orte', ['controller'=>'workshops', 'action'=>'all']);
     
-    $routes->connect('/widgets/integration', ['controller'=>'widgets', 'action'=>'integration']);
+    $builder->connect('/widgets/integration', ['controller'=>'widgets', 'action'=>'integration']);
     
-    $routes->connect('/initiativen/user/refuse/*', ['controller'=>'workshops', 'action'=>'userRefuse']);
-    $routes->connect('/initiativen/user/resign/*', ['controller'=>'workshops', 'action'=>'userResign']);
-    $routes->connect('/initiativen/user/approve/*', ['controller'=>'workshops', 'action'=>'userApprove']);
+    $builder->connect('/initiativen/user/refuse/*', ['controller'=>'workshops', 'action'=>'userRefuse']);
+    $builder->connect('/initiativen/user/resign/*', ['controller'=>'workshops', 'action'=>'userResign']);
+    $builder->connect('/initiativen/user/approve/*', ['controller'=>'workshops', 'action'=>'userApprove']);
     
-    $routes->connect('/registrierung/reparaturhelferin', ['controller'=>'users', 'action'=>'registerRepairhelper']);
-    $routes->connect('/registrierung/organisatorin', ['controller'=>'users', 'action'=>'registerOrga']);
-    $routes->connect('/registrierung', ['controller'=>'users', 'action'=>'register']);
+    $builder->connect('/registrierung/reparaturhelferin', ['controller'=>'users', 'action'=>'registerRepairhelper']);
+    $builder->connect('/registrierung/organisatorin', ['controller'=>'users', 'action'=>'registerOrga']);
+    $builder->connect('/registrierung', ['controller'=>'users', 'action'=>'register']);
     
-    $routes->connect('/users/login', ['controller'=>'users', 'action'=>'login']);
-    $routes->connect('/users/logout', ['controller'=>'users', 'action'=>'logout']);
-    $routes->connect('/users/welcome', ['controller'=>'users', 'action'=>'welcome']);
-    $routes->connect('/users/passwortAendern', ['controller'=>'users', 'action'=>'passwortAendern']);
-    $routes->connect('/users/activate/*', ['controller'=>'users', 'action'=>'activate']);
+    $builder->connect('/users/login', ['controller'=>'users', 'action'=>'login']);
+    $builder->connect('/users/logout', ['controller'=>'users', 'action'=>'logout']);
+    $builder->connect('/users/welcome', ['controller'=>'users', 'action'=>'welcome']);
+    $builder->connect('/users/passwortAendern', ['controller'=>'users', 'action'=>'passwortAendern']);
+    $builder->connect('/users/activate/*', ['controller'=>'users', 'action'=>'activate']);
     
-    $routes->connect('/users/profile/:id', ['controller'=>'users', 'action'=>'publicProfile'])
+    $builder->connect('/users/profile/:id', ['controller'=>'users', 'action'=>'publicProfile'])
         ->setPatterns(['id' => '\d+'])
         ->setPass(['id']);
-    $routes->connect('/users/profil/*', ['controller'=>'users', 'action'=>'profil']);
-    $routes->connect('/registrierung', ['controller'=>'users', 'action'=>'intro']);
+    $builder->connect('/users/profil/*', ['controller'=>'users', 'action'=>'profil']);
+    $builder->connect('/registrierung', ['controller'=>'users', 'action'=>'intro']);
     
-    $routes->connect('/reparatur-termine/*', ['controller'=>'events', 'action'=>'all']);
-    $routes->connect('/termine/edit/*', ['controller'=>'events', 'action'=>'edit']);
-    $routes->connect('/termine/duplicate/*', ['controller'=>'events', 'action'=>'duplicate']);
-    $routes->connect('/termine/add/*', ['controller'=>'events', 'action'=>'add']);
-    $routes->connect('/termine/delete/*', ['controller'=>'events', 'action'=>'delete']);
+    $builder->connect('/reparatur-termine/*', ['controller'=>'events', 'action'=>'all']);
+    $builder->connect('/termine/edit/*', ['controller'=>'events', 'action'=>'edit']);
+    $builder->connect('/termine/duplicate/*', ['controller'=>'events', 'action'=>'duplicate']);
+    $builder->connect('/termine/add/*', ['controller'=>'events', 'action'=>'add']);
+    $builder->connect('/termine/delete/*', ['controller'=>'events', 'action'=>'delete']);
     
-    $routes->connect('/rss-termine', ['controller' => 'events', 'action' => 'feed']);
+    $builder->connect('/rss-termine', ['controller' => 'events', 'action' => 'feed']);
     
-    $routes->connect('/aktive', ['controller' => 'users', 'action' => 'all']);
-    $routes->connect('/aktive/*', ['controller' => 'users', 'action' => 'all']);
-    $routes->connect('/kenntnisse', ['controller' => 'skills', 'action' => 'all']);
+    $builder->connect('/aktive', ['controller' => 'users', 'action' => 'all']);
+    $builder->connect('/aktive/*', ['controller' => 'users', 'action' => 'all']);
+    $builder->connect('/kenntnisse', ['controller' => 'skills', 'action' => 'all']);
     
-    $routes->connect('/laufzettel/add/*', ['controller'=>'infoSheets', 'action'=>'add']);
-    $routes->connect('/laufzettel/edit/*', ['controller'=>'infoSheets', 'action'=>'edit']);
-    $routes->connect('/laufzettel/delete/*', ['controller'=>'infoSheets', 'action'=>'delete']);
+    $builder->connect('/laufzettel/add/*', ['controller'=>'infoSheets', 'action'=>'add']);
+    $builder->connect('/laufzettel/edit/*', ['controller'=>'infoSheets', 'action'=>'edit']);
+    $builder->connect('/laufzettel/delete/*', ['controller'=>'infoSheets', 'action'=>'delete']);
     
-    $routes->connect('/newsletter', ['controller'=>'newsletters', 'action'=>'index']);
-    $routes->connect('/newsletter/activate/*', ['controller'=>'newsletters', 'action'=>'activate']);
-    $routes->connect('/newsletter/unsubscribe/*', ['controller'=>'newsletters', 'action'=>'unsubscribe']);
+    $builder->connect('/newsletter', ['controller'=>'newsletters', 'action'=>'index']);
+    $builder->connect('/newsletter/activate/*', ['controller'=>'newsletters', 'action'=>'activate']);
+    $builder->connect('/newsletter/unsubscribe/*', ['controller'=>'newsletters', 'action'=>'unsubscribe']);
     
-    $routes->connect('/seite/*', ['controller' => 'pages', 'action' => 'detail']);
+    $builder->connect('/seite/*', ['controller' => 'pages', 'action' => 'detail']);
     
-    $routes->connect('/post/*', ['controller'=>'posts', 'action'=>'detail']);
-    $routes->connect('/:blogUrl/*', ['controller'=>'blogs', 'action'=>'detail'], ['blogUrl' => 'neuigkeiten|'.Configure::read('AppConfig.htmlHelper')->getAdditionalBlogCategoryUrl()]);
+    $builder->connect('/post/*', ['controller'=>'posts', 'action'=>'detail']);
+    $builder->connect('/:blogUrl/*', ['controller'=>'blogs', 'action'=>'detail'], ['blogUrl' => 'neuigkeiten|'.Configure::read('AppConfig.htmlHelper')->getAdditionalBlogCategoryUrl()]);
     
     // für normale cake routings (users controller)
-    $routes->connect('/:controller/:action/*');
+    $builder->connect('/:controller/:action/*');
     
     // short url for initiativen detail
-    $routes->connect('/*', ['controller'=>'workshops', 'action'=>'detail']);
+    $builder->connect('/*', ['controller'=>'workshops', 'action'=>'detail']);
     
     /**
      * Connect catchall routes for all controllers.
      *
      * Using the argument `DashedRoute`, the `fallbacks` method is a shortcut for
-     *    `$routes->connect('/:controller', ['action' => 'index'], ['routeClass' => 'DashedRoute']);`
-     *    `$routes->connect('/:controller/:action/*', [], ['routeClass' => 'DashedRoute']);`
+     *    `$builder->connect('/:controller', ['action' => 'index'], ['routeClass' => 'DashedRoute']);`
+     *    `$builder->connect('/:controller/:action/*', [], ['routeClass' => 'DashedRoute']);`
      *
      * Any route class can be used with this method, such as:
      * - DashedRoute
@@ -141,6 +138,6 @@ Router::scope('/', function (RouteBuilder $routes) {
      * You can remove these routes once you've connected the
      * routes you want in your application.
      */
-    $routes->fallbacks(DashedRoute::class);
+    $builder->fallbacks();
 });
     

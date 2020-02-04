@@ -2,21 +2,20 @@
 
 namespace App\Test\TestCase\Controller;
 
+use App\Test\TestCase\AppTestCase;
 use App\Test\TestCase\Traits\LoadAllFixturesTrait;
 use App\Test\TestCase\Traits\LogFileAssertionsTrait;
 use App\Test\TestCase\Traits\UserAssertionsTrait;
 use Cake\Core\Configure;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\StringCompareTrait;
-use Cake\TestSuite\TestCase;
 
-class WorkshopsControllerTest extends TestCase
+class WorkshopsControllerTest extends AppTestCase
 {
     use IntegrationTestTrait;
     use UserAssertionsTrait;
     use StringCompareTrait;
     use LogFileAssertionsTrait;
-    use LoadAllFixturesTrait;
 
     public function testAjaxGetAllWorkshopsForMap()
     {
