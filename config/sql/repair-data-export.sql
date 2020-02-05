@@ -4,7 +4,7 @@ SELECT
     b.name as brand,
     i.device_name as device_name,
     DATE_FORMAT(i.created, '%Y') - i.device_age as construction_year,
-    DATE_FORMAT(i.created, '%Y-%m-%d') as created,
+    DATE_FORMAT(e.datumstart, '%Y-%m-%d') as datumstart,
     defect_description,
     defect_found_ffo2.name as defect_found_name,
     defect_found_ffo3.name as defect_found_reason,
@@ -25,4 +25,5 @@ LEFT JOIN form_field_options defect_found_ffo4 ON defect_found_ffo4.form_field_i
 LEFT JOIN form_field_options defect_found_ffo5 ON defect_found_ffo5.form_field_id = 5 AND defect_found_ffo5.value = i.no_repair_reason
 LEFT JOIN form_field_options defect_found_ffo6 ON defect_found_ffo6.form_field_id = 6 AND defect_found_ffo6.value = i.device_must_not_be_used_anymore
 WHERE i.status = 1
-ORDER by i.created DESC
+#AND w.uid = 2711
+ORDER by e.datumstart DESC
