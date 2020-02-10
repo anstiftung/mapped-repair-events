@@ -250,6 +250,11 @@ hr {
 }
 /* Frontpage */
 
+.select2-container .select2-selection,
+.select2-dropdown {
+    border-color: #DFDFDF ! important;
+}
+
 body.pages.detail.statistik .text-wrapper,
 body.pages.detail.statistik h1 {
     margin-left: 17%;
@@ -2891,7 +2896,15 @@ body.workshops.all input[type="text"] {
     margin-right: 10px;
     margin-top: 2px;
     margin-bottom: 10px;
-    width: 50%;
+    width: 30%;
+}
+body.events.all .input.select {
+}
+body.events.all .select2,
+body.events.all .input select { /* avoid jumping effect */
+	width: 100px ! important;
+	float: left;
+	margin-right: 10px;
 }
 body.workshops.all .item-wrapper,
 body.events.all .item-wrapper {

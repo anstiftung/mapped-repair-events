@@ -23,13 +23,15 @@
   if (!isset($objectNamePlural)) { $objectNamePlural = 'Datensätze'; };
   
   echo '<div class="pagination">';
-        echo '<div class="numbers">'.$this->Paginator->param('count').' '.($this->Paginator->param('count') == 1 ? $objectNameSingular : $objectNamePlural).' gefunden</div>';
-        /*
-        echo $this->Paginator->first('««', $mergedUrlOptions, null, ['class' => 'first']);
-        echo $this->Paginator->prev('«', $mergedUrlOptions, null, ['class' => 'prev']);
-        echo $this->Paginator->numbers(array_merge($mergedUrlOptions, ['before' => '', 'after' => '', 'separator' => '', 'modulus' => 6]));
-        echo $this->Paginator->next('»', $mergedUrlOptions, null, ['class' => 'next']);
-        echo $this->Paginator->last('»»', $mergedUrlOptions, null, ['class' => 'last']);
-        */
+        echo '<div class="numbers">';
+            echo $this->Number->precision($this->Paginator->param('count'), 0);
+            if (isset($allCount) && $allCount > $this->Paginator->param('count')) {
+                echo ' von insgesamt ' . $this->Number->precision($allCount, 0);
+                echo ' ' . ($allCount == 1 ? $objectNameSingularDativ : $objectNamePluralDativ);
+            } else {
+                echo ' ' . ($this->Paginator->param('count') == 1 ? $objectNameSingular : $objectNamePlural);
+            }
+            echo ' gefunden';
+        echo '</div>';
     echo '</div>';
 ?>

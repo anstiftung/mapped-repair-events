@@ -6,6 +6,9 @@
         if (!empty($categories)) {
             echo $this->Form->hidden('categories', ['label' => '', 'value' => $categories]);
         }
+        if ($useTimeRange) {
+            echo $this->Form->control('timeRange', ['type' => 'select', 'label' => '', 'options' => $timeRangeOptions, 'value' => $timeRange]);
+        }
     ?>
     <button type="submit" class="button filter"><?php echo __('Search'); ?></button>
     <?php if ($resetButton) { ?>

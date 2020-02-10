@@ -510,6 +510,22 @@ class EventsController extends AppController
         
         $conditions = $this->Event->getListConditions();
         
+        // get count without any filters
+        $allEventsCount = $this->Events->find('all', [
+            'conditions' => $conditions,
+            'contain' => [
+                'Workshops'
+            ]
+        ])->count();
+        $this->set('allEventsCount', $allEventsCount);
+        
+        $timeRangeOptions = [
+            '30days' => '30 Tage',
+            '90days' => '90 Tage',
+            'all' => 'alle'
+        ];
+        $this->set('timeRangeOptions', $timeRangeOptions);
+        
         $selectedCategories = !empty($this->request->getQuery('categories')) ? explode(',', h($this->request->getQuery('categories'))) : [];
         $this->set('selectedCategories', $selectedCategories);
         
@@ -579,6 +595,15 @@ class EventsController extends AppController
             $query->where($this->Event->getKeywordSearchConditions($keyword, false));
         }
         $this->set('keyword', $keyword);
+        
+        $timeRange = '30days';
+        if (!empty($this->request->getQuery('timeRange'))) {
+            $timeRange = h(strtolower(trim($this->request->getQuery('timeRange'))));
+        }
+        if (in_array($timeRange, ['30days', '90days'])) {
+            $query->where($this->Event->getTimeRangeCondition($timeRange, false));
+        }
+        $this->set('timeRange', $timeRange);
         
         $resetCategoriesUrl = '/reparatur-termine';
         if ($keyword != '') {
