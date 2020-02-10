@@ -3,7 +3,6 @@
 namespace App\Test\TestCase\Controller;
 
 use App\Test\TestCase\AppTestCase;
-use App\Test\TestCase\Traits\LoadAllFixturesTrait;
 use App\Test\TestCase\Traits\LogFileAssertionsTrait;
 use App\Test\TestCase\Traits\LoginTrait;
 use App\Test\TestCase\Traits\UserAssertionsTrait;
