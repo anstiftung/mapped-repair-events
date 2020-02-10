@@ -88,5 +88,20 @@ class InfoSheetsControllerTest extends AppTestCase
         $this->assertEquals($infoSheets[0]->owner, 1);
     }
     
+    public function testDeleteInfoSheetAsOrga()
+    {
+        $this->loginAsOrga();
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlInfoSheetDelete(7));
+        $this->assertFlashMessage('Der Laufzettel wurde erfolgreich gelöscht.');
+        
+        $this->InfoSheet = TableRegistry::getTableLocator()->get('InfoSheets');
+        $infoSheet = $this->InfoSheet->find('all', [
+            'conditions' => [
+                'InfoSheets.uid' => 7
+            ]
+        ])->first();
+        $this->assertEquals($infoSheet->status, APP_DELETED);
+    }
+    
 }
 ?>

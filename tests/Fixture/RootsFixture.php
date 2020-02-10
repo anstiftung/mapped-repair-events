@@ -33,6 +33,10 @@ class RootsFixture extends TestFixture
             'uid' => 6,
             'type' => 'events'
         ],
+        [
+            'uid' => 7,
+            'type' => 'info_sheets'
+        ],
     ];
 }
 ?>
