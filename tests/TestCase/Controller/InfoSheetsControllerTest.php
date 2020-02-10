@@ -82,10 +82,25 @@ class InfoSheetsControllerTest extends AppTestCase
                 'FormFieldOptions'
             ]
         ])->toArray();
-        $this->assertEquals(1, count($infoSheets));
+        $this->assertEquals(2, count($infoSheets));
         $this->assertEquals($infoSheets[0]->device_name, $this->newInfoSheetData['device_name']);
         $this->assertEquals($infoSheets[0]->defect_description, $this->newInfoSheetData['defect_description']);
         $this->assertEquals($infoSheets[0]->owner, 1);
+    }
+    
+    public function testDeleteInfoSheetAsOrga()
+    {
+        $this->loginAsOrga();
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlInfoSheetDelete(7));
+        $this->assertFlashMessage('Der Laufzettel wurde erfolgreich gelöscht.');
+        
+        $this->InfoSheet = TableRegistry::getTableLocator()->get('InfoSheets');
+        $infoSheet = $this->InfoSheet->find('all', [
+            'conditions' => [
+                'InfoSheets.uid' => 7
+            ]
+        ])->first();
+        $this->assertEquals($infoSheet->status, APP_DELETED);
     }
     
 }

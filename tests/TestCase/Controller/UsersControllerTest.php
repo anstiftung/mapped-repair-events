@@ -68,7 +68,7 @@ class UsersControllerTest extends AppTestCase
         
         $user = $this->getRegisteredUser();
         
-        $this->assertEquals($user->uid, 7);
+        $this->assertEquals($user->uid, 8);
         $this->assertEquals($user->nick, 'JohnDoeA');
         $this->assertEquals($user->email, $this->validUserData['email']);
         $this->assertEquals($user->firstname, 'John');
