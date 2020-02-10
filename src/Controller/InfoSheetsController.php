@@ -99,7 +99,7 @@ class InfoSheetsController extends AppController
             $this->AppFlash->setErrorMessage('Beim Löschen ist ein Fehler aufgetreten');
         }
         
-        $this->redirect($this->request->referer());
+        $this->redirect($this->getReferer());
         
     }
     
