@@ -89,7 +89,7 @@ class WorkshopsController extends AppController
     public function add()
     {
         $workshop = $this->Workshop->newEntity(
-            ['status' => APP_ON],
+            ['status' => APP_OFF],
             ['validate' => false]
         );
         $this->set('metaTags', ['title' => 'Initiative erstellen']);
