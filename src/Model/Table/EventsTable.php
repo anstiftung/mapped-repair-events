@@ -3,6 +3,7 @@
 namespace App\Model\Table;
 
 use Cake\Core\Configure;
+use Cake\I18n\Time;
 use Cake\ORM\Query;
 use Cake\Validation\Validator;
 
@@ -66,6 +67,24 @@ class EventsTable extends AppTable
                 'Workshops.name LIKE' => $keyword . '%',
                 'Events.ort LIKE' => $keyword . '%',
             ]);
+            if ($negate) {
+                $result = $exp->not($result);
+            }
+            return $result;
+        };
+    }
+    
+    public function getTimeRangeCondition($timeRange, $negate) {
+        return function ($exp, $query) use ($timeRange, $negate) {
+            if ($timeRange == '30days') {
+                $days = 30;
+            }
+            if ($timeRange == '90days') {
+                $days = 90;
+            }
+            $now = new Time();
+            $maxDate = $now->addDays($days);
+            $result = $exp->lte('Events.datumstart', $maxDate, 'date');
             if ($negate) {
                 $result = $exp->not($result);
             }

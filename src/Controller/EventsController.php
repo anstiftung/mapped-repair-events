@@ -498,7 +498,7 @@ class EventsController extends AppController
         $this->viewBuilder()->setOption('serialize', ['status', 'message', 'events']);
     }
     
-    function all()
+    public function all()
     {
         
         $metaTags = [
@@ -509,6 +509,23 @@ class EventsController extends AppController
         $this->set('metaTags', $metaTags);
         
         $conditions = $this->Event->getListConditions();
+        
+        // get count without any filters
+        $allEventsCount = $this->Events->find('all', [
+            'conditions' => $conditions,
+            'contain' => [
+                'Workshops'
+            ]
+        ])->count();
+        $this->set('allEventsCount', $allEventsCount);
+        
+        $timeRangeDefault = '30days';
+        $timeRangeOptions = [
+            '30days' => '30 Tage',
+            '90days' => '90 Tage',
+            'all' => 'alle'
+        ];
+        $this->set('timeRangeOptions', $timeRangeOptions);
         
         $selectedCategories = !empty($this->request->getQuery('categories')) ? explode(',', h($this->request->getQuery('categories'))) : [];
         $this->set('selectedCategories', $selectedCategories);
@@ -555,6 +572,10 @@ class EventsController extends AppController
                 $newUrl = '?keyword=' . h($this->request->getQuery('keyword')) . '&' . $newUrl;
             }
             
+            if (!empty($this->request->getQuery('timeRange')) && $this->request->getQuery('timeRange') != $timeRangeDefault) {
+                $newUrl = $newUrl . '&timeRange=' . h($this->request->getQuery('timeRange'));
+            }
+            
             $newUrl = str_replace('//', '/', $newUrl);
             
             $category['href'] = $newUrl;
@@ -580,9 +601,25 @@ class EventsController extends AppController
         }
         $this->set('keyword', $keyword);
         
+        $timeRange = $timeRangeDefault;
+        if (!empty($this->request->getQuery('timeRange'))) {
+            $timeRange = h(strtolower(trim($this->request->getQuery('timeRange'))));
+        }
+        if (in_array($timeRange, ['30days', '90days'])) {
+            $query->where($this->Event->getTimeRangeCondition($timeRange, false));
+        }
+        $this->set('timeRange', $timeRange);
+        
         $resetCategoriesUrl = '/reparatur-termine';
         if ($keyword != '') {
             $resetCategoriesUrl = '/reparatur-termine?keyword=' . $keyword;
+        }
+        if (!empty($this->request->getQuery('timeRange')) && $this->request->getQuery('timeRange') != $timeRangeDefault) {
+            $queryStringStartsWith = '?';
+            if ($keyword != '') {
+                $queryStringStartsWith = '&';
+            }
+            $resetCategoriesUrl .= $queryStringStartsWith . 'timeRange='.$this->request->getQuery('timeRange');
         }
         $this->set('resetCategoriesUrl', $resetCategoriesUrl);
         

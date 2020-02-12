@@ -15,7 +15,8 @@ echo $this->element('highlightNavi', ['main' => 'ORTE']);
             	'baseUrl' => '/orte',
            	    'keyword' => $keyword,
                 'resetButton' => ($keyword != '' ? true : false),
-                'label' => 'Suche nach Initiativen, PLZ und Orten'
+                'label' => 'Suche nach Initiativen, PLZ und Orten',
+                'useTimeRange' => false,
             ]);
             echo '</form>';
         ?>

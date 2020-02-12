@@ -425,6 +425,11 @@
 		min-width: 90%;
 		max-width: 90%;
 	}
+	body.events.all .input select {
+	   width: auto;
+	   min-width: auto;
+	   max-width: auto;
+	}
 	#eventEditForm .date-time-wrapper .input input {
 		width: 80px;
 		min-width: 80px;

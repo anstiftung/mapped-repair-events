@@ -17,8 +17,9 @@ $this->element('addScript', ['script' =>
         	'baseUrl' => '/reparatur-termine',
        	    'keyword' => $keyword,
             'categories' => $this->request->getQuery('categories'),
-            'resetButton' => (($keyword != '' || count($selectedCategories) > 0) ? true : false),
-            'label' => 'Suche nach Initiativen, PLZ und Orten'
+            'resetButton' => (($keyword != '' || count($selectedCategories) > 0 || $timeRange != '30days') ? true : false),
+            'label' => 'Suche nach Initiativen, PLZ und Orten',
+            'useTimeRange' => true
         ]);
         ?>
     
@@ -39,7 +40,13 @@ $this->element('addScript', ['script' =>
    </form>
         
     <?php
-    $paginationParams = ['objectNameSingular' => 'Reparaturtermin', 'objectNamePlural' => 'Reparaturtermine'];
+    $paginationParams = [
+        'objectNameSingular' => 'Reparaturtermin',
+        'objectNamePlural' => 'Reparaturtermine',
+        'objectNameSingularDativ' => 'Reparaturtermin',
+        'objectNamePluralDativ' => 'Reparaturterminen',
+        'allCount' => $allEventsCount
+    ];
     echo $this->element('pagination', $paginationParams);
 
     echo '</div>'; // div.top
