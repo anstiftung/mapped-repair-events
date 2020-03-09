@@ -14,11 +14,11 @@
     "install": "bash ../bin/cake npm_post_install"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.12.0",
-    "blueimp-file-upload": "^10.7.0",
+    "@fortawesome/fontawesome-free": "^5.12.1",
+    "blueimp-file-upload": "^10.8.0",
     "chart.js": "^2.9.3",
     "chart.piecelabel.js": "^0.15.0",
-    "ckeditor4": "^4.13.1",
+    "ckeditor4": "^4.14.0",
     "components-jqueryui": "~1.12",
     "detect_swipe": "^2.1.4",
     "featherlight": "^1.7.14",
