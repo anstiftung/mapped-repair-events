@@ -2045,6 +2045,16 @@ body.users .profile .categories-checkbox-wrapper b,
 #workshopEditForm .categories-checkbox-wrapper b {
   margin-bottom: 0;
 }
+#workshopEditForm .highlight-red {
+	border: 2px solid red;
+	border-radius: 5px;
+	float: left;
+	padding: 5px;
+	background-color: #FFCFCF;
+}
+#workshopEditForm .highlight-red label {
+	font-weight: bold;
+}
 body.users .profile .groups-checkbox-wrapper .error-message {
   margin-left: 0;
   padding: 5px;

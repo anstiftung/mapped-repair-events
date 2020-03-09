@@ -89,7 +89,16 @@ use Cake\Core\Configure;
             
             echo $this->Form->control('Workshops.show_statistics', ['type' => 'checkbox', 'label' => 'Statistik anzeigen (falls Laufzettel-Daten verfügbar)?']).'<br />';
             
-            echo $this->Form->control('Workshops.status', ['type' => 'select', 'options' => Configure::read('AppConfig.status')]).'<br />';
+            if ($workshop->status < APP_ON) {
+                echo '<div class="highlight-red">';
+            }
+                echo $this->Form->control('Workshops.status', [
+                    'type' => 'select',
+                    'options' => Configure::read('AppConfig.status'),
+                ]).'<br />';
+            if ($workshop->status < APP_ON) {
+                echo '</div>';
+            };
             
             if (!$useDefaultValidation) {
                 echo $this->element('metatagsFormfields', ['entity' => 'Workshops']);
