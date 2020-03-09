@@ -136,6 +136,7 @@ class EventsController extends AppController
         ->setSort([
             'InfoSheets.device_name' => 'ASC'
         ]);
+        $workshops->limit(1000000);
         
         foreach($workshops as $workshop) {
             $workshop->infoSheetCount = 0;
@@ -145,10 +146,14 @@ class EventsController extends AppController
                 }
             }
         }
+
         // workaround: if limit is not added, this warning appears
         // Warning (2): count(): Parameter must be an array or an object that implements Countable in [src/Template/Events/my_events.ctp, line 42]
-        $workshops->limit(1000000);
         $this->set('workshops', $workshops);
+        
+        foreach($workshops as $workshop) {
+            pr($workshop->infoSheetCount);
+        }
         
         $metaTags = [
             'title' => 'Meine Termine'
