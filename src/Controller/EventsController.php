@@ -151,10 +151,6 @@ class EventsController extends AppController
         // Warning (2): count(): Parameter must be an array or an object that implements Countable in [src/Template/Events/my_events.ctp, line 42]
         $this->set('workshops', $workshops);
         
-        foreach($workshops as $workshop) {
-            pr($workshop->infoSheetCount);
-        }
-        
         $metaTags = [
             'title' => 'Meine Termine'
         ];
