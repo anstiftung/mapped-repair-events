@@ -33,7 +33,7 @@ $this->element('addScript', array('script' =>
         		<h2 class="<?php echo join(' ', $workshopRowClass); ?>"><?php echo $workshop->name . ' (' . count($workshop->events) . ' Termine)' . $workshopTitleSuffix; ?></h2>
         	<?php } else { ?>
             	<a class="toggle-link heading <?php echo join(' ', $workshopRowClass); ?>" href="javascript:void(0);">
-            		<i class="fa fa-plus"></i> <?php echo $workshop->name . ' (' . count($workshop->events) . ' Termin' . (count($workshop->events) == 1 ? '' : 'e') . ', ' . $workshop->infoSheetCount . ' Laufzettel)' . $workshopTitleSuffix; ?>
+            		<i class="fa fa-plus"></i> <?php echo $workshop->name . ' (' . count($workshop->events) . ' Termin' . (count($workshop->events) == 1 ? '' : 'e') . ', ' . $this->Number->precision($workshop->infoSheetCount, 0) . ' Laufzettel)' . $workshopTitleSuffix; ?>
         		</a>
 			<?php } ?>
 			
