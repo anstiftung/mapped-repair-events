@@ -541,7 +541,7 @@ MappedRepairEvents.Helper = {
         if (wuid) {
             calEvent += '<div class="eventBox" style="display:none;" itemscope itemtype="http://schema.org/Event">';
 
-            if (ev.hasModifyPermissions) {
+            if (ev.hasModifyPermissions && ev.isPast == '0') {
                 calEvent += '<div class="deleteEvent">';
                 calEvent += '<a class="editEvent button" href="/termine/edit/'+ev.uid+'">'+stringEditEvent+'</a>';
                 calEvent += '<a class="dupEvent button" href="/termine/duplicate/'+ev.uid+'">'+stringDuplicateEvent+'</a>';

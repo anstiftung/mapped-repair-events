@@ -249,7 +249,17 @@ class WorkshopsController extends AppController
         if (!empty($this->request->getQuery('workshopUid'))) {
             $conditions['Workshops.uid'] = (int) $this->request->getQuery('workshopUid');
             $fields[] = 'Workshops.text';
-            $eventFields = array_merge($eventFields, ['Events.lat', 'Events.lng', 'Events.eventbeschreibung', 'Events.veranstaltungsort', 'Events.land', 'Events.image']);
+            $eventFields = array_merge(
+                $eventFields,
+                [
+                    'Events.lat',
+                    'Events.lng',
+                    'Events.eventbeschreibung',
+                    'Events.veranstaltungsort',
+                    'Events.land',
+                    'Events.image',
+                ]);
+            $eventFields['isPast'] = 'DATE_FORMAT(Events.datumstart, \'%Y-%m-%d\') < DATE_FORMAT(NOW(), \'%Y-%m-%d\')';
             $addCategories = true;
         }
         
