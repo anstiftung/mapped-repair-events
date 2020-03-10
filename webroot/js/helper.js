@@ -578,8 +578,6 @@ MappedRepairEvents.Helper = {
                     
             calEvent += '</div>';
         }
-            
-        
         
         return calEvent;
     },
