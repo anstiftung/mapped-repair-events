@@ -7,6 +7,7 @@ $this->element('addScript', array('script' =>
     JS_NAMESPACE.".Helper.bindToggleLinks(false, true);".
     JS_NAMESPACE.".Helper.bindToggleLinksForSubtables();".
     JS_NAMESPACE.".Helper.bindDeleteEventButton();".
+    JS_NAMESPACE.".Helper.bindDownloadInfoSheetButton();".
     JS_NAMESPACE.".Helper.bindDeleteInfoSheetButton();"
 ));
 ?>
@@ -37,11 +38,27 @@ $this->element('addScript', array('script' =>
         		</a>
 			<?php } ?>
 			
-			<a href="<?php echo Configure::read('AppConfig.htmlHelper')->urlEventNew($workshop->uid); ?>" class="button add-event<?php echo $hasEditEventPermissions ? '': ' hide'; ?>">Neuen Termin erstellen</a>
+			<a href="<?php echo Configure::read('AppConfig.htmlHelper')->urlEventNew($workshop->uid); ?>" class="button add-event<?php echo $hasEditEventPermissions ? '': ' hide'; ?>"><i class="fa fa-plus-circle"></i> Neuen Termin erstellen</a>
     		
 			<?php if (count($workshop->events) > 0) { ?>
 			
             	<div class="workshop-content-wrapper">
+            	
+            		<?php
+            		  if ($workshop->infoSheetCount > 0) {
+					    echo $this->Html->link(
+					        '<i class="fa fa-download"></i> Statistik-Download',
+					        'javascript:void(0);',
+					        [
+					            'class' => 'download-info-sheets button',
+					            'escape' => false,
+					            'data-workshop-uid' => $workshop->uid,
+					        ]
+				        );
+					    echo '<div class="info-sheets-year-wrapper">';
+					     echo $this->Form->year('info-sheets-year', ['empty' => 'Gesamt', 'min' => 2010, 'max' => date('Y')]);
+					    echo '</div>';
+            		  } ?>
             	
                     <table class="list">
                       
