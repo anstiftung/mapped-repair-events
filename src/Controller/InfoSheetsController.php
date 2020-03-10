@@ -6,6 +6,7 @@ use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use Cake\Http\Exception\NotFoundException;
 use Cake\ORM\TableRegistry;
+use League\Csv\Writer;
 
 class InfoSheetsController extends AppController
 {
@@ -19,7 +20,7 @@ class InfoSheetsController extends AppController
     public function isAuthorized($user)
     {
         
-        if (in_array($this->request->getParam('action'), ['edit', 'delete'])) {
+        if (in_array($this->request->getParam('action'), ['edit', 'delete', 'download'])) {
             
             // admin are allowd to edit and delete all info sheets
             if ($this->AppAuth->isAdmin()) {
@@ -71,6 +72,29 @@ class InfoSheetsController extends AppController
         return $this->AppAuth->user();
         
     }
+    
+    
+    public function download($workshopUid, $year=null) {
+        
+        $sqlFile = file_get_contents(ROOT . DS . 'config' . DS. 'sql' . DS . 'repair-data-export.sql');
+        $statement = $this->InfoSheet->getConnection()->prepare($sqlFile);
+        $statement->execute([
+            'workshopUid' => $workshopUid
+        ]);
+        $records = $statement->fetchAll('assoc');
+        
+        $writer = Writer::createFromString();
+        $writer->insertOne(array_keys($records[0]));
+        $writer->insertAll($records);
+        
+        header('Content-Type: text/csv; charset=UTF-8');
+        header('Content-Description: File Transfer');
+        header('Content-Disposition: attachment; filename="Laufzettel-Download.csv"');
+        
+        echo $writer->getContent();
+        die;
+    }
+    
     public function delete($infoSheetUid)
     {
         if ($infoSheetUid === null) {

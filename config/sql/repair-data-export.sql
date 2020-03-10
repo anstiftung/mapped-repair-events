@@ -25,5 +25,5 @@ LEFT JOIN form_field_options defect_found_ffo4 ON defect_found_ffo4.form_field_i
 LEFT JOIN form_field_options defect_found_ffo5 ON defect_found_ffo5.form_field_id = 5 AND defect_found_ffo5.value = i.no_repair_reason
 LEFT JOIN form_field_options defect_found_ffo6 ON defect_found_ffo6.form_field_id = 6 AND defect_found_ffo6.value = i.device_must_not_be_used_anymore
 WHERE i.status = 1
-#AND w.uid = 2711
+AND w.uid = :workshopUid
 ORDER by e.datumstart DESC
