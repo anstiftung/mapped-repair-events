@@ -76,6 +76,17 @@ class InfoSheetsController extends AppController
     
     public function download($workshopUid, $year=null) {
         
+        $this->Workshop = TableRegistry::getTableLocator()->get('Workshops');
+        $workshop = $this->Workshop->find('all', [
+            'conditions' => [
+                'Workshops.uid' => $workshopUid
+            ]
+        ])->first();
+        
+        if (empty($workshop)) {
+            throw new NotFoundException('workshop not found');
+        }
+        
         $sqlFile = file_get_contents(ROOT . DS . 'config' . DS. 'sql' . DS . 'repair-data-export.sql');
         $statement = $this->InfoSheet->getConnection()->prepare($sqlFile);
         $statement->execute([
@@ -89,7 +100,8 @@ class InfoSheetsController extends AppController
         
         header('Content-Type: text/csv; charset=UTF-8');
         header('Content-Description: File Transfer');
-        header('Content-Disposition: attachment; filename="Laufzettel-Download.csv"');
+        $filename = 'Laufzettel-Download-' . StringComponent::slugifyAndKeepCase($workshop->name);
+        header('Content-Disposition: attachment; filename="'.$filename.'.csv"');
         
         echo $writer->getContent();
         die;
