@@ -29,7 +29,7 @@
         
         if (isset($year)) {
             echo '<div class="input select">';
-            echo $this->Form->year('year', ['val' => $year, 'empty' => 'Jahr: alle', 'minYear' => 2010, 'maxYear' => date('Y')]);
+            echo $this->Form->year('year', ['val' => $year, 'empty' => 'Jahr: alle', 'min' => 2010, 'max' => date('Y')]);
             echo '</div>';
         }
         if (isset($month)) {
