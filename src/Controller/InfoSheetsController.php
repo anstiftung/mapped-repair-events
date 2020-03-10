@@ -87,12 +87,23 @@ class InfoSheetsController extends AppController
             throw new NotFoundException('workshop not found');
         }
         
-        $sqlFile = file_get_contents(ROOT . DS . 'config' . DS. 'sql' . DS . 'repair-data-export.sql');
-        $statement = $this->InfoSheet->getConnection()->prepare($sqlFile);
-        $statement->execute([
+        $query = file_get_contents(ROOT . DS . 'config' . DS. 'sql' . DS . 'repair-data-export.sql');
+        $params = [
             'workshopUid' => $workshopUid
-        ]);
+        ];
+        $filename = 'Laufzettel-Download-' . StringComponent::slugifyAndKeepCase($workshop->name);
+        if (in_array($year, Configure::read('AppConfig.timeHelper')->getAllYearsUntilThisYear(date('Y'), 2010))) {
+            $query = preg_replace('/WHERE 1/', 'WHERE 1 AND DATE_FORMAT(e.datumstart, \'%Y\') = :year', $query);
+            $params['year'] = $year;
+            $filename .= '-' . $year;
+        }
+        
+        $statement = $this->InfoSheet->getConnection()->prepare($query);
+        $statement->execute($params);
         $records = $statement->fetchAll('assoc');
+        if (empty($records)) {
+            throw new NotFoundException('info sheets not found');
+        }
         
         $writer = Writer::createFromString();
         $writer->insertOne(array_keys($records[0]));
@@ -100,7 +111,6 @@ class InfoSheetsController extends AppController
         
         header('Content-Type: text/csv; charset=UTF-8');
         header('Content-Description: File Transfer');
-        $filename = 'Laufzettel-Download-' . StringComponent::slugifyAndKeepCase($workshop->name);
         header('Content-Disposition: attachment; filename="'.$filename.'.csv"');
         
         echo $writer->getContent();
