@@ -103,5 +103,14 @@ class InfoSheetsControllerTest extends AppTestCase
         $this->assertEquals($infoSheet->status, APP_DELETED);
     }
     
+    public function testDownloadAsOrga()
+    {
+        $this->loginAsOrga();
+        $this->get('/laufzettel/download/2');
+        $this->assertResponseCode(200);
+        $this->_compareBasePath = ROOT . DS . 'tests' . DS . 'comparisons' . DS;
+        $this->assertSameAsFile('info-sheets-download.csv', $this->_response);
+    }
+
 }
 ?>
