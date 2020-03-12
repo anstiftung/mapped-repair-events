@@ -23,7 +23,7 @@ class BrandsController extends AdminAppController
         $entity = $this->Brand->newEntity($brand);
         $brand = $this->Brand->save($entity);
         $this->AppFlash->setFlashMessage('Marke erfolgreich erstellt.');
-        $this->redirect($this->referer());
+        $this->redirect($this->getReferer());
     }
     
     public function edit($id)

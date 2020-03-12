@@ -37,7 +37,8 @@ class PostsController extends AdminAppController
         $post = $this->Post->save($entity);
         
         $this->AppFlash->setFlashMessage('Post erfolgreich erstellt. UID: ' . $post->uid); // uid for fixture
-        $this->redirect($this->referer());
+        $this->redirect($this->getReferer());
+        
     }
 
     public function isAuthorized($user)
