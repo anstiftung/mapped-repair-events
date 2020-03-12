@@ -20,7 +20,24 @@ class InfoSheetsController extends AppController
     public function isAuthorized($user)
     {
         
-        if (in_array($this->request->getParam('action'), ['edit', 'delete', 'download'])) {
+        if (in_array($this->request->getParam('action'), ['download'])) {
+            
+            if ($this->AppAuth->isAdmin()) {
+                return true;
+            }
+
+            if ($this->AppAuth->isOrga()) {
+                $workshopUid = (int) $this->request->getParam('pass')[0];
+                $this->Workshop = TableRegistry::getTableLocator()->get('Workshops');
+                $workshop = $this->Workshop->getWorkshopForIsUserInOrgaTeamCheck($workshopUid);
+                if ($this->Workshop->isUserInOrgaTeam($this->AppAuth->user(), $workshop)) {
+                    return true;
+                }
+            }
+            
+        }
+        
+        if (in_array($this->request->getParam('action'), ['edit', 'delete'])) {
             
             // admin are allowd to edit and delete all info sheets
             if ($this->AppAuth->isAdmin()) {
@@ -42,8 +59,8 @@ class InfoSheetsController extends AppController
                         'Events'
                     ]
                 ])->first();
-                $workshopUid = $infoSheet->event->workshop_uid;
                 
+                $workshopUid = $infoSheet->event->workshop_uid;
                 $this->Workshop = TableRegistry::getTableLocator()->get('Workshops');
                 $workshop = $this->Workshop->getWorkshopForIsUserInOrgaTeamCheck($workshopUid);
                 if ($this->Workshop->isUserInOrgaTeam($this->AppAuth->user(), $workshop)) {
@@ -109,12 +126,21 @@ class InfoSheetsController extends AppController
         $writer->insertOne(array_keys($records[0]));
         $writer->insertAll($records);
         
-        header('Content-Type: text/csv; charset=UTF-8');
-        header('Content-Description: File Transfer');
-        header('Content-Disposition: attachment; filename="'.$filename.'.csv"');
+        // force download
+        $this->RequestHandler->renderAs(
+            $this,
+            'csv',
+            [
+                'charset' => 'UTF-8'
+            ],
+        );
+        $this->disableAutoRender();
         
-        echo $writer->getContent();
-        die;
+        $response = $this->response;
+        $response = $response->withStringBody($writer->getContent());
+        $response = $response->withDownload($filename . '.csv');
+        
+        return $response;
     }
     
     public function delete($infoSheetUid)
