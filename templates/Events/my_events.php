@@ -45,7 +45,7 @@ $this->element('addScript', array('script' =>
             	<div class="workshop-content-wrapper">
             	
             		<?php
-            		  if ($workshop->infoSheetCount > 0) {
+            		  if ($workshop->infoSheetCount > 0 && $hasEditEventPermissions) {
 					    echo $this->Html->link(
 					        '<i class="fa fa-download"></i> Statistik-Download',
 					        'javascript:void(0);',
