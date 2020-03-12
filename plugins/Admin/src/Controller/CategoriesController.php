@@ -23,7 +23,7 @@ class CategoriesController extends AdminAppController
         $entity = $this->Category->newEntity($category);
         $category = $this->Category->save($entity);
         $this->AppFlash->setFlashMessage('Kategorie erfolgreich erstellt.');
-        $this->redirect($this->referer());
+        $this->redirect($this->getReferer());
     }
     
     public function edit($id)

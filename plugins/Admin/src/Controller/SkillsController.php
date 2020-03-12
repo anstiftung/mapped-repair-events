@@ -23,7 +23,7 @@ class SkillsController extends AdminAppController
         $entity = $this->Skill->newEntity($skill);
         $skill = $this->Skill->save($entity);
         $this->AppFlash->setFlashMessage('Kenntnis erfolgreich erstellt.');
-        $this->redirect($this->referer());
+        $this->redirect($this->getReferer());
     }
     
     public function edit($id)

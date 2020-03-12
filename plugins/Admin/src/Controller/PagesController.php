@@ -23,7 +23,7 @@ class PagesController extends AdminAppController
         $entity = $this->Page->newEntity($page);
         $page = $this->Page->save($entity);
         $this->AppFlash->setFlashMessage('Seite erfolgreich erstellt. UID: ' . $page->uid); // uid for fixture
-        $this->redirect($this->referer());
+        $this->redirect($this->getReferer());
     }
 
     public function edit($uid)
