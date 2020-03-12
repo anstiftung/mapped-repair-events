@@ -3,7 +3,7 @@ use App\Controller\Component\StringComponent;
 echo $this->element('highlightNavi', ['main' => 'Wissen & Können']);
 ?>
 
-<h1>Alle Kenntnisse &amp; Interessen (<?php echo $skillCount; ?>)</h1>
+<h1>Alle Kenntnisse &amp; Interessen (<?php echo $this->Number->precision($skillCount, 0); ?>)</h1>
 
 <div class="dotted-line-full-width"></div>
 
