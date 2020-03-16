@@ -8,6 +8,16 @@ use DateTime;
 class MyTimeHelper extends TimeHelper {
     
 
+    public function getAllYearsUntilThisYear($thisYear, $firstYear)
+    {
+        $years = [];
+        while($thisYear >= $firstYear) {
+            $years[$thisYear] = $thisYear;
+            $thisYear--;
+        }
+        return $years;
+    }
+    
     public function getMonths()
     {
         $months = [

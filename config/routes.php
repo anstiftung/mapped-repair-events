@@ -106,6 +106,7 @@ Router::scope('/', function (RouteBuilder $builder) {
     $builder->connect('/laufzettel/add/*', ['controller'=>'infoSheets', 'action'=>'add']);
     $builder->connect('/laufzettel/edit/*', ['controller'=>'infoSheets', 'action'=>'edit']);
     $builder->connect('/laufzettel/delete/*', ['controller'=>'infoSheets', 'action'=>'delete']);
+    $builder->connect('/laufzettel/download/*', ['controller'=>'infoSheets', 'action'=>'download']);
     
     $builder->connect('/newsletter', ['controller'=>'newsletters', 'action'=>'index']);
     $builder->connect('/newsletter/activate/*', ['controller'=>'newsletters', 'action'=>'activate']);

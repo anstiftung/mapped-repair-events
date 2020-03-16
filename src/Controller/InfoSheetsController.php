@@ -6,6 +6,7 @@ use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use Cake\Http\Exception\NotFoundException;
 use Cake\ORM\TableRegistry;
+use League\Csv\Writer;
 
 class InfoSheetsController extends AppController
 {
@@ -18,6 +19,23 @@ class InfoSheetsController extends AppController
     
     public function isAuthorized($user)
     {
+        
+        if (in_array($this->request->getParam('action'), ['download'])) {
+            
+            if ($this->AppAuth->isAdmin()) {
+                return true;
+            }
+
+            if ($this->AppAuth->isOrga()) {
+                $workshopUid = (int) $this->request->getParam('pass')[0];
+                $this->Workshop = TableRegistry::getTableLocator()->get('Workshops');
+                $workshop = $this->Workshop->getWorkshopForIsUserInOrgaTeamCheck($workshopUid);
+                if ($this->Workshop->isUserInOrgaTeam($this->AppAuth->user(), $workshop)) {
+                    return true;
+                }
+            }
+            
+        }
         
         if (in_array($this->request->getParam('action'), ['edit', 'delete'])) {
             
@@ -41,8 +59,8 @@ class InfoSheetsController extends AppController
                         'Events'
                     ]
                 ])->first();
-                $workshopUid = $infoSheet->event->workshop_uid;
                 
+                $workshopUid = $infoSheet->event->workshop_uid;
                 $this->Workshop = TableRegistry::getTableLocator()->get('Workshops');
                 $workshop = $this->Workshop->getWorkshopForIsUserInOrgaTeamCheck($workshopUid);
                 if ($this->Workshop->isUserInOrgaTeam($this->AppAuth->user(), $workshop)) {
@@ -71,6 +89,60 @@ class InfoSheetsController extends AppController
         return $this->AppAuth->user();
         
     }
+    
+    
+    public function download($workshopUid, $year=null) {
+        
+        $this->Workshop = TableRegistry::getTableLocator()->get('Workshops');
+        $workshop = $this->Workshop->find('all', [
+            'conditions' => [
+                'Workshops.uid' => $workshopUid
+            ]
+        ])->first();
+        
+        if (empty($workshop)) {
+            throw new NotFoundException('workshop not found');
+        }
+        
+        $query = file_get_contents(ROOT . DS . 'config' . DS. 'sql' . DS . 'repair-data-export.sql');
+        $params = [
+            'workshopUid' => $workshopUid
+        ];
+        $filename = 'Laufzettel-Download-' . StringComponent::slugifyAndKeepCase($workshop->name);
+        if (in_array($year, Configure::read('AppConfig.timeHelper')->getAllYearsUntilThisYear(date('Y'), 2010))) {
+            $query = preg_replace('/WHERE 1/', 'WHERE 1 AND DATE_FORMAT(e.datumstart, \'%Y\') = :year', $query);
+            $params['year'] = $year;
+            $filename .= '-' . $year;
+        }
+        
+        $statement = $this->InfoSheet->getConnection()->prepare($query);
+        $statement->execute($params);
+        $records = $statement->fetchAll('assoc');
+        if (empty($records)) {
+            throw new NotFoundException('info sheets not found');
+        }
+        
+        $writer = Writer::createFromString();
+        $writer->insertOne(array_keys($records[0]));
+        $writer->insertAll($records);
+        
+        // force download
+        $this->RequestHandler->renderAs(
+            $this,
+            'csv',
+            [
+                'charset' => 'UTF-8'
+            ],
+        );
+        $this->disableAutoRender();
+        
+        $response = $this->response;
+        $response = $response->withStringBody($writer->getContent());
+        $response = $response->withDownload($filename . '.csv');
+        
+        return $response;
+    }
+    
     public function delete($infoSheetUid)
     {
         if ($infoSheetUid === null) {

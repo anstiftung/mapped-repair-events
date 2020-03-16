@@ -578,10 +578,20 @@ MappedRepairEvents.Helper = {
                     
             calEvent += '</div>';
         }
-            
-        
         
         return calEvent;
+    },
+    
+    bindDownloadInfoSheetButton : function() {
+        $('a.download-info-sheets').on('click', function() {
+            var workshopUid = $(this).data('workshop-uid');
+            var year = $(this).closest('.workshop-content-wrapper').find('select[name="info-sheets-year"').val();
+            var yearUrlString = '';
+            if (year != '') {
+                yearUrlString = '/' + year;
+            }
+            window.open('/laufzettel/download/' + workshopUid + yearUrlString);
+        });
     },
     
     bindDeleteEventButton : function() {
