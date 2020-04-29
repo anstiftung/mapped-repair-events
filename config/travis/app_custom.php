@@ -2,7 +2,6 @@
 return [
     'debug' => true,
     'emailErrorLoggingEnabled' => false,
-    'notificationMailAddress' => 'travis-rep-ini@mailinator.com',
     'isSsl' => false,
     'googleMapApiKey' => '',
     'EmailTransport' => [
