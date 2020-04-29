@@ -23,7 +23,7 @@ before_script:
 script:
   - vendor/bin/phpstan analyze -c phpstan.neon --no-interaction --no-progress
   - vendor/bin/phpunit --filter testAddWorkshop --stderr
-  - cat logs/cli-error.log
+  - cat logs/cli-error.log && cat logs/cli-debug && cat logs/error.log && cat logs/debug.log
   
 notifications:
   email: false
