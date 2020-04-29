@@ -194,11 +194,7 @@ class WorkshopsController extends AppController
                             'workshop' => $savedWorkshop,
                             'username' => $this->AppAuth->getUserName(),
                         ]);
-                        if (Configure::read('debug')) {
-                            $email->setTo(Configure::read('AppConfig.debugMailAddress'));
-                        } else {
-                            $email->setTo(Configure::read('AppConfig.notificationMailAddress'));
-                        }
+                        $email->setTo(Configure::read('AppConfig.notificationMailAddress'));
                         $email->send();
                     }
                     
@@ -968,13 +964,7 @@ class WorkshopsController extends AppController
         foreach($orgaTeam as $orgaUser) {
             $email->addCc($orgaUser->email);
         }
-        
-        if (Configure::read('debug')) {
-            $email->setTo(Configure::read('AppConfig.debugMailAddress'));
-        } else {
-            $email->setTo(Configure::read('AppConfig.notificationMailAddress'));
-        }
-       
+        $email->setTo(Configure::read('AppConfig.notificationMailAddress'));
         $email->send();
 
         $message = 'Die Initiative wurde erfolgreich gelöscht und alle Organisatoren wurden per E-Mail informiert.';
