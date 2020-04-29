@@ -2,6 +2,7 @@
 return [
     'debug' => true,
     'emailErrorLoggingEnabled' => false,
+    'initiativeNameSingular' => 'Reparatur-Initiative',
     'isSsl' => false,
     'googleMapApiKey' => '',
     'EmailTransport' => [
