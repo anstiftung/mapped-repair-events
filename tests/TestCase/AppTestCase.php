@@ -6,6 +6,7 @@ class AppTestCase extends TestCase
 {
     
     protected $fixtures = [
+        'app.BlockedWorkshopSlugs',
         'app.Blogs',
         'app.Brands',
         'app.Categories',
