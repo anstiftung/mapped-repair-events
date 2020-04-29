@@ -73,7 +73,30 @@ class WorkshopsControllerTest extends AppTestCase
         
         $this->assertMailCount(1);
         $this->assertMailSentTo(Configure::read('AppConfig.debugMailAddress'));
-        $this->assertMailContainsText('der Organisator John Doe hat soeben die Reparatur-Initiative test initiative erstellt.');
+        $this->assertMailContainsText('John Doe hat soeben die Reparatur-Initiative "test initiative" erstellt');
+        
+    }
+    
+    public function testEditWorkshopNotifications()
+    {
+        $this->loginAsOrga();
+        $this->post(
+            Configure::read('AppConfig.htmlHelper')->urlWorkshopEdit(2),
+            [
+                'referer' => '/',
+                'Workshops' => [
+                    'name' => 'Test Workshop',
+                    'url' => 'test-workshop',
+                    'use_custom_coordinates' => true,
+                    'lat' => 0,
+                    'lng' => 0,
+                ]
+            ]
+        );
+        
+        $this->assertMailCount(1);
+        $this->assertMailSentTo(Configure::read('AppConfig.debugMailAddress'));
+        $this->assertMailContainsText('John Doe hat soeben die Reparatur-Initiative "Test Workshop" geändert');
         
     }
     

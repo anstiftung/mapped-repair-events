@@ -185,18 +185,20 @@ class WorkshopsController extends AppController
                         }
                     }
                     
-                    // notify admins on add
-                    if (!$isEditMode) {
-                        $email = new Mailer('default');
-                        $email->viewBuilder()->setTemplate('workshop_added');
-                        $email->setSubject(Configure::read('AppConfig.initiativeNameSingular') . ' "'.$savedWorkshop->name.'" erfolgreich erstellt')
-                        ->setViewVars([
-                            'workshop' => $savedWorkshop,
-                            'username' => $this->AppAuth->getUserName(),
-                        ]);
-                        $email->setTo(Configure::read('AppConfig.notificationMailAddress'));
-                        $email->send();
+                    $userAction = 'erstellt';
+                    if ($isEditMode) {
+                        $userAction = 'geändert';
                     }
+                    $email = new Mailer('default');
+                    $email->viewBuilder()->setTemplate('workshop_added_or_changed');
+                    $email->setSubject(Configure::read('AppConfig.initiativeNameSingular') . ' "'.$entity->name.'" erfolgreich ' . $userAction)
+                    ->setViewVars([
+                        'workshop' => $entity,
+                        'username' => $this->AppAuth->getUserName(),
+                        'userAction' => $userAction,
+                    ]);
+                    $email->setTo(Configure::read('AppConfig.notificationMailAddress'));
+                    $email->send();
                     
                     $this->redirect($this->request->getData()['referer']);
                     
