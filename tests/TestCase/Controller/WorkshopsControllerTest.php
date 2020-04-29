@@ -4,16 +4,21 @@ namespace App\Test\TestCase\Controller;
 
 use App\Test\TestCase\AppTestCase;
 use App\Test\TestCase\Traits\LogFileAssertionsTrait;
+use App\Test\TestCase\Traits\LoginTrait;
 use App\Test\TestCase\Traits\UserAssertionsTrait;
 use Cake\Core\Configure;
+use Cake\ORM\TableRegistry;
+use Cake\TestSuite\EmailTrait;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\StringCompareTrait;
 
 class WorkshopsControllerTest extends AppTestCase
 {
+    use LoginTrait;
     use IntegrationTestTrait;
     use UserAssertionsTrait;
     use StringCompareTrait;
+    use EmailTrait;
     use LogFileAssertionsTrait;
 
     public function testAjaxGetAllWorkshopsForMap()
@@ -36,6 +41,40 @@ class WorkshopsControllerTest extends AppTestCase
         $this->doUserPrivacyAssertions();
     }
     
+    public function testAddWorkshop()
+    {
+
+        $workshopForPost = [
+            'name' => 'test initiative',
+            'url' => 'test-initiative',
+            'use_custom_coordinates' => true,
+            'lat' => 0,
+            'lng' => 0,
+        ];
+        
+        $this->loginAsOrga();
+        $this->post(
+            Configure::read('AppConfig.htmlHelper')->urlWorkshopNew(),
+            [
+                'referer' => '/',
+                'Workshops' => $workshopForPost
+            ]
+        );
+        
+        $this->Workshop = TableRegistry::getTableLocator()->get('Workshops');
+        $workshop = $this->Workshop->find('all', [
+            'conditions' => [
+                'Workshops.url' => $workshopForPost['url']
+            ]
+        ])->first();
+        
+        $this->assertEquals($workshop->name, $workshopForPost['name']);
+        $this->assertEquals($workshop->url, $workshopForPost['url']);
+        
+        $this->assertMailCount(1);
+        $this->assertMailSentTo(Configure::read('AppConfig.debugMailAddress'));
+        
+    }
     
 }
 ?>

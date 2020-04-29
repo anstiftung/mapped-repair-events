@@ -185,6 +185,23 @@ class WorkshopsController extends AppController
                         }
                     }
                     
+                    // notify admins on add
+                    if (!$isEditMode) {
+                        $email = new Mailer('default');
+                        $email->viewBuilder()->setTemplate('workshop_added');
+                        $email->setSubject(Configure::read('AppConfig.initiativeNameSingular') . ' "'.$savedWorkshop->name.'" erfolgreich erstellt')
+                        ->setViewVars([
+                            'workshop' => $savedWorkshop,
+                            'username' => $this->AppAuth->getUserName(),
+                        ]);
+                        if (Configure::read('debug')) {
+                            $email->setTo(Configure::read('AppConfig.debugMailAddress'));
+                        } else {
+                            $email->setTo(Configure::read('AppConfig.notificationMailAddress'));
+                        }
+                        $email->send();
+                    }
+                    
                     $this->redirect($this->request->getData()['referer']);
                     
                 } else {
