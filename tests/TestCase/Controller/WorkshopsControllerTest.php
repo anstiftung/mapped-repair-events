@@ -73,7 +73,7 @@ class WorkshopsControllerTest extends AppTestCase
         
         $this->assertMailCount(1);
         $this->assertMailSentTo(Configure::read('AppConfig.debugMailAddress'));
-        $this->assertMailContainsText('hat soeben');
+        $this->assertMailContains('hat soeben die Reparatur-Initiative "test initiative" erstellt');
         
     }
     
