@@ -24,7 +24,7 @@
     "featherlight": "^1.7.14",
     "fullcalendar": "^3.10.1",
     "jQuery-Impromptu": "https://github.com/trentrichardson/jQuery-Impromptu/tarball/master",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "jquery-knob": "https://github.com/aterrien/jQuery-Knob/tarball/master",
     "jquery-slugify": "^1.2.5",
     "jquery.cycle2": "^2.1.7",
