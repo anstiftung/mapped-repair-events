@@ -267,7 +267,11 @@ body.workshops.home .swiper-container .swiper-pagination-bullet-active {
     background-color: #4D8EA2;
 }
 body.workshops.home .swiper-container-horizontal > .swiper-pagination-bullets {
-	top: 60px;
+	top: 20px;
+}
+body.workshops.home .swiper-container-horizontal > .swiper-pagination-bullets span {
+    height: 12px;
+    width: 12px;
 }
 body.workshops.home .box.filter #search {
   width: 55px;
@@ -1695,10 +1699,11 @@ iframe .rc,
 
 #workshops-home .swiper-container {
     border: 1px solid #ddd;
-    padding: 20px 0;
-    height: 440px;
+    padding: 0;
+    height: 480px;
     float: left;
     margin-bottom: 20px;
+    margin-top: -2px;
     width: 573px;
 }
 #workshops-home .swiper-container img {

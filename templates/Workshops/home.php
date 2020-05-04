@@ -126,8 +126,6 @@ $tl_search_input_field = __('Map search field preentered');
                 <?php echo $this->element('home/slides'); ?>
             </div>
             <div class="swiper-pagination"></div>
-    		<div class="swiper-button-prev"></div>
-    		<div class="swiper-button-next"></div>
     	</div>
     </div>
 
