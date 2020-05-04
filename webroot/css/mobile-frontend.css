@@ -216,7 +216,7 @@
 		right: 5px ! important;
 		top: -12px;
 	}
-	body.workshops.home .cycle-slideshow {
+	body.workshops.home .swiper-container {
 	    width: auto ! important; /* using percent here breaks swiping */
 	    display: none;
 	}
