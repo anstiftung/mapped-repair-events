@@ -217,10 +217,12 @@
 		top: -12px;
 	}
 	body.workshops.home .swiper-container {
-	    width: auto ! important; /* using percent here breaks swiping */
-	    display: none;
+	   height: auto ! important;
 	}
-	
+	body.workshops.home .swiper-container,
+    body.workshops.home .swiper-slide img {
+	    width: 100% ! important;
+	}
 	.blog-detail div.text-wrapper img {
 		margin-left: 0;
 		margin-right: 10px;

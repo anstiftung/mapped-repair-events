@@ -38,7 +38,7 @@ MappedRepairEvents.MobileFrontend = {
             MappedRepairEvents.MobileFrontend.adaptHomeSlidesWidth(slides);
         });
         MappedRepairEvents.MobileFrontend.adaptHomeSlidesWidth(slides);
-        $(slides).closest('.cycle-slideshow').show();
+        $(slides).closest('.swiper-container').show();
     },
     
     adaptHomeSlidesWidth : function(slides) {

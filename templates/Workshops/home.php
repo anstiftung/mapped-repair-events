@@ -115,15 +115,6 @@ $tl_search_input_field = __('Map search field preentered');
 
     <div id="teaser-buttons-dotted-line-bottom" class="dotted-line-full-width"></div>
 
-
-    <?php
-        if ($this->request->getSession()->read('isMobile')) {
-            $this->element('addScript', ['script' => 
-                JS_NAMESPACE.".MobileFrontend.initAdaptHomeSlidesWidthListener('body.workshops.home .cycle-slideshow > a');
-            "]);
-        }
-    ?>
-
     <div class="left">
     	<?php
             $this->element('addScript', ['script' => 
