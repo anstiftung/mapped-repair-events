@@ -185,6 +185,21 @@ class WorkshopsController extends AppController
                         }
                     }
                     
+                    $userAction = 'erstellt';
+                    if ($isEditMode) {
+                        $userAction = 'geändert';
+                    }
+                    $email = new Mailer('default');
+                    $email->viewBuilder()->setTemplate('workshop_added_or_changed');
+                    $email->setSubject(Configure::read('AppConfig.initiativeNameSingular') . ' "'.$entity->name.'" erfolgreich ' . $userAction)
+                    ->setViewVars([
+                        'workshop' => $entity,
+                        'username' => $this->AppAuth->getUserName(),
+                        'userAction' => $userAction,
+                    ]);
+                    $email->setTo(Configure::read('AppConfig.notificationMailAddress'));
+                    $email->send();
+                    
                     $this->redirect($this->request->getData()['referer']);
                     
                 } else {
@@ -951,13 +966,7 @@ class WorkshopsController extends AppController
         foreach($orgaTeam as $orgaUser) {
             $email->addCc($orgaUser->email);
         }
-        
-        if (Configure::read('debug')) {
-            $email->setTo(Configure::read('AppConfig.debugMailAddress'));
-        } else {
-            $email->setTo(Configure::read('AppConfig.notificationMailAddress'));
-        }
-       
+        $email->setTo(Configure::read('AppConfig.notificationMailAddress'));
         $email->send();
 
         $message = 'Die Initiative wurde erfolgreich gelöscht und alle Organisatoren wurden per E-Mail informiert.';
