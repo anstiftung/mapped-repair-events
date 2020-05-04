@@ -33,15 +33,15 @@ MappedRepairEvents.MobileFrontend = {
         $(selector).addClass('no-hover');
     },
     
-    initAdaptCycle2SlidesWidthListener : function(slides) {
+    initAdaptHomeSlidesWidthListener : function(slides) {
         $(window).on('resize', function() {
-            MappedRepairEvents.MobileFrontend.adaptCycle2SlidesWidth(slides);
+            MappedRepairEvents.MobileFrontend.adaptHomeSlidesWidth(slides);
         });
-        MappedRepairEvents.MobileFrontend.adaptCycle2SlidesWidth(slides);
+        MappedRepairEvents.MobileFrontend.adaptHomeSlidesWidth(slides);
         $(slides).closest('.cycle-slideshow').show();
     },
     
-    adaptCycle2SlidesWidth : function(slides) {
+    adaptHomeSlidesWidth : function(slides) {
         $(slides).each(function() {
             $(this).find('img').width(MappedRepairEvents.MobileFrontend.getContentWidth());
         });

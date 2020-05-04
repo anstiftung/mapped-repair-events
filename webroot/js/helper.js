@@ -444,6 +444,20 @@ MappedRepairEvents.Helper = {
         }
     },
     
+    initSlider: function(selector) {
+        var mySwiper = new Swiper(selector, {
+            loop: true,
+            autoplay: {
+                delay: 6000,
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                type: 'bullets',
+                clickable: true,
+              }, 
+          });
+    },
+    
     hideAndResetCalendarEventsBox : function() {
         $('#calEvents').hide();
         $('#selectedDate').attr('data-date', '').html('');

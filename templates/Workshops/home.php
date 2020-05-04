@@ -119,22 +119,24 @@ $tl_search_input_field = __('Map search field preentered');
     <?php
         if ($this->request->getSession()->read('isMobile')) {
             $this->element('addScript', ['script' => 
-                JS_NAMESPACE.".MobileFrontend.initAdaptCycle2SlidesWidthListener('body.workshops.home .cycle-slideshow > a');
+                JS_NAMESPACE.".MobileFrontend.initAdaptHomeSlidesWidthListener('body.workshops.home .cycle-slideshow > a');
             "]);
         }
     ?>
 
     <div class="left">
-        <div class="cycle-slideshow"
-  			data-cycle-swipe=true
-            data-cycle-swipe-fx="scrollHorz"
-  			data-cycle-fx="scrollHorz"
-            data-cycle-speed="1000"
-            data-cycle-timeout="6000"
-            data-cycle-slides="> a"
-            >
-            <?php echo $this->element('home/slides'); ?>
-            <div class=cycle-pager></div>
+    	<?php
+            $this->element('addScript', ['script' => 
+                JS_NAMESPACE.".Helper.initSlider('body.workshops.home .swiper-container');
+            "]);
+        ?>
+        <div class="swiper-container">
+        	<div class="swiper-wrapper">
+                <?php echo $this->element('home/slides'); ?>
+            </div>
+            <div class="swiper-pagination"></div>
+    		<div class="swiper-button-prev"></div>
+    		<div class="swiper-button-next"></div>
     	</div>
     </div>
 
