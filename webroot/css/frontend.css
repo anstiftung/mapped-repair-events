@@ -263,27 +263,16 @@ body.pages.detail.statistik iframe {
     width: 75%;
     margin-top: 15px;
 }
-body.workshops.home .cycle-pager {
-    text-align: center;
-    width: 100%;
-    z-index: 500;
-    position: absolute;
-    top: 10px;
-    overflow: hidden;
+body.workshops.home .swiper-container .swiper-pagination-bullet-active {
+    background-color: #4D8EA2;
 }
-body.workshops.home .cycle-pager span {
-    font-size: 50px;
-    width: 16px;
-    height: 16px;
-    display: inline-block;
-    color: #ddd;
-    cursor: pointer;
+body.workshops.home .swiper-container-horizontal > .swiper-pagination-bullets {
+	top: 20px;
+	height: 12px;
 }
-body.workshops.home .cycle-pager span.cycle-pager-active {
-    color: #4D8EA2;
-}
-body.workshops.home .cycle-pager > * {
-    cursor: pointer;
+body.workshops.home .swiper-container-horizontal > .swiper-pagination-bullets span {
+    height: 12px;
+    width: 12px;
 }
 body.workshops.home .box.filter #search {
   width: 55px;
@@ -1709,14 +1698,16 @@ iframe .rc,
     background-position: 0 -290px;
 }
 
-#workshops-home .cycle-slideshow {
+#workshops-home .swiper-container {
     border: 1px solid #ddd;
-    padding: 20px 0;
-    height: 440px;
+    padding: 0;
+    height: 480px;
     float: left;
     margin-bottom: 20px;
+    margin-top: -2px;
+    width: 573px;
 }
-#workshops-home .cycle-slideshow img {
+#workshops-home .swiper-container img {
     width: 573px;
 }
 #workshops-home .news-box {
