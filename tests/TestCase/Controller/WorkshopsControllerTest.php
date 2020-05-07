@@ -73,7 +73,7 @@ class WorkshopsControllerTest extends AppTestCase
         
         $this->assertMailCount(1);
         $this->assertMailSentTo(Configure::read('AppConfig.debugMailAddress'));
-        $this->assertMailContainsText('"test initiative" erstellt');
+        $this->assertMailContainsTextAt(0, '"test initiative" erstellt');
         
     }
     
@@ -96,7 +96,7 @@ class WorkshopsControllerTest extends AppTestCase
         
         $this->assertMailCount(1);
         $this->assertMailSentTo(Configure::read('AppConfig.debugMailAddress'));
-        $this->assertMailContainsText('"Test Workshop" geändert');
+        $this->assertMailContainsTextAt(0, '"Test Workshop" geändert');
         
     }
     
