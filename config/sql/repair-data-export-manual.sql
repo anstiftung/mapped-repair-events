@@ -5,7 +5,7 @@ SELECT
     b.name as "brand",
     i.device_name as "device",
     DATE_FORMAT(i.created, '%Y') - i.device_age as "construction year",
-    DATE_FORMAT(e.datumstart, '%d.%m.%Y') as "date of event",
+    e.datumstart as "date of event",
     defect_description as "defect description",
     defect_found_ffo2.name as "defect found name",
     defect_found_ffo3.name as "defect_found_reason",
