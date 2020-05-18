@@ -13,7 +13,7 @@ SELECT
     defect_found_ffo5.name as "no_repair_reason",
     defect_found_ffo6.name as "device_must_not_be_used_anymore",
     no_repair_reason_text as "no_repair_reason_text",
-    w.uid
+    w.uid as "workshop uid"
 FROM info_sheets i
 LEFT JOIN brands b ON i.brand_id = b.id
 LEFT JOIN categories c ON c.id = i.category_id
