@@ -104,7 +104,7 @@ class InfoSheetsController extends AppController
             throw new NotFoundException('workshop not found');
         }
         
-        $query = file_get_contents(ROOT . DS . 'config' . DS. 'sql' . DS . 'repair-data-export.sql');
+        $query = file_get_contents(ROOT . DS . 'config' . DS. 'sql' . DS . 'repair-data-export-csv.sql');
         $params = [
             'workshopUid' => $workshopUid
         ];
