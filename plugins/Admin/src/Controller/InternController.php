@@ -76,7 +76,7 @@ class InternController extends AdminAppController
         $upload = $this->getRequest()->getData('upload');
         
         // non-image files will return false
-        if (!in_array($upload->getClientMediaType(), [
+        if (!in_array(mime_content_type($upload->getStream()->getMetadata('uri')), [
             'image/jpeg',
             'image/png',
             'image/gif'
