@@ -3600,6 +3600,29 @@ body.users.profil .add-skill {
     margin-top: 5px ! important;
 }
 
+#covid-19-banner {
+	transform: rotate(-18deg);
+	position: absolute;
+	top: 130px;
+	left: 60px;
+	z-index: 100;
+	display: none;
+}
+#covid-19-banner a {
+	position: absolute;
+	top: 12px;
+	right: 9px;
+	color: #E8138D;
+	font-size: 30px;
+}
+#covid-19-banner a:hover {
+    color: #924A6A;
+}
+
+body.workshops.detail #covid-19-banner {
+	top: 175px;
+}
+
 @media (max-width: 767px) {
     #wrapper {
         width: 100%;

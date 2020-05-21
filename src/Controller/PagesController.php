@@ -33,8 +33,18 @@ class PagesController extends AppController
     {
         parent::beforeFilter($event);
         $this->AppAuth->allow([
-            'detail'
+            'detail',
+            'closeCovid19Banner'
         ]);
+    }
+    
+    public function closeCovid19Banner() {
+        $this->RequestHandler->renderAs($this, 'json');
+        $_SESSION['show_covid_19_banner'] = false;
+        $this->set([
+            'status' => true
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['status']);
     }
 
     public function detail()

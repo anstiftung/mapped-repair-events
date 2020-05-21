@@ -15,6 +15,23 @@ MappedRepairEvents.Helper = {
         MappedRepairEvents.Detect.setIsMobile();
     }
 
+    ,initCovid19Banner: function() {
+        var banner = $('#covid-19-banner');
+        banner.find('a').on('click', function() {
+            banner.animate({ opacity: 'toggle' }, 'slow');
+            MappedRepairEvents.Helper.ajaxCall(
+                '/pages/' + 'closeCovid19Banner',
+                {},
+                {
+                    onOk : function(data) {
+                    },
+                    onError : function(data) {
+                    }
+                }
+            );            
+        });
+    }
+
     ,bindAddDateButton : function(dateHtml) {
         
         // remove select2 which is already initialized - it causes problems when the html is copied and pasted
