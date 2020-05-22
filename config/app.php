@@ -335,6 +335,9 @@ return [
      */
     'Session' => [
         'defaults' => 'php',
-        'timeout' => 60*60*24
+        'ini' => [
+            'session.save_path' => TMP . 'sessions',
+        ],
+        'timeout' => 60*60*24,
     ],
 ];
