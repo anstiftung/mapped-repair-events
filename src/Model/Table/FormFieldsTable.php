@@ -5,7 +5,7 @@ use Cake\ORM\Table;
 
 class FormFieldsTable extends Table
 {
-    
+
     public function initialize(array $config): void
     {
         parent::initialize($config);
@@ -13,7 +13,7 @@ class FormFieldsTable extends Table
             'foreignKey' => 'form_field_id'
         ]);
     }
-    
+
     public function getForForm($formFieldId)
     {
         $formField = $this->find('all', [
@@ -29,17 +29,17 @@ class FormFieldsTable extends Table
                 ]
             ],
         ])->first();
-        
+
         $preparedFormFieldOptions = [];
         foreach($formField->form_field_options as $formFieldOption) {
             $preparedFormFieldOptions[$formFieldOption->value] = $formFieldOption->name;
         }
-        
+
         $formField->preparedOptions = $preparedFormFieldOptions;
-        
+
         return $formField;
     }
-    
+
 }
 
 ?>

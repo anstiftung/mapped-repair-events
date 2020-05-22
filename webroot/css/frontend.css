@@ -55,24 +55,24 @@ div.jqibox {
     margin-top: 10%;
     z-index: 10000 ! important;
 }
-div.jqi .jqimessage{ 
-    padding: 10px; 
-    line-height: 20px; 
+div.jqi .jqimessage{
+    padding: 10px;
+    line-height: 20px;
     color: #444444;
-    font-size: 14px; 
+    font-size: 14px;
 }
 div.jqi .jqibuttons button,
 div.jqi .jqibuttons button:hover {
     color: #333 ! important;
 }
-div.jqi{ 
-    width: 400px; 
+div.jqi{
+    width: 400px;
     max-width:90%;
     font-family: 'Open Sans', arial, helvetica, sans-serif;
-    position: absolute; 
-    background-color: #ffffff; 
-    font-size: 11px; 
-    text-align: left; 
+    position: absolute;
+    background-color: #ffffff;
+    font-size: 11px;
+    text-align: left;
     border: solid 1px #eeeeee;
     border-radius: 6px;
     -moz-border-radius: 6px;
@@ -152,7 +152,7 @@ hr {
     margin-top: 30px;
 }
 #workshopApply div.input.select {
-    float: left;  
+    float: left;
 }
 #workshopApply div.input.select label {
     display: none;
@@ -191,7 +191,7 @@ hr {
 }
 #logo {
     width: 75px;
-    height: 75px; 
+    height: 75px;
 }
 #claim {
     float: left;
@@ -267,8 +267,8 @@ body.workshops.home .swiper-container .swiper-pagination-bullet-active {
     background-color: #4D8EA2;
 }
 body.workshops.home .swiper-container-horizontal > .swiper-pagination-bullets {
-	top: 20px;
-	height: 12px;
+    top: 20px;
+    height: 12px;
 }
 body.workshops.home .swiper-container-horizontal > .swiper-pagination-bullets span {
     height: 12px;
@@ -316,7 +316,7 @@ body.newsletters.index #content p {
 }
 body.newsletters.index .input {
     float: left;
-    margin-right: 10px;  
+    margin-right: 10px;
 }
 body.newsletters.index .input label {
   font-weight: bold;
@@ -334,7 +334,7 @@ i.fa-border {
     background-color: #fff;
     border-radius: 3px;
     padding: 5px 6px;
-    border-color: #ccc; 
+    border-color: #ccc;
 }
 a:hover i.fa-border {
     opacity: .5;
@@ -425,7 +425,7 @@ td.fc-has-event span.event-count {
     text-align: center;
     color: #fff;
     margin-top: 21px;
-} 
+}
 .filter select {
     padding: 5px;
     border-radius: 3px;
@@ -513,7 +513,7 @@ body.workshops.detail .skill-icon-wrapper {
 }
 body.workshops.detail .widget-link {
     float: right;
-    font-size: 11px;    
+    font-size: 11px;
 }
 body.workshops.detail .widget-link.events {
     margin: 6px -8px 0px 20px;
@@ -786,8 +786,8 @@ div.admin div.edit.column-1 textarea {
     padding-left: 95px;
 }
 #eventEditForm label[for="0-renotify"] {
-	padding-left: 0 ! important;
-	width: 100% ! important;
+    padding-left: 0 ! important;
+    width: 100% ! important;
 }
 #eventEditForm .input.checkbox input,
 #workshopEditForm .input.checkbox input {
@@ -1147,21 +1147,21 @@ body.events.myEvents h2 {
     margin-bottom: 10px ! important;
 }
 body.events.myEvents a.download-info-sheets {
-	float: right;
-	margin-bottom: 5px;
+    float: right;
+    margin-bottom: 5px;
 }
 body.events.myEvents .info-sheets-year-wrapper {
-	float: right;
-	margin-right: 5px;
+    float: right;
+    margin-right: 5px;
 }
 body.events.myEvents .info-sheets-year-wrapper .select2-container .select2-selection--single {
-	height: 26px;
+    height: 26px;
 }
 body.events.myEvents .info-sheets-year-wrapper .select2-container--default .select2-selection--single .select2-selection__rendered {
-	line-height: 26px;
+    line-height: 26px;
 }
 body.events.myEvents .info-sheets-year-wrapper .select2-container {
-	width: 83px ! important;
+    width: 83px ! important;
 }
 body.events.myEvents h2.offline,
 body.events.myEvents a.toggle-link.offline {
@@ -1395,7 +1395,7 @@ div.map-detail #mapContainer {
     top: 40px;
     right: 10px;
     */
-    
+
     float: right;
     margin-top: -18px;
     margin-bottom: 25px;
@@ -1596,7 +1596,7 @@ iframe .rc,
     background-color: #F5F5F5;
     position: relative;
 }
-@-moz-document url-prefix() { 
+@-moz-document url-prefix() {
   #workshops-home .find-events-box {
      margin-top: 25px;
   }
@@ -2054,14 +2054,14 @@ body.users .profile .categories-checkbox-wrapper b,
   margin-bottom: 0;
 }
 #workshopEditForm .highlight-red {
-	border: 2px solid red;
-	border-radius: 5px;
-	float: left;
-	padding: 5px;
-	background-color: #FFCFCF;
+    border: 2px solid red;
+    border-radius: 5px;
+    float: left;
+    padding: 5px;
+    background-color: #FFCFCF;
 }
 #workshopEditForm .highlight-red label {
-	font-weight: bold;
+    font-weight: bold;
 }
 body.users .profile .groups-checkbox-wrapper .error-message {
   margin-left: 0;
@@ -2098,7 +2098,7 @@ body.users .profile .categories-checkbox-wrapper > div.input > label,
 }
 .user-reg .input input[type="checkbox"] {
     float: left;
-    margin-top: 0px;  
+    margin-top: 0px;
     margin-right: 8px;
 }
 #passwort-aendern label,
@@ -2532,7 +2532,7 @@ body..featherlight:not(.featherlight-swipe-aware) .featherlight-image {
 }
 .featherlight-next span,
 .featherlight-previous span {
-    font-size: 50px;  
+    font-size: 50px;
 }
 #metatags {
     clear: both;
@@ -2920,9 +2920,9 @@ body.events.all .input.select {
 }
 body.events.all .select2,
 body.events.all .input select { /* avoid jumping effect */
-	width: 100px ! important;
-	float: left;
-	margin-right: 10px;
+    width: 100px ! important;
+    float: left;
+    margin-right: 10px;
 }
 body.workshops.all .item-wrapper,
 body.events.all .item-wrapper {
@@ -3059,10 +3059,10 @@ body.users.publicProfile .top-wrapper {
     margin-bottom: 20px;
 }
 body.users.publicProfile .dotted-line-full-width {
-	margin-top: 0px;
-	float: left;
-	margin-left: -50px;
-	margin-bottom: 15px;
+    margin-top: 0px;
+    float: left;
+    margin-left: -50px;
+    margin-bottom: 15px;
 }
 body.users.publicProfile .bottom-wrapper,
 body.users.publicProfile #sklill_icons {
@@ -3074,11 +3074,11 @@ body.users.publicProfile #sklill_icons {
     margin-bottom: 15px;
 }
 a.public-user-wrapper:hover {
-	background-color: #f5f5f5;
+    background-color: #f5f5f5;
 }
 .public-user-wrapper span {
-	color: #727374;
-	font-weight: normal;
+    color: #727374;
+    font-weight: normal;
 }
 .public-user-wrapper .left-wrapper {
     width: 210px;
@@ -3204,7 +3204,7 @@ body.skills.all h1 {
     padding-left: 42px;
 }
 body.skills.all .dotted-line-full-width {
-	margin-bottom: 15px;
+    margin-bottom: 15px;
 }
 body.users.all h1 {
     float: left;
@@ -3330,25 +3330,25 @@ div.admin div.edit .error-message {
     line-height: 15px;
 }
 body.events div.admin div.edit .date-time-wrapper .error-message {
-	margin-left: 79px;
+    margin-left: 79px;
 }
 body.events div.admin div.edit .input.time .error-message {
     margin-left: 0;
 }
 body.events.add .date-time-wrapper .row {
-	float: left;
-	width: 100%;
+    float: left;
+    width: 100%;
 }
 body.events .date-time-wrapper .row .time-fields-wrapper {
-	float: left;
+    float: left;
 }
 body.events.add .date-time-wrapper .fa {
     line-height: 35px;
     font-size: 20px;
 }
 body.events.add .date-time-wrapper .fa-minus-circle {
-	color: red;
-	margin-right: 5px;
+    color: red;
+    margin-right: 5px;
 }
 div.admin div.edit.column-1 .error-message,
 div.admin div.edit.column-2 .error-message {

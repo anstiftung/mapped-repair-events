@@ -11,9 +11,9 @@ use Cake\ORM\TableRegistry;
 
 class EventsController extends AppController
 {
-    
+
     public function beforeFilter(EventInterface $event) {
-        
+
         parent::beforeFilter($event);
         $this->Event = TableRegistry::getTableLocator()->get('Events');
         $this->AppAuth->allow([
@@ -23,44 +23,44 @@ class EventsController extends AppController
             'feed'
         ]);
     }
-    
+
     public function isAuthorized($user)
     {
-        
+
         if ($this->request->getParam('action') == 'myEvents') {
             return $this->AppAuth->user();
         }
-        
+
         if ($this->request->getParam('action') == 'add') {
-            
+
             if ($this->AppAuth->isAdmin()) {
                 $this->useDefaultValidation = false;
                 return true;
             }
-            
+
             // repair helpers are not allowed to add events
             if (!$this->AppAuth->isOrga()) {
                 return false;
             }
-            
+
             $workshopUid = (int) $this->request->getParam('pass')[0];
             $this->Workshop = TableRegistry::getTableLocator()->get('Workshops');
             $workshop = $this->Workshop->getWorkshopForIsUserInOrgaTeamCheck($workshopUid);
             if ($this->Workshop->isUserInOrgaTeam($this->AppAuth->user(), $workshop)) {
                 return true;
             }
-            
+
         }
-        
+
         if (in_array($this->request->getParam('action'), ['edit', 'delete', 'duplicate'])) {
-            
+
             // repair helpers are not allowed to edit, delete or duplicate events (even not own content - which does not exist because "add" is locked for repairhelpers too)
             if (!($this->AppAuth->isOrga() || $this->AppAuth->isAdmin())) {
                 return false;
             }
-            
+
             $eventUid = (int) $this->request->getParam('pass')[0];
-            
+
             $this->Event = TableRegistry::getTableLocator()->get('Events');
             $event = $this->Event->find('all', [
                 'conditions' => [
@@ -69,35 +69,35 @@ class EventsController extends AppController
                 ]
             ])->first();
             $workshopUid = $event->workshop_uid;
-            
+
             if ($this->request->getParam('action') == 'edit' && $event->datumstart->isPast()) {
                 return false;
             }
-            
+
             if ($this->AppAuth->isAdmin()) {
                 $this->useDefaultValidation = false;
                 return true;
             }
-            
+
             // all approved orgas are allowed to edit their events
             $this->Workshop = TableRegistry::getTableLocator()->get('Workshops');
             $workshop = $this->Workshop->getWorkshopForIsUserInOrgaTeamCheck($workshopUid);
             if ($this->Workshop->isUserInOrgaTeam($this->AppAuth->user(), $workshop)) {
                 return true;
             }
-            
+
             return false;
         }
-        
+
         return parent::isAuthorized($user);
-        
+
     }
-    
+
     public function myEvents()
     {
-        
+
         $hasEditEventPermissions = $this->AppAuth->isAdmin() || $this->AppAuth->isOrga();
-        
+
         $this->Workshop = TableRegistry::getTableLocator()->get('Workshops');
         // complicated is-user-orga-check no needed again because this page is only accessible for orga users
         if ($this->AppAuth->isAdmin()) {
@@ -105,7 +105,7 @@ class EventsController extends AppController
         } else {
             $workshops = $this->Workshop->getWorkshopsForAssociatedUser($this->AppAuth->getUserUid(), APP_DELETED);
         }
-        
+
         $workshops->contain([
             'Events.InfoSheets.OwnerUsers',
             'Events.InfoSheets.Brands' => function($q) {
@@ -115,29 +115,29 @@ class EventsController extends AppController
             return $q->select($this->Workshop->Events->InfoSheets->Categories);
             }
             ]);
-        
+
         $this->Workshop->getAssociation('Events')->setConditions(['Events.status > ' . APP_DELETED])
         ->setSort([
             'Events.datumstart' => 'DESC',
             'Events.uhrzeitstart' => 'DESC'
         ]);
-        
+
         $conditions = [
             'InfoSheets.status > ' . APP_DELETED
         ];
-        
+
         // show only own content for repair helper
         if (!$hasEditEventPermissions) {
             $conditions['InfoSheets.owner'] = $this->AppAuth->getUserUid();
         }
-        
+
         $this->Workshop->getAssociation('Events')->getAssociation('InfoSheets')
         ->setConditions($conditions)
         ->setSort([
             'InfoSheets.device_name' => 'ASC'
         ]);
         $workshops->limit(1000000);
-        
+
         foreach($workshops as $workshop) {
             $workshop->infoSheetCount = 0;
             if (!empty($workshop->events)) {
@@ -150,24 +150,24 @@ class EventsController extends AppController
         // workaround: if limit is not added, this warning appears
         // Warning (2): count(): Parameter must be an array or an object that implements Countable in [src/Template/Events/my_events.ctp, line 42]
         $this->set('workshops', $workshops);
-        
+
         $metaTags = [
             'title' => 'Meine Termine'
         ];
         $this->set('metaTags', $metaTags);
-        
+
         $this->set('hasEditEventPermissions', $hasEditEventPermissions);
         $this->set('infoSheetColspan', $hasEditEventPermissions ? 11 : 8);
-        
+
     }
-    
+
     public function feed()
     {
-        
+
         if (! $this->RequestHandler->prefers('rss')) {
             throw new NotFoundException('kein rss');
         }
-        
+
         $this->Event = TableRegistry::getTableLocator()->get('Events');
         $events = $this->Event->find('all', [
             'conditions' => $this->Event->getListConditions(),
@@ -178,21 +178,21 @@ class EventsController extends AppController
                 'Workshops'
             ]
         ]);
-        
+
         if ($events->count() == 0) {
             throw new NotFoundException('no events found');
         }
-        
+
         $this->set('events', $events);
-        
+
     }
-    
+
     public function delete($eventUid)
     {
         if ($eventUid === null) {
             throw new NotFoundException;
         }
-        
+
         $event = $this->Event->find('all', [
             'conditions' => [
                 'Events.uid' => $eventUid,
@@ -203,22 +203,22 @@ class EventsController extends AppController
                 'Workshops'
             ]
         ])->first();
-        
+
         if (empty($event)) {
             throw new NotFoundException;
         }
-        
+
         // keep this line here!!!
         $originalEventStatus = $event->status;
-        
+
         $patchedEntity = $this->Event->patchEntity(
             $this->Event->get($eventUid),
             ['status' => APP_DELETED]
         );
-        
+
         if ($this->Event->save($patchedEntity)) {
             $this->AppFlash->setFlashMessage('Der Termin wurde erfolgreich gelöscht.');
-            
+
             if ($originalEventStatus) {
                 // START notify subscribers
                 $this->Worknews = TableRegistry::getTableLocator()->get('Worknews');
@@ -244,18 +244,18 @@ class EventsController extends AppController
                 }
                 // END notify subscribers
             }
-            
+
         } else {
             $this->AppFlash->setErrorMessage('Beim Löschen ist ein Fehler aufgetreten');
         }
-        
+
         $this->redirect($this->request->referer(false));
-        
+
     }
-    
+
     public function add($preselectedWorkshopUid)
     {
-        
+
         $event = $this->Event->newEntity(
             [
                 'status' => APP_ON,
@@ -263,9 +263,9 @@ class EventsController extends AppController
             ],
             ['validate' => false]
         );
-        
+
         $this->set('metaTags', ['title' => 'Termin erstellen']);
-        
+
         $this->Workshop = TableRegistry::getTableLocator()->get('Workshops');
         // complicated is-user-orga-check no needed again because this page is only accessible for orga users
         if ($this->AppAuth->isAdmin()) {
@@ -273,20 +273,20 @@ class EventsController extends AppController
         } else {
             $workshops = $this->Workshop->getWorkshopsForAssociatedUser($this->AppAuth->getUserUid(), APP_DELETED);
         }
-        
+
         $this->set('workshopsForDropdown', $this->Workshop->transformForDropdown($workshops));
         $this->set('preselectedWorkshopUid', $preselectedWorkshopUid);
         $this->set('editFormUrl', Configure::read('AppConfig.htmlHelper')->urlEventNew($preselectedWorkshopUid));
         $this->set('isDuplicateMode', false);
-        
+
         $this->_edit([$event], false);
-        
+
         // assures rendering of success message on redirected page and NOT before and then not showing it
         if (empty($this->request->getData())) {
             $this->render('edit');
         }
     }
-    
+
     public function duplicate($eventUid) {
         $event = $this->Event->find('all', [
             'conditions' => [
@@ -298,7 +298,7 @@ class EventsController extends AppController
                 'Workshops'
             ]
         ])->first();
-        
+
         if (empty($event)) {
             throw new NotFoundException;
         }
@@ -310,14 +310,14 @@ class EventsController extends AppController
         $this->_edit([$event], false);
         $this->render('edit');
     }
-    
+
     public function edit($eventUid)
     {
-        
+
         if ($eventUid === null) {
             throw new NotFoundException;
         }
-        
+
         $event = $this->Event->find('all', [
             'conditions' => [
                 'Events.uid' => $eventUid,
@@ -328,29 +328,29 @@ class EventsController extends AppController
                 'Workshops'
             ]
         ])->first();
-        
+
         if (empty($event)) {
             throw new NotFoundException;
         }
-        
+
         $this->setIsCurrentlyUpdated($event->uid);
         $this->set('metaTags', ['title' => 'Termin bearbeiten']);
         $this->set('editFormUrl', Configure::read('AppConfig.htmlHelper')->urlEventEdit($event->uid));
         $this->set('isDuplicateMode', false);
         $patchedEntities = $this->_edit([$event], true);
-        
+
         $patchedEntity = $patchedEntities[0];
-        
+
         // only send notfications if status was changed from off to on
         $sendNotificationMails = $event->status == APP_OFF && $patchedEntity->status == APP_ON;
-        
+
         // never send notification mail on add! this is done in cronjob SendWorknewsNotificationShell
         // if event is edited and renotify is active, send mail to subscriber
         if (!empty($event->workshop)) {
             $workshop = $event->workshop;
             $sendNotificationMails |= $patchedEntity->renotify;
         }
-        
+
         // notify subscribers
         if (isset($workshop) && $sendNotificationMails) {
             $this->Worknews = TableRegistry::getTableLocator()->get('Worknews');
@@ -360,16 +360,16 @@ class EventsController extends AppController
             }
         }
     }
-    
+
     private function _edit($events, $isEditMode)
     {
         $this->Category = TableRegistry::getTableLocator()->get('Categories');
         $this->set('categories', $this->Category->getForDropdown(APP_ON));
-        
+
         $this->set('uid', $events[0]->uid);
-        
+
         $this->setReferer();
-        
+
         if (!empty($this->request->getData())) {
             $i = 0;
             $patchedEvents = [];
@@ -406,19 +406,19 @@ class EventsController extends AppController
             }
 
             $events = $patchedEvents;
-            
+
             $hasErrors = false;
             foreach($events as $event) {
                 if ($event->hasErrors()) {
                     $hasErrors |= true;
                 }
             }
-            
+
             $errors = $events[0]->getErrors();
             if (isset($errors['lat']) && isset($errors['lat']['numeric'])) {
                 $this->AppFlash->setFlashError($errors['lat']['numeric']);
             }
-            
+
             if (!$hasErrors) {
                 $eventModel = $this->Event;
                 $this->Event->getConnection()->transactional(function () use ($eventModel, $events) {
@@ -435,30 +435,30 @@ class EventsController extends AppController
                 $this->redirect($this->request->getData()['referer']);
                 return $events;
             }
-            
+
         }
-        
+
         $this->set('events', $events);
         $this->set('isEditMode', $isEditMode);
         $this->render('edit');
         return $events;
-        
+
     }
-    
+
     public function ajaxGetAllEventsForMap()
     {
-        
+
         if (!$this->request->is('ajax')) {
             throw new ForbiddenException();
         }
-        
+
         $this->RequestHandler->renderAs($this, 'json');
-        
+
         $keyword = '';
         $conditions = $this->Event->getListConditions();
-        
+
         $allParamsEmpty = empty($this->request->getQuery('keyword'));
-        
+
         $events = $this->Event->find('all', [
             'conditions' => $conditions,
             'fields' => $this->Event->getListFields(),
@@ -469,18 +469,18 @@ class EventsController extends AppController
             ]
         ]);
         $events->distinct($this->Event->getListFields());
-        
+
         if (!empty($this->request->getQuery('keyword'))) {
             $keyword = h(strtolower(trim($this->request->getQuery('keyword'))));
             if ($keyword !== '' && $keyword !== 'null') {
                 $events->where($this->Event->getKeywordSearchConditions($keyword, false));
             }
         }
-        
+
         if (! $allParamsEmpty) {
             $events->where($this->Event->getKeywordSearchConditions($keyword, true));
         }
-        
+
         if (!empty($this->request->getQuery('categories'))) {
             $categories = explode(',', h($this->request->getQuery('categories')));
             if (!empty($categories)) {
@@ -498,19 +498,19 @@ class EventsController extends AppController
         ]);
         $this->viewBuilder()->setOption('serialize', ['status', 'message', 'events']);
     }
-    
+
     public function all()
     {
-        
+
         $metaTags = [
             'title' => 'Suche Reparaturtermine in deiner Nähe',
             'description' => 'Termine und Veranstaltungen von Repair Cafés und anderen ' . Configure::read('AppConfig.initiativeNamePlural') . ' in deiner Nähe',
             'keywords' => 'repair café, repair cafe, reparieren, repair, reparatur, reparatur-initiativen, netzwerk reparatur-initiativen, reparaturtermin, reparaturveranstaltung'
         ];
         $this->set('metaTags', $metaTags);
-        
+
         $conditions = $this->Event->getListConditions();
-        
+
         // get count without any filters
         $allEventsCount = $this->Events->find('all', [
             'conditions' => $conditions,
@@ -519,7 +519,7 @@ class EventsController extends AppController
             ]
         ])->count();
         $this->set('allEventsCount', $allEventsCount);
-        
+
         $timeRangeDefault = '30days';
         $timeRangeOptions = [
             '30days' => '30 Tage',
@@ -527,13 +527,13 @@ class EventsController extends AppController
             'all' => 'alle'
         ];
         $this->set('timeRangeOptions', $timeRangeOptions);
-        
+
         $selectedCategories = !empty($this->request->getQuery('categories')) ? explode(',', h($this->request->getQuery('categories'))) : [];
         $this->set('selectedCategories', $selectedCategories);
-        
+
         $this->Category = TableRegistry::getTableLocator()->get('Categories');
         $categories = $this->Category->getMainCategoriesForFrontend();
-        
+
         $preparedCategories = [];
         foreach ($categories as $category) {
             // category is selected
@@ -554,7 +554,7 @@ class EventsController extends AppController
                     ]);
                 }
             }
-            
+
             // initially all categories selected
             if (count($selectedCategories) == 0) {
                 $categoryClass = 'selected';
@@ -562,23 +562,23 @@ class EventsController extends AppController
                     $category->id
                 ]);
             }
-            
-            
+
+
             $newUrl = 'categories=' . join(',', $categoryIdsForNewUrl);
             $newUrl = str_replace('categories=,', '&categories=', $newUrl);
-            
+
             if (empty($this->request->getQuery('keyword'))) {
                 $newUrl = '?' . $newUrl;
             } else {
                 $newUrl = '?keyword=' . h($this->request->getQuery('keyword')) . '&' . $newUrl;
             }
-            
+
             if (!empty($this->request->getQuery('timeRange')) && $this->request->getQuery('timeRange') != $timeRangeDefault) {
                 $newUrl = $newUrl . '&timeRange=' . h($this->request->getQuery('timeRange'));
             }
-            
+
             $newUrl = str_replace('//', '/', $newUrl);
-            
+
             $category['href'] = $newUrl;
             $category['class'] = $categoryClass;
             $preparedCategories[] = [
@@ -590,18 +590,18 @@ class EventsController extends AppController
             ];
         }
         $this->set('preparedCategories', $preparedCategories);
-        
+
         $query = $this->Events->find('all', [
             'conditions' => $conditions,
         ]);
-        
+
         $keyword = '';
         if (!empty($this->request->getQuery('keyword'))) {
             $keyword = h(strtolower(trim($this->request->getQuery('keyword'))));
             $query->where($this->Event->getKeywordSearchConditions($keyword, false));
         }
         $this->set('keyword', $keyword);
-        
+
         $timeRange = $timeRangeDefault;
         if (!empty($this->request->getQuery('timeRange'))) {
             $timeRange = h(strtolower(trim($this->request->getQuery('timeRange'))));
@@ -610,7 +610,7 @@ class EventsController extends AppController
             $query->where($this->Event->getTimeRangeCondition($timeRange, false));
         }
         $this->set('timeRange', $timeRange);
-        
+
         $resetCategoriesUrl = '/reparatur-termine';
         if ($keyword != '') {
             $resetCategoriesUrl = '/reparatur-termine?keyword=' . $keyword;
@@ -623,7 +623,7 @@ class EventsController extends AppController
             $resetCategoriesUrl .= $queryStringStartsWith . 'timeRange='.$this->request->getQuery('timeRange');
         }
         $this->set('resetCategoriesUrl', $resetCategoriesUrl);
-        
+
         if (!empty($this->request->getQuery('categories'))) {
             $categories = explode(',', h($this->request->getQuery('categories')));
             if (!empty($categories)) {
@@ -635,7 +635,7 @@ class EventsController extends AppController
             }
         }
         $query->distinct($this->Events->getListFields());
-        
+
         $events = $this->paginate($query, [
             'fields' => $this->Event->getListFields(),
             'order' => $this->Event->getListOrder(),
@@ -644,9 +644,9 @@ class EventsController extends AppController
                 'Categories'
             ]
         ]);
-        
+
         $this->set('events', $events);
-        
+
         // $events needs to be cloned, because unset($e['workshop']); in combineEventsForMap would also remove it from $events
         // $events cannot be cloned because it is a resultset
         // so call $this->pagniate twice - no performance problem!
@@ -659,7 +659,7 @@ class EventsController extends AppController
         ]);
         $eventsForMap = $this->combineEventsForMap($newEvents);
         $this->set('eventsForMap', $eventsForMap);
-        
+
         $urlOptions = [
             'url' => [
                 'controller' => 'reparatur-termine',
@@ -667,9 +667,9 @@ class EventsController extends AppController
             ]
         ];
         $this->set('urlOptions', $urlOptions);
-        
+
     }
-    
+
     /**
      * combines multiple events to one marker
      *
@@ -679,7 +679,7 @@ class EventsController extends AppController
     private function combineEventsForMap($events)
     {
         $eventsForMap1 = [];
-        
+
         foreach ($events as $event) {
             unset($event->uhrzeitstart);
             unset($event->uhrzeitend);
@@ -709,6 +709,6 @@ class EventsController extends AppController
         }
         return $eventsForMap;
     }
-    
+
 }
 ?>

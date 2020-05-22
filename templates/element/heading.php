@@ -20,5 +20,5 @@ use Cake\ORM\TableRegistry;
       echo '<i class="far fa-edit fa-border"></i>';
     echo '</a>';
   }
-  
+
 ?>

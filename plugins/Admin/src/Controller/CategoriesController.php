@@ -12,7 +12,7 @@ class CategoriesController extends AdminAppController
         parent::__construct($request, $response);
         $this->Category = TableRegistry::getTableLocator()->get('Categories');
     }
-    
+
     public function insert()
     {
         $category = [
@@ -25,65 +25,65 @@ class CategoriesController extends AdminAppController
         $this->AppFlash->setFlashMessage('Kategorie erfolgreich erstellt.');
         $this->redirect($this->getReferer());
     }
-    
+
     public function edit($id)
     {
-        
+
         if (empty($id)) {
             throw new NotFoundException;
         }
-        
+
         $category = $this->Category->find('all', [
             'conditions' => [
                 'Categories.id' => $id,
                 'Categories.status >= ' . APP_DELETED
             ]
         ])->first();
-        
+
         if (empty($category)) {
             throw new NotFoundException;
         }
-        
+
         $this->set('id', $category->id);
-        
+
         $this->setReferer();
-        
+
         if (!empty($this->request->getData())) {
-            
+
             $this->request = $this->request->withData('Categories.carbon_footprint', str_replace(',', '.', $this->request->getData('Categories.carbon_footprint')));
             $this->request = $this->request->withData('Categories.material_footprint', str_replace(',', '.', $this->request->getData('Categories.material_footprint')));
-            
+
             $patchedEntity = $this->Category->patchEntity(
                 $category,
                 $this->request->getData(),
                 ['validate' => true]
             );
-            
+
             if (!($patchedEntity->hasErrors())) {
                 $this->saveObject($patchedEntity);
             } else {
                 $category = $patchedEntity;
             }
         }
-        
+
         $this->set('category', $category);
-        
+
         $metaTags = ['title' => 'Kategorie bearbeiten'];
         $this->set('metaTags', $metaTags);
-        
+
         $this->set('mainCategories', $this->Category->getForDropdown([APP_ON, APP_OFF]));
-        
+
     }
-    
+
     public function index()
     {
         parent::index();
-        
+
         $conditions = [
             'Categories.status > ' . APP_DELETED
         ];
         $conditions = array_merge($this->conditions, $conditions);
-        
+
         $query = $this->Category->find('all', [
             'conditions' => $conditions,
             'contain' => [
@@ -95,22 +95,22 @@ class CategoriesController extends AdminAppController
                 'Categories.name' => 'ASC'
             ]
         ]);
-        
+
         $objects = $this->paginate($query);
-        
+
         foreach($objects as $object) {
             if ($object->owner_user) {
                 $object->owner_user->revertPrivatizeData();
             }
         }
-        
+
         $this->set('objects', $objects->toArray());
-        
+
         $metaTags = [
             'title' => 'Kategorien'
         ];
         $this->set('metaTags', $metaTags);
-        
+
     }
-    
+
 }

@@ -21,43 +21,43 @@ $postLink = $this->Html->link( '%s',
 <div class="post-wrapper">
 
     <div class="text-wrapper">
-    
+
 <?php
 if ($type != 'detail') {
     $heading = $this->Html->link(
              $post->name,
              $this->Html->urlPostDetail($post->url)
     );
-	echo '<div class="postteaser"><h2>'.$heading.'</h2>';
+    echo '<div class="postteaser"><h2>'.$heading.'</h2>';
 }
 
 echo '<div class="post-meta">';
-            
+
     $output =  [];
-    
+
     if (!in_array($blog->url, ['publikationen'])) {
         $output[] = $post->publish->i18nFormat(Configure::read('DateFormat.de.DateLong'));
     }
-    
+
     if ($post->where != '') {
           $output[] = $post->where;
     }
-    
+
     $output[] = '<a href="'.$this->Html->urlBlogDetail($blog->url).'">'.$blog->name.'</a>';
-    
+
     if ($post->author != '') {
         $output[] = '<a href="'.$this->Html->urlUserProfile($post->owner).'">'.trim($post->author).'</a>';
     }
-    
+
     echo join(' | ', $output);
-            
+
 echo '</div>'; // .post-meta
 
 if ($type == 'detail') {
     echo '<div class="sc"></div>';
 }
 
-echo '<div class="image-text-wrapper">';           
+echo '<div class="image-text-wrapper">';
 
     if ($type == 'detail' || !in_array($blog->url, $this->Html->getPostTypesWithPreview())) {
       $postText = $post->text;
@@ -71,15 +71,15 @@ echo '<div class="image-text-wrapper">';
         if (strlen($post->text) >= $postLength) {
           $postText = substr($postText, 0, strlen($postText) - 4).' ...';
           $postText .=  $this->Html->link(__('News read on'),
-    	      ['controller' => 'posts',
-      		        'action' => 'detail',
-    		        $post->url],
+              ['controller' => 'posts',
+                      'action' => 'detail',
+                    $post->url],
                     ['class' => 'button rounded', 'style' => 'margin:10px 10px 20px 0px;float:right;']
-    	      );
+              );
         }
       }
     }
-            
+
 //detail
 echo '<div class="ckeditor-text">';
 

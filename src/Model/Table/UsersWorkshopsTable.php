@@ -20,7 +20,7 @@ class UsersWorkshopsTable extends Table
             'foreignKey' => 'workshop_uid'
         ]);
     }
-    
+
     public function addApprovedUser($workshopUid, $userUid)
     {
         $query = 'REPLACE INTO ' . $this->getTable() . ' (user_uid, workshop_uid, created, approved) VALUES(:userUid, :workshopUid, NOW(), NOW());';
@@ -30,7 +30,7 @@ class UsersWorkshopsTable extends Table
         ];
         $this->getConnection()->execute($query, $params);
     }
-    
+
 }
 
 ?>

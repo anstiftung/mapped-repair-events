@@ -11,5 +11,5 @@ $id = 'id-' . rand(10000, 20000);
 </a>
 
 <div class="hide"><div id="<?php echo $id; ?>" class="help-layer">
-	<?php echo $title; ?>
+    <?php echo $title; ?>
 </div></div>

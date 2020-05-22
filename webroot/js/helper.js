@@ -1,5 +1,5 @@
 MappedRepairEvents.Helper = {
-        
+
     init : function() {
         this.highlightFormFields();
         this.checkUrlForLoginBoxOpen();
@@ -33,19 +33,19 @@ MappedRepairEvents.Helper = {
     }
 
     ,bindAddDateButton : function(dateHtml) {
-        
+
         // remove select2 which is already initialized - it causes problems when the html is copied and pasted
         $('.date-time-wrapper select').select2('destroy');
-        
+
         var addDateButton = $('a.add-date-button');
-        
+
         addDateButton.on('click', function() {
             var wrapper = $(this).closest('.date-time-wrapper');
             wrapper.append(dateHtml);
             MappedRepairEvents.Helper.bindRemoveDateButton();
             MappedRepairEvents.Helper.reinitalizeDateWrappers();
-            
-            // set default values of new from first row 
+
+            // set default values of new from first row
             var row = $('.date-time-wrapper .row');
             row.last().find('.input.text input').val(
                 row.first().find('.input.text input').val()
@@ -57,18 +57,18 @@ MappedRepairEvents.Helper = {
                 }
                 $(this).val($(id).val());
             });
-            
+
         });
 
     }
-    
+
     ,bindRemoveDateButton : function() {
         $('a.remove-date-button').off('click').on('click', function() {
             $(this).closest('.row').remove();
             MappedRepairEvents.Helper.reinitalizeDateWrappers();
         });
     }
-    
+
     ,reinitalizeDateWrappers : function() {
         var row = $('.date-time-wrapper .row');
         // date label
@@ -100,7 +100,7 @@ MappedRepairEvents.Helper = {
      * http://stackoverflow.com/questions/8472/practical-non-image-based-captcha-approaches?lq=1
      */
     ,updateAntiSpamField: function (form, id) {
-    
+
         if ($('#antiSpam' + id).length == 0) {
             var inputField = $('<input />').attr('id', 'antiSpam' + id).attr('name', 'antiSpam').attr('type', 'hidden');
             $('#UserReg' + id).prepend(inputField);
@@ -111,11 +111,11 @@ MappedRepairEvents.Helper = {
         } else {
             a.value = parseInt(a.value) + 1;
         }
-    
+
         setTimeout(function () {
             MappedRepairEvents.Helper.updateAntiSpamField(form, id);
         }, 1000);
-    }   
+    }
 
 
     ,initLoginBoxLayoutListener : function() {
@@ -123,7 +123,7 @@ MappedRepairEvents.Helper = {
             MappedRepairEvents.Helper.setLoginBoxLayout();
         });
     }
-    
+
     ,setLoginBoxLayout : function() {
         var newRight = $('#header').width() - $(window).width() + 20;
         if (newRight < 20) {
@@ -131,10 +131,10 @@ MappedRepairEvents.Helper = {
         }
         $('#header #login-box').css('right', newRight + 'px');
     }
-    
+
     ,initSkillFilter : function() {
         $('select#skills').on('change', function() {
-            var url = '/aktive'; 
+            var url = '/aktive';
             if ($(this).val() > 0) {
                 url = '/aktive/' + $(this).val() + '-' + $.slugify($(this).find('option:selected').text());
             }
@@ -186,7 +186,7 @@ MappedRepairEvents.Helper = {
         }
         return floatAsString;
     }
-    
+
     ,getStringAsFloat: function (string) {
         string = string.replace(/,/, '.');
         return parseFloat(string);
@@ -214,7 +214,7 @@ MappedRepairEvents.Helper = {
     }
 
     ,initCookieBanner : function() {
-        
+
         $.CookiesMessage({
             messageBg: '#c8d218',
             messageText: 'Diese Seite verwendet Cookies. Durch die Nutzung unserer Seite erklären Sie sich damit einverstanden, dass wir Cookies setzen.',
@@ -232,14 +232,14 @@ MappedRepairEvents.Helper = {
     }
 
     ,layoutEditButtons : function() {
-        var buttons = $('div.admin.edit button'); 
+        var buttons = $('div.admin.edit button');
         buttons.css('top', ($('#header').height() + 40) + 'px');
         buttons.show();
     }
 
     ,initCustomCoordinatesCheckbox : function(checkboxSelector) {
         var wrapper = $('.custom-coordinates-wrapper');
-        var checkbox = $(checkboxSelector); 
+        var checkbox = $(checkboxSelector);
         checkbox.on('click', function() {
             MappedRepairEvents.Helper.toggleCheckboxWrapper($(this), wrapper);
         });
@@ -247,7 +247,7 @@ MappedRepairEvents.Helper = {
             MappedRepairEvents.Helper.toggleCheckboxWrapper(checkbox, wrapper);
         }
     }
-    
+
     ,toggleCheckboxWrapper : function(checkbox, wrapper) {
         if (checkbox.is(':checked')) {
             wrapper.show();
@@ -255,7 +255,7 @@ MappedRepairEvents.Helper = {
             wrapper.hide();
         }
     },
-    
+
     initCkeditor: function (name, isMobile) {
 
         if (!CKEDITOR.env.isCompatible) {
@@ -280,7 +280,7 @@ MappedRepairEvents.Helper = {
         }
 
         var editor = CKEDITOR.instances[name];
-        
+
         if (editor) {
             editor.destroy(true);
         }
@@ -305,27 +305,27 @@ MappedRepairEvents.Helper = {
     }
 
     ,doCurrentlyUpdatedActions : function(isCurrentlyUpdated) {
-        
+
         if (!isCurrentlyUpdated) return;
-        
+
         var submitButton = $('div.admin form button[type=submit]');
         var textFields = $('div.admin form input[type=text]').not('input[readonly=readonly]'); //felder, die per html auf readonly gesetzt wurden (url), nicht freigeben!
-        
+
         $('#unlockEditPageLink').click(function() {
             textFields.removeAttr('readonly');
             $('div.flash-message-box').animate({ opacity: 'toggle' }, 'slow', function() {
-                MappedRepairEvents.Admin.layoutEditButtons();    
+                MappedRepairEvents.Admin.layoutEditButtons();
             });
             submitButton.attr('disabled', false);
             submitButton.removeClass('gray');
             $('#flashMessage a.closer').trigger('click');
         });
-        
+
         textFields.attr('readonly', 'readonly');
         submitButton.attr('disabled', true);
         submitButton.addClass('gray');
-    },    
-    
+    },
+
     /**
      * @param date: yyyy-mm-dd
      */
@@ -333,7 +333,7 @@ MappedRepairEvents.Helper = {
         date = date.split('-');
         return [ date[2], date[1], date[0] ].join('.');
     },
-    
+
     /**
      * @param time: hh:mm:ss
      */
@@ -346,13 +346,13 @@ MappedRepairEvents.Helper = {
             return [ time[0], time[1] ].join(':');
         }
     },
-    
+
     bindSlugToggle : function() {
         $('#show-url-edit-field').on('click', function() {
             $('.url-edit-field').animate({height : 'toggle'}, 300);
         });
     },
-    
+
     addSpinnerToButton: function (button, iconClass) {
         button.find('i').removeClass(iconClass);
         button.find('i').addClass('fa-circle-notch');
@@ -366,15 +366,15 @@ MappedRepairEvents.Helper = {
     },
 
     bindCancelButton : function(uid) {
-        
+
         uid = uid || 0;
-        
+
         $('#cancel-button').on('click', function() {
-            
+
             if (uid == 0) {
                 document.location.href = $('input[name="referer"]').val();
             }
-            
+
             MappedRepairEvents.Helper.ajaxCall(
                 '/admin/' + 'intern/' + 'ajaxCancelAdminEditPage/'
                 ,{ uid: uid
@@ -387,10 +387,10 @@ MappedRepairEvents.Helper = {
                     alert(data.message);
                 }
                 }
-            );            
+            );
         });
     },
-    
+
     addSpinner: function (button) {
         button.html('<i class="fa fa-spinner fa-spin"><i>');
         this.disableButton(button);
@@ -410,9 +410,9 @@ MappedRepairEvents.Helper = {
         button.attr('disabled', 'disabled');
         button.addClass('disabled'); // :enabled selector does not work in chrome, bootstrap adds pointer-events: none;
     },
-    
+
     initScrollToTopButton: function() {
-        
+
         $('#scroll-to-top').hide();
 
         $(window).scroll(function() {
@@ -431,17 +431,17 @@ MappedRepairEvents.Helper = {
         });
 
     },
-    
+
     initRegistration : function() {
-        
+
         this.updateAntiSpamField($('#UserReg7'), 7);
         this.updateAntiSpamField($('#UserReg9'), 9);
-        
+
         // remove double ids because form is rendered twice - all labels are clickable
         var multipleCheckbox = $('.fcph .categories-checkbox-wrapper .checkbox');
         multipleCheckbox.find('label').removeAttr('for');
         multipleCheckbox.find('input').removeAttr('id');
-        
+
         $('.registration-button').on('click', function() {
             var formOpenedText = '▼ Bitte ausfüllen';
             if ($(this).html() != formOpenedText) {
@@ -460,7 +460,7 @@ MappedRepairEvents.Helper = {
             $('.fcph-' + userGroupId).closest('.half').find('.registration-button').trigger('click');
         }
     },
-    
+
     initSlider: function(selector) {
         var mySwiper = new Swiper(selector, {
             loop: true,
@@ -471,21 +471,21 @@ MappedRepairEvents.Helper = {
                 el: '.swiper-pagination',
                 type: 'bullets',
                 clickable: true,
-              }, 
+              },
           });
     },
-    
+
     hideAndResetCalendarEventsBox : function() {
         $('#calEvents').hide();
         $('#selectedDate').attr('data-date', '').html('');
         $('#calDottedLine').hide();
     },
-    
+
     showEventDetail : function(event, isMobile) {
-        
+
         var parsedEvent = $.parseJSON(event);
         $('.fc-day[data-date='+parsedEvent[1]+']').trigger('click');
-        
+
         if (isMobile) {
             var eventRow = $('.calEvent[rel^="'+parsedEvent[0]+'"]');
             eventRow.trigger('click');
@@ -496,21 +496,21 @@ MappedRepairEvents.Helper = {
             );
         }
     },
-    
+
     beforeBodyAnimateMobile : function() {
         $('html,body').css('height', 'inherit');
     },
-    
+
     /* html and body need height inherit for a working scrollTop,
      * but mobile navigation is not working properly with this setting
-     * therefore it is reset on navToggle click 
+     * therefore it is reset on navToggle click
      */
     afterBodyAnimateMobile : function() {
         $('#navToggle').one('click', function() {
             $('html,body').css('height', '100%');
         });
     },
-    
+
     updateDayEventCount : function(day) {
         var eventCount = $('.calEvent[rel*="' + day.data('date')+'"]').not('.isntInRadius').length;
         day.find('span.event-count').remove();
@@ -519,17 +519,17 @@ MappedRepairEvents.Helper = {
             day.find('.event-count').show();
         }
     },
-    
+
     bindCalEventClickHome : function() {
         $('.calEvent').on('click', function() {
             var rel = $(this).attr('rel').split(' ');
             window.location.href = '/'+rel[1]+'?event='+[rel[0], rel[2]].join(',')+'#datum';
         });
     },
-    
+
     /**
      * for mobile version
-     * implemented as accordion - only one event detail can be shown at a time 
+     * implemented as accordion - only one event detail can be shown at a time
      */
     bindCalEventClickWorkshopDetailMobile : function() {
         $('.calEvent').on('click', function() {
@@ -538,15 +538,15 @@ MappedRepairEvents.Helper = {
             eventBox2Show.toggle(100);
         });
     },
-    
+
     getCategoryIcon : function(category) {
         return '<div title="' + category.name + '" class="sklill_icon small ' + category.icon + '"></div>';
-    }, 
-    
+    },
+
     getCalEventHtml : function(ev, wuid, showDate, stringEventIsOnline, stringEventIsOffline, stringEditEvent, stringDuplicateEvent, stringConfirmDeleteEvent, stringDeleteEvent, stringNoCategories) {
 
         var calEvent = '<div itemscope itemtype="http://schema.org/Event" class="calEvent '+( ev.status == 1 ? 'online' : 'offline' )+'" style="display:none;" rel="'+[ev.uid, ev.wurl, ev.datumstart_formatted].join(' ')+'" data-date="'+ev.datumstart_formatted+'">';
-            
+
         if (ev.hasModifyPermissions) {
             calEvent += '<div class="onoffline" style="color:'+( ev.status == 1 ? 'green' : 'red' )+';">' + ( ev.status == 1 ? stringEventIsOnline : stringEventIsOffline) + '</div>';
         }
@@ -566,9 +566,9 @@ MappedRepairEvents.Helper = {
         calEvent += '<span itemprop="addressLocality">'+ev.ort+'</span> von ';
         calEvent += '<meta itemprop="startDate" content="'+ev.datumstart_formatted+'T'+MappedRepairEvents.Helper.niceTime(ev.uhrzeitstart_formatted)+'" /><span>'+MappedRepairEvents.Helper.niceTime(ev.uhrzeitstart_formatted)+'</span> - ';
         calEvent += '<meta itemprop="endDate" content="'+ev.datumstart_formatted+'T'+MappedRepairEvents.Helper.niceTime(ev.uhrzeitend_formatted)+'" /><span>'+MappedRepairEvents.Helper.niceTime(ev.uhrzeitend_formatted)+' Uhr</span>';
-                
+
         calEvent += '</div>';
-            
+
         if (wuid) {
             calEvent += '<div class="eventBox" style="display:none;" itemscope itemtype="http://schema.org/Event">';
 
@@ -580,7 +580,7 @@ MappedRepairEvents.Helper = {
                 calEvent += '</div>';
                 calEvent += '<div class="sc"></div><br />';
             }
-                    
+
             calEvent += ( ev.image ? '<div itemprop="image" class="imgevent"><img src="/files/uploadify/events/thumbs-100/'+ev.image+'"></div>' : '' );
             calEvent += '<div class="eventtitel" itemprop="name">'+ev.eventname+'</div>';
             calEvent += '<div itemprop="address" itemscope itemtype="http://schema.org/PostalAddress"><span itemprop="streetAddress">'+ev.strasse+'</span>, <span itemprop="postalCode"> '+ev.zip+'</span> <span itemprop="addressLocality">'+ev.ort+'</span>, <span itemprop="addressCountry">'+ev.land+'</span></div>';
@@ -590,7 +590,7 @@ MappedRepairEvents.Helper = {
             calEvent += '<div>' + formattedDate + formattedTime + '</div>';
             calEvent += '<br /><div itemprop="description">'+ev.eventbeschreibung+'</div>';
             calEvent += '<div class="sc"></div>';
-                    
+
             if (ev.categories && ev.categories.length > 0) {
                 for(var i in ev.categories) {
                     calEvent += '<div title="' + ev.categories[i].name + '" class="lstCatNew sklill_icon small ' + ev.categories[i].icon + '"></div>';
@@ -598,7 +598,7 @@ MappedRepairEvents.Helper = {
             } else {
                 calEvent += stringNoCategories;
             }
-                    
+
             calEvent += '<div class="sc"></div><br />';
             calEvent += '<div class="mapevent" itemprop="geo" itemscope itemtype="http://schema.org/GeoCoordinates">';
             calEvent += '<meta itemprop="latitude" content="'+ev.lat+'" />';
@@ -606,13 +606,13 @@ MappedRepairEvents.Helper = {
             calEvent += '<iframe class="eiwsd" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="//www.openstreetmap.org/export/embed.html?bbox='+ev.lng+'%2C'+ev.lat+'%2C'+ev.lng+'%2C'+ev.lat+'&amp;zoom=14&amp;layers=H&amp;marker='+ev.lat+'%2C'+ev.lng+'" ></iframe>';
             calEvent += '</div>';
             calEvent += '<div class="sc"></div>';
-                    
+
             calEvent += '</div>';
         }
-        
+
         return calEvent;
     },
-    
+
     bindDownloadInfoSheetButton : function() {
         $('a.download-info-sheets').on('click', function() {
             var workshopUid = $(this).data('workshop-uid');
@@ -624,9 +624,9 @@ MappedRepairEvents.Helper = {
             window.open('/laufzettel/download/' + workshopUid + yearUrlString);
         });
     },
-    
+
     bindDeleteEventButton : function() {
-        
+
         $('a.delete-event').on('click', function() {
             var message = 'Soll dieser Termin wirklich gelöscht werden?<br />Dies kann nicht rückgängig gemacht werden!';
             var eventUid = $(this).closest('tr').find('td.eventUid').html();
@@ -643,11 +643,11 @@ MappedRepairEvents.Helper = {
                 }
             });
         });
-        
+
     },
-    
+
     bindDeleteInfoSheetButton : function() {
-        
+
         $('a.delete-info_sheet').on('click', function() {
             var message = 'Soll dieser Laufzettel wirklich gelöscht werden?<br />Dies kann nicht rückgängig gemacht werden!';
             var eventUid = $(this).closest('tr').find('td.infoSheetUid').html();
@@ -664,13 +664,13 @@ MappedRepairEvents.Helper = {
                 }
             });
         });
-        
+
     },
 
     getFileExtension : function(path) {
         return path.split('.').pop();
     },
-    
+
     adaptHeightOfWorkshopsBoxLogo : function(container, isMobile) {
         var logos = $(container).find('.row .inner img');
         logos.each(function() {
@@ -692,25 +692,25 @@ MappedRepairEvents.Helper = {
             }).trigger('load');
         });
     },
-    
+
     initSubNavi : function() {
-        
+
         var mainNavi = $('#nav > ul > li > a');
         var subNavi = $('#nav > ul ul');
-        
+
         var preselectedSubNavi = $('#nav > ul ul:visible');
-        
+
         // center sub navis
         mainNavi.each(function() {
-            
+
            var centerPositionMainNavi = $(this).position().left + $(this).outerWidth() / 2;
            var subnavi = $(this).closest('li').find('ul');
-           
+
            if (subnavi.length > 0) {
 
                subnavi.css('paddingLeft', 0);
                subnavi.css('width', 0);
-               
+
                var subnaviInnerWidth = 0;
                subnavi.find('li').each(function() {
                    var originalDisplay = $(this).closest('ul').css('display');
@@ -722,26 +722,26 @@ MappedRepairEvents.Helper = {
                        $(this).closest('ul').hide();
                    }
                });
-               
+
                var leftForSubNavi = centerPositionMainNavi - subnaviInnerWidth / 2
                subnavi.css('left', 0);
                subnavi.css('paddingLeft', leftForSubNavi);
-               
+
                var subnaviOuterWidth = $('#header').width() - leftForSubNavi;
                subnavi.css('width', subnaviOuterWidth);
            }
         });
-        
+
         mainNavi.on('mouseover', function(e) {
             subNavi.hide();
             $(this).closest('li').find('ul').show();
         });
-        
+
         mainNavi.on('mouseout', function(e) {
             $(this).closest('li').not(':hover').find('ul').hide();
             preselectedSubNavi.show();
         });
-        
+
         subNavi.on('mouseover', function(e) {
             subNavi.hide();
             $(this).show();
@@ -753,13 +753,13 @@ MappedRepairEvents.Helper = {
         });
 
     },
-    
+
     showSubNavi : function(activeElement) {
         // show subnavi if active element is main element
         if (activeElement.parent().find('ul.submenu').length > 0) {
             activeElement.parent().find('ul.submenu').show();
         }
-        
+
         // show subnavi if active element is subnavi element
         if (activeElement.parent().parent().hasClass('submenu')) {
             var submenu = activeElement.parent().parent();
@@ -767,7 +767,7 @@ MappedRepairEvents.Helper = {
             submenu.show();
         }
     },
-    
+
     initMobileForum : function() {
         $('#header').attr('canvas', '');
         $('#header').addClass('mobile');
@@ -777,14 +777,14 @@ MappedRepairEvents.Helper = {
         this.appendCssFile('css/mobile-forum');
         MappedRepairEvents.Helper.initMobile();
     },
-    
+
     initMobile : function() {
 
         // elements in header.ctp are cached
         if ($('#header').hasClass('mobile')) {
             $('#nav').addClass('mobile');
         }
-        
+
         var socialIcons = [];
         $('div.socialicons a').each(function() {
             var item = $('<li />').html($(this));
@@ -795,44 +795,44 @@ MappedRepairEvents.Helper = {
         });
         $('#nav #menu').append(socialIcons);
 
-        
+
         $('body').append($('#nav'));
         $('#login-box').show();
-        
+
         var controller = new slidebars();
         controller.init();
-        
+
         $('#navToggle').on('click', function (event) {
             event.stopPropagation();
             event.preventDefault();
             controller.toggle('main-menu');
         });
-        
+
         $(controller.events).on('opened', function (event, id) {
             $('[canvas]').on('click', function() {
                 controller.close(id);
             });
         });
-           
+
         // chrome pull refresh fix
         $('body, html').css('overflow-y', 'auto');
-           
+
     },
-    
+
     initFindEventsForm : function(form) {
         $(form).find('input[type="text"]').on('keyup', function(e) {
-            var button = $(form).find('a'); 
+            var button = $(form).find('a');
             button.attr('href', '/reparatur-termine/?keyword=' + $(this).val());
             if (e.which == 13) {
                 window.location.href = button.attr('href');
             }
         });
     },
-    
+
     appendCssFile : function(file) {
         $('head').append('<link rel="stylesheet" type="text/css" href="/' + file + '.css" />');
     },
-    
+
     initJqueryTabsWithoutAjax : function() {
         $('.custom-ui-tabs li').on('mouseover', function(e) {
             $(this).addClass('ui-state-hover');
@@ -841,11 +841,11 @@ MappedRepairEvents.Helper = {
             $(this).removeClass('ui-state-hover');
         });
     },
-    
+
     initWorkshopDetail : function(workshopUid) {
-        
+
         this.loadWorkshopForWorkshopDetailCalendar(workshopUid);
-        
+
         $('#tabs, #tabs2').tabs();
 
         $(document).on('mouseover', '.sklill_icon', function(e){
@@ -857,9 +857,9 @@ MappedRepairEvents.Helper = {
                 }).triggerHandler('mouseover');
             }
         });
-        
+
     },
-    
+
     fixChartInHiddenIframe : function () {
         var chartIframeTab = $('.ui-tabs-anchor[href$="#tabs-3"]');
         chartIframeTab.on('click', function() {
@@ -868,7 +868,7 @@ MappedRepairEvents.Helper = {
             iframe.height(iframe.data('height'));
         });
     },
-    
+
     loadWorkshopForWorkshopDetailCalendar : function(workshopUid) {
         $.ajax('/workshops/ajaxGetAllWorkshopsForMap?workshopUid=' + workshopUid, {
             'async': false
@@ -878,7 +878,7 @@ MappedRepairEvents.Helper = {
             }
         );
     },
-    
+
     initTooltip : function(container) {
         $(container).tooltip({
             content: function() {
@@ -887,18 +887,18 @@ MappedRepairEvents.Helper = {
             position: { my: 'right top', at: 'right bottom' }
         });
     },
-    
+
     bindApplyWorkshopButton : function(button) {
-        
+
         var workshopUid = button.closest('form').find('#0-workshop-uid').val();
-        
+
         if (workshopUid == 0) {
             alert('Bitte wähle eine Initiative aus.');
             return;
         }
-        
+
         $('.ajaxLoader').show();
-        
+
         MappedRepairEvents.Helper.ajaxCall('/workshops/ajaxGetWorkshopDetail/' + workshopUid, {}, {
             onOk : function(data) {
                 $('.ajaxLoader').hide();
@@ -917,13 +917,13 @@ MappedRepairEvents.Helper = {
                 MappedRepairEvents.Helper.toggleCheckboxWrapper(useCustomCoordinatesCheckbox, wrapper);
                 $('#0-lat').val(data.workshop.lat);
                 $('#0-lng').val(data.workshop.lng);
-                
+
                 $('.categories-checkbox-wrapper select').prop('checked', false);
                 for(var i in data.workshop.categories) {
                     var categoryId = data.workshop.categories[i].id;
                     $('#0-categories-ids-' + categoryId).prop('checked', true);
                 }
-                
+
             },
             onError : function(data) {
                 alert(data.message);
@@ -931,53 +931,53 @@ MappedRepairEvents.Helper = {
         });
 
     },
-    
+
     /**
      * updates href of category links depending on input field value (keyword)
      * so that keyword is not lost if category button is clicked (instead of submit button)
      */
     initEventAllForm : function(form) {
-         
+
         $(form).find('input#keyword').on('keyup', function(event) {
-            
+
             var keyword = $(this).val();
-            
+
             $(form).find('a.lstCat').each(function() {
-                
+
                 var href = $(this).attr('href');
                 var params = href.split('/');
-                
-                // sometimes 'index' is added in url => not needed, messes up length count 
+
+                // sometimes 'index' is added in url => not needed, messes up length count
                 for(var i in params) {
                     if (params[i] == 'index') {
                         params.splice(i, 1);
                     }
                 }
-                
+
                 if (params.length == 3) {
                     // param keyword not yet existing
                     params.splice(2, 0, 'keyword:' + keyword);
                 }
-                
+
                 if (params.length == 4) {
                     // param keyword already existing
                     params[2] = 'keyword:' + keyword;
                 }
-                
+
                 $(this).attr('href', params.join('/'));
-                
+
             });
-            
+
         });
-        
+
     }
 
     ,bindTooltip : function(selector) {
         $(selector).tooltip({
             content: function() {
                 return $(this).attr('title');
-            } 
-        });        
+            }
+        });
     }
 
     ,bindFlashMessageCancelButton : function() {
@@ -985,9 +985,9 @@ MappedRepairEvents.Helper = {
             $(this).parent().animate({height : 'toggle'}, 300);
         });
     }
-    
+
     ,bindToggleLinks: function (autoOpen, openFirstElement) {
-        
+
         $('.toggle-link').on('click', function () {
             MappedRepairEvents.Helper.doToggle($(this), $(this).next().next());
         });
@@ -995,15 +995,15 @@ MappedRepairEvents.Helper = {
         if (autoOpen) {
             $('.toggle-link').trigger('click');
         }
-        
+
         if (openFirstElement) {
             $('.toggle-link').first().trigger('click');
         }
 
     }
-    
+
     ,bindShowMoreLink: function() {
-        
+
         $('.show-more-link').on('click', function () {
             $('article.preview').hide();
             $(this).hide();
@@ -1011,15 +1011,15 @@ MappedRepairEvents.Helper = {
         });
 
     }
-    
+
     ,bindToggleLinksForSubtables : function() {
         $('.toggle-link-for-subtable').on('click', function () {
             MappedRepairEvents.Helper.doToggle($(this), $(this).closest('tr').next('tr.subtable-container'));
         });
     }
-    
+
     ,doToggle : function(element, elementToToggle) {
-        
+
         var toggleMode = elementToToggle.css('display');
 
         if (toggleMode == 'none') {
@@ -1033,7 +1033,7 @@ MappedRepairEvents.Helper = {
         elementToToggle.stop(true, true).animate({
             height: 'toggle'
         }, 400);
-        
+
     }
 
     ,isChrome : function() {
@@ -1043,14 +1043,14 @@ MappedRepairEvents.Helper = {
     ,isSafari : function() {
         return navigator.userAgent.match(/safari/i);
     }
-    
+
     ,addCssFile : function(cssFile) {
         cssFile += '.css';
         $.get(cssFile, function(cssFile) {
             $('head').append('<style type=\'text/css\'>' + cssFile + '</style>');
         });
     }
-    
+
     ,initHome : function() {
         $('#home .box.static a.teaser-text-link').click(function() {
             $('#home .box.static div.teaser-text').animate({height : 'toggle'}, 1000);
@@ -1061,11 +1061,11 @@ MappedRepairEvents.Helper = {
             }
         });
     }
-    
+
     /**
      * sorts an associative array by a given field
      * http://stackoverflow.com/questions/979256/how-to-sort-an-array-of-javascript-objects
-     * 
+     *
      *  // Sort by price high to low
      *  homes.sort(sortBy('price', true, parseInt));
      *  //Sort by city, case-insensitive, A-Z
@@ -1079,9 +1079,9 @@ MappedRepairEvents.Helper = {
             var A = key(a), B = key(b);
             return ((A < B) ? -1 : (A > B) ? +1 : 0) * [-1,1][+!!reverse];
         };
-       
+
     }
-    
+
     ,removeDuplicates : function(inputArray) {
         var i;
         var len = inputArray.length;
@@ -1121,15 +1121,15 @@ MappedRepairEvents.Helper = {
             });
         });
     }
-    
+
     ,getFlashMessageBoxContainer : function() {
         return $('#flashMessage');
     }
-    
+
     ,setFlashMessageSuccess : function(message) {
         return this.setFlashMessage('success', message);
     }
-    
+
     ,setFlashMessage : function(type, message) {
         this.getFlashMessageBoxContainer().html(message);
         this.getFlashMessageBoxContainer().addClass(type);
@@ -1146,7 +1146,7 @@ MappedRepairEvents.Helper = {
     ,bindApplyForCollaborationButtonUser : function() {
 
         $('#mitarbeits-anfrage-stellen').click(function() {
-            
+
             var selectedWorkshop = $('#users-workshops-workshop-uid option:selected').text();
             var selectedUser = $('#users-workshops-user-uid option:selected').text();
             var infoText = 'Möchtest du wirklich der Initiative <b>' + selectedWorkshop + '</b> beitreten?';
@@ -1172,9 +1172,9 @@ MappedRepairEvents.Helper = {
             $('#login-box-form').show();
         }
     },
-    
+
     bindDeleteWorkshopButton : function() {
-        
+
         $('a.delete-workshop').on('click', function() {
             var message = 'Soll diese Initiative wirklich gelöscht werden? Dies kann nicht rückgängig gemacht werden!<br />Alle anderen Organisatoren (falls vorhanden) werden automatisch per E-Mail darüber informiert.';
             var workshopUid = $(this).closest('tr').find('div.workshopUid').html();
@@ -1198,12 +1198,12 @@ MappedRepairEvents.Helper = {
         $('a.resign-not-possible').on('click', function() {
             $.prompt('Du bist der letzte aktive Organisator der Initiative, daher ist das Austreten nicht möglich. <br /><br />Bei Fragen wende dich bitte an reparieren@anstiftung.de');
         });
-        
+
         $('a.refuse-not-possible').on('click', function() {
             var name = $(this).closest('tr').find('td:first').html();
             $.prompt('<b>' + name + '</b> ist der letzte aktive Organisator der Initiative, daher ist das Beenden der Mitarbeit nicht möglich. <br /><br />Bei Fragen wende dich bitte an reparieren@anstiftung.de');
         });
-        
+
         $('a.refuse, a.approve, a.resign').on('click', function() {
 
             var name = $(this).closest('tr').find('td:first').html();
@@ -1211,7 +1211,7 @@ MappedRepairEvents.Helper = {
             var workshopUid = $(this).closest('tr').find('div.workshopUid').html();
 
             var type = $(this).closest('tr').find('.user-type').html();
-            
+
             switch(type) {
             case 'user' :
                 var refuseMessage = 'Möchtest du die Mitarbeit von ' + name + ' wirklich beenden?';
@@ -1224,7 +1224,7 @@ MappedRepairEvents.Helper = {
             if ($(this).hasClass('refuse')) {
                 message = refuseMessage;
                 url = '/initiativen/' + 'use' + 'r/ref' + 'use/' + type + '/' +  userUid + '/' + workshopUid;
-                
+
                 buttons = {
                     Beenden : true,
                     Abbrechen : false
@@ -1234,7 +1234,7 @@ MappedRepairEvents.Helper = {
             if ($(this).hasClass('approve')) {
                 message = approveMessage;
                 url = '/initiativen/' + 'use' + 'r/appro' + 've/' + type + '/' +  userUid + '/' + workshopUid;
-                
+
                 buttons = {
                     Bestaetigen : true,
                     Abbrechen : false
@@ -1261,7 +1261,7 @@ MappedRepairEvents.Helper = {
 
         });
     },
-    
+
     initPagination : function() {
         $('.pagination span:last').css('border-right', 'none');
         $('.pagination span:contains(\'«\')').attr('title', 'Zurück');
@@ -1269,7 +1269,7 @@ MappedRepairEvents.Helper = {
         $('.pagination span:contains(\'««\')').attr('title', 'Erste Seite');
         $('.pagination span:contains(\'»»\')').attr('title', 'Letzte Seite');
     },
-    
+
     highlightFormFields : function() {
         var formFieldsToHighlight = $(
             'input[type="text"], input[type="password"], textarea, select').not(
@@ -1281,7 +1281,7 @@ MappedRepairEvents.Helper = {
             $(this).css('background-color', 'white');
         });
     },
- 
+
     doLoginFormActions : function() {
 
         $('#anmelden-link').on('click', function() {
@@ -1291,7 +1291,7 @@ MappedRepairEvents.Helper = {
         $('#UserEmail').on('blur', function() {
             MappedRepairEvents.Helper.resetInputField(this, 'E-Mail-Adresse');
         });
-        
+
         $('#UserEmail').on('focus', function() {
             MappedRepairEvents.Helper.emptyInputField(this, 'E-Mail-Adresse');
         });
@@ -1299,7 +1299,7 @@ MappedRepairEvents.Helper = {
         $('#UserPassword').on('blur', function() {
             MappedRepairEvents.Helper.resetInputField(this, 'Passwort');
         });
-        
+
         $('#UserPassword').on('focus', function() {
             MappedRepairEvents.Helper.emptyInputField(this, 'Passwort');
         });
@@ -1309,7 +1309,7 @@ MappedRepairEvents.Helper = {
     /**
      * usage on form field onblur TODO '+' is not escaped and therefore always
      * replaced -> function does not work if default value has '+' in it!
-     * 
+     *
      * @param string
      *            form field
      * @param string
@@ -1325,7 +1325,7 @@ MappedRepairEvents.Helper = {
     /**
      * usage on form field onfocus TODO '+' is not escaped and therefore always
      * replaced -> function does not work if default value has '+' in it!
-     * 
+     *
      * @param string
      *            form field
      * @param string

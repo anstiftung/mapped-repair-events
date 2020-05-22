@@ -3,7 +3,7 @@ use Cake\Core\Configure;
 
 $this->element('addScript', array('script' => "
     var mapObject = new ".JS_NAMESPACE.".Map([], 'search', true, ".json_encode($customCenterCoordinates).", ".$customZoomLevel.", '".$markerSrc."', '".$foundMarkerSrc."');
-	mapObject.setMapAsFixed($('#content .right').height());"
+    mapObject.setMapAsFixed($('#content .right').height());"
 ));
 
 $customCss = '';
@@ -43,30 +43,30 @@ if ($customCss != '') {
 ?>
 
 <div class="right">
-	
-	<div class="box filter">
-		<span class="wss">Ort</span>
-		
-		<div class="input">
-			<input name="data[workshopSearchAddress]" id="workshopSearchAddress" type="text" value="" />
-		</div>
-		
-        <button id="search" type="button" class="button submit">Suche</button>
-        <button id="reset" type="button" class="button gray reset-widget">Suche zurücksetzen</button>   
-		
-		<a class="button gray plattform-link" target="_blank" href="<?php echo Configure::read('AppConfig.serverName'); ?>">
-			<img src="/img/core/logo-grau.jpg" width="60" height="60" />
-			<span>zu <?php echo $this->Html->getHostName(); ?></span>
-		</a>
-		
-	</div>
 
-	<div class="sc"></div>
- 
-	<div id="mapContainer" >
-		<div id="map" >
-			<div id="workshopSearchLoader"></div>
-		</div>
-	</div>
-	
+    <div class="box filter">
+        <span class="wss">Ort</span>
+
+        <div class="input">
+            <input name="data[workshopSearchAddress]" id="workshopSearchAddress" type="text" value="" />
+        </div>
+
+        <button id="search" type="button" class="button submit">Suche</button>
+        <button id="reset" type="button" class="button gray reset-widget">Suche zurücksetzen</button>
+
+        <a class="button gray plattform-link" target="_blank" href="<?php echo Configure::read('AppConfig.serverName'); ?>">
+            <img src="/img/core/logo-grau.jpg" width="60" height="60" />
+            <span>zu <?php echo $this->Html->getHostName(); ?></span>
+        </a>
+
+    </div>
+
+    <div class="sc"></div>
+
+    <div id="mapContainer" >
+        <div id="map" >
+            <div id="workshopSearchLoader"></div>
+        </div>
+    </div>
+
 </div>

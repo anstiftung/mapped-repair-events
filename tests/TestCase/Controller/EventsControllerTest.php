@@ -22,9 +22,9 @@ class EventsControllerTest extends AppTestCase
     use EmailTrait;
     use StringCompareTrait;
     use LogFileAssertionsTrait;
-    
+
     private $newEventData;
-    
+
     public function loadNewEventData()
     {
         $this->newEventData = [
@@ -47,7 +47,7 @@ class EventsControllerTest extends AppTestCase
             'lng' => ''
         ];
     }
-    
+
     public function testAddEventValidations()
     {
         $this->loadNewEventData();
@@ -68,7 +68,7 @@ class EventsControllerTest extends AppTestCase
         $this->assertResponseContains('Bitte trage eine von-Uhrzeit ein.');
         $this->assertResponseContains('Bitte trage eine bis-Uhrzeit ein.');
     }
-    
+
     public function testAddEventsOk()
     {
         $this->loadNewEventData();
@@ -82,13 +82,13 @@ class EventsControllerTest extends AppTestCase
         $this->newEventData['datumstart'] = '01.01.2020';
         $this->newEventData['uhrzeitstart'] = '10:00';
         $this->newEventData['uhrzeitend'] = '20:00';
-        
+
         $newEventData2 = [
             'datumstart' => '01.02.2020',
             'uhrzeitstart' => '12:00',
             'uhrzeitend' => '22:00',
         ];
-        
+
         $this->post(
             Configure::read('AppConfig.htmlHelper')->urlEventNew(2),
             [
@@ -98,14 +98,14 @@ class EventsControllerTest extends AppTestCase
             ]
         );
         $this->assertResponseNotContains('error');
-        
+
         $this->Event = TableRegistry::getTableLocator()->get('Events');
         $events = $this->Event->find('all', [
             'contain' => [
                 'Categories',
             ]
         ])->toArray();
-        
+
         $this->assertEquals(3, count($events));
         $this->assertEquals($events[1]->eventbeschreibung, 'description<img src="n" alt="n" />');
         $this->assertEquals($events[1]->strasse, $this->newEventData['strasse']);
@@ -114,21 +114,21 @@ class EventsControllerTest extends AppTestCase
         $this->assertEquals($events[1]->uhrzeitend, new FrozenTime($this->newEventData['uhrzeitend']));
         $this->assertEquals($events[1]->categories[0]->id, $this->newEventData['categories']['_ids'][0]);
         $this->assertEquals($events[1]->owner, 1);
-        
+
         $this->assertEquals($events[2]->datumstart, new FrozenDate($newEventData2['datumstart']));
         $this->assertEquals($events[2]->uhrzeitstart, new FrozenTime($newEventData2['uhrzeitstart']));
         $this->assertEquals($events[2]->uhrzeitend, new FrozenTime($newEventData2['uhrzeitend']));
-        
+
         $this->assertMailCount(0);
-        
+
     }
-    
+
     public function testEditEventWithoutNotifications()
     {
         $this->doTestEditForm(false);
         $this->assertMailCount(0);
     }
-    
+
     public function testEditEventWithNotifications()
     {
         $this->Event = TableRegistry::getTableLocator()->get('Events');
@@ -141,7 +141,7 @@ class EventsControllerTest extends AppTestCase
         $this->assertMailCount(1);
         $this->assertMailSentTo('worknews-test@mailinator.com');
     }
-    
+
     public function testAjaxGetAllEventsForMap()
     {
         $this->configRequest([
@@ -153,7 +153,7 @@ class EventsControllerTest extends AppTestCase
         $this->get('/events/ajaxGetAllEventsForMap');
         $this->assertSameAsFile('events-for-map.json', $this->_response);
     }
-    
+
     public function testDeleteEvent()
     {
         $this->loginAsOrga();
@@ -168,7 +168,7 @@ class EventsControllerTest extends AppTestCase
         $this->assertMailCount(1);
         $this->assertMailSentTo('worknews-test@mailinator.com');
     }
-    
+
     private function doTestEditForm($renotify)
     {
         $this->Event = TableRegistry::getTableLocator()->get('Events');
@@ -177,7 +177,7 @@ class EventsControllerTest extends AppTestCase
                 'Events.uid' => 6
             ]
         ])->first();
-        
+
         $eventForPost = [
             'eventbeschreibung' => 'new description',
             'strasse' => 'new street',
@@ -190,7 +190,7 @@ class EventsControllerTest extends AppTestCase
             'status' => APP_ON,
             'renotify' => $renotify
         ];
-        
+
         $this->loginAsOrga();
         $this->post(
             Configure::read('AppConfig.htmlHelper')->urlEventEdit($event->uid),
@@ -199,20 +199,20 @@ class EventsControllerTest extends AppTestCase
                 $eventForPost
             ]
         );
-        
+
         $event = $this->Event->find('all', [
             'conditions' => [
                 'Events.uid' => 6
             ]
         ])->first();
-        
+
         $this->assertEquals($event->eventbeschreibung, $eventForPost['eventbeschreibung']);
         $this->assertEquals($event->strasse, $eventForPost['strasse']);
         $this->assertEquals($event->datumstart, new FrozenDate($eventForPost['datumstart']));
         $this->assertEquals($event->uhrzeitstart, new FrozenTime($eventForPost['uhrzeitstart']));
         $this->assertEquals($event->uhrzeitend, new FrozenTime($eventForPost['uhrzeitend']));
-        
+
     }
-    
+
 }
 ?>

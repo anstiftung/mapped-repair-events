@@ -7,7 +7,7 @@ Ein User möchte gelöscht werden:
 
 <?php echo 'Nick: ' . $appAuth->getUserNick();?>
 
-<?php 
+<?php
 if ($deleteMessage != '') {
     echo 'Grund:';
     echo $deleteMessage;

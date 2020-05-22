@@ -16,12 +16,12 @@ class CountriesTable extends Table
                 'name_de' => 'ASC'
             ]
         ]);
-        
+
         $preparedCountries = [];
         foreach($countries as $country) {
-            $preparedCountries[$country->code] = $country->name_de; 
+            $preparedCountries[$country->code] = $country->name_de;
         }
-        
+
         return $preparedCountries;
     }
 }

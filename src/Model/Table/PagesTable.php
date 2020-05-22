@@ -17,7 +17,7 @@ class PagesTable extends AppTable
         ]);
         $this->addBehavior('Tree');
     }
-    
+
     public function getPageByName($name)
     {
         $page = $this->find('all', [
@@ -27,7 +27,7 @@ class PagesTable extends AppTable
         ])->first();
         return $page;
     }
-    
+
     public function validationAdmin(Validator $validator)
     {
         $validator = parent::addUrlValidation($validator);
@@ -35,9 +35,9 @@ class PagesTable extends AppTable
         $validator->minLength('name', 2, 'Bitte gib einen gültigen Namen an.');
         return $validator;
     }
-    
+
     private $flattenedArray = [];
-    
+
     private function flattenNestedArrayWithChildren($array, $separator = '')
     {
         foreach ($array as $item) {
@@ -50,10 +50,10 @@ class PagesTable extends AppTable
                 $this->flattenNestedArrayWithChildren($item->children, str_repeat('-', $this->getLevel($item) + 1) . ' ');
             }
         }
-        
+
         return $this->flattenedArray;
     }
-    
+
     public function getThreaded($conditions = [])
     {
         $pages = $this->find('threaded', [
@@ -67,7 +67,7 @@ class PagesTable extends AppTable
         ]);
         return $pages;
     }
-    
+
     public function getForSelect($excludePageId = null)
     {
         $conditions = [];
@@ -79,6 +79,6 @@ class PagesTable extends AppTable
         $flattenedPages = $this->flattenNestedArrayWithChildren($pages);
         return $flattenedPages;
     }
-    
+
 }
 ?>

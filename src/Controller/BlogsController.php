@@ -14,7 +14,7 @@ class BlogsController extends AppController
             'Posts.publish' => 'DESC'
         ]
     ];
-    
+
     public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);
@@ -26,20 +26,20 @@ class BlogsController extends AppController
 
     public function feed()
     {
-        
+
         if (! $this->RequestHandler->prefers('rss')) {
             throw new NotFoundException('kein rss');
         }
-        
+
         $conditions = array(
             'Posts.status' => APP_ON
         );
-        
+
         // aktuelles blog should contain all blog posts (no blog id filter!)
         if (!empty($this->request->getParam('blogUrl'))) {
             $conditions['Blogs.url'] = $this->request->getParam('blogUrl');
         }
-        
+
         $this->Post = TableRegistry::getTableLocator()->get('Posts');
         $posts = $this->Post->find('all', array(
             'order' => [
@@ -51,9 +51,9 @@ class BlogsController extends AppController
             ]
         ));
         if ($posts->count() == 0) throw new NotFoundException('Kein RSS-Feeds gefunden');
-        
+
         $this->set('posts', $posts);
-        
+
     }
 
     public function detail()
@@ -62,25 +62,25 @@ class BlogsController extends AppController
             throw new NotFoundException('page not found');
         }
         $url = $this->request->getParam('blogUrl');
-        
+
         if ($url == '')
             throw new NotFoundException('page not found');
-            
+
         $this->Blog = TableRegistry::getTableLocator()->get('Blogs');
         $blog = $this->Blog->find('all', [
             'conditions' => [
                 'Blogs.url' => $url
             ]
         ])->first();
-        
+
         if (empty($blog))
             throw new NotFoundException('blog empty');
-        
+
         $this->set('blog', $blog);
-        
+
         // get paginated posts
         $this->Post = TableRegistry::getTableLocator()->get('Posts');
-        
+
         // aktuelles blog should contain all blog posts (no blog id filter!)
         $conditions = [
             'Posts.status' => APP_ON
@@ -102,7 +102,7 @@ class BlogsController extends AppController
             ],
             'limit' => 1000
         ]);
-        
+
         $urlOptions = [
             'url' => [
                 'controller' => 'blog',
@@ -110,7 +110,7 @@ class BlogsController extends AppController
             ]
         ];
         $this->set('urlOptions', $urlOptions);
-        
+
         $this->set('metaTags', ['title' => $blog->name]);
         $this->set('posts', $posts);
     }

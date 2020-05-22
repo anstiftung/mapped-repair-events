@@ -3,12 +3,12 @@
 use Cake\Core\Configure;
 
 if (count($workshop->{$objectMember}) > 0) {
- 
+
  echo '<b class="heading">Die folgenden Personen sind bei dieser Initiative aktiv</b>';
  ?>
- 
+
     <table class="list">
-  
+
     <tr>
       <th><?php echo $typeSingularTranslated; ?></th>
       <th>Anfrage vom</th>
@@ -18,9 +18,9 @@ if (count($workshop->{$objectMember}) > 0) {
     </tr>
 
 <?php
-   
+
     foreach($workshop->{$objectMember} as $user) {
-    
+
     echo '<tr>';
 
       echo '<td>';
@@ -28,7 +28,7 @@ if (count($workshop->{$objectMember}) > 0) {
         echo '<div class="hide workshopUid">'.$workshop->uid.'</div>';
         echo '<div class="hide user-type" class="hide">'.$type.'</div>';
         echo $user->name;
-        
+
         $groupNames = [];
         $groupIds = [];
         if (isset($user->groups)) {
@@ -40,10 +40,10 @@ if (count($workshop->{$objectMember}) > 0) {
         if (!empty($groupNames)) {
             echo ' <small>('.implode(', ', $groupNames).')</small>';
         }
-        
-        
+
+
       echo '</td>';
-      
+
       echo '<td>';
         if ($user['_joinData']->created) {
             echo $user['_joinData']->created->i18nFormat(Configure::read('DateFormat.de.DateNTimeShort'));
@@ -60,7 +60,7 @@ if (count($workshop->{$objectMember}) > 0) {
               ['class' => 'button blink approve']
             );
         }
-        
+
       echo '</td>';
 
       echo '<td class="icon">';
@@ -96,9 +96,9 @@ if (count($workshop->{$objectMember}) > 0) {
       echo '</td>';
 
      echo '</tr>';
-     
+
    }
-   
-    echo '</table>';        
+
+    echo '</table>';
     }
 ?>

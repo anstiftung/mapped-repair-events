@@ -19,7 +19,7 @@ class UsersTable extends AppTable
     public function initialize(array $config): void
     {
         parent::initialize($config);
-        
+
         $this->belongsTo('Countries', [
             'foreignKey' => 'country_code'
         ]);
@@ -52,12 +52,12 @@ class UsersTable extends AppTable
             'foreignKey' => 'owner'
         ]);
     }
-    
+
     public function getDefaultPrivateFields()
     {
         return 'lastname,email,street,zip,phone,additional_contact';
     }
-    
+
     private function addGroupsValidation($validator, $groups, $multiple)
     {
         $validator->add('groups', 'checkForAllowedGroups', [
@@ -76,17 +76,17 @@ class UsersTable extends AppTable
         ]);
         return $validator;
     }
-    
+
     private function addLastOrgaValidation($validator)
     {
         $validator->add('groups', 'checkLastOrga', [
             'rule' => function($value, $context) {
-                
+
                 // never check on creating a user
                 if (!isset($context['data']['uid'])) {
                     return true;
                 }
-                
+
                 // only apply rule if checkbox was removed and user was orga user
                 if (is_array($context['data']['groups']['_ids']) && in_array(GROUPS_ORGA, $context['data']['groups']['_ids'])) {
                     return true;
@@ -104,7 +104,7 @@ class UsersTable extends AppTable
                         return true;
                     }
                 }
-            
+
                 // actual check if user is last orga user in any of "his" workshops starts here
                 $workshopTable = TableRegistry::getTableLocator()->get('Workshops');
                 $workshops = $workshopTable->getWorkshopsForAssociatedUser($context['data']['uid'], APP_OFF);
@@ -117,7 +117,7 @@ class UsersTable extends AppTable
         ]);
         return $validator;
     }
-    
+
     public function getWorkshopsWhereUserIsLastOrgaUser($workshops)
     {
         $lastOrgaWorkshops = [];
@@ -139,7 +139,7 @@ class UsersTable extends AppTable
         }
         return $lastOrgaWorkshops;
     }
-    
+
     private function getLastOrgaValidationErrorMessage($workshops)
     {
         $workshopLinks = [];
@@ -150,7 +150,7 @@ class UsersTable extends AppTable
                 Configure::read('AppConfig.htmlHelper')->urlWorkshopDetail($workshop->url),
                 ['target' => '_blank']
             );
-            $workshopNames[] = '"'.$workshop->name.'"'; 
+            $workshopNames[] = '"'.$workshop->name.'"';
         }
         $result = 'Du kannst die Gruppe OrganisatorIn nicht verlassen, da du bei folgenden Initiativen der/die letzte OrganisatorIn bist: ';
         $result .= join(',', $workshopLinks);
@@ -166,7 +166,7 @@ class UsersTable extends AppTable
         $validator = $this->addGroupsValidation($validator, Configure::read('AppConfig.htmlHelper')->getUserGroupsForRegistration(), false);
         return $validator;
     }
-    
+
     public function validationUserEditUser(Validator $validator)
     {
         $validator = $this->validationDefault($validator);
@@ -174,7 +174,7 @@ class UsersTable extends AppTable
         $validator = $this->addGroupsValidation($validator, Configure::read('AppConfig.htmlHelper')->getUserGroupsForUserEdit(false), true);
         return $validator;
     }
-    
+
     public function validationUserEditAdmin(Validator $validator)
     {
         $validator = $this->validationDefault($validator);
@@ -182,10 +182,10 @@ class UsersTable extends AppTable
         $validator = $this->addGroupsValidation($validator, Configure::read('AppConfig.htmlHelper')->getUserGroupsForUserEdit(true), true);
         return $validator;
     }
-    
+
     public function validationDefault(Validator $validator): \Cake\Validation\Validator
     {
-        
+
         $validator->notEmptyString('nick', 'Bitte trage deinen Nickname ein.');
         $validator->requirePresence('nick', true, 'Bitte trage deinen Nickname ein.');
         $validator->minLength('nick', 2, 'Mindestens 2 Zeichen bitte (Nickname).');
@@ -194,18 +194,18 @@ class UsersTable extends AppTable
             'provider' => 'table',
             'message' => 'Dieser Nickname wird bereits verwendet.'
         ]);
-        
+
         $validator->notEmptyString('firstname', 'Bitte trage deinen Vornamen ein.');
         $validator->requirePresence('firstname', true, 'Bitte trage deinen Vornamen ein.');
         $validator->minLength('firstname', 2, 'Mindestens 2 Zeichen bitte (Vorname).');
-        
+
         $validator->notEmptyString('lastname', 'Bitte trage deinen Nachnamen ein.');
         $validator->requirePresence('lastname', true, 'Bitte trage deinen Nachnamen ein.');
         $validator->minLength('lastname', 2, 'Mindestens 2 Zeichen bitte (Nachname).');
-        
+
         $validator->allowEmptyString('city');
         $validator->minLength('city', 2, 'Mindestens 2 Zeichen bitte (Ort).');
-        
+
         $validator->notEmptyString('email', 'Bitte trage deine E-Mail-Adresse ein.');
         $validator->requirePresence('email', true, 'Bitte trage deine E-Mail-Adresse ein.');
         $validator->email('email', true, 'Bitte trage eine gültige E-Mail-Adresse ein.');
@@ -214,21 +214,21 @@ class UsersTable extends AppTable
             'provider' => 'table',
             'message' => 'Diese E-Mail-Adresse wird bereits verwendet.'
         ]);
-        
+
         $validator->requirePresence('zip', true, 'Bitte trage deine PLZ ein.');
         $validator->notEmptyString('zip', 'Bitte trage deine PLZ ein.');
         $validator->add('zip', 'validFormat', [
             'rule' => array('custom', ZIP_REGEX),
             'message' => 'Die PLZ ist nicht gültig.'
         ]);
-        
+
         return $validator;
-        
+
     }
-    
+
     public function validationRequestPassword(Validator $validator)
     {
-        
+
         $validator->notEmptyString('email', 'Bitte trage deine E-Mail-Adresse ein.');
         $validator->email('email', false, 'Die E-Mail-Adresse ist ungültig.');
         $validator->add('email', 'userWithEmailExists', [
@@ -243,7 +243,7 @@ class UsersTable extends AppTable
             },
             'message' => 'Wir haben diese E-Mail-Adresse nicht gefunden.'
         ]);
-        
+
         return $validator;
     }
 
@@ -254,41 +254,41 @@ class UsersTable extends AppTable
                 $loggedUser = $this->find('all', [
                    'conditions' => [
                        'Users.uid' => $_SESSION['Auth']['User']['uid']
-                   ] 
+                   ]
                 ])->first();
                 return (new DefaultPasswordHasher)->check($value, $loggedUser->password);
             },
             'message' => 'Dein altes Passwort war falsch.'
         ]);
-        
+
         $validator->add('password_new_1', 'newPasswordRegexCheck', [
             'rule' => function ($value, $context) {
                 return (bool) preg_match(PASSWORD_REGEX, $value);
             },
             'message' => '10 - 32 Zeichen bitte.'
         ]);
-        
+
         $validator->add('password_new_1', 'newPasswordsEqual', [
             'rule' => 'newPasswordEqualsValidator',
             'provider' => 'table',
             'message' => 'Deine neuen Passwörter sind nicht gleich.',
             'allowEmpty' => false
         ]);
-        
+
         $validator->add('password_new_2', 'newPasswordsEqual', [
             'rule' => 'newPasswordEqualsValidator',
             'provider' => 'table',
             'message' => 'Deine neuen Passwörter sind nicht gleich.',
             'allowEmpty' => false
         ]);
-        
+
         $validator->add('password_new_1', 'newPasswordsDiffersToOld', [
             'rule' => 'newPasswordDiffersToOldValidator',
             'provider' => 'table',
             'message' => 'Dein neues Passwort muss anders lauten als dein altes.',
             'allowEmpty' => false
         ]);
-        
+
         $validator->add('password_new_2', 'newPasswordsDiffersToOld', [
             'rule' => 'newPasswordDiffersToOldValidator',
             'provider' => 'table',
@@ -298,10 +298,10 @@ class UsersTable extends AppTable
         $validator->notEmptyString('password', 'Bitte gib dein altes Passwort an.');
         $validator->notEmptyString('password_new_1', 'Bitte gib dein neues Passwort an.');
         $validator->notEmptyString('password_new_2', 'Bitte gib dein neues Passwort an.');
-        
+
         return $validator;
     }
-    
+
     public function newPasswordEqualsValidator($value, $context)
     {
         return $context['data']['password_new_1'] == $context['data']['password_new_2'];
@@ -332,13 +332,13 @@ class UsersTable extends AppTable
                 'lastname' => 'ASC'
             ]
         ]);
-        
+
         $preparedUsers = [];
         foreach($users as $user) {
             $user->revertPrivatizeData();
             $preparedUsers[$user->uid] = $user->name . ' (' . $user->nick . ')';
         }
-        
+
         return $preparedUsers;
     }
 
@@ -370,7 +370,7 @@ class UsersTable extends AppTable
                 'Users.password'
             ]
         ])->first();
-        
+
         if ($hashedPassword == $user->password) {
             return true;
         } else {

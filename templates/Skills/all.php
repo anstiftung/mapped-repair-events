@@ -9,7 +9,7 @@ echo $this->element('highlightNavi', ['main' => 'Wissen & Können']);
 
 <?php
 foreach($skills as $letter => $letterSkills) {
-    
+
     echo '<div class="letter">' . $letter . '</div>';
     echo '<div class="skills">';
     $i = 0;
@@ -38,7 +38,7 @@ foreach($skills as $letter => $letterSkills) {
             echo '<a href="'.$this->Html->urlSkillDetail($skill->id, StringComponent::slugify($skill->name)).'" class="'.$class.'">' . $skill->name . '</a>';
         }
     echo '</div>';
-    
+
 }
 
 ?>

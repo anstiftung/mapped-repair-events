@@ -8,12 +8,12 @@
  */
 
 if (!empty($images)) {
-    $this->element('addScript', ['script' => 
+    $this->element('addScript', ['script' =>
         JS_NAMESPACE.".Upload.setImages('".addslashes(json_encode($images))."');
     "]);
 }
 
-$this->element('addScript', ['script' => 
+$this->element('addScript', ['script' =>
     JS_NAMESPACE.".Upload.updateImageCount(".(!empty($images) ? count($images) : 0).");
 "]);
 

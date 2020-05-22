@@ -3,7 +3,7 @@
     $this->element('addScript', ['script' =>
         JS_NAMESPACE.".WidgetStatistics.initFilterForm();
     "]);
-    
+
     echo $this->Form->create(null, [
         'novalidate' => 'novalidate',
         'type' => 'get',
@@ -26,7 +26,7 @@
         if (isset($defaultDataSource)) {
             echo $this->Form->hidden('defaultDataSource', ['value' => $defaultDataSource]);
         }
-        
+
         if (isset($year)) {
             echo '<div class="input select">';
             echo $this->Form->year('year', ['val' => $year, 'empty' => 'Jahr: alle', 'min' => 2010, 'max' => date('Y')]);
@@ -35,7 +35,7 @@
         if (isset($month)) {
             echo $this->Form->control('month', ['type' => 'select', 'label' => '', 'val' => $month, 'options' => $this->Time->getMonths(), 'empty' => 'Monat: alle']);
         }
-        
+
         if (isset($dateFrom) && isset($dateTo)) {
             echo $this->element('datepicker');
             if (!$this->request->getSession()->read('isMobile')) {
@@ -50,5 +50,5 @@
         }
         echo '<button id="reset" class="button gray">Zurücksetzen</button>';
     echo $this->Form->end();
-    
+
 ?>

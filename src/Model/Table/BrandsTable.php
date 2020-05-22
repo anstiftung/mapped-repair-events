@@ -8,7 +8,7 @@ class BrandsTable extends Table
 
     public $allowedBasicHtmlFields = [];
     public $name_de = 'Marke';
-    
+
     public function initialize(array $config): void
     {
         $this->addBehavior('Timestamp');
@@ -18,13 +18,13 @@ class BrandsTable extends Table
             'foreignKey' => 'owner'
         ]);
     }
-    
+
     /**
      * @return array
      */
     public function getForDropdown()
     {
-        
+
         $brands = $this->find('all', [
             'fields' => [
                 'Brands.id',
@@ -38,7 +38,7 @@ class BrandsTable extends Table
                 'Brands.status > ' . APP_DELETED
             ]
         ]);
-        
+
         $preparedBrands = [];
         foreach($brands as $brand) {
             $name = $brand->name;
@@ -47,10 +47,10 @@ class BrandsTable extends Table
             }
             $preparedBrands[$brand->id] = $name;
         }
-        
+
         return $preparedBrands;
     }
-    
+
 }
 
 ?>

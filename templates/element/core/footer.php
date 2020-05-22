@@ -22,7 +22,7 @@ $staticMenu = [
         'name' => 'Widgets',
         'slug' => '/widgets/integration'
     ]
-    
+
 ];
 $menu = array_merge($menu, $staticMenu);
 

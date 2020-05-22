@@ -36,6 +36,6 @@ class SqlModeFixes extends AbstractMigration
             ALTER TABLE `workshops` CHANGE `text` `text` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
             ALTER TABLE `workshops` CHANGE `other_users` `other_users` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
         ");
-        
+
     }
 }

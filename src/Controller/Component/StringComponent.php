@@ -7,9 +7,9 @@ use Cake\Utility\Text;
 
 class StringComponent extends Component
 {
-    
+
     public $seoLinkArray = [];
-    
+
     /**
      * @param string $string
      * @return string
@@ -18,12 +18,12 @@ class StringComponent extends Component
     {
         return preg_replace('/^([\d]+)-(.*)$/', '$2', $string);
     }
-    
+
     public static function cleanStringForRssFeedDescription($string) {
         $string = htmlspecialchars(strip_tags($string, ALLOWED_TAGS_CKEDITOR_USER));
         return $string;
     }
-    
+
     /**
      * ?url= param is cut from a's href - in pagination sort links i have no idea where it comes from
      * @param string <a>
@@ -35,7 +35,7 @@ class StringComponent extends Component
         }
         return $link;
     }
-    
+
     /**
      * Checks if a string is ASCII
      * returns false if any character found not in 0-255
@@ -47,12 +47,12 @@ class StringComponent extends Component
     {
         return (preg_match('/^[\\x00-\\x7A]*$/', $string));
     }
-    
+
     public static function getUniqueMailinatorEmailAddress()
     {
         return strtolower(self::createRandomString(20) . '-repini@mailinator.com');
     }
-    
+
     /**
      * 	Tests if a string is utf8 encoded.
      * 	This will use the iconv support if installed/compiled with php, which
@@ -83,7 +83,7 @@ class StringComponent extends Component
             return preg_match('!'.$regexp.'!', $string);
         }
     }
-    
+
     /**
      * Removes characters from the beginning of a string if they are found
      * <code>
@@ -107,7 +107,7 @@ class StringComponent extends Component
         }
         return $replace . mb_substr($haystack, $findLength);
     }
-    
+
     /**
      * Replaces HTML-Signs into HTML Entities
      * This function was introduced because htmlenties from php encoded
@@ -127,7 +127,7 @@ class StringComponent extends Component
         ]);
         return $replaced;
     }
-    
+
     /**
      * Prepares text for output on the website
      * - replaces html entities
@@ -135,32 +135,32 @@ class StringComponent extends Component
      * - reencodes simple formating - [b] for bold
      */
     public static function prepareTextForHTML($text) {
-        
+
         //		$text = self::htmlentities($text);
         $text = nl2br($text);
-        
+
         //		$arraySearch  = array('[b]', '[/b]');
         //		$arrayReplace = array('<b>','</b>');
         //		$text = str_replace($arraySearch, $arrayReplace, $text);
-        
+
         return $text;
     }
-    
+
     public static function prepareTextPreview($text) {
         $text = strip_tags($text, '<ul><li><p><b><a><h2><strong>');
         return $text;
     }
-    
+
     public static function prepareTextPreviewForLinkedBoxes($text) {
         $text = strip_tags($text);
         return $text;
     }
-    
+
     public static function textForHTML($text)
     {
         return htmlspecialchars($text, ENT_COMPAT, 'UTF-8');
     }
-    
+
     // $str: The anchor string that will be altered
     // $relValue: The rel attribute values you wish to have attached to the anchor
     public static function makeNoFollow(&$str, $relValue = 'nofollow')
@@ -176,7 +176,7 @@ class StringComponent extends Component
         $str = preg_replace($pattern, $replace, $str);
         return $str;
     }
-    
+
     /**
      * Truncates a string
      *
@@ -216,7 +216,7 @@ class StringComponent extends Component
             }
             return $truncated . $end;
     }
-    
+
     /**
      * Adds some line breaks if the lines are to long
      *
@@ -258,7 +258,7 @@ class StringComponent extends Component
             }
             return $wrapped;
     }
-    
+
     /**
      * Characters have different width.
      * some are very broad, some a thin.
@@ -282,7 +282,7 @@ class StringComponent extends Component
             return 0;
         }
     }
-    
+
     /**
      * Implodes a String like php native function does but can handle
      * objects in the array and multiple dimensions
@@ -308,31 +308,31 @@ class StringComponent extends Component
             }
             return substr($return, 0, - strlen($glue));
     }
-    
+
     public static function createPassword()
     {
         return mb_strtolower(self::createRandomString(15));
     }
-    
+
     public static function createConfirmationCode($email)
     {
         $confirmationCode = mb_strtolower(substr(md5($email), 0, 5) . StringComponent::createRandomString(5));
         return $confirmationCode;
     }
-    
+
     public static function decodeConfirmationCode($emailAndConfirmationCodeHash)
     {
         $emailHash = substr($emailAndConfirmationCodeHash, 0, 5);
         $cc = substr($emailAndConfirmationCodeHash, - 5);
-        
+
         $return = [
             'emailHash' => $emailHash,
             'confirmationCode' => $cc
         ];
-        
+
         return $return;
     }
-    
+
     /**
      * Probability of two exact Random Strings, with a-zA-Z0-9 is:
      * (25+25+10)^(25+25+10)
@@ -369,7 +369,7 @@ class StringComponent extends Component
         }
         return $string;
     }
-    
+
     /**
      * create an md5 hash of the gien string
      * returns the with number given amount of characters
@@ -385,12 +385,12 @@ class StringComponent extends Component
         $sReturnNumber = '';
         $sReturnString = md5($sString, false);
         $sReturnNumber = md5($iNumber, false);
-        
+
         $sReturn = substr($sReturnString, 0, 8) . substr($sReturnNumber, 0, 8);
-        
+
         return $sReturn;
     }
-    
+
     /**
      * create an md5 hash of the gien string
      * returns the with number given amount of characters
@@ -404,7 +404,7 @@ class StringComponent extends Component
     {
         return md5($sString, false);
     }
-    
+
     /**
      * Strips all breaks from a string
      *
@@ -416,7 +416,7 @@ class StringComponent extends Component
     {
         return preg_replace('/([\\r|\\n]|\\<br\\>|\\<br \\/\\>|\\<p\\>|\\<p \\/\\>)/', $replace, $string);
     }
-    
+
     /**
      * Removes all non-alpha numerical charachters
      *
@@ -427,7 +427,7 @@ class StringComponent extends Component
     {
         return preg_replace('/([^\w])/', "", $string);
     }
-    
+
     /**
      * replaces umlauts and sz
      *
@@ -455,7 +455,7 @@ class StringComponent extends Component
         ];
         return str_replace($arraySearch, $arrayRepalce, $string);
     }
-    
+
     /**
      * original character should be kept
      * http://de.wikipedia.org/wiki/Diakritisches_Zeichen
@@ -469,7 +469,7 @@ class StringComponent extends Component
         $replace = explode(",", "c,s,t,ae,oe,a,c,e,i,o,u,y,a,e,i,o,u,y,a,e,i,o,u,y,a,e,i,o,u,y,c,e,r,s,z,a,u,o,e,i,o,u,a,n,a,u");
         return str_replace($search, $replace, $string);
     }
-    
+
     /**
      * only leaves characters from $whitelist and deletes all other characters
      * because of utf-8 reg ex 'w' can not be used
@@ -528,7 +528,7 @@ class StringComponent extends Component
             return '';
             return $returnString;
     }
-    
+
     /**
      * only leaves characters from $whitelist and deletes all other characters
      * because of utf-8 reg ex 'w' can not be used
@@ -666,7 +666,7 @@ class StringComponent extends Component
             return 'tip';
             return $returnString;
     }
-    
+
     /**
      *
      * http://stackoverflow.com/questions/5305879/automatic-clean-and-seo-friendly-url-slugs
@@ -696,12 +696,12 @@ class StringComponent extends Component
         $string = preg_replace("/[$separator]+/u", "$separator", $string);
         return $string;
     }
-    
+
     public static function slugifyAndKeepCase($string)
     {
         return self::slugify($string, '-', false);
     }
-    
+
     /**
      * @param string $string
      * @return string
@@ -714,9 +714,9 @@ class StringComponent extends Component
         }
         if ($len < 2) return $string;
         return substr($string, 0, 1).str_repeat('*', $len - 2).substr($string, $len - 1, 1);
-        
+
     }
-    
+
     public static function cutHtmlString($text, $length = 100, $ending = '...', $exact = false, $considerHtml = true)
     {
         if ($considerHtml) {
@@ -805,11 +805,11 @@ class StringComponent extends Component
                 $truncate .= '</' . $tag . '>';
             }
         }
-        
+
         $truncate = Configure::read('AppConfig.htmlHelper')->trimAndRemoveEmptyTags($truncate);
         return $truncate;
     }
-    
+
     public static function isUrlRelative($url)
     {
         if (preg_match('/https?\:\/\//', $url)) {
@@ -817,14 +817,14 @@ class StringComponent extends Component
         }
         return true;
     }
-    
+
     public static function getStrippedTextForBoxes($text)
     {
         $text = strip_tags($text, '<b>');
         $text = Text::truncate($text, 100);
         return $text;
     }
-    
+
     /**
      * http://www.maurits.vdschee.nl/php_hide_email/
      */
@@ -834,7 +834,7 @@ class StringComponent extends Component
         if ($class != '') {
             $classHtml = 'class=\"' . $class . '\" ';
         }
-        
+
         $character_set = '+-.0123456789@ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz';
         $key = str_shuffle($character_set);
         $cipher_text = '';
@@ -846,7 +846,7 @@ class StringComponent extends Component
         }
         for ($i = 0; $i < strlen($email); $i += 1)
             $cipher_text .= @$key[strpos($character_set, $email[$i])];
-            
+
             $script = 'var a="' . $key . '";var b=a.split("").sort().join("");var c="' . $cipher_text . '";var d="";';
             $script .= 'for(var e=0;e<c.length;e++)d+=b.charAt(a.indexOf(c.charAt(e)));';
             $script .= 'document.getElementById("' . $id . '").innerHTML="'.$tag.'";';
@@ -858,7 +858,7 @@ class StringComponent extends Component
                 '\"'
             ], $script) . "\")";
             $script = '<script type="text/javascript">/*<![CDATA[*/' . $script . '/*]]>*/</script>';
-            
+
             return '<span id="' . $id . '">[javascript protected email address]</span>' . $script;
     }
 }

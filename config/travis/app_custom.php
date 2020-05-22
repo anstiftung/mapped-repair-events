@@ -38,7 +38,7 @@ return [
             'database' => 'db_test'
         ],
     ],
-    
+
     'Security' => [
         'salt' => '1352742f9cf63228087273ae55bdf6bb2d1a75b82c7e3c6c7023c3014c703a85',
     ]

@@ -3,13 +3,13 @@ use Cake\Core\Configure;
 
 $items = [];
 foreach ($posts as $post) {
-    
+
     $link = $this->Html->urlPostDetail($post->url);
-    
+
     $body = $post->publish->i18nFormat(Configure::read('DateFormat.de.DateLong2'));
     $body .= ' // ' . $post->name;
     $body .= '<br />' . h(strip_tags($post->text));
-    
+
     $body = $this->Text->truncate($body, 400, [
         'ending' => '...',
         'exact'  => true,

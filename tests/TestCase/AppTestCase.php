@@ -4,7 +4,7 @@ use Cake\TestSuite\TestCase;
 
 class AppTestCase extends TestCase
 {
-    
+
     protected $fixtures = [
         'app.BlockedWorkshopSlugs',
         'app.Blogs',
@@ -35,7 +35,7 @@ class AppTestCase extends TestCase
         'app.Workshops',
         'app.WorkshopsCategories',
     ];
-    
+
 }
 
 

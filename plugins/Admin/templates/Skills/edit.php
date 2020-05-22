@@ -21,11 +21,11 @@ $this->element('addScript', array('script' =>
             echo $this->Form->control('Skills.name', ['label' => 'Name']).'<br />';
             echo $this->Form->control('Skills.status', ['type' => 'select', 'options' => Configure::read('AppConfig.approvalStatus')]).'<br />';
         ?>
-	</div>
+    </div>
 
-	<?php        
+    <?php
         echo $this->element('cancelAndSaveButton', ['saveLabel' => 'Speichern']);
-		echo $this->Form->end();
-	?>
-    
+        echo $this->Form->end();
+    ?>
+
 </div>

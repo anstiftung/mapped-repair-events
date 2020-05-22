@@ -1,6 +1,6 @@
 <?php
 /**
- *   In order to use forum please install fluxbb forum manually 
+ *   In order to use forum please install fluxbb forum manually
  *   see AppConfig.fluxBbForumEnabled
  *   folgende anpassungen wurden vorgenommen, damit eine zentrale user-verwaltung (und zwar die von cake) verwendet wird
  * - einträge in die flux-user-tabelle (flux_user) mittels updateUserTable
@@ -21,10 +21,10 @@ class FluxBbComponent extends AppComponent
     public function __construct(ComponentRegistry $collection, $settings = [])
     {
         parent::__construct($collection, $settings);
-        
+
         $this->User = TableRegistry::getTableLocator()->get('Users');
         $this->connection = ConnectionManager::get('default');
-        
+
         // bei mehrmaligem require wird constante pun mehrfach definiert => notice
         require (WWW_ROOT . 'forum/config.php');
         $this->cookie_name = $cookie_name;
@@ -45,7 +45,7 @@ class FluxBbComponent extends AppComponent
     {
 
         $fluxUser = $this->getFluxUser($user->uid);
-        
+
         $query = "
             UPDATE fluxbb_forums f JOIN fluxbb_users u ON u.username = f.last_poster SET f.last_poster = :username WHERE u.id = :fluxUserId;
             UPDATE fluxbb_topics t JOIN fluxbb_users u ON u.username = t.last_poster SET t.last_poster = :username WHERE u.id = :fluxUserId;
@@ -56,7 +56,7 @@ class FluxBbComponent extends AppComponent
             'fluxUserId' => $fluxUser['FluxUsers']['id']
         ];
         $this->connection->execute($query, $params);
-        
+
         $query = "UPDATE fluxbb_users SET username = :username, email = :email WHERE id = :fluxUserId;";
         $params = [
             'username' => $user->nick,
@@ -64,14 +64,14 @@ class FluxBbComponent extends AppComponent
             'fluxUserId' => $fluxUser['FluxUsers']['id']
         ];
         $this->connection->execute($query, $params);
-        
+
     }
 
     public function changeUserGroup($user, $groups)
     {
         $fluxUser = $this->getFluxUser($user->uid);
         arsort($groups); // damit admin gewinnt, groups zuerst absteigend sortieren
-        
+
         $groupId = 4; // fluxx bb group member
         foreach ($groups as $group) {
             // fluxbb unterstützt nur einfach-zuordnung. falls mehrfach-zuordnung, gewinnt admin
@@ -81,7 +81,7 @@ class FluxBbComponent extends AppComponent
                 $groupId = 1; // flux bb group admin
             }
         }
-        
+
         $query = "UPDATE `fluxbb_users` SET `group_id` = '" . $groupId . "'
                 WHERE `id` = '" . $fluxUser['FluxUsers']['id'] . "'";
         $this->connection->execute($query);
@@ -92,7 +92,7 @@ class FluxBbComponent extends AppComponent
         $fluxUser = $this->getFluxUser($userUid);
         if (! empty($fluxUser))
             return;
-        
+
         $sql = "
             INSERT INTO `fluxbb_users` (
                 `username`, `group_id`, `email`,
@@ -102,14 +102,14 @@ class FluxBbComponent extends AppComponent
             VALUES(
                 :username, '4', :email, '1', 0, 0, 'German', 'Air', :time, :remoteAddr, :time
             )";
-        
+
         $params = [
             'username' => $username,
             'email' => $email,
             'time' => time(),
             'remoteAddr' => isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : ''
         ];
-        
+
         $this->connection->execute($sql, $params);
     }
 
@@ -133,7 +133,7 @@ class FluxBbComponent extends AppComponent
                 'Users.status >= ' . APP_DELETED
             ]
         ])->first();
-        
+
         return $fluxUser;
     }
 
@@ -144,12 +144,12 @@ class FluxBbComponent extends AppComponent
 
     public function login($userUid)
     {
-        
+
         // Remove this users guest entry from the online list
         $this->connection->execute("DELETE FROM `fluxbb_online` WHERE ident='" . $_SERVER['REMOTE_ADDR'] . "'");
-        
+
         require_once ($_SERVER['DOCUMENT_ROOT'] . 'forum/include/functions.php'); // wegen forum_hmac() und forum_setcookie()
-        
+
         $fluxUser = $this->getFluxUser($userUid);
         $expire = $this->getExpire();
 
@@ -168,10 +168,10 @@ class FluxBbComponent extends AppComponent
     public function logout($userUid)
     {
         $fluxUser = $this->getFluxUser($userUid);
-        
+
         // Remove this users guest entry from the online list
         $this->connection->execute("DELETE FROM `fluxbb_online` WHERE user_id='" . $fluxUser['FluxUsers']['id'] . "'");
-        
+
         setcookie($this->cookie_name, md5(uniqid(rand(), true)), time(), $this->cookie_path, $this->cookie_domain, $this->cookie_secure, true);
     }
 }

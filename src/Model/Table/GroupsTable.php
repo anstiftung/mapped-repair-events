@@ -41,7 +41,7 @@ class GroupsTable extends Table
             }
             return false;
     }
-    
+
     public function isInGroup($user, $groupNames) {
         if ( empty($user['groups']) ) return false;
         is_array($groupNames) or $groupNames = (array) $groupNames;

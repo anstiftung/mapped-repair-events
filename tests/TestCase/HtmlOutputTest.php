@@ -13,13 +13,13 @@ class HtmlOutputTest extends AppTestCase
     use IntegrationTestTrait;
     use HtmlOutputAssertionsTrait;
     use LogFileAssertionsTrait;
-    
+
     public function testHome()
     {
         $this->get('/');
         $this->doAssertHtmlOutput();
     }
-    
+
     public function testWorkshopDetail()
     {
         $this->get(Configure::read('AppConfig.htmlHelper')->urlWorkshopDetail('test-workshop'));
@@ -31,19 +31,19 @@ class HtmlOutputTest extends AppTestCase
         $this->get(Configure::read('AppConfig.htmlHelper')->urlPostDetail('test-post'));
         $this->doAssertHtmlOutput();
     }
-    
+
     public function testPageDetail()
     {
         $this->get(Configure::read('AppConfig.htmlHelper')->urlPageDetail('test-page'));
         $this->doAssertHtmlOutput();
     }
-    
+
     public function testUsers()
     {
         $this->get(Configure::read('AppConfig.htmlHelper')->urlUsers());
         $this->doAssertHtmlOutput();
     }
-    
+
     public function testUserProfile()
     {
         $this->get(Configure::read('AppConfig.htmlHelper')->urlUserProfile(1));
@@ -61,7 +61,7 @@ class HtmlOutputTest extends AppTestCase
         $this->get('/widgets/statisticsGlobal');
         $this->doAssertHtmlOutput();
     }
-    
+
     public function testEventsWithoutFilter()
     {
         $this->get(Configure::read('AppConfig.htmlHelper')->urlEvents() . '?timeRange=all');
@@ -76,7 +76,7 @@ class HtmlOutputTest extends AppTestCase
         $this->doAssertHtmlOutput();
         $this->assertResponseContains('<div class="numbers">1 Reparaturtermin gefunden</div>');
     }
-    
+
     public function testEventsWithCategoryFilterNotFound()
     {
         $this->get(Configure::read('AppConfig.htmlHelper')->urlEvents() . '?categories=88');

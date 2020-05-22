@@ -1,6 +1,6 @@
 <?php
 use Cake\Core\Configure;
-  $this->element('addScript', array('script' => 
+  $this->element('addScript', array('script' =>
     JS_NAMESPACE.".Helper.doCurrentlyUpdatedActions(".$isCurrentlyUpdated.");".
     JS_NAMESPACE.".Helper.bindCancelButton(".$uid.");".
     JS_NAMESPACE.".Helper.layoutEditButtons();
@@ -11,9 +11,9 @@ use Cake\Core\Configure;
 <div class="admin edit">
 
     <div class="edit">
-    
+
       <?php echo $this->element('heading', ['first' => 'Seite bearbeiten']); ?>
-      
+
       <?php
         echo $this->Form->create($page, ['novalidate']);
         echo $this->Form->hidden('referer', ['value' => $referer]);
@@ -24,8 +24,8 @@ use Cake\Core\Configure;
             'type_de' => 'die Seite',
             'data' => $page
         ]).'<br />';
-        
-        
+
+
         echo $this->Form->control('Pages.menu_type', [
             'type' => 'select',
             'label' => 'In welchem Menü soll die Seite angezeigt werden?',
@@ -45,12 +45,12 @@ use Cake\Core\Configure;
             'type' => 'text',
             'escape' => false
         ]);
-        
+
         echo $this->Form->control('Pages.status', ['type' => 'select', 'options' => Configure::read('AppConfig.status')]).'<br />';
         echo $this->element('metatagsFormfields', ['entity' => 'Pages']);
     ?>
     </div>
-    
+
     <?php
         echo $this->element('cancelAndSaveButton');
     ?>

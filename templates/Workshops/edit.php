@@ -11,7 +11,7 @@ use Cake\Core\Configure;
             JS_NAMESPACE.".MobileFrontend.putSaveAndCancelButtonToEndOfForm();
         "]);
     }
-    $this->element('addScript', array('script' => 
+    $this->element('addScript', array('script' =>
         JS_NAMESPACE.".Helper.bindCancelButton(".$workshop->uid.");".
         JS_NAMESPACE.".Helper.layoutEditButtons();".
         JS_NAMESPACE.".Helper.initCustomCoordinatesCheckbox('#workshops-use-custom-coordinates');
@@ -30,12 +30,12 @@ use Cake\Core\Configure;
         echo $this->Form->hidden('referer', ['value' => $referer]);
         ?>
         <div class="edit">
-       
+
            <?php echo $this->element('heading', ['first' => $metaTags['title']]); ?>
-            
+
            <?php
             echo $this->Form->control('Workshops.name', ['label' => 'Name der Initiative']).'<br />';
-            
+
             echo $this->element('urlEditField', [
                 'type' => 'Workshops',
                 'urlPrefix' => '/',
@@ -44,7 +44,7 @@ use Cake\Core\Configure;
                 'checkOriginalStatus' => true,
                 'data' => $workshop
             ]).'<br />';
-            
+
             if ($isEditMode) {
                 echo '<b class="hint">Hinweis: Die Logo-Datei sollte rechteckig und mindestens 300 Pixel breit sein.</b>';
             }
@@ -55,24 +55,24 @@ use Cake\Core\Configure;
                 ,'uid' => $workshop->uid
                 ,'label' => 'Logo'
             ]).'<br />';
-            
+
             echo $this->Form->control('Workshops.street', ['label' => 'Straße + Hausnummer']).'<br />';
             echo $this->Form->control('Workshops.zip', ['label' => 'PLZ']).'<br />';
             echo $this->Form->control('Workshops.city', ['label' => 'Stadt']).'<br />';
             echo $this->Form->control('Workshops.adresszusatz', ['label' => 'Adresszusatz']).'<br />';
             echo $this->Form->control('Workshops.country_code', ['type' => 'select', 'options' => $countries, 'label' => 'Land']).'<br />';
-            
+
             echo $this->Form->control('Workshops.use_custom_coordinates', ['type' => 'checkbox', 'label' => 'Koordinaten selbst festlegen?']).'<br />';
             echo '<div class="custom-coordinates-wrapper">';
                 echo $this->Form->control('Workshops.lat', ['label' => 'Breite (Lat)', 'type' => 'text']).'<br />';
                 echo $this->Form->control('Workshops.lng', ['label' => 'Länge (Long)', 'type' => 'text']).'<br />';
             echo '</div>';
-            
+
             echo $this->Form->control('Workshops.traeger', array('label' => 'Träger')).'<br />';
             echo $this->Form->control('Workshops.rechtsform', array('label' => 'Rechtsform der RI')).'<br />';
             echo $this->Form->control('Workshops.rechtl_vertret', array('type' => 'textarea', 'label' => 'Rechtlich vertreten durch: (Name, Anschrift, Tel, Email und Funktion)' )).'<br />';
-            
-            
+
+
             echo $this->Form->control('Workshops.additional_contact', ['type' => 'textarea', 'label' => ['text' => 'Andere Kontaktmöglichkeiten', 'escape' => false]]).'<br />';
             echo $this->Form->control('Workshops.email', ['label' => 'E-Mail']).'<br />';
             echo $this->Form->control('Workshops.website', ['label' => 'Website']).'<br />';
@@ -86,9 +86,9 @@ use Cake\Core\Configure;
                       <p>- Bitte überprüfe nach Änderung oder Neueingabe deines Facebook-Usernamens die Darstellung auf der Frontend-Seite.</p>'));
             echo '</div>';
             echo '<div class="sc"></div>';
-            
+
             echo $this->Form->control('Workshops.show_statistics', ['type' => 'checkbox', 'label' => 'Statistik anzeigen (falls Laufzettel-Daten verfügbar)?']).'<br />';
-            
+
             if ($workshop->status < APP_ON) {
                 echo '<div class="highlight-red">';
             }
@@ -99,17 +99,17 @@ use Cake\Core\Configure;
             if ($workshop->status < APP_ON) {
                 echo '</div>';
             };
-            
+
             if (!$useDefaultValidation) {
                 echo $this->element('metatagsFormfields', ['entity' => 'Workshops']);
             }
         ?>
-        
+
         <?php echo $this->element('cancelAndSaveButton', ['saveLabel' => 'Initiative speichern']); ?>
         <div class="sc"></div>
     </div>
-    
-    
+
+
     <div class="ckeditor-edit">
       <?php
         echo $this->element('ckeditorEdit', [
@@ -131,10 +131,10 @@ use Cake\Core\Configure;
             ]);
             echo '</div>';
     echo '</div>';
-    ?>    
+    ?>
 
     <?php echo $this->Form->end(); ?>
-  
+
 </div>
 
 <div class="sc"></div> <?php /* wegen ckeditor */ ?>

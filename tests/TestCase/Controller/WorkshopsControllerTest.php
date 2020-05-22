@@ -32,7 +32,7 @@ class WorkshopsControllerTest extends AppTestCase
         $this->get('/workshops/ajaxGetAllWorkshopsForMap');
         $this->assertSameAsFile('workshops-for-map.json', $this->_response);
     }
-    
+
     public function testWorkshopDetail()
     {
         $this->get(Configure::read('AppConfig.htmlHelper')->urlWorkshopDetail('test-workshop'));
@@ -40,7 +40,7 @@ class WorkshopsControllerTest extends AppTestCase
         $this->assertResponseNotEmpty();
         $this->doUserPrivacyAssertions();
     }
-    
+
     public function testAddWorkshop()
     {
 
@@ -51,7 +51,7 @@ class WorkshopsControllerTest extends AppTestCase
             'lat' => 0,
             'lng' => 0,
         ];
-        
+
         $this->loginAsOrga();
         $this->post(
             Configure::read('AppConfig.htmlHelper')->urlWorkshopNew(),
@@ -60,23 +60,23 @@ class WorkshopsControllerTest extends AppTestCase
                 'Workshops' => $workshopForPost
             ]
         );
-        
+
         $this->Workshop = TableRegistry::getTableLocator()->get('Workshops');
         $workshop = $this->Workshop->find('all', [
             'conditions' => [
                 'Workshops.url' => $workshopForPost['url']
             ]
         ])->first();
-        
+
         $this->assertEquals($workshop->name, $workshopForPost['name']);
         $this->assertEquals($workshop->url, $workshopForPost['url']);
-        
+
         $this->assertMailCount(1);
         $this->assertMailSentTo(Configure::read('AppConfig.debugMailAddress'));
         $this->assertMailContainsTextAt(0, '"test initiative" erstellt');
-        
+
     }
-    
+
     public function testEditWorkshopNotifications()
     {
         $this->loginAsOrga();
@@ -93,12 +93,12 @@ class WorkshopsControllerTest extends AppTestCase
                 ]
             ]
         );
-        
+
         $this->assertMailCount(1);
         $this->assertMailSentTo(Configure::read('AppConfig.debugMailAddress'));
         $this->assertMailContainsTextAt(0, '"Test Workshop" geändert');
-        
+
     }
-    
+
 }
 ?>

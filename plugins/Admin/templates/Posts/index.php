@@ -6,7 +6,7 @@
       $heading = $blogs[$this->request->getQuery()['val-opt-2']];
       $blogUrl = $this->request->getQuery()['val-opt-2'];
   }
-  
+
     echo $this->element('list'
         ,[
        'objects' => $objects

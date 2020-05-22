@@ -23,13 +23,13 @@ class BlogsTable extends Table
                 'Blogs.name' => 'ASC'
             ]
         ]);
-        
+
         $preparedBlogs = [];
         foreach($blogs as $blog) {
             $preparedBlogs[$blog->id] = $blog->name;
         }
         return $preparedBlogs;
-        
+
         return $blogs;
     }
 }

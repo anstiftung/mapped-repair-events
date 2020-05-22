@@ -7,14 +7,14 @@ use Cake\TestSuite\Fixture\TestFixture;
 class FormFieldOptionsFixture extends TestFixture
 {
     public $import = ['table' => 'form_field_options', 'connection' => 'default'];
-    
+
     public function init(): void
     {
         $this->records = [
             [
                 'id' => 1,
                 'form_field_id' => 1,
-                'value' => 1,                
+                'value' => 1,
                 'name' => '',
                 'status' => 1,
             ],
@@ -182,6 +182,6 @@ class FormFieldOptionsFixture extends TestFixture
         ];
         parent::init();
     }
-    
+
 }
 ?>

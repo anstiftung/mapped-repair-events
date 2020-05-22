@@ -1,5 +1,5 @@
 .fc-row .fc-content-skeleton td {
-	border-color: #ddd ! important;
+    border-color: #ddd ! important;
 }
 .fc td.fc-today {
     border-style: double; /* overcome neighboring borders */
@@ -10,10 +10,10 @@
     background-image: url(/img/gotdatedetail.png) ! important;
 }
 .fc-day-grid-container {
-	height: auto ! important;
+    height: auto ! important;
 }
 .fc-day.fc-has-event, .fc-day-number {
-	cursor: pointer;
+    cursor: pointer;
 }
 
 
@@ -114,5 +114,5 @@ div#selectedDate {
     background-color: #d7cbdf !important;
 }
 .fc-basic-view .fc-week-number, .fc-basic-view .fc-day-number {
-	padding: 1px 2px 0 0;
+    padding: 1px 2px 0 0;
 }

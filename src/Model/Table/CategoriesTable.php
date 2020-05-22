@@ -11,7 +11,7 @@ class CategoriesTable extends Table
 
     public $allowedBasicHtmlFields = [];
     public $name_de = 'Kategorie';
-    
+
     public function initialize(array $config): void
     {
         $this->addBehavior('Tree');
@@ -26,53 +26,53 @@ class CategoriesTable extends Table
             'foreignKey' => 'owner'
         ]);
     }
-    
+
     public function validationDefault(Validator $validator): \Cake\Validation\Validator
     {
         $validator->notEmptyString('name', 'Bitte trage den Namen ein.');
         return $validator;
     }
-    
+
     public function getMaterialFootprintByParentCategoryId($parentCategoryId)
     {
-        
+
         $category = $this->find('all', [
             'conditions' => [
                 'Categories.parent_id' => $parentCategoryId
             ]
         ])->first();
-        
+
         $result = 0;
         if (!empty($category)) {
             $result = $category->material_footprint;
         }
-        
+
         return $result;
     }
-    
+
     public function getCarbonFootprintByParentCategoryId($parentCategoryId)
     {
-        
+
         $category = $this->find('all', [
             'conditions' => [
                 'Categories.parent_id' => $parentCategoryId
             ]
         ])->first();
-        
+
         $result = 0;
         if (!empty($category)) {
             $result = $category->carbon_footprint;
         }
-        
+
         return $result;
     }
-    
+
     /**
      * @return array
      */
     public function getForSubcategoryDropdown()
     {
-        
+
         $categories = $this->find('threaded', [
             'conditions' => [
                 'Categories.visible_on_platform' => APP_ON,
@@ -101,28 +101,28 @@ class CategoriesTable extends Table
             }
             $preparedCategories[$category->name] = $subCategories;
         }
-        
+
         return $preparedCategories;
-        
+
     }
-    
+
     public function calculateMaterialFootprint($repairedCount, $materialFootprintFactor)
     {
         $savedEnergyPart = 0.3;
         return $repairedCount * $materialFootprintFactor * $savedEnergyPart;
     }
-    
+
     public function calculateCarbonFootprint($repairedCount, $carbonFootprintFactor)
     {
         $savedEnergyPart = 0.3;
         return $repairedCount * $carbonFootprintFactor * $savedEnergyPart;
     }
-    
+
     public function getCategoriesForStatisticsGlobal()
     {
-        
+
         $categories = [];
-        
+
         $mainCategories = $this->getMainCategoriesForFrontend();
         foreach($mainCategories as $category) {
             $categories[] = [
@@ -132,7 +132,7 @@ class CategoriesTable extends Table
                 'material_footprint' => $category->material_footprint
             ];
         }
-        
+
         $thirdPartySubCategories = $this->find('all', [
             'conditions' => [
                 'Categories.parent_id IN' => Configure::read('AppConfig.mainCategoryIdsWhereSubCategoriesAreShown')
@@ -149,12 +149,12 @@ class CategoriesTable extends Table
                 'material_footprint' => $category->material_footprint
             ];
         }
-        
+
         $categories = Hash::sort($categories, '{n}.name');
-        
+
         return $categories;
     }
-    
+
     public function getMainCategoriesForFrontend()
     {
         $categories = $this->find('all', [
@@ -168,13 +168,13 @@ class CategoriesTable extends Table
         ]);
         return $categories;
     }
-    
+
     /**
      * @return array
      */
     public function getForDropdown($visibleOnPlatform)
     {
-        
+
         $categories = $this->find('all', [
             'conditions' => [
                 'Categories.parent_id IS NULL',
@@ -188,15 +188,15 @@ class CategoriesTable extends Table
                 'LOWER(Categories.name)' => 'ASC'
             ]
         ]);
-        
+
         $preparedCategories = [];
         foreach($categories as $category) {
             $preparedCategories[$category->id] = $category->name;
         }
-        
+
         return $preparedCategories;
     }
-    
+
 }
 
 ?>

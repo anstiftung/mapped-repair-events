@@ -3,12 +3,12 @@
 echo $this->element('highlightNavi' ,['main' => $post->blog->name]);
 echo $this->element('heading', ['first' => $post->name]);
 
-$this->element('addScript', ['script' => 
+$this->element('addScript', ['script' =>
     JS_NAMESPACE.".AppFeatherlight.initLightboxImageGallery('.left .image-wrapper');
 "]);
 
 if ($this->request->getSession()->read('isMobile')) {
-    $this->element('addScript', ['script' => 
+    $this->element('addScript', ['script' =>
         JS_NAMESPACE.".MobileFrontend.adaptPostDetail();
     "]);
 };
@@ -19,7 +19,7 @@ if ($this->request->getSession()->read('isMobile')) {
 
 <div class="post-detail <?php echo $post->blog->url; ?>">
 
-	<div class="left">
+    <div class="left">
         <?php
             foreach($post->photos as $photo) {
                 echo '<div class="image-wrapper">';
@@ -32,17 +32,17 @@ if ($this->request->getSession()->read('isMobile')) {
                 echo '</div>';
             }
         ?>
-	</div>
-	
-	<div class="right">
-    	<?php
-        	echo $this->element('post',
-        	    ['post' => $post,
-        	        'type' => 'detail',
-        	        'blog' => $post->blog
-        	    ]
+    </div>
+
+    <div class="right">
+        <?php
+            echo $this->element('post',
+                ['post' => $post,
+                    'type' => 'detail',
+                    'blog' => $post->blog
+                ]
             );
-    	?>
-	</div>
-    
+        ?>
+    </div>
+
 </div>

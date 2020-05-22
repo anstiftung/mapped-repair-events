@@ -6,12 +6,12 @@ use Cake\ORM\TableRegistry;
 
 class SendWorknewsNotificationShell extends AppShell
 {
-    
+
     public function main()
     {
-        
+
         $this->Event = TableRegistry::getTableLocator()->get('Events');
-        
+
         // find all events that start in one week
         $events = $this->Event->find('all', [
             'conditions' => [
@@ -22,7 +22,7 @@ class SendWorknewsNotificationShell extends AppShell
                 'Workshops'
             ]
         ]);
-        
+
         // send notification mail to all subscribers
         $this->Worknews = TableRegistry::getTableLocator()->get('Worknews');
         foreach($events as $event) {
@@ -31,7 +31,7 @@ class SendWorknewsNotificationShell extends AppShell
                 $this->Worknews->sendNotifications($subscribers, 'Reparatur-Termin nächste Woche: ' . $event->workshop->name, 'event_next_week', $event->workshop, $event);
             }
         }
-        
+
     }
-    
+
 }

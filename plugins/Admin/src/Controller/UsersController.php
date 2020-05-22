@@ -23,7 +23,7 @@ class UsersController extends AdminAppController
     public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);
-        
+
         $this->addSearchOptions([
             'Users.firstname' => [
                 'name' => 'Users.firstname',
@@ -50,7 +50,7 @@ class UsersController extends AdminAppController
                 'extraDropdown' => true
             ]
         ]);
-        
+
         // für optional groups dropdown
         $this->generateSearchConditions('opt-1');
         $this->generateSearchConditions('opt-2');
@@ -59,12 +59,12 @@ class UsersController extends AdminAppController
     public function index()
     {
         parent::index();
-        
+
         $conditions = [
             'Users.status > ' . APP_DELETED
         ];
         $conditions = array_merge($this->conditions, $conditions);
-        
+
         $query = $this->User->find('all', [
             'conditions' => $conditions,
             'contain' => [
@@ -79,9 +79,9 @@ class UsersController extends AdminAppController
                 'OwnerWorkshops'
             ]
         ]);
-        
+
         $query = $this->addMatchingsToQuery($query);
-        
+
         $objects = $this->paginate($query, [
             'order' => [
                 'Users.created' => 'DESC'
@@ -91,7 +91,7 @@ class UsersController extends AdminAppController
             $object->revertPrivatizeData();
         }
         $this->set('objects', $objects->toArray());
-        
+
         $this->Workshop = TableRegistry::getTableLocator()->get('Workshops');
         $this->set('workshops', $this->Workshop->getForDropdown());
     }

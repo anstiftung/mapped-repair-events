@@ -21,7 +21,7 @@
                     }
                     echo '<br />';
                 echo '</a>';
-    
+
                 $groupNames = [];
                 if (isset($user->groups)) {
                     foreach($user->groups as $group) {
@@ -37,5 +37,5 @@
     ?>
 
     </div>
-    
+
 <?php } ?>

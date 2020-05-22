@@ -1,12 +1,12 @@
 
 MappedRepairEvents.Admin = {
-    
+
     init : function() {
         MappedRepairEvents.Helper.highlightFormFields();
         MappedRepairEvents.Helper.bindFlashMessageCancelButton();
         MappedRepairEvents.Helper.beautifyDropdowns();
     },
-    
+
     bindDelete: function() {
         $('a.delete-link').click(function() {
             linkedImage = $(this);
@@ -24,26 +24,26 @@ MappedRepairEvents.Admin = {
             );
         });
     },
-    
+
     deleteAppObject : function(linkedImage, uid) {
-        
+
         linkedImage.parent().parent().animate( { opacity: 'toggle'}, 'slow', function() {});
-        
+
         var statusType = 'status';
         var value = -1;
-        
+
         MappedRepairEvents.Helper.ajaxCall(
             '/admin/' + 'intern/' + 'ajaxChangeAppObjectStatus/'
             ,{uid: uid, status_type: statusType, value: value }
             ,{ onOk : function(data) {
-                    
+
                  }
                 ,onError : function(data) {
                     alert(data.message);
                 }
             }
-        );    
-        
+        );
+
     }
 
 };

@@ -10,7 +10,7 @@ use Cake\Utility\Inflector;
 $objectForEditableCheck = $data;
 
 if (isset($checkOriginalStatus) && $checkOriginalStatus && $data->uid) {
-    
+
     $objectClass = TableRegistry::get($type);
     $entity = $objectClass->get($data->uid, [
         'conditions' => [
@@ -39,19 +39,19 @@ if (isset($hidden) && $hidden) {
         JS_NAMESPACE.".Helper.bindSlugToggle();"
     ));
     echo '<div class="formfield-wrapper url-edit-field-wrapper">';
-    
+
     $display = 'none';
     $checked = '';
     if ($this->Form->isFieldError($type . '.url')) {
         $display = 'block';
         $checked = ' checked="checked"';
     }
-    
+
     echo '<div class="checkbox">
               <input type="checkbox" name="show-url-edit-field" id="show-url-edit-field"'.$checked.'">
               <label for="show-url-edit-field">'.__('edit slug').'</label>
           </div>';
-    
+
     $title = '<ul>';
     $title .= '<li>Die Url auf unserer Plattform besteht aus '.(Configure::read('isSsl') ? 'https' : 'http').'://' . $_SERVER['SERVER_NAME'] . $urlPrefix . ' und einem frei wählbaren Namenszusatz, dem sogenannten "Slug".</li>
                       <li><b>Achtung:</b> Der Slug kann nur geändert werden, wenn ' . $type_de . ' auf offline gesetzt ist.</li>
@@ -61,9 +61,9 @@ if (isset($hidden) && $hidden) {
     }
     $title .= '</ul>';
     echo $this->element('helpIcon', array('title' => $title));
-    
+
     echo '</div>';
-    
+
     echo '<div class="url-edit-field" style="display:'.$display.'";float: left;">';
 }
 echo $this->Form->control($type . '.url', $htmlAttributes);

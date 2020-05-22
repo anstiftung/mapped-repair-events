@@ -2,7 +2,7 @@
 
 use Cake\Core\Configure;
 
-$this->element('addScript', ['script' => 
+$this->element('addScript', ['script' =>
     JS_NAMESPACE.".Helper.bindWorkshopUserActions();
 "]);
 ?>
@@ -13,9 +13,9 @@ $this->element('addScript', ['script' =>
 
 <h2><?php echo $currentRelationsText; ?></h2>
 
-    
+
     <table class="list">
-      
+
       <tr>
         <th>Name der Initiative</th>
         <th>Anfrage vom</th>
@@ -29,13 +29,13 @@ $this->element('addScript', ['script' =>
       </tr>
 
 <?php foreach($associatedWorkshops as $associatedWorkshop) {
-    
+
     foreach($associatedWorkshop->users as $user) {
         if ($user->uid == $appAuth->getUserUid()) {
             $userEntity = $user;
         }
     }
-    
+
     echo '<tr>';
 
       echo '<td>';
@@ -59,7 +59,7 @@ $this->element('addScript', ['script' =>
           echo '<b>noch nicht bestätigt</b>';
         }
       echo '</td>';
-      
+
       echo '<td class="icon">';
       if (in_array($associatedWorkshop->uid, $workshopsWhereUserIsLastOrgaUserUids) && $appAuth->isOrga() && !is_null($userEntity->_joinData->approved)) {
               $deleteClass = 'resign-not-possible';
@@ -80,7 +80,7 @@ $this->element('addScript', ['script' =>
               ]
           );
       echo '</td>';
-      
+
       echo '<td class="icon">';
           echo $this->Html->link(
               '<i class="far fa-envelope fa-border"></i>',
@@ -91,7 +91,7 @@ $this->element('addScript', ['script' =>
             ]
           );
       echo '</td>';
-      
+
 
       if ($type == 'user') {
           echo '<td class="icon">';
@@ -118,9 +118,9 @@ $this->element('addScript', ['script' =>
             }
            echo '</td>';
       }
-      
+
       echo '<td class="icon">';
-                
+
         $preview = false;
         if ($associatedWorkshop->status == APP_ON ) {
           $icon =  '<i class="fas fa-arrow-right fa-border"></i>';
@@ -130,19 +130,19 @@ $this->element('addScript', ['script' =>
           $previewText = 'Initiative als Vorschau anzeigen';
           $preview = true;
         }
-        
+
         echo $this->Html->link(
           $icon
           ,$this->Html->urlWorkshopDetail($associatedWorkshop->url, $preview)
           ,['title' => $previewText, 'escape' => false]
         );
-        echo '</td>';      
-    
+        echo '</td>';
+
      echo '</tr>';
-     
+
   }
   echo '</table>';
-  
+
 }
 ?>
 
@@ -175,5 +175,5 @@ $this->element('addScript', ['script' =>
     </button>
 
 </form>
-    
+
 <?php } ?>

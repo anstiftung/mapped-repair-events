@@ -11,9 +11,9 @@
   <lastBuildDate><?php echo $rssFeedData['lastBuildDate']; ?></lastBuildDate>
 
   <?php foreach($rssFeedData['items'] as $item) { ?>
-    
+
     <item>
-    
+
       <title><?php echo $item['title']; ?></title>
       <description><?php echo $item['description']; ?></description>
       <link><?php echo $item['link']; ?></link>
@@ -21,7 +21,7 @@
           <pubDate><?php echo $item['pubDate']; ?></pubDate>
       <?php } ?>
       <guid><?php echo $item['link']; ?></guid> <?php /* TODO anschauen was guid macht, momentan ist es einfach der link */ ?>
-      
+
       <?php
         if (!empty($item['enclosures'])) {
           foreach($item['enclosures'] as $enclosure) {
@@ -39,8 +39,7 @@
         }
        }
       ?>
-         
+
     </item>
-  
+
   <?php } ?>
-   

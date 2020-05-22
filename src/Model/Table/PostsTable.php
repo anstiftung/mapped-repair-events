@@ -31,7 +31,7 @@ class PostsTable extends AppTable
         $validator->minLength('city', 1, 'Bitte gib einen Author an.');
         return $validator;
     }
-    
+
     public function validationAdmin(Validator $validator)
     {
         $validator = parent::addUrlValidation($validator);
@@ -40,7 +40,7 @@ class PostsTable extends AppTable
         $validator->notEmptyString('publish', 'Bitte trage ein, ab wann der Post gezeigt werden soll.');
         return $validator;
     }
-    
+
     public function getLatestPosts() {
         $posts = $this->find('all', [
             'fields' => [
@@ -60,6 +60,6 @@ class PostsTable extends AppTable
         ]);
         return $posts;
     }
-    
+
 }
 ?>
