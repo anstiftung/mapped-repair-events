@@ -1,5 +1,5 @@
 <?php use Cake\Core\Configure; ?>
-Eine von dir abonnierte <?php echo Configure::read('AppConfig.initiativeNameSingular'); ?> hat einen Termin gelöscht. 
+Eine von dir abonnierte <?php echo Configure::read('AppConfig.initiativeNameSingular'); ?> hat einen Termin gelöscht.
 
 Klicke hier für aktuelle Reparaturtermine der Initiative:
 

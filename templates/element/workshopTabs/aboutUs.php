@@ -1,6 +1,6 @@
 
 <div id="tabs-1">
-	<div class="address-wrapper">
+    <div class="address-wrapper">
 
 <?php
 
@@ -104,10 +104,10 @@ if (!$this->request->getSession()->read('isMobile')) {
 }
 
 if(!empty($workshop->categories)) { ?>
-	<div class="skill-icon-wrapper">
-    	<h2>Unsere Reparaturbereiche</h2>
+    <div class="skill-icon-wrapper">
+        <h2>Unsere Reparaturbereiche</h2>
         <div class="skill-icons">
-        <?php 
+        <?php
             foreach($workshop->categories as $category) {
                 echo '<div title="'.$category->name.'" class="sklill_icon '.$category->icon.'"></div>';
             }

@@ -12,13 +12,13 @@ use Cake\ORM\TableRegistry;
 
 class UsersController extends AppController
 {
-    
+
     public function __construct($request = null, $response = null)
     {
         parent::__construct($request, $response);
         $this->User = TableRegistry::getTableLocator()->get('Users');
     }
-    
+
     public function isAuthorized($user)
     {
         switch($this->request->getParam('action')) {
@@ -30,11 +30,11 @@ class UsersController extends AppController
                 return $this->AppAuth->isAdmin();
                 break;
         }
-        
+
         return parent::isAuthorized($user);
-        
+
     }
-    
+
     public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);
@@ -49,9 +49,9 @@ class UsersController extends AppController
             'publicProfile',
             'all'
         ]);
-        
+
     }
-    
+
     public function all()
     {
 
@@ -65,18 +65,18 @@ class UsersController extends AppController
                     'Skills.status' => APP_ON
                 ]
             ])->first();
-                
+
             if (empty($skill)) {
                 throw new NotFoundException('skill not found');
             }
-            
+
             $this->set('skill', $skill);
         }
-        
+
         $conditions = [
             'Users.status' => APP_ON
         ];
-        
+
         if ($this->getRequest()->getQuery('zip') != '') {
             $conditions['LEFT(Users.zip, 1) = '] = (int) $this->getRequest()->getQuery('zip');
             $conditions['FIND_IN_SET("zip", private) = '] = 0; // Users.private would be converted to users.private on prod so leave it out!
@@ -84,20 +84,20 @@ class UsersController extends AppController
         if ($skillId > 0) {
             $conditions['FIND_IN_SET("skills", private) = '] = 0; // Users.private would be converted to users.private on prod so leave it out!
         }
-        
+
         $users = $this->User->find('all', [
             'conditions' => $conditions,
             'contain' => [
                 'Skills'
             ]
         ]);
-        
+
         if ($skillId > 0) {
             $users->matching('Skills', function(Query $q) use ($skillId) {
                 return $q->where(['Skills.id' => $skillId]);
             });
         }
-        
+
         $users = $this->paginate($users, [
             'sortWhitelist' => [
                 'Users.created', 'Users.nick'
@@ -107,7 +107,7 @@ class UsersController extends AppController
             ]
         ]);
         $this->set('users', $users);
-        
+
         if ($skillId > 0) {
             $correctSlug = Configure::read('AppConfig.htmlHelper')->urlSkillDetail($skillId, $skill->name);
             if ($correctSlug != Configure::read('AppConfig.htmlHelper')->urlSkillDetail($skillId, StringComponent::removeIdFromSlug($this->getRequest()->getParam('pass')[0]))) {
@@ -115,28 +115,28 @@ class UsersController extends AppController
                 return;
             }
         }
-        
+
         $this->Skill = TableRegistry::getTableLocator()->get('Skills');
         $skillsForDropdown = $this->Skill->getForDropdown(false);
         $this->set('skillsForDropdown', $skillsForDropdown);
-        
+
         $metaTags = [
             'title' => 'Aktive'
         ];
         $this->set('metaTags', $metaTags);
-        
+
         $overviewLink = Configure::read('AppConfig.htmlHelper')->urlUsers();
         if (preg_match('`/kenntnisse`', $this->referer())) {
             $overviewLink = Configure::read('AppConfig.htmlHelper')->urlSkills();
         }
         $this->set('overviewLink', $overviewLink);
     }
-    
+
     public function publicProfile()
     {
-        
+
         $userUid = $this->request->getParam('pass')[0];
-        
+
         $workshopsAssociation = $this->User->getAssociation('Workshops');
         $workshopsAssociation->setConditions([
             'UsersWorkshops.approved <> \'0000-00-00 00:00:00\'',
@@ -160,19 +160,19 @@ class UsersController extends AppController
                 ]
             ]
         ])->first();
-        
+
         if (empty($user)) {
             throw new NotFoundException('user not found');
         }
         $this->set('user', $user);
-        
+
         $metaTags = [
             'title' => ($user->firstname . $user->lastname != '' ? 'Profil von ' . $user->name : 'Profil')
         ];
         $this->set('metaTags', $metaTags);
-        
+
     }
-    
+
     public function welcome() {
         $this->Page = TableRegistry::getTableLocator()->get('Pages');
         $homepageIntrotext = $this->Page->getPageByName('homepage.introtext');
@@ -181,35 +181,35 @@ class UsersController extends AppController
             'title' => 'Herzlich Willkommen'
         ];
         $this->set('metaTags', $metaTags);
-        
+
     }
-    
+
     public function neuesPasswortAnfordern()
     {
         $metaTags = [
             'title' => 'Neues Passwort anfordern'
         ];
         $this->set('metaTags', $metaTags);
-        
+
         $user = $this->User->newEntity([]);
-        
+
         if (! empty($this->request->getData())) {
-            
+
             $user = $this->User->newEntity($this->request->getData(), [
                 'validate' => 'RequestPassword'
             ]);
-            
+
             if (!($user->hasErrors())) {
-                
+
                 $user = $this->User->find('all', [
                     'conditions' => [
                         'Users.email' => $this->request->getData('Users.email')
                     ]
                 ]) ->first();
                 $user->revertPrivatizeData();
-                
+
                 $newPassword = $this->User->setNewPassword($user->uid);
-                
+
                 // send email
                 $email = new Mailer('default');
                 $email->viewBuilder()->setTemplate('new_password_request');
@@ -218,7 +218,7 @@ class UsersController extends AppController
                     'password' => $newPassword,
                     'user' => $user
                 ]);
-                
+
                 if (Configure::read('debug')) {
                     $email->setTo(Configure::read('AppConfig.debugMailAddress'));
                 } else {
@@ -226,20 +226,20 @@ class UsersController extends AppController
                 }
                 $email->send();
                 $this->AppFlash->setFlashMessage('Dir wurde ein neues Passwort zugeschickt.');
-                
+
                 $this->set('password', $newPassword);
                 $this->set('user', $user);
-                
+
                 $this->redirect(Configure::read('AppConfig.htmlHelper')->urlLogin());
             } else {
                 $this->AppFlash->setFlashError('Es sind Fehler aufgetreten.');
             }
         }
-        
+
         $this->set('user', $user);
-        
+
     }
-    
+
     public function add()
     {
         $user = $this->User->newEntity(
@@ -248,28 +248,28 @@ class UsersController extends AppController
             ],
             ['validate' => false]
         );
-        
+
         $this->_profil($user, false, false);
-        
+
         $metaTags = [
             'title' => 'Neuen User anlegen'
         ];
         $this->set('metaTags', $metaTags);
-        
+
         $this->render('profil');
-        
+
     }
-    
+
     private function _profil($user, $isMyProfile, $isEditMode)
     {
         $this->Category = TableRegistry::getTableLocator()->get('Categories');
         $this->set('categories', $this->Category->getForDropdown(APP_ON));
-        
+
         $this->Country = TableRegistry::getTableLocator()->get('Countries');
         $this->set('countries', $this->Country->getForDropdown());
-        
+
         $this->set('groups', Configure::read('AppConfig.htmlHelper')->getUserGroupsForUserEdit($this->AppAuth->isAdmin()));
-        
+
         $this->setReferer();
         if (empty($this->request->getData())) {
             $user->private_as_array = explode(',', $user->private);
@@ -281,7 +281,7 @@ class UsersController extends AppController
                 $private = [];
             }
             $this->request = $this->request->withData('Users.private', $private);
-            
+
             // START save user generated skills
             $skills = $this->request->getData('Users.skills._ids');
             if (!empty($skills)) {
@@ -298,7 +298,7 @@ class UsersController extends AppController
                     }
                 }
                 $this->request = $this->request->withData('Users.skills._ids', $skills);
-                
+
                 $addedSkillIds = [];
                 if (!empty($skillsToAdd)) {
                     $addedSkills = $this->Skill->saveMany($skillsToAdd);
@@ -309,21 +309,21 @@ class UsersController extends AppController
                 }
             }
             // END save user generated skills
-            
+
             $user = $this->User->patchEntity($user, $this->request->getData(), ['validate' => 'UserEdit' . ($this->AppAuth->isAdmin() ? 'Admin' : 'User')]);
             if (!$user->hasErrors()) {
                 $this->User->save($user);
-                
+
                 // update own profile
                 if ($isMyProfile) {
                     $this->AppAuth->setUser($user->toArray()); // to array is important for forum to avoid __PHP_Incomplete_Class Object
                 }
-                
+
                 if (Configure::read('AppConfig.fluxBbForumEnabled')) {
                     $this->FluxBb->changeUserData($user);
                     $this->FluxBb->changeUserGroup($user, $this->request->getData('Users.groups._ids'));
                 }
-                
+
                 if ($isEditMode) {
                     $message = 'Das Profil wurde erfolgreich gespeichert.';
                 } else {
@@ -336,30 +336,30 @@ class UsersController extends AppController
             }
         }
         $this->set('user', $user);
-        
+
         $this->Page = TableRegistry::getTableLocator()->get('Pages');
         $orgaInfotext = $this->Page->getPageByName('Was.ist.ein.Organisator');
         $this->set('orgaInfotext', $orgaInfotext->text);
         $repairhelperInfotext = $this->Page->getPageByName('Was.ist.ein.Reparateur');
         $this->set('repairhelperInfotext', $repairhelperInfotext->text);
-        
+
         $this->set('isMyProfile', $isMyProfile);
         $this->set('isEditMode', $isEditMode);
-        
-        
+
+
     }
-    
+
     public function profil($userUid=null)
     {
-        
+
         if ($userUid === null && !$this->AppAuth->user()) {
             throw new NotFoundException('not logged in and no userUid passed');
         }
-        
+
         if ($userUid !== null && !$this->AppAuth->isAdmin()) {
             throw new NotFoundException('only admins can change other profiles');
         }
-        
+
         // own profile
         $isMyProfile = false;
         if ($userUid === null && $this->AppAuth->user()) {
@@ -369,7 +369,7 @@ class UsersController extends AppController
             ];
             $isMyProfile = true;
         }
-        
+
         $user = $this->User->find('all', [
             'conditions' => [
                 'Users.uid' => $userUid,
@@ -382,17 +382,17 @@ class UsersController extends AppController
             ]
         ])->first();
         $user->revertPrivatizeData();
-        
+
         if (empty($user)) {
             throw new NotFoundException('user not found');
         }
-        
+
         $this->Skill = TableRegistry::getTableLocator()->get('Skills');
         $skillsForDropdown = $this->Skill->getForDropdown(true);
         $this->set('skillsForDropdown', $skillsForDropdown);
-        
+
         $this->_profil($user, $isMyProfile, true);
-        
+
         // profile from other user
         if (!$isMyProfile && $this->AppAuth->isAdmin()) {
             $metaTags = [
@@ -400,34 +400,34 @@ class UsersController extends AppController
             ];
         }
         $this->set('metaTags', $metaTags);
-        
+
     }
-    
+
     public function passwortAendern()
     {
-        
+
         $metaTags = [
             'title' => 'Passwort ändern'
         ];
         $this->set('metaTags', $metaTags);
-        
+
         $user = $this->User->newEntity([]);
         $this->set('user', $user);
-        
+
         if (empty($this->request->getData())) {
             return;
         }
-        
+
         $user = $this->User->newEntity([]);
         $this->set('user', $user);
-        
+
         $userUid = $this->AppAuth->getUserUid();
         $this->User->id = $userUid;
-        
+
         $user = $this->User->newEntity($this->request->getData(), [
             'validate' => 'ChangePassword'
         ]);
-        
+
         if (!($user->hasErrors())) {
             $user = $this->User->get($this->AppAuth->getUserUid());
             $user->revertPrivatizeData();
@@ -441,7 +441,7 @@ class UsersController extends AppController
         }
         $this->set('user', $user);
     }
-    
+
     public function forum()
     {
         if (Configure::read('AppConfig.fluxBbForumEnabled')) {
@@ -451,7 +451,7 @@ class UsersController extends AppController
             throw new NotFoundException();
         }
     }
-    
+
     public function login()
     {
         $metaTags = [
@@ -479,15 +479,15 @@ class UsersController extends AppController
             }
         }
     }
-    
+
     public function delete() {
         $metaTags = [
             'title' => 'Profil löschen'
         ];
         $this->set('metaTags', $metaTags);
-        
+
         $this->setReferer();
-        
+
         if (!empty($this->request->getData())) {
             $email = new Mailer('default');
             $email->viewBuilder()->setTemplate('user_delete_request');
@@ -503,30 +503,30 @@ class UsersController extends AppController
             $this->redirect('/');
         }
     }
-    
+
     public function activate() {
-        
+
         if (! isset($this->request->getParam('pass')['0'])) {
             $this->AppFlash->setFlashError(__('Invalid parameters.'));
             return;
         }
-        
+
         $conditions = [
             'Users.status >= ' . APP_OFF
         ];
-        
+
         $this->User = TableRegistry::getTableLocator()->get('Users');
         $user = $this->User->find('all', [
             'conditions' => array_merge($conditions, [
                 'Users.confirm' => $this->request->getParam('pass')['0']
             ])
         ])->first();
-        
+
         if (empty($user)) {
             $this->AppFlash->setFlashError(__('Invalid activation code.'));
             return;
         }
-        
+
         $user = $this->User->get($user->uid, [
             'conditions' => $conditions,
             'contain' => [
@@ -541,9 +541,9 @@ class UsersController extends AppController
         ];
         $entity = $this->User->patchEntity($user, $user2save, ['validate' => false]);
         $this->User->save($entity);
-        
+
         $this->AppAuth->setUser($user->toArray()); // toArray is important for forum to avoid __PHP_Incomplete_Class Object
-        
+
         // activate newsletter if existing
         $this->Newsletter = TableRegistry::getTableLocator()->get('Newsletters');
         $newsletter = $this->Newsletter->find('all', [
@@ -556,16 +556,16 @@ class UsersController extends AppController
             $this->loadComponent('CptNewsletter');
             $this->CptNewsletter->activateNewsletterAndSendNotification($newsletter);
         }
-        
+
         if (Configure::read('AppConfig.fluxBbForumEnabled')) {
             $this->FluxBb->insert($user->uid, $user->nick, $user->email);
         }
         $this->AppFlash->setFlashMessage('Dein Account ist nun aktiviert, du bist eingeloggt und kannst deine Profildaten ergänzen bzw. dein Passwort ändern.');
-        
+
         $this->redirect(Configure::read('AppConfig.htmlHelper')->urlUserHome());
-        
+
     }
-    
+
     public function registerRepairhelper() {
         $this->register(GROUPS_REPAIRHELPER);
         // assures rendering of success message on redirected page and NOT before and then not showing it
@@ -573,7 +573,7 @@ class UsersController extends AppController
             $this->render('register');
         }
     }
-    
+
     public function registerOrga() {
         $this->register(GROUPS_ORGA);
         // assures rendering of success message on redirected page and NOT before and then not showing it
@@ -581,28 +581,28 @@ class UsersController extends AppController
             $this->render('register');
         }
     }
-    
+
     public function register($userGroup=GROUPS_REPAIRHELPER)
     {
-        
+
         $this->Country = TableRegistry::getTableLocator()->get('Countries');
         $this->set('countries', $this->Country->getForDropdown());
-        
+
         $this->Category = TableRegistry::getTableLocator()->get('Categories');
         $this->set('categories', $this->Category->getForDropdown(APP_ON));
-        
+
         $this->set('groups', Configure::read('AppConfig.htmlHelper')->getUserGroupsForRegistration());
-        
+
         $user = $this->User->newEntity([]);
-        
+
         if (! empty($this->request->getData())) {
-            
+
             if (!empty($this->getRequest()->getData()) && ($this->getRequest()->getData('antiSpam') == '' || $this->getRequest()->getData('antiSpam') < 3)) {
                 $this->AppFlash->setFlashError('S-p-a-m-!');
                 $this->redirect('/');
                 return;
             }
-            
+
             if ($this->request->getData('Users.i_want_to_receive_the_newsletter')) {
                 $this->loadComponent('CptNewsletter');
                 $newsletter = $this->CptNewsletter->getConfirmedNewsletterForEmail($this->request->getData('Users.email'));
@@ -617,22 +617,22 @@ class UsersController extends AppController
                     $this->CptNewsletter->save($newsletter);
                 }
             }
-            
+
             $this->request = $this->request->withData('groups', ['_ids' => [$userGroup]]);
             $user = $this->User->patchEntity($user, $this->request->getData(), ['validate' => 'Registration']);
-            
+
             if (!($user->hasErrors())) {
-                
+
                 $user = $this->request->getData();
                 $user['Users']['confirm'] = md5(StringComponent::createRandomString());
                 $user['Users']['status'] = APP_OFF;
                 $user['Users']['private'] = $this->User->getDefaultPrivateFields();
                 $userEntity = $this->User->newEntity($user, ['validate' => 'Registration']);
-                
+
                 $userEntity = $this->stripTagsFromFields($userEntity, 'User');
                 $result = $this->User->save($userEntity);
                 $password = $this->User->setNewPassword($result->uid);
-                
+
                 $email = new Mailer('default');
                 $email->viewBuilder()->setTemplate('registration_successful');
                 $email->setSubject('Deine Registrierung bei '. Configure::read('AppConfig.htmlHelper')->getHostName())
@@ -640,13 +640,13 @@ class UsersController extends AppController
                     'password' => $password,
                     'data' => $user
                 ]);
-                
+
                 $email->setTo($user['Users']['email']);
-                
+
                 if ($email->send()) {
                     $this->AppFlash->setFlashMessage('Deine Registrierung war erfolgreich. Bitte überprüfe dein E-Mail-Konto um deine E-Mail-Adresse zu bestätigen.');
                 }
-                
+
                 $this->redirect(Configure::read('AppConfig.htmlHelper')->urlLogin());
             } else {
                 $this->AppFlash->setFlashError('Es sind Fehler aufgetreten.');
@@ -654,26 +654,26 @@ class UsersController extends AppController
                 $this->render('register');
             }
         }
-        
+
         $this->set('user', $user);
-        
+
         $metaTags = [
             'title' => 'Registrierung - Wähle deine Rolle: OrganisatorIn oder ReparaturhelferIn'
         ];
         $this->set('metaTags', $metaTags);
     }
-    
+
     public function logout()
     {
         if (Configure::read('AppConfig.fluxBbForumEnabled')) {
             $this->loadComponent('FluxBb');
             $this->FluxBb->logout($this->AppAuth->getUserUid());
         }
-        
+
         $this->AppFlash->setFlashMessage('Du hast dich erfolgreich ausgeloggt.');
         $this->redirect($this->AppAuth->logout());
     }
-    
+
 }
 
 ?>

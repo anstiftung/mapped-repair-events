@@ -1,5 +1,5 @@
 <?php
-	use App\Controller\Component\StringComponent;
+    use App\Controller\Component\StringComponent;
 
 if ($linkToProfile) {
     echo '<a class="public-user-wrapper" href="'.$this->Html->urlUserProfile($user->uid).'" title="Zum Profil von '.h($user->nick).'">';
@@ -9,33 +9,33 @@ if ($linkToProfile) {
 ?>
 
 <span class="left-wrapper">
-	<?php
-		echo $this->Html->getUserProfileImage($user);
-	?>
+    <?php
+        echo $this->Html->getUserProfileImage($user);
+    ?>
 </span>
 <span class="right-wrapper">
-	<?php
-	    echo '<span class="public-name-wrapper">';
-		    if ($user->firstname . ' ' . $user->lastname != $user->nick) {
-		       $name = [];
-		       if ($user->firstname != '') {
-       	           $name[] = $user->firstname;
-		       }
-   	           if ($user->lastname != '') {
-   	               $name[] = $user->lastname;
-   	           }
-   	           echo join(' ', $name);
-		    }
-	    echo '</span>';
-	    
-	    echo '<' . $headingTag . '>';
-		    echo  $user->nick;
-	    echo '</' . $headingTag . '>';
-	    
-	    if ($user->email) {
-	        echo StringComponent::hide_email($user->email, 'email', false);
-	    }
-	    
+    <?php
+        echo '<span class="public-name-wrapper">';
+            if ($user->firstname . ' ' . $user->lastname != $user->nick) {
+               $name = [];
+               if ($user->firstname != '') {
+                      $name[] = $user->firstname;
+               }
+                  if ($user->lastname != '') {
+                      $name[] = $user->lastname;
+                  }
+                  echo join(' ', $name);
+            }
+        echo '</span>';
+
+        echo '<' . $headingTag . '>';
+            echo  $user->nick;
+        echo '</' . $headingTag . '>';
+
+        if ($user->email) {
+            echo StringComponent::hide_email($user->email, 'email', false);
+        }
+
         echo '<span class="address-wrapper">';
             $addressString = '';
             if ($user->street != '') {

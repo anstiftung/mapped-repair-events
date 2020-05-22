@@ -1,5 +1,5 @@
 <?php
-    echo $this->element('list', 
+    echo $this->element('list',
        [
       'objects' => $objects
       ,'heading' => 'Laufzettel'

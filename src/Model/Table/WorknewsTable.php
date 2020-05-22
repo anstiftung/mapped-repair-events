@@ -8,7 +8,7 @@ use Cake\Validation\Validator;
 
 class WorknewsTable extends Table
 {
- 
+
     public function initialize(array $config): void
     {
         parent::initialize($config);
@@ -17,7 +17,7 @@ class WorknewsTable extends Table
             'foreignKey' => 'workshop_uid'
         ]);
     }
-    
+
     public function validationDefault(Validator $validator): \Cake\Validation\Validator
     {
         $validator->email('email', true, 'Bitte trage eine gültige E-Mail-Adresse ein.');
@@ -29,7 +29,7 @@ class WorknewsTable extends Table
         ]);
         return $validator;
     }
-    
+
     public function getSubscribers($workshopUid)
     {
         $subscribers = $this->find('all', [
@@ -43,7 +43,7 @@ class WorknewsTable extends Table
         ]);
         return $subscribers;
     }
-    
+
     public function sendNotifications($subscribers, $subject, $template, $workshop, $event)
     {
         $email = new Mailer('default');
@@ -59,6 +59,6 @@ class WorknewsTable extends Table
             $email->send();
         }
     }
-    
+
 }
 ?>

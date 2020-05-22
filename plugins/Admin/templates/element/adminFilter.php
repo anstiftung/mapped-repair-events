@@ -3,7 +3,7 @@
     <?php
     use Cake\Core\Configure;
 use Cake\Utility\Inflector;
-    
+
     echo $this->Form->control('key-standard', [
         'type' => 'select',
         'name' => 'key-standard',
@@ -32,7 +32,7 @@ use Cake\Utility\Inflector;
                 'value' => isset($this->request->getQueryParams()['val-opt-' . $i]) ? $this->request->getQueryParams()['val-opt-' . $i] : '',
                 'label' => ''
             ]);
-            
+
             echo $this->Form->hidden('key-opt-' . $i, [
                 'name' => 'key-opt-' . $i,
                 'value' => $optionalSearchForm['value']
@@ -40,7 +40,7 @@ use Cake\Utility\Inflector;
         }
     }
     ?>
-    
+
     <?php
     if ($searchStatus) {
         echo $this->Form->control('val-status', [
@@ -54,33 +54,33 @@ use Cake\Utility\Inflector;
             'value' => isset($this->request->getQueryParams()['val-status']) ? $this->request->getQueryParams()['val-status'] : '',
             'label' => 'Status'
         ]);
-        
+
         echo $this->Form->hidden('key-status', [
             'name' => 'key-status',
             'value' => Inflector::pluralize($objectClass) . '.status'
         ]);
     }
-    
+
     echo $this->Form->hidden('sort', [
         'name' => 'sort',
         'value' => isset($this->request->getQueryParams()['sort']) ? $this->request->getQueryParams()['sort'] : ''
     ]);
-    
+
     echo $this->Form->hidden('direction', [
         'name' => 'direction',
         'value' => isset($this->request->getQueryParams()['direction']) ? $this->request->getQueryParams()['direction'] : ''
     ]);
-    
+
     ?>
 
     <button type="submit" class="rounded">Suchen</button>
 
     <?php if (!empty($this->request->getQueryParams())) { ?>
         <button type="button" class="rounded gray"
-			onclick="document.location.href='/<?php echo strtolower($this->request->getParam('plugin')).'/'.strtolower($this->request->getParam('controller')).'/'.$this->request->getParam('action');?>';">
-		Filter zurücksetzen<span></span>
-	</button>
+            onclick="document.location.href='/<?php echo strtolower($this->request->getParam('plugin')).'/'.strtolower($this->request->getParam('controller')).'/'.$this->request->getParam('action');?>';">
+        Filter zurücksetzen<span></span>
+    </button>
     <?php } ?>
-    
+
 </form>
 <div class="sc"></div>

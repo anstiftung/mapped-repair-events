@@ -18,7 +18,7 @@ class InfoSheetsControllerTest extends AppTestCase
     use UserAssertionsTrait;
     use StringCompareTrait;
     use LogFileAssertionsTrait;
-    
+
     private $newInfoSheetData = [
         'visitor_gender' => 'm',
         'visitor_age' => '',
@@ -42,7 +42,7 @@ class InfoSheetsControllerTest extends AppTestCase
         'device_must_not_be_used_anymore' => '',
         'no_repair_reason_text' => ''
     ];
-    
+
     public function testAddInfoSheetValidations()
     {
         $this->loginAsOrga();
@@ -57,7 +57,7 @@ class InfoSheetsControllerTest extends AppTestCase
         $this->assertResponseContains('Bitte wähle eine Kategorie aus.');
         $this->assertResponseContains('Wurde der Fehler gefunden?');
     }
-    
+
     public function testAddInfoSheetOk()
     {
         $this->loginAsOrga();
@@ -73,7 +73,7 @@ class InfoSheetsControllerTest extends AppTestCase
             ]
         );
         $this->assertResponseNotContains('error');
-        
+
         $this->InfoSheet = TableRegistry::getTableLocator()->get('InfoSheets');
         $infoSheets = $this->InfoSheet->find('all', [
             'contain' => [
@@ -87,13 +87,13 @@ class InfoSheetsControllerTest extends AppTestCase
         $this->assertEquals($infoSheets[0]->defect_description, $this->newInfoSheetData['defect_description']);
         $this->assertEquals($infoSheets[0]->owner, 1);
     }
-    
+
     public function testDeleteInfoSheetAsOrga()
     {
         $this->loginAsOrga();
         $this->get(Configure::read('AppConfig.htmlHelper')->urlInfoSheetDelete(7));
         $this->assertFlashMessage('Der Laufzettel wurde erfolgreich gelöscht.');
-        
+
         $this->InfoSheet = TableRegistry::getTableLocator()->get('InfoSheets');
         $infoSheet = $this->InfoSheet->find('all', [
             'conditions' => [
@@ -102,7 +102,7 @@ class InfoSheetsControllerTest extends AppTestCase
         ])->first();
         $this->assertEquals($infoSheet->status, APP_DELETED);
     }
-    
+
     public function testDownloadAsOrga()
     {
         $this->loginAsOrga();

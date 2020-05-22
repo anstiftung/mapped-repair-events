@@ -39,42 +39,42 @@ class PagesController extends AppController
 
     public function detail()
     {
-        
+
         if (! isset($this->request->getParam('pass')['0'])) {
             throw new NotFoundException('page not found');
         }
         $url = $this->request->getParam('pass')['0'];
-        
+
         if ($url == '')
             throw new NotFoundException('page not found');
-        
+
         $this->Page = TableRegistry::getTableLocator()->get('Pages');
         $conditions = array_merge([
             'Pages.url' => $url,
             'Pages.status' => APP_ON
         ], $this->getPreviewConditions('Pages', $url));
-        
+
         $page = $this->Page->find('all', [
             'conditions' => $conditions,
             'contain' => [
                 'Metatags'
             ]
         ])->first();
-        
+
         if (empty($page))
             throw new NotFoundException('page empty');
-        
+
         $this->doPreviewChecks($page->status, Configure::read('AppConfig.htmlHelper')->urlPageDetail($page->url));
-        
+
         $this->setContext($page);
-        
+
         $metaTags = [
             'title' => $page->name
         ];
         $metaTags = $this->mergeCustomMetaTags($metaTags, $page);
         $this->set('metaTags', $metaTags);
-        
+
         $this->set('page', $page);
-        
+
     }
 }

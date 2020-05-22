@@ -14,18 +14,18 @@ h2 {
     font-size: 18px;
 }
 h2 a {
-	text-decoration: none;
+    text-decoration: none;
 }
 h2 a:hover {
-	color: #727374;
+    color: #727374;
 }
 .input,
 span {
-	float: left;
-	margin-right: 5px;
+    float: left;
+    margin-right: 5px;
 }
 span {
-	line-height: 26px;
+    line-height: 26px;
 }
 .input input {
     border-radius: 3px;
@@ -42,12 +42,12 @@ span {
 }
 
 #chartCategories {
-	margin-top: 10px;
-	float: left;
+    margin-top: 10px;
+    float: left;
 }
 p.info {
-	clear: both;
-	float: left;
+    clear: both;
+    float: left;
 }
 .input.select select {
     padding: 5px;
@@ -64,10 +64,10 @@ p.info {
     width: 100%;
 }
 .material-footprint-wrapper span {
-	float: none;
+    float: none;
 }
 .material-footprint-wrapper .img-wrapper {
-	position: relative;
+    position: relative;
 }
 .material-footprint-wrapper b {
     position: absolute;
@@ -79,18 +79,18 @@ p.info {
     color: #000;
 }
 .material-footprint-wrapper.small b {
-	top: -7px;
+    top: -7px;
 }
 .material-footprint-wrapper span.info-text {
-	margin-top: 10px;
-	line-height: 16px;
+    margin-top: 10px;
+    line-height: 16px;
 }
 .material-footprint-wrapper img {
     width: 80px;
     margin-bottom: -5px;
 }
 .material-footprint-wrapper .amount-persons-per-year {
-	display: none;
+    display: none;
 }
 
 .carbon-footprint-wrapper {
@@ -119,7 +119,7 @@ p.info {
     line-height: 25px;
 }
 .carbon-footprint-wrapper.small span.info-text {
-	line-height: 16px;
+    line-height: 16px;
 }
 
 .carbon-footprint-wrapper.small {
@@ -133,8 +133,8 @@ p.info {
     height: 12px;
 }
 .carbon-footprint-wrapper.small span.info-text {
-	display: block;
-	clear: both;
+    display: block;
+    clear: both;
     line-height: 17px;
     margin-top: -5px;
     text-align: center;
@@ -142,5 +142,5 @@ p.info {
 
 /* would only be needed for iphone */
 .chartjs-render-monitor {
-	width: 100% ! important;
+    width: 100% ! important;
 }

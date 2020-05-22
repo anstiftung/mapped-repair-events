@@ -9,39 +9,39 @@ use Cake\ORM\TableRegistry;
 
 class CptNewsletterComponent extends AppComponent
 {
-    
+
     private $confirmationCode = '';
     private $unsubscribeCode = '';
-    
+
     public function __construct(ComponentRegistry $registry, array $config = [])
     {
         parent::__construct($registry, $config);
         $this->Newsletter = TableRegistry::getTableLocator()->get('Newsletters');
     }
-    
+
     public function setConfirmationCode($confirmationCode)
     {
         $this->confirmationCode = $confirmationCode;
     }
-    
+
     public function setUnsubscribeCode($unsubscribeCode)
     {
         $this->unsubscribeCode = $unsubscribeCode;
     }
-    
+
     public function getUnsubscribeCode() {
         return $this->unsubscribeCode;
     }
-    
+
     public function getConfirmationCode() {
         return $this->confirmationCode;
     }
-    
+
     public function save($data)
     {
         return $this->Newsletter->save($data);
     }
-    
+
     public function getConfirmedNewsletterForEmail($email)
     {
         $newsletter = $this->Newsletter->find('all', [
@@ -52,7 +52,7 @@ class CptNewsletterComponent extends AppComponent
         ])->first();
         return $newsletter;
     }
-    
+
     public function prepareEntity($data)
     {
         $this->setConfirmationCode(md5(StringComponent::createRandomString()));
@@ -68,7 +68,7 @@ class CptNewsletterComponent extends AppComponent
         $newsletter = $this->Newsletter->newEntity($mergedData);
         return $newsletter;
     }
-    
+
     public function activateNewsletterAndSendNotification($newsletter)
     {
         $this->Newsletter->save(
@@ -80,18 +80,18 @@ class CptNewsletterComponent extends AppComponent
                 ]
             )
         );
-        
+
         $email = new Mailer('default');
         $email->viewBuilder()->setTemplate('activated_newsletter_notification');
         $email->setSubject('Neue E-Mailadresse eingetragen')
         ->setViewVars([
             'newsletter' => $newsletter
         ])->setTo(Configure::read('AppConfig.notificationMailAddress'));
-        
+
         $email->send();
-        
+
     }
-    
+
 }
 
 ?>

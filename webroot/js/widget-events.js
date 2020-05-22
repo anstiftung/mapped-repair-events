@@ -1,7 +1,7 @@
 MappedRepairEvents.WidgetEvents = {
-        
+
     loadEventsForWorkshop : function(workshopUid, num) {
-        
+
         $.ajax('/workshops/ajaxGetAllWorkshopsForMap?workshopUid=' + workshopUid).done(
             function(data) {
                 var eventHtml = '';
@@ -28,13 +28,13 @@ MappedRepairEvents.WidgetEvents = {
                 MappedRepairEvents.WidgetEvents.initNavigation(j, num);
             }
         );
-        
+
     },
 
     initNavigation : function(itemCount, num) {
-        
+
         if (itemCount > num) {
-            
+
             $('#next').show();
             $('#next').on('click', function() {
                 $('#prev').show();
@@ -57,7 +57,7 @@ MappedRepairEvents.WidgetEvents = {
             });
 
         }
-        
+
         if ((itemCount > 0 && itemCount > num) || itemCount == num) {
             $('.item').slice(0, num).show();
         }

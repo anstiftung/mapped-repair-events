@@ -11,11 +11,11 @@ class EventsTable extends AppTable
 {
 
     public $name_de = 'Termin';
-    
+
     public $allowedBasicHtmlFields = [
         'eventbeschreibung'
     ];
-    
+
     public function initialize(array $config): void
     {
         parent::initialize($config);
@@ -31,7 +31,7 @@ class EventsTable extends AppTable
             'targetForeignKey' => 'category_id'
         ]);
     }
-    
+
     public function validationDefault(Validator $validator): \Cake\Validation\Validator
     {
         $validator = $this->getNumberRangeValidator($validator, 'lat', -90, 90);
@@ -59,7 +59,7 @@ class EventsTable extends AppTable
         ]);
         return $validator;
     }
-    
+
     public function getKeywordSearchConditions($keyword, $negate) {
         return function ($exp, $query) use ($keyword, $negate) {
             $result = $exp->or_([
@@ -73,7 +73,7 @@ class EventsTable extends AppTable
             return $result;
         };
     }
-    
+
     public function getTimeRangeCondition($timeRange, $negate) {
         return function ($exp, $query) use ($timeRange, $negate) {
             if ($timeRange == '30days') {
@@ -91,7 +91,7 @@ class EventsTable extends AppTable
             return $result;
         };
     }
-    
+
     public function getListConditions() {
         return [
             'Events.status' => APP_ON,
@@ -99,7 +99,7 @@ class EventsTable extends AppTable
             'DATE(Events.datumstart) >= DATE(NOW())'
         ];
     }
-    
+
     public function getListFields() {
         return [
             'Events.uid',
@@ -122,38 +122,38 @@ class EventsTable extends AppTable
             'directurl' => "CONCAT(Workshops.url, '?event=', Events.uid, ',', Events.datumstart)"
         ];
     }
-    
+
     public function getListOrder() {
         return [
             'Events.datumstart' => 'ASC',
             'Events.uhrzeitstart' => 'ASC'
         ];
     }
-    
+
     public function findAll(Query $query, array $options): Query
     {
         return $query->formatResults(function (\Cake\Collection\CollectionInterface $results) {
-            
+
             return $results->map(function ($row) {
-                
+
                 if ($row['datumstart']) {
                     $row['datumstart_formatted'] = $row['datumstart']->i18nFormat(Configure::read('DateFormat.Database'));
                 }
-                
+
                 if ($row['uhrzeitstart']) {
                     $row['uhrzeitstart_formatted'] = $row['uhrzeitstart']->i18nFormat(Configure::read('DateFormat.de.TimeShort'));
                 }
                 if ($row['uhrzeitend']) {
                     $row['uhrzeitend_formatted'] = $row['uhrzeitend']->i18nFormat(Configure::read('DateFormat.de.TimeShort'));
                 }
-                
+
                 return $row;
-                
+
             });
-            
+
         });
     }
-    
+
 }
 
 ?>

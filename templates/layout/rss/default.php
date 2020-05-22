@@ -1,4 +1,4 @@
-<?php 
+<?php
 use Feed\View\RssView;
 
 if (!isset($channelData)) {

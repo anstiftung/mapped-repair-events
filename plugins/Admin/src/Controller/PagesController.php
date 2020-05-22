@@ -32,7 +32,7 @@ class PagesController extends AdminAppController
         if (empty($uid)) {
             throw new NotFoundException;
         }
-        
+
         $page = $this->Page->find('all', [
             'conditions' => [
                 'Pages.uid' => $uid,
@@ -42,19 +42,19 @@ class PagesController extends AdminAppController
                 'Metatags'
             ]
         ])->first();
-        
+
         if (empty($page)) {
             throw new NotFoundException;
         }
-        
+
         $this->set('pagesForSelect', $this->Page->getForSelect($page->uid));
         $this->set('uid', $page->uid);
-        
+
         $this->setReferer();
         $this->setIsCurrentlyUpdated($uid);
-        
+
         if (!empty($this->request->getData())) {
-            
+
             $patchedEntity = $this->Page->getPatchedEntityForAdminEdit($page, $this->request->getData(), $this->useDefaultValidation);
             if (!($patchedEntity->hasErrors())) {
                 $patchedEntity = $this->patchEntityWithCurrentlyUpdatedFields($patchedEntity);
@@ -63,7 +63,7 @@ class PagesController extends AdminAppController
                 $page = $patchedEntity;
             }
         }
-        
+
         $this->set('page', $page);
     }
 
@@ -74,7 +74,7 @@ class PagesController extends AdminAppController
             'Pages.status > ' . APP_DELETED
         ];
         $conditions = array_merge($this->conditions, $conditions);
-        
+
         $query = $this->Page->find('all', [
             'conditions' => $conditions,
             'contain' => [
@@ -98,4 +98,3 @@ class PagesController extends AdminAppController
         $this->set('objects', $objects->toArray());
     }
 }
-    

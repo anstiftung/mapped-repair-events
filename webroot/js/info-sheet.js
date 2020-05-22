@@ -1,7 +1,7 @@
 MappedRepairEvents.InfoSheet = {
-    
+
     addCustomHtmlToSelect2EmptyResults : function(selectElement, selectorClass, text) {
-        
+
         var html = 'Keine Übereinstimmungen gefunden.<br />';
         html += '<a class="button ' + selectorClass.replace(/\./, '') + '" href="javascript:void(0);">';
         html += text + '</a>';
@@ -15,15 +15,15 @@ MappedRepairEvents.InfoSheet = {
                 return markup;
             }
         });
-        
+
         // class for button does not yet exist, so use $('body').on-syntax to add click event for button
         $('body').on('click', selectorClass, function() {
             selectElement.val(-1).trigger('change');
             selectElement.select2('close');
         });
-        
+
     },
-    
+
     initDependentRadioButtons : function() {
         this.bindDependentRadioButtonOnClick('.defect_found', 'infosheets-defect-found-1', '.defect_found_reason', '.repair_postponed_reason, .no_repair_reason, .no_repair_reason_text_wrapper');
         this.bindDependentRadioButtonOnClick('.defect_found_reason', 'infosheets-defect-found-reason-2', '.repair_postponed_reason', '.no_repair_reason_text_wrapper');
@@ -37,13 +37,13 @@ MappedRepairEvents.InfoSheet = {
                 $(selectorToShow).show('slow');
             } else {
                 $(selectorToShow).hide();
-                $(selectorToHideIfNotSelected).hide();                
+                $(selectorToHideIfNotSelected).hide();
             }
         });
         // init edit forms
         $(wrapperClass + ':visible').find('input[checked="checked"]').trigger('click');
     }
-    
+
     ,bindAddDropdownOnChange : function(selectElement, detailSelector) {
         selectElement.on('change', function() {
             var selected = $(this).find(':selected');
@@ -57,9 +57,9 @@ MappedRepairEvents.InfoSheet = {
         });
         selectElement.trigger('change'); // if dropdown is preselected
     }
-    
+
     ,bindTogglePowerSupplyOnChange : function(selectElement, detailSelector) {
-        
+
         var allowedMainCategoryNames = [
             'Elektro Sonstiges',
             'Haushaltsgeräte',
@@ -67,9 +67,9 @@ MappedRepairEvents.InfoSheet = {
             'Computer',
             'Handy / Smartphone / Tablet'
         ];
-        
+
         selectElement.on('change', function() {
-            
+
             var selected = $(this).find(':selected');
             var mainCategoryName;
             if ($(this).attr('id') == 'infosheets-new-subcategory-parent-id') {
@@ -80,18 +80,18 @@ MappedRepairEvents.InfoSheet = {
             } else {
                 mainCategoryName = selected.closest('optgroup').attr('label');
             }
-            
+
             var detailFormFields = $(this).closest('fieldset').find(detailSelector);
             if ($.inArray(mainCategoryName, allowedMainCategoryNames) !== -1) {
                 detailFormFields.show();
             } else {
                 detailFormFields.hide();
             }
-            
+
         });
-        
+
         selectElement.trigger('change'); // if dropdown is preselected
-        
+
     }
 
     ,initSubCategoryDropdown : function(container) {
@@ -104,7 +104,7 @@ MappedRepairEvents.InfoSheet = {
         this.bindAddDropdownOnChange(dropdown, '.add-subcategory');
         this.bindTogglePowerSupplyOnChange(dropdown, '.power_supply');
     }
-    
+
     ,initMainCategoryDropdown : function(container) {
         this.bindTogglePowerSupplyOnChange($(container), '.power_supply');
     }
@@ -118,5 +118,5 @@ MappedRepairEvents.InfoSheet = {
         );
         this.bindAddDropdownOnChange(dropdown, '.add-brand');
     }
-        
+
 };

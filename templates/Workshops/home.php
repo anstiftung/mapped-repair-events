@@ -15,14 +15,14 @@ $tl_search_input_field = __('Map search field preentered');
 <div id="workshops-home">
 
     <?php
-        $this->element('addScript', ['script' => 
+        $this->element('addScript', ['script' =>
             JS_NAMESPACE.".Helper.initFindEventsForm('body.workshops.home .find-events-box');
         "]);
         if (!$this->request->getSession()->read('isMobile')) {
             $this->element('addScript', ['script' => "
                 var mapObject = new ".JS_NAMESPACE.".Map([], 'search', false, {x:51.4, y:14.7});
                 mapObject.map.on('movestart', function() {
-            	   mapObject.hideHomeImageOverlay();
+                   mapObject.hideHomeImageOverlay();
                 });
             "]);
         }
@@ -30,15 +30,15 @@ $tl_search_input_field = __('Map search field preentered');
 
     <?php if (!$this->request->getSession()->read('isMobile')) { ?>
         <div class="left calendar">
-        	<?php echo $this->element('calendar'); ?>
+            <?php echo $this->element('calendar'); ?>
         </div>
     <?php } ?>
 
     <div class="right" style="margin-top: -3px;">
 
-	    <?php if (!$this->request->getSession()->read('isMobile')) { ?>
+        <?php if (!$this->request->getSession()->read('isMobile')) { ?>
 
-        	<div class="box filter">
+            <div class="box filter">
                 <?php
                     echo '<span class="wss">' . __('Location') . '</span>';
                     echo $this->Form->control('workshopSearchAddress', [
@@ -49,47 +49,47 @@ $tl_search_input_field = __('Map search field preentered');
                         'id' => 'workshopSearchAddress'
                     ]);
                 ?>
-        		<button id="reset" type="button" class="button gray reset"><?php echo __('Clear'); ?></button>
-        		<button id="search" type="button" class="button submit"><?php echo __('Search'); ?></button>
-        	</div>
+                <button id="reset" type="button" class="button gray reset"><?php echo __('Clear'); ?></button>
+                <button id="search" type="button" class="button submit"><?php echo __('Search'); ?></button>
+            </div>
 
-        	<div class="sc"></div>
-        	<div id="flashMessage"></div>
-        	<div class="sc"></div>
+            <div class="sc"></div>
+            <div id="flashMessage"></div>
+            <div class="sc"></div>
 
-        	<div id="mapContainer">
-        		<div id="map">
-        			<div id="workshopSearchLoader"></div>
-        		</div>
-        		<img id="mapHomeInfoBox" src="/img/home/willkommen-map.jpg" width="239" height="130" />
-        	</div>
+            <div id="mapContainer">
+                <div id="map">
+                    <div id="workshopSearchLoader"></div>
+                </div>
+                <img id="mapHomeInfoBox" src="/img/home/willkommen-map.jpg" width="239" height="130" />
+            </div>
 
-        	<br />
-        	<div style="float: right; margin: 5px 5px 0px 0px">
-        		<a title="Landkarte Repair Cafes" href="/widgets/integration/#2">
-        			Diese Karte auf deiner Webseite einfügen
-        		</a>
-        	</div>
+            <br />
+            <div style="float: right; margin: 5px 5px 0px 0px">
+                <a title="Landkarte Repair Cafes" href="/widgets/integration/#2">
+                    Diese Karte auf deiner Webseite einfügen
+                </a>
+            </div>
 
         <?php } ?>
 
-    	<div class="sc"></div>
+        <div class="sc"></div>
 
-    	<?php
-        	if ($this->request->getSession()->read('isMobile')) {
-        	    $this->element('addScript', ['script' => 
-        	        JS_NAMESPACE.".MobileFrontend.disableHoverOnSelector('body.workshops.home .find-events-box');
+        <?php
+            if ($this->request->getSession()->read('isMobile')) {
+                $this->element('addScript', ['script' =>
+                    JS_NAMESPACE.".MobileFrontend.disableHoverOnSelector('body.workshops.home .find-events-box');
                 "]);
-        	}
-    	?>
-    	<div class="find-events-box">
-    		<div class="inner">
-        		<h3><?php echo __('Find nearby repair events.'); ?></h3>
-           		<label><?php echo __('Zip or city'); ?>:</label>
-           		<input type="text" />
-           		<a class="button violet" href="javascript:void(0);"><?php echo __('Search'); ?></a>
-           	</div>
-    	</div>
+            }
+        ?>
+        <div class="find-events-box">
+            <div class="inner">
+                <h3><?php echo __('Find nearby repair events.'); ?></h3>
+                   <label><?php echo __('Zip or city'); ?>:</label>
+                   <input type="text" />
+                   <a class="button violet" href="javascript:void(0);"><?php echo __('Search'); ?></a>
+               </div>
+        </div>
 
     </div>
 
@@ -97,67 +97,67 @@ $tl_search_input_field = __('Map search field preentered');
 
     <?php
         if ($this->request->getSession()->read('isMobile')) {
-            $this->element('addScript', ['script' => 
+            $this->element('addScript', ['script' =>
                 JS_NAMESPACE.".MobileFrontend.initAdaptTeaserButtonSizeListener('body.workshops.home .teaser-buttons a', 2);
             "]);
         }
     ?>
     <div class="teaser-buttons">
-    	<?php
+        <?php
             if ($this->request->getSession()->read('isMobile')) {
-        	    $this->element('addScript', ['script' => 
-        	        JS_NAMESPACE.".MobileFrontend.disableHoverOnSelector('body.workshops.home .teaser-buttons a');
+                $this->element('addScript', ['script' =>
+                    JS_NAMESPACE.".MobileFrontend.disableHoverOnSelector('body.workshops.home .teaser-buttons a');
                 "]);
             }
             echo $this->element('home/teaserButtons');
-    	?>
+        ?>
     </div>
 
     <div id="teaser-buttons-dotted-line-bottom" class="dotted-line-full-width"></div>
 
     <div class="left">
-    	<?php
-            $this->element('addScript', ['script' => 
+        <?php
+            $this->element('addScript', ['script' =>
                 JS_NAMESPACE.".Helper.initSlider('body.workshops.home .swiper-container');
             "]);
         ?>
         <div class="swiper-container">
-        	<div class="swiper-wrapper">
+            <div class="swiper-wrapper">
                 <?php echo $this->element('home/slides'); ?>
             </div>
             <div class="swiper-pagination"></div>
-    	</div>
+        </div>
     </div>
 
     <div class="right">
-    	<div class="news-box">
-    		<div class="inner">
-        		<a class="header" href="/neuigkeiten/"><?php echo __('Latest posts'); ?></a>
-        		<?php $i = 0; ?>
-        		<?php foreach($latestPosts as $post) { ?>
-        			<div class="number"><?php $i++;echo $i;?>.</div>
-        			<a class="row" href="<?php echo $this->Html->urlPostDetail($post->url); ?>">
-        				<span>
-        					<b><?php echo $post->name; ?></b><br />
-                        	<?php
-                            	$textLength = 290;
+        <div class="news-box">
+            <div class="inner">
+                <a class="header" href="/neuigkeiten/"><?php echo __('Latest posts'); ?></a>
+                <?php $i = 0; ?>
+                <?php foreach($latestPosts as $post) { ?>
+                    <div class="number"><?php $i++;echo $i;?>.</div>
+                    <a class="row" href="<?php echo $this->Html->urlPostDetail($post->url); ?>">
+                        <span>
+                            <b><?php echo $post->name; ?></b><br />
+                            <?php
+                                $textLength = 290;
                                 $postText = StringComponent::prepareTextPreviewForLinkedBoxes($post->text);
                                 $postText = StringComponent::makeNoFollow($postText);
                                 $postText = StringComponent::cutHtmlString($postText, $textLength);
                                 $postText = Text::truncate($postText, $textLength, ['ellipsis' => '... <span class="read-more">weiterlesen</span>']);
                                 echo $postText;
-        	       			?>
-        				</span>
-        			</a>
-        		<?php } ?>
-        	</div>
-    	</div>
+                               ?>
+                        </span>
+                    </a>
+                <?php } ?>
+            </div>
+        </div>
     </div>
     <div class="sc"></div>
 
     <?php
         if ($this->request->getSession()->read('isMobile')) {
-            $this->element('addScript', ['script' => 
+            $this->element('addScript', ['script' =>
                 JS_NAMESPACE.".MobileFrontend.adaptTeaserButtonSize('body.workshops.home .about-us-box a', 1);
             "]);
         }
@@ -166,25 +166,25 @@ $tl_search_input_field = __('Map search field preentered');
     <?php echo $this->element('home/aboutUsBox'); ?>
 
     <div class="right">
-    	<?php
-    	    $this->element('addScript', ['script' =>
-    	       JS_NAMESPACE.".Helper.adaptHeightOfWorkshopsBoxLogo('body.workshops.home .workshops-box', '".$this->request->getSession()->read('isMobile')."');
+        <?php
+            $this->element('addScript', ['script' =>
+               JS_NAMESPACE.".Helper.adaptHeightOfWorkshopsBoxLogo('body.workshops.home .workshops-box', '".$this->request->getSession()->read('isMobile')."');
             "]);
-	    ?>
+        ?>
         <div class="workshops-box">
-       		<a class="header" href="/orte/"><?php echo __('Initiatives from the network'); ?><span><?php echo __('Show all'); ?></span></a>
-    		<?php foreach($latestWorkshops as $workshop) { ?>
-    			<a class="row" href="<?php echo $this->Html->urlWorkshopDetail($workshop->url); ?>">
-					<span class="inner">
-    					<img alt="<?php echo h($workshop->name); ?>"
+               <a class="header" href="/orte/"><?php echo __('Initiatives from the network'); ?><span><?php echo __('Show all'); ?></span></a>
+            <?php foreach($latestWorkshops as $workshop) { ?>
+                <a class="row" href="<?php echo $this->Html->urlWorkshopDetail($workshop->url); ?>">
+                    <span class="inner">
+                        <img alt="<?php echo h($workshop->name); ?>"
                              src="<?php echo $this->Html->getThumbs100Image($workshop->image, 'workshops'); ?>" />
                         <span class="info">
-    	                    <span class="name"><?php echo $workshop->name; ?></span><br />
-    						<span class="address"><?php echo $workshop->street . ', ' .$workshop->zip . ' ' . $workshop->city; ?></span>
-    					</span>
-    				</span>
-    			</a>
-    		<?php } ?>
+                            <span class="name"><?php echo $workshop->name; ?></span><br />
+                            <span class="address"><?php echo $workshop->street . ', ' .$workshop->zip . ' ' . $workshop->city; ?></span>
+                        </span>
+                    </span>
+                </a>
+            <?php } ?>
         </div>
     </div>
 

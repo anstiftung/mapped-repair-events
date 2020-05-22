@@ -7,7 +7,7 @@ use Cake\TestSuite\Fixture\TestFixture;
 class BlogsFixture extends TestFixture
 {
     public $import = ['table' => 'blogs', 'connection' => 'default'];
-    
+
     public $records = [
         [
             'id' => 1,
@@ -15,6 +15,6 @@ class BlogsFixture extends TestFixture
             'url' => 'neuigkeiten'
         ]
     ];
-    
+
 }
 ?>

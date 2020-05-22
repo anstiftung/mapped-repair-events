@@ -3,7 +3,7 @@ use Cake\Core\Configure;
 use Cake\Utility\Inflector;
 ?>
 <!DOCTYPE html>
-<html lang="de">  
+<html lang="de">
     <head>
     <meta charset="utf-8" />
     <?php
@@ -29,11 +29,11 @@ use Cake\Utility\Inflector;
     <?php
         echo $this->Html->meta('favicon.ico','img/favicon.ico',['type' => 'icon']);
     ?>
-  
+
     <?php
         echo $this->AssetCompress->css('_admin', array('raw' => Configure::read('debug')));
     ?>
-    
+
     <script type="text/javascript">
         if(!window.<?php echo JS_NAMESPACE; ?>) { <?php echo JS_NAMESPACE; ?> = window.<?php echo JS_NAMESPACE; ?> = {}; }
     </script>
@@ -41,15 +41,15 @@ use Cake\Utility\Inflector;
 </head>
 
 <body class="<?php echo Inflector::tableize($this->name) . ' ' . $this->request->getParam('action'); ?>">
-  
+
   <div id="wrapper">
-  
+
     <div id="header">
       <?php echo $this->element('core/header'); ?>
       <?php echo $this->element('core/loginBox'); ?>
       <div class="sc"></div>
     </div>
-  
+
     <div id="content">
         <?php
           echo $this->Flash->render();
@@ -57,26 +57,26 @@ use Cake\Utility\Inflector;
           echo $this->fetch('content');
       ?>
     </div>
-    
-    <div class="sc"></div>    
-  
+
+    <div class="sc"></div>
+
   </div>
-  
+
   <div class="sc"></div>
-    
+
   <?php
     echo $this->AssetCompress->script('_admin', array('raw' => Configure::read('debug')));
-      
+
     echo $this->Html->script('/node_modules/ckeditor4/ckeditor');
     echo $this->Html->script('/node_modules/ckeditor4/adapters/jquery');
-    
+
     echo $this->Html->scriptBlock(
         $this->Html->wrapJavascriptBlock(
             JS_NAMESPACE.".Admin.init();"
         ),
         ['inline' => true]
     );
-      
+
     $scripts = $this->fetch('script');
     if ($scripts != '') {
         echo $this->Html->wrapJavascriptBlock($scripts);

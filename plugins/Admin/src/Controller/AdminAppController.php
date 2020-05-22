@@ -25,9 +25,9 @@ class AdminAppController extends AppController
     public $searchUid = true;
 
     public $searchStatus = true;
-    
+
     public $conditions = [];
-    
+
     public $matchings = [];
 
     public function isAuthorized($user)
@@ -41,7 +41,7 @@ class AdminAppController extends AppController
     public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);
-        
+
         $title = $this->name;
         if ($this->request->getParam('action') != 'index') {
             $title .= ' | ' . Inflector::camelize($this->request->getParam('action'));
@@ -50,7 +50,7 @@ class AdminAppController extends AppController
             'title' => $title
         ];
         $this->set('metaTags', $metaTags);
-        
+
         if ($this->searchText) {
             $this->searchOptions[$this->pluralizedModelName . '.text'] = [
                 'name' => $this->pluralizedModelName . '.text',
@@ -69,7 +69,7 @@ class AdminAppController extends AppController
                 'searchType' => 'search'
             ];
         }
-        
+
         if ($this->searchStatus) {
             $this->searchOptions[$this->pluralizedModelName . '.status'] = [
                 'name' => $this->pluralizedModelName . '.status',
@@ -79,31 +79,31 @@ class AdminAppController extends AppController
             $this->generateSearchConditions('status');
         }
         $this->searchOptions = array_reverse($this->searchOptions);
-        
+
         $this->generateSearchConditions('standard');
-        
+
         $this->prepareSearchOptionsForDropdown();
     }
 
     public function index()
     {
-        
+
         $this->primaryKey = $this->{$this->pluralizedModelName}->getPrimaryKey();
-        
+
         $this->paginate['order'] = [
             $this->pluralizedModelName . '.updated' => 'DESC'
         ];
         $this->conditions[] = $this->pluralizedModelName . '.status > ' . APP_DELETED;
-        
+
         $this->set('objectClass', Inflector::classify($this->name));
-        
+
         $this->set('searchStatus', $this->searchStatus);
     }
 
     protected function generateSearchConditions($searchFieldKey)
     {
         $queryParams = $this->request->getQueryParams();
-        
+
         if (isset($queryParams['val-' . $searchFieldKey])) {
             $filterValue = $queryParams['val-' . $searchFieldKey];
             if ($filterValue == '') {
@@ -132,10 +132,10 @@ class AdminAppController extends AppController
             }
         }
     }
-    
+
     protected function addMatchingsToQuery($query)
     {
-        
+
         foreach($this->matchings as $matching) {
             $query->matching($matching['association'], function(Query $q) use ($matching) {
                 return $q->where($matching['condition']);
@@ -149,12 +149,12 @@ class AdminAppController extends AppController
      */
     protected function saveObject($entity, $useDefaultValidation = true)
     {
-        
+
         //header('X-XSS-Protection:0');
         $modelName = $this->modelName;
-        
+
         $entity = $this->stripTagsFromFields($entity, $modelName);
-        
+
         if ($this->$modelName->save($entity)) {
             $this->AppFlash->setFlashMessage($this->$modelName->name_de . ' erfolgreich gespeichert.');
             // votings und orga pads (object_groups) können die navi verändern => navi für uneingeloggte user löschen (die für eingeloggte wird eh nur 1 sec gecacht)
@@ -164,7 +164,7 @@ class AdminAppController extends AppController
             $this->AppFlash->setFlashError($this->$modelName->name_de . ' wurde <b>nicht</b> gespeichert. Bitte überprüfe das Formular.');
         }
     }
-    
+
     protected function addSearchOptions($searchOptions)
     {
         $searchOptions = array_reverse($searchOptions);
@@ -186,8 +186,7 @@ class AdminAppController extends AppController
         }
         $this->set('searchOptionsForDropdown', $searchOptionsForDropdown);
     }
-    
-    
+
+
 
 }
- 

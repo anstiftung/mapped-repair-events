@@ -9,7 +9,7 @@ MappedRepairEvents.Detect = {
             }, 200)
         );
     }
-    
+
     ,setIsMobile : function(callback) {
         MappedRepairEvents.Helper.ajaxCall(
             '/detects/setIsMobile',

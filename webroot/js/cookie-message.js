@@ -43,7 +43,7 @@
             infoUrl: "#",                                               // More Info button URL
             cookieExpire: 180                                       // Cookie expire time (days)
         };
-        
+
         options = $.extend(defaults, options);
 
         var cookieName  = location.host;
@@ -128,7 +128,7 @@
             $("#band-cookies").slideToggle();
         });
 
-  
+
   };
 
 

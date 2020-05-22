@@ -19,11 +19,11 @@ class RootsTable extends Table
     public function getType($uid)
     {
         $data = $this->get($uid);
-        
+
         if (! $data) {
             throw new NotFoundException('Object not found! uid: ' . $uid);
         }
-        
+
         return $data->object_type;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-$this->element('addScript', ['script' => 
+$this->element('addScript', ['script' =>
     JS_NAMESPACE.".Helper.bindApplyForCollaborationButtonUser();
 "]);
 echo $this->element('jqueryTabsWithoutAjax', [
@@ -10,8 +10,8 @@ echo $this->element('jqueryTabsWithoutAjax', [
 ?>
 
 <div class="profile ui-tabs custom-ui-tabs ui-widget-content">
-	<div class="ui-tabs-panel">
-		<?php
+    <div class="ui-tabs-panel">
+        <?php
           echo $this->element('apply', [
             'heading' => 'Aktive Mitgliedschaften',
             'currentRelationsText' => 'Du bist derzeit bei den folgenden Initiativen beteiligt',
@@ -25,5 +25,5 @@ echo $this->element('jqueryTabsWithoutAjax', [
             'explainationText' => $appAuth->isAdmin() ? 'Die Zuordnung wird bereits bestätigt sein.' : 'Klicke dann auf "Initiative beitreten". Die ausgewählte Initiative erhält deine Beitrittsanfrage zum Bestätigen.',
           ]);
         ?>
-	</div>
+    </div>
 </div>

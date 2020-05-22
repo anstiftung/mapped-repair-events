@@ -5,6 +5,6 @@ use Cake\ORM\Table;
 
 class MetatagsTable extends Table
 {
-      
+
 }
 ?>

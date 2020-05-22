@@ -7,7 +7,7 @@ use Cake\TestSuite\Fixture\TestFixture;
 class CategoriesFixture extends TestFixture
 {
     public $import = ['table' => 'categories', 'connection' => 'default'];
-      
+
       public $records = [
           [
               'id' => '87',
@@ -16,6 +16,6 @@ class CategoriesFixture extends TestFixture
               'status' => APP_ON
           ]
       ];
-      
+
 }
 ?>

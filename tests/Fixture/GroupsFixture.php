@@ -7,7 +7,7 @@ use Cake\TestSuite\Fixture\TestFixture;
 class GroupsFixture extends TestFixture
 {
     public $import = ['table' => 'groups', 'connection' => 'default'];
-      
+
     public $records = [
         [
           'id' => '2',
@@ -26,6 +26,6 @@ class GroupsFixture extends TestFixture
           'name' => 'forum_moderator'
         ],
     ];
-      
+
 }
 ?>

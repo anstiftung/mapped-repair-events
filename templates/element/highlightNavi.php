@@ -7,7 +7,7 @@ if (isset($main)) {
         });
         activeElement.addClass('active');
     "]);
-    
+
     if (!$this->request->getSession()->read('isMobile')) {
         $this->element('addScript', ['script' => "
             MappedRepairEvents.Helper.showSubNavi(activeElement);

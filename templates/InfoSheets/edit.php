@@ -6,8 +6,8 @@ use Cake\Core\Configure;
             JS_NAMESPACE.".Helper.doCurrentlyUpdatedActions(".$isCurrentlyUpdated.");"
         ));
     }
-        
-    $this->element('addScript', array('script' => 
+
+    $this->element('addScript', array('script' =>
         JS_NAMESPACE.".Helper.bindCancelButton(".$infoSheet->uid.");".
         JS_NAMESPACE.".InfoSheet.initSubCategoryDropdown('#infosheets-category-id');".
         JS_NAMESPACE.".InfoSheet.initMainCategoryDropdown('#infosheets-new-subcategory-parent-id');".
@@ -28,7 +28,7 @@ use Cake\Core\Configure;
     ]);
     ?>
     <div class="edit<?php echo !$this->request->getSession()->read('isMobile') ? ' column-1' : ''; ?>">
-    	<div style="padding:0 10px;">
+        <div style="padding:0 10px;">
             <?php
                 echo $this->element('heading', ['first' => $metaTags['title']]);
                 echo $this->Form->hidden('referer', ['value' => $referer]);
@@ -43,9 +43,9 @@ use Cake\Core\Configure;
                 echo '</p>';
             ?>
             <a id="print-button" href="javascript:window.print();" class="button rounded gray">Drucken</a>
-		</div>
-	</div>
-	
+        </div>
+    </div>
+
     <div class="edit<?php echo !$this->request->getSession()->read('isMobile') ? ' column-2' : ''; ?>">
         <?php
             $visitorFields = '<div class="gender-radio-button-wrapper">';
@@ -60,10 +60,10 @@ use Cake\Core\Configure;
             );
         ?>
     </div>
-        
+
     <div class="edit<?php echo !$this->request->getSession()->read('isMobile') ? ' column-2' : ''; ?>">
     <?php
-        
+
         echo $this->Form->fieldset(
             $this->Form->control('InfoSheets.category_id', [
                 'type' => 'select',
@@ -120,7 +120,7 @@ use Cake\Core\Configure;
         );
     ?>
     </div>
-    
+
     <div class="edit<?php echo !$this->request->getSession()->read('isMobile') ? ' column-1' : ''; ?>">
     <?php
         echo $this->Form->fieldset(
@@ -137,12 +137,12 @@ use Cake\Core\Configure;
                 'legend' => 'Defekt'
             ]
         );
-        
+
         echo $this->element('cancelAndSaveButton', ['saveLabel' => 'Speichern']);
     ?>
     </div>
-    <?php            
-		echo $this->Form->end();
-	?>
-    
+    <?php
+        echo $this->Form->end();
+    ?>
+
 </div>

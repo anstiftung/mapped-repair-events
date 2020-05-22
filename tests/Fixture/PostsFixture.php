@@ -7,7 +7,7 @@ use Cake\TestSuite\Fixture\TestFixture;
 class PostsFixture extends TestFixture
 {
     public $import = ['table' => 'posts', 'connection' => 'default'];
-    
+
     public $records = [
         [
             'uid' => 4,
@@ -19,6 +19,6 @@ class PostsFixture extends TestFixture
             'status' => APP_ON
         ]
     ];
-    
+
 }
 ?>

@@ -9,8 +9,8 @@ use Cake\View\Helper\HtmlHelper;
 use App\Controller\Component\StringComponent;
 
 class MyHtmlHelper extends HtmlHelper {
-    
-    
+
+
     public function getMenuTypes()
     {
         return [
@@ -19,12 +19,12 @@ class MyHtmlHelper extends HtmlHelper {
             'footer' => 'Footer (unten)'
         ];
     }
-    
+
     public function getAdditionalBlogCategoryUrl()
     {
         return StringComponent::slugify(Configure::read('AppConfig.additionalBlogCategoryName'));
     }
-    
+
     public function getHostName()
     {
         $serverName = Configure::read('AppConfig.serverName');
@@ -32,25 +32,25 @@ class MyHtmlHelper extends HtmlHelper {
         $parsedServerName = str_replace('www.', '', $parsedServerName);
         return $parsedServerName;
     }
-    
+
     function getCarbonFootprintAsString($carbonFootprintSum)
     {
-        
+
         $co2AeqPerFlightKilometer = 0.214;
         $carbonFootprintSumInFlightKilometers = $carbonFootprintSum / $co2AeqPerFlightKilometer;
-        
+
         $unit = 'kg';
         $carbonFootprintSumForView = $carbonFootprintSum;
         if ($carbonFootprintSum >= 1000) {
             $carbonFootprintSumForView /= 1000;
             $unit = 't';
         }
-        
+
         $distanceToSun  =   149600000;
         $distanceToMars =    55650000;
         $distanceToMoon =      380000;
         $circumferenceOfEarth = 40075;
-        
+
         if ($carbonFootprintSumInFlightKilometers >= $circumferenceOfEarth) {
             if ($carbonFootprintSumInFlightKilometers > $distanceToSun) {
                 $humanUnderstandableComparisonString = 'der mittleren Entfernung zur Sonne';
@@ -69,39 +69,39 @@ class MyHtmlHelper extends HtmlHelper {
                 $humanUnderstandableComparisonFactor = $carbonFootprintSumInFlightKilometers / $circumferenceOfEarth;
             }
         }
-        
+
         $result = '';
         $result .= Configure::read('AppConfig.numberHelper')->precision($carbonFootprintSumForView, 0) . ' ' . $unit;
         $result .= ' CO2 bzw. ';
         $result .= $this->Number->precision($carbonFootprintSumInFlightKilometers, 0);
         $result .= ' km mit dem Flugzeug';
-        
+
         if (isset($humanUnderstandableComparisonString)) {
             $result .= ', entspricht ca. ' . $this->Number->format(
                 $this->roundUpToAny($humanUnderstandableComparisonFactor, 2)
             ) . 'x ' . $humanUnderstandableComparisonString;
         }
-        
+
         return $result;
     }
-    
+
     public function getMaterialFootprintAsString($materialFootprintSum)
     {
         $annualConsumptionPerCapitaInKg = 26000;
         $amountPersonsPerYear = round($materialFootprintSum / $annualConsumptionPerCapitaInKg, 1);
-        
+
         $unit = 'kg';
         $materialFootprintSumForView = $materialFootprintSum;
         if ($materialFootprintSum >= 1000) {
             $materialFootprintSumForView /= 1000;
             $unit = 't';
         }
-        
+
         $digits = 0;
         if ($amountPersonsPerYear < 10) {
             $digits = 1;
         }
-        
+
         $result = '';
         $roundedAmountPersonsPerYear = round($amountPersonsPerYear, $digits);
         $result .= $this->Number->precision($materialFootprintSumForView, 0);
@@ -110,11 +110,11 @@ class MyHtmlHelper extends HtmlHelper {
         $result .= $this->Number->precision($roundedAmountPersonsPerYear, $digits) . ' Personen';
         return $result;
     }
-    
+
     function roundUpToAny($n,$x) {
         return round($n*$x) / $x;
     }
-    
+
     function getGenders()
     {
         return [
@@ -122,7 +122,7 @@ class MyHtmlHelper extends HtmlHelper {
             'm' => 'männlich'
         ];
     }
-    
+
     function generateGenericRadioButton($form, $formField, $labelClass = '')
     {
         $result = '<div class="form-fields-checkbox-wrapper dependent-form-field '.$formField->identifier.'">'.
@@ -134,19 +134,19 @@ class MyHtmlHelper extends HtmlHelper {
             ]).
             '</div>';
             return $result;
-            
+
     }
-    
+
     function addClassToFormInputContainer($class)
     {
         return '<div class="'.$class.' input {{type}}">{{content}}</div>';
     }
-    
+
     function addClassToFormInputContainerError($class)
     {
         return '<div class="'.$class.' input {{type}}{{required}} error">{{content}}{{error}}</div>';
     }
-    
+
     function generateFakeMaskedInputField($label, $value, $hideAllCharacters=false)
     {
         $result = '<div class="input text">';
@@ -155,7 +155,7 @@ class MyHtmlHelper extends HtmlHelper {
         $result .= '</div>';
         return $result;
     }
-    
+
     function getFacebookHint()
     {
         $html = '<strong>Facebook</strong>
@@ -164,32 +164,32 @@ class MyHtmlHelper extends HtmlHelper {
         Beispiel: NICHT https://www.facebook.com/netzwerk-reparatur-initiatven, sondern lediglich netzwerk-reparatur-initiativen eintragen.</p>';
         return $html;
     }
-    
+
     function getRoleHint($repairhelperInfotext, $orgaInfotext)
     {
         $html = '<strong>Wichtige Informationen über die verschiedenen Benutzerrollen</strong><br />
                 <a class="open-with-featherlight" href="#repairhelperHelp" id="urlHelpLink">Was ist ein(e) <strong>ReparaturhelferIn</strong> ?</a>
                 <div class="hide">
-                	<div id="repairhelperHelp" class="help-layer">
-                	'.$repairhelperInfotext.'
-            		</div>
-        		</div>
-            	&nbsp; &#x2016; &nbsp;
+                    <div id="repairhelperHelp" class="help-layer">
+                    '.$repairhelperInfotext.'
+                    </div>
+                </div>
+                &nbsp; &#x2016; &nbsp;
                 <a class="open-with-featherlight" href="#orgaHelp" id="urlHelpLink">Was ist ein(e) <strong>OrgansiatorIn</strong> ?</a>
                 <div class="hide">
-                	<div id="orgaHelp" class="help-layer">
-            	    	'.$orgaInfotext.'
-                	</div>
+                    <div id="orgaHelp" class="help-layer">
+                        '.$orgaInfotext.'
+                    </div>
                 </div>';
         return $html;
     }
-    
+
     function urlEventDetail($workshopUrl, $eventUid, $eventDatumstart)
     {
         return $this->urlWorkshopDetail($workshopUrl) .'?event='.$eventUid.','.$eventDatumstart->i18nFormat(Configure::read('DateFormat.Database')).'#datum';
     }
-    
-    
+
+
     function urlUsers($zip=-1) {
         $url = '/aktive';
         if ($zip >= 0) {
@@ -197,15 +197,15 @@ class MyHtmlHelper extends HtmlHelper {
         }
         return $url;
     }
-    
+
     function urlUserProfile($userUid) {
         return '/users/profile/'.$userUid;
     }
-    
+
     function urlUserHome() {
         return '/users/welcome';
     }
-    
+
     function getUserBackendNaviLinks($userUid, $isMyProfile, $isOrga) {
         $result = [];
         $result[] = ['url' => $this->urlUserHome(), 'name' => 'INFO'];
@@ -217,12 +217,12 @@ class MyHtmlHelper extends HtmlHelper {
         $result[] = ['url' => '/initiativen/mitmachen', 'name' => 'MITMACHEN'];
         return $result;
     }
-    
+
     function urlMyEvents()
     {
         return '/meine-termine';
     }
-    
+
     /**
      * for google geocoder
      * eg: Mayrhofstr. 4 => Mayrhofstraße 4 / Test Str. => Test Straße
@@ -233,26 +233,26 @@ class MyHtmlHelper extends HtmlHelper {
         $string = preg_replace('/(s)tr\./i', '$1traße', $string);
         return $string;
     }
-    
+
     function getFacebookUrl($username) {
         return 'https://www.facebook.com/' . $username . '/';
     }
-    
+
     public function trimAndRemoveEmptyTags($html) {
-        
+
         $pattern = "/<[^\/>]*>([\s]?)*<\/[^>]*>/";
         $html = preg_replace($pattern, '', $html);
-        
+
         return trim($html);
     }
-    
+
     public function __construct(View $View, array $config = [])
     {
         $this->helpers[] = 'Number';
         $this->_defaultConfig['templates']['javascriptblock'] = "{{content}}";
         parent::__construct($View, $config);
     }
-    
+
     function wrapJavascriptBlock($content) {
         return "<script>
             //<![CDATA[
@@ -262,34 +262,34 @@ class MyHtmlHelper extends HtmlHelper {
             //]]>
         </script>";
     }
-    
+
     function getJqueryUiIcon($icon, $class='', $options, $url='') {
-        
+
         $options['escape'] = [true];
-        
+
         $return = '<ul class="'.$class.' jquery-ui-icon">';
         $return .= '<li class="ui-state-default ui-corner-all">';
-        
+
         if ($url == '') {
             $return .= $icon;
         } else {
             $return .= self::link($icon, $url, $options);
         }
-        
+
         $return .= '</li>';
         $return .= '</ul>';
-        
+
         return $return;
-        
+
     }
-    
+
     public $selectedMain = [];
     public $selectedSub1 = [];
     public $selectedSub2 = [];
     public $selectedSub3 = [];
-    
+
     public $selectParentElements = true;
-    
+
     function urlPageDetail($url, $preview=false) {
         $previewSuffix = '';
         if ($preview == true) {
@@ -297,7 +297,7 @@ class MyHtmlHelper extends HtmlHelper {
         }
         return '/seite/' . $url . $previewSuffix;
     }
-    
+
     /**
      * for admin edit
      */
@@ -305,18 +305,18 @@ class MyHtmlHelper extends HtmlHelper {
         if ($object->status == APP_OFF) return true;
         return false;
     }
-    
+
     function urlRegister() {
         return '/registrierung';
     }
-    
+
     function urlRegisterRepairhelper() {
         return '/registrierung/reparaturhelferin';
     }
     function urlRegisterOrga() {
         return '/registrierung/organisatorin';
     }
-    
+
     function urlLogin($redirect='') {
         $url = '/users/login';
         if ($redirect != '') {
@@ -348,7 +348,7 @@ class MyHtmlHelper extends HtmlHelper {
     function urlNeuesPasswortAnfordern() {
         return '/users/neuesPasswortAnfordern';
     }
-    
+
     function urlCategoryNew() {
         return '/admin/categories/insert/';
     }
@@ -388,35 +388,35 @@ class MyHtmlHelper extends HtmlHelper {
     function urlInfoSheetDelete($infoSheetUid) {
         return '/laufzettel/delete/' . $infoSheetUid;
     }
-    
+
     function urlFeed() {
         return '/feed.rss';
     }
-    
+
     function getThumbs50Image($image, $objectType) {
         return FILES_DIR . 'uploadify/' . $objectType . '/thumbs-50/' . $image;
     }
-    
+
     function getThumbs100Image($image, $objectType) {
         return FILES_DIR . 'uploadify/' . $objectType . '/thumbs-100/' . $image;
     }
-    
+
     function getThumbs150Image($image, $objectType) {
         return FILES_DIR . 'uploadify/' . $objectType . '/thumbs-150/' . $image;
     }
-    
+
     function getThumbs300Image($image, $objectType) {
         return FILES_DIR . 'uploadify/' . $objectType . '/thumbs-300/' . $image;
     }
-    
+
     function getOriginalImage($image, $objectType) {
         return FILES_DIR . 'uploadify/' . $objectType . '/' . $image;
     }
-    
+
     function getThumbs280ImageMultiple($image) {
         return FILES_DIR . 'multiple/thumbs-280/' . $image;
     }
-    
+
     function getThumbs800ImageMultiple($image) {
         return FILES_DIR . 'multiple/thumbs-800/' . $image;
     }
@@ -452,7 +452,7 @@ class MyHtmlHelper extends HtmlHelper {
     function urlWorkshopDelete($uid) {
         return '/initiativen/loeschen/'.$uid;
     }
-    
+
     function urlWorkshopDetail($url) {
         return '/' . $url;
     }
@@ -488,12 +488,12 @@ class MyHtmlHelper extends HtmlHelper {
         }
         return $url;
     }
-    
+
     function getUserProfileImage($user)
     {
         $userAltText = isset($user->image_alt_text) ? $user->image_alt_text : $user['image_alt_text'];
         $userImage = isset($user->image) ? $user->image : $user['image'];
-        
+
         $imageHtml = '<img alt="'.$userAltText.'"  class="rounded" src="/files/uploadify/users/thumbs-150/'.$userImage.'" >';
         if(empty($userImage)) {
             if (!empty($user->categories)) {
@@ -508,7 +508,7 @@ class MyHtmlHelper extends HtmlHelper {
         }
         return $imageHtml;
     }
-    
+
     function urlUserNew() {
         return '/users/add';
     }
@@ -518,9 +518,9 @@ class MyHtmlHelper extends HtmlHelper {
         } else {
             return '/forum/'; // ohne trailing slash gibts einen 301er
         }
-        
+
     }
-    
+
     function getUserGroupsForRegistration() {
         $userGroups = [
             GROUPS_ORGA         => 'OrganisatorIn',
@@ -528,7 +528,7 @@ class MyHtmlHelper extends HtmlHelper {
         ];
         return $userGroups;
     }
-    
+
     function getUserGroupsForWorkshopDetail() {
         $userGroups = [
             GROUPS_ADMIN        => 'Admin',
@@ -537,14 +537,14 @@ class MyHtmlHelper extends HtmlHelper {
         ];
         return $userGroups;
     }
-    
+
     function getUserGroups() {
         $userGroups = [
             GROUPS_ADMIN       => 'Admin'
         ];
         return $userGroups;
     }
-    
+
     function getUserGroupsForUserEdit($isAdmin = false) {
         $userGroups = [];
         if ($isAdmin) {
@@ -554,85 +554,85 @@ class MyHtmlHelper extends HtmlHelper {
         $userGroups[GROUPS_REPAIRHELPER] = 'ReparaturhelferIn';
         return $userGroups;
     }
-    
+
     function formatBytes($bytes, $precision = 2) {
         $units = ['B', 'KB', 'MB', 'GB', 'TB'];
-        
+
         $bytes = max($bytes, 0);
         $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
         $pow = min($pow, count($units) - 1);
-        
+
         $bytes /= pow(1024, $pow);
-        
+
         return round($bytes, $precision) . ' ' . $units[$pow];
     }
-    
+
     function getPhotoDimensions($dimension) {
         if (!preg_match('/x/', $dimension)) return false;
         return explode('x', $dimension);
     }
-    
+
     function js($file, $dir=JS_URL) {
         $file = $dir . $file;
         $url = $file .'?'.@filemtime(WWW_ROOT . str_replace('/', DS, $file));
         return '<script type="text/javascript" src="'.$url.'"></script>';
     }
-    
+
     /**
      * creates navigation with up to 2 sublevels
      */
     function createMenuEntry($menuElement, $order = null, $mainMenuElement = null) {
-        
+
         $element = '';
-        
+
         if ($menuElement['level'] == 'main') {
             $element .= '';
         }
-        
+
         $class = '';
         $element .= '<li ' . $class . '>';
-        
+
         $htmlAttributes = [];
         if (isset($menuElement['htmlAttributes'])) {
             $htmlAttributes = array_merge($htmlAttributes, $menuElement['htmlAttributes']);
         }
         if ('/' . $this->here == $menuElement['url']) {
-            
+
             if (isset($htmlAttributes['class'])) {
                 // $htmlAttributes['class'] .= ' selected';
             } else {
                 // $htmlAttributes['class'] = ' selected';
             }
-            
+
             if ($menuElement['level'] == 'main') {
                 $this->selectedMain = $menuElement;
             }
-            
+
             if ($menuElement['level'] == 'sub1') {
                 $this->selectedMain = $mainMenuElement;
                 $this->selectedSub1 = $menuElement;
             }
         }
-        
+
         if (isset($menuElement['sub'])) {
-            
+
             foreach ($menuElement['sub'] as $sub1MenuElement) {
-                
+
                 if ('/' . $this->here == $sub1MenuElement['url']) {
-                    
+
                     if ($this->selectParentElements && in_array($menuElement['level'], ['main', 'sub'])) {
                         // $htmlAttributes['class'] = 'selected';
                     }
-                    
+
                     if ($menuElement['level'] == 'sub1') {
                         $this->selectedMain = $mainMenuElement;
                         $this->selectedSub1 = $menuElement;
                         $this->selectedSub2 = $sub1MenuElement;
                     }
-                    
+
                     continue;
                 }
-                
+
                 if (isset($sub1MenuElement['sub'])) {
                     foreach ($sub1MenuElement['sub'] as $sub2MenuElement) {
                         if ('/' . $this->here == $sub2MenuElement['url']) {
@@ -643,9 +643,9 @@ class MyHtmlHelper extends HtmlHelper {
                 }
             }
         }
-        
+
         $element .= self::link($menuElement['name'], $menuElement['url'], $htmlAttributes);
-        
+
         if (isset($menuElement['sub'])) {
             $i = 0;
             $element .= '<ul class="submenu">';
@@ -655,15 +655,15 @@ class MyHtmlHelper extends HtmlHelper {
             }
             $element .= '</ul>';
         }
-        
+
         $element .= '</li>';
-        
+
         if ($menuElement['level'] == 'main') {
             $element .= '';
         }
-        
+
         return $element;
-        
+
     }
-    
+
 }

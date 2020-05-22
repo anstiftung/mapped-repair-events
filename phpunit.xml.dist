@@ -15,7 +15,7 @@
         <testsuite name="App">
             <directory>./tests/TestCase/</directory>
         </testsuite>
-    </testsuites> 
+    </testsuites>
 
     <filter>
         <whitelist>
@@ -23,7 +23,7 @@
             <directory suffix=".php">./plugins/*/src/</directory>
         </whitelist>
     </filter>
-    
+
     <listeners>
         <listener class="Cake\TestSuite\Fixture\FixtureInjector">
             <arguments>
@@ -31,5 +31,5 @@
             </arguments>
         </listener>
     </listeners>
-    
+
 </phpunit>

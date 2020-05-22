@@ -12,7 +12,7 @@ class SkillsController extends AdminAppController
         parent::__construct($request, $response);
         $this->Skill = TableRegistry::getTableLocator()->get('Skills');
     }
-    
+
     public function insert()
     {
         $skill = [
@@ -25,60 +25,60 @@ class SkillsController extends AdminAppController
         $this->AppFlash->setFlashMessage('Kenntnis erfolgreich erstellt.');
         $this->redirect($this->getReferer());
     }
-    
+
     public function edit($id)
     {
-        
+
         if (empty($id)) {
             throw new NotFoundException;
         }
-        
+
         $skill = $this->Skill->find('all', [
             'conditions' => [
                 'Skills.id' => $id,
                 'Skills.status >= ' . APP_DELETED
             ]
         ])->first();
-        
+
         if (empty($skill)) {
             throw new NotFoundException;
         }
-        
+
         $this->set('id', $skill->id);
-        
+
         $this->setReferer();
-        
+
         if (!empty($this->request->getData())) {
-            
+
             $patchedEntity = $this->Skill->patchEntity(
                 $skill,
                 $this->request->getData(),
                 ['validate' => true]
             );
-            
+
             if (!($patchedEntity->hasErrors())) {
                 $this->saveObject($patchedEntity);
             } else {
                 $skill = $patchedEntity;
             }
         }
-        
+
         $this->set('skill', $skill);
-        
+
         $metaTags = ['title' => 'Kenntnis bearbeiten'];
         $this->set('metaTags', $metaTags);
-        
+
     }
-    
+
     public function index()
     {
         parent::index();
-        
+
         $conditions = [
             'Skills.status > ' . APP_DELETED
         ];
         $conditions = array_merge($this->conditions, $conditions);
-        
+
         $query = $this->Skill->find('all', [
             'conditions' => $conditions,
             'contain' => [
@@ -88,22 +88,22 @@ class SkillsController extends AdminAppController
                 'Skills.name' => 'ASC'
             ]
         ]);
-        
+
         $objects = $this->paginate($query);
-        
+
         foreach($objects as $object) {
             if ($object->owner_user) {
                 $object->owner_user->revertPrivatizeData();
             }
         }
-        
+
         $this->set('objects', $objects->toArray());
-        
+
         $metaTags = [
             'title' => 'Kenntnisse'
         ];
         $this->set('metaTags', $metaTags);
-        
+
     }
-    
+
 }

@@ -1,5 +1,5 @@
 @media print{
-  
+
   #nav,
   #infoSheetEditForm h1,
   #infoSheetEditForm #print-button {
@@ -15,5 +15,5 @@
   #infoSheetEditForm .edit.column-2 {
       width: 520px;
   }
-  
+
 }

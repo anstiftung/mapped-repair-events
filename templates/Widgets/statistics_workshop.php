@@ -1,12 +1,12 @@
 <?php if ($showWorkshopName) { ?>
-	<style>
-	   h2 a {
-	       color: <?php echo $borderColorOk;?>;
-	   }
-	</style>
-	<h2>
-    	<?php
-    	echo '<a target="_blank" href="'.$this->Html->urlWorkshopDetail($workshop->url).'">'.$workshop->name.'</a>';
+    <style>
+       h2 a {
+           color: <?php echo $borderColorOk;?>;
+       }
+    </style>
+    <h2>
+        <?php
+        echo '<a target="_blank" href="'.$this->Html->urlWorkshopDetail($workshop->url).'">'.$workshop->name.'</a>';
         ?>
     </h2>
 <?php } ?>
@@ -33,13 +33,13 @@ if ($showBarChart && $chartHasData) {
 
 <?php
 if ($showDonutChart && $chartHasData) {
-	$this->element('addScript', ['script' =>
-	    JS_NAMESPACE.".WidgetStatistics.loadWorkshopDetailChartRepaired('".json_encode($statisticsRepairedData)."', " . (!$showBarChart ? 0 : 1) . ");
+    $this->element('addScript', ['script' =>
+        JS_NAMESPACE.".WidgetStatistics.loadWorkshopDetailChartRepaired('".json_encode($statisticsRepairedData)."', " . (!$showBarChart ? 0 : 1) . ");
     "]);
 ?>
 <canvas id="chartRepaired" height="250"></canvas>
 <?php } ?>
 
 <?php if (!$chartHasData) { ?>
-	<p class="info">Für den angegeben Zeitraum sind keine Daten vorhanden.</p>
+    <p class="info">Für den angegeben Zeitraum sind keine Daten vorhanden.</p>
 <?php } ?>

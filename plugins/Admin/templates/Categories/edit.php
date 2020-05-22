@@ -25,11 +25,11 @@ $this->element('addScript', array('script' =>
             echo $this->Form->control('Categories.parent_id', ['style' => 'width: 295px;', 'type' => 'select', 'label' => 'Oberkategorie', 'options' => $mainCategories, 'empty' => 'Oberkategorie auswählen...']).'<br />';
             echo $this->Form->control('Categories.status', ['type' => 'select', 'options' => Configure::read('AppConfig.approvalStatus')]).'<br />';
         ?>
-	</div>
+    </div>
 
-	<?php        
+    <?php
         echo $this->element('cancelAndSaveButton', ['saveLabel' => 'Speichern']);
-		echo $this->Form->end();
-	?>
-    
+        echo $this->Form->end();
+    ?>
+
 </div>

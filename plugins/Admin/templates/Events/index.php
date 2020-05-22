@@ -1,5 +1,5 @@
 <?php
-    echo $this->element('list', 
+    echo $this->element('list',
        [
       'objects' => $objects
       ,'heading' => 'Termine'
@@ -9,7 +9,7 @@
          ['name' => 'uid', 'label' => 'UID']
         ,['name' => 'image', 'label' => 'Bild']
         ,['name' => 'workshop.name', 'label' => 'Rep-Ini']
-        ,['name' => 'eventbeschreibung', 'label' => 'Beschrei-bung', 'tooltip' => true] 
+        ,['name' => 'eventbeschreibung', 'label' => 'Beschrei-bung', 'tooltip' => true]
         ,['name' => 'datumstart', 'type' => 'date', 'label' => 'Datum Start']
         ,['name' => 'uhrzeitstart', 'type' => 'time', 'label' => 'Uhrzeit Start']
         ,['name' => 'uhrzeitend', 'type' => 'time', 'label' => 'Uhrzeit Ende']

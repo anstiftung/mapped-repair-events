@@ -7,7 +7,7 @@ use Cake\TestSuite\Fixture\TestFixture;
 class EventsCategoriesFixture extends TestFixture
 {
     public $import = ['table' => 'events_categories', 'connection' => 'default'];
-    
+
     public function init(): void
     {
         $this->records = [
@@ -18,6 +18,6 @@ class EventsCategoriesFixture extends TestFixture
         ];
         parent::init();
     }
-    
+
 }
 ?>

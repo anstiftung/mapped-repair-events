@@ -39,9 +39,9 @@ class AppController extends Controller
 {
 
     public $useDefaultValidation = true;
-    
+
     public $modelName;
-    
+
     public function __construct($request = null, $response = null)
     {
         parent::__construct($request, $response);
@@ -50,8 +50,8 @@ class AppController extends Controller
         $this->modelName = Inflector::classify($this->name);
         $this->pluralizedModelName = Inflector::pluralize($this->modelName);
     }
-    
-    
+
+
     /**
      * Initialization hook method.
      *
@@ -63,9 +63,9 @@ class AppController extends Controller
      */
     public function initialize(): void
     {
-        
+
         parent::initialize();
-        
+
         $this->loadComponent('Common');
         $this->loadComponent('String');
         $this->loadComponent('RequestHandler', [
@@ -77,7 +77,7 @@ class AppController extends Controller
         $this->loadComponent('AppFlash', [
             'clear' => true
         ]);
-        
+
         $this->loadComponent('AppAuth', [
             'logoutRedirect' => '/',
             'authError' => 'Zugriff verweigert, bitte melde dich an.',
@@ -97,14 +97,14 @@ class AppController extends Controller
             ],
             'storage' => 'Session'
         ]);
-        
+
         $this->paginate = [
             'limit' => 100000,
             'maxLimit' => 100000
         ];
-           
+
     }
-    
+
     protected function setNavigation()
     {
         $this->Page = TableRegistry::getTableLocator()->get('Pages');
@@ -132,19 +132,19 @@ class AppController extends Controller
     public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);
-        
+
         $this->set('useDefaultValidation', $this->useDefaultValidation);
-        
+
         if (Configure::read('debug')) {
             Cache::disable();
         } else {
-            
+
             // wenn eingeloggt, nur 1 sec cachen, damit das forum auf das gecachte html zugreifen kann
             $duration = '+1 day';
             if ($this->AppAuth->user()) {
                 $duration = '+1 sec';
             }
-            
+
             Cache::setConfig('navi', [
                 'engine' => 'File',
                 'duration' => $duration,
@@ -152,14 +152,14 @@ class AppController extends Controller
                 'serialize' => false
             ]);
             Cache::enable();
-            
+
         }
-        
+
         // fluxbb login
         if (Configure::read('AppConfig.fluxBbForumEnabled') && $this->AppAuth->user()) {
             $this->FluxBb->login($this->AppAuth->getUserUid());
         }
-        
+
         if (!$this->request->getSession()->check('isMobile')) {
             $detect = new Mobile_Detect();
             $isMobile = false;
@@ -168,19 +168,19 @@ class AppController extends Controller
             }
             $this->request->getSession()->write('isMobile', $isMobile); // default value
         }
-        
+
     }
-    
+
     public function beforeRender(EventInterface $event)
     {
-        
+
         parent::beforeRender($event);
-        
+
         $this->setNavigation();
         $this->set('appAuth', $this->AppAuth);
         $this->set('loggedUser', $this->AppAuth->user());
     }
-    
+
     public function isAuthorized($user)
     {
         return true;
@@ -202,7 +202,7 @@ class AppController extends Controller
      * und diese seite aber online ist, redirecten.
      * nur, wenn die seite offline ist, flash message anzeigen, sonst verwirrt es
      * den user
-     * 
+     *
      * @param int status of the object
      * @param string url
      */
@@ -218,7 +218,7 @@ class AppController extends Controller
 
     /**
      * überprüft die url auf den parameter /vorschau
-     * 
+     *
      * @param string $modelName
      * @param string url (zum zeitpunkt dieses methoden-aufrufes ist noch keine uid vorhanden, sondern nur die url
      * @return array $params status for cake-condition
@@ -226,17 +226,17 @@ class AppController extends Controller
     protected function getPreviewConditions($modelName, $url)
     {
         $previewConditions = [];
-        
+
         if ($this->$modelName->hasField('publish')) {
             $previewConditions = [
                 'DATE('.$modelName . '.publish) <= DATE(NOW())'
             ];
         }
-        
+
         // admins oder owner dürfen offline-content im preview-mode sehen
         if (! $this->AppAuth->isAdmin() && ! $this->AppAuth->isOwnerByModelNameAndUrl($modelName, $url))
             return $previewConditions;
-        
+
         if ($this->isPreview()) {
             $previewConditions = [
                 $modelName . '.status' . ' >= ' . APP_OFF
@@ -253,7 +253,7 @@ class AppController extends Controller
             'className' => $className
         ]);
     }
-    
+
     public function mergeCustomMetaTags($metaTags, $object)
     {
         if (!empty($object->metatag) && !empty($object->metatag->title)) {
@@ -267,12 +267,12 @@ class AppController extends Controller
         }
         return $metaTags;
     }
-    
+
     public function setReferer()
     {
         $this->set('referer', $this->getReferer());
     }
-    
+
     public function getReferer()
     {
         return $this->request->getData('referer') ?? $_SERVER['HTTP_REFERER'] ?? '/';
@@ -281,25 +281,25 @@ class AppController extends Controller
     /**
      * checks if detail page is allowed for current user group
      * currently implemented for pages and votings
-     * 
+     *
      * @param array $groups
      * @throws NotFoundException
      */
     protected function doUserGroupAccessCheck($groups)
     {
         return true;
-        
+
         $loggedUser = $this->AppAuth->getUser();
         $loggedUserGroups = [];
         if (! empty($loggedUser->groups)) {
             $loggedUserGroups = Hash::extract($loggedUser->groups, '{n}.id');
         }
-        
+
         $objectGroups = [];
         if (! empty($groups)) {
             $objectGroups = Hash::extract($groups, '{n}.id');
         }
-        
+
         if (! $this->AppAuth->user()) {
             // ausgeloggt und page hat rechte gesetzt => 404
             if (! empty($objectGroups)) {
@@ -320,7 +320,7 @@ class AppController extends Controller
             }
         }
     }
-    
+
     protected function patchEntityWithCurrentlyUpdatedFields($entity)
     {
         $modelName = $this->modelName;
@@ -330,7 +330,7 @@ class AppController extends Controller
         ]);
         return $entity;
     }
-    
+
     protected function stripTagsFromFields($entity, $modelName)
     {
         foreach ($entity->toArray() as $field => $data) {
@@ -351,12 +351,12 @@ class AppController extends Controller
         }
         return $entity;
     }
-    
+
     public function setIsCurrentlyUpdated($uid)
     {
         $this->set('isCurrentlyUpdated', $this->isCurrentlyUpdated($uid) ? '1' : '0');
     }
-    
+
     /**
      * @param int $uid
      * @return boolean $success
@@ -373,20 +373,20 @@ class AppController extends Controller
                 'CurrentlyUpdatedByUsers'
             ]
         ]);
-        
+
         $data = $data->first();
         $diffInSeconds = 0;
-        
+
         if ($data->currently_updated_start) {
             $diffInSeconds = Configure::read('AppConfig.timeHelper')->datediff(strtotime(date('Y-m-d H:i:s')), strtotime($data->currently_updated_start->format('Y-m-d H:i:s')));
         }
-        
+
         if (! empty($data->currently_updated_by_user) && $data->currently_updated_by_user->uid != $this->AppAuth->getUserUid() && $data->currently_updated_by_user->uid > 0 && $diffInSeconds < 60 * 60) {
             $updatingUser = $data->currently_updated_by_user->firstname . ' ' . $data->currently_updated_by_user->lastname;
             $this->AppFlash->setFlashError('<b>Diese Seite ist gesperrt. ' . $updatingUser . ' hat ' . Configure::read('AppConfig.timeHelper')->timeAgoInWords($data->currentlyUpdatedStart) . ' begonnen, sie zu bearbeiten. <a id="unlockEditPageLink" href="javascript:void(0);">Entsperren?</a></b>');
             return true;
         }
-        
+
         // if not currently updated, set logged user as updating one
         $saveData = [
             'currently_updated_by' => $this->AppAuth->getUserUid(),
@@ -394,31 +394,31 @@ class AppController extends Controller
         ];
         $entity = $this->$modelName->patchEntity($data, $saveData);
         $this->$modelName->save($entity);
-        
+
         return false;
     }
-    
+
     protected function getLatLngFromGeoCodingService($addressString) {
-        
+
         if (Configure::read('googleMapApiKey') == '') {
             throw new ServiceUnavailableException('googleMapApiKey not defined');
         }
-        
+
         $lat = 'ungültig';
         $lng = 'ungültig';
-        
+
         $addressString = Configure::read('AppConfig.htmlHelper')->replaceAddressAbbreviations($addressString);
         $geocode = file_get_contents('https://maps.googleapis.com/maps/api/geocode/json?key='.Configure::read('googleMapApiKey').'&address=' . urlencode($addressString));
         $output = json_decode($geocode);
-        
+
         if ($output->status == 'OK' && empty($output->results[0]->partial_match)) {
             $lat = str_replace(',', '.', $output->results[0]->geometry->location->lat);
             $lng = str_replace(',', '.', $output->results[0]->geometry->location->lng);
         } else {
             $this->log(json_encode($output));
         }
-        
+
         return ['lat' => $lat, 'lng' => $lng];
     }
-    
+
 }

@@ -3,7 +3,7 @@ use Cake\Core\Configure;
 use Cake\Utility\Inflector;
 ?>
 <!DOCTYPE html>
-<html lang="de">  
+<html lang="de">
 <head>
 <meta charset="utf-8" />
 <meta name="handheldfriendly" content="True" />
@@ -20,18 +20,18 @@ use Cake\Utility\Inflector;
         'description' => !empty($defaultMetaTags) && !empty($defaultMetaTags['description']) ? $defaultMetaTags['description'] : Configure::read('AppConfig.titleSuffix'),
         'keywords' => !empty($defaultMetaTags) && !empty($defaultMetaTags['keywords']) ? $defaultMetaTags['keywords'] : ''
     ];
-	if (Configure::read('debug') === true) {
-		$defaultMetaTags['robots'] = 'noindex, nofollow';
-	}
-	if (!empty($metaTags)) {
-		$metaTags = array_merge($defaultMetaTags, $metaTags);
-	} else {
-		$metaTags = $defaultMetaTags;
-	}
-	foreach($metaTags as $metaTagName => $metaTagContent) {
-	    if ($metaTagName == 'title') continue;
+    if (Configure::read('debug') === true) {
+        $defaultMetaTags['robots'] = 'noindex, nofollow';
+    }
+    if (!empty($metaTags)) {
+        $metaTags = array_merge($defaultMetaTags, $metaTags);
+    } else {
+        $metaTags = $defaultMetaTags;
+    }
+    foreach($metaTags as $metaTagName => $metaTagContent) {
+        if ($metaTagName == 'title') continue;
         echo $this->Html->meta(['name' => $metaTagName, 'content' => $metaTagContent])."\n";
-	}
+    }
 ?>
 <title><?php echo $metaTags['title'] . ' | ' . Configure::read('AppConfig.titleSuffix'); ?></title>
 <?php
@@ -61,40 +61,40 @@ use Cake\Utility\Inflector;
 <link rel="icon" type="image/png" href="/img/favicon-160x160.png" sizes="160x160"/>
 <link rel="icon" type="image/png" href="/img/favicon-192x192.png" sizes="192x192"/>
 <link rel="icon" type="image/png" href="/img/favicon-196x196.png" sizes="196x196"/>
-<meta name="msapplication-TileImage" content="/img/win8-tile-144x144.png"/> 
-<meta name="msapplication-TileColor" content="#c8d218"/> 
-<meta name="msapplication-navbutton-color" content="#c8d217"/> 
-<meta name="application-name" content="<?php echo (Configure::read('isSsl') ? 'https' : 'http'); ?>://<?php echo Configure::read('AppConfig.serverName'); ?>"/> 
-<meta name="msapplication-tooltip" content="<?php echo (Configure::read('isSsl') ? 'https' : 'http'); ?>://<?php echo Configure::read('AppConfig.serverName'); ?>"/> 
-<meta name="apple-mobile-web-app-title" content="<?php echo (Configure::read('isSsl') ? 'https' : 'http'); ?>://<?php echo Configure::read('AppConfig.serverName'); ?>"/> 
-<meta name="msapplication-square70x70logo" content="/img/win8-tile-70x70.png"/> 
-<meta name="msapplication-square144x144logo" content="/img/win8-tile-144x144.png"/> 
-<meta name="msapplication-square150x150logo" content="/img/win8-tile-150x150.png"/> 
-<meta name="msapplication-wide310x150logo" content="/img/win8-tile-310x150.png"/> 
-<meta name="msapplication-square310x310logo" content="/img/win8-tile-310x310.png"/> 
-    
+<meta name="msapplication-TileImage" content="/img/win8-tile-144x144.png"/>
+<meta name="msapplication-TileColor" content="#c8d218"/>
+<meta name="msapplication-navbutton-color" content="#c8d217"/>
+<meta name="application-name" content="<?php echo (Configure::read('isSsl') ? 'https' : 'http'); ?>://<?php echo Configure::read('AppConfig.serverName'); ?>"/>
+<meta name="msapplication-tooltip" content="<?php echo (Configure::read('isSsl') ? 'https' : 'http'); ?>://<?php echo Configure::read('AppConfig.serverName'); ?>"/>
+<meta name="apple-mobile-web-app-title" content="<?php echo (Configure::read('isSsl') ? 'https' : 'http'); ?>://<?php echo Configure::read('AppConfig.serverName'); ?>"/>
+<meta name="msapplication-square70x70logo" content="/img/win8-tile-70x70.png"/>
+<meta name="msapplication-square144x144logo" content="/img/win8-tile-144x144.png"/>
+<meta name="msapplication-square150x150logo" content="/img/win8-tile-150x150.png"/>
+<meta name="msapplication-wide310x150logo" content="/img/win8-tile-310x150.png"/>
+<meta name="msapplication-square310x310logo" content="/img/win8-tile-310x310.png"/>
+
 <?php
     echo $this->AssetCompress->css('_frontend' . ($this->request->getSession()->read('isMobile') ? '_mobile' : ''), ['raw' => Configure::read('debug')]);
 ?>
-    
+
 <script type="text/javascript">
     if(!window.<?php echo JS_NAMESPACE; ?>) { <?php echo JS_NAMESPACE; ?> = window.<?php echo JS_NAMESPACE; ?> = {}; }
 </script>
-    
+
 </head>
 
 <body class="<?php echo Inflector::tableize($this->name) . ' ' . $this->request->getParam('action'); ?><?php echo !empty($page->url) ? ' ' . $page->url : ''; ?>">
 
     <div id="everything">
-        
+
         <div id="wrapper">
-        	
+
             <?php if( $this->request->getSession()->read('isMobile') ) { ?>
-                <div id="header" class="mobile" canvas="" style="height:75px;">	
+                <div id="header" class="mobile" canvas="" style="height:75px;">
             <?php } else {?>
-                <div id="header" class="no-mobile" style="height:120px;">		
+                <div id="header" class="no-mobile" style="height:120px;">
             <?php } ?>
-            
+
             <?php
                 $menuCacheOptions = [];
                 // if placed in element, javascript in file is not executed if cached file is loaded!
@@ -114,26 +114,26 @@ use Cake\Utility\Inflector;
                 echo $this->element('core/header', [], $menuCacheOptions);
             ?>
             </div>
-            
+
             <?php if( $this->request->getSession()->read('isMobile') ) { ?>
                 <div canvas="container" id="content" style="margin-top:75px;">
             <?php } else {?>
                 <div id="content" style="margin-top:120px;">
             <?php } ?>
-            
+
             <?php
                 echo $this->Flash->render();
                 echo $this->Flash->render('auth');
                 echo $this->fetch('content');
             ?>
-            
+
             </div>
-            
+
             <div class="sc"></div>
             <div id="footer" canvas="container">
                 <?php echo $this->element('core/footer'); ?>
             </div>
-            
+
             <?php
                 if (!$this->request->getSession()->read('isMobile')) {
                     echo $this->element('scrollToTopButton');
@@ -141,12 +141,12 @@ use Cake\Utility\Inflector;
             ?>
 
             <?php
-            
+
             echo $this->AssetCompress->script('_frontend' . ($this->request->getSession()->read('isMobile') ? '_mobile' : ''), ['raw' => Configure::read('debug')]);
-            
+
             echo $this->Html->script('/node_modules/ckeditor4/ckeditor');
             echo $this->Html->script('/node_modules/ckeditor4/adapters/jquery');
-            
+
             // add script BEFORE all scripts that are loaded in views (block)
             echo $this->Html->scriptBlock(
                 $this->Html->wrapJavascriptBlock(
@@ -169,18 +169,18 @@ use Cake\Utility\Inflector;
                     ['inline' => true]
                 );
             }
-            
+
             $scripts = $this->fetch('script');
             if ($scripts != '') {
                 echo $this->Html->wrapJavascriptBlock($scripts);
             }
             ?>
-        
+
         </div><!--wrapper-->
-    
+
     </div><!--everything-->
-	
-	<?php echo $this->element('core/piwik'); ?>
-	
+
+    <?php echo $this->element('core/piwik'); ?>
+
 </body>
 </html>

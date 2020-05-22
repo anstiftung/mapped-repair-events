@@ -5,9 +5,9 @@ $convertedName = strtolower($explodedName[0]).'-'.$explodedName[1].'';
 
 if ($uid === null) {
     echo '<p style="margin-bottom: 10px;clear: both;">Um Bilder und Dateien hochzuladen, bitte zuerst speichern.</p>';
-    $this->element('addScript', ['script' => 
+    $this->element('addScript', ['script' =>
         JS_NAMESPACE . ".Helper.initCkeditorWithoutElfinder('".$convertedName."', ".$this->request->getSession()->read('isMobile').");"
-	]);
+    ]);
 } else {
     $this->element('addScript', ['script' =>
         JS_NAMESPACE . ".Helper.initCkeditor('".$convertedName."', ".$this->request->getSession()->read('isMobile').");"

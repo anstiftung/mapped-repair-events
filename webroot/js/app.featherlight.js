@@ -56,7 +56,7 @@ MappedRepairEvents.AppFeatherlight = {
             }
         });
     },
-    
+
     initLightboxForImages: function (container) {
 
         var configuration = this.initLightbox({

@@ -3,11 +3,11 @@ use Cake\Core\Configure;
 
 $items = [];
 foreach ($events as $event) {
-    
+
     $link = $this->Html->urlEventDetail($event->workshop->url, $event->uid, $event->datumstart);
-    
+
     $body = $event->datumstart->i18nFormat(Configure::read('DateFormat.de.DateLong2'));
-    
+
     $uhrzeitstart = $event->uhrzeitstart->i18nFormat(Configure::read('DateFormat.de.TimeShort'));
     if ($uhrzeitstart != '00:00') {
         $body .= ' um ' . $uhrzeitstart;
@@ -21,7 +21,7 @@ foreach ($events as $event) {
         $body .= ' // ' . $event->veranstaltungsort;
     }
     $body .= '<br />'.h(strip_tags($event->eventbeschreibung));
-    
+
     $body = $this->Text->truncate($body, 400, [
         'ending' => '...',
         'exact'  => true,

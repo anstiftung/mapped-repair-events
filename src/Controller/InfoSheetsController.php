@@ -10,18 +10,18 @@ use League\Csv\Writer;
 
 class InfoSheetsController extends AppController
 {
-    
+
     public function beforeFilter(EventInterface $event) {
-        
+
         parent::beforeFilter($event);
         $this->InfoSheet = TableRegistry::getTableLocator()->get('InfoSheets');
     }
-    
+
     public function isAuthorized($user)
     {
-        
+
         if (in_array($this->request->getParam('action'), ['download'])) {
-            
+
             if ($this->AppAuth->isAdmin()) {
                 return true;
             }
@@ -34,22 +34,22 @@ class InfoSheetsController extends AppController
                     return true;
                 }
             }
-            
+
         }
-        
+
         if (in_array($this->request->getParam('action'), ['edit', 'delete'])) {
-            
+
             // admin are allowd to edit and delete all info sheets
             if ($this->AppAuth->isAdmin()) {
                 return true;
             }
-            
+
             $infoSheetUid = (int) $this->request->getParam('pass')[0];
             $this->InfoSheet = TableRegistry::getTableLocator()->get('InfoSheets');
-            
+
             // orgas are allowed to edit and delete only info sheets of associated workshops
             if ($this->AppAuth->isOrga()) {
-                
+
                 $infoSheet = $this->InfoSheet->find('all', [
                     'conditions' => [
                         'InfoSheets.uid' => $infoSheetUid,
@@ -59,16 +59,16 @@ class InfoSheetsController extends AppController
                         'Events'
                     ]
                 ])->first();
-                
+
                 $workshopUid = $infoSheet->event->workshop_uid;
                 $this->Workshop = TableRegistry::getTableLocator()->get('Workshops');
                 $workshop = $this->Workshop->getWorkshopForIsUserInOrgaTeamCheck($workshopUid);
                 if ($this->Workshop->isUserInOrgaTeam($this->AppAuth->user(), $workshop)) {
                     return true;
                 }
-                
+
             }
-                
+
             // repairhelpers are allowed to edit and delete only own info sheets
             if ($this->AppAuth->isRepairhelper()) {
                 $infoSheet = $this->InfoSheet->find('all', [
@@ -82,28 +82,28 @@ class InfoSheetsController extends AppController
                     return true;
                 }
             }
-            
+
             return false;
         }
-        
+
         return $this->AppAuth->user();
-        
+
     }
-    
-    
+
+
     public function download($workshopUid, $year=null) {
-        
+
         $this->Workshop = TableRegistry::getTableLocator()->get('Workshops');
         $workshop = $this->Workshop->find('all', [
             'conditions' => [
                 'Workshops.uid' => $workshopUid
             ]
         ])->first();
-        
+
         if (empty($workshop)) {
             throw new NotFoundException('workshop not found');
         }
-        
+
         $query = file_get_contents(ROOT . DS . 'config' . DS. 'sql' . DS . 'repair-data-export-csv.sql');
         $params = [
             'workshopUid' => $workshopUid
@@ -114,18 +114,18 @@ class InfoSheetsController extends AppController
             $params['year'] = $year;
             $filename .= '-' . $year;
         }
-        
+
         $statement = $this->InfoSheet->getConnection()->prepare($query);
         $statement->execute($params);
         $records = $statement->fetchAll('assoc');
         if (empty($records)) {
             throw new NotFoundException('info sheets not found');
         }
-        
+
         $writer = Writer::createFromString();
         $writer->insertOne(array_keys($records[0]));
         $writer->insertAll($records);
-        
+
         // force download
         $this->RequestHandler->renderAs(
             $this,
@@ -135,55 +135,55 @@ class InfoSheetsController extends AppController
             ],
         );
         $this->disableAutoRender();
-        
+
         $response = $this->response;
         $response = $response->withStringBody($writer->getContent());
         $response = $response->withDownload($filename . '.csv');
-        
+
         return $response;
     }
-    
+
     public function delete($infoSheetUid)
     {
         if ($infoSheetUid === null) {
             throw new NotFoundException;
         }
-        
+
         $infoSheet = $this->InfoSheet->find('all', [
             'conditions' => [
                 'InfoSheets.uid' => $infoSheetUid,
                 'InfoSheets.status >= ' . APP_DELETED
             ]
         ])->first();
-        
+
         if (empty($infoSheet)) {
             throw new NotFoundException;
         }
-        
+
         $patchedEntity = $this->InfoSheet->patchEntity(
             $this->InfoSheet->get($infoSheetUid),
             ['status' => APP_DELETED]
         );
-        
+
         if ($this->InfoSheet->save($patchedEntity)) {
             $this->AppFlash->setFlashMessage('Der Laufzettel wurde erfolgreich gelöscht.');
         } else {
             $this->AppFlash->setErrorMessage('Beim Löschen ist ein Fehler aufgetreten');
         }
-        
+
         $this->redirect($this->getReferer());
-        
+
     }
-    
+
     public function add($eventUid)
     {
-        
+
         if ($eventUid === null) {
             throw new NotFoundException;
         }
-        
+
         $this->Event = TableRegistry::getTableLocator()->get('Events');
-        
+
         $this->Event->getAssociation('Workshops')->setConditions(['Workshops.status > ' . APP_DELETED]);
         $event = $this->Event->find('all', [
             'conditions' => [
@@ -193,7 +193,7 @@ class InfoSheetsController extends AppController
                 'Workshops'
             ]
         ]);
-        
+
         $infoSheet = $this->InfoSheet->newEntity(
             [
                 'status' => APP_ON,
@@ -202,27 +202,27 @@ class InfoSheetsController extends AppController
             ['validate' => false]
         );
         $infoSheet->event = $event->first();
-        
+
         $this->set('metaTags', ['title' => 'Laufzettel erstellen']);
-        
+
         $this->set('eventUid', $eventUid);
         $this->set('editFormUrl', Configure::read('AppConfig.htmlHelper')->urlInfoSheetNew($eventUid));
-        
+
         $this->_edit($infoSheet, false);
-        
+
         // assures rendering of success message on redirected page and NOT before and then not showing it
         if (empty($this->request->getData())) {
             $this->render('edit');
         }
     }
-    
+
     public function edit($infoSheetUid)
     {
-        
+
         if ($infoSheetUid === null) {
             throw new NotFoundException;
         }
-        
+
         $infoSheet = $this->InfoSheet->find('all', [
             'conditions' => [
                 'InfoSheets.uid' => $infoSheetUid,
@@ -234,22 +234,22 @@ class InfoSheetsController extends AppController
                 'FormFieldOptions'
             ]
         ])->first();
-        
+
         if (empty($infoSheet)) {
             throw new NotFoundException;
         }
-        
+
         $this->setIsCurrentlyUpdated($infoSheet->uid);
         $this->set('metaTags', ['title' => 'Laufzettel bearbeiten']);
         $this->set('editFormUrl', Configure::read('AppConfig.htmlHelper')->urlInfoSheetEdit($infoSheet->uid));
         $this->_edit($infoSheet, true);
     }
-    
+
     private function _edit($infoSheet, $isEditMode)
     {
-        
+
         $this->set('uid', $infoSheet->uid);
-        
+
         $this->Category = TableRegistry::getTableLocator()->get('Categories');
         $categoriesForSubcategory = $this->Category->getForSubcategoryDropdown();
         $categoriesForSubcategory['Kategorie nicht vorhanden?'] = [
@@ -257,46 +257,46 @@ class InfoSheetsController extends AppController
         ];
         $this->set('categoriesForSubcategory', $categoriesForSubcategory);
         $this->set('categories', $this->Category->getForDropdown(APP_ON));
-        
+
         $this->Brand = TableRegistry::getTableLocator()->get('Brands');
         $brandsForDropdown = $this->Brand->getForDropdown();
         $brandsForDropdown['Marke nicht vorhanden?'] = [
             '-1' => 'Marke hinzufügen'
         ];
         $this->set('brands', $brandsForDropdown);
-        
+
         $this->FormField = TableRegistry::getTableLocator()->get('FormFields');
-        
+
         $powerSupplyFormField = $this->FormField->getForForm(1);
         $this->set('powerSupplyFormField', $powerSupplyFormField);
 
         $defectFoundFormField = $this->FormField->getForForm(2);
         $this->set('defectFoundFormField', $defectFoundFormField);
-        
+
         $defectFoundReasonFormField = $this->FormField->getForForm(3);
         $this->set('defectFoundReasonFormField', $defectFoundReasonFormField);
-        
+
         $repairPostponedReasonFormField = $this->FormField->getForForm(4);
         $this->set('repairPostponedReasonFormField', $repairPostponedReasonFormField);
-        
+
         $noRepairReasonFormField = $this->FormField->getForForm(5);
         $this->set('noRepairReasonFormField', $noRepairReasonFormField);
-        
+
         $deviceMustNotBeUsedAnymoreFormField = $this->FormField->getForForm(6);
         $this->set('deviceMustNotBeUsedAnymoreFormField', $deviceMustNotBeUsedAnymoreFormField);
-        
+
         $this->setReferer();
-        
+
         if (!empty($this->request->getData())) {
-            
+
             $patchedEntity = $this->InfoSheet->getPatchedEntityForAdminEdit($infoSheet, $this->request->getData(), $this->useDefaultValidation);
-            
+
             $errors = $patchedEntity->getErrors();
             if (empty($errors)) {
-                
+
                 $patchedEntity = $this->patchEntityWithCurrentlyUpdatedFields($patchedEntity);
                 $entity = $this->stripTagsFromFields($patchedEntity, 'InfoSheet');
-                
+
                 if ($patchedEntity->category_id == -1) {
                     $category = $this->Category->save(
                         $this->Category->newEntity(
@@ -310,7 +310,7 @@ class InfoSheetsController extends AppController
                     ));
                     $entity->category_id = $category->id;
                 }
-                
+
                 if ($patchedEntity->brand_id == -1) {
                     $brand = $this->Brand->save(
                         $this->Brand->newEntity(
@@ -322,27 +322,27 @@ class InfoSheetsController extends AppController
                         ));
                     $entity->brand_id = $brand->id;
                 }
-                
+
                 if ($this->InfoSheet->save($entity)) {
                     $this->AppFlash->setFlashMessage($this->InfoSheet->name_de . ' erfolgreich gespeichert.');
                     $this->redirect($this->request->getData()['referer']);
                 } else {
                     $this->AppFlash->setFlashError($this->InfoSheet->name_de . ' <b>nicht</b>erfolgreich gespeichert.');
                 }
-                                
+
             } else {
                 $infoSheet = $patchedEntity;
             }
         }
-        
+
         $this->set('infoSheet', $infoSheet);
         $this->set('isEditMode', $isEditMode);
-        
+
         if (!empty($errors)) {
             $this->render('edit');
         }
-        
+
     }
-    
+
 }
 ?>

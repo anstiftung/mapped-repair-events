@@ -18,10 +18,10 @@ class FileAndEmailLog extends FileLog
             $this->sendEmailWithErrorInformation($message);
         }
     }
-    
+
     private function sendEmailWithErrorInformation($message)
     {
-        
+
         $ignoredExceptionsRegex = [
            '(MissingController|MissingAction|RecordNotFound|NotFound)Exception',
            'Workshops\/rss\/home\.ctp',
@@ -33,13 +33,13 @@ class FileAndEmailLog extends FileLog
         if (preg_match('`' . join('|', $ignoredExceptionsRegex) . '`', $message)) {
             return false;
         }
-        
+
         $session = Router::getRequest()->getSession();
         $loggedUser = [];
         if ($session->read('Auth.User.uid') !== null) {
             $loggedUser = $session->read('Auth');
         }
-        
+
         $subject = 'ErrorLog RepIni: ' . Text::truncate($message, 90) . ' ' . date('Y-m-d H:i:s');
         try {
             $email = new Mailer('default');
@@ -55,7 +55,7 @@ class FileAndEmailLog extends FileLog
         } catch (SocketException $e) {
             return false;
         }
-        
+
     }
 
 }

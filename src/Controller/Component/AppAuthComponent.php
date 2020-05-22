@@ -8,21 +8,21 @@ use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
 
 class AppAuthComponent extends AuthComponent {
-    
+
     public $components = ['AppFlash', 'Session', 'RequestHandler', 'AppEmail'];
-    
+
     public $controller;
-    
-    
+
+
     /**
      * also private data of logged user is needed sometimes (internally)
      */
     public function user(?string $key = null)
     {
         $userFromSession = parent::user();
-        
+
         if (!empty($userFromSession)) {
-            
+
             $userModel = TableRegistry::getTableLocator()->get('Users');
             $user = $userModel->find('all', [
                 'conditions' => [
@@ -36,19 +36,19 @@ class AppAuthComponent extends AuthComponent {
                 ]
             ])->first();
             $user->revertPrivatizeData();
-            
+
             if ($key === null) {
                 return $user;
             }
-            
+
             return Hash::get($user, $key);
-        
+
         }
-        
+
         return null;
-        
+
     }
-    
+
     public function flash($message): void
     {
         $this->AppFlash->setFlashError($message);
@@ -57,11 +57,11 @@ class AppAuthComponent extends AuthComponent {
     public function getGroupId() {
         return $this->user('group_id');
     }
-    
+
     private function prepareGroupModel() {
         return TableRegistry::getTableLocator()->get('Groups');
     }
-    
+
     public function isAdmin() {
         if (!$this->user()) return false;
         $group = $this->prepareGroupModel();
@@ -82,7 +82,7 @@ class AppAuthComponent extends AuthComponent {
         $group = $this->prepareGroupModel();
         return $group->isInGroup($this->user(), $groups);
     }
-    
+
   /**
    * diese methode ist für das frontend (keine uid in url)
    * checks if the logged user is the owner of the passed modelName / url or not
@@ -90,7 +90,7 @@ class AppAuthComponent extends AuthComponent {
    * @param string url
    */
   public function isOwnerByModelNameAndUrl($modelName, $url) {
-    
+
     $pluralizedModelName = Inflector::pluralize($modelName);
     $objectTable = TableRegistry::getTableLocator()->get($pluralizedModelName);
     $object = $objectTable->find('all', [
@@ -99,13 +99,13 @@ class AppAuthComponent extends AuthComponent {
           $pluralizedModelName.'.url' => $url,
           $pluralizedModelName.'.status >= '.APP_DELETED
     ]]);
-    
+
     if ($object->count() == 1) {
       return true;
     }
-    
+
     return false;
-    
+
   }
 
   /**
@@ -114,27 +114,27 @@ class AppAuthComponent extends AuthComponent {
    * @param int $uid
    */
   public function isOwner($uid) {
-      
+
      $rootTable = TableRegistry::getTableLocator()->get('Roots');
      $objectType = $rootTable->getType($uid);
      $objectClass = Inflector::classify($objectType);
      $pluralizedClass = Inflector::pluralize($objectClass);
      $objectTable = TableRegistry::getTableLocator()->get($pluralizedClass);
-     
+
      $object = $objectTable->find('all', [
       'conditions' => [
           $pluralizedClass.'.owner' => $this->getUserUid(),
           $pluralizedClass.'.uid' => $uid,
           $pluralizedClass.'.status >= '.APP_DELETED
     ]]);
-     
+
     if ($object->count() == 1) {
       return true;
     }
     return false;
-    
+
   }
-      
+
       /**
        * @return int/boolean logged in User's uid or false if empty $this->User['uid']
        */
@@ -142,37 +142,37 @@ class AppAuthComponent extends AuthComponent {
           if (!$this->user()) return 0;
           return $this->user()['uid'];
       }
-      
+
       public function getUserName() {
           if (!$this->user()) return '';
           return $this->user()['firstname'] . ' ' . $this->user()['lastname'];
       }
-      
+
       public function getUserFirstname() {
           if (!$this->user()) return '';
           return $this->user()['firstname'];
       }
-      
+
       public function getUserLastname() {
           if (!$this->user()) return '';
           return $this->user()['lastname'];
       }
-      
+
       public function getUserEmail() {
           if (!$this->user()) return '';
           return $this->user()['email'];
       }
-      
+
       public function getUserNick() {
           if (!$this->user()) return '';
           return $this->user()['nick'];
       }
-      
+
       public function getUser() {
           if (!$this->user()) return 0;
           return $this->user();
-      }    
-    
+      }
+
 }
 
 ?>

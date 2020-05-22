@@ -3,7 +3,7 @@ use Cake\Core\Configure;
 use Cake\Utility\Hash;
 
 $this->element('addScript', array(
-    'script' => 
+    'script' =>
         JS_NAMESPACE.".Admin.bindDelete();".
         JS_NAMESPACE.".Helper.initTooltip('.tooltip');
     "
@@ -21,7 +21,7 @@ if (!isset($hideDeleteLink) || !$hideDeleteLink) {
 
 <div class="admin">
 
-	<div class="list">
+    <div class="list">
 
         <?php
         if (! isset($heading)) {
@@ -33,7 +33,7 @@ if (!isset($hideDeleteLink) || !$hideDeleteLink) {
             'first' => $heading
         ]);
         ?>
-        
+
         <?php
         if (! isset($optionalSearchForms)) {
             $optionalSearchForms = [];
@@ -77,19 +77,19 @@ if (!isset($hideDeleteLink) || !$hideDeleteLink) {
         <table class="list">
             <?php
             foreach ($fields as $field) {
-                
+
                 // wenn das feld "label" gesetzt ist, label anzeigen und zum nächsten feld
                 $label = $field['name'];
                 if (isset($field['label'])) {
                     $label = $field['label'];
                 }
-                
+
                 // nach owner.name ist nicht sortierbar wegen virtual fields...
                 if (isset($field['sortable']) && ! $field['sortable']) {
                     echo '<th>' . $label . '</th>';
                     continue;
                 }
-                
+
                 if (isset($field['type']) && in_array($field['type'], [
                     'array',
                     'habtm'
@@ -98,20 +98,20 @@ if (!isset($hideDeleteLink) || !$hideDeleteLink) {
                     $caption = preg_replace('/\./', ' ', $caption);
                     echo $caption;
                 } else {
-                    
+
                     $splittedField = preg_split('/\./', $field['name']);
-                    
+
                     if (count($splittedField) == 1) {
                         $caption = $this->name . "\n"  . $splittedField[0];
                     }
-                    
+
                     if (count($splittedField) == 3) { // TODO checken ob index vorhanden - momentan nicht nötig
                         $caption = $splittedField[1] . "\n" . $splittedField[2];
                     }
-                    
+
                     if (isset($caption)) {
                         $caption = preg_replace('/_/', ' ', $caption);
-                        
+
                         // bei bestimmten feldern keine caption anzeigen
                         if (preg_match('/(email|website|feed_url|twitter_username|facebook_username)/', $label)) {
                             echo '<th class="icon"></th>';
@@ -132,17 +132,17 @@ if (!isset($hideDeleteLink) || !$hideDeleteLink) {
             if (isset($showMethod)) {
                 echo '<th class="icon"></th>';
             }
-            
+
             foreach ($objects as $object) {
-                
+
                 $rowStatusClass = 'status-online';
                 if (isset($object['status']) && $object['status'] == APP_OFF) {
                     $rowStatusClass = ' status-offline';
                 }
                 echo '<tr class="' . $rowStatusClass . '">';
-                
+
                 foreach ($fields as $field) {
-                    
+
                     $value = '';
                     if (isset($field['type']) && $field['type'] == 'array') {
                         foreach ($object[$field['name']] as $key => $fieldValue) {
@@ -179,16 +179,16 @@ if (!isset($hideDeleteLink) || !$hideDeleteLink) {
                                         }
                                     } else {
                                         $value = $object[$splittedField[0]];
-                                    }                            
+                                    }
                             }
                         } else {
                             // example: entity.association.name
                             $value = $object->{$splittedField[0]}->{$splittedField[1]}->{$splittedField[2]};
                         }
                     }
-                    
+
                     echo '<td>';
-                    
+
                     if (! empty($field['link'])) {
                         $linkUrlMethod = $field['link']['urlMethod'];
                         $linkParamsArray = $field['link']['params'];
@@ -208,7 +208,7 @@ if (!isset($hideDeleteLink) || !$hideDeleteLink) {
                             echo $field['values']->$value;
                         }
                     } elseif (! empty($field['type'])) {
-                        
+
                         if ($field['type'] == 'datetime') {
                             if ($value) {
                                 echo $value->i18nFormat(Configure::read('DateFormat.de.DateNTimeShort'));
@@ -279,10 +279,10 @@ if (!isset($hideDeleteLink) || !$hideDeleteLink) {
                             echo $value;
                         }
                     }
-                    
+
                     echo '</td>';
                 }
-                
+
                 if ($showDeleteLink) {
                     echo '<td class="icon">';
                         echo $this->Html->link(
@@ -322,14 +322,14 @@ if (!isset($hideDeleteLink) || !$hideDeleteLink) {
                     ]);
                     echo '</td>';
                 }
-                
+
                 // show link
                 if (isset($showMethod)) {
-                    
+
                     echo '<td class="icon">';
-                    
+
                     $showMethodUrl = $showMethod['url'];
-                    
+
                     switch ($showMethodUrl) {
                         case 'urlEventDetail':
                             if (!empty($object['workshop'])) {
@@ -351,11 +351,11 @@ if (!isset($hideDeleteLink) || !$hideDeleteLink) {
                             $showMethodCall = $this->Html->$showMethodUrl($object['url']);
                             break;
                     }
-                    
+
                     if ($object['status'] != APP_ON) {
                         $showMethodCall = null;
                     }
-                    
+
                     if ($showMethodCall) {
                         echo $this->Html->link('<i class="fas fa-arrow-right fa-border"></i>', $showMethodCall, [
                             'title' => 'anzeigen',
@@ -364,18 +364,18 @@ if (!isset($hideDeleteLink) || !$hideDeleteLink) {
                     }
                     echo '</td>';
                 }
-                
+
                 echo '</tr>';
             }
-            
+
             ?>
-        
+
         </table>
-        
+
         <?php
         // echo $this->element('pagination');
         ?>
-        
+
     </div>
 
 </div>

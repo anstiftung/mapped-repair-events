@@ -6,7 +6,7 @@ use Cake\ORM\TableRegistry;
 
 trait LoginTrait
 {
-    
+
     protected function loginAsOrga()
     {
         $orgaUserEmail = 'johndoe@mailinator.com';
@@ -20,13 +20,13 @@ trait LoginTrait
             ]
         ])->first();
         $user->revertPrivatizeData();
-        
+
         $this->session([
             'Auth' => [
                 'User' => $user->toArray()
             ]
         ]);
-        
+
     }
 
 }

@@ -15,16 +15,16 @@ class SitemapsController extends AppController
             'index'
         ]);
     }
-    
+
     public function index()
     {
-     
+
         if (!$this->RequestHandler->prefers('xml')) {
             throw new NotFoundException();
         }
-        
+
         $this->RequestHandler->renderAs($this, 'xml');
-        
+
         $this->Workshop = TableRegistry::getTableLocator()->get('Workshops');
         $workshops = $this->Workshop->find('all', [
             'conditions' => [
@@ -32,7 +32,7 @@ class SitemapsController extends AppController
             ]
         ]);
         $this->set('workshops', $workshops);
-        
+
         $this->Post = TableRegistry::getTableLocator()->get('Posts');
         $posts = $this->Post->find('all', [
             'conditions' => [
@@ -40,7 +40,7 @@ class SitemapsController extends AppController
             ]
         ]);
         $this->set('posts', $posts);
-        
+
         $this->Page = TableRegistry::getTableLocator()->get('Pages');
         $pages = $this->Page->find('all', [
             'conditions' => [
@@ -48,7 +48,7 @@ class SitemapsController extends AppController
             ]
         ]);
         $this->set('pages', $pages);
-        
+
     }
 
 }

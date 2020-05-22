@@ -118,7 +118,7 @@ if (!$fullBaseUrl) {
     if (env('HTTPS')) {
         $s = 's';
     }
-    
+
     $httpHost = env('HTTP_HOST');
     if (isset($httpHost)) {
         $fullBaseUrl = 'http' . $s . '://' . $httpHost;
@@ -141,12 +141,12 @@ if (!is_null(Configure::read('Security.salt'))) {
  */
 ServerRequest::addDetector('mobile', function ($request) {
     $detector = new \Detection\MobileDetect();
-    
+
     return $detector->isMobile();
 });
 ServerRequest::addDetector('tablet', function ($request) {
     $detector = new \Detection\MobileDetect();
-    
+
     return $detector->isTablet();
 });
 

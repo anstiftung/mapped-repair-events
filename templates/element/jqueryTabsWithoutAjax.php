@@ -16,5 +16,5 @@ $this->element('addScript', ['script' =>
                 echo '<li class="'.implode(' ', $classes).'"><a href="'.$link['url'].'" class="ui-tabs-anchor">'.$link['name'].'</a></li>';
             }
         ?>
-	</ul>
-</div>   
+    </ul>
+</div>

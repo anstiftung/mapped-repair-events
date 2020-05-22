@@ -6,23 +6,23 @@ use Cake\ORM\Entity;
 
 class User extends Entity
 {
-    
+
     protected $_virtual = ['name'];
     public $privatize = true;
-    
+
     public function __construct(array $properties = [], array $options = [])
     {
         parent::__construct($properties, $options);
         $this->privatizeData($this);
     }
-    
+
     public function revertPrivatizeData()
     {
         foreach($this->extractOriginalChanged($this->getVisible()) as $property => $value) {
-            $this->$property = $value; 
+            $this->$property = $value;
         }
     }
-    
+
     public function privatizeData(&$user)
     {
         $privateFields = explode(',',  $user->private);
@@ -33,7 +33,7 @@ class User extends Entity
             }
         }
     }
-    
+
     protected function _getName()
     {
         if (isset($this->_fields['firstname']) && isset($this->_fields['lastname'])) {
@@ -41,7 +41,7 @@ class User extends Entity
         }
         return '';
     }
-    
+
     protected function _setPassword($password)
     {
         if (strlen($password) > 0) {
@@ -58,5 +58,5 @@ class User extends Entity
         '_joinData',
         'UsersWorkshops'
     ];
-    
+
 }

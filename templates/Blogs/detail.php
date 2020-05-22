@@ -13,7 +13,7 @@ echo $this->element('highlightNavi',['main' => $blog->name]);
     echo '<br>' . $this->element('heading', [
         'first' => $blogHeading
     ]);
-	
+
     if (count($posts) > 0) {
       echo '<span class="rsslink-wrapper">
                 <a class="rsslink" target="_blank" href="'.$this->Html->urlFeed($blog->url).'" title="'.__('get platform news via E-Mail').'">
@@ -27,14 +27,14 @@ echo $this->element('highlightNavi',['main' => $blog->name]);
             echo $blog->text;
         echo '</div>';
     }
-    
-    foreach($posts as $post) { 
-    
+
+    foreach($posts as $post) {
+
         $params = [];
         $params['post'] = $post;
         $params['type'] = 'preview';
         $params['blog'] = $post->blog;
-        
+
         if (!$this->request->getSession()->read('isMobile') && $post->image != '') {
             $postImage = $this->Html->getThumbs100Image($post->image, 'posts');
             $params['imageSize'] = 150;
@@ -47,7 +47,7 @@ echo $this->element('highlightNavi',['main' => $blog->name]);
             }
         }
         echo '<br /><br />'.$this->element('post', $params);
-        
+
     }
 ?>
 
@@ -60,9 +60,9 @@ $this->element('addScript', ['script' => "
             $(this).tooltip({
                 content: function() {
                     return $(this).attr('title');
-                } 
+                }
             }).triggerHandler('mouseover');
         }
     });
 "]);
-?> 
+?>

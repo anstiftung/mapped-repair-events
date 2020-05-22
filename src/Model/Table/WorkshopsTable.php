@@ -7,7 +7,7 @@ use Cake\ORM\TableRegistry;
 
 class WorkshopsTable extends AppTable
 {
-    
+
     public $name_de = '';
 
     public $allowedBasicHtmlFields = [
@@ -20,9 +20,9 @@ class WorkshopsTable extends AppTable
     public function initialize(array $config): void
     {
         parent::initialize($config);
-        
+
         $this->name_de = Configure::read('AppConfig.initiativeNameSingular');
-        
+
         $this->belongsTo('Countries', [
             'foreignKey' => 'country_code'
         ]);
@@ -55,7 +55,7 @@ class WorkshopsTable extends AppTable
             'targetForeignKey' => 'category_id'
         ]);
     }
-    
+
     public function validationDefault(Validator $validator): \Cake\Validation\Validator
     {
         $validator = $this->validationAdmin($validator);
@@ -76,10 +76,10 @@ class WorkshopsTable extends AppTable
             'rule' => array('custom', ZIP_REGEX),
             'message' => 'Die PLZ ist nicht gültig.'
         ]);
-        
+
         return $validator;
     }
-    
+
     public function validationAdmin(Validator $validator)
     {
         $validator = $this->getNumberRangeValidator($validator, 'lat', -90, 90);
@@ -94,9 +94,9 @@ class WorkshopsTable extends AppTable
         $validator->notEmptyString('email', 'Bitte trage deine E-Mail-Adresse ein.');
         return $validator;
     }
-    
+
     /**
-     * 
+     *
      * @param int $userUid
      * @return array
      */
@@ -117,12 +117,12 @@ class WorkshopsTable extends AppTable
         }
         return $workshops;
     }
-    
+
     public function getWorkshopsForAdmin($workshopStatus)
     {
         return $this->getWorkshopsWithUsers($workshopStatus);
     }
-    
+
     public function transformForDropdown($workshops)
     {
         $result = [];
@@ -131,7 +131,7 @@ class WorkshopsTable extends AppTable
         }
         return $result;
     }
-    
+
     public function getWorkshopsWithUsers($workshopStatus)
     {
         $workshops = $this->find('all', [
@@ -153,7 +153,7 @@ class WorkshopsTable extends AppTable
         }
         return $workshops;
     }
-    
+
     private function addBlockedWorkshopSlugsValidationRule($validator)
     {
         $validator->add('url', 'addBlockedWorkshopSlugsValidationRule', [
@@ -173,16 +173,16 @@ class WorkshopsTable extends AppTable
             'message' => 'Dieser Slug darf nicht verwendet werden.'
         ]);
         return $validator;
-        
+
     }
-    
+
     public function getTeam($workshop)
     {
         return $workshop->users;
     }
-    
+
     /**
-     * returns owner and approved users_workshops users with group $orgaTeamGroups 
+     * returns owner and approved users_workshops users with group $orgaTeamGroups
      * @param $workshop
      * @return array
      */
@@ -208,7 +208,7 @@ class WorkshopsTable extends AppTable
         }
         return $orgaTeam;
     }
-    
+
     public function getWorkshopForIsUserInOrgaTeamCheck($workshopUid)
     {
         $usersAssociation = $this->getAssociation('Users');
@@ -227,7 +227,7 @@ class WorkshopsTable extends AppTable
         ])->first();
         return $workshop;
     }
-    
+
     public function isUserInOrgaTeam($user, $workshop)
     {
         if (empty($user)) {
@@ -243,7 +243,7 @@ class WorkshopsTable extends AppTable
         }
         return $userFound;
     }
-    
+
     public function getKeywordSearchConditions($keyword, $negate) {
         return function ($exp, $query) use ($keyword, $negate) {
             $result = $exp->or_([
@@ -257,7 +257,7 @@ class WorkshopsTable extends AppTable
             return $result;
         };
     }
-    
+
     public function getLatestWorkshops() {
         $workshops = $this->find('all', [
             'fields' => [
@@ -279,7 +279,7 @@ class WorkshopsTable extends AppTable
         ]);
         return $workshops;
     }
-    
+
     /**
      *
      * @param int $workshopUid
@@ -301,7 +301,7 @@ class WorkshopsTable extends AppTable
                 'UsersWorkshops'
             ]
         ])->first();
-        
+
         if (!empty($workshop->users_workshops)) {
             return true;
         } else {

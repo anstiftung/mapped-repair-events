@@ -15,7 +15,7 @@ class SkillsController extends AppController
             'detail'
         ]);
     }
-    
+
     public function all()
     {
         $metaTags = [
@@ -24,7 +24,7 @@ class SkillsController extends AppController
             'keywords' => ''
         ];
         $this->set('metaTags', $metaTags);
-        
+
         $this->Skill = TableRegistry::getTableLocator()->get('Skills');
         $skills = $this->Skill->find('all', [
             'order' => [
@@ -42,7 +42,7 @@ class SkillsController extends AppController
                 ]
             ]
         ]);
-        
+
         $preparedSkills = [];
         $skillCount = 0;
         foreach($skills as $skill) {

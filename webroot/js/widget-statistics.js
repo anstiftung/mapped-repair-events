@@ -1,32 +1,32 @@
 MappedRepairEvents.WidgetStatistics = {
-   
+
     initFilterForm : function() {
         this.initResetButton();
         this.initFormFieldChangeEvent();
     },
-   
+
     initFormFieldChangeEvent : function() {
         $('form input, form select').on('change', function() {
             $(this).closest('form').submit();
         });
     },
-    
+
     initMaterialFootprintAnimation : function() {
-        
+
         var wrapperSelector = '.material-footprint-wrapper';
-        
+
         var contentWidth = $('#content').width();
         var erWrapper = $(wrapperSelector);
 
         if (contentWidth <= 650) {
             erWrapper.addClass('small');
         }
-        
+
         var totalCount = MappedRepairEvents.Helper.getStringAsFloat($(wrapperSelector + ' .amount-persons-per-year').text());
         $(wrapperSelector + ' b').html(totalCount).text();
-        
+
         var digitsUpToCount = 10; // also adapt in MyHtmlHelper::getMaterialFootprintAsString
-        
+
         $('.material-footprint-wrapper b').each(function () {
             var $this = $(this);
             var newCounter = MappedRepairEvents.Helper.getStringAsFloat($this.text());
@@ -36,7 +36,7 @@ MappedRepairEvents.WidgetStatistics = {
             }
             newCounter -= step;
             $({ counter: 0 }).animate({
-                counter: newCounter 
+                counter: newCounter
             },
             {
               duration: 2000,
@@ -61,22 +61,22 @@ MappedRepairEvents.WidgetStatistics = {
             });
           });
     },
-   
+
     initCarbonFootprintAnimation : function() {
-       
+
         var contentWidth = $('#content').width();
         var erWrapper = $('.carbon-footprint-wrapper');
 
         if (contentWidth <= 650) {
             erWrapper.addClass('small');
         }
-        
+
         if (!erWrapper.hasClass('small')) {
             erWrapper.find('.info-text').appendTo(erWrapper.find('.line'));
         }
 
         var lineWidthInPx = contentWidth - erWrapper.find('img').width() * 2 - 50;
-        
+
         // has scrollbar?
         if ($('body').get(0).scrollWidth == $('html').width()) {
             lineWidthInPx -= 20;
@@ -90,19 +90,19 @@ MappedRepairEvents.WidgetStatistics = {
             });
         });
     },
-        
+
     initResetButton : function() {
         $('#reset').on('click', function(event) {
-            
+
             var form = $(this).closest('form');
-            
+
             if (form.find('#datefrom').length > 0) {
                 form.find('#datefrom').val('01.01.2010');
             }
             if (form.find('#dateto').length > 0) {
                 form.find('#dateto').val(form.find('#today').val());
             }
-            
+
             if (form.find('input[name="defaultDataSource"]').length > 0) {
                 form.find('#datasource').val(form.find('input[name="defaultDataSource"]'));
             }
@@ -112,16 +112,16 @@ MappedRepairEvents.WidgetStatistics = {
             if (form.find('select[name="year"]').length > 0) {
                 form.find('select[name="year"]').val('');
             }
-            
+
         });
     },
-   
+
     loadWorkshopDetailChartRepaired : function(data, displayLabel) {
-        
+
         displayLabel = displayLabel || false;
-        
+
         data = $.parseJSON(data);
-       
+
         var config = {
             type: 'doughnut',
             data: {
@@ -149,7 +149,7 @@ MappedRepairEvents.WidgetStatistics = {
                             return newLabel;
                         }
                     }
-                },                
+                },
                 legend: {
                     display: displayLabel
                 },
@@ -159,15 +159,15 @@ MappedRepairEvents.WidgetStatistics = {
                 }
             }
         };
-       
+
         new Chart($('#chartRepaired'), config);
-       
+
     },
-   
+
     loadWorkshopDetailChartCategories : function(data) {
-       
+
         data = $.parseJSON(data);
-       
+
         var config = {
             type: 'bar',
             data: {
@@ -188,7 +188,7 @@ MappedRepairEvents.WidgetStatistics = {
                             return newLabel;
                         }
                     }
-                },                
+                },
                 scales: {
                     xAxes: [{
                         stacked: true,
@@ -200,7 +200,7 @@ MappedRepairEvents.WidgetStatistics = {
                         },
                         gridLines: {
                             display: false
-                        }                       
+                        }
                     }],
                     yAxes: [{
                         stacked: true,
@@ -210,12 +210,12 @@ MappedRepairEvents.WidgetStatistics = {
                             }
                         }
                     }]
-                }                   
+                }
             }
         };
-       
+
         new Chart($('#chartCategories'), config);
-       
+
     }
-         
+
 };

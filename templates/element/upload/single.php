@@ -6,7 +6,7 @@
  * @param int uid
  * @parms string label
  */
- 
+
 if (empty($image)) {
     $linkSrcForOverlay = '';
     $linkTagForForm = '<i class="fa fa-camera fa-border"></i>';
@@ -31,7 +31,7 @@ echo $this->element('upload/base', [
     <label style="vertical-align: top;"><?php echo $label; ?></label>
     <?php
     if ($uid === null) {
-        echo 'Um ein Logo hochzuladen, bitte zuerst speichern.';   
+        echo 'Um ein Logo hochzuladen, bitte zuerst speichern.';
     } else {
         echo $this->Html->link(
             $linkTagForForm,

@@ -13,7 +13,7 @@ class DetectsController extends AppController
             'setIsMobile'
         ]);
     }
-    
+
     public function setIsMobile()
     {
         $this->RequestHandler->renderAs($this, 'json');

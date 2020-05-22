@@ -8,7 +8,7 @@ namespace App\Shell;
 use Cake\Console\Shell;
 
 class AppShell extends Shell {
-    
+
     public function getEnvironment() {
         $environment = 'live';
         if (isset($_SERVER['HOMEPATH']) &&  $_SERVER['HOMEPATH'] == '\Users\mario') {

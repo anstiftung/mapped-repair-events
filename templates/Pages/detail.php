@@ -6,6 +6,6 @@
 <div class="text-wrapper">
   <?php
     echo $page->text;
-?>   
-  
+?>
+
 </div>

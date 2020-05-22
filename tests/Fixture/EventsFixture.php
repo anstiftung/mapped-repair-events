@@ -9,7 +9,7 @@ use Cake\I18n\FrozenTime;
 class EventsFixture extends TestFixture
 {
     public $import = ['table' => 'events', 'connection' => 'default'];
-    
+
     public function init(): void
     {
         $this->records = [
@@ -29,6 +29,6 @@ class EventsFixture extends TestFixture
         ];
         parent::init();
     }
-    
+
 }
 ?>

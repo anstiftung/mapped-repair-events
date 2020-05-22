@@ -14,13 +14,13 @@ abstract class AppTable extends Table
     public $allowedBasicHtmlFields = [];
 
     public $Root;
-    
+
     public $loggedUserUid = 0;
 
     public function initialize(array $config): void
     {
         $this->setPrimaryKey('uid');
-        
+
         $this->addBehavior('Timestamp', [
             'events' => [
                 'Model.beforeSave' => [
@@ -29,7 +29,7 @@ abstract class AppTable extends Table
                 ]
             ]
         ]);
-        
+
         $this->belongsTo('Roots', [
             'foreignKey' => 'uid'
         ]);
@@ -45,9 +45,9 @@ abstract class AppTable extends Table
             'className' => 'Users',
             'foreignKey' => 'owner'
         ]);
-                
+
     }
-    
+
     public function addUrlValidation(Validator $validator)
     {
         $validator->notEmptyString('url', 'Bitte trage einen Slug ein.');
@@ -64,19 +64,19 @@ abstract class AppTable extends Table
         ]);
         return $validator;
     }
-    
+
     public function validationAdmin(Validator $validator)
     {
         $validator = $this->addUrlValidation($validator);
         return $validator;
     }
-    
+
     public function validationDefault(Validator $validator): \Cake\Validation\Validator
     {
         $validator = $this->validationAdmin($validator);
         return $validator;
     }
-    
+
     public function getNumberRangeValidator(Validator $validator, $field, $min, $max)
     {
         $message = 'Die Eingabe muss eine Zahl zwischen ' . $min . ' und ' . $max . ' sein.';
@@ -85,7 +85,7 @@ abstract class AppTable extends Table
         $validator->notEmptyString($field, $message);
         return $validator;
     }
-    
+
     public function getPatchedEntityForAdminEdit($entity, $data, $useDefaultValidation)
     {
         $patchedEntity = $this->patchEntity(
@@ -98,7 +98,7 @@ abstract class AppTable extends Table
 
     public function beforeSave(EventInterface $event, $entity, $options)
     {
-        
+
         $request = Router::getRequest();
         if ($request) {
             $session = $request->getSession();
@@ -107,7 +107,7 @@ abstract class AppTable extends Table
             }
         }
         if ($entity->isNew()) {
-            
+
             /*
              * INSERT
              */
@@ -121,7 +121,7 @@ abstract class AppTable extends Table
             ];
             $result = $this->Root->save($this->Root->newEntity($rootEntity));
             $entity->uid = $result->uid;
-            
+
             if ($entity->url == '') {
                 $entity->url = !empty($entity->name) ? StringComponent::slugify($entity->name) : $result->uid;
             }
@@ -131,23 +131,23 @@ abstract class AppTable extends Table
             if ($entity->status == '') {
                 $entity->status = APP_OFF;
             }
-            
+
         } else {
             /*
              * UPDATE
              */
         }
-        
+
         // add default protocol to field website
         if ($this->hasField('website') && $entity->website != '') {
             if (!preg_match('/^https?:\/\//', $entity->website)) {
                 $entity->website = 'http://'.$entity->website;
             }
         }
-        
+
         $entity->updated_by = $this->loggedUserUid;
-        
-    }    
+
+    }
 
 }
 ?>
