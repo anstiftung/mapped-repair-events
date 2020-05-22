@@ -15,9 +15,11 @@
 namespace App\Controller;
 
 use Cake\Core\Configure;
+use Cake\Http\Cookie\Cookie;
 use Cake\Http\Exception\NotFoundException;
 use Cake\ORM\TableRegistry;
 use Cake\Event\EventInterface;
+use DateTime;
 
 /**
  * Static content controller
@@ -40,7 +42,14 @@ class PagesController extends AppController
     
     public function closeCovid19Banner() {
         $this->RequestHandler->renderAs($this, 'json');
-        $_SESSION['show_covid_19_banner'] = false;
+        $cookie = (new Cookie('covid_19_banner'))
+        ->withValue(
+            [
+                'show' => false,            ]
+            )
+            ->withExpiry(new DateTime('+30 day'));
+            $this->setResponse($this->getResponse()->withCookie($cookie));
+        
         $this->set([
             'status' => true
         ]);

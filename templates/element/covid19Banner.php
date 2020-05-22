@@ -1,11 +1,16 @@
 <?php
-    if (isset($_SESSION['show_covid_19_banner']) && !$_SESSION['show_covid_19_banner']) {
+
+$covid19BannerCookie = $this->getRequest()->getCookie('covid_19_banner');
+if (!empty($covid19BannerCookie)) {
+    $value = json_decode($covid19BannerCookie);
+    if (isset($value->show) && !$value->show) {
         return;
     }
-    
-    $this->element('addScript', ['script' =>
-        JS_NAMESPACE.".Helper.initCovid19Banner();
-    "]);
+}
+
+$this->element('addScript', ['script' =>
+    JS_NAMESPACE.".Helper.initCovid19Banner();
+"]);
 
 ?>
 
