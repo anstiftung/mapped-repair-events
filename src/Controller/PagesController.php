@@ -39,7 +39,7 @@ class PagesController extends AppController
             'closeCovid19Banner'
         ]);
     }
-    
+
     public function closeCovid19Banner() {
         $this->RequestHandler->renderAs($this, 'json');
         $cookie = (new Cookie('covid_19_banner'))
@@ -47,9 +47,9 @@ class PagesController extends AppController
             [
                 'show' => false,            ]
             )
-            ->withExpiry(new DateTime('+30 day'));
+            ->withExpiry(new DateTime('+7 day'));
             $this->setResponse($this->getResponse()->withCookie($cookie));
-        
+
         $this->set([
             'status' => true
         ]);
