@@ -39,7 +39,10 @@ function initCal(){
         ,viewRender : function() {
 
             <?php if (!$this->request->getSession()->read('isMobile')) { ?>
-                $('#covid-19-banner').animate({ opacity: 'toggle' }, 'slow');
+                var container = $('#covid-19-banner');
+                if (container.css('display') == 'none') {
+                    container.animate({ opacity: 'toggle' }, 'slow');
+                }
             <?php } ?>
 
             $('#selectedDate').attr('data-date', '').html('');
