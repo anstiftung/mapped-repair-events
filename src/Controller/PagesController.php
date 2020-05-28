@@ -15,9 +15,11 @@
 namespace App\Controller;
 
 use Cake\Core\Configure;
+use Cake\Http\Cookie\Cookie;
 use Cake\Http\Exception\NotFoundException;
 use Cake\ORM\TableRegistry;
 use Cake\Event\EventInterface;
+use DateTime;
 
 /**
  * Static content controller
@@ -33,8 +35,25 @@ class PagesController extends AppController
     {
         parent::beforeFilter($event);
         $this->AppAuth->allow([
-            'detail'
+            'detail',
+            'closeCovid19Banner'
         ]);
+    }
+
+    public function closeCovid19Banner() {
+        $this->RequestHandler->renderAs($this, 'json');
+        $cookie = (new Cookie('covid_19_banner'))
+        ->withValue(
+            [
+                'show' => false,            ]
+            )
+            ->withExpiry(new DateTime('+7 day'));
+            $this->setResponse($this->getResponse()->withCookie($cookie));
+
+        $this->set([
+            'status' => true
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['status']);
     }
 
     public function detail()

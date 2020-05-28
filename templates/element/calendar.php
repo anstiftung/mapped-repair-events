@@ -17,6 +17,11 @@
 <div id="selectedDate"></div>
 <div id="calDottedLine" class="dotted-line-full-width"></div>
 <div id="calEvents"></div>
+<?php
+if (!$this->request->getSession()->read('isMobile')) {
+        echo $this->element('covid19Banner');
+    }
+?>
 
 <script type="text/javascript">
 var autoClicked = false;
@@ -32,6 +37,13 @@ function initCal(){
         ,lang : 'de'
         <?php if ( $event ): ?>,defaultDate : '<?php echo $event[1]; ?>'<?php endif; ?>
         ,viewRender : function() {
+
+            <?php if (!$this->request->getSession()->read('isMobile')) { ?>
+                var container = $('#covid-19-banner');
+                if (container.css('display') == 'none') {
+                    container.animate({ opacity: 'toggle' }, 'slow');
+                }
+            <?php } ?>
 
             $('#selectedDate').attr('data-date', '').html('');
             $('#calEvents').hide();
