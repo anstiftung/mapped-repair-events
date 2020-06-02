@@ -337,6 +337,7 @@ return [
         'defaults' => 'php',
         'ini' => [
             'session.save_path' => TMP . 'sessions',
+            'session.gc_maxlifetime' => 60*60*24,
         ],
         'timeout' => 60*60*24,
     ],
