@@ -1,7 +1,9 @@
 <?php
-@session_start();
 ini_set('upload_max_filesize', '100M');
 ini_set('post_max_size', '100M');
+$sessionSavePath = '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR . 'sessions';
+ini_set('session.save_path', $sessionSavePath);
+@session_start();
 if (empty($_SESSION['Auth'])) {
     exit(0);
 }
@@ -9,7 +11,7 @@ if (empty($_SESSION['Auth'])) {
 error_reporting(0); // Set E_ALL for debuging
 
 // // To Enable(true) handling of PostScript files by ImageMagick
-// // It is disabled by default as a countermeasure 
+// // It is disabled by default as a countermeasure
 // // of Ghostscript multiple -dSAFER sandbox bypass vulnerabilities
 // // see https://www.kb.cert.org/vuls/id/332928
 // define('ELFINDER_IMAGEMAGICK_PS', true);
@@ -112,11 +114,11 @@ elFinder::$netDrivers['ftp'] = 'FTP';
  * @return bool|null
  **/
 function access($attr, $path, $data, $volume, $isDir, $relpath) {
-	$basename = basename($path);
-	return $basename[0] === '.'                  // if file/folder begins with '.' (dot)
-			 && strlen($relpath) !== 1           // but with out volume root
-		? !($attr == 'read' || $attr == 'write') // set read+write to false, other (locked+hidden) set to true
-		:  null;                                 // else elFinder decide it itself
+    $basename = basename($path);
+    return $basename[0] === '.'                  // if file/folder begins with '.' (dot)
+             && strlen($relpath) !== 1           // but with out volume root
+        ? !($attr == 'read' || $attr == 'write') // set read+write to false, other (locked+hidden) set to true
+        :  null;                                 // else elFinder decide it itself
 }
 
 
@@ -147,7 +149,7 @@ if (isset($_SESSION['ELFINDER']['uploadUrl'])) {
 mkdir($uploadPath, 0777, true);
 
 $opts = array(
-	// 'debug' => true,
+    // 'debug' => true,
     'bind' => array(
         'upload.presave' => array(
             'Plugin.AutoResize.onUpLoadPreSave'
@@ -161,19 +163,19 @@ $opts = array(
             'quality' => 95
         )
     ),
-	'roots' => array(
-		array(
-			'driver'        => 'LocalFileSystem',           // driver for accessing file system (REQUIRED)
-		    'path'          => $uploadPath, // path to files (REQUIRED)
-			'URL'           => $uploadUrl, // URL to files (REQUIRED)
-		    'trashHash'     => 't1_Lw',                     // elFinder's hash of trash folder
-		    'winHashFix'    => DIRECTORY_SEPARATOR !== '/', // to make hash same to Linux one on windows too
-			'uploadDeny'    => array('all'),                // All Mimetypes not allowed to upload
-			'uploadAllow'   => $allowed,// Mimetype `image` and `text/plain` allowed to upload
-			'uploadOrder'   => array('deny', 'allow'),      // allowed Mimetype `image` and `text/plain` only
-			'accessControl' => 'access'                     // disable and hide dot starting files (OPTIONAL)
-		)
-	)
+    'roots' => array(
+        array(
+            'driver'        => 'LocalFileSystem',           // driver for accessing file system (REQUIRED)
+            'path'          => $uploadPath, // path to files (REQUIRED)
+            'URL'           => $uploadUrl, // URL to files (REQUIRED)
+            'trashHash'     => 't1_Lw',                     // elFinder's hash of trash folder
+            'winHashFix'    => DIRECTORY_SEPARATOR !== '/', // to make hash same to Linux one on windows too
+            'uploadDeny'    => array('all'),                // All Mimetypes not allowed to upload
+            'uploadAllow'   => $allowed,// Mimetype `image` and `text/plain` allowed to upload
+            'uploadOrder'   => array('deny', 'allow'),      // allowed Mimetype `image` and `text/plain` only
+            'accessControl' => 'access'                     // disable and hide dot starting files (OPTIONAL)
+        )
+    )
 );
 
 // run elFinder
