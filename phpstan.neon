@@ -4,7 +4,7 @@ parameters:
         - php
     paths:
         - src
-    autoload_files:
+    bootstrapFiles:
         - tests/bootstrap.php
     excludes_analyse:
         - src/Controller/Component/FluxBbComponent.php
