@@ -338,7 +338,7 @@ return [
         'ini' => [
             'session.save_path' => TMP . 'sessions',
         ],
-        // if timeout changes, change value CleanSessionsShell too (in minutes!)
+        // if timeout changes, change value CleanSessionsShell too)
         'timeout' => 60*60*24,
     ],
 ];
