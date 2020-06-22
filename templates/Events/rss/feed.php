@@ -30,7 +30,7 @@ foreach ($events as $event) {
     $items[] = [
         'title' => $event->workshop->name,
         'link' => $link,
-        'guid' => ['url' => $link, 'isPermaLink' => 'true'],
+        'guid' => ['url' => $link],
         'description' => $body,
         'pubDate' => $event->datumstart->i18nFormat(Configure::read('DateFormat.de.DateLong2'))
     ];

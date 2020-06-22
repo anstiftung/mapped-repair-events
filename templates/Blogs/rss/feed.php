@@ -18,7 +18,7 @@ foreach ($posts as $post) {
     $items[] = [
         'title' => $post->name,
         'link' => $link,
-        'guid' => ['url' => $link, 'isPermaLink' => 'true'],
+        'guid' => ['url' => $link],
         'description' => $body,
         'pubDate' => $post->publish->i18nFormat(Configure::read('DateFormat.de.DateLong2'))
     ];
