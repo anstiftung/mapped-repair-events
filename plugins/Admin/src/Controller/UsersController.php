@@ -2,7 +2,6 @@
 namespace Admin\Controller;
 
 use Cake\Event\EventInterface;
-use Cake\ORM\TableRegistry;
 
 class UsersController extends AdminAppController
 {
@@ -14,10 +13,10 @@ class UsersController extends AdminAppController
     public function __construct($request = null, $response = null)
     {
         parent::__construct($request, $response);
-        $this->User = TableRegistry::getTableLocator()->get('Users');
-        $this->Workshop = TableRegistry::getTableLocator()->get('Workshops');
-        $this->Country = TableRegistry::getTableLocator()->get('Countries');
-        $this->Group = TableRegistry::getTableLocator()->get('Groups');
+        $this->User = $this->getTableLocator()->get('Users');
+        $this->Workshop = $this->getTableLocator()->get('Workshops');
+        $this->Country = $this->getTableLocator()->get('Countries');
+        $this->Group = $this->getTableLocator()->get('Groups');
     }
 
     public function beforeFilter(EventInterface $event)
@@ -92,7 +91,7 @@ class UsersController extends AdminAppController
         }
         $this->set('objects', $objects->toArray());
 
-        $this->Workshop = TableRegistry::getTableLocator()->get('Workshops');
+        $this->Workshop = $this->getTableLocator()->get('Workshops');
         $this->set('workshops', $this->Workshop->getForDropdown());
     }
 }

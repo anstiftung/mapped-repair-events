@@ -8,7 +8,6 @@ use Cake\Event\EventInterface;
 use Cake\Mailer\Mailer;
 use Cake\Http\Exception\NotFoundException;
 use Cake\ORM\Query;
-use Cake\ORM\TableRegistry;
 
 class UsersController extends AppController
 {
@@ -16,7 +15,7 @@ class UsersController extends AppController
     public function __construct($request = null, $response = null)
     {
         parent::__construct($request, $response);
-        $this->User = TableRegistry::getTableLocator()->get('Users');
+        $this->User = $this->getTableLocator()->get('Users');
     }
 
     public function isAuthorized($user)
@@ -58,7 +57,7 @@ class UsersController extends AppController
         $skillId = 0;
         if (isset($this->getRequest()->getParam('pass')[0])) {
             $skillId = (int) $this->getRequest()->getParam('pass')[0];
-            $this->Skill = TableRegistry::getTableLocator()->get('Skills');
+            $this->Skill = $this->getTableLocator()->get('Skills');
             $skill = $this->Skill->find('all', [
                 'conditions' => [
                     'Skills.id' => $skillId,
@@ -116,7 +115,7 @@ class UsersController extends AppController
             }
         }
 
-        $this->Skill = TableRegistry::getTableLocator()->get('Skills');
+        $this->Skill = $this->getTableLocator()->get('Skills');
         $skillsForDropdown = $this->Skill->getForDropdown(false);
         $this->set('skillsForDropdown', $skillsForDropdown);
 
@@ -174,7 +173,7 @@ class UsersController extends AppController
     }
 
     public function welcome() {
-        $this->Page = TableRegistry::getTableLocator()->get('Pages');
+        $this->Page = $this->getTableLocator()->get('Pages');
         $homepageIntrotext = $this->Page->getPageByName('homepage.introtext');
         $this->set('homepageIntrotext', $homepageIntrotext);
         $metaTags = [
@@ -262,10 +261,10 @@ class UsersController extends AppController
 
     private function _profil($user, $isMyProfile, $isEditMode)
     {
-        $this->Category = TableRegistry::getTableLocator()->get('Categories');
+        $this->Category = $this->getTableLocator()->get('Categories');
         $this->set('categories', $this->Category->getForDropdown(APP_ON));
 
-        $this->Country = TableRegistry::getTableLocator()->get('Countries');
+        $this->Country = $this->getTableLocator()->get('Countries');
         $this->set('countries', $this->Country->getForDropdown());
 
         $this->set('groups', Configure::read('AppConfig.htmlHelper')->getUserGroupsForUserEdit($this->AppAuth->isAdmin()));
@@ -285,7 +284,7 @@ class UsersController extends AppController
             // START save user generated skills
             $skills = $this->request->getData('Users.skills._ids');
             if (!empty($skills)) {
-                $this->Skill = TableRegistry::getTableLocator()->get('Skills');
+                $this->Skill = $this->getTableLocator()->get('Skills');
                 $skillsToAdd = [];
                 foreach($skills as $key => $skill) {
                     if (!is_numeric($skill)) {
@@ -337,7 +336,7 @@ class UsersController extends AppController
         }
         $this->set('user', $user);
 
-        $this->Page = TableRegistry::getTableLocator()->get('Pages');
+        $this->Page = $this->getTableLocator()->get('Pages');
         $orgaInfotext = $this->Page->getPageByName('Was.ist.ein.Organisator');
         $this->set('orgaInfotext', $orgaInfotext->text);
         $repairhelperInfotext = $this->Page->getPageByName('Was.ist.ein.Reparateur');
@@ -387,7 +386,7 @@ class UsersController extends AppController
             throw new NotFoundException('user not found');
         }
 
-        $this->Skill = TableRegistry::getTableLocator()->get('Skills');
+        $this->Skill = $this->getTableLocator()->get('Skills');
         $skillsForDropdown = $this->Skill->getForDropdown(true);
         $this->set('skillsForDropdown', $skillsForDropdown);
 
@@ -464,7 +463,7 @@ class UsersController extends AppController
                 $this->AppAuth->setUser($user);
                 $redirectUrl = Configure::read('AppConfig.htmlHelper')->urlUserHome();
                 if ($this->AppAuth->isOrga()) {
-                    $workshop = TableRegistry::getTableLocator()->get('Workshops');
+                    $workshop = $this->getTableLocator()->get('Workshops');
                     $userWorkshops = $workshop->getWorkshopsForAssociatedUser($this->AppAuth->getUserUid(), APP_OFF);
                     if ($userWorkshops->count() == 1) {
                         $redirectUrl = Configure::read('AppConfig.htmlHelper')->urlWorkshopDetail($userWorkshops->first()->url);
@@ -515,7 +514,7 @@ class UsersController extends AppController
             'Users.status >= ' . APP_OFF
         ];
 
-        $this->User = TableRegistry::getTableLocator()->get('Users');
+        $this->User = $this->getTableLocator()->get('Users');
         $user = $this->User->find('all', [
             'conditions' => array_merge($conditions, [
                 'Users.confirm' => $this->request->getParam('pass')['0']
@@ -545,7 +544,7 @@ class UsersController extends AppController
         $this->AppAuth->setUser($user->toArray()); // toArray is important for forum to avoid __PHP_Incomplete_Class Object
 
         // activate newsletter if existing
-        $this->Newsletter = TableRegistry::getTableLocator()->get('Newsletters');
+        $this->Newsletter = $this->getTableLocator()->get('Newsletters');
         $newsletter = $this->Newsletter->find('all', [
             'conditions' => [
                 'Newsletters.email' => $user->email,
@@ -585,10 +584,10 @@ class UsersController extends AppController
     public function register($userGroup=GROUPS_REPAIRHELPER)
     {
 
-        $this->Country = TableRegistry::getTableLocator()->get('Countries');
+        $this->Country = $this->getTableLocator()->get('Countries');
         $this->set('countries', $this->Country->getForDropdown());
 
-        $this->Category = TableRegistry::getTableLocator()->get('Categories');
+        $this->Category = $this->getTableLocator()->get('Categories');
         $this->set('categories', $this->Category->getForDropdown(APP_ON));
 
         $this->set('groups', Configure::read('AppConfig.htmlHelper')->getUserGroupsForRegistration());

@@ -6,7 +6,6 @@ use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use Cake\Mailer\Mailer;
 use Cake\Http\Exception\NotFoundException;
-use Cake\ORM\TableRegistry;
 
 class NewslettersController extends AppController {
 
@@ -30,7 +29,7 @@ class NewslettersController extends AppController {
         ];
         $this->set('metaTags', $metaTags);
 
-        $this->Newsletter = TableRegistry::getTableLocator()->get('Newsletters');
+        $this->Newsletter = $this->getTableLocator()->get('Newsletters');
         $this->loadComponent('CptNewsletter');
         $newsletter = $this->CptNewsletter->getConfirmedNewsletterForEmail($this->AppAuth->getUserEmail());
 
@@ -82,7 +81,7 @@ class NewslettersController extends AppController {
             throw new NotFoundException('param not found');
         }
 
-        $this->Newsletter = TableRegistry::getTableLocator()->get('Newsletters');
+        $this->Newsletter = $this->getTableLocator()->get('Newsletters');
         $newsletter = $this->Newsletter->find('all', [
             'conditions' => [
                 'Newsletters.confirm' => $this->request->getParam('pass')['0'],
@@ -111,7 +110,7 @@ class NewslettersController extends AppController {
             throw new NotFoundException('param not found');
         }
 
-        $this->Newsletter = TableRegistry::getTableLocator()->get('Newsletters');
+        $this->Newsletter = $this->getTableLocator()->get('Newsletters');
         $newsletter = $this->Newsletter->find('all', [
             'conditions' => [
                 'Newsletters.unsub' => $this->request->getParam('pass')['0'],

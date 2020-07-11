@@ -4,7 +4,6 @@ namespace App\Controller;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use Cake\Http\Exception\NotFoundException;
-use Cake\ORM\TableRegistry;
 
 class PostsController extends AppController
 {
@@ -27,7 +26,7 @@ class PostsController extends AppController
         if ($url == '')
             throw new NotFoundException('page not found');
 
-        $this->Post = TableRegistry::getTableLocator()->get('Posts');
+        $this->Post = $this->getTableLocator()->get('Posts');
         $conditions = array_merge([
             'Posts.url' => $url,
             'Posts.status' => APP_ON

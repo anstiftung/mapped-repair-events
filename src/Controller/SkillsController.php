@@ -2,7 +2,6 @@
 namespace App\Controller;
 
 use Cake\Event\EventInterface;
-use Cake\ORM\TableRegistry;
 
 class SkillsController extends AppController
 {
@@ -25,7 +24,7 @@ class SkillsController extends AppController
         ];
         $this->set('metaTags', $metaTags);
 
-        $this->Skill = TableRegistry::getTableLocator()->get('Skills');
+        $this->Skill = $this->getTableLocator()->get('Skills');
         $skills = $this->Skill->find('all', [
             'order' => [
                 'Skills.name'=> 'ASC'

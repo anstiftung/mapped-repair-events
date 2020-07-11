@@ -6,7 +6,6 @@ use stdClass;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use Cake\Http\Exception\NotFoundException;
-use Cake\ORM\TableRegistry;
 
 class WidgetsController extends AppController
 {
@@ -39,7 +38,7 @@ class WidgetsController extends AppController
         if (!empty($_GET['id'])) {
             $workshopUid = (int) $_GET['id'];
         }
-        $this->Workshop = TableRegistry::getTableLocator()->get('Workshops');
+        $this->Workshop = $this->getTableLocator()->get('Workshops');
         $workshop = $this->Workshop->find('all', [
             'conditions' => [
                 'Workshops.uid' => $workshopUid
@@ -197,7 +196,7 @@ class WidgetsController extends AppController
 
         $this->viewBuilder()->setLayout('widget');
 
-        $this->Workshop = TableRegistry::getTableLocator()->get('Workshops');
+        $this->Workshop = $this->getTableLocator()->get('Workshops');
         $workshop = $this->Workshop->find('all', [
             'conditions' => [
                 'Workshops.uid' => $workshopUid,
@@ -227,8 +226,8 @@ class WidgetsController extends AppController
     private function statisticsWorkshopCategories($workshopUid, $dateFrom, $dateTo, $backgroundColorOk, $backgroundColorNotOk, $borderColorOk, $borderColorNotOk)
     {
 
-        $this->InfoSheet = TableRegistry::getTableLocator()->get('InfoSheets');
-        $this->Category = TableRegistry::getTableLocator()->get('Categories');
+        $this->InfoSheet = $this->getTableLocator()->get('InfoSheets');
+        $this->Category = $this->getTableLocator()->get('Categories');
         $categoriesForStatistics = $this->Category->getMainCategoriesForFrontend()->toArray();
 
         $categoriesLabels = [];
@@ -275,7 +274,7 @@ class WidgetsController extends AppController
     private function statisticsWorkshopRepaired($workshopUid, $dateFrom, $dateTo, $backgroundColorOk, $backgroundColorNotOk, $borderColorOk, $borderColorNotOk)
     {
 
-        $this->InfoSheet = TableRegistry::getTableLocator()->get('InfoSheets');
+        $this->InfoSheet = $this->getTableLocator()->get('InfoSheets');
 
         $dataRepaired = $this->InfoSheet->getRepairedByWorkshopUid($workshopUid, $dateFrom, $dateTo);
         $dataNotRepaired = $this->InfoSheet->getNotRepairedByWorkshopUid($workshopUid, $dateFrom, $dateTo);
@@ -435,7 +434,7 @@ class WidgetsController extends AppController
         $includeThirdPartyStatistics = in_array($dataSource, ['all', 'third-party-name']);
         $includeInfoSheetStatistics = in_array($dataSource, ['all', 'platform']);
 
-        $this->Category = TableRegistry::getTableLocator()->get('Categories');
+        $this->Category = $this->getTableLocator()->get('Categories');
         $categoriesForStatistics = $this->Category->getCategoriesForStatisticsGlobal();
 
         $categoriesIds = [];
@@ -457,7 +456,7 @@ class WidgetsController extends AppController
 
         if ($includeInfoSheetStatistics) {
 
-            $this->InfoSheet = TableRegistry::getTableLocator()->get('InfoSheets');
+            $this->InfoSheet = $this->getTableLocator()->get('InfoSheets');
             foreach($categoriesIds as $index => $mainCategoryId) {
                 $repaired = $this->InfoSheet->getRepairedGlobalByMainCategoryId($mainCategoryId, $dateFrom, $dateTo);
                 $carbonFootprint = $this->Category->getCarbonFootprintByParentCategoryId($mainCategoryId);
@@ -473,7 +472,7 @@ class WidgetsController extends AppController
 
         if ($includeThirdPartyStatistics) {
 
-            $this->ThirdPartyStatistic = TableRegistry::getTableLocator()->get('ThirdPartyStatistics');
+            $this->ThirdPartyStatistic = $this->getTableLocator()->get('ThirdPartyStatistics');
             $thirdPartySums = $this->ThirdPartyStatistic->getSumsByDate($dateFrom, $dateTo);
             $thirdPartyPreparedSums = $this->ThirdPartyStatistic->sumUpForMainCategory($thirdPartySums);
             $thirdPartyPreparedSums = $this->ThirdPartyStatistic->bindCategoryDataToSums($thirdPartyPreparedSums);
@@ -539,7 +538,7 @@ class WidgetsController extends AppController
         $dateFrom = $dates['dateFrom'];
         $dateTo = $dates['dateTo'];
 
-        $this->InfoSheet = TableRegistry::getTableLocator()->get('InfoSheets');
+        $this->InfoSheet = $this->getTableLocator()->get('InfoSheets');
 
         $dataRepaired = $this->InfoSheet->getRepaired($dateFrom, $dateTo);
         $dataNotRepaired = $this->InfoSheet->getNotRepaired($dateFrom, $dateTo);

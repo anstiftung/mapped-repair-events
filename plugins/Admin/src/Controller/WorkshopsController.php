@@ -2,7 +2,6 @@
 namespace Admin\Controller;
 
 use Cake\Event\EventInterface;
-use Cake\ORM\TableRegistry;
 
 class WorkshopsController extends AdminAppController
 {
@@ -40,8 +39,8 @@ class WorkshopsController extends AdminAppController
         ];
         $conditions = array_merge($this->conditions, $conditions);
 
-        $this->Workshop = TableRegistry::getTableLocator()->get('Workshops');
-        $this->User = TableRegistry::getTableLocator()->get('Users');
+        $this->Workshop = $this->getTableLocator()->get('Workshops');
+        $this->User = $this->getTableLocator()->get('Users');
 
         $query = $this->Workshop->find('all', [
             'conditions' => $conditions,
@@ -60,7 +59,7 @@ class WorkshopsController extends AdminAppController
             ]
         ]);
 
-        $this->InfoSheet = TableRegistry::getTableLocator()->get('InfoSheets');
+        $this->InfoSheet = $this->getTableLocator()->get('InfoSheets');
         foreach($objects as $object) {
             $object->workshop_info_sheets_count = $this->InfoSheet->workshopInfoSheetsCount($object->uid);
             foreach($object->users as $user) {
