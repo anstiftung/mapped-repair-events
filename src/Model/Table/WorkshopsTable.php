@@ -3,7 +3,7 @@ namespace App\Model\Table;
 
 use Cake\Validation\Validator;
 use Cake\Core\Configure;
-use Cake\ORM\TableRegistry;
+use Cake\Datasource\FactoryLocator;
 
 class WorkshopsTable extends AppTable
 {
@@ -158,7 +158,7 @@ class WorkshopsTable extends AppTable
     {
         $validator->add('url', 'addBlockedWorkshopSlugsValidationRule', [
             'rule' => function($value, $context) {
-                $bws = TableRegistry::getTableLocator()->get('BlockedWorkshopSlugs');
+                $bws = FactoryLocator::get('Table')->get('BlockedWorkshopSlugs');
                 $recordCount = $bws->find('all', [
                     'conditions' => [
                         'status' => APP_ON,

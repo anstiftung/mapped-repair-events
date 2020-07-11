@@ -3,9 +3,9 @@ namespace App\Controller\Component;
 
 use Cake\Controller\ComponentRegistry;
 use Cake\Core\Configure;
+use Cake\Datasource\FactoryLocator;
 use Cake\I18n\Time;
 use Cake\Mailer\Mailer;
-use Cake\ORM\TableRegistry;
 
 class CptNewsletterComponent extends AppComponent
 {
@@ -16,7 +16,7 @@ class CptNewsletterComponent extends AppComponent
     public function __construct(ComponentRegistry $registry, array $config = [])
     {
         parent::__construct($registry, $config);
-        $this->Newsletter = TableRegistry::getTableLocator()->get('Newsletters');
+        $this->Newsletter = FactoryLocator::get('Table')->get('Newsletters');
     }
 
     public function setConfirmationCode($confirmationCode)
