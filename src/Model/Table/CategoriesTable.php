@@ -84,7 +84,7 @@ class CategoriesTable extends Table
             ]
         ])
         ->where(function ($exp, $query) {
-            return $exp->or_([
+            return $exp->or([
                 'Categories.parent_id IS NULL',
                 'Categories.parent_id NOT IN' => Configure::read('AppConfig.mainCategoryIdsWhereSubCategoriesAreShown')
             ]);

@@ -1061,7 +1061,7 @@ class WorkshopsController extends AppController
         $this->set('keyword', $keyword);
 
         $workshops = $this->paginate($query, [
-            'sortWhitelist' => [
+            'sortableFields' => [
                 'Workshops.created', 'Workshops.zip', 'Workshops.city', 'Workshops.name'
             ],
             'order' => [
