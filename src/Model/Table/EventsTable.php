@@ -62,7 +62,7 @@ class EventsTable extends AppTable
 
     public function getKeywordSearchConditions($keyword, $negate) {
         return function ($exp, $query) use ($keyword, $negate) {
-            $result = $exp->or_([
+            $result = $exp->or([
                 'Events.zip LIKE' => $keyword . '%',
                 'Workshops.name LIKE' => $keyword . '%',
                 'Events.ort LIKE' => $keyword . '%',

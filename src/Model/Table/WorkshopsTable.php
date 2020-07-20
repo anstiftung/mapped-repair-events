@@ -246,7 +246,7 @@ class WorkshopsTable extends AppTable
 
     public function getKeywordSearchConditions($keyword, $negate) {
         return function ($exp, $query) use ($keyword, $negate) {
-            $result = $exp->or_([
+            $result = $exp->or([
                 'Workshops.city LIKE' => $keyword . '%',
                 'Workshops.zip LIKE' => $keyword . '%',
                 'Workshops.name LIKE' => $keyword . '%',
