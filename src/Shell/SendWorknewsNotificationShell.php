@@ -2,15 +2,13 @@
 
 namespace App\Shell;
 
-use Cake\ORM\TableRegistry;
-
 class SendWorknewsNotificationShell extends AppShell
 {
 
     public function main()
     {
 
-        $this->Event = TableRegistry::getTableLocator()->get('Events');
+        $this->Event = $this->getTableLocator()->get('Events');
 
         // find all events that start in one week
         $events = $this->Event->find('all', [
@@ -24,7 +22,7 @@ class SendWorknewsNotificationShell extends AppShell
         ]);
 
         // send notification mail to all subscribers
-        $this->Worknews = TableRegistry::getTableLocator()->get('Worknews');
+        $this->Worknews = $this->getTableLocator()->get('Worknews');
         foreach($events as $event) {
             $subscribers = $this->Worknews->getSubscribers($event->workshop_uid);
             if (!empty($subscribers)) {

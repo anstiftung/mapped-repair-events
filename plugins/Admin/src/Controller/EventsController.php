@@ -3,7 +3,6 @@ namespace Admin\Controller;
 
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
-use Cake\ORM\TableRegistry;
 
 class EventsController extends AdminAppController
 {
@@ -11,7 +10,7 @@ class EventsController extends AdminAppController
     public function __construct($request = null, $response = null)
     {
         parent::__construct($request, $response);
-        $this->Event = TableRegistry::getTableLocator()->get('Events');
+        $this->Event = $this->getTableLocator()->get('Events');
     }
 
     public function beforeFilter(EventInterface $event)
@@ -74,7 +73,7 @@ class EventsController extends AdminAppController
         }
         $this->set('objects', $objects->toArray());
 
-        $this->User = TableRegistry::getTableLocator()->get('Users');
+        $this->User = $this->getTableLocator()->get('Users');
         $this->set('users', $this->User->getForDropdown());
     }
 

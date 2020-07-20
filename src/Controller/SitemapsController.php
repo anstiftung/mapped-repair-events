@@ -2,7 +2,6 @@
 namespace App\Controller;
 
 use Cake\Event\EventInterface;
-use Cake\ORM\TableRegistry;
 use Cake\Http\Exception\NotFoundException;
 
 class SitemapsController extends AppController
@@ -25,7 +24,7 @@ class SitemapsController extends AppController
 
         $this->RequestHandler->renderAs($this, 'xml');
 
-        $this->Workshop = TableRegistry::getTableLocator()->get('Workshops');
+        $this->Workshop = $this->getTableLocator()->get('Workshops');
         $workshops = $this->Workshop->find('all', [
             'conditions' => [
                 'Workshops.status' => APP_ON
@@ -33,7 +32,7 @@ class SitemapsController extends AppController
         ]);
         $this->set('workshops', $workshops);
 
-        $this->Post = TableRegistry::getTableLocator()->get('Posts');
+        $this->Post = $this->getTableLocator()->get('Posts');
         $posts = $this->Post->find('all', [
             'conditions' => [
                 'Posts.status' => APP_ON
@@ -41,7 +40,7 @@ class SitemapsController extends AppController
         ]);
         $this->set('posts', $posts);
 
-        $this->Page = TableRegistry::getTableLocator()->get('Pages');
+        $this->Page = $this->getTableLocator()->get('Pages');
         $pages = $this->Page->find('all', [
             'conditions' => [
                 'Pages.status' => APP_ON

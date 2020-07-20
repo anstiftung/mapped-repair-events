@@ -2,7 +2,6 @@
 namespace Admin\Controller;
 
 use Cake\Http\Exception\NotFoundException;
-use Cake\ORM\TableRegistry;
 
 class SkillsController extends AdminAppController
 {
@@ -10,7 +9,7 @@ class SkillsController extends AdminAppController
     public function __construct($request = null, $response = null)
     {
         parent::__construct($request, $response);
-        $this->Skill = TableRegistry::getTableLocator()->get('Skills');
+        $this->Skill = $this->getTableLocator()->get('Skills');
     }
 
     public function insert()

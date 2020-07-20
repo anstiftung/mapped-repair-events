@@ -3,7 +3,6 @@ namespace App\Controller;
 
 use Cake\Event\EventInterface;
 use Cake\Http\Exception\NotFoundException;
-use Cake\ORM\TableRegistry;
 
 class BlogsController extends AppController
 {
@@ -40,7 +39,7 @@ class BlogsController extends AppController
             $conditions['Blogs.url'] = $this->request->getParam('blogUrl');
         }
 
-        $this->Post = TableRegistry::getTableLocator()->get('Posts');
+        $this->Post = $this->getTableLocator()->get('Posts');
         $posts = $this->Post->find('all', array(
             'order' => [
                 'Posts.publish'=> 'DESC'
@@ -66,7 +65,7 @@ class BlogsController extends AppController
         if ($url == '')
             throw new NotFoundException('page not found');
 
-        $this->Blog = TableRegistry::getTableLocator()->get('Blogs');
+        $this->Blog = $this->getTableLocator()->get('Blogs');
         $blog = $this->Blog->find('all', [
             'conditions' => [
                 'Blogs.url' => $url
@@ -79,7 +78,7 @@ class BlogsController extends AppController
         $this->set('blog', $blog);
 
         // get paginated posts
-        $this->Post = TableRegistry::getTableLocator()->get('Posts');
+        $this->Post = $this->getTableLocator()->get('Posts');
 
         // aktuelles blog should contain all blog posts (no blog id filter!)
         $conditions = [

@@ -3,7 +3,7 @@
 namespace App\Controller\Component;
 
 use Cake\Controller\Component\AuthComponent;
-use Cake\ORM\TableRegistry;
+use Cake\Datasource\FactoryLocator;
 use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
 
@@ -23,7 +23,7 @@ class AppAuthComponent extends AuthComponent {
 
         if (!empty($userFromSession)) {
 
-            $userModel = TableRegistry::getTableLocator()->get('Users');
+            $userModel = FactoryLocator::get('Table')->get('Users');
             $user = $userModel->find('all', [
                 'conditions' => [
                     'Users.uid' => $userFromSession['uid'],
@@ -59,7 +59,7 @@ class AppAuthComponent extends AuthComponent {
     }
 
     private function prepareGroupModel() {
-        return TableRegistry::getTableLocator()->get('Groups');
+        return FactoryLocator::get('Table')->get('Groups');
     }
 
     public function isAdmin() {
@@ -92,7 +92,7 @@ class AppAuthComponent extends AuthComponent {
   public function isOwnerByModelNameAndUrl($modelName, $url) {
 
     $pluralizedModelName = Inflector::pluralize($modelName);
-    $objectTable = TableRegistry::getTableLocator()->get($pluralizedModelName);
+    $objectTable = FactoryLocator::get('Table')->get($pluralizedModelName);
     $object = $objectTable->find('all', [
       'conditions' => [
           $pluralizedModelName.'.owner' => $this->getUserUid(),
@@ -115,11 +115,11 @@ class AppAuthComponent extends AuthComponent {
    */
   public function isOwner($uid) {
 
-     $rootTable = TableRegistry::getTableLocator()->get('Roots');
+     $rootTable = FactoryLocator::get('Table')->get('Roots');
      $objectType = $rootTable->getType($uid);
      $objectClass = Inflector::classify($objectType);
      $pluralizedClass = Inflector::pluralize($objectClass);
-     $objectTable = TableRegistry::getTableLocator()->get($pluralizedClass);
+     $objectTable = FactoryLocator::get('Table')->get($pluralizedClass);
 
      $object = $objectTable->find('all', [
       'conditions' => [

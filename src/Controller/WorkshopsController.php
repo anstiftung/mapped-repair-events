@@ -9,7 +9,6 @@ use Cake\I18n\Time;
 use Cake\Mailer\Mailer;
 use Cake\Http\Exception\ForbiddenException;
 use Cake\Http\Exception\NotFoundException;
-use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
 
 class WorkshopsController extends AppController
@@ -18,7 +17,7 @@ class WorkshopsController extends AppController
     public function beforeFilter(EventInterface $event) {
 
         parent::beforeFilter($event);
-        $this->Workshop = TableRegistry::getTableLocator()->get('Workshops');
+        $this->Workshop = $this->getTableLocator()->get('Workshops');
         $this->connection = ConnectionManager::get('default');
         $this->AppAuth->allow([
             'ajaxGetAllWorkshopsForMap',
@@ -72,7 +71,7 @@ class WorkshopsController extends AppController
             $workshopUid = (int) $this->request->getParam('pass')[0];
 
             // all approved orgas are alloewed to edit and add workshops
-            $this->Workshop = TableRegistry::getTableLocator()->get('Workshops');
+            $this->Workshop = $this->getTableLocator()->get('Workshops');
 
             $workshop = $this->Workshop->getWorkshopForIsUserInOrgaTeamCheck($workshopUid);
             if ($this->Workshop->isUserInOrgaTeam($this->AppAuth->user(), $workshop)) {
@@ -131,10 +130,10 @@ class WorkshopsController extends AppController
     private function _edit($workshop, $isEditMode)
     {
 
-        $this->User = TableRegistry::getTableLocator()->get('Users');
-        $this->Workshop = TableRegistry::getTableLocator()->get('Workshops');
-        $this->Country = TableRegistry::getTableLocator()->get('Countries');
-        $this->Category = TableRegistry::getTableLocator()->get('Categories');
+        $this->User = $this->getTableLocator()->get('Users');
+        $this->Workshop = $this->getTableLocator()->get('Workshops');
+        $this->Country = $this->getTableLocator()->get('Countries');
+        $this->Category = $this->getTableLocator()->get('Categories');
         $this->set('categories', $this->Category->getForDropdown(APP_ON));
 
         $this->set('uid', $workshop->uid);
@@ -173,7 +172,7 @@ class WorkshopsController extends AppController
 
                     // add orga user to workshop if workshop was created - id is kinda hard to retrieve...
                     if (!$isEditMode && $this->AppAuth->isOrga() &&!$this->AppAuth->isAdmin()) {
-                        $usersWorkshop = TableRegistry::getTableLocator()->get('UsersWorkshops');
+                        $usersWorkshop = $this->getTableLocator()->get('UsersWorkshops');
                         $savedWorkshop = $this->Workshop->find('all', [
                             'conditions' => [
                                 'Workshops.url' => $patchedEntity->url,
@@ -331,7 +330,7 @@ class WorkshopsController extends AppController
 
         $workshops = $workshops->toArray();
 
-        $this->Category = TableRegistry::getTableLocator()->get('Categories');
+        $this->Category = $this->getTableLocator()->get('Categories');
         $categories = $this->Category->getMainCategoriesForFrontend();
 
         $preparedWorkshops = [];
@@ -400,11 +399,11 @@ class WorkshopsController extends AppController
 
     public function home() {
 
-        $this->Workshop = TableRegistry::getTableLocator()->get('Workshops');
+        $this->Workshop = $this->getTableLocator()->get('Workshops');
         $latestWorkshops = $this->Workshop->getLatestWorkshops();
         $this->set('latestWorkshops', $latestWorkshops);
 
-        $this->Post = TableRegistry::getTableLocator()->get('Posts');
+        $this->Post = $this->getTableLocator()->get('Posts');
         $latestPosts = $this->Post->getLatestPosts();
         $this->set('latestPosts', $latestPosts);
 
@@ -420,7 +419,7 @@ class WorkshopsController extends AppController
     private function processWorknewsAddForm($workshop)
     {
 
-        $this->Worknews = TableRegistry::getTableLocator()->get('Worknews');
+        $this->Worknews = $this->getTableLocator()->get('Worknews');
         $worknews = $this->Worknews->find('all', [
             'conditions' => [
                 'Worknews.workshop_uid' => $workshop->uid,
@@ -503,7 +502,7 @@ class WorkshopsController extends AppController
             throw new NotFoundException('workshop not found');
         }
 
-        $this->Workshop = TableRegistry::getTableLocator()->get('Workshops');
+        $this->Workshop = $this->getTableLocator()->get('Workshops');
         $conditions = array_merge([
             'Workshops.url' => $url,
             'Workshops.status' => APP_ON
@@ -531,7 +530,7 @@ class WorkshopsController extends AppController
                 'DATE_FORMAT(Events.datumstart, \'%Y-%m-%d\') >= DATE_FORMAT(NOW(), \'%Y-%m-%d\')',
                 'Events.status >= ' . APP_OFF
             ]);
-            $this->Category = TableRegistry::getTableLocator()->get('Categories');
+            $this->Category = $this->getTableLocator()->get('Categories');
             $categories = $this->Category->find('all');
             $contain[] = 'Events';
             $contain[] = 'Events.Categories';
@@ -551,7 +550,7 @@ class WorkshopsController extends AppController
 
         $this->processWorknewsAddForm($workshop);
 
-        $this->User = TableRegistry::getTableLocator()->get('Users');
+        $this->User = $this->getTableLocator()->get('Users');
         $orgaTeam = $this->Workshop->getOrgaTeam($workshop);
         $this->set('orgaTeam', $orgaTeam);
 
@@ -616,7 +615,7 @@ class WorkshopsController extends AppController
         $this->set('event', $event);
 
         $showStatistics = false;
-        $this->InfoSheet = TableRegistry::getTableLocator()->get('InfoSheets');
+        $this->InfoSheet = $this->getTableLocator()->get('InfoSheets');
         if ($this->InfoSheet->workshopInfoSheetsCount($workshop->uid) > 0 && $workshop->show_statistics) {
             $showStatistics = true;
         }
@@ -794,7 +793,7 @@ class WorkshopsController extends AppController
 
             $userModel = Inflector::pluralize($model);
             $this->set('userModel', $userModel);
-            $um = TableRegistry::getTableLocator()->get($userModel);
+            $um = $this->getTableLocator()->get($userModel);
             $subject = 'Anfrage zur Mitarbeit bei deiner ' . Configure::read('AppConfig.initiativeNameSingular');
             $user = $um->find('all', [
                 'conditions' => [
@@ -805,7 +804,7 @@ class WorkshopsController extends AppController
 
             /* START email-versand an alle initiativen-orgas */
             if (!$this->AppAuth->isAdmin()) {
-                $this->Workshop = TableRegistry::getTableLocator()->get('Workshops');
+                $this->Workshop = $this->getTableLocator()->get('Workshops');
                 $workshop = $this->Workshop->find('all', [
                     'conditions' => [
                         'Workshops.uid' => $workshopUid,
@@ -851,8 +850,8 @@ class WorkshopsController extends AppController
             $this->redirect(Configure::read('AppConfig.htmlHelper')->$redirectUrlMethod());
         }
 
-        $this->User = TableRegistry::getTableLocator()->get('Users');
-        $this->Workshop = TableRegistry::getTableLocator()->get('Workshops');
+        $this->User = $this->getTableLocator()->get('Users');
+        $this->Workshop = $this->getTableLocator()->get('Workshops');
         $associatedWorkshops = $this->Workshop->getWorkshopsWithUsers(APP_OFF);
         $associatedWorkshops->matching('Users', function ($q) use ($userUid) {
             return $q->where([
@@ -899,11 +898,11 @@ class WorkshopsController extends AppController
             $userUid = $this->request->getData('users_workshops.user_uid');
         }
 
-        $this->associationTable = TableRegistry::getTableLocator()->get('UsersWorkshops');
+        $this->associationTable = $this->getTableLocator()->get('UsersWorkshops');
         $this->apply('UsersWorkshops', 'users_workshops', 'user_uid', 'Users', $userUid, $filterCondition);
 
         if ($this->AppAuth->isAdmin()) {
-            $this->User = TableRegistry::getTableLocator()->get('Users');
+            $this->User = $this->getTableLocator()->get('Users');
             $this->set('usersForDropdown', $this->User->getForDropdown());
         }
 
@@ -915,7 +914,7 @@ class WorkshopsController extends AppController
             throw new NotFoundException('orga role required');
         }
 
-        $userTable = TableRegistry::getTableLocator()->get('Users');
+        $userTable = $this->getTableLocator()->get('Users');
         $user = $userTable->find('all', [
             'conditions' => [
                 'Users.uid' => $this->AppAuth->getUserUid()
@@ -929,7 +928,7 @@ class WorkshopsController extends AppController
             ]
         ]);
 
-        $workshopTable = TableRegistry::getTableLocator()->get('Workshops');
+        $workshopTable = $this->getTableLocator()->get('Workshops');
         $workshop = $workshopTable->find('all', [
             'conditions' => [
                 'Workshops.uid' => $workshopUid,
@@ -978,7 +977,7 @@ class WorkshopsController extends AppController
 
     public function verwalten()
     {
-        $this->Workshop = TableRegistry::getTableLocator()->get('Workshops');
+        $this->Workshop = $this->getTableLocator()->get('Workshops');
         // complicated is-user-orga-check no needed again because this page is only accessible for orga users
         if ($this->AppAuth->isAdmin()) {
             $workshops = $this->Workshop->getWorkshopsForAdmin(APP_DELETED);
@@ -986,7 +985,7 @@ class WorkshopsController extends AppController
             $workshops = $this->Workshop->getWorkshopsForAssociatedUser($this->AppAuth->getUserUid(), APP_DELETED);
         }
 
-        $this->User = TableRegistry::getTableLocator()->get('Users');
+        $this->User = $this->getTableLocator()->get('Users');
         $workshopsWhereUserIsLastOrgaUser = $this->User->getWorkshopsWhereUserIsLastOrgaUser($workshops);
         $workshopsWhereUserIsLastOrgaUserUids = [];
         foreach($workshopsWhereUserIsLastOrgaUser as $w) {
@@ -1011,7 +1010,7 @@ class WorkshopsController extends AppController
 
         $this->RequestHandler->renderAs($this, 'json');
 
-        $this->Workshop = TableRegistry::getTableLocator()->get('Workshops');
+        $this->Workshop = $this->getTableLocator()->get('Workshops');
 
         $workshop = $this->Workshop->find('all', [
             'conditions' => [
@@ -1061,7 +1060,7 @@ class WorkshopsController extends AppController
         $this->set('keyword', $keyword);
 
         $workshops = $this->paginate($query, [
-            'sortWhitelist' => [
+            'sortableFields' => [
                 'Workshops.created', 'Workshops.zip', 'Workshops.city', 'Workshops.name'
             ],
             'order' => [

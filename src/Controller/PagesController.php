@@ -17,7 +17,6 @@ namespace App\Controller;
 use Cake\Core\Configure;
 use Cake\Http\Cookie\Cookie;
 use Cake\Http\Exception\NotFoundException;
-use Cake\ORM\TableRegistry;
 use Cake\Event\EventInterface;
 use DateTime;
 
@@ -67,7 +66,7 @@ class PagesController extends AppController
         if ($url == '')
             throw new NotFoundException('page not found');
 
-        $this->Page = TableRegistry::getTableLocator()->get('Pages');
+        $this->Page = $this->getTableLocator()->get('Pages');
         $conditions = array_merge([
             'Pages.url' => $url,
             'Pages.status' => APP_ON

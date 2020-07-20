@@ -7,7 +7,6 @@ use App\Test\TestCase\Traits\LogFileAssertionsTrait;
 use App\Test\TestCase\Traits\LoginTrait;
 use App\Test\TestCase\Traits\UserAssertionsTrait;
 use Cake\Core\Configure;
-use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\StringCompareTrait;
 
@@ -74,7 +73,7 @@ class InfoSheetsControllerTest extends AppTestCase
         );
         $this->assertResponseNotContains('error');
 
-        $this->InfoSheet = TableRegistry::getTableLocator()->get('InfoSheets');
+        $this->InfoSheet = $this->getTableLocator()->get('InfoSheets');
         $infoSheets = $this->InfoSheet->find('all', [
             'contain' => [
                 'Events.Workshops',
@@ -94,7 +93,7 @@ class InfoSheetsControllerTest extends AppTestCase
         $this->get(Configure::read('AppConfig.htmlHelper')->urlInfoSheetDelete(7));
         $this->assertFlashMessage('Der Laufzettel wurde erfolgreich gelöscht.');
 
-        $this->InfoSheet = TableRegistry::getTableLocator()->get('InfoSheets');
+        $this->InfoSheet = $this->getTableLocator()->get('InfoSheets');
         $infoSheet = $this->InfoSheet->find('all', [
             'conditions' => [
                 'InfoSheets.uid' => 7

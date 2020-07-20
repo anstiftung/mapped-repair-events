@@ -7,7 +7,6 @@ use App\Test\TestCase\Traits\LogFileAssertionsTrait;
 use App\Test\TestCase\Traits\LoginTrait;
 use App\Test\TestCase\Traits\UserAssertionsTrait;
 use Cake\Core\Configure;
-use Cake\ORM\TableRegistry;
 use Cake\TestSuite\EmailTrait;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\StringCompareTrait;
@@ -99,7 +98,7 @@ class EventsControllerTest extends AppTestCase
         );
         $this->assertResponseNotContains('error');
 
-        $this->Event = TableRegistry::getTableLocator()->get('Events');
+        $this->Event = $this->getTableLocator()->get('Events');
         $events = $this->Event->find('all', [
             'contain' => [
                 'Categories',
@@ -131,7 +130,7 @@ class EventsControllerTest extends AppTestCase
 
     public function testEditEventWithNotifications()
     {
-        $this->Event = TableRegistry::getTableLocator()->get('Events');
+        $this->Event = $this->getTableLocator()->get('Events');
         $patchedEntity = $this->Event->patchEntity(
             $this->Event->get(6),
             ['status' => APP_OFF]
@@ -158,7 +157,7 @@ class EventsControllerTest extends AppTestCase
     {
         $this->loginAsOrga();
         $this->get(Configure::read('AppConfig.htmlHelper')->urlEventDelete(6));
-        $this->Event = TableRegistry::getTableLocator()->get('Events');
+        $this->Event = $this->getTableLocator()->get('Events');
         $event = $this->Event->find('all', [
             'conditions' => [
                 'Events.uid' => 6
@@ -171,7 +170,7 @@ class EventsControllerTest extends AppTestCase
 
     private function doTestEditForm($renotify)
     {
-        $this->Event = TableRegistry::getTableLocator()->get('Events');
+        $this->Event = $this->getTableLocator()->get('Events');
         $event = $this->Event->find('all', [
             'conditions' => [
                 'Events.uid' => 6

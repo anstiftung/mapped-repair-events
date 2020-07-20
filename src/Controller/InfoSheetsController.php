@@ -5,7 +5,6 @@ use App\Controller\Component\StringComponent;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use Cake\Http\Exception\NotFoundException;
-use Cake\ORM\TableRegistry;
 use League\Csv\Writer;
 
 class InfoSheetsController extends AppController
@@ -14,7 +13,7 @@ class InfoSheetsController extends AppController
     public function beforeFilter(EventInterface $event) {
 
         parent::beforeFilter($event);
-        $this->InfoSheet = TableRegistry::getTableLocator()->get('InfoSheets');
+        $this->InfoSheet = $this->getTableLocator()->get('InfoSheets');
     }
 
     public function isAuthorized($user)
@@ -28,7 +27,7 @@ class InfoSheetsController extends AppController
 
             if ($this->AppAuth->isOrga()) {
                 $workshopUid = (int) $this->request->getParam('pass')[0];
-                $this->Workshop = TableRegistry::getTableLocator()->get('Workshops');
+                $this->Workshop = $this->getTableLocator()->get('Workshops');
                 $workshop = $this->Workshop->getWorkshopForIsUserInOrgaTeamCheck($workshopUid);
                 if ($this->Workshop->isUserInOrgaTeam($this->AppAuth->user(), $workshop)) {
                     return true;
@@ -45,7 +44,7 @@ class InfoSheetsController extends AppController
             }
 
             $infoSheetUid = (int) $this->request->getParam('pass')[0];
-            $this->InfoSheet = TableRegistry::getTableLocator()->get('InfoSheets');
+            $this->InfoSheet = $this->getTableLocator()->get('InfoSheets');
 
             // orgas are allowed to edit and delete only info sheets of associated workshops
             if ($this->AppAuth->isOrga()) {
@@ -61,7 +60,7 @@ class InfoSheetsController extends AppController
                 ])->first();
 
                 $workshopUid = $infoSheet->event->workshop_uid;
-                $this->Workshop = TableRegistry::getTableLocator()->get('Workshops');
+                $this->Workshop = $this->getTableLocator()->get('Workshops');
                 $workshop = $this->Workshop->getWorkshopForIsUserInOrgaTeamCheck($workshopUid);
                 if ($this->Workshop->isUserInOrgaTeam($this->AppAuth->user(), $workshop)) {
                     return true;
@@ -93,7 +92,7 @@ class InfoSheetsController extends AppController
 
     public function download($workshopUid, $year=null) {
 
-        $this->Workshop = TableRegistry::getTableLocator()->get('Workshops');
+        $this->Workshop = $this->getTableLocator()->get('Workshops');
         $workshop = $this->Workshop->find('all', [
             'conditions' => [
                 'Workshops.uid' => $workshopUid
@@ -182,7 +181,7 @@ class InfoSheetsController extends AppController
             throw new NotFoundException;
         }
 
-        $this->Event = TableRegistry::getTableLocator()->get('Events');
+        $this->Event = $this->getTableLocator()->get('Events');
 
         $this->Event->getAssociation('Workshops')->setConditions(['Workshops.status > ' . APP_DELETED]);
         $event = $this->Event->find('all', [
@@ -250,7 +249,7 @@ class InfoSheetsController extends AppController
 
         $this->set('uid', $infoSheet->uid);
 
-        $this->Category = TableRegistry::getTableLocator()->get('Categories');
+        $this->Category = $this->getTableLocator()->get('Categories');
         $categoriesForSubcategory = $this->Category->getForSubcategoryDropdown();
         $categoriesForSubcategory['Kategorie nicht vorhanden?'] = [
             '-1' => 'Unterkategorie hinzufügen'
@@ -258,14 +257,14 @@ class InfoSheetsController extends AppController
         $this->set('categoriesForSubcategory', $categoriesForSubcategory);
         $this->set('categories', $this->Category->getForDropdown(APP_ON));
 
-        $this->Brand = TableRegistry::getTableLocator()->get('Brands');
+        $this->Brand = $this->getTableLocator()->get('Brands');
         $brandsForDropdown = $this->Brand->getForDropdown();
         $brandsForDropdown['Marke nicht vorhanden?'] = [
             '-1' => 'Marke hinzufügen'
         ];
         $this->set('brands', $brandsForDropdown);
 
-        $this->FormField = TableRegistry::getTableLocator()->get('FormFields');
+        $this->FormField = $this->getTableLocator()->get('FormFields');
 
         $powerSupplyFormField = $this->FormField->getForForm(1);
         $this->set('powerSupplyFormField', $powerSupplyFormField);

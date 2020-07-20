@@ -3,7 +3,6 @@ namespace Admin\Controller;
 
 use App\Controller\Component\StringComponent;
 use Cake\Http\Exception\NotFoundException;
-use Cake\ORM\TableRegistry;
 
 class PagesController extends AdminAppController
 {
@@ -11,7 +10,7 @@ class PagesController extends AdminAppController
     public function __construct($request = null, $response = null)
     {
         parent::__construct($request, $response);
-        $this->Page = TableRegistry::getTableLocator()->get('Pages');
+        $this->Page = $this->getTableLocator()->get('Pages');
     }
 
     public function insert()

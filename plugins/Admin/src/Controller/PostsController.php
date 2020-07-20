@@ -6,7 +6,6 @@ use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use Cake\I18n\Date;
 use Cake\Http\Exception\NotFoundException;
-use Cake\ORM\TableRegistry;
 
 class PostsController extends AdminAppController
 {
@@ -14,9 +13,9 @@ class PostsController extends AdminAppController
     public function __construct($request = null, $response = null)
     {
         parent::__construct($request, $response);
-        $this->Post = TableRegistry::getTableLocator()->get('Posts');
-        $this->Blog = TableRegistry::getTableLocator()->get('Blogs');
-        $this->User = TableRegistry::getTableLocator()->get('Users');
+        $this->Post = $this->getTableLocator()->get('Posts');
+        $this->Blog = $this->getTableLocator()->get('Blogs');
+        $this->User = $this->getTableLocator()->get('Users');
     }
 
     public function insert($blogId)
