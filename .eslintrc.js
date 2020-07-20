@@ -4,9 +4,11 @@ module.exports = {
         "jquery": true,
         "es6": true
     },
+    "ignorePatterns": ["webroot/js/elFinder/"],
     "globals": {
-        "MappedRepairEvents": true,
+        "Chart": true,
         "CKEDITOR": true,
+        "MappedRepairEvents": true,
         "slidebars": true,
         "L": true
     },
