@@ -7,7 +7,6 @@ use Cake\I18n\FrozenTime;
 use Cake\Mailer\Mailer;
 use Cake\Http\Exception\ForbiddenException;
 use Cake\Http\Exception\NotFoundException;
-use Cake\ORM\TableRegistry;
 
 class EventsController extends AppController
 {
@@ -15,7 +14,7 @@ class EventsController extends AppController
     public function beforeFilter(EventInterface $event) {
 
         parent::beforeFilter($event);
-        $this->Event = TableRegistry::getTableLocator()->get('Events');
+        $this->Event = $this->getTableLocator()->get('Events');
         $this->AppAuth->allow([
             'detail',
             'all',
@@ -44,7 +43,7 @@ class EventsController extends AppController
             }
 
             $workshopUid = (int) $this->request->getParam('pass')[0];
-            $this->Workshop = TableRegistry::getTableLocator()->get('Workshops');
+            $this->Workshop = $this->getTableLocator()->get('Workshops');
             $workshop = $this->Workshop->getWorkshopForIsUserInOrgaTeamCheck($workshopUid);
             if ($this->Workshop->isUserInOrgaTeam($this->AppAuth->user(), $workshop)) {
                 return true;
@@ -61,7 +60,7 @@ class EventsController extends AppController
 
             $eventUid = (int) $this->request->getParam('pass')[0];
 
-            $this->Event = TableRegistry::getTableLocator()->get('Events');
+            $this->Event = $this->getTableLocator()->get('Events');
             $event = $this->Event->find('all', [
                 'conditions' => [
                     'Events.uid' => $eventUid,
@@ -80,7 +79,7 @@ class EventsController extends AppController
             }
 
             // all approved orgas are allowed to edit their events
-            $this->Workshop = TableRegistry::getTableLocator()->get('Workshops');
+            $this->Workshop = $this->getTableLocator()->get('Workshops');
             $workshop = $this->Workshop->getWorkshopForIsUserInOrgaTeamCheck($workshopUid);
             if ($this->Workshop->isUserInOrgaTeam($this->AppAuth->user(), $workshop)) {
                 return true;
@@ -98,7 +97,7 @@ class EventsController extends AppController
 
         $hasEditEventPermissions = $this->AppAuth->isAdmin() || $this->AppAuth->isOrga();
 
-        $this->Workshop = TableRegistry::getTableLocator()->get('Workshops');
+        $this->Workshop = $this->getTableLocator()->get('Workshops');
         // complicated is-user-orga-check no needed again because this page is only accessible for orga users
         if ($this->AppAuth->isAdmin()) {
             $workshops = $this->Workshop->getWorkshopsForAdmin(APP_DELETED);
@@ -168,7 +167,7 @@ class EventsController extends AppController
             throw new NotFoundException('kein rss');
         }
 
-        $this->Event = TableRegistry::getTableLocator()->get('Events');
+        $this->Event = $this->getTableLocator()->get('Events');
         $events = $this->Event->find('all', [
             'conditions' => $this->Event->getListConditions(),
             'order' => [
@@ -221,7 +220,7 @@ class EventsController extends AppController
 
             if ($originalEventStatus) {
                 // START notify subscribers
-                $this->Worknews = TableRegistry::getTableLocator()->get('Worknews');
+                $this->Worknews = $this->getTableLocator()->get('Worknews');
                 $subscribers = $this->Worknews->find('all', [
                     'conditions' => [
                         'Worknews.workshop_uid' => $event->workshop_uid,
@@ -266,7 +265,7 @@ class EventsController extends AppController
 
         $this->set('metaTags', ['title' => 'Termin erstellen']);
 
-        $this->Workshop = TableRegistry::getTableLocator()->get('Workshops');
+        $this->Workshop = $this->getTableLocator()->get('Workshops');
         // complicated is-user-orga-check no needed again because this page is only accessible for orga users
         if ($this->AppAuth->isAdmin()) {
             $workshops = $this->Workshop->getWorkshopsForAdmin(APP_DELETED);
@@ -353,7 +352,7 @@ class EventsController extends AppController
 
         // notify subscribers
         if (isset($workshop) && $sendNotificationMails) {
-            $this->Worknews = TableRegistry::getTableLocator()->get('Worknews');
+            $this->Worknews = $this->getTableLocator()->get('Worknews');
             $subscribers = $this->Worknews->getSubscribers($patchedEntity->workshop_uid);
             if (!empty($subscribers)) {
                 $this->Worknews->sendNotifications($subscribers, 'Termin geändert: ' . $workshop->name, 'event_changed', $workshop, $patchedEntity);
@@ -363,7 +362,7 @@ class EventsController extends AppController
 
     private function _edit($events, $isEditMode)
     {
-        $this->Category = TableRegistry::getTableLocator()->get('Categories');
+        $this->Category = $this->getTableLocator()->get('Categories');
         $this->set('categories', $this->Category->getForDropdown(APP_ON));
 
         $this->set('uid', $events[0]->uid);
@@ -531,7 +530,7 @@ class EventsController extends AppController
         $selectedCategories = !empty($this->request->getQuery('categories')) ? explode(',', h($this->request->getQuery('categories'))) : [];
         $this->set('selectedCategories', $selectedCategories);
 
-        $this->Category = TableRegistry::getTableLocator()->get('Categories');
+        $this->Category = $this->getTableLocator()->get('Categories');
         $categories = $this->Category->getMainCategoriesForFrontend();
 
         $preparedCategories = [];

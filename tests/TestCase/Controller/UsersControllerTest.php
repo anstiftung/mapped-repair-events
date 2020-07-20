@@ -6,7 +6,6 @@ use App\Test\TestCase\AppTestCase;
 use App\Test\TestCase\Traits\LogFileAssertionsTrait;
 use App\Test\TestCase\Traits\UserAssertionsTrait;
 use Cake\Core\Configure;
-use Cake\ORM\TableRegistry;
 use Cake\TestSuite\EmailTrait;
 use Cake\TestSuite\IntegrationTestTrait;
 
@@ -176,7 +175,7 @@ class UsersControllerTest extends AppTestCase
 
     private function getNewsletterData()
     {
-        $this->Newsletter = TableRegistry::getTableLocator()->get('Newsletters');
+        $this->Newsletter = $this->getTableLocator()->get('Newsletters');
         $newsletter = $this->Newsletter->find('all', [
             'conditions' => [
                 'Newsletters.email' => $this->validUserData['email']
@@ -187,7 +186,7 @@ class UsersControllerTest extends AppTestCase
 
     private function getRegisteredUser()
     {
-        $this->User = TableRegistry::getTableLocator()->get('Users');
+        $this->User = $this->getTableLocator()->get('Users');
         $user = $this->User->find('all', [
             'conditions' => [
                 'Users.email' => $this->validUserData['email']

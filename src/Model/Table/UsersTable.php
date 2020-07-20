@@ -4,8 +4,8 @@ namespace App\Model\Table;
 use App\Controller\Component\StringComponent;
 use Cake\Auth\DefaultPasswordHasher;
 use Cake\Core\Configure;
+use Cake\Datasource\FactoryLocator;
 use Cake\Validation\Validator;
-use Cake\ORM\TableRegistry;
 
 class UsersTable extends AppTable
 {
@@ -99,14 +99,14 @@ class UsersTable extends AppTable
                             'Groups'
                         ]
                     ])->first();
-                    $groupsTable = TableRegistry::getTableLocator()->get('Groups');
+                    $groupsTable = FactoryLocator::get('Table')->get('Groups');
                     if (!$groupsTable->isOrga($user)) {
                         return true;
                     }
                 }
 
                 // actual check if user is last orga user in any of "his" workshops starts here
-                $workshopTable = TableRegistry::getTableLocator()->get('Workshops');
+                $workshopTable = FactoryLocator::get('Table')->get('Workshops');
                 $workshops = $workshopTable->getWorkshopsForAssociatedUser($context['data']['uid'], APP_OFF);
                 $associatedWorkshopsWhereUserIsLastOrgaUser = $this->getWorkshopsWhereUserIsLastOrgaUser($workshops);
                 if (!empty($associatedWorkshopsWhereUserIsLastOrgaUser)) {

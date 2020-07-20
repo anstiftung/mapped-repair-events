@@ -2,7 +2,6 @@
 namespace Admin\Controller;
 
 use Cake\Http\Exception\NotFoundException;
-use Cake\ORM\TableRegistry;
 
 class BrandsController extends AdminAppController
 {
@@ -10,7 +9,7 @@ class BrandsController extends AdminAppController
     public function __construct($request = null, $response = null)
     {
         parent::__construct($request, $response);
-        $this->Brand = TableRegistry::getTableLocator()->get('Brands');
+        $this->Brand = $this->getTableLocator()->get('Brands');
     }
 
     public function insert()

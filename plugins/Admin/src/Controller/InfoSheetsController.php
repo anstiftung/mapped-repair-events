@@ -2,7 +2,6 @@
 namespace Admin\Controller;
 
 use Cake\Event\EventInterface;
-use Cake\ORM\TableRegistry;
 
 class InfoSheetsController extends AdminAppController
 {
@@ -10,7 +9,7 @@ class InfoSheetsController extends AdminAppController
     public function __construct($request = null, $response = null)
     {
         parent::__construct($request, $response);
-        $this->InfoSheet = TableRegistry::getTableLocator()->get('InfoSheets');
+        $this->InfoSheet = $this->getTableLocator()->get('InfoSheets');
     }
 
     public function beforeFilter(EventInterface $event)
@@ -63,7 +62,7 @@ class InfoSheetsController extends AdminAppController
         
         $this->set('objects', $objects->toArray());
         
-        $this->User = TableRegistry::getTableLocator()->get('Users');
+        $this->User = $this->getTableLocator()->get('Users');
         $this->set('users', $this->User->getForDropdown());
         
         $metaTags = [

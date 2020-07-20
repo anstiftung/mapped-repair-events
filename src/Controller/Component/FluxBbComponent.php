@@ -13,7 +13,7 @@ namespace App\Controller\Component;
 use Cake\Controller\ComponentRegistry;
 use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
-use Cake\ORM\TableRegistry;
+use Cake\Datasource\FactoryLocator;
 
 class FluxBbComponent extends AppComponent
 {
@@ -22,7 +22,7 @@ class FluxBbComponent extends AppComponent
     {
         parent::__construct($collection, $settings);
 
-        $this->User = TableRegistry::getTableLocator()->get('Users');
+        $this->User = FactoryLocator::get('Table')->get('Users');
         $this->connection = ConnectionManager::get('default');
 
         // bei mehrmaligem require wird constante pun mehrfach definiert => notice

@@ -2,7 +2,7 @@
 
 namespace App\Test\TestCase\Traits;
 
-use Cake\ORM\TableRegistry;
+use Cake\Datasource\FactoryLocator;
 
 trait LoginTrait
 {
@@ -10,7 +10,7 @@ trait LoginTrait
     protected function loginAsOrga()
     {
         $orgaUserEmail = 'johndoe@mailinator.com';
-        $this->User = TableRegistry::getTableLocator()->get('Users');
+        $this->User = FactoryLocator::get('Table')->get('Users');
         $user = $this->User->find('all', [
             'conditions' => [
                 'Users.email' => $orgaUserEmail

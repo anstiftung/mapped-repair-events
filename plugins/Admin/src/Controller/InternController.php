@@ -5,7 +5,6 @@ namespace Admin\Controller;
 use App\Controller\Component\StringComponent;
 use Cake\Core\Configure;
 use Cake\Core\Exception\Exception;
-use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
 use Cake\Filesystem\Folder;
 use Intervention\Image\ImageManagerStatic as Image;
@@ -35,7 +34,7 @@ class InternController extends AdminAppController
 
     public function addCategory($name)
     {
-        $categories = TableRegistry::getTableLocator()->get('Categories');
+        $categories = $this->getTableLocator()->get('Categories');
         $c = $categories->save($categories->newEntity(['name' => $name, 'icon' => StringComponent::slugify($name)]));
         pr($c);
         exit;
@@ -43,7 +42,7 @@ class InternController extends AdminAppController
 
     public function addSubCategory($name, $parentId)
     {
-        $categories = TableRegistry::getTableLocator()->get('Categories');
+        $categories = $this->getTableLocator()->get('Categories');
         $c = $categories->save($categories->newEntity([
             'name' => $name,
             'parent_id' => $parentId,
@@ -154,7 +153,7 @@ class InternController extends AdminAppController
     public function ajaxMiniUploadFormSaveUploadedImagesMultiple()
     {
         $this->autoRender = false;
-        $this->Photo = TableRegistry::getTableLocator()->get('Photos');
+        $this->Photo = $this->getTableLocator()->get('Photos');
 
         $objectUid = $this->request->getData('uid');
         $objectType = $this->request->getData('objectType');
@@ -307,7 +306,7 @@ class InternController extends AdminAppController
         $objectType = $this->Root->getType($uid);
         $objectClass = Inflector::classify($objectType);
         $pluralizedClass = Inflector::pluralize($objectClass);
-        $objectTable = TableRegistry::getTableLocator()->get($pluralizedClass);
+        $objectTable = $this->getTableLocator()->get($pluralizedClass);
         $object = $objectTable->find('all', [
             'conditions' => [
                 $pluralizedClass . '.uid' => $uid
@@ -345,7 +344,7 @@ class InternController extends AdminAppController
         $objectType = $this->Root->getType($uid);
         $objectClass = Inflector::classify($objectType);
         $pluralizedClass = Inflector::pluralize($objectClass);
-        $this->{$objectClass} = TableRegistry::getTableLocator()->get($pluralizedClass);
+        $this->{$objectClass} = $this->getTableLocator()->get($pluralizedClass);
 
         $entity = $this->$objectClass->get($uid, [
                 'conditions' => [
@@ -382,7 +381,7 @@ class InternController extends AdminAppController
             $objectType = $this->Root->getType($uid);
             $objectClass = Inflector::classify($objectType);
             $pluralizedClass = Inflector::pluralize($objectClass);
-            $this->{$objectClass} = TableRegistry::getTableLocator()->get($pluralizedClass);
+            $this->{$objectClass} = $this->getTableLocator()->get($pluralizedClass);
 
             $object = $this->$objectClass->find('all', [
                 'conditions' => [

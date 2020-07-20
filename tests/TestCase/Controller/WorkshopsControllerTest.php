@@ -7,7 +7,6 @@ use App\Test\TestCase\Traits\LogFileAssertionsTrait;
 use App\Test\TestCase\Traits\LoginTrait;
 use App\Test\TestCase\Traits\UserAssertionsTrait;
 use Cake\Core\Configure;
-use Cake\ORM\TableRegistry;
 use Cake\TestSuite\EmailTrait;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\StringCompareTrait;
@@ -61,7 +60,7 @@ class WorkshopsControllerTest extends AppTestCase
             ]
         );
 
-        $this->Workshop = TableRegistry::getTableLocator()->get('Workshops');
+        $this->Workshop = $this->getTableLocator()->get('Workshops');
         $workshop = $this->Workshop->find('all', [
             'conditions' => [
                 'Workshops.url' => $workshopForPost['url']

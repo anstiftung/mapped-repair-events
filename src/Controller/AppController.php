@@ -22,7 +22,6 @@ use Cake\Event\EventInterface;
 use Cake\I18n\Time;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Http\Exception\ServiceUnavailableException;
-use Cake\ORM\TableRegistry;
 use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
 use Mobile_Detect;
@@ -46,7 +45,7 @@ class AppController extends Controller
     {
         parent::__construct($request, $response);
         $this->connection = ConnectionManager::get('default');
-        $this->Root = TableRegistry::getTableLocator()->get('Roots');
+        $this->Root = $this->getTableLocator()->get('Roots');
         $this->modelName = Inflector::classify($this->name);
         $this->pluralizedModelName = Inflector::pluralize($this->modelName);
     }
@@ -107,7 +106,7 @@ class AppController extends Controller
 
     protected function setNavigation()
     {
-        $this->Page = TableRegistry::getTableLocator()->get('Pages');
+        $this->Page = $this->getTableLocator()->get('Pages');
         $conditions = [];
         $conditions['Pages.status'] = APP_ON;
         $pages = $this->Page->getThreaded($conditions);

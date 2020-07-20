@@ -5,7 +5,6 @@ namespace App\Controller;
 use Cake\Event\EventInterface;
 use Cake\I18n\Time;
 use Cake\Http\Exception\NotFoundException;
-use Cake\ORM\TableRegistry;
 
 class WorknewsController extends AppController {
 
@@ -25,7 +24,7 @@ class WorknewsController extends AppController {
             throw new NotFoundException('param not found');
         }
 
-        $this->Worknews = TableRegistry::getTableLocator()->get('Worknews');
+        $this->Worknews = $this->getTableLocator()->get('Worknews');
         $worknews = $this->Worknews->find('all', [
             'conditions' => [
                 'Worknews.confirm' => $this->request->getParam('pass')['0'],
@@ -63,7 +62,7 @@ class WorknewsController extends AppController {
             throw new NotFoundException('param not found');
         }
 
-        $this->Worknews = TableRegistry::getTableLocator()->get('Worknews');
+        $this->Worknews = $this->getTableLocator()->get('Worknews');
         $worknews = $this->Worknews->find('all', [
             'conditions' => [
                 'Worknews.unsub' => $this->request->getParam('pass')['0'],

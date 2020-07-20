@@ -1,17 +1,13 @@
 <?php
-/**
- * @param type
- */
-
 use Cake\Core\Configure;
-use Cake\ORM\TableRegistry;
+use Cake\Datasource\FactoryLocator;
 use Cake\Utility\Inflector;
 
 $objectForEditableCheck = $data;
 
 if (isset($checkOriginalStatus) && $checkOriginalStatus && $data->uid) {
 
-    $objectClass = TableRegistry::get($type);
+    $objectClass = FactoryLocator::get('Table')->get($type);
     $entity = $objectClass->get($data->uid, [
         'conditions' => [
             $type.'.status >= ' . APP_DELETED

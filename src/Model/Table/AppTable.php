@@ -2,9 +2,9 @@
 namespace App\Model\Table;
 
 use App\Controller\Component\StringComponent;
+use Cake\Datasource\FactoryLocator;
 use Cake\Event\EventInterface;
 use Cake\ORM\Table;
-use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
 use Cake\Validation\Validator;
 
@@ -112,7 +112,7 @@ abstract class AppTable extends Table
              * INSERT
              */
             if (! $this->Root) {
-                $this->Root = TableRegistry::getTableLocator()->get('Roots');
+                $this->Root = FactoryLocator::get('Table')->get('Roots');
             }
             $rootEntity = [
                 'Roots' => [
