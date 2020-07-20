@@ -287,7 +287,7 @@ MappedRepairEvents.Helper = {
 
     },
 
-    initCkeditorWithoutElfinder: function (name) {
+    initCkeditorWithoutElfinder: function (name, isMobile) {
 
         if (!CKEDITOR.env.isCompatible) {
             return false;
@@ -1336,15 +1336,6 @@ MappedRepairEvents.Helper = {
         if (formField.value.replace(/\+/g, ' ') == unescape(decodeURI(defaultValue)).replace(/\+/g, ' ')) {
             formField.value = '';
         }
-    },
-
-    isEmpty : function(obj) {
-        for ( var prop in obj) {
-            if (obj.hasOwnProperty(prop)) {
-                return false;
-            }
-        }
-        return true;
     },
 
     /**

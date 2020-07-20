@@ -44,8 +44,6 @@ MappedRepairEvents.Map = function(objects, type, isWidget, customCenterCoordinat
 
     MappedRepairEvents.MapObject = this;
 
-    publicTransportLayer = undefined;
-
     MappedRepairEvents.MapObject.isWidget = isWidget;
 
     this.blueIcon = L.icon({
@@ -493,7 +491,6 @@ MappedRepairEvents.Map.prototype = {
                     notfiltered: not_filtered_wrk
                 };
 
-                var foundMarkers = [];
                 var pmarkers = [];
 
                 // alle gefundenen marker der map hinzufügen
@@ -509,7 +506,7 @@ MappedRepairEvents.Map.prototype = {
                 }
                 if (filteredObjects.notfiltered) {
                     for(var j=0;j<filteredObjects.notfiltered.length;j++) {
-                        var pmarker = new PruneCluster.Marker(filteredObjects.notfiltered[j]['Workshop'].lat, filteredObjects.notfiltered[j]['Workshop'].lng, {
+                        pmarker = new PruneCluster.Marker(filteredObjects.notfiltered[j]['Workshop'].lat, filteredObjects.notfiltered[j]['Workshop'].lng, {
                             icon: MappedRepairEvents.MapObject.defaultIcon,
                             popup: MappedRepairEvents.MapObject.buildBubbleStringForWorkshops(filteredObjects.notfiltered[j]['Workshop']),
                             object: filteredObjects.notfiltered[j]['Workshop']
@@ -527,17 +524,6 @@ MappedRepairEvents.Map.prototype = {
                     if ($('#workshopSearchAddress').val() != '') {
                         MappedRepairEvents.Helper.setFlashMessage('red', 'Mit den aktuellen Filter-Einstellungen wurde keine Initiative gefunden.');
                     }
-                } else {
-                    /*
-                    // (group wichtig, weil auch die nicht gefundenen marker angezeigt werden)
-                    var group = new L.featureGroup(foundMarkers);
-                    if (filteredObjects.filtered.length == 1) {
-                        MappedRepairEvents.MapObject.pruneCluster.FitBounds();
-                    } else {
-                        // zoomt auf die gefundenen marker
-                        MappedRepairEvents.MapObject.map.fitBounds(group.getBounds(), {'padding':[8,8]});
-                    }
-                    */
                 }
 
             }

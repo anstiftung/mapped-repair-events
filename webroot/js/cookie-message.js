@@ -96,7 +96,7 @@
             var result = false;
             if(document.cookie) {
                 var mycookieArray = document.cookie.split(';');
-                for(i=0; i<mycookieArray.length; i++) {
+                for(var i=0; i<mycookieArray.length; i++) {
                     var mykeyValue = mycookieArray[i].split('=');
                     if(Trim(mykeyValue[0]) == cookieName) result = mykeyValue[1];
                 }

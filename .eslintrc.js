@@ -9,7 +9,10 @@ module.exports = {
         "Chart": true,
         "CKEDITOR": true,
         "MappedRepairEvents": true,
+        "PruneCluster": true,
+        "PruneClusterForLeaflet": true,
         "slidebars": true,
+        "Swiper": true,
         "L": true
     },
     "extends": "eslint:recommended",
