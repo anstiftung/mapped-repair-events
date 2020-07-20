@@ -383,7 +383,7 @@ MappedRepairEvents.Helper = {
                 ,{ onOk : function(data) {
                     document.location.href = data.referer;
                 }
-                    ,onError : function(data) {
+                ,onError : function(data) {
                     alert(data.message);
                 }
                 }
@@ -471,8 +471,8 @@ MappedRepairEvents.Helper = {
                 el: '.swiper-pagination',
                 type: 'bullets',
                 clickable: true,
-              },
-          });
+            },
+        });
     },
 
     hideAndResetCalendarEventsBox : function() {
@@ -703,33 +703,33 @@ MappedRepairEvents.Helper = {
         // center sub navis
         mainNavi.each(function() {
 
-           var centerPositionMainNavi = $(this).position().left + $(this).outerWidth() / 2;
-           var subnavi = $(this).closest('li').find('ul');
+            var centerPositionMainNavi = $(this).position().left + $(this).outerWidth() / 2;
+            var subnavi = $(this).closest('li').find('ul');
 
-           if (subnavi.length > 0) {
+            if (subnavi.length > 0) {
 
-               subnavi.css('paddingLeft', 0);
-               subnavi.css('width', 0);
+                subnavi.css('paddingLeft', 0);
+                subnavi.css('width', 0);
 
-               var subnaviInnerWidth = 0;
-               subnavi.find('li').each(function() {
-                   var originalDisplay = $(this).closest('ul').css('display');
-                   if (originalDisplay == 'none') {
-                       $(this).closest('ul').show();
-                   }
-                   subnaviInnerWidth += $(this).width();
-                   if (originalDisplay == 'none') {
-                       $(this).closest('ul').hide();
-                   }
-               });
+                var subnaviInnerWidth = 0;
+                subnavi.find('li').each(function() {
+                    var originalDisplay = $(this).closest('ul').css('display');
+                    if (originalDisplay == 'none') {
+                        $(this).closest('ul').show();
+                    }
+                    subnaviInnerWidth += $(this).width();
+                    if (originalDisplay == 'none') {
+                        $(this).closest('ul').hide();
+                    }
+                });
 
-               var leftForSubNavi = centerPositionMainNavi - subnaviInnerWidth / 2
-               subnavi.css('left', 0);
-               subnavi.css('paddingLeft', leftForSubNavi);
+                var leftForSubNavi = centerPositionMainNavi - subnaviInnerWidth / 2;
+                subnavi.css('left', 0);
+                subnavi.css('paddingLeft', leftForSubNavi);
 
-               var subnaviOuterWidth = $('#header').width() - leftForSubNavi;
-               subnavi.css('width', subnaviOuterWidth);
-           }
+                var subnaviOuterWidth = $('#header').width() - leftForSubNavi;
+                subnavi.css('width', subnaviOuterWidth);
+            }
         });
 
         mainNavi.on('mouseover', function(e) {

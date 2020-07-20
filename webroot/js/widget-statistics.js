@@ -32,34 +32,34 @@ MappedRepairEvents.WidgetStatistics = {
             var newCounter = MappedRepairEvents.Helper.getStringAsFloat($this.text());
             var step = 1;
             if (totalCount < digitsUpToCount) {
-               step = 0.1;
+                step = 0.1;
             }
             newCounter -= step;
             $({ counter: 0 }).animate({
                 counter: newCounter
             },
             {
-              duration: 2000,
-              easing: 'swing',
-              step: function () {
-                  var digits = 0;
-                  var step = 1;
-                  var counter
-                  if (totalCount < digitsUpToCount) {
-                      digits = 1;
-                      step = 0.1;
-                  }
-                  counter = this.counter += step;
-                  counter = MappedRepairEvents.Helper.formatFloatAsString(counter, digits);
-                  $this.text(counter);
-              },
-              // sometimes there are rounding differences after increasing the counter
-              // assure that after animation there's always the correct number
-              complete : function() {
-                  $this.text(MappedRepairEvents.Helper.formatFloatAsString(totalCount));
-              }
+                duration: 2000,
+                easing: 'swing',
+                step: function () {
+                    var digits = 0;
+                    var step = 1;
+                    var counter;
+                    if (totalCount < digitsUpToCount) {
+                        digits = 1;
+                        step = 0.1;
+                    }
+                    counter = this.counter += step;
+                    counter = MappedRepairEvents.Helper.formatFloatAsString(counter, digits);
+                    $this.text(counter);
+                },
+                // sometimes there are rounding differences after increasing the counter
+                // assure that after animation there's always the correct number
+                complete : function() {
+                    $this.text(MappedRepairEvents.Helper.formatFloatAsString(totalCount));
+                }
             });
-          });
+        });
     },
 
     initCarbonFootprintAnimation : function() {

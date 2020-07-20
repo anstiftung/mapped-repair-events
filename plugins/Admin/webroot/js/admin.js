@@ -37,10 +37,10 @@ MappedRepairEvents.Admin = {
             ,{uid: uid, status_type: statusType, value: value }
             ,{ onOk : function(data) {
 
-                 }
-                ,onError : function(data) {
-                    alert(data.message);
-                }
+            }
+            ,onError : function(data) {
+                alert(data.message);
+            }
             }
         );
 
