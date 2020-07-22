@@ -36,8 +36,9 @@ function initCal(){
            center: 'title',
            right: 'next'
         },
-        <?php if ( $event ): ?>defaultDate : '<?php echo $event[1]; ?>',<?php endif; ?>
-        locale: 'de'
+        <?php if ( $event ): ?>initialDate : '<?php echo $event[1]; ?>',<?php endif; ?>
+        locale: 'de',
+        contentHeight: 340
     });
 
     calendar.setOption('datesSet', function(dateInfo) {
@@ -54,93 +55,93 @@ function initCal(){
 
         var waitForCal = setInterval(function() {
 
-            if ($('.fc-day').length) {
-
-                clearInterval(waitForCal);
-
-                var date = new Date();
-                var findEventsBox = $('.find-events-box');
-
-                // add hover-effect for mouseover calendar day in right top corner
-                $('.fc-day-number').hover(function() {
-                    var date = $(this).data('date');
-                    $('.fc-day').each(function() {
-                        if ($(this).attr('data-date') == date) {
-                            $(this).addClass('hover');
-                        }
-                    });
-                }, function() {
-                    $('.fc-day').removeClass('hover');
-                });
-
-                $('.fc-day, .fc-day-number').on('click', function() {
-
-                    // do not show empty box
-                    if (!$(this).hasClass('fc-has-event')) {
-                        return false;
-                    }
-                    if ($('#calEvents').css('display') == 'block' && $(this).hasClass('selected')) {
-                        MappedRepairEvents.Helper.hideAndResetCalendarEventsBox();
-                        $(this).removeClass('selected');
-                        <?php if (!$this->request->getSession()->read('isMobile')) { ?>
-                            findEventsBox.hide();
-                        <?php } ?>
-                        return false;
-                    }
-
-                    $('#calEvents').show();
-
-                    $('.fc-day, .fc-day-number').removeClass('selected');
-
-                    if ($(this).hasClass('selected')) {
-                        <?php if (!$this->request->getSession()->read('isMobile')) { ?>
-                            findEventsBox.hide();
-                        <?php } ?>
-                        return false;
-                    }
-
-                    $(this).addClass('selected');
-
-                    var date = $(this).attr('data-date');
-
-                    $('.eventBox').hide();
-                    $('#calDottedLine').show();
-
-                    $('#selectedDate').attr('data-date', date).html('<?php echo __('Events on'); ?> ' +  MappedRepairEvents.Helper.niceDate(date));
-
-                    $('.calEvent').each(function() {
-                        var display = 'none';
-                        if ($(this).data('date') == date && !$(this).hasClass('isntInRadius')) {
-                            display = 'block';
-                        }
-                        var elementToToggle = $(this);
-                        // workshop detail
-                        if ($(this).next().attr('class') == 'eventBox') {
-                            var elementToToggle = $(this).next();
-                        }
-                        elementToToggle.css({display: display});
-                    });
-
-                    <?php if (!$this->request->getSession()->read('isMobile')) { ?>
-                        findEventsBox.css('height', $('#calEvents').height());
-                        findEventsBox.show();
-                    <?php } ?>
-
-                });
-
-                getEvents();
-
-                $('td.fc-day:not(.no-hover)').hover(
-                    function() {
-                        $(this).addClass('hover');
-                        $('.fc-content-skeleton td.fc-today').addClass('hover');
-                      }, function() {
-                        $(this).removeClass('hover');
-                        $('.fc-content-skeleton td.fc-today').removeClass('hover');
-                    }
-                );
-
+            if ($('.fc-day').length == 0) {
+                return;
             }
+
+            clearInterval(waitForCal);
+
+            var date = new Date();
+            var findEventsBox = $('.find-events-box');
+
+            // add hover-effect for mouseover calendar day in right top corner
+            $('.fc-day-number').hover(function() {
+                var date = $(this).data('date');
+                $('.fc-day').each(function() {
+                    if ($(this).attr('data-date') == date) {
+                        $(this).addClass('hover');
+                    }
+                });
+            }, function() {
+                $('.fc-day').removeClass('hover');
+            });
+
+            $('.fc-day').off('click').on('click', function() {
+
+                // do not show empty box
+                if (!$(this).hasClass('fc-has-event')) {
+                    return false;
+                }
+
+                if ($('#calEvents').css('display') == 'block' && $(this).hasClass('selected')) {
+                    MappedRepairEvents.Helper.hideAndResetCalendarEventsBox();
+                    $(this).removeClass('selected');
+                    <?php if (!$this->request->getSession()->read('isMobile')) { ?>
+                        findEventsBox.hide();
+                    <?php } ?>
+                    return false;
+                }
+
+                $('#calEvents').show();
+
+                $('.fc-day').removeClass('selected');
+
+                if ($(this).hasClass('selected')) {
+                    <?php if (!$this->request->getSession()->read('isMobile')) { ?>
+                        findEventsBox.hide();
+                    <?php } ?>
+                    return false;
+                }
+
+                $(this).addClass('selected');
+
+                var date = $(this).attr('data-date');
+
+                $('.eventBox').hide();
+                $('#calDottedLine').show();
+
+                $('#selectedDate').attr('data-date', date).html('<?php echo __('Events on'); ?> ' +  MappedRepairEvents.Helper.niceDate(date));
+
+                $('.calEvent').each(function() {
+                    var display = 'none';
+                    if ($(this).data('date') == date && !$(this).hasClass('isntInRadius')) {
+                        display = 'block';
+                    }
+                    var elementToToggle = $(this);
+                    // workshop detail
+                    if ($(this).next().attr('class') == 'eventBox') {
+                        var elementToToggle = $(this).next();
+                    }
+                    elementToToggle.css({display: display});
+                });
+
+                <?php if (!$this->request->getSession()->read('isMobile')) { ?>
+                    findEventsBox.css('height', $('#calEvents').height());
+                    findEventsBox.show();
+                <?php } ?>
+
+            });
+
+            getEvents();
+
+            $('td.fc-day:not(.no-hover)').hover(
+                function() {
+                    $(this).addClass('hover');
+                  }, function() {
+                    $(this).removeClass('hover');
+                }
+            );
+
         }, 500);
 
     });

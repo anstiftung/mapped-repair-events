@@ -419,13 +419,6 @@ table.list a.icon-link-text {
     margin: 0px 0px 0px 0px;
     display: block
 }
-td.fc-has-event span.event-count {
-    display: none;
-    display: block;
-    text-align: center;
-    color: #fff;
-    margin-top: 21px;
-}
 .filter select {
     padding: 5px;
     border-radius: 3px;

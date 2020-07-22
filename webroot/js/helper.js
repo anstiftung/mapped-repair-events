@@ -511,8 +511,9 @@ MappedRepairEvents.Helper = {
         });
     },
 
-    updateDayEventCount : function(day) {
-        var eventCount = $('.calEvent[rel*="' + day.data('date')+'"]').not('.isntInRadius').length;
+    updateDayEventCount : function(dayRow) {
+        var eventCount = $('.calEvent[rel*="' + dayRow.data('date')+'"]').not('.isntInRadius').length;
+        var day = dayRow.find('.fc-daygrid-day-events');
         day.find('span.event-count').remove();
         if (eventCount > 0) {
             day.html('<span class="event-count">' + eventCount + '</span>');
