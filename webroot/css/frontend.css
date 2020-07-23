@@ -546,7 +546,6 @@ div.calEvent:hover {
 
 #workshop-detail .fc-has-event {
     margin: 10%;
-    background-color: #fff;
     background-position: center 58%;
     background-image: url(/img/gotdatedetail.png);
     background-repeat: no-repeat;

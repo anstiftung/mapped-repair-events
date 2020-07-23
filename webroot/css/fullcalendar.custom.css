@@ -118,6 +118,14 @@ div#selectedDate {
     background-color: #4D8EA2;
     border-color: #4D8EA2;
 }
+.fc .fc-button-primary:focus {
+    box-shadow: inherit;
+}
+.fc .fc-button-primary:hover,
+.fc .fc-button-primary:active {
+    background-color: #77B1C5 ! important;
+    border-color: #77B1C5 ! important;
+}
 .fc .fc-toolbar-title {
     font-size: 18px;
 }
