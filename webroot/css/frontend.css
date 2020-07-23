@@ -555,10 +555,6 @@ div.calEvent:hover {
 #workshop-detail .fc-has-event.offline {
     background-image: url(/img/gotdatedraft.png);
 }
-
-#workshop-detail .fc-unthemed .fc-today {
-    background-color: #d7cbdf !important;
-}
 body.workshops.detail .calEvent {
     display: none ! important;
 }
