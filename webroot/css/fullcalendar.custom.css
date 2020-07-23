@@ -1,10 +1,6 @@
 .fc-row .fc-content-skeleton td {
     border-color: #ddd ! important;
 }
-.fc td.fc-today {
-    border-style: double; /* overcome neighboring borders */
-    background-color: #f8fbc5 !important
-}
 .fc td.fc-day.fc-has-event.hover,
 .fc td.fc-day.fc-has-event.selected {
     background-image: url(/img/gotdatedetail.png) ! important;
@@ -15,22 +11,19 @@
 .fc-day.fc-has-event, .fc-day-number {
     cursor: pointer;
 }
-
-
-.fc-past.fc-day-number {
+.fc-day-past.fc-day-number {
     background-color: transparent !important;
 }
 
 .fc-has-event {
     margin: 10%;
-    background-color: transparent !important;
     background-position: center 55% ! important;
     background-image: url(/img/gotdate.png) ! important;
     background-repeat: no-repeat ! important;
 }
 
-.fc-past {
-    background-color: #f2f2f2 !important;
+.fc-day-past {
+    background-color: rgba(77,142,162,.07) ! important;
 }
 
 div#calEvents {
@@ -110,9 +103,45 @@ div#selectedDate {
     background-image: url(/img/gotdatedraft.png);
 }
 
-#workshop-detail .fc-unthemed .fc-today {
+#workshop-detail .fc-unthemed .fc-day-today {
     background-color: #d7cbdf !important;
 }
 .fc-basic-view .fc-week-number, .fc-basic-view .fc-day-number {
     padding: 1px 2px 0 0;
+}
+
+/* fullcalendar v5 */
+.fc .fc-daygrid-day-number {
+    font-weight: normal;
+}
+.fc .fc-button-primary {
+    background-color: #4D8EA2;
+    border-color: #4D8EA2;
+}
+.fc .fc-toolbar-title {
+    font-size: 18px;
+}
+.fc .fc-toolbar.fc-header-toolbar {
+    margin-bottom: 7px;
+}
+.fc td.fc-has-event span.event-count {
+    display: none;
+    display: block;
+    text-align: center;
+    color: #fff;
+    margin-top: 0px;
+}
+.fc .fc-col-header-cell {
+    height: 17px;
+}
+.fc a:hover {
+    text-decoration: none;
+}
+/* avoid jumping on selecting next month */
+.fc .fc-day:not(.fc-has-event) .event-count {
+    display: none;
+}
+.fc .fc-scroller-liquid-absolute,
+.fc .fc-scroller {
+    overflow: hidden ! important;
 }

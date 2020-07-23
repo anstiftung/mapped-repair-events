@@ -9,8 +9,8 @@ MappedRepairEvents.Admin = {
 
     bindDelete: function() {
         $('a.delete-link').click(function() {
-            linkedImage = $(this);
-            uid = $(this).attr('id').replace('delete-link-', '');
+            var linkedImage = $(this);
+            var uid = $(this).attr('id').replace('delete-link-', '');
             $.prompt(
                 'Möchtest du dieses Objekt wirklich löschen? UID: ' + uid
                 ,{
@@ -37,10 +37,10 @@ MappedRepairEvents.Admin = {
             ,{uid: uid, status_type: statusType, value: value }
             ,{ onOk : function(data) {
 
-                 }
-                ,onError : function(data) {
-                    alert(data.message);
-                }
+            }
+            ,onError : function(data) {
+                alert(data.message);
+            }
             }
         );
 

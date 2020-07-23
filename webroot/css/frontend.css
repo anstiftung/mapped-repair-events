@@ -419,13 +419,6 @@ table.list a.icon-link-text {
     margin: 0px 0px 0px 0px;
     display: block
 }
-td.fc-has-event span.event-count {
-    display: none;
-    display: block;
-    text-align: center;
-    color: #fff;
-    margin-top: 21px;
-}
 .filter select {
     padding: 5px;
     border-radius: 3px;
@@ -561,10 +554,6 @@ div.calEvent:hover {
 
 #workshop-detail .fc-has-event.offline {
     background-image: url(/img/gotdatedraft.png);
-}
-
-#workshop-detail .fc-unthemed .fc-today {
-    background-color: #d7cbdf !important;
 }
 body.workshops.detail .calEvent {
     display: none ! important;
@@ -1598,7 +1587,7 @@ iframe .rc,
 }
 @-moz-document url-prefix() {
   #workshops-home .find-events-box {
-     margin-top: 25px;
+     margin-top: 26px;
   }
 }
 #workshops-home .find-events-box:not(.no-hover):hover {

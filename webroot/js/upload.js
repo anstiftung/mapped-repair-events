@@ -195,7 +195,7 @@ MappedRepairEvents.Upload = {
                         alert(data.msg);
                         MappedRepairEvents.AppFeatherlight.closeLightbox();
                     }
-                        ,onOk : function(data) {
+                    ,onOk : function(data) {
                         if (isMultiple) {
                             document.location.reload();
                         } else {
@@ -208,7 +208,7 @@ MappedRepairEvents.Upload = {
                         }
                         MappedRepairEvents.AppFeatherlight.closeLightbox();
                     }
-                });
+                    });
             },
             function() {
                 if (!MappedRepairEvents.Upload.images) {

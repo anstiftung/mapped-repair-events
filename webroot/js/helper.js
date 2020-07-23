@@ -28,7 +28,7 @@ MappedRepairEvents.Helper = {
                     onError : function(data) {
                     }
                 }
-            );            
+            );
         });
     }
 
@@ -264,7 +264,7 @@ MappedRepairEvents.Helper = {
 
         this.destroyCkeditor(name);
 
-        CKEDITOR.timestamp = 'v4.13.1';
+        CKEDITOR.timestamp = 'v4.14.1';
         $('textarea#' + name + '.ckeditor').ckeditor({
             customConfig: '/js/ckeditor/config.js',
             height: isMobile ? 350 : 650,
@@ -287,7 +287,7 @@ MappedRepairEvents.Helper = {
 
     },
 
-    initCkeditorWithoutElfinder: function (name) {
+    initCkeditorWithoutElfinder: function (name, isMobile) {
 
         if (!CKEDITOR.env.isCompatible) {
             return false;
@@ -295,7 +295,7 @@ MappedRepairEvents.Helper = {
 
         this.destroyCkeditor(name);
 
-        CKEDITOR.timestamp = 'v4.13.1';
+        CKEDITOR.timestamp = 'v4.14.1';
         $('textarea#' + name + '.ckeditor').ckeditor({
             customConfig: '/js/ckeditor/config-without-elfinder.js',
             height: isMobile ? 350 : 650,
@@ -383,7 +383,7 @@ MappedRepairEvents.Helper = {
                 ,{ onOk : function(data) {
                     document.location.href = data.referer;
                 }
-                    ,onError : function(data) {
+                ,onError : function(data) {
                     alert(data.message);
                 }
                 }
@@ -471,8 +471,8 @@ MappedRepairEvents.Helper = {
                 el: '.swiper-pagination',
                 type: 'bullets',
                 clickable: true,
-              },
-          });
+            },
+        });
     },
 
     hideAndResetCalendarEventsBox : function() {
@@ -511,8 +511,9 @@ MappedRepairEvents.Helper = {
         });
     },
 
-    updateDayEventCount : function(day) {
-        var eventCount = $('.calEvent[rel*="' + day.data('date')+'"]').not('.isntInRadius').length;
+    updateDayEventCount : function(dayRow) {
+        var eventCount = $('.calEvent[rel*="' + dayRow.data('date')+'"]').not('.isntInRadius').length;
+        var day = dayRow.find('.fc-daygrid-day-events');
         day.find('span.event-count').remove();
         if (eventCount > 0) {
             day.html('<span class="event-count">' + eventCount + '</span>');
@@ -703,33 +704,33 @@ MappedRepairEvents.Helper = {
         // center sub navis
         mainNavi.each(function() {
 
-           var centerPositionMainNavi = $(this).position().left + $(this).outerWidth() / 2;
-           var subnavi = $(this).closest('li').find('ul');
+            var centerPositionMainNavi = $(this).position().left + $(this).outerWidth() / 2;
+            var subnavi = $(this).closest('li').find('ul');
 
-           if (subnavi.length > 0) {
+            if (subnavi.length > 0) {
 
-               subnavi.css('paddingLeft', 0);
-               subnavi.css('width', 0);
+                subnavi.css('paddingLeft', 0);
+                subnavi.css('width', 0);
 
-               var subnaviInnerWidth = 0;
-               subnavi.find('li').each(function() {
-                   var originalDisplay = $(this).closest('ul').css('display');
-                   if (originalDisplay == 'none') {
-                       $(this).closest('ul').show();
-                   }
-                   subnaviInnerWidth += $(this).width();
-                   if (originalDisplay == 'none') {
-                       $(this).closest('ul').hide();
-                   }
-               });
+                var subnaviInnerWidth = 0;
+                subnavi.find('li').each(function() {
+                    var originalDisplay = $(this).closest('ul').css('display');
+                    if (originalDisplay == 'none') {
+                        $(this).closest('ul').show();
+                    }
+                    subnaviInnerWidth += $(this).width();
+                    if (originalDisplay == 'none') {
+                        $(this).closest('ul').hide();
+                    }
+                });
 
-               var leftForSubNavi = centerPositionMainNavi - subnaviInnerWidth / 2
-               subnavi.css('left', 0);
-               subnavi.css('paddingLeft', leftForSubNavi);
+                var leftForSubNavi = centerPositionMainNavi - subnaviInnerWidth / 2;
+                subnavi.css('left', 0);
+                subnavi.css('paddingLeft', leftForSubNavi);
 
-               var subnaviOuterWidth = $('#header').width() - leftForSubNavi;
-               subnavi.css('width', subnaviOuterWidth);
-           }
+                var subnaviOuterWidth = $('#header').width() - leftForSubNavi;
+                subnavi.css('width', subnaviOuterWidth);
+            }
         });
 
         mainNavi.on('mouseover', function(e) {
@@ -1336,15 +1337,6 @@ MappedRepairEvents.Helper = {
         if (formField.value.replace(/\+/g, ' ') == unescape(decodeURI(defaultValue)).replace(/\+/g, ' ')) {
             formField.value = '';
         }
-    },
-
-    isEmpty : function(obj) {
-        for ( var prop in obj) {
-            if (obj.hasOwnProperty(prop)) {
-                return false;
-            }
-        }
-        return true;
     },
 
     /**
