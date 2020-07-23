@@ -11,8 +11,6 @@
 .fc-day.fc-has-event, .fc-day-number {
     cursor: pointer;
 }
-
-
 .fc-day-past.fc-day-number {
     background-color: transparent !important;
 }
@@ -142,4 +140,8 @@ div#selectedDate {
 /* avoid jumping on selecting next month */
 .fc .fc-day:not(.fc-has-event) .event-count {
     display: none;
+}
+.fc .fc-scroller-liquid-absolute,
+.fc .fc-scroller {
+    overflow: hidden ! important;
 }
