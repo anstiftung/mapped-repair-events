@@ -1587,7 +1587,7 @@ iframe .rc,
 }
 @-moz-document url-prefix() {
   #workshops-home .find-events-box {
-     margin-top: 25px;
+     margin-top: 26px;
   }
 }
 #workshops-home .find-events-box:not(.no-hover):hover {
