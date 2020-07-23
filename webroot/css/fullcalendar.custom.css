@@ -1,10 +1,6 @@
 .fc-row .fc-content-skeleton td {
     border-color: #ddd ! important;
 }
-.fc td.fc-day-today {
-    border-style: double; /* overcome neighboring borders */
-    background-color: #f8fbc5 !important
-}
 .fc td.fc-day.fc-has-event.hover,
 .fc td.fc-day.fc-has-event.selected {
     background-image: url(/img/gotdatedetail.png) ! important;
@@ -23,14 +19,13 @@
 
 .fc-has-event {
     margin: 10%;
-    background-color: transparent !important;
     background-position: center 55% ! important;
     background-image: url(/img/gotdate.png) ! important;
     background-repeat: no-repeat ! important;
 }
 
 .fc-day-past {
-    background-color: #f2f2f2 !important;
+    background-color: rgba(77,142,162,.07) ! important;
 }
 
 div#calEvents {
