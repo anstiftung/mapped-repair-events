@@ -3,7 +3,7 @@
 echo 'Die von dir abonnierte Initiative "' . $workshop->name . '" hat nächste Woche einen Reparatur-Termin:'; ?>
 
 
-<?php echo __('Click here to learn more:'); ?>
+<?php echo 'Bitte informiere dich bei der Reparatur-Initiative, unter welchen Bedingungen derzeit das Reparaturcafé angeboten wird. Kontaktdaten und weitere Informationen findest du hier:'; ?>
 
 <?php echo Configure::read('AppConfig.serverName').$url; ?>
 
