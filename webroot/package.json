@@ -22,7 +22,7 @@
     "components-jqueryui": "~1.12",
     "detect_swipe": "^2.1.4",
     "featherlight": "^1.7.14",
-    "fullcalendar": "^5.1.0",
+    "fullcalendar": "^5.3.0",
     "jQuery-Impromptu": "https://github.com/trentrichardson/jQuery-Impromptu/tarball/master",
     "jquery": "^3.5.1",
     "jquery-knob": "https://github.com/aterrien/jQuery-Knob/tarball/master",
@@ -34,9 +34,9 @@
     "select2": "^4.0.13",
     "slidebars": "^2.0.2",
     "speakingurl": "^14.0.1",
-    "swiper": "^6.0.4"
+    "swiper": "^6.1.2"
   },
   "devDependencies": {
-    "eslint": "^7.5.0"
+    "eslint": "^7.7.0"
   }
 }
