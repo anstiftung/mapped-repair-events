@@ -25,22 +25,22 @@ $menu = [
 
 $menu = array_merge($menu, $this->Menu->buildPageMenu($pagesForHeader));
 
-if (Configure::read('AppConfig.additionalBlogCategoryEnabled') && !empty($menu[2])) {
-    // add additionalBlogCategory as last child in 3rd main menu item
-    $additionalBlogCategory[] = [
-        'name' => Configure::read('AppConfig.additionalBlogCategoryName'),
-        'slug' => $this->Html->urlBlogDetail(Configure::read('AppConfig.htmlHelper')->getAdditionalBlogCategoryUrl())
-    ];
-    array_splice($menu[2]['children'], count($menu[2]['children']), 0, $additionalBlogCategory);
-}
-
 if (Configure::read('AppConfig.fluxBbForumEnabled')) {
     // add forum link as last child in 4th main menu item
     $forum[] = [
         'name' => 'Forum',
         'slug' => $this->Html->urlForum($appAuth->user())
     ];
-    array_splice($menu[3]['children'], count($menu[3]['children']), 0, $forum);
+    array_splice($menu[2]['children'], count($menu[2]['children']), 0, $forum);
+}
+
+if (Configure::read('AppConfig.additionalBlogCategoryEnabled') && !empty($menu[3])) {
+    // add additionalBlogCategory as last child in 3rd main menu item
+    $additionalBlogCategory[] = [
+        'name' => Configure::read('AppConfig.additionalBlogCategoryName'),
+        'slug' => $this->Html->urlBlogDetail(Configure::read('AppConfig.htmlHelper')->getAdditionalBlogCategoryUrl())
+    ];
+    array_splice($menu[3]['children'], count($menu[3]['children']), 0, $additionalBlogCategory);
 }
 
 // add aktive link as last child in 5th main menu item
