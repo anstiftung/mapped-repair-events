@@ -1,35 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit
-    colors="true"
-    processIsolation="false"
-    stopOnFailure="false"
-    verbose="true"
-    bootstrap="./tests/bootstrap.php"
-    >
-    <php>
-        <ini name="memory_limit" value="-1"/>
-        <ini name="apc.enable_cli" value="1"/>
-    </php>
-
-    <testsuites>
-        <testsuite name="App">
-            <directory>./tests/TestCase/</directory>
-        </testsuite>
-    </testsuites>
-
-    <filter>
-        <whitelist>
-            <directory suffix=".php">./src/</directory>
-            <directory suffix=".php">./plugins/*/src/</directory>
-        </whitelist>
-    </filter>
-
-    <listeners>
-        <listener class="Cake\TestSuite\Fixture\FixtureInjector">
-            <arguments>
-                <object class="Cake\TestSuite\Fixture\FixtureManager" />
-            </arguments>
-        </listener>
-    </listeners>
-
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" colors="true" processIsolation="false" stopOnFailure="false" verbose="true" bootstrap="./tests/bootstrap.php" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+  <coverage>
+    <include>
+      <directory suffix=".php">./src/</directory>
+      <directory suffix=".php">./plugins/*/src/</directory>
+    </include>
+  </coverage>
+  <php>
+    <ini name="memory_limit" value="-1"/>
+    <ini name="apc.enable_cli" value="1"/>
+  </php>
+  <testsuites>
+    <testsuite name="App">
+      <directory>./tests/TestCase/</directory>
+    </testsuite>
+  </testsuites>
+  <listeners>
+    <listener class="Cake\TestSuite\Fixture\FixtureInjector">
+      <arguments>
+        <object class="Cake\TestSuite\Fixture\FixtureManager"/>
+      </arguments>
+    </listener>
+  </listeners>
 </phpunit>
