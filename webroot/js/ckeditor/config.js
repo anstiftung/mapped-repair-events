@@ -46,4 +46,4 @@ CKEDITOR.editorConfig = function( config ) {
     //config.removeDialogTabs = 'image:advanced;link:advanced';
 };
 
-CKEDITOR.timestamp = 'v4.14.1'; // change this string if version is updated
+CKEDITOR.timestamp = 'v4.15.0'; // change this string if version is updated
