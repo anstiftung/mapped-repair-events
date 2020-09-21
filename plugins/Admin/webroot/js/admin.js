@@ -14,9 +14,9 @@ MappedRepairEvents.Admin = {
             $.prompt(
                 'Möchtest du dieses Objekt wirklich löschen? UID: ' + uid
                 ,{
-                    buttons: {Loeschen: true, Abbrechen: false}
-                    ,submit: function(v,m,f) {
-                        if(m){ // gigi was v, bug
+                    buttons: {Loeschen: true, Abbrechen: false},
+                    submit: function(v,m,f) {
+                        if(m){
                             MappedRepairEvents.Admin.deleteAppObject(linkedImage, uid);
                         }
                     }
@@ -27,20 +27,24 @@ MappedRepairEvents.Admin = {
 
     deleteAppObject : function(linkedImage, uid) {
 
-        linkedImage.parent().parent().animate( { opacity: 'toggle'}, 'slow', function() {});
+        linkedImage.closest('tr').animate( { opacity: 'toggle'}, 'slow', function() {});
 
         var statusType = 'status';
         var value = -1;
 
         MappedRepairEvents.Helper.ajaxCall(
-            '/admin/' + 'intern/' + 'ajaxChangeAppObjectStatus/'
-            ,{uid: uid, status_type: statusType, value: value }
-            ,{ onOk : function(data) {
-
-            }
-            ,onError : function(data) {
-                alert(data.message);
-            }
+            '/admin/' + 'intern/' + 'ajaxChangeAppObjectStatus/',
+            {
+                uid: uid,
+                status_type: statusType,
+                value: value
+            },
+            {
+                onOk : function(data) {
+                },
+                onError : function(data) {
+                    alert(data.msg);
+                }
             }
         );
 

@@ -346,7 +346,7 @@ class InternController extends AdminAppController
         $pluralizedClass = Inflector::pluralize($objectClass);
         $this->{$objectClass} = $this->getTableLocator()->get($pluralizedClass);
 
-        $entity = $this->$objectClass->get($uid, [
+        $entity = $this->{$objectClass}->get($uid, [
                 'conditions' => [
                     $pluralizedClass.'.status >= ' . APP_DELETED
                 ]
@@ -355,11 +355,20 @@ class InternController extends AdminAppController
         if ($objectType == 'users') {
             $entity->revertPrivatizeData();
         }
-        $entity = $this->$objectClass->patchEntity($entity, [$statusType => $value]);
-        if ($this->$objectClass->save($entity)) {
+        $entity = $this->{$objectClass}->patchEntity(
+            $entity, [
+                $statusType => $value
+            ],
+            [
+                'validate' => false
+            ]
+        );
+
+        if ($this->{$objectClass}->save($entity)) {
             die(json_encode([
                 'status' => 0,
-                'msg' => 'ok'
+                'msg' => 'ok',
+                'uid' => $uid,
             ]));
         } else {
             die(json_encode([
