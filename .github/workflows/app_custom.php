@@ -3,18 +3,31 @@ return [
     'debug' => true,
     'emailErrorLoggingEnabled' => false,
     'googleMapApiKey' => '',
+    'EmailTransport' => [
+        'default' => [
+            'className' => 'Mail',
+        ]
+    ],
+    'Email' => [
+        'default' => [
+            'transport' => 'default',
+            'from' => 'you@localhost'
+        ],
+    ],
     'Datasources' => [
         'default' => [
             'host' => '127.0.0.1',
             'username' => 'root',
             'password' => 'password',
-            'database' => 'db_default'
+            'database' => 'db_default',
+            'port' => '8888',
         ],
         'test' => [
             'host' => '127.0.0.1',
             'username' => 'root',
             'password' => 'password',
-            'database' => 'db_test'
+            'database' => 'db_test',
+            'port' => '8888',
         ],
     ],
 
