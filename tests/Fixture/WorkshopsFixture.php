@@ -13,6 +13,7 @@ class WorkshopsFixture extends TestFixture
             'uid' => 2,
             'name' => 'Test Workshop',
             'url' => 'test-workshop',
+            'owner' => 1,
             'status' => APP_ON
         ]
     ];

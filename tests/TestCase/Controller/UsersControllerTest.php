@@ -175,29 +175,32 @@ class UsersControllerTest extends AppTestCase
 
     }
 
-    public function testDeleteUser()
+    public function testDeleteUserWithAssociationChecks()
     {
         $userUid = 1;
         $this->User = $this->getTableLocator()->get('Users');
-        $user = $this->User->find('all', [
-            'conditions' => [
-                'Users.uid' => $userUid,
-            ],
-            'contain' => [
-                'Workshops'
-            ]
-        ])->first();
+        $this->Workshop = $this->getTableLocator()->get('Workshops');
+        $user = $this->User->get($userUid);
 
         // 1. try to delete user with workshop relation
         $this->User->delete($user);
         $this->assertArrayHasKey('workshops', $user->getErrors());
         $this->assertArrayHasKey('_isNotLinkedTo', $user->getErrors()['workshops']);
+        $this->assertArrayHasKey('owner_workshops', $user->getErrors());
+        $this->assertArrayHasKey('_isNotLinkedTo', $user->getErrors()['owner_workshops']);
 
         // 2. remove workshop relation
+        $ownerAndAssociatedWorkshopId = 2;
         $this->loginAsOrga();
-        $this->get(Configure::read('AppConfig.htmlHelper')->urlUserWorkshopResign('user', $userUid, 2));
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlUserWorkshopResign('user', $userUid, $ownerAndAssociatedWorkshopId));
 
-        // 3. delete user
+        // 3. remove ownership
+        $workshop = $this->Workshop->get($ownerAndAssociatedWorkshopId);
+        $workshop->owner = 0;
+        $this->Workshop->save($workshop);
+
+        // 4. successfully delete user
+        $user = $this->User->get($userUid);
         $this->User->delete($user);
         $user = $this->User->find('all', [
             'conditions' => [
@@ -205,7 +208,6 @@ class UsersControllerTest extends AppTestCase
             ],
         ])->first();
         $this->assertEmpty($user);
-
     }
 
     private function getNewsletterData()
