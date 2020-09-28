@@ -49,7 +49,7 @@ if (isset($hidden) && $hidden) {
           </div>';
 
     $title = '<ul>';
-    $title .= '<li>Die Url auf unserer Plattform besteht aus '.(Configure::read('isSsl') ? 'https' : 'http').'://' . $_SERVER['SERVER_NAME'] . $urlPrefix . ' und einem frei wählbaren Namenszusatz, dem sogenannten "Slug".</li>
+    $title .= '<li>Die Url auf unserer Plattform besteht aus ' . Configure::read('AppConfig.serverName') . $urlPrefix . ' und einem frei wählbaren Namenszusatz, dem sogenannten "Slug".</li>
                       <li><b>Achtung:</b> Der Slug kann nur geändert werden, wenn ' . $type_de . ' auf offline gesetzt ist.</li>
                       <li>Sie sollte nur in Sonderfällen geändert werden, da das Suchmaschinenranking der Seite darunter leidet.</li>';
     if ($type != 'Coach') {

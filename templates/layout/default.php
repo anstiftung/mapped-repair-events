@@ -64,9 +64,9 @@ use Cake\Utility\Inflector;
 <meta name="msapplication-TileImage" content="/img/win8-tile-144x144.png"/>
 <meta name="msapplication-TileColor" content="#c8d218"/>
 <meta name="msapplication-navbutton-color" content="#c8d217"/>
-<meta name="application-name" content="<?php echo (Configure::read('isSsl') ? 'https' : 'http'); ?>://<?php echo Configure::read('AppConfig.serverName'); ?>"/>
-<meta name="msapplication-tooltip" content="<?php echo (Configure::read('isSsl') ? 'https' : 'http'); ?>://<?php echo Configure::read('AppConfig.serverName'); ?>"/>
-<meta name="apple-mobile-web-app-title" content="<?php echo (Configure::read('isSsl') ? 'https' : 'http'); ?>://<?php echo Configure::read('AppConfig.serverName'); ?>"/>
+<meta name="application-name" content="<?php echo Configure::read('AppConfig.serverName'); ?>"/>
+<meta name="msapplication-tooltip" content="<?php echo Configure::read('AppConfig.serverName'); ?>"/>
+<meta name="apple-mobile-web-app-title" content="<?php echo Configure::read('AppConfig.serverName'); ?>"/>
 <meta name="msapplication-square70x70logo" content="/img/win8-tile-70x70.png"/>
 <meta name="msapplication-square144x144logo" content="/img/win8-tile-144x144.png"/>
 <meta name="msapplication-square150x150logo" content="/img/win8-tile-150x150.png"/>

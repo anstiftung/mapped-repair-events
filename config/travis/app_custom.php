@@ -2,7 +2,6 @@
 return [
     'debug' => true,
     'emailErrorLoggingEnabled' => false,
-    'isSsl' => false,
     'googleMapApiKey' => '',
     'EmailTransport' => [
         'default' => [
