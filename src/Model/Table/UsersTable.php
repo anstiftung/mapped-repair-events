@@ -5,6 +5,7 @@ use App\Controller\Component\StringComponent;
 use Cake\Auth\DefaultPasswordHasher;
 use Cake\Core\Configure;
 use Cake\Datasource\FactoryLocator;
+use Cake\ORM\RulesChecker;
 use Cake\Validation\Validator;
 
 class UsersTable extends AppTable
@@ -56,6 +57,16 @@ class UsersTable extends AppTable
     public function getDefaultPrivateFields()
     {
         return 'lastname,email,street,zip,phone,additional_contact';
+    }
+
+    public function buildRules(RulesChecker $rules): RulesChecker
+    {
+        $rules->addDelete($rules->isNotLinkedTo(
+            'Workshops',
+            null,
+            'Der User ist noch mindestens einer Initiative als Owner zugeordnet.'
+        ));
+        return $rules;
     }
 
     private function addGroupsValidation($validator, $groups, $multiple)

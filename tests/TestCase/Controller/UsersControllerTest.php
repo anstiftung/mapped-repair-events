@@ -8,6 +8,7 @@ use App\Test\TestCase\Traits\UserAssertionsTrait;
 use Cake\Core\Configure;
 use Cake\TestSuite\EmailTrait;
 use Cake\TestSuite\IntegrationTestTrait;
+use App\Test\TestCase\Traits\LoginTrait;
 
 class UsersControllerTest extends AppTestCase
 {
@@ -15,6 +16,7 @@ class UsersControllerTest extends AppTestCase
     use UserAssertionsTrait;
     use EmailTrait;
     use LogFileAssertionsTrait;
+    use LoginTrait;
 
     private $validUserData = [
         'nick' => 'JohnDoeA<img onerror="alert();" />',
@@ -170,6 +172,39 @@ class UsersControllerTest extends AppTestCase
         $newsletter = $this->getNewsletterData();
         $this->assertEquals('ok', $newsletter[0]->confirm);
         $this->assertMailCount(2);
+
+    }
+
+    public function testDeleteUser()
+    {
+        $userUid = 1;
+        $this->User = $this->getTableLocator()->get('Users');
+        $user = $this->User->find('all', [
+            'conditions' => [
+                'Users.uid' => $userUid,
+            ],
+            'contain' => [
+                'Workshops'
+            ]
+        ])->first();
+
+        // 1. try to delete user with workshop relation
+        $this->User->delete($user);
+        $this->assertArrayHasKey('workshops', $user->getErrors());
+        $this->assertArrayHasKey('_isNotLinkedTo', $user->getErrors()['workshops']);
+
+        // 2. remove workshop relation
+        $this->loginAsOrga();
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlUserWorkshopResign('user', $userUid, 2));
+
+        // 3. delete user
+        $this->User->delete($user);
+        $user = $this->User->find('all', [
+            'conditions' => [
+                'Users.uid' => $userUid,
+            ],
+        ])->first();
+        $this->assertEmpty($user);
 
     }
 
