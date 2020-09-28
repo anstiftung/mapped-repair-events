@@ -5,41 +5,39 @@ return [
     'googleMapApiKey' => '',
     'EmailTransport' => [
         'default' => [
-            'className' => 'Smtp',
-            'host' => '',
-            'port' => 465,
-            'username' => '',
-            'password' => '',
-            'client' => null
-        ],
+            'className' => 'Mail',
+        ]
     ],
     'Email' => [
         'default' => [
             'transport' => 'default',
-            'from' => [
-                'test@example.com'
-            ],
-            'emailFormat' => 'text',
-            'charset' => 'utf-8'
-        ]
+            'from' => 'you@localhost'
+        ],
     ],
     'Datasources' => [
         'default' => [
             'host' => '127.0.0.1',
             'username' => 'root',
-            'password' => '',
-            'database' => 'db_default'
+            'password' => 'password',
+            'database' => 'db_test',
+            'port' => '8888',
         ],
         'test' => [
             'host' => '127.0.0.1',
             'username' => 'root',
-            'password' => '',
-            'database' => 'db_test'
+            'password' => 'password',
+            'database' => 'db_test',
+            'port' => '8888',
         ],
     ],
 
     'Security' => [
         'salt' => '1352742f9cf63228087273ae55bdf6bb2d1a75b82c7e3c6c7023c3014c703a85',
+    ],
+
+    'AppConfig' => [
+        'serverName' => 'http://localhost',
     ]
+
 ];
 ?>
