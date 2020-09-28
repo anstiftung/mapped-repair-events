@@ -12,7 +12,7 @@ use Cake\Core\Configure;
     <strong class="highlight">Beispiel-Link:</strong> <a title="Voransicht" target="_blank" href="/widgets/test-widget-map.php">Voransicht Landkarte</a>
     <br />
     <code class="inlinecode">
-        &lt;iframe frameborder="0" width="100%" height="650" src="<?php echo (Configure::read('isSsl') ? 'https' : 'http'); ?>://<?php echo $_SERVER['SERVER_NAME']; ?>/widgets/map"&gt;&lt;/iframe&gt;
+        &lt;iframe frameborder="0" width="100%" height="650" src="<?php echo Configure::read('AppConfig.serverName'); ?>/widgets/map"&gt;&lt;/iframe&gt;
     </code>
 
     <br />
@@ -21,7 +21,7 @@ use Cake\Core\Configure;
     <strong class="highlight">Beispiel-Link für die Zentrierung auf die Schweiz:</strong> <a title="Voransicht" target="_blank" href="/widgets/test-widget-map-switzerland.php">Voransicht Landkarte</a>
     <br />
     <code class="inlinecode">
-        &lt;iframe frameborder="0" width="100%" height="650" src="<?php echo (Configure::read('isSsl') ? 'https' : 'http'); ?>://<?php echo $_SERVER['SERVER_NAME']; ?>/widgets/map?<span class="highlight">zoomLevel=8</span>&amp;<span class="highlight">lat=46.8</span>&amp;<span class="highlight">lng=8.2</span>"&gt;&lt;/iframe&gt;
+        &lt;iframe frameborder="0" width="100%" height="650" src="<?php echo Configure::read('AppConfig.serverName'); ?>/widgets/map?<span class="highlight">zoomLevel=8</span>&amp;<span class="highlight">lat=46.8</span>&amp;<span class="highlight">lng=8.2</span>"&gt;&lt;/iframe&gt;
     </code>
 
     <br />
@@ -36,7 +36,7 @@ use Cake\Core\Configure;
     <strong class="highlight">Beispiel-Link für eine umgestaltete Karte:</strong> <a title="Voransicht" target="_blank" href="/widgets/test-widget-map-custom-colors-and-marker.php">Voransicht Landkarte</a>
     <br />
     <code class="inlinecode">
-        &lt;iframe frameborder="0" width="100%" height="650" src="<?php echo (Configure::read('isSsl') ? 'https' : 'http'); ?>://<?php echo $_SERVER['SERVER_NAME']; ?>/widgets/map?
+        &lt;iframe frameborder="0" width="100%" height="650" src="<?php echo Configure::read('AppConfig.serverName'); ?>/widgets/map?
         <span class="highlight">buttonColor=4f0901</span>&amp;<span class="highlight">buttonBgColor=db0202</span>&amp;<span class="highlight">searchButtonColor=db0202</span>&amp;<span class="highlight">searchButtonBgColor=4f0901</span>&amp;<span class="highlight">buttonMouseoverBgColor=ccc</span>&amp<span class="highlight">buttonMouseoverColor=000</span><br />
         &amp;<span class="highlight">clusterOuterColor=4f0901</span>&amp;<span class="highlight">clusterInnerColor=E22F00</span>&amp;<span class="highlight">clusterFontColor=4f0901</span><br />
         &amp;<span class="highlight">markerSrc=https://cdn2.iconfinder.com/data/icons/splashyIcons/marker_squared_red.png</span><br />&amp;<span class="highlight">foundMarkerSrc=https://cdn2.iconfinder.com/data/icons/splashyIcons/marker_squared_grey_5.png</span>"
