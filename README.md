@@ -5,11 +5,11 @@
 <h4 align="center">Mapped repair events. A platform for community repair.</h4>
 
 <p align="center">
-  <a href="https://travis-ci.org/anstiftung/mapped-repair-events">
-    <img src="https://travis-ci.org/anstiftung/mapped-repair-events.svg"
-         alt="Build status">
+<a href="https://github.com/anstiftung/mapped-repair-events/actions">
+    <img src="https://img.shields.io/github/workflow/status/anstiftung/mapped-repair-events/Mapped%20Repair%20Events%20CI/master?style=flat-square"
+        alt="Build status">
   </a>
-  <a href="LICENSE">
+    <a href="LICENSE">
     <img src="https://img.shields.io/github/license/anstiftung/mapped-repair-events"
          alt="Software license">
   </a>
