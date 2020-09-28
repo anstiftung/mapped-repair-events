@@ -64,7 +64,7 @@ class UsersTable extends AppTable
         $rules->addDelete($rules->isNotLinkedTo(
             'Workshops',
             null,
-            'Der User ist noch mindestens einer Initiative als Owner zugeordnet.'
+            'Der User ist noch mindestens einer Initiative als Mitarbeiter zugeordnet.'
         ));
         return $rules;
     }
