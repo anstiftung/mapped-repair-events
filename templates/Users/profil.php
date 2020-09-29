@@ -119,7 +119,7 @@ if ($isMyProfile) {
                 echo $this->Form->control('Users.about_me', ['label' => 'Über mich (max. 1.000 Zeichen)', 'type' => 'textarea', 'data-private' => true]).'<br />';
 
                 if ($appAuth->isAdmin()) {
-                    echo $this->Form->control('Users.status', ['type' => 'select', 'options' => Configure::read('AppConfig.status')]). '<br />';
+                    echo $this->Form->control('Users.status', ['type' => 'select', 'options' => Configure::read('AppConfig.status2')]). '<br />';
                 }
 
                 echo $this->element('cancelAndSaveButton', ['hideCancelButton' => $isMyProfile]);
