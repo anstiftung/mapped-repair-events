@@ -27,12 +27,14 @@ class UsersTable extends AppTable
         $this->belongsToMany('Groups', [
             'joinTable' => 'users_groups',
             'foreignKey' => 'user_uid',
-            'targetForeignKey' => 'group_id'
+            'targetForeignKey' => 'group_id',
+            'dependent' => true,
         ]);
         $this->belongsToMany('Categories', [
             'joinTable' => 'users_categories',
             'foreignKey' => 'user_uid',
-            'targetForeignKey' => 'category_id'
+            'targetForeignKey' => 'category_id',
+            'dependent' => true,
         ]);
         $this->belongsToMany('Skills', [
             'joinTable' => 'users_skills',
@@ -40,7 +42,8 @@ class UsersTable extends AppTable
             'targetForeignKey' => 'skill_id',
             'sort' => [
                 'Skills.name' => 'ASC'
-            ]
+            ],
+            'dependent' => true,
         ]);
         $this->belongsToMany('Workshops', [
 //             'through' => 'UsersWorkshops', // strangely this works in workshop table but not here
