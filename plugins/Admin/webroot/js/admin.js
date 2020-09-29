@@ -27,8 +27,6 @@ MappedRepairEvents.Admin = {
 
     deleteAppObject : function(linkedImage, uid) {
 
-        linkedImage.closest('tr').animate( { opacity: 'toggle'}, 'slow', function() {});
-
         var statusType = 'status';
         var value = -1;
 
@@ -41,6 +39,7 @@ MappedRepairEvents.Admin = {
             },
             {
                 onOk : function(data) {
+                    linkedImage.closest('tr').animate( { opacity: 'toggle'}, 'slow', function() {});
                 },
                 onError : function(data) {
                     alert(data.msg);
