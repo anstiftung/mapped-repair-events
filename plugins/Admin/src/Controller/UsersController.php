@@ -72,10 +72,13 @@ class UsersController extends AdminAppController
                 'Workshops' => [
                     'fields' => [
                         'Workshops.name',
-                        'UsersWorkshops.user_uid'
+                        'UsersWorkshops.user_uid',
+                    ],
+                    'conditions' => [
+                        'Workshops.status > ' . APP_DELETED,
                     ]
                 ],
-                'OwnerWorkshops'
+                'OwnerWorkshops',
             ]
         ]);
 
