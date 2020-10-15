@@ -175,7 +175,7 @@ class UsersControllerTest extends AppTestCase
 
     }
 
-    public function testDeleteUserWithAssociationChecks()
+    public function testDeleteUserWithNonDeletedWorkshop()
     {
         $userUid = 1;
         $this->User = $this->getTableLocator()->get('Users');
@@ -185,16 +185,17 @@ class UsersControllerTest extends AppTestCase
         // 1. try to delete user with workshop relation
         $this->User->delete($user);
         $this->assertArrayHasKey('workshops', $user->getErrors());
-        $this->assertArrayHasKey('_isNotLinkedTo', $user->getErrors()['workshops']);
-        $this->assertArrayHasKey('owner_workshops', $user->getErrors());
-        $this->assertArrayHasKey('_isNotLinkedTo', $user->getErrors()['owner_workshops']);
+        $this->assertEquals('Der User ist noch bei folgenden Initiativen als Mitarbeiter zugeordnet: Test Workshop', $user->getErrors()['workshops'][0]);
 
-        // 2. remove workshop relation
+        $this->assertArrayHasKey('owner_workshops', $user->getErrors());
+        $this->assertEquals('Der User ist noch bei folgenden Initiativen als Owner zugeordnet: Test Workshop', $user->getErrors()['owner_workshops'][0]);
+
+        // 2. manually remove workshop relation
         $ownerAndAssociatedWorkshopId = 2;
         $this->loginAsOrga();
         $this->get(Configure::read('AppConfig.htmlHelper')->urlUserWorkshopResign('user', $userUid, $ownerAndAssociatedWorkshopId));
 
-        // 3. remove ownership
+        // 3. manually remove ownership
         $workshop = $this->Workshop->get($ownerAndAssociatedWorkshopId);
         $workshop->owner = 0;
         $this->Workshop->save($workshop);
@@ -208,6 +209,47 @@ class UsersControllerTest extends AppTestCase
             ],
         ])->first();
         $this->assertEmpty($user);
+    }
+
+    public function testDeleteUserWithDeletedWorkshop()
+    {
+        $userUid = 1;
+        $workshopUid = 2;
+        $this->User = $this->getTableLocator()->get('Users');
+        $this->Workshop = $this->getTableLocator()->get('Workshops');
+
+        $workshop = $this->Workshop->get($workshopUid);
+        $workshop->status = APP_DELETED;
+        $this->Workshop->save($workshop);
+
+        $user = $this->User->get($userUid);
+
+        // 1. delete user with workshop (status deleted) relation
+        $this->User->delete($user);
+
+        $this->assertEmpty($user->getErrors());
+
+        // check if workshop owner of deleted workshops (-1) were set to 0 automatically
+        $workshop = $this->Workshop->get($workshopUid);
+        $this->assertEquals(0, $workshop->owner);
+
+        // check if workshop associations of deleted workshops (-1) were removed automatically
+        $workshops = $this->Workshop->find('all', [
+            'conditions' => [
+                'Workshops.status' => APP_DELETED,
+            ],
+            'contain' => [
+                'Users' => [
+                    'conditions' => [
+                        'Users.uid' => $userUid,
+                    ]
+                ]
+            ]
+        ])->toArray();
+//         $this->assertEmpty($workshops);
+
+        // 4. check last orga
+
     }
 
     private function getNewsletterData()

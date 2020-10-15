@@ -1,12 +1,18 @@
 <?php
 namespace App\Model\Table;
 
+use ArrayObject;
 use App\Controller\Component\StringComponent;
+use App\Model\Rule\UserLinkToWorkshopRule;
+use App\Model\Rule\UserIsWorkshopOwnerRule;
 use Cake\Auth\DefaultPasswordHasher;
 use Cake\Core\Configure;
+use Cake\Datasource\EntityInterface;
 use Cake\Datasource\FactoryLocator;
 use Cake\ORM\RulesChecker;
+use Cake\Utility\Hash;
 use Cake\Validation\Validator;
+use Cake\Event\EventInterface;
 
 class UsersTable extends AppTable
 {
@@ -49,7 +55,7 @@ class UsersTable extends AppTable
 //             'through' => 'UsersWorkshops', // strangely this works in workshop table but not here
             'joinTable' => 'users_workshops',
             'foreignKey' => 'user_uid',
-            'targetForeignKey' => 'workshop_uid'
+            'targetForeignKey' => 'workshop_uid',
         ]);
         $this->hasMany('OwnerWorkshops', [
             'className' => 'Workshops',
@@ -64,17 +70,64 @@ class UsersTable extends AppTable
 
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-        $rules->addDelete($rules->isNotLinkedTo(
-            'Workshops',
+        $rules->addDelete(
+            new UserIsWorkshopOwnerRule(),
             null,
-            'Der User ist noch mindestens bei einer Initiative als Mitarbeiter zugeordnet.'
-        ));
-        $rules->addDelete($rules->isNotLinkedTo(
-            'OwnerWorkshops',
+            [
+                'errorField' => 'owner_workshops',
+            ]
+        );
+        $rules->addDelete(
+            new UserLinkToWorkshopRule(),
             null,
-            'Der User ist noch mindestens bei einer Initiative Owner.'
-        ));
+            [
+                'errorField' => 'workshops',
+            ]
+        );
         return $rules;
+    }
+
+    public function beforeDelete(EventInterface $event, EntityInterface $entity, ArrayObject $options)
+    {
+
+        // 1. set owner to 0 for all workshops where to-be-deleted user was owner
+        $workshopTable = FactoryLocator::get('Table')->get('Workshops');
+        $ownerWorkshops = $workshopTable->find('all', [
+            'conditions' => [
+                'Workshops.owner' => $entity->get('uid'),
+                'Workshops.status' => APP_DELETED,
+            ],
+        ])->toArray();
+
+        if (!empty($ownerWorkshops)) {
+            $workshopTable->updateAll([
+                'owner' => 0,
+            ], [
+                'Workshops.uid IN' => Hash::extract($ownerWorkshops, '{n}.uid'),
+            ]);
+        }
+
+        // remove associations of deleted workshops
+        $associatedWorkshops = $workshopTable->find('all', [
+            'conditions' => [
+                'Workshops.status' => APP_DELETED,
+            ],
+            'contain' => [
+                'Users' => [
+                    'conditions' => [
+                        'Users.uid' => $entity->get('uid'),
+                    ]
+                ]
+            ]
+        ])->toArray();
+
+        if (!empty($associatedWorkshops)) {
+            $usersWorkshopsTable = FactoryLocator::get('Table')->get('UsersWorkshops');
+            $usersWorkshopsTable->deleteAll([
+                'UsersWorkshops.workshop_uid IN' => Hash::extract($associatedWorkshops, '{n}.uid'),
+            ]);
+        }
+
     }
 
     private function addGroupsValidation($validator, $groups, $multiple)
