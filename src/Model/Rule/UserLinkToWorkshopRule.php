@@ -9,6 +9,8 @@ use Cake\Utility\Hash;
 class UserLinkToWorkshopRule
 {
 
+    public $User;
+
     public function __invoke(EntityInterface $entity, array $options)
     {
 

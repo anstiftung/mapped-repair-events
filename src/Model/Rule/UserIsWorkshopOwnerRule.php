@@ -9,6 +9,8 @@ use Cake\Utility\Hash;
 class UserIsWorkshopOwnerRule
 {
 
+    public $User;
+
     public function __invoke(EntityInterface $entity, array $options)
     {
 
