@@ -46,7 +46,7 @@ class UserLinkToWorkshopRule
         $workshops = $this->Workshop->getWorkshopsForAssociatedUser($userUid, APP_DELETED);
         $associatedWorkshopsWhereUserIsLastOrgaUser = $this->User->getWorkshopsWhereUserIsLastOrgaUser($workshops);
 
-        $errorMessage = 'Der User ist noch bei folgenden Initiativen als letzter Organisator zugeordnet: ';
+        $errorMessage = 'Der User ist bei folgenden Initiativen als letzter Organisator zugeordnet: ';
         $errorMessage .= join(', ', Hash::extract($associatedWorkshopsWhereUserIsLastOrgaUser, '{n}.name'));
         return $errorMessage;
 

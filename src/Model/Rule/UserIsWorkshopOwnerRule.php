@@ -32,7 +32,7 @@ class UserIsWorkshopOwnerRule
             return true;
         }
 
-        $errorMessage = 'Der User ist noch bei folgenden Initiativen als Owner zugeordnet: ';
+        $errorMessage = 'Der User ist bei folgenden Initiativen als Owner zugeordnet: ';
         $errorMessage .= join(', ', Hash::extract($user->owner_workshops, '{n}.name'));
         return $errorMessage;
 

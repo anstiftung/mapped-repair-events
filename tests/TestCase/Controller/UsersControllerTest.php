@@ -197,7 +197,7 @@ class UsersControllerTest extends AppTestCase
         $this->assertEquals(1, count($user->getErrors()));
 
         $this->assertArrayHasKey('owner_workshops', $user->getErrors());
-        $this->assertEquals('Der User ist noch bei folgenden Initiativen als Owner zugeordnet: Test Workshop', $user->getErrors()['owner_workshops'][0]);
+        $this->assertEquals('Der User ist bei folgenden Initiativen als Owner zugeordnet: Test Workshop', $user->getErrors()['owner_workshops'][0]);
 
         // 2. manually remove workshop relation
         $ownerAndAssociatedWorkshopId = 2;
@@ -231,10 +231,10 @@ class UsersControllerTest extends AppTestCase
         // 1. try to delete user with workshop relation
         $this->User->delete($user);
         $this->assertArrayHasKey('workshops', $user->getErrors());
-        $this->assertEquals('Der User ist noch bei folgenden Initiativen als letzter Organisator zugeordnet: Test Workshop', $user->getErrors()['workshops'][0]);
+        $this->assertEquals('Der User ist bei folgenden Initiativen als letzter Organisator zugeordnet: Test Workshop', $user->getErrors()['workshops'][0]);
 
         $this->assertArrayHasKey('owner_workshops', $user->getErrors());
-        $this->assertEquals('Der User ist noch bei folgenden Initiativen als Owner zugeordnet: Test Workshop', $user->getErrors()['owner_workshops'][0]);
+        $this->assertEquals('Der User ist bei folgenden Initiativen als Owner zugeordnet: Test Workshop', $user->getErrors()['owner_workshops'][0]);
 
         // 2. manually remove workshop relation
         $ownerAndAssociatedWorkshopId = 2;
