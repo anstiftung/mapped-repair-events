@@ -32,7 +32,7 @@ class UsersControllerTest extends AppTestCase
         $this->get(Configure::read('AppConfig.htmlHelper')->urlUsers());
         $this->doUserPrivacyAssertions();
         $users = $this->viewVariable('users');
-        $this->assertEquals(2, count($users));
+        $this->assertEquals(3, count($users));
     }
 
     public function testPublicProfileFieldsPrivate()
@@ -69,7 +69,7 @@ class UsersControllerTest extends AppTestCase
 
         $user = $this->getRegisteredUser();
 
-        $this->assertEquals($user->uid, 8);
+        $this->assertEquals($user->uid, 9);
         $this->assertEquals($user->nick, 'JohnDoeA');
         $this->assertEquals($user->email, $this->validUserData['email']);
         $this->assertEquals($user->firstname, 'John');
@@ -175,24 +175,33 @@ class UsersControllerTest extends AppTestCase
 
     }
 
-    public function testDeleteUserWithNonDeletedWorkshop()
+    public function testDeleteRepairhelperUserWithNonDeletedWorkshop()
     {
         $userUid = 1;
         $this->User = $this->getTableLocator()->get('Users');
         $this->Workshop = $this->getTableLocator()->get('Workshops');
-        $user = $this->User->get($userUid);
+        $this->Group = $this->getTableLocator()->get('Groups');
+        $user = $this->User->get($userUid, [
+            'contain' => [
+                'Groups',
+            ],
+        ]);
+        // change user to repairhelper
+        $user->groups = [
+            $this->Group->get(GROUPS_REPAIRHELPER)
+        ];
+        $this->User->save($user);
 
         // 1. try to delete user with workshop relation
         $this->User->delete($user);
-        $this->assertArrayHasKey('workshops', $user->getErrors());
-        $this->assertEquals('Der User ist noch bei folgenden Initiativen als Mitarbeiter zugeordnet: Test Workshop', $user->getErrors()['workshops'][0]);
+        $this->assertEquals(1, count($user->getErrors()));
 
         $this->assertArrayHasKey('owner_workshops', $user->getErrors());
         $this->assertEquals('Der User ist noch bei folgenden Initiativen als Owner zugeordnet: Test Workshop', $user->getErrors()['owner_workshops'][0]);
 
         // 2. manually remove workshop relation
         $ownerAndAssociatedWorkshopId = 2;
-        $this->loginAsOrga();
+        $this->loginAsAdmin();
         $this->get(Configure::read('AppConfig.htmlHelper')->urlUserWorkshopResign('user', $userUid, $ownerAndAssociatedWorkshopId));
 
         // 3. manually remove ownership
@@ -211,8 +220,47 @@ class UsersControllerTest extends AppTestCase
         $this->assertEmpty($user);
     }
 
-    public function testDeleteUserWithDeletedWorkshop()
+    public function testDeleteLastOrgaUserWithNonDeletedWorkshop()
     {
+
+        $userUid = 1;
+        $this->User = $this->getTableLocator()->get('Users');
+        $this->Workshop = $this->getTableLocator()->get('Workshops');
+        $user = $this->User->get($userUid);
+
+        // 1. try to delete user with workshop relation
+        $this->User->delete($user);
+        $this->assertArrayHasKey('workshops', $user->getErrors());
+        $this->assertEquals('Der User ist noch bei folgenden Initiativen als letzter Organisator zugeordnet: Test Workshop', $user->getErrors()['workshops'][0]);
+
+        $this->assertArrayHasKey('owner_workshops', $user->getErrors());
+        $this->assertEquals('Der User ist noch bei folgenden Initiativen als Owner zugeordnet: Test Workshop', $user->getErrors()['owner_workshops'][0]);
+
+        // 2. manually remove workshop relation
+        $ownerAndAssociatedWorkshopId = 2;
+        $this->loginAsAdmin();
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlUserWorkshopResign('user', $userUid, $ownerAndAssociatedWorkshopId));
+
+        // 3. manually remove ownership
+        $workshop = $this->Workshop->get($ownerAndAssociatedWorkshopId);
+        $workshop->owner = 0;
+        $this->Workshop->save($workshop);
+
+        // 4. successfully delete user
+        $user = $this->User->get($userUid);
+        $this->User->delete($user);
+        $user = $this->User->find('all', [
+            'conditions' => [
+                'Users.uid' => $userUid,
+            ],
+        ])->first();
+        $this->assertEmpty($user);
+
+    }
+
+    public function testDeleteLastOrgaUserWithDeletedWorkshop()
+    {
+
         $userUid = 1;
         $workshopUid = 2;
         $this->User = $this->getTableLocator()->get('Users');
@@ -224,7 +272,7 @@ class UsersControllerTest extends AppTestCase
 
         $user = $this->User->get($userUid);
 
-        // 1. delete user with workshop (status deleted) relation
+        // delete user with workshop (status deleted) relation
         $this->User->delete($user);
 
         $this->assertEmpty($user->getErrors());
@@ -242,7 +290,13 @@ class UsersControllerTest extends AppTestCase
         ])->toArray();
         $this->assertEmpty($usersWorkshops);
 
-        // 4. check last orga
+        // approve if user is deleted
+        $user = $this->User->find('all', [
+            'conditions' => [
+                'Users.uid' => $userUid,
+            ],
+        ])->first();
+        $this->assertEmpty($user);
 
     }
 
