@@ -184,6 +184,7 @@ class UsersControllerTest extends AppTestCase
         $user = $this->User->get($userUid, [
             'contain' => [
                 'Groups',
+                'OwnerWorkshops',
             ],
         ]);
         // change user to repairhelper
@@ -194,24 +195,13 @@ class UsersControllerTest extends AppTestCase
 
         // 1. try to delete user with workshop relation
         $this->User->delete($user);
-        $this->assertEquals(1, count($user->getErrors()));
+        $this->assertFalse($user->hasErrors());
 
-        $this->assertArrayHasKey('owner_workshops', $user->getErrors());
-        $this->assertEquals('Der User ist bei folgenden Initiativen als Owner zugeordnet: Test Workshop', $user->getErrors()['owner_workshops'][0]);
+        // 3. check changed owner of workshops
+        $workshop = $this->Workshop->get($user->owner_workshops[0]->uid);
+        $this->assertEquals(8, $workshop->owner);
 
-        // 2. manually remove workshop relation
-        $ownerAndAssociatedWorkshopId = 2;
-        $this->loginAsAdmin();
-        $this->get(Configure::read('AppConfig.htmlHelper')->urlUserWorkshopResign('user', $userUid, $ownerAndAssociatedWorkshopId));
-
-        // 3. manually remove ownership
-        $workshop = $this->Workshop->get($ownerAndAssociatedWorkshopId);
-        $workshop->owner = 0;
-        $this->Workshop->save($workshop);
-
-        // 4. successfully delete user
-        $user = $this->User->get($userUid);
-        $this->User->delete($user);
+        // 4. check successfully deleted user
         $user = $this->User->find('all', [
             'conditions' => [
                 'Users.uid' => $userUid,
@@ -233,22 +223,23 @@ class UsersControllerTest extends AppTestCase
         $this->assertArrayHasKey('workshops', $user->getErrors());
         $this->assertEquals('Der User ist bei folgenden Initiativen als letzter Organisator zugeordnet: Test Workshop', $user->getErrors()['workshops'][0]);
 
-        $this->assertArrayHasKey('owner_workshops', $user->getErrors());
-        $this->assertEquals('Der User ist bei folgenden Initiativen als Owner zugeordnet: Test Workshop', $user->getErrors()['owner_workshops'][0]);
-
         // 2. manually remove workshop relation
         $ownerAndAssociatedWorkshopId = 2;
         $this->loginAsAdmin();
         $this->get(Configure::read('AppConfig.htmlHelper')->urlUserWorkshopResign('user', $userUid, $ownerAndAssociatedWorkshopId));
 
-        // 3. manually remove ownership
-        $workshop = $this->Workshop->get($ownerAndAssociatedWorkshopId);
-        $workshop->owner = 0;
-        $this->Workshop->save($workshop);
-
-        // 4. successfully delete user
-        $user = $this->User->get($userUid);
+        // 3. successfully delete user
+        $user = $this->User->get($userUid, [
+            'contain' => [
+                'OwnerWorkshops',
+            ]
+        ]);
         $this->User->delete($user);
+
+        // 4. check changed owner of workshops
+        $workshop = $this->Workshop->get($user->owner_workshops[0]->uid);
+        $this->assertEquals(8, $workshop->owner);
+
         $user = $this->User->find('all', [
             'conditions' => [
                 'Users.uid' => $userUid,
@@ -274,8 +265,7 @@ class UsersControllerTest extends AppTestCase
 
         // delete user with workshop (status deleted) relation
         $this->User->delete($user);
-
-        $this->assertEmpty($user->getErrors());
+        $this->assertFalse($user->hasErrors());
 
         // check if workshop owner of deleted workshops (-1) were set to 0 automatically
         $workshop = $this->Workshop->get($workshopUid);

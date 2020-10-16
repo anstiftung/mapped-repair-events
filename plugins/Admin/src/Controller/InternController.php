@@ -8,7 +8,6 @@ use Cake\Core\Exception\Exception;
 use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
 use Cake\Filesystem\Folder;
-use Cake\Log\Log;
 use Intervention\Image\ImageManagerStatic as Image;
 
 class InternController extends AdminAppController

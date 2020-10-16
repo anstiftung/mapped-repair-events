@@ -72,13 +72,6 @@ class UsersTable extends AppTable
     public function buildRules(RulesChecker $rules): RulesChecker
     {
         $rules->addDelete(
-            new UserIsWorkshopOwnerRule(),
-            null,
-            [
-                'errorField' => 'owner_workshops',
-            ]
-        );
-        $rules->addDelete(
             new UserLinkToWorkshopRule(),
             null,
             [
@@ -93,20 +86,36 @@ class UsersTable extends AppTable
 
         $userUid = $entity->get('uid');
 
-        // 1. set owner to 0 for all workshops where to-be-deleted user was owner
+        // 1. set owner to 0 for all deleted workshops where to-be-deleted user was owner
         $workshopTable = FactoryLocator::get('Table')->get('Workshops');
-        $ownerWorkshops = $workshopTable->find('all', [
+        $deletedOwnerWorkshops = $workshopTable->find('all', [
             'conditions' => [
                 'Workshops.owner' =>$userUid,
                 'Workshops.status' => APP_DELETED,
             ],
         ])->toArray();
 
-        if (!empty($ownerWorkshops)) {
+        if (!empty($deletedOwnerWorkshops)) {
             $workshopTable->updateAll([
                 'owner' => 0,
             ], [
-                'Workshops.uid IN' => Hash::extract($ownerWorkshops, '{n}.uid'),
+                'Workshops.uid IN' => Hash::extract($deletedOwnerWorkshops, '{n}.uid'),
+            ]);
+        }
+
+        // 1. set owner to admin-user for all non-deleted workshops where to-be-deleted user was owner
+        $nonDeletedOwnerWorkshops = $workshopTable->find('all', [
+            'conditions' => [
+                'Workshops.owner' =>$userUid,
+                'Workshops.status > ' . APP_DELETED,
+            ],
+        ])->toArray();
+
+        if (!empty($nonDeletedOwnerWorkshops)) {
+            $workshopTable->updateAll([
+                'owner' => Configure::read('AppConfig.adminUserUid'),
+            ], [
+                'Workshops.uid IN' => Hash::extract($nonDeletedOwnerWorkshops, '{n}.uid'),
             ]);
         }
 
