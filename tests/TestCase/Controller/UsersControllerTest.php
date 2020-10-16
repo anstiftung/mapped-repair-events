@@ -233,20 +233,14 @@ class UsersControllerTest extends AppTestCase
         $workshop = $this->Workshop->get($workshopUid);
         $this->assertEquals(0, $workshop->owner);
 
-        // check if workshop associations of deleted workshops (-1) were removed automatically
-        $workshops = $this->Workshop->find('all', [
+        // check if all workshop associations the user were removed automatically
+        $this->UsersWorkshop = $this->getTableLocator()->get('UsersWorkshops');
+        $usersWorkshops = $this->UsersWorkshop->find('all', [
             'conditions' => [
-                'Workshops.status' => APP_DELETED,
+                'UsersWorkshops.user_uid' => $userUid,
             ],
-            'contain' => [
-                'Users' => [
-                    'conditions' => [
-                        'Users.uid' => $userUid,
-                    ]
-                ]
-            ]
         ])->toArray();
-//         $this->assertEmpty($workshops);
+        $this->assertEmpty($usersWorkshops);
 
         // 4. check last orga
 

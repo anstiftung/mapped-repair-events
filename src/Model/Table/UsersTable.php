@@ -56,6 +56,7 @@ class UsersTable extends AppTable
             'joinTable' => 'users_workshops',
             'foreignKey' => 'user_uid',
             'targetForeignKey' => 'workshop_uid',
+            'dependent' => true,
         ]);
         $this->hasMany('OwnerWorkshops', [
             'className' => 'Workshops',
@@ -90,11 +91,13 @@ class UsersTable extends AppTable
     public function beforeDelete(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
 
+        $userUid = $entity->get('uid');
+
         // 1. set owner to 0 for all workshops where to-be-deleted user was owner
         $workshopTable = FactoryLocator::get('Table')->get('Workshops');
         $ownerWorkshops = $workshopTable->find('all', [
             'conditions' => [
-                'Workshops.owner' => $entity->get('uid'),
+                'Workshops.owner' =>$userUid,
                 'Workshops.status' => APP_DELETED,
             ],
         ])->toArray();
@@ -104,27 +107,6 @@ class UsersTable extends AppTable
                 'owner' => 0,
             ], [
                 'Workshops.uid IN' => Hash::extract($ownerWorkshops, '{n}.uid'),
-            ]);
-        }
-
-        // remove associations of deleted workshops
-        $associatedWorkshops = $workshopTable->find('all', [
-            'conditions' => [
-                'Workshops.status' => APP_DELETED,
-            ],
-            'contain' => [
-                'Users' => [
-                    'conditions' => [
-                        'Users.uid' => $entity->get('uid'),
-                    ]
-                ]
-            ]
-        ])->toArray();
-
-        if (!empty($associatedWorkshops)) {
-            $usersWorkshopsTable = FactoryLocator::get('Table')->get('UsersWorkshops');
-            $usersWorkshopsTable->deleteAll([
-                'UsersWorkshops.workshop_uid IN' => Hash::extract($associatedWorkshops, '{n}.uid'),
             ]);
         }
 
