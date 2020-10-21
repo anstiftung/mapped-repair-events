@@ -103,7 +103,7 @@ class UsersTable extends AppTable
             ]);
         }
 
-        // 1. set owner to admin-user for all non-deleted workshops where to-be-deleted user was owner
+        // 2. set owner to admin-user for all non-deleted workshops where to-be-deleted user was owner
         $nonDeletedOwnerWorkshops = $workshopTable->find('all', [
             'conditions' => [
                 'Workshops.owner' =>$userUid,
@@ -119,6 +119,25 @@ class UsersTable extends AppTable
             ]);
         }
 
+        // 3. delete user profile image
+        if ($entity->image != '') {
+
+            $fileName = explode('?', $entity->image);
+            $fileName = $fileName[0];
+
+            $thumbSizes = Configure::read('AppConfig.thumbSizes');
+            foreach ($thumbSizes as $thumbSize => $thumbSizeOptions) {
+                $thumbMethod = 'getThumbs' . $thumbSize . 'Image';
+                $thumbsFileName = Configure::read('AppConfig.htmlHelper')->$thumbMethod($fileName, 'users');
+                $targetFileAbsolute = str_replace('//', '/', $_SERVER['DOCUMENT_ROOT'] . $thumbsFileName);
+                unlink($targetFileAbsolute);
+            }
+
+            $originalFileName =  Configure::read('AppConfig.htmlHelper')->getOriginalImage($fileName, 'users');
+            $targetFileAbsolute = str_replace('//', '/', $_SERVER['DOCUMENT_ROOT'] . $originalFileName);
+            unlink($targetFileAbsolute);
+
+        }
     }
 
     private function addGroupsValidation($validator, $groups, $multiple)
