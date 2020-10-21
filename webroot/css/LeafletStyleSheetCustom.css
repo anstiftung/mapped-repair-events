@@ -5,3 +5,7 @@
 .prunecluster div {
     background-color: #EFAD11;
 }
+.leaflet-popup-content {
+    max-height: 150px;
+    overflow-y: auto;
+}
