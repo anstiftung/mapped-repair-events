@@ -29,5 +29,27 @@ trait LoginTrait
 
     }
 
+    protected function loginAsAdmin()
+    {
+        $adminUserEmail = 'admin@mailinator.com';
+        $this->User = FactoryLocator::get('Table')->get('Users');
+        $user = $this->User->find('all', [
+            'conditions' => [
+                'Users.email' => $adminUserEmail
+            ],
+            'contain' => [
+                'Groups'
+            ]
+        ])->first();
+        $user->revertPrivatizeData();
+
+        $this->session([
+            'Auth' => [
+                'User' => $user->toArray()
+            ]
+        ]);
+
+    }
+
 }
 ?>

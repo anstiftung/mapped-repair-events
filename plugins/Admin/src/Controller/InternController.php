@@ -5,6 +5,7 @@ namespace Admin\Controller;
 use App\Controller\Component\StringComponent;
 use Cake\Core\Configure;
 use Cake\Core\Exception\Exception;
+use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
 use Cake\Filesystem\Folder;
 use Intervention\Image\ImageManagerStatic as Image;
@@ -353,7 +354,15 @@ class InternController extends AdminAppController
             ]
         );
         if ($objectType == 'users') {
-            $entity->revertPrivatizeData();
+            $this->User->delete($entity);
+            if ($entity->hasErrors()) {
+                $errorMessages = ['Löschen nicht möglich:'];
+                $errorMessages = array_merge($errorMessages, array_values(Hash::flatten($entity->getErrors())));
+                die(json_encode([
+                    'status' => 1,
+                    'msg' => join("\r\n", $errorMessages),
+                ]));
+            }
         }
         $entity = $this->{$objectClass}->patchEntity(
             $entity, [

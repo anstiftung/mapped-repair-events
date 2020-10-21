@@ -20,7 +20,7 @@ echo $this->element('list'
                 ,['name' => 'lastname', 'label' => 'Nachname']
                 ,['name' => 'Groups.name', 'type' => 'habtm', 'label' => 'Gruppen']
                 ,['name' => 'owner_workshops.name', 'type' => 'habtm', 'label' => Configure::read('AppConfig.initiativeNameSingular') . ' (Owner)']
-                ,['name' => 'workshops.name', 'type' => 'habtm', 'label' => Configure::read('AppConfig.initiativeNameSingular') . '(Mitarbeiter)']
+                ,['name' => 'workshops.name', 'type' => 'habtm', 'label' => Configure::read('AppConfig.initiativeNameSingular') . ' (Mitarbeiter)']
                 ,['name' => 'created', 'type' => 'datetime', 'label' => 'erstellt']
                 ,['name' => 'updated', 'type' => 'datetime', 'label' => 'geändert']
                 ,['name' => 'email']

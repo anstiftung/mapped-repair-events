@@ -37,6 +37,10 @@ class RootsFixture extends TestFixture
             'uid' => 7,
             'type' => 'info_sheets'
         ],
+        [
+            'uid' => 8,
+            'type' => 'users'
+        ],
     ];
 }
 ?>

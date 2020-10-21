@@ -749,7 +749,6 @@ class WorkshopsController extends AppController
     }
 
     /**
-     *
      * @return $workshop
      */
     public function userDelete($type)

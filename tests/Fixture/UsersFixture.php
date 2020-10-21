@@ -38,7 +38,22 @@ class UsersFixture extends TestFixture
               'private' => '',
               'created' => '2019-09-17 08:23:23',
               'modified' => '2019-09-17 08:23:23'
-          ]
+          ],
+          [
+              'uid' => 8,
+              'firstname' => 'Admin',
+              'lastname' => 'Admin',
+              'nick' => 'Admin',
+              'email' => 'admin@mailinator.com',
+              'additional_contact' => '',
+              'zip' => '66546',
+              'street' => 'Test Street 4',
+              'phone' => '055466554645',
+              'status' => APP_ON,
+              'private' => '',
+              'created' => '2019-09-17 08:23:23',
+              'modified' => '2019-09-17 08:23:23'
+          ],
       ];
 }
 ?>

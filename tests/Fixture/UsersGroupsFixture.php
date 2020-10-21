@@ -10,8 +10,12 @@ class UsersGroupsFixture extends TestFixture
 
       public $records = [
           [
-              'user_uid' => '1',
-              'group_id' => '9'
+              'user_uid' => 1,
+              'group_id' => GROUPS_ORGA,
+          ],
+          [
+              'user_uid' => 8,
+              'group_id' => GROUPS_ADMIN,
           ],
       ];
 

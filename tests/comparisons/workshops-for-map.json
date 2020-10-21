@@ -12,7 +12,7 @@
                 "street": null,
                 "zip": null,
                 "city": null,
-                "owner": null,
+                "owner": 1,
                 "users": [
                     {
                         "uid": 1,

@@ -8,6 +8,7 @@ use App\Test\TestCase\Traits\UserAssertionsTrait;
 use Cake\Core\Configure;
 use Cake\TestSuite\EmailTrait;
 use Cake\TestSuite\IntegrationTestTrait;
+use App\Test\TestCase\Traits\LoginTrait;
 
 class UsersControllerTest extends AppTestCase
 {
@@ -15,6 +16,7 @@ class UsersControllerTest extends AppTestCase
     use UserAssertionsTrait;
     use EmailTrait;
     use LogFileAssertionsTrait;
+    use LoginTrait;
 
     private $validUserData = [
         'nick' => 'JohnDoeA<img onerror="alert();" />',
@@ -30,7 +32,7 @@ class UsersControllerTest extends AppTestCase
         $this->get(Configure::read('AppConfig.htmlHelper')->urlUsers());
         $this->doUserPrivacyAssertions();
         $users = $this->viewVariable('users');
-        $this->assertEquals(2, count($users));
+        $this->assertEquals(3, count($users));
     }
 
     public function testPublicProfileFieldsPrivate()
@@ -67,7 +69,7 @@ class UsersControllerTest extends AppTestCase
 
         $user = $this->getRegisteredUser();
 
-        $this->assertEquals($user->uid, 8);
+        $this->assertEquals($user->uid, 9);
         $this->assertEquals($user->nick, 'JohnDoeA');
         $this->assertEquals($user->email, $this->validUserData['email']);
         $this->assertEquals($user->firstname, 'John');
@@ -170,6 +172,121 @@ class UsersControllerTest extends AppTestCase
         $newsletter = $this->getNewsletterData();
         $this->assertEquals('ok', $newsletter[0]->confirm);
         $this->assertMailCount(2);
+
+    }
+
+    public function testDeleteRepairhelperUserWithNonDeletedWorkshop()
+    {
+        $userUid = 1;
+        $this->User = $this->getTableLocator()->get('Users');
+        $this->Workshop = $this->getTableLocator()->get('Workshops');
+        $this->Group = $this->getTableLocator()->get('Groups');
+        $user = $this->User->get($userUid, [
+            'contain' => [
+                'Groups',
+                'OwnerWorkshops',
+            ],
+        ]);
+        // change user to repairhelper
+        $user->groups = [
+            $this->Group->get(GROUPS_REPAIRHELPER)
+        ];
+        $this->User->save($user);
+
+        // 1. try to delete user with workshop relation
+        $this->User->delete($user);
+        $this->assertFalse($user->hasErrors());
+
+        // 3. check changed owner of workshops
+        $workshop = $this->Workshop->get($user->owner_workshops[0]->uid);
+        $this->assertEquals(8, $workshop->owner);
+
+        // 4. check successfully deleted user
+        $user = $this->User->find('all', [
+            'conditions' => [
+                'Users.uid' => $userUid,
+            ],
+        ])->first();
+        $this->assertEmpty($user);
+    }
+
+    public function testDeleteLastOrgaUserWithNonDeletedWorkshop()
+    {
+
+        $userUid = 1;
+        $this->User = $this->getTableLocator()->get('Users');
+        $this->Workshop = $this->getTableLocator()->get('Workshops');
+        $user = $this->User->get($userUid);
+
+        // 1. try to delete user with workshop relation
+        $this->User->delete($user);
+        $this->assertArrayHasKey('workshops', $user->getErrors());
+        $this->assertEquals('Der User ist bei folgenden Initiativen als letzter Organisator zugeordnet: Test Workshop', $user->getErrors()['workshops'][0]);
+
+        // 2. manually remove workshop relation
+        $ownerAndAssociatedWorkshopId = 2;
+        $this->loginAsAdmin();
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlUserWorkshopResign('user', $userUid, $ownerAndAssociatedWorkshopId));
+
+        // 3. successfully delete user
+        $user = $this->User->get($userUid, [
+            'contain' => [
+                'OwnerWorkshops',
+            ]
+        ]);
+        $this->User->delete($user);
+
+        // 4. check changed owner of workshops
+        $workshop = $this->Workshop->get($user->owner_workshops[0]->uid);
+        $this->assertEquals(8, $workshop->owner);
+
+        $user = $this->User->find('all', [
+            'conditions' => [
+                'Users.uid' => $userUid,
+            ],
+        ])->first();
+        $this->assertEmpty($user);
+
+    }
+
+    public function testDeleteLastOrgaUserWithDeletedWorkshop()
+    {
+
+        $userUid = 1;
+        $workshopUid = 2;
+        $this->User = $this->getTableLocator()->get('Users');
+        $this->Workshop = $this->getTableLocator()->get('Workshops');
+
+        $workshop = $this->Workshop->get($workshopUid);
+        $workshop->status = APP_DELETED;
+        $this->Workshop->save($workshop);
+
+        $user = $this->User->get($userUid);
+
+        // delete user with workshop (status deleted) relation
+        $this->User->delete($user);
+        $this->assertFalse($user->hasErrors());
+
+        // check if workshop owner of deleted workshops (-1) were set to 0 automatically
+        $workshop = $this->Workshop->get($workshopUid);
+        $this->assertEquals(0, $workshop->owner);
+
+        // check if all workshop associations the user were removed automatically
+        $this->UsersWorkshop = $this->getTableLocator()->get('UsersWorkshops');
+        $usersWorkshops = $this->UsersWorkshop->find('all', [
+            'conditions' => [
+                'UsersWorkshops.user_uid' => $userUid,
+            ],
+        ])->toArray();
+        $this->assertEmpty($usersWorkshops);
+
+        // approve if user is deleted
+        $user = $this->User->find('all', [
+            'conditions' => [
+                'Users.uid' => $userUid,
+            ],
+        ])->first();
+        $this->assertEmpty($user);
 
     }
 

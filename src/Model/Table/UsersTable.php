@@ -1,11 +1,18 @@
 <?php
 namespace App\Model\Table;
 
+use ArrayObject;
 use App\Controller\Component\StringComponent;
+use App\Model\Rule\UserLinkToWorkshopRule;
+use App\Model\Rule\UserIsWorkshopOwnerRule;
 use Cake\Auth\DefaultPasswordHasher;
 use Cake\Core\Configure;
+use Cake\Datasource\EntityInterface;
 use Cake\Datasource\FactoryLocator;
+use Cake\ORM\RulesChecker;
+use Cake\Utility\Hash;
 use Cake\Validation\Validator;
+use Cake\Event\EventInterface;
 
 class UsersTable extends AppTable
 {
@@ -26,12 +33,14 @@ class UsersTable extends AppTable
         $this->belongsToMany('Groups', [
             'joinTable' => 'users_groups',
             'foreignKey' => 'user_uid',
-            'targetForeignKey' => 'group_id'
+            'targetForeignKey' => 'group_id',
+            'dependent' => true,
         ]);
         $this->belongsToMany('Categories', [
             'joinTable' => 'users_categories',
             'foreignKey' => 'user_uid',
-            'targetForeignKey' => 'category_id'
+            'targetForeignKey' => 'category_id',
+            'dependent' => true,
         ]);
         $this->belongsToMany('Skills', [
             'joinTable' => 'users_skills',
@@ -39,13 +48,15 @@ class UsersTable extends AppTable
             'targetForeignKey' => 'skill_id',
             'sort' => [
                 'Skills.name' => 'ASC'
-            ]
+            ],
+            'dependent' => true,
         ]);
         $this->belongsToMany('Workshops', [
 //             'through' => 'UsersWorkshops', // strangely this works in workshop table but not here
             'joinTable' => 'users_workshops',
             'foreignKey' => 'user_uid',
-            'targetForeignKey' => 'workshop_uid'
+            'targetForeignKey' => 'workshop_uid',
+            'dependent' => true,
         ]);
         $this->hasMany('OwnerWorkshops', [
             'className' => 'Workshops',
@@ -56,6 +67,77 @@ class UsersTable extends AppTable
     public function getDefaultPrivateFields()
     {
         return 'lastname,email,street,zip,phone,additional_contact';
+    }
+
+    public function buildRules(RulesChecker $rules): RulesChecker
+    {
+        $rules->addDelete(
+            new UserLinkToWorkshopRule(),
+            null,
+            [
+                'errorField' => 'workshops',
+            ]
+        );
+        return $rules;
+    }
+
+    public function beforeDelete(EventInterface $event, EntityInterface $entity, ArrayObject $options)
+    {
+
+        $userUid = $entity->get('uid');
+
+        // 1. set owner to 0 for all deleted workshops where to-be-deleted user was owner
+        $workshopTable = FactoryLocator::get('Table')->get('Workshops');
+        $deletedOwnerWorkshops = $workshopTable->find('all', [
+            'conditions' => [
+                'Workshops.owner' =>$userUid,
+                'Workshops.status' => APP_DELETED,
+            ],
+        ])->toArray();
+
+        if (!empty($deletedOwnerWorkshops)) {
+            $workshopTable->updateAll([
+                'owner' => 0,
+            ], [
+                'Workshops.uid IN' => Hash::extract($deletedOwnerWorkshops, '{n}.uid'),
+            ]);
+        }
+
+        // 2. set owner to admin-user for all non-deleted workshops where to-be-deleted user was owner
+        $nonDeletedOwnerWorkshops = $workshopTable->find('all', [
+            'conditions' => [
+                'Workshops.owner' =>$userUid,
+                'Workshops.status > ' . APP_DELETED,
+            ],
+        ])->toArray();
+
+        if (!empty($nonDeletedOwnerWorkshops)) {
+            $workshopTable->updateAll([
+                'owner' => Configure::read('AppConfig.adminUserUid'),
+            ], [
+                'Workshops.uid IN' => Hash::extract($nonDeletedOwnerWorkshops, '{n}.uid'),
+            ]);
+        }
+
+        // 3. delete user profile image
+        if ($entity->image != '') {
+
+            $fileName = explode('?', $entity->image);
+            $fileName = $fileName[0];
+
+            $thumbSizes = Configure::read('AppConfig.thumbSizes');
+            foreach ($thumbSizes as $thumbSize => $thumbSizeOptions) {
+                $thumbMethod = 'getThumbs' . $thumbSize . 'Image';
+                $thumbsFileName = Configure::read('AppConfig.htmlHelper')->$thumbMethod($fileName, 'users');
+                $targetFileAbsolute = str_replace('//', '/', $_SERVER['DOCUMENT_ROOT'] . $thumbsFileName);
+                unlink($targetFileAbsolute);
+            }
+
+            $originalFileName =  Configure::read('AppConfig.htmlHelper')->getOriginalImage($fileName, 'users');
+            $targetFileAbsolute = str_replace('//', '/', $_SERVER['DOCUMENT_ROOT'] . $originalFileName);
+            unlink($targetFileAbsolute);
+
+        }
     }
 
     private function addGroupsValidation($validator, $groups, $multiple)
