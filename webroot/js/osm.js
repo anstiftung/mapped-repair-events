@@ -151,7 +151,6 @@ MappedRepairEvents.Map.prototype = {
     ,initDetailMap : function() {
 
         $('#mapContainer a.change-map-size').show();
-        var urlForAnalytics = document.location.href.split('/');
 
         $('a.change-map-size').on('click', function() {
 
@@ -165,16 +164,12 @@ MappedRepairEvents.Map.prototype = {
                     $('div.map-detail #mapContainer').css('margin-left', '0');  // nur für ie7
                     $('div.map-detail .opening-hours').css('margin-top', '0');
                     $('#mapContainer a.change-map-size').html('Karte vergrößern');
-
-
-
                 });
             } else {
                 $('#mapContainer, #map').animate({height : '538px', width : '990px'}, 1000, function() {
                     //bei Größenänderung Karte zurechtrücken
                     MappedRepairEvents.MapObject.map.invalidateSize(true);
                 });
-
 
                 $('div.map-detail .address-wrapper').css('padding-top', '575px');
                 $('div.map-detail h1').css('margin-bottom', '20px');
@@ -253,7 +248,6 @@ MappedRepairEvents.Map.prototype = {
 
         this.pruneCluster.RegisterMarkers(pmarkers);
 
-
     }
 
     ,FitFoundBounds : function () {
@@ -273,7 +267,6 @@ MappedRepairEvents.Map.prototype = {
             this.map.fitBounds(new L.LatLngBounds(new L.LatLng(bounds.minLat, bounds.maxLng), new L.LatLng(bounds.maxLat, bounds.minLng)));
         }
     }
-
 
     ,initMarkers : function() {
 
