@@ -18,6 +18,9 @@
         if (isset($showWorkshopName)) {
             echo $this->Form->hidden('showWorkshopName', ['value' => $showWorkshopName]);
         }
+        if (isset($statisticsType)) {
+            echo $this->Form->hidden('statisticsType', ['value' => $statisticsType]);
+        }
         echo $this->Form->hidden('backgroundColorOk', ['value' => $backgroundColorOk]);
         echo $this->Form->hidden('backgroundColorNotOk', ['value' => $backgroundColorNotOk]);
         echo $this->Form->hidden('borderColorOk', ['value' => $borderColorOk]);

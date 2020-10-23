@@ -19,5 +19,5 @@ if (!$this->request->getSession()->read('isMobile')) {
            echo '<h2>Statistik</h2>';
        }
     ?>
-    <iframe src="/widgets/statistics-workshop/<?php echo $workshop->uid; ?>?showWorkshopName=false" scrolling="no" border="0" width="100%" <?php echo $heightAttribute; ?>="<?php echo $height; ?>" style="overflow:hidden;margin-bottom:10px;"></iframe>
+    <iframe src="/widgets/statistics-workshop/<?php echo $workshop->uid; ?>?showWorkshopName=false&statisticsType=<?php echo $workshop->show_statistics; ?>" scrolling="no" border="0" width="100%" <?php echo $heightAttribute; ?>="<?php echo $height; ?>" style="overflow:hidden;margin-bottom:10px;"></iframe>
 </div>

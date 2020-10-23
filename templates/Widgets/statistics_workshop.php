@@ -1,3 +1,7 @@
+<?php
+use Cake\Datasource\FactoryLocator;
+?>
+
 <?php if ($showWorkshopName) { ?>
     <style>
        h2 a {
@@ -21,8 +25,17 @@ echo $this->element('widgets/statisticsFilterForm', [
     'backgroundColorOk' => $backgroundColorOk,
     'backgroundColorNotOk' => $backgroundColorNotOk,
     'borderColorOk' => $borderColorOk,
-    'borderColorNotOk' => $borderColorNotOk
+    'borderColorNotOk' => $borderColorNotOk,
+    'statisticsType' => $statisticsType,
 ]);
+
+$workshopTable = FactoryLocator::get('Table')->get('Workshops');
+if (in_array($statisticsType, [$workshopTable::STATISTICS_SHOW_ONLY_FLIGHT_KM, $workshopTable::STATISTICS_SHOW_ALL])) {
+    if ($carbonFootprintSum > 0) {
+        echo $this->element('widgets/carbonFootprint', ['carbonFootprintSum' => $carbonFootprintSum]);
+    }
+}
+
 if ($showBarChart && $chartHasData) {
     $this->element('addScript', ['script' =>
         JS_NAMESPACE.".WidgetStatistics.loadWorkshopDetailChartCategories('".json_encode($statisticsCategoriesData)."');
