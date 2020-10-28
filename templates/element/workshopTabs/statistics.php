@@ -12,7 +12,7 @@ if (!$this->request->getSession()->read('isMobile')) {
     </div>
     <?php
        $heightAttribute = 'data-height';
-       $height = 1140;
+       $height = 1250;
        if ($this->request->getSession()->read('isMobile')) {
            $heightAttribute = 'height';
            $height = 700;
