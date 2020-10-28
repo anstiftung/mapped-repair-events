@@ -11,7 +11,6 @@ class WorkshopsTable extends AppTable
     public const STATISTICS_DISABLED = 0;
     public const STATISTICS_SHOW_ALL = 1;
     public const STATISTICS_SHOW_ONLY_CHART = 2;
-    public const STATISTICS_SHOW_ONLY_FLIGHT_KM = 3;
 
     public $name_de = '';
 
@@ -102,7 +101,6 @@ class WorkshopsTable extends AppTable
                 self::STATISTICS_DISABLED,
                 self::STATISTICS_SHOW_ALL,
                 self::STATISTICS_SHOW_ONLY_CHART,
-                self::STATISTICS_SHOW_ONLY_FLIGHT_KM,
             ],
             'Dieser Wert ist nicht gültig.',
         );

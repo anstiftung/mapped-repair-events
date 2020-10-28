@@ -19,7 +19,6 @@ class MyHtmlHelper extends HtmlHelper {
             $workshop::STATISTICS_DISABLED => 'Keine Statistik im Profil anzeigen',
             $workshop::STATISTICS_SHOW_ALL => 'Gesamte Statistik anzeigen',
             $workshop::STATISTICS_SHOW_ONLY_CHART => 'Nur Zahlenstatistik im Profil anzeigen',
-            $workshop::STATISTICS_SHOW_ONLY_FLIGHT_KM => 'Nur die Flug-km im Profil anzeigen',
         ];
     }
 
