@@ -14,9 +14,9 @@
     "install": "bash ../bin/cake npm_post_install"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.14.0",
+    "@fortawesome/fontawesome-free": "^5.15.1",
     "blueimp-file-upload": "^10.31.0",
-    "chart.js": "^2.9.3",
+    "chart.js": "^2.9.4",
     "chart.piecelabel.js": "^0.15.0",
     "ckeditor4": "^4.15.0",
     "components-jqueryui": "~1.12",
@@ -28,15 +28,15 @@
     "jquery-knob": "https://github.com/aterrien/jQuery-Knob/tarball/master",
     "jquery-slugify": "^1.2.5",
     "leaflet": "^1.7.1",
-    "moment": "^2.29.0",
+    "moment": "^2.29.1",
     "prunecluster": "^2.1.0",
     "scrolltofixed": "^1.0.6",
     "select2": "^4.0.13",
     "slidebars": "^2.0.2",
     "speakingurl": "^14.0.1",
-    "swiper": "^6.3.2"
+    "swiper": "^6.3.4"
   },
   "devDependencies": {
-    "eslint": "^7.10.0"
+    "eslint": "^7.12.1"
   }
 }
