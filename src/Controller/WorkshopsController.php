@@ -616,7 +616,7 @@ class WorkshopsController extends AppController
 
         $showStatistics = false;
         $this->InfoSheet = $this->getTableLocator()->get('InfoSheets');
-        if ($this->InfoSheet->workshopInfoSheetsCount($workshop->uid) > 0 && $workshop->show_statistics > APP_OFF) {
+        if ($this->InfoSheet->workshopInfoSheetsCount($workshop->uid) > 0 && $workshop->show_statistics > $this->Workshop::STATISTICS_DISABLED) {
             $showStatistics = true;
         }
         $this->set('showStatistics', $showStatistics);

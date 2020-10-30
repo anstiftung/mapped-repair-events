@@ -200,7 +200,7 @@ class WidgetsController extends AppController
         $workshop = $this->Workshop->find('all', [
             'conditions' => [
                 'Workshops.uid' => $workshopUid,
-                'Workshops.show_statistics > ' => APP_OFF,
+                'Workshops.show_statistics > ' => $this->Workshop::STATISTICS_DISABLED,
             ]
         ])->first();
         if (empty($workshop)) {
