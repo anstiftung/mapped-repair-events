@@ -18,8 +18,8 @@
         if (isset($showWorkshopName)) {
             echo $this->Form->hidden('showWorkshopName', ['value' => $showWorkshopName]);
         }
-        if (isset($statisticsType)) {
-            echo $this->Form->hidden('statisticsType', ['value' => $statisticsType]);
+        if (isset($showCarbonFootprint)) {
+            echo $this->Form->hidden('showCarbonFootprint', ['value' => $showCarbonFootprint]);
         }
         echo $this->Form->hidden('backgroundColorOk', ['value' => $backgroundColorOk]);
         echo $this->Form->hidden('backgroundColorNotOk', ['value' => $backgroundColorNotOk]);
