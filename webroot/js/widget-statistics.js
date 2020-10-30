@@ -129,7 +129,7 @@ MappedRepairEvents.WidgetStatistics = {
                     data: data.data,
                     backgroundColor: data.backgroundColor,
                     borderColor: data.borderColor,
-                    borderWidth: data.borderWidth,
+                    borderWidth: data.borderWidth
                 }],
                 labels: data.labels
             },
