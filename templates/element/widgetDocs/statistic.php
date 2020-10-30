@@ -59,6 +59,16 @@ use Cake\Core\Configure;
     </code>
 
     <br />
+    <h2>Umweltentlastung ausblenden</h2>
+    <ul>
+        <li>Beim Widget für <?php echo Configure::read('AppConfig.initiativeNamePlural'); ?> kann die Umweltentlastung in Form von eingesparten Flug-Kilometer ausgeblendet werden.</li>
+    </ul>
+
+    <code class="inlinecode">
+        &lt;iframe frameborder="0" width="100%" height="700" src="<?php echo Configure::read('AppConfig.serverName'); ?>/widgets/statistics-workshop/1234?<span class="highlight">showCarbonFootprint=0</span>"&gt;&lt;/iframe&gt;
+    </code>
+
+    <br />
     <h2>Balkendiagramm bzw. Donut-Diagramm ausblenden</h2>
     <ul>
         <li>showDonutChart / showBarChart auf <b>0</b> setzen, falls die enstprechende Grafik nicht angezeigt werden soll.</li>

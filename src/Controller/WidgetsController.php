@@ -320,11 +320,11 @@ class WidgetsController extends AppController
         }
         $this->set('showWorkshopName', $showWorkshopName);
 
-        $statisticsType = false;
-        if (in_array('statisticsType', array_keys($this->request->getQueryParams()))) {
-            $statisticsType = h($this->request->getQuery('statisticsType'));
+        $showCarbonFootprint = true;
+        if (in_array('showCarbonFootprint', array_keys($this->request->getQueryParams()))) {
+            $showCarbonFootprint = h($this->request->getQuery('showCarbonFootprint')) == 1 ? true : false;
         }
-        $this->set('statisticsType', $statisticsType);
+        $this->set('showCarbonFootprint', $showCarbonFootprint);
 
     }
 
@@ -411,6 +411,7 @@ class WidgetsController extends AppController
             $borderColorNotOk = $this->validateHtmlColor(h($this->request->getQuery('borderColorNotOk')));
         }
         $this->set('borderColorNotOk', $borderColorNotOk);
+
     }
 
     private function getDateFromByMonthAndYear($month, $year)

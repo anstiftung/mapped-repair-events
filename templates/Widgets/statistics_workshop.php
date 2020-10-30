@@ -26,14 +26,12 @@ echo $this->element('widgets/statisticsFilterForm', [
     'backgroundColorNotOk' => $backgroundColorNotOk,
     'borderColorOk' => $borderColorOk,
     'borderColorNotOk' => $borderColorNotOk,
-    'statisticsType' => $statisticsType,
+    'showCarbonFootprint' => $showCarbonFootprint,
 ]);
 
 $workshopTable = FactoryLocator::get('Table')->get('Workshops');
-if (in_array($statisticsType, [$workshopTable::STATISTICS_SHOW_ALL])) {
-    if ($carbonFootprintSum > 0) {
-        echo $this->element('widgets/carbonFootprint', ['carbonFootprintSum' => $carbonFootprintSum]);
-    }
+if ($showCarbonFootprint && isset($carbonFootprintSum) && $carbonFootprintSum > 0) {
+    echo $this->element('widgets/carbonFootprint', ['carbonFootprintSum' => $carbonFootprintSum]);
 }
 
 if ($showBarChart && $chartHasData) {

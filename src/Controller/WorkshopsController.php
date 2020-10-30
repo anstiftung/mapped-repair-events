@@ -621,6 +621,9 @@ class WorkshopsController extends AppController
         }
         $this->set('showStatistics', $showStatistics);
 
+        $showCarbonFootprint = $workshop->show_statistics == $this->Workshop::STATISTICS_SHOW_ALL;
+        $this->set('showCarbonFootprint', $showCarbonFootprint);
+
     }
 
     private function checkType($type)

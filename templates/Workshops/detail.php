@@ -108,11 +108,9 @@ if (!$this->request->getSession()->read('isMobile')) {
             echo $this->element('workshopTabs/team', [
                 'team' => $team
             ]);
-            if ($showStatistics) {
-                echo $this->element('workshopTabs/statistics', [
-                    'workshop' => $workshop
-                ]);
-            }
+            echo $this->element('workshopTabs/statistics', [
+                'workshop' => $workshop
+            ]);
 
             if ($this->request->getSession()->read('isMobile') && count($workshop->events) > 0) {
                 echo '<h2>'.__('Next Events').'</h2>';
