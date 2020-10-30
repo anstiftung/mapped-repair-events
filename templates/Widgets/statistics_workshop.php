@@ -1,7 +1,3 @@
-<?php
-use Cake\Datasource\FactoryLocator;
-?>
-
 <?php if ($showWorkshopName) { ?>
     <style>
        h2 a {
@@ -29,7 +25,6 @@ echo $this->element('widgets/statisticsFilterForm', [
     'showCarbonFootprint' => $showCarbonFootprint,
 ]);
 
-$workshopTable = FactoryLocator::get('Table')->get('Workshops');
 if ($showCarbonFootprint && isset($carbonFootprintSum) && $carbonFootprintSum > 0) {
     echo $this->element('widgets/carbonFootprint', ['carbonFootprintSum' => $carbonFootprintSum]);
 }
