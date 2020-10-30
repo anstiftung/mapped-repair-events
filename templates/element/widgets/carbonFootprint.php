@@ -2,7 +2,7 @@
     $this->element('addScript', ['script' =>
         JS_NAMESPACE.".WidgetStatistics.initCarbonFootprintAnimation();
     "]);
-    $infoText = '<span class="info-text">Umweltentlastung: ' . $this->Html->getCarbonFootprintAsString($carbonFootprintSum) .'</span>';
+    $infoText = '<span class="info-text"><a href="'.$this->Html->urlPageDetail('statistik').'" target="_blank">Umweltentlastung</a></b>: ' . $this->Html->getCarbonFootprintAsString($carbonFootprintSum) .'</span>';
 ?>
 
 <div class="carbon-footprint-wrapper">
