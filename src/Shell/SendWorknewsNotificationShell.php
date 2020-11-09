@@ -17,7 +17,11 @@ class SendWorknewsNotificationShell extends AppShell
                 'DATEDIFF(Events.datumstart, NOW()) = 7'
             ],
             'contain' => [
-                'Workshops'
+                'Workshops' => [
+                    'conditions' => [
+                        'Workshops.status' => APP_ON,
+                    ]
+                ]
             ]
         ]);
 
