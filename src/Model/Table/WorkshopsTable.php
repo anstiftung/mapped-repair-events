@@ -8,6 +8,10 @@ use Cake\Datasource\FactoryLocator;
 class WorkshopsTable extends AppTable
 {
 
+    public const STATISTICS_DISABLED = 0;
+    public const STATISTICS_SHOW_ALL = 1;
+    public const STATISTICS_SHOW_ONLY_CHART = 2;
+
     public $name_de = '';
 
     public $allowedBasicHtmlFields = [
@@ -73,10 +77,9 @@ class WorkshopsTable extends AppTable
         $validator->decimal('lat', null, 'Bitte gib eine Zahl ein.');
         $validator->decimal('lng', null, 'Bitte gib eine Zahl ein.');
         $validator->add('zip', 'validFormat', [
-            'rule' => array('custom', ZIP_REGEX),
+            'rule' => ['custom', ZIP_REGEX],
             'message' => 'Die PLZ ist nicht gültig.'
         ]);
-
         return $validator;
     }
 
@@ -92,6 +95,15 @@ class WorkshopsTable extends AppTable
         $validator->allowEmptyString('website');
         $validator->email('email', true, 'Bitte trage eine gültige E-Mail-Adresse ein.');
         $validator->notEmptyString('email', 'Bitte trage deine E-Mail-Adresse ein.');
+        $validator->inList(
+            'show_statistics',
+            [
+                self::STATISTICS_DISABLED,
+                self::STATISTICS_SHOW_ALL,
+                self::STATISTICS_SHOW_ONLY_CHART,
+            ],
+            'Dieser Wert ist nicht gültig.',
+        );
         return $validator;
     }
 

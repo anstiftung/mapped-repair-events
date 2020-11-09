@@ -13,11 +13,16 @@ h2 {
     margin-bottom: 5px;
     font-size: 18px;
 }
-h2 a {
+h2 a,
+span.info-text a {
     text-decoration: none;
 }
-h2 a:hover {
+span.info-text a {
     color: #727374;
+}
+span.info-text a:hover,
+h2 a:hover {
+    text-decoration: underline;
 }
 .input,
 span {

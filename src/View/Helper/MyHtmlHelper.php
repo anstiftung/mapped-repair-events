@@ -7,9 +7,20 @@ use Cake\Filesystem\Folder;
 use Cake\View\View;
 use Cake\View\Helper\HtmlHelper;
 use App\Controller\Component\StringComponent;
+use Cake\Datasource\FactoryLocator;
 
 class MyHtmlHelper extends HtmlHelper {
 
+
+    public function getWorkshopStatisticTypes()
+    {
+        $workshop = FactoryLocator::get('Table')->get('Workshops');
+        return [
+            $workshop::STATISTICS_DISABLED => 'Keine Statistik im Profil anzeigen',
+            $workshop::STATISTICS_SHOW_ALL => 'Gesamte Statistik anzeigen',
+            $workshop::STATISTICS_SHOW_ONLY_CHART => 'Nur Zahlenstatistik im Profil anzeigen',
+        ];
+    }
 
     public function getMenuTypes()
     {

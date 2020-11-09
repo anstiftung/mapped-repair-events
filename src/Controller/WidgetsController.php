@@ -200,7 +200,7 @@ class WidgetsController extends AppController
         $workshop = $this->Workshop->find('all', [
             'conditions' => [
                 'Workshops.uid' => $workshopUid,
-                'Workshops.show_statistics' => APP_ON
+                'Workshops.show_statistics > ' => $this->Workshop::STATISTICS_DISABLED,
             ]
         ])->first();
         if (empty($workshop)) {
@@ -234,9 +234,12 @@ class WidgetsController extends AppController
         $categoriesDatasets = [];
         $categoriesDataRepaired = [];
         $categoriesDataNotRepaired = [];
+        $carbonFootprintSum = 0;
         foreach($categoriesForStatistics as &$c) {
             $repaired = $this->InfoSheet->getRepairedByMainCategoryId($workshopUid, $c['id'], $dateFrom, $dateTo);
             $notRepaired = $this->InfoSheet->getNotRepairedByMainCategoryId($workshopUid, $c['id'], $dateFrom, $dateTo);
+            $carbonFootprint = $this->Category->getCarbonFootprintByParentCategoryId($c->id);
+            $carbonFootprintSum += $this->Category->calculateCarbonFootprint($repaired, $carbonFootprint);
             if ($repaired == 0 && $notRepaired == 0) {
                 unset($c);
                 continue;
@@ -268,6 +271,7 @@ class WidgetsController extends AppController
         ]);
 
         $this->setBarChartHasData($this->viewBuilder()->getVar('statisticsCategoriesData'));
+        $this->set('carbonFootprintSum', $carbonFootprintSum);
 
     }
 
@@ -315,6 +319,12 @@ class WidgetsController extends AppController
             $showWorkshopName = h($this->request->getQuery('showWorkshopName')) == 1 ? true : false;
         }
         $this->set('showWorkshopName', $showWorkshopName);
+
+        $showCarbonFootprint = true;
+        if (in_array('showCarbonFootprint', array_keys($this->request->getQueryParams()))) {
+            $showCarbonFootprint = h($this->request->getQuery('showCarbonFootprint')) == 1 ? true : false;
+        }
+        $this->set('showCarbonFootprint', $showCarbonFootprint);
 
     }
 
@@ -401,6 +411,7 @@ class WidgetsController extends AppController
             $borderColorNotOk = $this->validateHtmlColor(h($this->request->getQuery('borderColorNotOk')));
         }
         $this->set('borderColorNotOk', $borderColorNotOk);
+
     }
 
     private function getDateFromByMonthAndYear($month, $year)

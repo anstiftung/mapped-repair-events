@@ -168,6 +168,11 @@ MappedRepairEvents.WidgetStatistics = {
 
         data = $.parseJSON(data);
 
+        for(var i in data.datasets)
+        {
+            data.datasets[i].maxBarThickness = 100;
+        }
+
         var config = {
             type: 'bar',
             data: {
@@ -192,7 +197,6 @@ MappedRepairEvents.WidgetStatistics = {
                 scales: {
                     xAxes: [{
                         stacked: true,
-                        maxBarThickness: 100,
                         ticks: {
                             autoSkip: false,
                             maxRotation: 90,

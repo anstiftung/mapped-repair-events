@@ -87,7 +87,7 @@ use Cake\Core\Configure;
             echo '</div>';
             echo '<div class="sc"></div>';
 
-            echo $this->Form->control('Workshops.show_statistics', ['type' => 'checkbox', 'label' => 'Statistik anzeigen (falls Laufzettel-Daten verfügbar)?']).'<br />';
+            echo $this->Form->control('Workshops.show_statistics', ['type' => 'select', 'options' => $this->Html->getWorkshopStatisticTypes(),  'label' => 'Statistik anzeigen (falls Laufzettel-Daten verfügbar)?']).'<br />';
 
             if ($workshop->status < APP_ON) {
                 echo '<div class="highlight-red">';

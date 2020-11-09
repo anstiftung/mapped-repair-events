@@ -21,8 +21,14 @@ echo $this->element('widgets/statisticsFilterForm', [
     'backgroundColorOk' => $backgroundColorOk,
     'backgroundColorNotOk' => $backgroundColorNotOk,
     'borderColorOk' => $borderColorOk,
-    'borderColorNotOk' => $borderColorNotOk
+    'borderColorNotOk' => $borderColorNotOk,
+    'showCarbonFootprint' => $showCarbonFootprint,
 ]);
+
+if ($showCarbonFootprint && isset($carbonFootprintSum) && $carbonFootprintSum > 0) {
+    echo $this->element('widgets/carbonFootprint', ['carbonFootprintSum' => $carbonFootprintSum]);
+}
+
 if ($showBarChart && $chartHasData) {
     $this->element('addScript', ['script' =>
         JS_NAMESPACE.".WidgetStatistics.loadWorkshopDetailChartCategories('".json_encode($statisticsCategoriesData)."');

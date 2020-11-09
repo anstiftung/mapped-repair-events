@@ -13,24 +13,11 @@ echo $this->element('widgets/statisticsFilterForm', [
     'defaultDataSource' => $defaultDataSource
 ]);
 
-?>
+if ($carbonFootprintSum > 0) {
+    echo $this->element('widgets/carbonFootprint', ['carbonFootprintSum' => $carbonFootprintSum]);
+}
 
-<?php if ($carbonFootprintSum > 0) { ?>
-    <?php
-        $this->element('addScript', ['script' =>
-            JS_NAMESPACE.".WidgetStatistics.initCarbonFootprintAnimation();
-        "]);
-           $infoText = '<span class="info-text">Umweltentlastung: ' . $this->Html->getCarbonFootprintAsString($carbonFootprintSum) .'</span>';
-    ?>
-    <div class="carbon-footprint-wrapper">
-        <img src="/img/statistics/carbon-footprint.png" />
-        <div class="line"></div>
-        <img src="/img/statistics/carbon-footprint.png" />
-        <span class="info-text"><?php echo $infoText; ?></span>
-    </div>
-<?php } ?>
-
-<?php if ($materialFootprintSum > 0) { ?>
+if ($materialFootprintSum > 0) { ?>
     <?php
         $this->element('addScript', ['script' =>
             JS_NAMESPACE.".WidgetStatistics.initMaterialFootprintAnimation();
