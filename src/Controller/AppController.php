@@ -375,9 +375,9 @@ class AppController extends Controller
 
         $data = $data->first();
         $diffInSeconds = 0;
-
         if ($data->currently_updated_start) {
-            $diffInSeconds = Configure::read('AppConfig.timeHelper')->datediff(strtotime(date('Y-m-d H:i:s')), strtotime($data->currently_updated_start->format('Y-m-d H:i:s')));
+            $currentlyUpdatedStart = strtotime($data->currently_updated_start->format('Y-m-d H:i:s'));
+            $diffInSeconds = time() - $currentlyUpdatedStart;
         }
 
         if (! empty($data->currently_updated_by_user) && $data->currently_updated_by_user->uid != $this->AppAuth->getUserUid() && $data->currently_updated_by_user->uid > 0 && $diffInSeconds < 60 * 60) {

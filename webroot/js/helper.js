@@ -309,7 +309,9 @@ MappedRepairEvents.Helper = {
         if (!isCurrentlyUpdated) return;
 
         var submitButton = $('div.admin form button[type=submit]');
-        var textFields = $('div.admin form input[type=text]').not('input[readonly=readonly]'); //felder, die per html auf readonly gesetzt wurden (url), nicht freigeben!
+
+        //felder, die per html auf readonly gesetzt wurden (url), nicht freigeben!
+        var textFields = $('div.admin form input[type=text]').not('input[readonly=readonly]');
 
         $('#unlockEditPageLink').click(function() {
             textFields.removeAttr('readonly');
