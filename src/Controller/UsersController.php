@@ -462,16 +462,6 @@ class UsersController extends AppController
             if ($user) {
                 $this->AppAuth->setUser($user);
                 $redirectUrl = Configure::read('AppConfig.htmlHelper')->urlUserHome();
-                if ($this->AppAuth->isOrga()) {
-                    $workshop = $this->getTableLocator()->get('Workshops');
-                    $userWorkshops = $workshop->getWorkshopsForAssociatedUser($this->AppAuth->getUserUid(), APP_OFF);
-                    if ($userWorkshops->count() == 1) {
-                        $redirectUrl = Configure::read('AppConfig.htmlHelper')->urlWorkshopDetail($userWorkshops->first()->url);
-                    }
-                    if ($userWorkshops->count() > 1) {
-                        $redirectUrl = Configure::read('AppConfig.htmlHelper')->urlUserWorkshopAdmin();
-                    }
-                }
                 $this->redirect($redirectUrl);
             } else {
                 $this->AppFlash->setFlashError('Der Login hat nicht funktioniert. Benutzername oder Passwort falsch? Konto aktiviert?');
