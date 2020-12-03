@@ -643,7 +643,6 @@ class UsersController extends AppController
                 $this->render('register');
             }
         }
-        pr($user);
 
         $this->set('user', $user);
 
