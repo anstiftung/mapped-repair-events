@@ -99,11 +99,11 @@ MappedRepairEvents.Helper = {
     /**
      * http://stackoverflow.com/questions/8472/practical-non-image-based-captcha-approaches?lq=1
      */
-    ,updateAntiSpamField: function (form, id) {
+    ,updateAntiSpamField: function (prependIdPart, form, id) {
 
         if ($('#antiSpam' + id).length == 0) {
             var inputField = $('<input />').attr('id', 'antiSpam' + id).attr('name', 'antiSpam').attr('type', 'hidden');
-            $('#UserReg' + id).prepend(inputField);
+            $(prependIdPart + id).prepend(inputField);
         }
         var a = document.getElementById('antiSpam' + id);
         if (isNaN(a.value) == true) {
@@ -113,7 +113,7 @@ MappedRepairEvents.Helper = {
         }
 
         setTimeout(function () {
-            MappedRepairEvents.Helper.updateAntiSpamField(form, id);
+            MappedRepairEvents.Helper.updateAntiSpamField(prependIdPart, form, id);
         }, 1000);
     }
 
@@ -436,8 +436,8 @@ MappedRepairEvents.Helper = {
 
     initRegistration : function() {
 
-        this.updateAntiSpamField($('#UserReg7'), 7);
-        this.updateAntiSpamField($('#UserReg9'), 9);
+        this.updateAntiSpamField('#UserReg', $('#UserReg7'), 7);
+        this.updateAntiSpamField('#UserReg', $('#UserReg9'), 9);
 
         // remove double ids because form is rendered twice - all labels are clickable
         var multipleCheckbox = $('.fcph .categories-checkbox-wrapper .checkbox');

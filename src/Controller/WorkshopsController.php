@@ -419,6 +419,12 @@ class WorkshopsController extends AppController
     private function processWorknewsAddForm($workshop)
     {
 
+        if (!empty($this->getRequest()->getData()) && ($this->getRequest()->getData('antiSpam') == '' || $this->getRequest()->getData('antiSpam') < 3)) {
+            $this->AppFlash->setFlashError('S-p-a-m-!');
+            $this->redirect('/');
+            return;
+        }
+
         $this->Worknews = $this->getTableLocator()->get('Worknews');
         $worknews = $this->Worknews->find('all', [
             'conditions' => [
