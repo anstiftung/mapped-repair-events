@@ -61,8 +61,12 @@ if (!$this->request->getSession()->read('isMobile')) {
 
         echo '<div class="sc"></div>';
         if (!$subscribed) {
+            $this->element('addScript', ['script' =>
+                JS_NAMESPACE.".Helper.updateAntiSpamField('#WorknewsForm', $('#WorkNewsForm" . $workshop->uid . "'), ".$workshop->uid.");
+            "]);
             echo $this->Form->create($worknews, [
-                'novalidate' => 'novalidate'
+                'novalidate' => 'novalidate',
+                'id' => 'WorknewsForm' . $workshop->uid,
             ]);
 
                 echo $this->Form->hidden('Worknews.workshop_uid', [

@@ -582,7 +582,7 @@ class UsersController extends AppController
 
         $this->set('groups', Configure::read('AppConfig.htmlHelper')->getUserGroupsForRegistration());
 
-        $user = $this->User->newEntity([]);
+        $user = $this->User->newEmptyEntity();
 
         if (! empty($this->request->getData())) {
 
