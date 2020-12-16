@@ -18,6 +18,8 @@ echo $this->element('list'
                 ,['name' => 'nick', 'label' => 'Nick']
                 ,['name' => 'firstname', 'label' => 'Vorname']
                 ,['name' => 'lastname', 'label' => 'Nachname']
+                ,['name' => 'city', 'label' => 'Stadt']
+                ,['name' => 'country_code', 'label' => 'Land']
                 ,['name' => 'Groups.name', 'type' => 'habtm', 'label' => 'Gruppen']
                 ,['name' => 'owner_workshops.name', 'type' => 'habtm', 'label' => Configure::read('AppConfig.initiativeNameSingular') . ' (Owner)']
                 ,['name' => 'workshops.name', 'type' => 'habtm', 'label' => Configure::read('AppConfig.initiativeNameSingular') . ' (Mitarbeiter)']
