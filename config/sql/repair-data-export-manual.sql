@@ -27,5 +27,5 @@ LEFT JOIN form_field_options defect_found_ffo5 ON defect_found_ffo5.form_field_i
 LEFT JOIN form_field_options defect_found_ffo6 ON defect_found_ffo6.form_field_id = 6 AND defect_found_ffo6.value = i.device_must_not_be_used_anymore
 WHERE 1
 AND i.status = 1
-AND e.datumstart <= '2020-03-31'
+AND e.datumstart <= '2020-09-30'
 ORDER by e.datumstart DESC
