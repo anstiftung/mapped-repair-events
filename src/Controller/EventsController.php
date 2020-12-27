@@ -5,7 +5,6 @@ use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use Cake\I18n\FrozenTime;
 use Cake\Mailer\Mailer;
-use Cake\Http\Exception\ForbiddenException;
 use Cake\Http\Exception\NotFoundException;
 
 class EventsController extends AppController
@@ -448,7 +447,7 @@ class EventsController extends AppController
     {
 
         if (!$this->request->is('ajax')) {
-            throw new ForbiddenException();
+            throw new NotFoundException();
         }
 
         $this->RequestHandler->renderAs($this, 'json');
