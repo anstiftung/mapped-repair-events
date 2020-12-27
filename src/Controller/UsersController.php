@@ -586,8 +586,7 @@ class UsersController extends AppController
 
         if (! empty($this->request->getData())) {
 
-            if (!empty($this->getRequest()->getData()) && ($this->getRequest()->getData('antiSpam') == '' || $this->getRequest()->getData('antiSpam') < 3)) {
-                $this->AppFlash->setFlashError('S-p-a-m-!');
+            if (!empty($this->getRequest()->getData()) && ($this->getRequest()->getData('botEwX482') == '' || $this->getRequest()->getData('botEwX482') < 3)) {
                 $this->redirect('/');
                 return;
             }

@@ -101,11 +101,11 @@ MappedRepairEvents.Helper = {
      */
     ,updateAntiSpamField: function (prependIdPart, form, id) {
 
-        if ($('#antiSpam' + id).length == 0) {
-            var inputField = $('<input />').attr('id', 'antiSpam' + id).attr('name', 'antiSpam').attr('type', 'hidden');
+        if ($('#botEwX482' + id).length == 0) {
+            var inputField = $('<input />').attr('id', 'botEwX482' + id).attr('name', 'botEwX482').attr('type', 'hidden');
             $(prependIdPart + id).prepend(inputField);
         }
-        var a = document.getElementById('antiSpam' + id);
+        var a = document.getElementById('botEwX482' + id);
         if (isNaN(a.value) == true) {
             a.value = 0;
         } else {

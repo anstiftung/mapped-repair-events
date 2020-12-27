@@ -60,7 +60,7 @@ class UsersControllerTest extends AppTestCase
         $this->post(
             Configure::read('AppConfig.htmlHelper')->urlRegisterOrga(),
             [
-                'antiSpam' => 100,
+                'botEwX482' => 100,
                 'Users' => $this->validUserData
             ]
         );
@@ -95,7 +95,7 @@ class UsersControllerTest extends AppTestCase
         $this->post(
             Configure::read('AppConfig.htmlHelper')->urlRegisterOrga(),
             [
-                'antiSpam' => 100
+                'botEwX482' => 100
             ]
         );
         $this->assertEmptyData();
@@ -107,7 +107,7 @@ class UsersControllerTest extends AppTestCase
         $this->post(
             Configure::read('AppConfig.htmlHelper')->urlRegisterOrga(),
             [
-                'antiSpam' => 100,
+                'botEwX482' => 100,
                 'Users' => [
                     'nick' => '',
                     'firstname' => '',
@@ -127,7 +127,7 @@ class UsersControllerTest extends AppTestCase
         $this->post(
             Configure::read('AppConfig.htmlHelper')->urlRegisterOrga(),
             [
-                'antiSpam' => 100,
+                'botEwX482' => 100,
                 'Users' => [
                     'email' => 'johndoe@mailinator.com',
                 ]
@@ -142,7 +142,7 @@ class UsersControllerTest extends AppTestCase
         $this->post(
             Configure::read('AppConfig.htmlHelper')->urlRegisterOrga(),
             [
-                'antiSpam' => 100,
+                'botEwX482' => 100,
                 'Users' => [
                     'email' => 'johndoe@gadsfadsewcadfaees.com',
                 ]
@@ -158,7 +158,7 @@ class UsersControllerTest extends AppTestCase
         $this->post(
             Configure::read('AppConfig.htmlHelper')->urlRegisterOrga(),
             [
-                'antiSpam' => 100,
+                'botEwX482' => 100,
                 'Users' => $this->validUserData
             ]
         );
