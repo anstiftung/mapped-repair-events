@@ -334,11 +334,11 @@ MappedRepairEvents.Map.prototype = {
     }
 
     ,showHomeImageOverlay : function() {
-        $('img#mapHomeInfoBox').stop(true).show('slow');
+        $('#mapHomeInfoBox').stop(true).show('slow');
     }
 
     ,hideHomeImageOverlay : function() {
-        $('img#mapHomeInfoBox').stop(true).hide('slow');
+        $('#mapHomeInfoBox').stop(true).hide('slow');
     }
 
     ,buildBubbleStringForWorkshops : function(object) {

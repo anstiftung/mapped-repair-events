@@ -3611,6 +3611,12 @@ body.workshops.detail #covid-19-banner {
     top: 175px;
 }
 
+#mapHomeInfoBox {
+    width: 239px;
+}
+#mapHomeInfoBox > * {
+    float: left;
+}
 @media (max-width: 767px) {
     #wrapper {
         width: 100%;

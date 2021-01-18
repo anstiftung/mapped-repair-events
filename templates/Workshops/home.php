@@ -61,7 +61,12 @@ $tl_search_input_field = __('Map search field preentered');
                 <div id="map">
                     <div id="workshopSearchLoader"></div>
                 </div>
-                <img id="mapHomeInfoBox" src="/img/home/willkommen-map.jpg" width="239" height="130" />
+                <div id="mapHomeInfoBox">
+                    <img id="mapHomeInfoBoxA" src="/img/home/home-info-box-A.jpg" width="239" height="116" />
+                    <a id="mapHomeInfoBoxB" href="<?php echo $this->Html->urlPostDetail('online-reparaturhilfe-finden'); ?>">
+                        <img src="/img/home/home-info-box-B.jpg" width="239" height="63" />
+                    </a>
+                </div>
             </div>
 
             <br />
