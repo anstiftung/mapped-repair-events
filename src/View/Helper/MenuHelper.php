@@ -61,9 +61,19 @@ class MenuHelper extends Helper
     {
 
         $liClass = [];
+        if (!empty($item['children'])) {
+            $liClass[] = 'has-children';
+            $liClass[] = 'has-icon';
+        }
         $tmpMenuItem = '<li' . (!empty($liClass) ? ' class="' . join(' ', $liClass).'"' : '').'>';
 
-            $tmpMenuItem .= $this->renderMenuElement($item['slug'], $item['name'], @$item['options']['style'], @$item['options']['class'], @$item['options']['fa-icon']);
+            $tmpMenuItem .= $this->renderMenuElement(
+                $item['slug'],
+                $item['name'],
+                $item['options']['style'] ?? '',
+                $item['options']['class'] ?? [],
+                $item['options']['fa-icon'] ?? ''
+            );
 
         if (!empty($item['children'])) {
             $tmpMenuItem .= '<ul class="submenu">';
