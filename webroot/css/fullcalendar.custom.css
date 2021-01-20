@@ -137,7 +137,11 @@ div#selectedDate {
     display: block;
     text-align: center;
     color: #fff;
-    margin-top: 0px;
+    margin-top: -1px;
+    margin-left: 1px;
+}
+.fc-day-past span.event-count {
+    margin-top: -2px ! important;
 }
 .fc .fc-col-header-cell {
     height: 17px;
