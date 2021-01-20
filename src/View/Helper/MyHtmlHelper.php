@@ -274,26 +274,6 @@ class MyHtmlHelper extends HtmlHelper {
         </script>";
     }
 
-    function getJqueryUiIcon($icon, $class='', $options, $url='') {
-
-        $options['escape'] = [true];
-
-        $return = '<ul class="'.$class.' jquery-ui-icon">';
-        $return .= '<li class="ui-state-default ui-corner-all">';
-
-        if ($url == '') {
-            $return .= $icon;
-        } else {
-            $return .= self::link($icon, $url, $options);
-        }
-
-        $return .= '</li>';
-        $return .= '</ul>';
-
-        return $return;
-
-    }
-
     public $selectedMain = [];
     public $selectedSub1 = [];
     public $selectedSub2 = [];
