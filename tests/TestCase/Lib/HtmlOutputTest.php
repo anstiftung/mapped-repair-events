@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Test\TestCase\Controller;
+namespace App\Test\TestCase\Lib;
 
 use App\Test\TestCase\AppTestCase;
 use App\Test\TestCase\Traits\HtmlOutputAssertionsTrait;
