@@ -4,17 +4,21 @@ on:
   push:
     paths-ignore:
       - '**.md'
+      - '**.js'
+      - '**.css'
   pull_request:
     paths-ignore:
       - '**.md'
-
+      - '**.js'
+      - '**.css'
+  
 jobs:
   ci:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     continue-on-error: ${{ matrix.experimental }}
     strategy:
       matrix:
-        php-version: ['7.3', '7.4']
+        php-version: ['7.3', '7.4', '8.0']
         experimental: [false]
        # include:
        #   - php-version: '8.0'
@@ -36,7 +40,9 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-version }}
-
+        env:
+          update: true #forces minor release update
+          
       - uses: actions/checkout@v2
 
       - name: Setup DB
