@@ -563,12 +563,6 @@ class MyHtmlHelper extends HtmlHelper {
         return explode('x', $dimension);
     }
 
-    function js($file, $dir=JS_URL) {
-        $file = $dir . $file;
-        $url = $file .'?'.@filemtime(WWW_ROOT . str_replace('/', DS, $file));
-        return '<script type="text/javascript" src="'.$url.'"></script>';
-    }
-
     /**
      * creates navigation with up to 2 sublevels
      */
