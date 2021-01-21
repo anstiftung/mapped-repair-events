@@ -43,9 +43,15 @@ class ThirdPartyStatisticsTable extends Table
                 ]
             ])->first();
             if (in_array($category->parent_id, Configure::read('AppConfig.mainCategoryIdsWhereSubCategoriesAreShown'))) {
-                @$preparedSums[$category->id] += $sum->sumRepaired;
+                if (!isset($preparedSums[$category->id])) {
+                    $preparedSums[$category->id] = 0;
+                }
+                $preparedSums[$category->id] += $sum->sumRepaired;
             } else {
-                @$preparedSums[$category->parent_id] += $sum->sumRepaired;
+                if (!isset($preparedSums[$category->id])) {
+                    $preparedSums[$category->parent_id] = 0;
+                }
+                $preparedSums[$category->parent_id] += $sum->sumRepaired;
             }
         }
         return $preparedSums;
