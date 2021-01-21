@@ -647,8 +647,10 @@ class StringComponent extends Component
         } else {
             $tag = '<span ' . $classHtml . '>"+d+"</span>';
         }
-        for ($i = 0; $i < strlen($email); $i += 1)
-            $cipher_text .= @$key[strpos($character_set, $email[$i])];
+
+        for ($i = 0; $i < strlen($email); $i++) {
+
+            $cipher_text .= $key[strpos($character_set, $email[$i])];
 
             $script = 'var a="' . $key . '";var b=a.split("").sort().join("");var c="' . $cipher_text . '";var d="";';
             $script .= 'for(var e=0;e<c.length;e++)d+=b.charAt(a.indexOf(c.charAt(e)));';
@@ -662,6 +664,9 @@ class StringComponent extends Component
             ], $script) . "\")";
             $script = '<script type="text/javascript">/*<![CDATA[*/' . $script . '/*]]>*/</script>';
 
-            return '<span id="' . $id . '">[javascript protected email address]</span>' . $script;
+        }
+
+        return '<span id="' . $id . '">[javascript protected email address]</span>' . $script;
+
     }
 }
