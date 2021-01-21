@@ -649,23 +649,21 @@ class StringComponent extends Component
         }
 
         for ($i = 0; $i < strlen($email); $i++) {
-
             $cipher_text .= $key[strpos($character_set, $email[$i])];
-
-            $script = 'var a="' . $key . '";var b=a.split("").sort().join("");var c="' . $cipher_text . '";var d="";';
-            $script .= 'for(var e=0;e<c.length;e++)d+=b.charAt(a.indexOf(c.charAt(e)));';
-            $script .= 'document.getElementById("' . $id . '").innerHTML="'.$tag.'";';
-            $script = "eval(\"" . str_replace([
-                "\\",
-                '"'
-            ], [
-                "\\\\",
-                '\"'
-            ], $script) . "\")";
-            $script = '<script type="text/javascript">/*<![CDATA[*/' . $script . '/*]]>*/</script>';
-
         }
 
+        $script = 'var a="' . $key . '";var b=a.split("").sort().join("");var c="' . $cipher_text . '";var d="";';
+        $script .= 'for(var e=0;e<c.length;e++)d+=b.charAt(a.indexOf(c.charAt(e)));';
+        $script .= 'document.getElementById("' . $id . '").innerHTML="'.$tag.'";';
+        $script = "eval(\"" . str_replace([
+            "\\",
+            '"'
+        ], [
+            "\\\\",
+            '\"'
+        ], $script) . "\")";
+
+        $script = '<script type="text/javascript">/*<![CDATA[*/' . $script . '/*]]>*/</script>';
         return '<span id="' . $id . '">[javascript protected email address]</span>' . $script;
 
     }
