@@ -72,7 +72,6 @@ class MenuHelper extends Helper
                 $item['name'],
                 $item['options']['style'] ?? '',
                 $item['options']['class'] ?? [],
-                $item['options']['fa-icon'] ?? ''
             );
 
         if (!empty($item['children'])) {
@@ -88,7 +87,7 @@ class MenuHelper extends Helper
         return $tmpMenuItem;
     }
 
-    private function renderMenuElement($slug, $name, $style = '', $class = [], $fontAwesomeIconClass = '')
+    private function renderMenuElement($slug, $name, $style = '', $class = [])
     {
 
         if ($style != '') {
@@ -106,18 +105,12 @@ class MenuHelper extends Helper
             $class[] = 'active';
         }
 
-        if ($fontAwesomeIconClass != '') {
-            $class[] = 'has-icon';
-        }
-//         $fontAwesomeIconString = '<i class="fas '.@$fontAwesomeIconClass.'"></i>';
-        $fontAwesomeIconString = '';
-
         $classString = '';
         if (!empty($class)) {
             $classString = ' class="' . join(' ', $class). '" ';
         }
 
-        $naviElement = '<a' . $classString . $style.' href="'.$slug.'" title="'.h(strip_tags($name)).'">'.$fontAwesomeIconString.$name.'</a>';
+        $naviElement = '<a' . $classString . $style.' href="'.$slug.'" title="'.h(strip_tags($name)).'">'.$name.'</a>';
 
         return $naviElement;
     }
