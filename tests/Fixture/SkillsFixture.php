@@ -10,6 +10,7 @@ class SkillsFixture extends TestFixture
 
       public $records = [
           [
+              'id' => 1,
               'name' => 'Open Source'
           ]
       ];

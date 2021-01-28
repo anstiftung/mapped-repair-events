@@ -377,7 +377,7 @@ class UsersController extends AppController
             'contain' => [
                 'Groups',
                 'Categories',
-                'Skills'
+                'Skills',
             ]
         ])->first();
         $user->revertPrivatizeData();
@@ -580,6 +580,9 @@ class UsersController extends AppController
         $this->Category = $this->getTableLocator()->get('Categories');
         $this->set('categories', $this->Category->getForDropdown(APP_ON));
 
+        $this->Skill = $this->getTableLocator()->get('Skills');
+        $this->set('skillsForDropdown', $this->Skill->getForDropdown(false));
+
         $this->set('groups', Configure::read('AppConfig.htmlHelper')->getUserGroupsForRegistration());
 
         $user = $this->User->newEmptyEntity();
@@ -616,7 +619,6 @@ class UsersController extends AppController
                 $user['Users']['status'] = APP_OFF;
                 $user['Users']['private'] = $this->User->getDefaultPrivateFields();
                 $userEntity = $this->User->newEntity($user, ['validate' => 'Registration']);
-
                 $userEntity = $this->stripTagsFromFields($userEntity, 'User');
                 $result = $this->User->save($userEntity);
                 $password = $this->User->setNewPassword($result->uid);

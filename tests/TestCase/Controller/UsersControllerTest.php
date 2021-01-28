@@ -24,7 +24,13 @@ class UsersControllerTest extends AppTestCase
         'lastname' => 'DoeA',
         'zip' => '12345',
         'email' => 'johndoeA@mailinator.com',
-        'privacy_policy_accepted' => 1
+        'privacy_policy_accepted' => 1,
+        'categories' => [
+            '_ids' => [87],
+        ],
+        'skills' => [
+            '_ids' => [1],
+        ],
     ];
 
     public function testAll()
@@ -68,7 +74,6 @@ class UsersControllerTest extends AppTestCase
         $this->assertRedirectContains('/');
 
         $user = $this->getRegisteredUser();
-
         $this->assertEquals($user->uid, 9);
         $this->assertEquals($user->nick, 'JohnDoeA');
         $this->assertEquals($user->email, $this->validUserData['email']);
@@ -77,6 +82,8 @@ class UsersControllerTest extends AppTestCase
         $this->assertNotEquals($user->password, null);
         $this->assertEquals($user->groups[0]->id, GROUPS_ORGA);
         $this->assertNotEquals($user->groups[0]->id, GROUPS_REPAIRHELPER);
+        $this->assertEquals($user->categories[0]->id, 87);
+        $this->assertEquals($user->skills[0]->id, 1);
 
         $this->assertMailCount(1);
         $this->assertMailSentTo($this->validUserData['email']);
@@ -309,7 +316,9 @@ class UsersControllerTest extends AppTestCase
                 'Users.email' => $this->validUserData['email']
             ],
             'contain' => [
-                'Groups'
+                'Groups',
+                'Categories',
+                'Skills',
             ]
         ])->first();
         $user->revertPrivatizeData();
