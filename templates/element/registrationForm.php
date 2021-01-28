@@ -67,16 +67,27 @@
         'id' => null
     ]);
 
-    echo '<br>';
+    echo '<br />';
     echo '<div class="categories-checkbox-wrapper">';
         echo $this->Form->control('Users.categories._ids', [
             'multiple' => 'checkbox',
             'label' => 'Reparatur-Kenntnisse',
             'id' => 'UserRegCategory' . $userGroup,
         ]);
+    echo '</div>';
+
+    echo '<div class="skills-wrapper">';
+        echo '<b>Weitere Kenntnisse / Interessen</b>';
+        echo $this->Form->control('Users.skills._ids', [
+            'multiple' => 'select',
+            'data-tags' => true,
+            'data-token-separators' => "[',']",
+            'label' => false,
+            'id' => 'UserRegSkills' . $userGroup,
+            'options' => $skillsForDropdown,
+        ]);
     echo '</div>
-    <div class="sc"></div>
-    <br>
+    <br />
     <div id="cbskillsxtra">';
 
     echo $this->Form->control('Users.about_me', [

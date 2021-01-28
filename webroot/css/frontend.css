@@ -2000,16 +2000,26 @@ a.button.violet {
 
 .user-reg input[type="text"],
 .user-reg input[type="email"],
-.user-reg select,
-.user-reg label {
+.user-reg label,
+.user-reg .select2 {
     margin: 5px auto ! important;
     width: 90% ! important;
     text-align: left ! important;
 }
 .user-reg .categories-checkbox-wrapper,
-#cbskillsxtra {
+#cbskillsxtra,
+.user-reg .skills-wrapper {
     text-align: left;
     padding: 5px 15px;
+}
+.user-reg .skills-wrapper {
+    float: left;
+    margin-top: 30px;
+    width: 100%;
+}
+.select2-selection__choice {
+    font-size: 12px;
+    margin-bottom: 3px;
 }
 body.users .profile .categories-checkbox-wrapper,
 #infoSheetEditForm .form-fields-checkbox-wrapper,
