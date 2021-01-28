@@ -34,6 +34,40 @@ class SkillsTable extends Table
         return $validator;
     }
 
+    public function addSkills($request, $appAuth)
+    {
+
+        $skills = $request->getData('Users.skills._ids');
+        if (empty($skills)) {
+            return $request;
+        }
+
+        $skillsToAdd = [];
+        foreach($skills as $key => $skill) {
+            if (!is_numeric($skill)) {
+                unset($skills[$key]);
+                $skillsToAdd[] = $this->newEntity([
+                    'name' => $skill,
+                    'status' => $appAuth->isAdmin() ? APP_ON : APP_OFF,
+                    'owner' => $appAuth->getUserUid()
+                ]);
+            }
+        }
+        $request = $request->withData('Users.skills._ids', $skills);
+
+        $addedSkillIds = [];
+        if (!empty($skillsToAdd)) {
+            $addedSkills = $this->saveMany($skillsToAdd);
+            foreach($addedSkills as $addedSkill) {
+                $addedSkillIds[] = $addedSkill->id;
+            }
+            $request = $request->withData('Users.skills._ids', array_merge($skills, $addedSkillIds));
+        }
+
+        return $request;
+
+    }
+
     /**
      * @return array
      */

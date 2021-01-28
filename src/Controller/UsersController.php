@@ -281,33 +281,8 @@ class UsersController extends AppController
             }
             $this->request = $this->request->withData('Users.private', $private);
 
-            // START save user generated skills
-            $skills = $this->request->getData('Users.skills._ids');
-            if (!empty($skills)) {
-                $this->Skill = $this->getTableLocator()->get('Skills');
-                $skillsToAdd = [];
-                foreach($skills as $key => $skill) {
-                    if (!is_numeric($skill)) {
-                        unset($skills[$key]);
-                        $skillsToAdd[] = $this->Skill->newEntity([
-                            'name' => $skill,
-                            'status' => $this->AppAuth->isAdmin() ? APP_ON : APP_OFF,
-                            'owner' => $this->AppAuth->getUserUid()
-                        ]);
-                    }
-                }
-                $this->request = $this->request->withData('Users.skills._ids', $skills);
-
-                $addedSkillIds = [];
-                if (!empty($skillsToAdd)) {
-                    $addedSkills = $this->Skill->saveMany($skillsToAdd);
-                    foreach($addedSkills as $addedSkill) {
-                        $addedSkillIds[] = $addedSkill->id;
-                    }
-                    $this->request = $this->request->withData('Users.skills._ids', array_merge($skills, $addedSkillIds));
-                }
-            }
-            // END save user generated skills
+            $this->Skill = $this->getTableLocator()->get('Skills');
+            $this->request = $this->Skill->addSkills($this->request, $this->AppAuth);
 
             $user = $this->User->patchEntity($user, $this->request->getData(), ['validate' => 'UserEdit' . ($this->AppAuth->isAdmin() ? 'Admin' : 'User')]);
             if (!$user->hasErrors()) {
@@ -593,6 +568,9 @@ class UsersController extends AppController
                 $this->redirect('/');
                 return;
             }
+
+            $this->Skill = $this->getTableLocator()->get('Skills');
+            $this->request = $this->Skill->addSkills($this->request, $this->AppAuth);
 
             if ($this->request->getData('Users.i_want_to_receive_the_newsletter')) {
                 $this->loadComponent('CptNewsletter');
