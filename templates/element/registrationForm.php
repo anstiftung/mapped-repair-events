@@ -72,7 +72,7 @@
         echo $this->Form->control('Users.categories._ids', [
             'multiple' => 'checkbox',
             'label' => 'Reparatur-Kenntnisse',
-            'id' => null
+            'id' => 'UserRegCategory' . $userGroup,
         ]);
     echo '</div>
     <div class="sc"></div>
