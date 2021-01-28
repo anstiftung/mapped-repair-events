@@ -19,7 +19,7 @@
     "blueimp-file-upload": "^10.31.0",
     "chart.js": "^2.9.4",
     "chart.piecelabel.js": "^0.15.0",
-    "ckeditor4": "^4.15.1",
+    "ckeditor4": "^4.16.0",
     "components-jqueryui": "~1.12",
     "detect_swipe": "^2.1.4",
     "featherlight": "^1.7.14",
@@ -34,7 +34,7 @@
     "select2": "^4.0.13",
     "slidebars": "^2.0.2",
     "speakingurl": "^14.0.1",
-    "swiper": "^6.4.5"
+    "swiper": "^6.4.8"
   },
   "devDependencies": {
     "eslint": "^7.18.0"
