@@ -417,11 +417,17 @@ class WidgetsController extends AppController
     private function getDateFromByMonthAndYear($month, $year)
     {
         $yearTo = $year;
+        if (is_array($year) && isset($year['year'])) {
+            $yearTo = $year = $year['year'];
+        }
         if ($year == '') {
             $year = '2010';
             $yearTo = date('Y');
         }
         $monthTo = $month;
+        if (is_array($month) && isset($month['month'])) {
+            $monthTo = $month = $month['month'];
+        }
         if ($month == '') {
             $month = '01';
             $monthTo = '12';
