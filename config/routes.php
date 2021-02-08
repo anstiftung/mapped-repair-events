@@ -47,7 +47,7 @@ Router::defaultRouteClass(DashedRoute::class);
 
 Router::scope('/', function (RouteBuilder $builder) {
 
-    $builder->setExtensions(['html', 'rss', 'xml']);
+    $builder->setExtensions(['html', 'rss', 'xml', 'ics']);
 
     $builder->connect('/sitemap', ['controller' => 'sitemaps', 'action' => 'index']);
 
@@ -91,6 +91,7 @@ Router::scope('/', function (RouteBuilder $builder) {
     $builder->connect('/users/profil/*', ['controller'=>'users', 'action'=>'profil']);
     $builder->connect('/registrierung', ['controller'=>'users', 'action'=>'intro']);
 
+    $builder->connect('/events', ['controller'=>'events', 'action'=>'ical']);
     $builder->connect('/reparatur-termine/*', ['controller'=>'events', 'action'=>'all']);
     $builder->connect('/termine/edit/*', ['controller'=>'events', 'action'=>'edit']);
     $builder->connect('/termine/duplicate/*', ['controller'=>'events', 'action'=>'duplicate']);

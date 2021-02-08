@@ -6,6 +6,9 @@ use Cake\Event\EventInterface;
 use Cake\I18n\FrozenTime;
 use Cake\Mailer\Mailer;
 use Cake\Http\Exception\NotFoundException;
+use Eluceo\iCal\Component\Calendar;
+use Eluceo\iCal\Component\Event;
+use Eluceo\iCal\Property\Event\Geo;
 
 class EventsController extends AppController
 {
@@ -18,7 +21,8 @@ class EventsController extends AppController
             'detail',
             'all',
             'ajaxGetAllEventsForMap',
-            'feed'
+            'feed',
+            'ical',
         ]);
     }
 
@@ -88,6 +92,67 @@ class EventsController extends AppController
         }
 
         return parent::isAuthorized($user);
+
+    }
+
+    public function ical()
+    {
+
+        if ($this->request->getParam('_ext') != 'ics') {
+            throw new NotFoundException();
+        }
+
+        $this->disableAutoRender();
+        $icalCalendar = new Calendar('www.reparatur-initiativen.de');
+        $icalCalendar->setTimezone(Configure::read('App.defaultTimezone'));
+
+        $events = $this->Events->find('all', [
+            'conditions' => $this->Event->getListConditions(),
+            'contain' => [
+                'Workshops',
+                'Categories',
+            ]
+        ]);
+
+        foreach($events as $event) {
+
+            $icalEvent = new Event();
+
+            $location = $event->strasse . ' ' . $event->zip . ' ' . $event->ort;
+            if ($event->veranstaltungsort != '') {
+                $location .= ' ' . $event->veranstaltungsort;
+            }
+
+            $description = $event->eventbeschreibung;
+            if (!empty($event->categories)) {
+                $description .= LF;
+                foreach($event->categories as $category) {
+                    $description .= ' ' . $category->name;
+                }
+            }
+            $description .= LF;
+            $description .= Configure::read('AppConfig.serverName') . Configure::read('AppConfig.htmlHelper')->urlEventDetail($event->workshop->url, $event->uid, $event->datumstart);
+
+            $icalEvent
+                ->setUseTimezone(true)
+                ->setDescription($description)
+                ->setDtStart(new \DateTime($event->uhrzeitstart->i18nFormat(Configure::read('DateFormat.DatabaseWithTime'))))
+                ->setDtEnd(new \DateTime($event->uhrzeitend->i18nFormat(Configure::read('DateFormat.DatabaseWithTime'))))
+                ->setLocation($location, '', new Geo($event->lat, $event->lng));
+
+            if ($event->uhrzeitstart_formatted == '00:00' && $event->uhrzeitend_formatted == '00:00') {
+                $icalEvent->setNoTime(true);
+            }
+
+            $icalCalendar->addComponent($icalEvent);
+        }
+
+        $this->request = $this->request->withHeader('Content-type', 'text/calendar');
+        $this->request = $this->request->withHeader('Content-Disposition', 'text/calendar');
+        $this->response = $this->response->withHeader('Content-Disposition', 'attachment; filename="events.ics"');
+        $this->response = $this->response->withStringBody($icalCalendar);
+
+        return $this->response;
 
     }
 
@@ -507,11 +572,9 @@ class EventsController extends AppController
         ];
         $this->set('metaTags', $metaTags);
 
-        $conditions = $this->Event->getListConditions();
-
         // get count without any filters
         $allEventsCount = $this->Events->find('all', [
-            'conditions' => $conditions,
+            'conditions' => $this->Event->getListConditions(),
             'contain' => [
                 'Workshops'
             ]

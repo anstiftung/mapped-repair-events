@@ -71,6 +71,7 @@ return [
     ],
     'DateFormat' => [
         'Database' => 'yyyy-MM-dd',
+        'DatabaseWithTime' => 'yyyy-MM-dd HH:mm:ss',
         'de' => [
             'DateShort' => 'dd.MM.yy',
             'DateLong' =>  'dd. MMMM y',
