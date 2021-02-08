@@ -148,6 +148,7 @@ class EventsController extends AppController
             $description .= Configure::read('AppConfig.serverName') . Configure::read('AppConfig.htmlHelper')->urlEventDetail($event->workshop->url, $event->uid, $event->datumstart);
 
             $icalEvent
+                ->setSummary(str_replace('Reparatur-Termin ' . $event->workshop->name, '\"', "'"))
                 ->setUseTimezone(true)
                 ->setDescription(str_replace($description, '\"', "'"))
                 ->setDtStart(new \DateTime($event->uhrzeitstart->i18nFormat(Configure::read('DateFormat.DatabaseWithTime'))))
