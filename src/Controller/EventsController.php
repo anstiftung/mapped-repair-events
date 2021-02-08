@@ -149,10 +149,10 @@ class EventsController extends AppController
 
             $icalEvent
                 ->setUseTimezone(true)
-                ->setDescription($description)
+                ->setDescription(str_replace($description, '\"', "'"))
                 ->setDtStart(new \DateTime($event->uhrzeitstart->i18nFormat(Configure::read('DateFormat.DatabaseWithTime'))))
                 ->setDtEnd(new \DateTime($event->uhrzeitend->i18nFormat(Configure::read('DateFormat.DatabaseWithTime'))))
-                ->setLocation($location, '', new Geo($event->lat, $event->lng));
+                ->setLocation(str_replace($location, '\"', "'"), '', new Geo($event->lat, $event->lng));
 
             if ($event->uhrzeitstart_formatted == '00:00' && $event->uhrzeitend_formatted == '00:00') {
                 $icalEvent->setNoTime(true);
