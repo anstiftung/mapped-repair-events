@@ -29,7 +29,7 @@
 ## Requirements
 * Server with shell access and cronjobs
 * Apache with `mod_rewrite`
-* PHP >= 7.3
+* PHP >= 7.4
 * MySQL >= 5.7
 * Node.js and npm ([installation](https://www.npmjs.com/get-npm)) developer packages
 * Composer ([installation](https://getcomposer.org/download/)) developer packages
