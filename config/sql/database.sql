@@ -1991,8 +1991,7 @@ CREATE TABLE `groups` (
 INSERT INTO `groups` (`id`, `name`) VALUES
 (2, 'admin'),
 (7, 'repairhelper'),
-(9, 'orga'),
-(10, 'forum_moderator');
+(9, 'orga');
 
 -- --------------------------------------------------------
 

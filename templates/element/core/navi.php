@@ -34,15 +34,6 @@ if (Configure::read('AppConfig.additionalBlogCategoryEnabled') && !empty($menu[2
     array_splice($menu[2]['children'], count($menu[2]['children']), 0, $additionalBlogCategory);
 }
 
-if (Configure::read('AppConfig.fluxBbForumEnabled')) {
-    // add forum link as last child in 4th main menu item
-    $forum[] = [
-        'name' => 'Forum',
-        'slug' => $this->Html->urlForum($appAuth->user())
-    ];
-    array_splice($menu[3]['children'], count($menu[3]['children']), 0, $forum);
-}
-
 // add aktive link as last child in 5th main menu item
 $userMenu[] = [
     'name' => 'Aktive',

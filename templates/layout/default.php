@@ -96,22 +96,13 @@ use Cake\Utility\Inflector;
             <?php } ?>
 
             <?php
-                $menuCacheOptions = [];
                 // if placed in element, javascript in file is not executed if cached file is loaded!
                 if (!$appAuth->user()) {
                     $this->element('addScript', ['script' =>
                         JS_NAMESPACE.".Helper.doLoginFormActions();
                     "]);
                 }
-                if (Configure::read('AppConfig.fluxBbForumEnabled')) {
-                    $menuCacheOptions = [
-                        'cache' => [
-                            'config' => 'navi',
-                            'key' => 'navi_'.$appAuth->getUserUid().'_core_navi',
-                        ]
-                    ];
-                }
-                echo $this->element('core/header', [], $menuCacheOptions);
+                echo $this->element('core/header');
             ?>
             </div>
 

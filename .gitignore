@@ -33,6 +33,5 @@ nbproject/* # NetBeans
 /.project
 /.buildpath
 /webroot/node_modules
-/forum
 
 /.phpunit.result.cache

@@ -70,9 +70,6 @@ class AppController extends Controller
         $this->loadComponent('RequestHandler', [
             'enableBeforeRedirect' => false
         ]);
-        if (Configure::read('AppConfig.fluxBbForumEnabled')) {
-            $this->loadComponent('FluxBb');
-        }
         $this->loadComponent('AppFlash', [
             'clear' => true
         ]);
@@ -131,43 +128,7 @@ class AppController extends Controller
     public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);
-
         $this->set('useDefaultValidation', $this->useDefaultValidation);
-
-        if (Configure::read('debug')) {
-            Cache::disable();
-        } else {
-
-            // wenn eingeloggt, nur 1 sec cachen, damit das forum auf das gecachte html zugreifen kann
-            $duration = '+1 day';
-            if ($this->AppAuth->user()) {
-                $duration = '+1 sec';
-            }
-
-            Cache::setConfig('navi', [
-                'engine' => 'File',
-                'duration' => $duration,
-                'path' => CACHE . 'views',
-                'serialize' => false
-            ]);
-            Cache::enable();
-
-        }
-
-        // fluxbb login
-        if (Configure::read('AppConfig.fluxBbForumEnabled') && $this->AppAuth->user()) {
-            $this->FluxBb->login($this->AppAuth->getUserUid());
-        }
-
-        if (!$this->request->getSession()->check('isMobile')) {
-            $detect = new Mobile_Detect();
-            $isMobile = false;
-            if ($detect->isMobile() && !$detect->isTablet()) {
-                $isMobile = true;
-            }
-            $this->request->getSession()->write('isMobile', $isMobile); // default value
-        }
-
     }
 
     public function beforeRender(EventInterface $event)

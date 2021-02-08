@@ -21,10 +21,6 @@ class GroupsFixture extends TestFixture
           'id' => '9',
           'name' => 'orga'
         ],
-        [
-          'id' => '10',
-          'name' => 'forum_moderator'
-        ],
     ];
 
 }

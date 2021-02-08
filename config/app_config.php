@@ -27,7 +27,6 @@ define('FILES_DIR', '/files/');
 define('GROUPS_ADMIN', 		      2);
 define('GROUPS_REPAIRHELPER', 	  7);
 define('GROUPS_ORGA', 	          9);
-define('GROUPS_FORUM_MODERATOR', 10);
 
 define('PASSWORD_REGEX', '/^([^\\s]){10,32}$/');
 define('ZIP_REGEX', '/^[0-9]{4,5}$/');
@@ -46,7 +45,6 @@ return [
         'yesno' => [0=>'nein',1=>'ja'],
         'debugMailAddress' => 'office@example.com',
         'notificationMailAddress' => 'office@example.com',
-        'fluxBbForumEnabled' => false,
         'adminUserUid' => 1,
         'additionalBlogCategoryEnabled' => false,
         'serverName' => 'http://www.example.org',

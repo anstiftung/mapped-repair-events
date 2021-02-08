@@ -503,14 +503,6 @@ class MyHtmlHelper extends HtmlHelper {
     function urlUserNew() {
         return '/users/add';
     }
-    function urlForum($loggedIn) {
-        if ($loggedIn) {
-            return '/users/forum'; //ohne diesen zusätzlichen redirect ist man nicht immer eingeloggt - cpt_flux_bb::login
-        } else {
-            return '/forum/'; // ohne trailing slash gibts einen 301er
-        }
-
-    }
 
     function getUserGroupsForRegistration() {
         $userGroups = [

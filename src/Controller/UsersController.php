@@ -39,7 +39,6 @@ class UsersController extends AppController
         parent::beforeFilter($event);
         $this->AppAuth->allow([
             'neuesPasswortAnfordern',
-            'forum',
             'login',
             'register',
             'registerRepairhelper',
@@ -290,12 +289,7 @@ class UsersController extends AppController
 
                 // update own profile
                 if ($isMyProfile) {
-                    $this->AppAuth->setUser($user->toArray()); // to array is important for forum to avoid __PHP_Incomplete_Class Object
-                }
-
-                if (Configure::read('AppConfig.fluxBbForumEnabled')) {
-                    $this->FluxBb->changeUserData($user);
-                    $this->FluxBb->changeUserGroup($user, $this->request->getData('Users.groups._ids'));
+                    $this->AppAuth->setUser($user->toArray());
                 }
 
                 if ($isEditMode) {
@@ -416,16 +410,6 @@ class UsersController extends AppController
         $this->set('user', $user);
     }
 
-    public function forum()
-    {
-        if (Configure::read('AppConfig.fluxBbForumEnabled')) {
-            //aufruf von /forum direkt nach login zeigt login-daten nicht an (cookie noch nicht gesetzt)
-            $this->redirect(Configure::read('AppConfig.htmlHelper')->urlForum(false));
-        } else {
-            throw new NotFoundException();
-        }
-    }
-
     public function login()
     {
         $metaTags = [
@@ -506,7 +490,7 @@ class UsersController extends AppController
         $entity = $this->User->patchEntity($user, $user2save, ['validate' => false]);
         $this->User->save($entity);
 
-        $this->AppAuth->setUser($user->toArray()); // toArray is important for forum to avoid __PHP_Incomplete_Class Object
+        $this->AppAuth->setUser($user->toArray());
 
         // activate newsletter if existing
         $this->Newsletter = $this->getTableLocator()->get('Newsletters');
@@ -521,9 +505,6 @@ class UsersController extends AppController
             $this->CptNewsletter->activateNewsletterAndSendNotification($newsletter);
         }
 
-        if (Configure::read('AppConfig.fluxBbForumEnabled')) {
-            $this->FluxBb->insert($user->uid, $user->nick, $user->email);
-        }
         $this->AppFlash->setFlashMessage('Dein Account ist nun aktiviert, du bist eingeloggt und kannst deine Profildaten ergänzen bzw. dein Passwort ändern.');
 
         $this->redirect(Configure::read('AppConfig.htmlHelper')->urlUserHome());
@@ -633,11 +614,6 @@ class UsersController extends AppController
 
     public function logout()
     {
-        if (Configure::read('AppConfig.fluxBbForumEnabled')) {
-            $this->loadComponent('FluxBb');
-            $this->FluxBb->logout($this->AppAuth->getUserUid());
-        }
-
         $this->AppFlash->setFlashMessage('Du hast dich erfolgreich ausgeloggt.');
         $this->redirect($this->AppAuth->logout());
     }

@@ -771,16 +771,6 @@ MappedRepairEvents.Helper = {
         }
     },
 
-    initMobileForum : function() {
-        $('#header').attr('canvas', '');
-        $('#header').addClass('mobile');
-        $('#content, #footer').attr('canvas', 'container');
-        this.appendCssFile('node_modules/slidebars/dist/slidebars');
-        this.appendCssFile('css/mobile-frontend');
-        this.appendCssFile('css/mobile-forum');
-        MappedRepairEvents.Helper.initMobile();
-    },
-
     initMobile : function() {
 
         // elements in header.ctp are cached
