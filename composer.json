@@ -4,11 +4,11 @@
     "homepage": "https://github.com/anstiftung/mapped-repair-events",
     "config": {
         "platform": {
-            "php": "7.3"
+            "php": "7.4"
         }
     },
     "require": {
-        "php": ">=7.3",
+        "php": ">=7.4",
         "cakephp/cakephp": "4.*",
         "cakephp/migrations": "^3.0",
         "cakephp/plugin-installer": "~1.0",
