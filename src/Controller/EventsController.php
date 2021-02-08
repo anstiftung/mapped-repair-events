@@ -103,7 +103,7 @@ class EventsController extends AppController
         }
 
         $this->disableAutoRender();
-        $icalCalendar = new Calendar('www.reparatur-initiativen.de');
+        $icalCalendar = new Calendar('reparatur-initiativen.de');
 
         $tz = Configure::read('App.defaultTimezone');
         $dtz = new \DateTimeZone($tz);
