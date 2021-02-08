@@ -104,7 +104,7 @@ class EventsController extends AppController
 
         $this->disableAutoRender();
         $icalCalendar = new Calendar('www.reparatur-initiativen.de');
-        $icalCalendar->setTimezone(Configure::read('App.defaultTimezone'));
+        $icalCalendar->setTimezone(new \Eluceo\iCal\Component\Timezone(Configure::read('App.defaultTimezone')));
 
         $events = $this->Events->find('all', [
             'conditions' => $this->Event->getListConditions(),
@@ -147,10 +147,10 @@ class EventsController extends AppController
             $icalCalendar->addComponent($icalEvent);
         }
 
-        $this->request = $this->request->withHeader('Content-type', 'text/calendar');
-        $this->request = $this->request->withHeader('Content-Disposition', 'text/calendar');
+        $this->response = $this->response->withHeader('Content-type', 'text/calendar');
+        $this->response = $this->response->withHeader('Content-Disposition', 'text/calendar');
         $this->response = $this->response->withHeader('Content-Disposition', 'attachment; filename="events.ics"');
-        $this->response = $this->response->withStringBody($icalCalendar);
+        $this->response = $this->response->withStringBody($icalCalendar->render());
 
         return $this->response;
 
