@@ -71,13 +71,13 @@ return [
     ],
     'DateFormat' => [
         'Database' => 'yyyy-MM-dd',
-        'DatabaseWithTime' => 'yyyy-MM-dd HH:mm:ss',
         'de' => [
             'DateShort' => 'dd.MM.yy',
             'DateLong' =>  'dd. MMMM y',
             'DateLong2' => 'dd.MM.yyyy',
             'DateNTimeShort' => 'dd.MM.y HH:mm',
             'TimeShort' => 'HH:mm',
+            'TimeWithSeconds' => 'HH:mm:ss',
             'DateNTimeForDatepicker' => 'dd.MM.yyyy HH:mm'
         ]
     ]

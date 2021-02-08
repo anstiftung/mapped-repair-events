@@ -125,7 +125,8 @@ class EventsController extends AppController
             'contain' => [
                 'Workshops',
                 'Categories',
-            ]
+            ],
+            'order' => $this->Event->getListOrder(),
         ]);
 
         foreach($events as $event) {
@@ -140,6 +141,7 @@ class EventsController extends AppController
             $description = $event->eventbeschreibung;
             if (!empty($event->categories)) {
                 $description .= LF;
+                $description .= 'Kategorien:';
                 foreach($event->categories as $category) {
                     $description .= ' ' . $category->name;
                 }
@@ -148,12 +150,26 @@ class EventsController extends AppController
             $description .= Configure::read('AppConfig.serverName') . Configure::read('AppConfig.htmlHelper')->urlEventDetail($event->workshop->url, $event->uid, $event->datumstart);
 
             $icalEvent
-                ->setSummary(str_replace('Reparatur-Termin ' . $event->workshop->name, '\"', "'"))
+                ->setSummary(str_replace('"', "'", $event->workshop->name))
                 ->setUseTimezone(true)
-                ->setDescription(str_replace($description, '\"', "'"))
-                ->setDtStart(new \DateTime($event->uhrzeitstart->i18nFormat(Configure::read('DateFormat.DatabaseWithTime'))))
-                ->setDtEnd(new \DateTime($event->uhrzeitend->i18nFormat(Configure::read('DateFormat.DatabaseWithTime'))))
-                ->setLocation(str_replace($location, '\"', "'"), '', new Geo($event->lat, $event->lng));
+                ->setDescription(str_replace('"', "'", strip_tags($description)))
+                ->setDtStart(new \DateTime(
+                    $event->datumstart->i18nFormat(
+                        Configure::read('DateFormat.Database')
+                    ) . ' ' .
+                    $event->uhrzeitstart->i18nFormat(
+                        Configure::read('DateFormat.de.TimeWithSeconds')
+                    )
+                ))
+                ->setDtEnd(new \DateTime(
+                    $event->datumstart->i18nFormat(
+                        Configure::read('DateFormat.Database')
+                    ) . ' ' .
+                    $event->uhrzeitend->i18nFormat(
+                        Configure::read('DateFormat.de.TimeWithSeconds')
+                    )
+                ))
+                ->setLocation(str_replace('"', "'", $location), '', new Geo($event->lat, $event->lng));
 
             if ($event->uhrzeitstart_formatted == '00:00' && $event->uhrzeitend_formatted == '00:00') {
                 $icalEvent->setNoTime(true);
@@ -162,8 +178,7 @@ class EventsController extends AppController
             $icalCalendar->addComponent($icalEvent);
         }
 
-        $this->response = $this->response->withHeader('Content-type', 'text/calendar');
-        $this->response = $this->response->withHeader('Content-Disposition', 'text/calendar');
+        $this->response = $this->response->withHeader('Content-type', 'text/calendar; charset=utf-8');
         $this->response = $this->response->withHeader('Content-Disposition', 'attachment; filename="events.ics"');
         $this->response = $this->response->withStringBody($icalCalendar->render());
 
