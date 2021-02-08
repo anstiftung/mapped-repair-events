@@ -104,7 +104,21 @@ class EventsController extends AppController
 
         $this->disableAutoRender();
         $icalCalendar = new Calendar('www.reparatur-initiativen.de');
-        $icalCalendar->setTimezone(new \Eluceo\iCal\Component\Timezone(Configure::read('App.defaultTimezone')));
+
+        $tz = Configure::read('App.defaultTimezone');
+        $dtz = new \DateTimeZone($tz);
+        date_default_timezone_set($tz);
+
+        $vTimezoneRuleDst = new \Eluceo\iCal\Component\TimezoneRule(\Eluceo\iCal\Component\TimezoneRule::TYPE_DAYLIGHT);
+        $vTimezoneRuleDst->setTzName($tz);
+        $vTimezoneRuleDst->setDtStart(new \DateTime('1981-03-29 02:00:00', $dtz));
+        $vTimezoneRuleDst->setTzOffsetFrom('+0100');
+        $vTimezoneRuleDst->setTzOffsetTo('+0200');
+
+        $vTimezone = new \Eluceo\iCal\Component\Timezone($tz);
+        $vTimezone->addComponent($vTimezoneRuleDst);
+
+        $icalCalendar->setTimezone($vTimezone);
 
         $events = $this->Events->find('all', [
             'conditions' => $this->Event->getListConditions(),
