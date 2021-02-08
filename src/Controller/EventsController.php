@@ -572,9 +572,11 @@ class EventsController extends AppController
         ];
         $this->set('metaTags', $metaTags);
 
+        $conditions = $this->Event->getListConditions();
+
         // get count without any filters
         $allEventsCount = $this->Events->find('all', [
-            'conditions' => $this->Event->getListConditions(),
+            'conditions' => $conditions,
             'contain' => [
                 'Workshops'
             ]
