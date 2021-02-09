@@ -628,6 +628,13 @@ class StringComponent extends Component
         return $text;
     }
 
+    public static function mb_str_shuffle($str)
+    {
+        $arr = preg_split('//u', $str, -1, PREG_SPLIT_NO_EMPTY);
+        shuffle($arr);
+        return implode('', $arr);
+    }
+
     /**
      * http://www.maurits.vdschee.nl/php_hide_email/
      */
@@ -638,8 +645,8 @@ class StringComponent extends Component
             $classHtml = 'class=\"' . $class . '\" ';
         }
 
-        $character_set = '+-.0123456789@ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz';
-        $key = str_shuffle($character_set);
+        $character_set = '+-.0123456789@ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜ_abcdefghijklmnopqrstuvwxyzäöüß';
+        $key = self::mb_str_shuffle($character_set);
         $cipher_text = '';
         $id = 'e' . rand(1, 999999999);
         if ($renderAsLink) {
