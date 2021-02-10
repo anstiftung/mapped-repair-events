@@ -6,6 +6,9 @@ use Cake\Event\EventInterface;
 use Cake\I18n\FrozenTime;
 use Cake\Mailer\Mailer;
 use Cake\Http\Exception\NotFoundException;
+use Eluceo\iCal\Component\Calendar;
+use Eluceo\iCal\Component\Event;
+use Eluceo\iCal\Property\Event\Geo;
 
 class EventsController extends AppController
 {
@@ -18,7 +21,8 @@ class EventsController extends AppController
             'detail',
             'all',
             'ajaxGetAllEventsForMap',
-            'feed'
+            'feed',
+            'ical',
         ]);
     }
 
@@ -88,6 +92,109 @@ class EventsController extends AppController
         }
 
         return parent::isAuthorized($user);
+
+    }
+
+    public function ical()
+    {
+
+        if ($this->request->getParam('_ext') != 'ics') {
+            throw new NotFoundException();
+        }
+
+        $this->disableAutoRender();
+        $icalCalendar = new Calendar('reparatur-initiativen.de');
+
+        $tz = Configure::read('App.defaultTimezone');
+        $dtz = new \DateTimeZone($tz);
+        date_default_timezone_set($tz);
+
+        $vTimezoneRuleDst = new \Eluceo\iCal\Component\TimezoneRule(\Eluceo\iCal\Component\TimezoneRule::TYPE_DAYLIGHT);
+        $vTimezoneRuleDst->setTzName($tz);
+        $vTimezoneRuleDst->setDtStart(new \DateTime('1981-03-29 02:00:00', $dtz));
+        $vTimezoneRuleDst->setTzOffsetFrom('+0100');
+        $vTimezoneRuleDst->setTzOffsetTo('+0200');
+
+        $vTimezone = new \Eluceo\iCal\Component\Timezone($tz);
+        $vTimezone->addComponent($vTimezoneRuleDst);
+
+        $icalCalendar->setTimezone($vTimezone);
+
+        $filename = 'events';
+        $conditions = $this->Event->getListConditions();
+        if ($this->request->getParam('uid') > 0) {
+            $conditions['Workshops.uid'] = $this->request->getParam('uid');
+            $filename = $this->request->getParam('uid');
+        }
+        $filename .= '.' . $this->request->getParam('_ext');
+
+        $events = $this->Events->find('all', [
+            'conditions' => $conditions,
+            'contain' => [
+                'Workshops',
+                'Categories',
+            ],
+            'order' => $this->Event->getListOrder(),
+        ]);
+
+        if ($events->count() == 0) {
+            throw new NotFoundException();
+        }
+
+        foreach($events as $event) {
+
+            $icalEvent = new Event();
+
+            $location = $event->strasse . ' ' . $event->zip . ' ' . $event->ort;
+            if ($event->veranstaltungsort != '') {
+                $location .= ' ' . $event->veranstaltungsort;
+            }
+
+            $description = $event->eventbeschreibung;
+            if (!empty($event->categories)) {
+                $description .= LF;
+                $description .= 'Kategorien:';
+                foreach($event->categories as $category) {
+                    $description .= ' ' . $category->name;
+                }
+            }
+            $description .= LF;
+            $description .= Configure::read('AppConfig.serverName') . Configure::read('AppConfig.htmlHelper')->urlEventDetail($event->workshop->url, $event->uid, $event->datumstart);
+
+            $icalEvent
+                ->setSummary(str_replace('"', "'", $event->workshop->name))
+                ->setUseTimezone(true)
+                ->setDescription(str_replace('"', "'", strip_tags($description)))
+                ->setDtStart(new \DateTime(
+                    $event->datumstart->i18nFormat(
+                        Configure::read('DateFormat.Database')
+                    ) . ' ' .
+                    $event->uhrzeitstart->i18nFormat(
+                        Configure::read('DateFormat.de.TimeWithSeconds')
+                    )
+                ))
+                ->setDtEnd(new \DateTime(
+                    $event->datumstart->i18nFormat(
+                        Configure::read('DateFormat.Database')
+                    ) . ' ' .
+                    $event->uhrzeitend->i18nFormat(
+                        Configure::read('DateFormat.de.TimeWithSeconds')
+                    )
+                ))
+                ->setLocation(str_replace('"', "'", $location), '', new Geo($event->lat, $event->lng));
+
+            if ($event->uhrzeitstart_formatted == '00:00' && $event->uhrzeitend_formatted == '00:00') {
+                $icalEvent->setNoTime(true);
+            }
+
+            $icalCalendar->addComponent($icalEvent);
+        }
+
+        $this->response = $this->response->withHeader('Content-type', 'text/calendar; charset=utf-8');
+        $this->response = $this->response->withHeader('Content-Disposition', 'attachment; filename="'.$filename.'"');
+        $this->response = $this->response->withStringBody($icalCalendar->render());
+
+        return $this->response;
 
     }
 

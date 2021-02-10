@@ -77,6 +77,7 @@ return [
             'DateLong2' => 'dd.MM.yyyy',
             'DateNTimeShort' => 'dd.MM.y HH:mm',
             'TimeShort' => 'HH:mm',
+            'TimeWithSeconds' => 'HH:mm:ss',
             'DateNTimeForDatepicker' => 'dd.MM.yyyy HH:mm'
         ]
     ]
