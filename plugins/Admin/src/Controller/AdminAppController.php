@@ -3,7 +3,6 @@ namespace Admin\Controller;
 
 use App\Controller\AppController;
 use Cake\Event\EventInterface;
-use Cake\Cache\Cache;
 use Cake\ORM\Query;
 use Cake\Utility\Inflector;
 
@@ -157,8 +156,6 @@ class AdminAppController extends AppController
 
         if ($this->$modelName->save($entity)) {
             $this->AppFlash->setFlashMessage($this->$modelName->name_de . ' erfolgreich gespeichert.');
-            // votings und orga pads (object_groups) können die navi verändern => navi für uneingeloggte user löschen (die für eingeloggte wird eh nur 1 sec gecacht)
-            Cache::delete('element_navi_0_core_navi', 'navi');
             $this->redirect($this->request->getData()['referer']);
         } else {
             $this->AppFlash->setFlashError($this->$modelName->name_de . ' wurde <b>nicht</b> gespeichert. Bitte überprüfe das Formular.');

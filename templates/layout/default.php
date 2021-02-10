@@ -96,7 +96,6 @@ use Cake\Utility\Inflector;
             <?php } ?>
 
             <?php
-                // if placed in element, javascript in file is not executed if cached file is loaded!
                 if (!$appAuth->user()) {
                     $this->element('addScript', ['script' =>
                         JS_NAMESPACE.".Helper.doLoginFormActions();
