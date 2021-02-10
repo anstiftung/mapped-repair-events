@@ -518,6 +518,12 @@ class WorkshopsController extends AppController
             'UsersWorkshops.approved <> \'0000-00-00 00:00:00\''
         ]);
 
+        $eventsAssociation = $this->Workshop->getAssociation('Events');
+        $eventsAssociation->setConditions([
+            'DATE_FORMAT(Events.datumstart, \'%Y-%m-%d\') >= DATE_FORMAT(NOW(), \'%Y-%m-%d\')',
+            'Events.status >= ' . APP_OFF
+        ]);
+
         $contain = [
             'Categories',
             'Countries',
@@ -531,11 +537,6 @@ class WorkshopsController extends AppController
         // mobile version does not include calendar and only shows bound events
         // it's the calendar component that fetches the workshop's events
         if ($this->request->getSession()->read('isMobile')) {
-            $eventsAssociation = $this->Workshop->getAssociation('Events');
-            $eventsAssociation->setConditions([
-                'DATE_FORMAT(Events.datumstart, \'%Y-%m-%d\') >= DATE_FORMAT(NOW(), \'%Y-%m-%d\')',
-                'Events.status >= ' . APP_OFF
-            ]);
             $this->Category = $this->getTableLocator()->get('Categories');
             $categories = $this->Category->find('all');
             $contain[] = 'Events.Categories';
