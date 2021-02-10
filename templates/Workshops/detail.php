@@ -60,6 +60,11 @@ if (!$this->request->getSession()->read('isMobile')) {
         <?php }
 
         echo '<div class="sc"></div>';
+
+        if (count($workshop->events) > 0) {
+            echo 'Ich möchte die anstehenden Reparaturtermine mit meinem digitalen Kalender synchronisieren: <a href="/events/'.$workshop->uid.'.ics">Hier klicken</a>.';
+        }
+
         if (!$subscribed) {
             $this->element('addScript', ['script' =>
                 JS_NAMESPACE.".Helper.updateAntiSpamField('#WorknewsForm', $('#WorkNewsForm" . $workshop->uid . "'), ".$workshop->uid.");

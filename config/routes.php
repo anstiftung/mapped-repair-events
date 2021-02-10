@@ -92,6 +92,9 @@ Router::scope('/', function (RouteBuilder $builder) {
     $builder->connect('/registrierung', ['controller'=>'users', 'action'=>'intro']);
 
     $builder->connect('/events', ['controller'=>'events', 'action'=>'ical']);
+    $builder->connect('/events/:uid', ['controller'=>'events', 'action'=>'ical'])
+        ->setPatterns(['uid' => '\d+'])
+        ->setPass(['uid']);
     $builder->connect('/reparatur-termine/*', ['controller'=>'events', 'action'=>'all']);
     $builder->connect('/termine/edit/*', ['controller'=>'events', 'action'=>'edit']);
     $builder->connect('/termine/duplicate/*', ['controller'=>'events', 'action'=>'duplicate']);

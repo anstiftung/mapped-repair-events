@@ -524,6 +524,7 @@ class WorkshopsController extends AppController
             'Metatags',
             'OwnerUsers',
             'Users',
+            'Events',
             'Users.Groups'
         ];
 
@@ -537,7 +538,6 @@ class WorkshopsController extends AppController
             ]);
             $this->Category = $this->getTableLocator()->get('Categories');
             $categories = $this->Category->find('all');
-            $contain[] = 'Events';
             $contain[] = 'Events.Categories';
         }
 

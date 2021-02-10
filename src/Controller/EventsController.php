@@ -120,14 +120,26 @@ class EventsController extends AppController
 
         $icalCalendar->setTimezone($vTimezone);
 
+        $filename = 'events';
+        $conditions = $this->Event->getListConditions();
+        if ($this->request->getParam('uid') > 0) {
+            $conditions['Workshops.uid'] = $this->request->getParam('uid');
+            $filename = $this->request->getParam('uid');
+        }
+        $filename .= '.' . $this->request->getParam('_ext');
+
         $events = $this->Events->find('all', [
-            'conditions' => $this->Event->getListConditions(),
+            'conditions' => $conditions,
             'contain' => [
                 'Workshops',
                 'Categories',
             ],
             'order' => $this->Event->getListOrder(),
         ]);
+
+        if ($events->count() == 0) {
+            throw new NotFoundException();
+        }
 
         foreach($events as $event) {
 
@@ -179,7 +191,7 @@ class EventsController extends AppController
         }
 
         $this->response = $this->response->withHeader('Content-type', 'text/calendar; charset=utf-8');
-        $this->response = $this->response->withHeader('Content-Disposition', 'attachment; filename="events.ics"');
+        $this->response = $this->response->withHeader('Content-Disposition', 'attachment; filename="'.$filename.'"');
         $this->response = $this->response->withStringBody($icalCalendar->render());
 
         return $this->response;
