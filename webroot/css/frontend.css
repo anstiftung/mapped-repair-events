@@ -552,7 +552,10 @@ div.calEvent:hover {
 }
 
 #workshop-detail .fc-has-event.offline {
-    background-image: url(/img/gotdatedraft.png);
+    background-image: url(/img/gotdatedraft.png) ! important;
+}
+#workshop-detail .eventBox .onoffline {
+    margin-bottom: 10px;
 }
 body.workshops.detail .calEvent {
     display: none ! important;

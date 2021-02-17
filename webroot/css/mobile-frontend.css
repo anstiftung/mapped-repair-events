@@ -128,7 +128,8 @@
     body.workshops.detail div.calEvent:hover {
         text-decoration: none ! important;
     }
-    body.workshops.detail .calEvent.online {
+    body.workshops.detail .calEvent.online,
+    body.workshops.detail .calEvent.offline {
         visibility: visible ! important;
         display: block ! important;
     }

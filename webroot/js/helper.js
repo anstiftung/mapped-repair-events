@@ -575,6 +575,10 @@ MappedRepairEvents.Helper = {
         if (wuid) {
             calEvent += '<div class="eventBox" style="display:none;" itemscope itemtype="http://schema.org/Event">';
 
+            if (ev.hasModifyPermissions) {
+                calEvent += '<div class="onoffline" style="color:'+( ev.status == 1 ? 'green' : 'red' )+';">' + ( ev.status == 1 ? stringEventIsOnline : stringEventIsOffline) + '</div><br />';
+            }
+
             if (ev.hasModifyPermissions && ev.isPast == '0') {
                 calEvent += '<div class="deleteEvent">';
                 calEvent += '<a class="editEvent button" href="/termine/edit/'+ev.uid+'">'+stringEditEvent+'</a>';
