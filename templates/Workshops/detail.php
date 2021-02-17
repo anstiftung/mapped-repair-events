@@ -61,7 +61,7 @@ if (!$this->request->getSession()->read('isMobile')) {
 
         echo '<div class="sc"></div>';
 
-        if (count($workshop->events) > 0) {
+        if ($onlineEventsCount > 0) {
             echo 'Ich möchte die anstehenden Reparaturtermine mit meinem digitalen Kalender synchronisieren: <a href="/events/'.$workshop->uid.'.ics">Hier klicken</a>.';
         }
 

@@ -554,6 +554,14 @@ class WorkshopsController extends AppController
         $this->doPreviewChecks($workshop->status, Configure::read('AppConfig.htmlHelper')->urlWorkshopDetail($workshop->url));
         $this->setContext($workshop);
 
+        $onlineEventsCount = 0;
+        foreach($workshop->events as $event) {
+            if ($event->status) {
+                $onlineEventsCount++;
+            }
+        }
+        $this->set('onlineEventsCount', $onlineEventsCount);
+
         $this->processWorknewsAddForm($workshop);
 
         $this->User = $this->getTableLocator()->get('Users');
