@@ -30,7 +30,7 @@ MappedRepairEvents.Upload = {
             html += '<p class="info-text">ACHTUNG! Die Seite wird beim Speichern neu geladen, d.h. ungespeicherte Daten gehen verloren!</b></p>';
         }
 
-        html += '<p class="info-text">Bitte nur selbstgemachte Bilder verwenden (keine aus dem Internet).</p>';
+        html += '<p class="info-text">Bilder bitte nur hochladen, wenn du über die Nutzungsrechte verfügst!</p>';
         html += '<a class="upload-button">PC durchsuchen</a>';
         html += '<input' + (multiple ? ' multiple' : '') + ' type="file" name="upload" accept="image/jpeg, image/x-png" />';
         html += '</div>';
