@@ -579,11 +579,15 @@ MappedRepairEvents.Helper = {
                 calEvent += '<div class="onoffline" style="color:'+( ev.status == 1 ? 'green' : 'red' )+';">' + ( ev.status == 1 ? stringEventIsOnline : stringEventIsOffline) + '</div><br />';
             }
 
-            if (ev.hasModifyPermissions && ev.isPast == '0') {
+            if (ev.hasModifyPermissions) {
                 calEvent += '<div class="deleteEvent">';
-                calEvent += '<a class="editEvent button" href="/termine/edit/'+ev.uid+'">'+stringEditEvent+'</a>';
+                if (ev.isPast == '0') {
+                    calEvent += '<a class="editEvent button" href="/termine/edit/'+ev.uid+'">'+stringEditEvent+'</a>';
+                }
                 calEvent += '<a class="dupEvent button" href="/termine/duplicate/'+ev.uid+'">'+stringDuplicateEvent+'</a>';
-                calEvent += '<a class="delEvent button gray" href="/termine/delete/'+ev.uid+'" onclick="return confirm(\''+stringConfirmDeleteEvent+'\');">'+stringDeleteEvent+'</a>';
+                if (ev.isPast == '0') {
+                    calEvent += '<a class="delEvent button gray" href="/termine/delete/'+ev.uid+'" onclick="return confirm(\''+stringConfirmDeleteEvent+'\');">'+stringDeleteEvent+'</a>';
+                }
                 calEvent += '</div>';
                 calEvent += '<div class="sc"></div><br />';
             }
