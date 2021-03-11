@@ -71,30 +71,6 @@ class SkillsTable extends Table
     /**
      * @return array
      */
-    public function getForSubcategoryDropdown()
-    {
-
-        $skills = $this->find('all', [
-            'conditions' => [
-                'Skills.status > ' . APP_DELETED
-            ],
-            'order' => [
-                'Skills.status' => 'DESC'
-            ]
-        ]);
-        foreach($skills as &$skill) {
-            if ($skill->status == APP_OFF) {
-                $skill->name .= ' (unbestätigt)';
-            }
-        }
-
-        return $skills;
-
-    }
-
-    /**
-     * @return array
-     */
     public function getForDropdown($includeOffline)
     {
 
