@@ -19,12 +19,12 @@ class SkillsTable extends Table
             'foreignKey' => 'skill_id',
             'targetForeignKey' => 'user_uid',
             'sort' => [
-                'Users.nick' => 'ASC'
+                'Users.nick' => 'ASC',
             ]
         ]);
         $this->belongsTo('OwnerUsers', [
             'className' => 'Users',
-            'foreignKey' => 'owner'
+            'foreignKey' => 'owner',
         ]);
     }
 
@@ -46,10 +46,11 @@ class SkillsTable extends Table
         foreach($skills as $key => $skill) {
             if (!is_numeric($skill)) {
                 unset($skills[$key]);
+                $preparedSkill = strip_tags($skill);
                 $skillsToAdd[] = $this->newEntity([
-                    'name' => $skill,
+                    'name' => $preparedSkill,
                     'status' => $appAuth->isAdmin() ? APP_ON : APP_OFF,
-                    'owner' => $appAuth->getUserUid()
+                    'owner' => $appAuth->getUserUid(),
                 ]);
             }
         }
@@ -75,21 +76,21 @@ class SkillsTable extends Table
     {
 
         $conditions = [
-            'Skills.status' => APP_ON
+            'Skills.status' => APP_ON,
         ];
         if ($includeOffline) {
             $conditions = [
-                'Skills.status >= ' => APP_OFF
+                'Skills.status >= ' => APP_OFF,
             ];
         }
         $skills = $this->find('all', [
             'conditions' => $conditions,
             'fields' => [
                 'Skills.id',
-                'Skills.name'
+                'Skills.name',
             ],
             'order' => [
-                'LOWER(Skills.name)' => 'ASC'
+                'LOWER(Skills.name)' => 'ASC',
             ]
         ]);
 
