@@ -14,7 +14,7 @@
     "install": "bash ../bin/cake npm_post_install"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.15.2",
+    "@fortawesome/fontawesome-free": "^5.15.3",
     "@sintef/prune-cluster": "^2.1.0",
     "blueimp-file-upload": "^10.31.0",
     "chart.js": "^2.9.4",
@@ -37,6 +37,6 @@
     "swiper": "^6.5.0"
   },
   "devDependencies": {
-    "eslint": "^7.21.0"
+    "eslint": "^7.22.0"
   }
 }
