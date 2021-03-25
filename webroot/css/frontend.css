@@ -550,7 +550,9 @@ div.calEvent:hover {
     background-image: url(/img/gotdatedetail.png);
     background-repeat: no-repeat;
 }
-
+#workshop-detail .fc-has-event.has-online-event {
+    background-image: url(/img/gotdatedetail-online.png) ! important;
+}
 #workshop-detail .fc-has-event.offline {
     background-image: url(/img/gotdatedraft.png) ! important;
 }

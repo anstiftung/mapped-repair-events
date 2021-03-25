@@ -22,6 +22,10 @@
     background-repeat: no-repeat ! important;
 }
 
+.fc-has-event.has-online-event {
+    background-image: url(/img/gotdate-online.png) ! important;
+}
+
 .fc-day-past {
     background-color: rgba(77,142,162,.07) ! important;
 }
