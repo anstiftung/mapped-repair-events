@@ -13,10 +13,11 @@ echo $this->element('highlightNavi', ['main' => 'ORTE']);
         <?php
             echo $this->element('listSearchForm', [
                 'baseUrl' => '/orte',
-                   'keyword' => $keyword,
+                'keyword' => $keyword,
                 'resetButton' => ($keyword != '' ? true : false),
                 'label' => 'Suche nach Initiativen, PLZ und Orten',
                 'useTimeRange' => false,
+                'showIsOnlineEventCheckbox' => false,
             ]);
             echo '</form>';
         ?>

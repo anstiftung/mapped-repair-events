@@ -13,14 +13,17 @@ $this->element('addScript', ['script' =>
     <div class="top">
         <h1>Gesamtansicht Reparaturtermine</h1>
 
-        <?php echo $this->element('listSearchForm', [
-            'baseUrl' => '/reparatur-termine',
-               'keyword' => $keyword,
-            'categories' => $this->request->getQuery('categories'),
-            'resetButton' => (($keyword != '' || count($selectedCategories) > 0 || $timeRange != '30days') ? true : false),
-            'label' => 'Suche nach Initiativen, PLZ und Orten',
-            'useTimeRange' => true
-        ]);
+        <?php
+            echo $this->element('listSearchForm', [
+                'baseUrl' => '/reparatur-termine',
+                'keyword' => $keyword,
+                'categories' => $this->request->getQuery('categories'),
+                'resetButton' => (($keyword != '' || count($selectedCategories) > 0 || $timeRange != '30days' || $isOnlineEvent) ? true : false),
+                'label' => 'Suche nach Initiativen, PLZ und Orten',
+                'useTimeRange' => true,
+                'showIsOnlineEventCheckbox' => true,
+                'isOnlineEvent' => $isOnlineEvent,
+            ]);
         ?>
 
         <div class="sc"></div>

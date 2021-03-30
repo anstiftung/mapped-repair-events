@@ -2920,11 +2920,17 @@ body.events.all input[type="text"],
 body.workshops.all input[type="text"] {
     float: left;
     margin-right: 10px;
-    margin-top: 2px;
     margin-bottom: 10px;
     width: 30%;
 }
-body.events.all .input.select {
+body.events.all .input.checkbox {
+    padding: 1px 10px 1px 5px;
+}
+body.events.all .input.checkbox label {
+    line-height: 27px;
+}
+body.events.all input[name="isOnlineEvent"] {
+    float: left;
 }
 body.events.all .select2,
 body.events.all .input select { /* avoid jumping effect */
