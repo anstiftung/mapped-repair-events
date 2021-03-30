@@ -490,6 +490,9 @@ MappedRepairEvents.Helper = {
 
         if (isMobile) {
             var eventRow = $('.calEvent[rel^="'+parsedEvent[0]+'"]');
+            if (eventRow.length == 0) {
+                return; // past event
+            }
             eventRow.trigger('click');
             this.beforeBodyAnimateMobile();
             $('html,body').animate({
@@ -548,7 +551,13 @@ MappedRepairEvents.Helper = {
 
     getCalEventHtml : function(ev, wuid, showDate, stringEventIsOnline, stringEventIsOffline, stringEditEvent, stringDuplicateEvent, stringConfirmDeleteEvent, stringDeleteEvent, stringNoCategories) {
 
-        var calEvent = '<div itemscope itemtype="http://schema.org/Event" class="calEvent '+( ev.status == 1 ? 'online' : 'offline' )+'" style="display:none;" rel="'+[ev.uid, ev.wurl, ev.datumstart_formatted].join(' ')+'" data-date="'+ev.datumstart_formatted+'">';
+        var calEvent = '<div itemscope itemtype="http://schema.org/Event" class="calEvent ';
+        calEvent += ev.status == 1 ? 'online' : 'offline';
+        calEvent += ev.is_online_event == 1 ? ' is-online-event' : '';
+        calEvent += '" style="display:none;"';
+        calEvent += ' rel="' + [ev.uid, ev.wurl, ev.datumstart_formatted].join(' ');
+        calEvent += '" data-date="' + ev.datumstart_formatted;
+        calEvent += '">';
 
         if (ev.hasModifyPermissions) {
             calEvent += '<div class="onoffline" style="color:'+( ev.status == 1 ? 'green' : 'red' )+';">' + ( ev.status == 1 ? stringEventIsOnline : stringEventIsOffline) + '</div>';
@@ -562,6 +571,9 @@ MappedRepairEvents.Helper = {
         var formattedTime = '';
         if (ev.uhrzeitstart_formatted != '00:00' && ev.uhrzeitend_formatted != '00:00') {
             formattedTime = MappedRepairEvents.Helper.niceTime(ev.uhrzeitstart_formatted)+' - '+MappedRepairEvents.Helper.niceTime(ev.uhrzeitend_formatted)+' Uhr';
+        }
+        if (ev.is_online_event) {
+            calEvent += '<span class="is-online-event">[Online]</span>';
         }
         calEvent += '<span itemprop="name"><b>'+ formattedDate + ev.eventname+'</b></span>: ';
         calEvent += '<span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress"><span itemprop="streetAddress">'+ev.strasse+',</span> ';

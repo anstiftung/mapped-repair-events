@@ -528,7 +528,12 @@ div.calEvent {
     line-height: 16px;
     padding: 5px;
 }
-
+div.calEvent span.is-online-event {
+    float: left;
+    color: #EA138C;
+    font-weight: bold;
+    margin-right: 2px;
+}
 div.calEvent:hover {
     text-decoration: underline;
     color: black;
@@ -550,7 +555,7 @@ div.calEvent:hover {
     background-image: url(/img/gotdatedetail.png);
     background-repeat: no-repeat;
 }
-#workshop-detail .fc-has-event.has-online-event {
+#workshop-detail .fc-has-event.fc-has-online-event {
     background-image: url(/img/gotdatedetail-online.png) ! important;
 }
 #workshop-detail .fc-has-event.offline {

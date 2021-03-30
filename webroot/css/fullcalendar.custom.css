@@ -22,7 +22,7 @@
     background-repeat: no-repeat ! important;
 }
 
-.fc-has-event.has-online-event {
+.fc-has-event.fc-has-online-event {
     background-image: url(/img/gotdate-online.png) ! important;
 }
 
