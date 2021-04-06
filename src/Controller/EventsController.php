@@ -537,7 +537,7 @@ class EventsController extends AppController
                 }
                 $message = count($events) . ' ' . $message . ' erfolgreich gespeichert.';
                 $this->AppFlash->setFlashMessage($message);
-                $this->redirect($this->request->getData()['referer']);
+                $this->redirect($this->getPreparedReferer());
                 return $events;
             }
 

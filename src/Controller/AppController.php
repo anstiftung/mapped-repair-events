@@ -213,6 +213,11 @@ class AppController extends Controller
         return $metaTags;
     }
 
+    public function getPreparedReferer()
+    {
+        return htmlspecialchars_decode($this->getRequest()->getData('referer'));
+    }
+
     public function setReferer()
     {
         $this->set('referer', $this->getReferer());
