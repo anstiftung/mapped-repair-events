@@ -199,7 +199,7 @@ class WorkshopsController extends AppController
                     $email->setTo(Configure::read('AppConfig.notificationMailAddress'));
                     $email->send();
 
-                    $this->redirect($this->request->getData()['referer']);
+                    $this->redirect($this->getPreparedReferer());
 
                 } else {
                     $this->AppFlash->setFlashError($this->Workshop->name_de . ' <b>nicht</b>erfolgreich gespeichert.');

@@ -143,20 +143,13 @@ class AdminAppController extends AppController
         return $query;
     }
 
-    /**
-     * validation happens in child controller
-     */
     protected function saveObject($entity, $useDefaultValidation = true)
     {
-
-        //header('X-XSS-Protection:0');
         $modelName = $this->modelName;
-
         $entity = $this->stripTagsFromFields($entity, $modelName);
-
         if ($this->$modelName->save($entity)) {
             $this->AppFlash->setFlashMessage($this->$modelName->name_de . ' erfolgreich gespeichert.');
-            $this->redirect($this->request->getData()['referer']);
+            $this->redirect($this->getPreparedReferer());
         } else {
             $this->AppFlash->setFlashError($this->$modelName->name_de . ' wurde <b>nicht</b> gespeichert. Bitte überprüfe das Formular.');
         }
