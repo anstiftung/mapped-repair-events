@@ -115,6 +115,7 @@ class EventsTable extends AppTable
             'Events.image_alt_text',
             'Events.owner',
             'Events.eventbeschreibung',
+            'Events.is_online_event',
             'Workshops.name',
             'Workshops.url',
             'Workshops.image',

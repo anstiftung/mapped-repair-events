@@ -77,7 +77,13 @@ $this->element('addScript', ['script' =>
 
             echo '</a>';
 
-            echo '<a class="title" href="'.$this->Html->urlWorkshopDetail($event->directurl).'#datum">'.$event->datumstart->i18nFormat(Configure::read('DateFormat.de.DateLong2')) . ' // ' . $event->workshop->name.' // ' . ' ' . $event->ort.'</a>';
+            echo '<a class="title" href="'.$this->Html->urlWorkshopDetail($event->directurl).'#datum">';
+            if ($event->is_online_event) {
+                echo '<span class="is-online-event">[ONLINE]</span> ';
+            }
+            echo $event->datumstart->i18nFormat(Configure::read('DateFormat.de.DateLong2'));
+            echo ' // ' . $event->workshop->name.' // ' . ' ' . $event->ort;
+            echo '</a>';
             echo '<div class="text-wrapper">';
             echo '<p>Der Termin beginnt um <b>' . $event->uhrzeitstart->i18nFormat(Configure::read('DateFormat.de.TimeShort')) .'</b> und endet um <b>' . $event->uhrzeitend->i18nFormat(Configure::read('DateFormat.de.TimeShort')).' Uhr</b>.</p>';
             echo '</div>';

@@ -528,11 +528,17 @@ div.calEvent {
     line-height: 16px;
     padding: 5px;
 }
-div.calEvent span.is-online-event {
-    float: left;
+div.calEvent span.is-online-event,
+body.events.all span.is-online-event {
     color: #EA138C;
     font-weight: bold;
+}
+div.calEvent span.is-online-event {
     margin-right: 2px;
+    float: left;
+}
+body.events.all a:hover span.is-online-event {
+    color: #4D8EA2;
 }
 div.calEvent:hover {
     text-decoration: underline;
