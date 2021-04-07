@@ -34,7 +34,8 @@
     "select2": "^4.0.13",
     "slidebars": "^2.0.2",
     "speakingurl": "^14.0.1",
-    "swiper": "^6.5.2"
+    "svelte": "^3.37.0",
+    "swiper": "^6.5.4"
   },
   "devDependencies": {
     "eslint": "^7.23.0"
