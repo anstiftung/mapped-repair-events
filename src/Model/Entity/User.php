@@ -8,7 +8,6 @@ class User extends Entity
 {
 
     protected $_virtual = ['name'];
-    public $privatize = true;
 
     public function __construct(array $properties = [], array $options = [])
     {
