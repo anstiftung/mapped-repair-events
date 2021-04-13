@@ -54,7 +54,8 @@ class WorknewsTable extends Table
             ->setViewVars([
                 'url' => Configure::read('AppConfig.htmlHelper')->urlEventDetail($workshop->url, $event->uid, $event->datumstart),
                 'unsub' => $subscriber->unsub,
-                'workshop' => $workshop
+                'workshop' => $workshop,
+                'event' => $event,
             ]);
             $email->send();
         }
