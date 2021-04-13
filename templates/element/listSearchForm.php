@@ -10,7 +10,7 @@
             echo $this->Form->control('timeRange', ['type' => 'select', 'label' => '', 'options' => $timeRangeOptions, 'value' => $timeRange]);
         }
         if ($showIsOnlineEventCheckbox) {
-            echo $this->Form->control('isOnlineEvent', ['type' => 'checkbox', 'label' => 'Online-Event?', 'checked' => $isOnlineEvent]);
+            echo $this->Form->control('isOnlineEvent', ['hiddenField' => false, 'type' => 'checkbox', 'label' => 'Online-Event?', 'checked' => $isOnlineEvent]);
         }
     ?>
     <button type="submit" class="button filter"><?php echo __('Search'); ?></button>
