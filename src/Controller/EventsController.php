@@ -685,6 +685,9 @@ class EventsController extends AppController
             if (!empty($this->request->getQuery('timeRange')) && $this->request->getQuery('timeRange') != $timeRangeDefault) {
                 $newUrl = $newUrl . '&timeRange=' . h($this->request->getQuery('timeRange'));
             }
+            if (!empty($this->request->getQuery('isOnlineEvent'))) {
+                $newUrl = $newUrl . '&isOnlineEvent=' . h($this->request->getQuery('isOnlineEvent'));
+            }
 
             $newUrl = str_replace('//', '/', $newUrl);
 
