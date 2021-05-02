@@ -15,6 +15,6 @@ $this->element('addScript', ['script' =>
 ?>
 
 <div id="covid-19-banner">
-	<a href="javascript:void(0);"><i class="fa fa-times-circle fa-lg"></i></a>
-	<img src="/img/core/covid-19-banner.jpg" width="250" height="209" />
+    <a href="javascript:void(0);"><i class="fa fa-times-circle fa-lg"></i></a>
+    <img src="/img/core/covid-19-banner-V01.jpg" width="250" height="209" />
 </div>
