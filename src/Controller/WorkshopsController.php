@@ -225,7 +225,7 @@ class WorkshopsController extends AppController
     public function ajaxGetWorkshopsAndUsersForKeyword() {
 
         if (!$this->request->is('ajax')) {
-            //throw new ForbiddenException();
+            throw new ForbiddenException();
         }
 
         $keywords = h($this->request->getQuery('keywords')) ?? [];
