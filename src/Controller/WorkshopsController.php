@@ -22,10 +22,11 @@ class WorkshopsController extends AppController
         $this->AppAuth->allow([
             'ajaxGetAllWorkshopsForMap',
             'ajaxGetWorkshopDetail',
+            'ajaxGetWorkshopsAndUsersForKeyword',
             'home',
             'cluster',
             'detail',
-            'all'
+            'all',
         ]);
 
     }
@@ -219,6 +220,105 @@ class WorkshopsController extends AppController
         if (!empty($errors)) {
             $this->render('edit');
         }
+    }
+
+    public function ajaxGetWorkshopsAndUsersForKeyword() {
+
+        if (!$this->request->is('ajax')) {
+            //throw new ForbiddenException();
+        }
+
+        $keywords = h($this->request->getQuery('keywords')) ?? [];
+        if (empty($keywords)) {
+            throw new NotFoundException('no keyword passed');
+        }
+
+        if (count($keywords) != 1) {
+            throw new NotFoundException('only one keyword allowed');
+        }
+
+        if ($keywords[0] != '3D-Druck') {
+            throw new NotFoundException('only 3D-Druck allowed as keyword');
+        }
+
+        $categoryIds = [630];
+        $skillIds = [16,17];
+
+        $this->RequestHandler->renderAs($this, 'json');
+
+        $this->Workshop = $this->getTableLocator()->get('Workshops');
+        $categoriesAssociation = $this->Workshop->getAssociation('Categories');
+        $categoriesAssociation->setConditions([
+            'Categories.status' => APP_ON,
+        ]);
+
+        $workshops = $this->Workshop->find('all', [
+            'conditions' => [
+                'Workshops.status' => APP_ON,
+            ],
+            'contain' => [
+                'Categories',
+                'Countries',
+            ],
+            'order' => ['Workshops.name' => 'ASC'],
+        ]);
+
+        $workshops->matching('Categories', function ($q) use ($categoryIds) {
+            return $q->where([
+                'Categories.id IN' => $categoryIds,
+            ]);
+        });
+
+        $preparedWorkshops = [];
+        foreach($workshops as $workshop) {
+            $preparedWorkshops[] = [
+                'uid' => $workshop->uid,
+                'name' => $workshop->name,
+                'lat' => $workshop->lat,
+                'lng' => $workshop->lng,
+                'url' => Configure::read('AppConfig.serverName') . Configure::read('AppConfig.htmlHelper')->urlWorkshopDetail($workshop->url),
+                'street' => $workshop->street,
+                'zip' => $workshop->zip,
+                'city' => $workshop->city,
+                'website' => $workshop->website,
+                'image' => $workshop->image != '' ?  Configure::read('AppConfig.serverName') . Configure::read('AppConfig.htmlHelper')->getThumbs150Image($workshop->image, 'workshops') : '',
+                'country' => [
+                    'name_de' => $workshop->country->name_de,
+                ],
+                'categories' => [],
+            ];
+        }
+
+        $this->User = $this->getTableLocator()->get('Users');
+        $users = $this->User->find('all', [
+            'conditions' => [
+                'Users.status' => APP_ON,
+            ],
+            'contain' => [
+                'Skills',
+            ],
+            'order' => [
+                'Users.firstname' => 'ASC',
+                'Users.nick' => 'ASC',
+            ],
+        ]);
+        $users->matching('Skills', function ($q) use ($skillIds) {
+            return $q->where([
+                'Skills.id IN' => $skillIds,
+            ]);
+        });
+
+        $preparedUsers = [];
+
+        $this->set([
+            'status' => 1,
+            'message' => 'ok',
+            'workshops' => $preparedWorkshops,
+            'users' => $preparedUsers,
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['status', 'message', 'workshops', 'users']);
+
+
     }
 
     public function ajaxGetAllWorkshopsForMap() {
