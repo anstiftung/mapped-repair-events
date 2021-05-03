@@ -310,7 +310,12 @@ class WorkshopsController extends AppController
         });
 
         $preparedUsers = [];
+        $userUids = [];
         foreach($users as $user) {
+            if (in_array($user->uid, $userUids)) {
+                continue;
+            }
+            $userUids[] = $user->uid;
             $preparedUsers[] = [
                 'uid' => $user->uid,
                 'nick' => $user->nick,
