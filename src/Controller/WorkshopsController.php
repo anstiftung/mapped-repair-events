@@ -283,7 +283,7 @@ class WorkshopsController extends AppController
                 'website' => $workshop->website,
                 'image' => $workshop->image != '' ?  Configure::read('AppConfig.serverName') . Configure::read('AppConfig.htmlHelper')->getThumbs150Image($workshop->image, 'workshops') : '',
                 'country' => [
-                    'name_de' => $workshop->country->name_de,
+                    'name_de' => !empty($workshop->country) ? $workshop->country->name_de : '',
                 ],
                 'categories' => [],
             ];
@@ -295,6 +295,7 @@ class WorkshopsController extends AppController
                 'Users.status' => APP_ON,
             ],
             'contain' => [
+                'Countries',
                 'Skills',
             ],
             'order' => [
@@ -309,6 +310,22 @@ class WorkshopsController extends AppController
         });
 
         $preparedUsers = [];
+        foreach($users as $user) {
+            $preparedUsers[] = [
+                'uid' => $user->uid,
+                'nick' => $user->nick,
+                'firstname' => $user->firstname,
+                'lastname' => $user->lastname,
+                'city' => $user->city,
+                'website' => $user->website,
+                'url' => Configure::read('AppConfig.serverName') . Configure::read('AppConfig.htmlHelper')->urlUserProfile($user->uid),
+                'image' => $user->image != '' ?  Configure::read('AppConfig.serverName') . Configure::read('AppConfig.htmlHelper')->getThumbs150Image($user->image, 'users') : '',
+                'country' => [
+                    'name_de' => !empty($user->country) ? $user->country->name_de : '',
+                ],
+                'categories' => [],
+            ];
+        }
 
         $this->set([
             'status' => 1,
@@ -316,8 +333,8 @@ class WorkshopsController extends AppController
             'workshops' => $preparedWorkshops,
             'users' => $preparedUsers,
         ]);
-        $this->viewBuilder()->setOption('serialize', ['status', 'message', 'workshops', 'users']);
 
+        $this->viewBuilder()->setOption('serialize', ['status', 'message', 'workshops', 'users']);
 
     }
 
