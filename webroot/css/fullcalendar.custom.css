@@ -5,6 +5,11 @@
 .fc td.fc-day.fc-has-event.selected {
     background-image: url(/img/gotdatedetail.png) ! important;
 }
+
+.fc td.fc-day.fc-has-online-event.hover,
+.fc td.fc-day.fc-has-online-event.selected {
+    background-image: url(/img/gotdatedetail-online.jpg) ! important;
+}
 .fc-day-grid-container {
     height: auto ! important;
 }
