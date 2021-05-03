@@ -237,8 +237,8 @@ class WorkshopsController extends AppController
             throw new NotFoundException('only one keyword allowed');
         }
 
-        if ($keywords[0] != '3D-Druck') {
-            throw new NotFoundException('only 3D-Druck allowed as keyword');
+        if ($keywords[0] != '3D-reparieren') {
+            throw new NotFoundException('only 3D-reparieren allowed as keyword');
         }
 
         $categoryIds = [630];
