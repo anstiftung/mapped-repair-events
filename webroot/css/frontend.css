@@ -530,7 +530,7 @@ div.calEvent {
 }
 div.calEvent span.is-online-event,
 body.events.all span.is-online-event {
-    color: #EA138C;
+    color: #4D8EA2;
     font-weight: bold;
 }
 div.calEvent span.is-online-event {
