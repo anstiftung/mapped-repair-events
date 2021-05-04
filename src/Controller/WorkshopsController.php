@@ -295,7 +295,7 @@ class WorkshopsController extends AppController
                 'zip' => $workshop->zip,
                 'city' => $workshop->city,
                 'website' => $workshop->website,
-                'image' => $workshop->image != '' ?  Configure::read('AppConfig.serverName') . Configure::read('AppConfig.htmlHelper')->getThumbs150Image($workshop->image, 'workshops') : '',
+                'image' => $workshop->image != '' ?  Configure::read('AppConfig.serverName') . Configure::read('AppConfig.htmlHelper')->getThumbs150Image($workshop->image, 'workshops') : Configure::read('AppConfig.serverName') . Configure::read('AppConfig.htmlHelper')->getThumbs100Image('rclogo-100.jpg', 'workshops'),
                 'country' => [
                     'name_de' => !empty($workshop->country) ? $workshop->country->name_de : '',
                 ],
