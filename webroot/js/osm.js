@@ -121,9 +121,9 @@ MappedRepairEvents.Map.prototype = {
         this.tag = new MappedRepairEvents.Tag(preparedTags);
         this.tag.tags = this.tag.sortAndMakeTagsUnique(preparedTags);
 
-    }
+    },
 
-    ,loadAllWorkshops : function(keyword, callback) {
+    loadAllWorkshops : function(keyword, callback) {
         $.ajax({
             url: '/workshops/ajaxGetAllWorkshopsForMap?keyword=' + keyword,
             async: false,
@@ -135,9 +135,9 @@ MappedRepairEvents.Map.prototype = {
                 }
             }
         });
-    }
+    },
 
-    ,loadAllEvents : function(keyword, categories) {
+    loadAllEvents : function(keyword, categories) {
         $.ajax({
             url: '/events/ajaxGetAllEventsForMap?keyword=' + keyword + '&categories=' + categories,
             async: false,
@@ -146,9 +146,9 @@ MappedRepairEvents.Map.prototype = {
                 MappedRepairEvents.MapObject.initMarkers();
             }
         });
-    }
+    },
 
-    ,initDetailMap : function() {
+    initDetailMap : function() {
 
         $('#mapContainer a.change-map-size').show();
 
@@ -181,9 +181,9 @@ MappedRepairEvents.Map.prototype = {
             }
         });
 
-    }
+    },
 
-    ,initSearchMap : function() {
+    initSearchMap : function() {
 
         MappedRepairEvents.MapObject.objects = MappedRepairEvents.MapObject.allObjects;
 
@@ -213,9 +213,9 @@ MappedRepairEvents.Map.prototype = {
         // layout-verbesserung
         $('.categories-dropdown-wrapper label').remove();
 
-    }
+    },
 
-    ,bindMarkers : function(objects, icon) {
+    bindMarkers : function(objects, icon) {
 
         var pmarkers = [];
 
@@ -248,9 +248,9 @@ MappedRepairEvents.Map.prototype = {
 
         this.pruneCluster.RegisterMarkers(pmarkers);
 
-    }
+    },
 
-    ,FitFoundBounds : function () {
+    FitFoundBounds : function () {
         var foundMarkers = [];
         var markers = MappedRepairEvents.MapObject.pruneCluster.GetMarkers();
         for(var i in markers) {
@@ -266,9 +266,9 @@ MappedRepairEvents.Map.prototype = {
         if (bounds) {
             this.map.fitBounds(new L.LatLngBounds(new L.LatLng(bounds.minLat, bounds.maxLng), new L.LatLng(bounds.maxLat, bounds.minLng)));
         }
-    }
+    },
 
-    ,initMarkers : function() {
+    initMarkers : function() {
 
         this.map = L.map('map').setView([0,0],0);
 
@@ -308,9 +308,9 @@ MappedRepairEvents.Map.prototype = {
         this.FitFoundBounds();
         this.zoomToMarkerLayerBounds();
 
-    }
+    },
 
-    ,zoomToMarkerLayerBounds : function() {
+    zoomToMarkerLayerBounds : function() {
 
         //Zoom to right position and zoomlevel
         if (this.customZoomLevel == 0) {
@@ -325,23 +325,23 @@ MappedRepairEvents.Map.prototype = {
 
         this.panToCustomCenterCoordinates();
 
-    }
+    },
 
-    ,panToCustomCenterCoordinates: function() {
+    panToCustomCenterCoordinates: function() {
         if (this.customCenterCoordinates) {
             this.map.panTo(new L.LatLng(MappedRepairEvents.MapObject.customCenterCoordinates.x, MappedRepairEvents.MapObject.customCenterCoordinates.y));
         }
-    }
+    },
 
-    ,showHomeImageOverlay : function() {
+    showHomeImageOverlay : function() {
         $('#mapHomeInfoBox').stop(true).show('slow');
-    }
+    },
 
-    ,hideHomeImageOverlay : function() {
+    hideHomeImageOverlay : function() {
         $('#mapHomeInfoBox').stop(true).hide('slow');
-    }
+    },
 
-    ,buildBubbleStringForWorkshops : function(object) {
+    buildBubbleStringForWorkshops : function(object) {
 
         // legacy: modify non-cake-object
         if (!object[this.objectType]) {
@@ -353,15 +353,15 @@ MappedRepairEvents.Map.prototype = {
             bubbleString += this.getWorkshopEventBubbleString(object.Events);
         }
         return bubbleString;
-    }
+    },
 
-    ,buildBubbleStringForEvents : function(object) {
+    buildBubbleStringForEvents : function(object) {
         var bubbleString = '<a href="/' + object.Workshop.url + '">' + object.Workshop.name+'</a><br />';
         bubbleString += this.getWorkshopEventBubbleString(object.Events);
         return bubbleString;
-    }
+    },
 
-    ,getWorkshopEventBubbleString : function(events) {
+    getWorkshopEventBubbleString : function(events) {
 
         var bubbleString = '';
         var mycounter = 1;
@@ -385,9 +385,9 @@ MappedRepairEvents.Map.prototype = {
 
         }
         return bubbleString;
-    }
+    },
 
-    ,resetSearch : function() {
+    resetSearch : function() {
 
         MappedRepairEvents.MapObject.removeSpinnerFromSearchButton();
 
@@ -411,16 +411,16 @@ MappedRepairEvents.Map.prototype = {
         MappedRepairEvents.Helper.hideAndResetCalendarEventsBox();
         MappedRepairEvents.MapObject.showHomeImageOverlay();
 
-    }
+    },
 
-    ,resetSearchWidget : function() {
+    resetSearchWidget : function() {
         document.location.reload();
-    }
+    },
 
     /**
      * die suche nach dem ort benötigt einen geocoding-request => callback!
      */
-    ,initAddressSearch : function() {
+    initAddressSearch : function() {
         var searchString = $.trim($('#workshopSearchAddress').val());
         if (searchString != MappedRepairEvents.MapObject.exampleTextSearchAddress && searchString != '') {
             this.applyFilter(searchString);
@@ -434,12 +434,12 @@ MappedRepairEvents.Map.prototype = {
 
     removeSpinnerFromSearchButton : function() {
         MappedRepairEvents.Helper.removeSpinner($('#search'), 'Suche');
-    }
+    },
 
     /**
     * addressLatLng is empty if address is not found or not passed
     */
-    ,applyFilter : function(sucheOrt) {
+    applyFilter : function(sucheOrt) {
 
         MappedRepairEvents.Helper.quickHideFlashMessage();
         this.clearMarkers();
@@ -522,21 +522,13 @@ MappedRepairEvents.Map.prototype = {
             }
         });
 
-    }
+    },
 
-    /**
-     * löscht alle marker auf der map
-     */
-    ,clearMarkers : function() {
+    clearMarkers : function() {
         this.pruneCluster.RemoveMarkers();
-    }
+    },
 
-    /**
-     * @param array objects
-     * @param int id
-     * @return array objects
-     */
-    ,doFilterByCategories : function(objects, categoryId) {
+    doFilterByCategories : function(objects, categoryId) {
         var foundObjects = [];
         for(var i=0;i<objects.length;i++) {
             if ($.inArray(categoryId, objects[i].Workshop.categories) > -1) {
@@ -544,13 +536,14 @@ MappedRepairEvents.Map.prototype = {
             }
         }
         return foundObjects;
-    }
+    },
 
-    ,updateCalendar : function() {
+    updateCalendar : function() {
+
         var
-            visibleEvents = []
-            ,dateChosen = $('#selectedDate').attr('data-date')
-            ,mapBounds = MappedRepairEvents.MapObject.map.getBounds()
+            visibleEvents = [],
+            dateChosen = $('#selectedDate').attr('data-date'),
+            mapBounds = MappedRepairEvents.MapObject.map.getBounds()
         ;
 
         var markers = MappedRepairEvents.MapObject.pruneCluster.GetMarkers();
@@ -583,18 +576,23 @@ MappedRepairEvents.Map.prototype = {
             }
         });
 
-        $('td.fc-day').each(function() {
-            if ( $('.calEvent.isInRadius[data-date='+$(this).attr('data-date')+']').length )  {
+        var day = $('td.fc-day');
+        day.removeClass('fc-has-online-event');
+        day.each(function() {
+            var visibleEventByDate = $('.calEvent.isInRadius[data-date='+$(this).attr('data-date')+']');
+            if (visibleEventByDate.length)  {
+                if (visibleEventByDate.hasClass('is-online-event')) {
+                    $(this).addClass('fc-has-online-event');
+                }
                 $(this).addClass('fc-has-event');
             } else {
                 $(this).removeClass('fc-has-event');
             }
             MappedRepairEvents.Helper.updateDayEventCount($(this));
-
         });
 
         MappedRepairEvents.MapObject.reupdate = false;
-    }
+    },
 
-    ,reupdate : false
+    reupdate : false
 };

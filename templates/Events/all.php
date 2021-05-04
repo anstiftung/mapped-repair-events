@@ -13,14 +13,17 @@ $this->element('addScript', ['script' =>
     <div class="top">
         <h1>Gesamtansicht Reparaturtermine</h1>
 
-        <?php echo $this->element('listSearchForm', [
-            'baseUrl' => '/reparatur-termine',
-               'keyword' => $keyword,
-            'categories' => $this->request->getQuery('categories'),
-            'resetButton' => (($keyword != '' || count($selectedCategories) > 0 || $timeRange != '30days') ? true : false),
-            'label' => 'Suche nach Initiativen, PLZ und Orten',
-            'useTimeRange' => true
-        ]);
+        <?php
+            echo $this->element('listSearchForm', [
+                'baseUrl' => '/reparatur-termine',
+                'keyword' => $keyword,
+                'categories' => $this->request->getQuery('categories'),
+                'resetButton' => (($keyword != '' || count($selectedCategories) > 0 || $timeRange != '30days' || $isOnlineEvent) ? true : false),
+                'label' => 'Suche nach Initiativen, PLZ und Orten',
+                'useTimeRange' => true,
+                'showIsOnlineEventCheckbox' => true,
+                'isOnlineEvent' => $isOnlineEvent,
+            ]);
         ?>
 
         <div class="sc"></div>
@@ -74,7 +77,13 @@ $this->element('addScript', ['script' =>
 
             echo '</a>';
 
-            echo '<a class="title" href="'.$this->Html->urlWorkshopDetail($event->directurl).'#datum">'.$event->datumstart->i18nFormat(Configure::read('DateFormat.de.DateLong2')) . ' // ' . $event->workshop->name.' // ' . ' ' . $event->ort.'</a>';
+            echo '<a class="title" href="'.$this->Html->urlWorkshopDetail($event->directurl).'#datum">';
+            if ($event->is_online_event) {
+                echo '<span class="is-online-event">[ONLINE]</span> ';
+            }
+            echo $event->datumstart->i18nFormat(Configure::read('DateFormat.de.DateLong2'));
+            echo ' // ' . $event->workshop->name.' // ' . ' ' . $event->ort;
+            echo '</a>';
             echo '<div class="text-wrapper">';
             echo '<p>Der Termin beginnt um <b>' . $event->uhrzeitstart->i18nFormat(Configure::read('DateFormat.de.TimeShort')) .'</b> und endet um <b>' . $event->uhrzeitend->i18nFormat(Configure::read('DateFormat.de.TimeShort')).' Uhr</b>.</p>';
             echo '</div>';

@@ -132,6 +132,7 @@ $this->element('addScript', ['script' =>
             echo '<div class="sc"></div>';
 
             echo $this->Form->control($i.'.eventbeschreibung', ['label' => __('Add Event: event description')]).'<br />';
+            echo $this->Form->control($i.'.is_online_event', ['type' => 'checkbox', 'label' => 'Online-Termin?']).'<br />';
 
             if (!$isEditMode && isset($preselectedWorkshopUid)) {
                 echo '<br /><br />';

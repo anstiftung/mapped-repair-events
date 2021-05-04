@@ -257,7 +257,8 @@ class WorkshopsController extends AppController
             'Events.ort',
             'Events.datumstart',
             'Events.uhrzeitstart',
-            'Events.uhrzeitend'
+            'Events.uhrzeitend',
+            'Events.is_online_event',
         ];
 
         if (!empty($this->request->getQuery('workshopUid'))) {

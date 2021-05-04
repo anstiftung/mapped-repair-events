@@ -133,7 +133,7 @@ class UsersController extends AppController
     public function publicProfile()
     {
 
-        $userUid = $this->request->getParam('pass')[0];
+        $userUid = $this->request->getParam('id');
 
         $workshopsAssociation = $this->User->getAssociation('Workshops');
         $workshopsAssociation->setConditions([

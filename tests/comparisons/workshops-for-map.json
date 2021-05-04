@@ -33,6 +33,7 @@
                         "strasse": null,
                         "zip": null,
                         "ort": null,
+                        "is_online_event": 0,
                         "categories": [
                             {
                                 "id": 87,

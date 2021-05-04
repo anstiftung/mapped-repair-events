@@ -13,9 +13,9 @@ MappedRepairEvents.Helper = {
         MappedRepairEvents.Helper.setLoginBoxLayout();
         MappedRepairEvents.Detect.initIsMobileListener();
         MappedRepairEvents.Detect.setIsMobile();
-    }
+    },
 
-    ,initCovid19Banner: function() {
+    initCovid19Banner: function() {
         var banner = $('#covid-19-banner');
         banner.find('a').on('click', function() {
             banner.animate({ opacity: 'toggle' }, 'slow');
@@ -30,9 +30,9 @@ MappedRepairEvents.Helper = {
                 }
             );
         });
-    }
+    },
 
-    ,bindAddDateButton : function(dateHtml) {
+    bindAddDateButton : function(dateHtml) {
 
         // remove select2 which is already initialized - it causes problems when the html is copied and pasted
         $('.date-time-wrapper select').select2('destroy');
@@ -60,16 +60,16 @@ MappedRepairEvents.Helper = {
 
         });
 
-    }
+    },
 
-    ,bindRemoveDateButton : function() {
+    bindRemoveDateButton : function() {
         $('a.remove-date-button').off('click').on('click', function() {
             $(this).closest('.row').remove();
             MappedRepairEvents.Helper.reinitalizeDateWrappers();
         });
-    }
+    },
 
-    ,reinitalizeDateWrappers : function() {
+    reinitalizeDateWrappers : function() {
         var row = $('.date-time-wrapper .row');
         // date label
         row.find('.input.text label').each(function(i) {
@@ -94,12 +94,12 @@ MappedRepairEvents.Helper = {
         });
         row.find('.datepicker-input').datepicker('destroy');
         row.find('.datepicker-input').datepicker();
-    }
+    },
 
     /**
      * http://stackoverflow.com/questions/8472/practical-non-image-based-captcha-approaches?lq=1
      */
-    ,updateAntiSpamField: function (prependIdPart, form, id) {
+    updateAntiSpamField: function (prependIdPart, form, id) {
 
         if ($('#botEwX482' + id).length == 0) {
             var inputField = $('<input />').attr('id', 'botEwX482' + id).attr('name', 'botEwX482').attr('type', 'hidden');
@@ -115,24 +115,23 @@ MappedRepairEvents.Helper = {
         setTimeout(function () {
             MappedRepairEvents.Helper.updateAntiSpamField(prependIdPart, form, id);
         }, 1000);
-    }
+    },
 
-
-    ,initLoginBoxLayoutListener : function() {
+    initLoginBoxLayoutListener : function() {
         $(window).on('resize orientationchange', function() {
             MappedRepairEvents.Helper.setLoginBoxLayout();
         });
-    }
+    },
 
-    ,setLoginBoxLayout : function() {
+    setLoginBoxLayout : function() {
         var newRight = $('#header').width() - $(window).width() + 20;
         if (newRight < 20) {
             newRight = 20;
         }
         $('#header #login-box').css('right', newRight + 'px');
-    }
+    },
 
-    ,initSkillFilter : function() {
+    initSkillFilter : function() {
         $('select#skills').on('change', function() {
             var url = '/aktive';
             if ($(this).val() > 0) {
@@ -140,7 +139,7 @@ MappedRepairEvents.Helper = {
             }
             document.location.href = url;
         });
-    }
+    },
 
     /**
      * Returns a function, that, as long as it continues to be invoked, will not
@@ -149,7 +148,7 @@ MappedRepairEvents.Helper = {
      * leading edge, instead of the trailing.
      * https://davidwalsh.name/javascript-debounce-function
      */
-    ,debounce: function(func, wait, immediate) {
+    debounce: function(func, wait, immediate) {
         var timeout;
         return function() {
             var context = this, args = arguments;
@@ -162,17 +161,17 @@ MappedRepairEvents.Helper = {
             timeout = setTimeout(later, wait);
             if (callNow) func.apply(context, args);
         };
-    }
+    },
 
-    ,isIphone : function() {
+    isIphone : function() {
         return true; //???
-    }
+    },
 
-    ,toLocaleStringSupportsOptions : function() {
+    toLocaleStringSupportsOptions : function() {
         return !!(typeof Intl == 'object' && Intl && typeof Intl.NumberFormat == 'function');
-    }
+    },
 
-    ,formatFloatAsString: function(float, digits) {
+    formatFloatAsString: function(float, digits) {
         if (this.toLocaleStringSupportsOptions()) {
             var floatAsString = float.toLocaleString(
                 'de-DE',
@@ -185,14 +184,14 @@ MappedRepairEvents.Helper = {
             floatAsString = float.toFixed(digits);
         }
         return floatAsString;
-    }
+    },
 
-    ,getStringAsFloat: function (string) {
+    getStringAsFloat: function (string) {
         string = string.replace(/,/, '.');
         return parseFloat(string);
-    }
+    },
 
-    ,initWidgetDocs : function() {
+    initWidgetDocs : function() {
         $('.nav-toggle1,.nav-toggle2,.nav-toggle3').click(function() {
             var collapse_content_selector = $(this).attr('href');
             $(this).addClass(' active');
@@ -211,9 +210,9 @@ MappedRepairEvents.Helper = {
             $('.nav-toggle' + myhash).trigger('click');
             $('.nav-toggle' + myhash).addClass(' active');
         }
-    }
+    },
 
-    ,initCookieBanner : function() {
+    initCookieBanner : function() {
 
         $.CookiesMessage({
             messageBg: '#c8d218',
@@ -225,19 +224,19 @@ MappedRepairEvents.Helper = {
             closeEnable: false
         });
         $('#band-cookies-ok').addClass('button');
-    }
+    },
 
-    ,beautifyDropdowns : function() {
+    beautifyDropdowns : function() {
         $('select').not('.no-select2').select2();
-    }
+    },
 
-    ,layoutEditButtons : function() {
+    layoutEditButtons : function() {
         var buttons = $('div.admin.edit button');
         buttons.css('top', ($('#header').height() + 40) + 'px');
         buttons.show();
-    }
+    },
 
-    ,initCustomCoordinatesCheckbox : function(checkboxSelector) {
+    initCustomCoordinatesCheckbox : function(checkboxSelector) {
         var wrapper = $('.custom-coordinates-wrapper');
         var checkbox = $(checkboxSelector);
         checkbox.on('click', function() {
@@ -246,9 +245,9 @@ MappedRepairEvents.Helper = {
         if (checkbox.is(':checked')) {
             MappedRepairEvents.Helper.toggleCheckboxWrapper(checkbox, wrapper);
         }
-    }
+    },
 
-    ,toggleCheckboxWrapper : function(checkbox, wrapper) {
+    toggleCheckboxWrapper : function(checkbox, wrapper) {
         if (checkbox.is(':checked')) {
             wrapper.show();
         } else {
@@ -302,9 +301,9 @@ MappedRepairEvents.Helper = {
             width: isMobile ? '100%' : 627
         });
 
-    }
+    },
 
-    ,doCurrentlyUpdatedActions : function(isCurrentlyUpdated) {
+    doCurrentlyUpdatedActions : function(isCurrentlyUpdated) {
 
         if (!isCurrentlyUpdated) return;
 
@@ -378,14 +377,15 @@ MappedRepairEvents.Helper = {
             }
 
             MappedRepairEvents.Helper.ajaxCall(
-                '/admin/' + 'intern/' + 'ajaxCancelAdminEditPage/'
-                ,{ uid: uid
-                    ,referer: $('input[name="referer"]').val()
-                }
-                ,{ onOk : function(data) {
+                '/admin/' + 'intern/' + 'ajaxCancelAdminEditPage/',
+                {
+                    uid: uid,
+                    referer: $('input[name="referer"]').val()
+                },
+                { onOk : function(data) {
                     document.location.href = data.referer;
-                }
-                ,onError : function(data) {
+                },
+                onError : function(data) {
                     alert(data.message);
                 }
                 }
@@ -464,7 +464,7 @@ MappedRepairEvents.Helper = {
     },
 
     initSlider: function(selector) {
-        var mySwiper = new Swiper(selector, {
+        new Swiper(selector, {
             loop: true,
             autoplay: {
                 delay: 6000,
@@ -490,6 +490,9 @@ MappedRepairEvents.Helper = {
 
         if (isMobile) {
             var eventRow = $('.calEvent[rel^="'+parsedEvent[0]+'"]');
+            if (eventRow.length == 0) {
+                return; // avoid error for past events
+            }
             eventRow.trigger('click');
             this.beforeBodyAnimateMobile();
             $('html,body').animate({
@@ -548,7 +551,13 @@ MappedRepairEvents.Helper = {
 
     getCalEventHtml : function(ev, wuid, showDate, stringEventIsOnline, stringEventIsOffline, stringEditEvent, stringDuplicateEvent, stringConfirmDeleteEvent, stringDeleteEvent, stringNoCategories) {
 
-        var calEvent = '<div itemscope itemtype="http://schema.org/Event" class="calEvent '+( ev.status == 1 ? 'online' : 'offline' )+'" style="display:none;" rel="'+[ev.uid, ev.wurl, ev.datumstart_formatted].join(' ')+'" data-date="'+ev.datumstart_formatted+'">';
+        var calEvent = '<div itemscope itemtype="http://schema.org/Event" class="calEvent ';
+        calEvent += ev.status == 1 ? 'online' : 'offline';
+        calEvent += ev.is_online_event == 1 ? ' is-online-event' : '';
+        calEvent += '" style="display:none;"';
+        calEvent += ' rel="' + [ev.uid, ev.wurl, ev.datumstart_formatted].join(' ');
+        calEvent += '" data-date="' + ev.datumstart_formatted;
+        calEvent += '">';
 
         if (ev.hasModifyPermissions) {
             calEvent += '<div class="onoffline" style="color:'+( ev.status == 1 ? 'green' : 'red' )+';">' + ( ev.status == 1 ? stringEventIsOnline : stringEventIsOffline) + '</div>';
@@ -562,6 +571,9 @@ MappedRepairEvents.Helper = {
         var formattedTime = '';
         if (ev.uhrzeitstart_formatted != '00:00' && ev.uhrzeitend_formatted != '00:00') {
             formattedTime = MappedRepairEvents.Helper.niceTime(ev.uhrzeitstart_formatted)+' - '+MappedRepairEvents.Helper.niceTime(ev.uhrzeitend_formatted)+' Uhr';
+        }
+        if (ev.is_online_event) {
+            calEvent += '<span class="is-online-event">[Online]</span>';
         }
         calEvent += '<span itemprop="name"><b>'+ formattedDate + ev.eventname+'</b></span>: ';
         calEvent += '<span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress"><span itemprop="streetAddress">'+ev.strasse+',</span> ';
@@ -971,23 +983,23 @@ MappedRepairEvents.Helper = {
 
         });
 
-    }
+    },
 
-    ,bindTooltip : function(selector) {
+    bindTooltip : function(selector) {
         $(selector).tooltip({
             content: function() {
                 return $(this).attr('title');
             }
         });
-    }
+    },
 
-    ,bindFlashMessageCancelButton : function() {
+    bindFlashMessageCancelButton : function() {
         $('#flashMessage a.closer').on('click', function() {
             $(this).parent().animate({height : 'toggle'}, 300);
         });
-    }
+    },
 
-    ,bindToggleLinks: function (autoOpen, openFirstElement) {
+    bindToggleLinks: function (autoOpen, openFirstElement) {
 
         $('.toggle-link').on('click', function () {
             MappedRepairEvents.Helper.doToggle($(this), $(this).next().next());
@@ -1001,9 +1013,9 @@ MappedRepairEvents.Helper = {
             $('.toggle-link').first().trigger('click');
         }
 
-    }
+    },
 
-    ,bindShowMoreLink: function() {
+    bindShowMoreLink: function() {
 
         $('.show-more-link').on('click', function () {
             $('article.preview').hide();
@@ -1011,15 +1023,15 @@ MappedRepairEvents.Helper = {
             MappedRepairEvents.Helper.doToggle($(this), $(this).next());
         });
 
-    }
+    },
 
-    ,bindToggleLinksForSubtables : function() {
+    bindToggleLinksForSubtables : function() {
         $('.toggle-link-for-subtable').on('click', function () {
             MappedRepairEvents.Helper.doToggle($(this), $(this).closest('tr').next('tr.subtable-container'));
         });
-    }
+    },
 
-    ,doToggle : function(element, elementToToggle) {
+    doToggle : function(element, elementToToggle) {
 
         var toggleMode = elementToToggle.css('display');
 
@@ -1035,24 +1047,24 @@ MappedRepairEvents.Helper = {
             height: 'toggle'
         }, 400);
 
-    }
+    },
 
-    ,isChrome : function() {
+    isChrome : function() {
         return navigator.userAgent.match(/chrome/i);
-    }
+    },
 
-    ,isSafari : function() {
+    isSafari : function() {
         return navigator.userAgent.match(/safari/i);
-    }
+    },
 
-    ,addCssFile : function(cssFile) {
+    addCssFile : function(cssFile) {
         cssFile += '.css';
         $.get(cssFile, function(cssFile) {
             $('head').append('<style type=\'text/css\'>' + cssFile + '</style>');
         });
-    }
+    },
 
-    ,initHome : function() {
+    initHome : function() {
         $('#home .box.static a.teaser-text-link').click(function() {
             $('#home .box.static div.teaser-text').animate({height : 'toggle'}, 1000);
             if ($(this).html() == '... weiterlesen') {
@@ -1061,7 +1073,7 @@ MappedRepairEvents.Helper = {
                 $(this).html('... weiterlesen');
             }
         });
-    }
+    },
 
     /**
      * sorts an associative array by a given field
@@ -1072,7 +1084,7 @@ MappedRepairEvents.Helper = {
      *  //Sort by city, case-insensitive, A-Z
      *  homes.sort(sortBy('city', false, function(a){return a.toUpperCase()}));
      */
-    ,sortBy : function(field, reverse, primer) {
+    sortBy : function(field, reverse, primer) {
 
         var key = function (x) {return primer ? primer(x[field]) : x[field];};
 
@@ -1081,9 +1093,9 @@ MappedRepairEvents.Helper = {
             return ((A < B) ? -1 : (A > B) ? +1 : 0) * [-1,1][+!!reverse];
         };
 
-    }
+    },
 
-    ,removeDuplicates : function(inputArray) {
+    removeDuplicates : function(inputArray) {
         var i;
         var len = inputArray.length;
         var outputArray = [];
@@ -1096,10 +1108,9 @@ MappedRepairEvents.Helper = {
             outputArray.push(i);
         }
         return outputArray;
-    }
+    },
 
-
-    ,bindNewObjectButton : function(selector, message, url) {
+    bindNewObjectButton : function(selector, message, url) {
         $(selector).click(function() {
             $.prompt(message, {
                 buttons : {
@@ -1121,30 +1132,30 @@ MappedRepairEvents.Helper = {
                 }
             });
         });
-    }
+    },
 
-    ,getFlashMessageBoxContainer : function() {
+    getFlashMessageBoxContainer : function() {
         return $('#flashMessage');
-    }
+    },
 
-    ,setFlashMessageSuccess : function(message) {
+    setFlashMessageSuccess : function(message) {
         return this.setFlashMessage('success', message);
-    }
+    },
 
-    ,setFlashMessage : function(type, message) {
+    setFlashMessage : function(type, message) {
         this.getFlashMessageBoxContainer().html(message);
         this.getFlashMessageBoxContainer().addClass(type);
         this.getFlashMessageBoxContainer().show('slow');
-    }
-    ,hideFlashMessage : function(type) {
+    },
+    hideFlashMessage : function(type) {
         type = type || '';
         $('#flashMessage' + type).hide('slow');
-    }
-    ,quickHideFlashMessage : function() {
+    },
+    quickHideFlashMessage : function() {
         this.getFlashMessageBoxContainer().hide();
-    }
+    },
 
-    ,bindApplyForCollaborationButtonUser : function() {
+    bindApplyForCollaborationButtonUser : function() {
 
         $('#mitarbeits-anfrage-stellen').click(function() {
 
@@ -1166,9 +1177,9 @@ MappedRepairEvents.Helper = {
                 }
             });
         });
-    }
+    },
 
-    ,checkUrlForLoginBoxOpen : function() {
+    checkUrlForLoginBoxOpen : function() {
         if (document.location.search.match(/\?login=/)) {
             $('#login-box-form').show();
         }

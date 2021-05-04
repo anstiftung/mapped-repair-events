@@ -636,6 +636,10 @@ class EventsController extends AppController
         $selectedCategories = !empty($this->request->getQuery('categories')) ? explode(',', h($this->request->getQuery('categories'))) : [];
         $this->set('selectedCategories', $selectedCategories);
 
+        $isOnlineEvent = $this->request->getQuery('isOnlineEvent') ?? false;
+        $isOnlineEvent = (bool) h($isOnlineEvent);
+        $this->set('isOnlineEvent', $isOnlineEvent);
+
         $this->Category = $this->getTableLocator()->get('Categories');
         $categories = $this->Category->getMainCategoriesForFrontend();
 
@@ -680,6 +684,9 @@ class EventsController extends AppController
 
             if (!empty($this->request->getQuery('timeRange')) && $this->request->getQuery('timeRange') != $timeRangeDefault) {
                 $newUrl = $newUrl . '&timeRange=' . h($this->request->getQuery('timeRange'));
+            }
+            if (!empty($this->request->getQuery('isOnlineEvent'))) {
+                $newUrl = $newUrl . '&isOnlineEvent=' . h($this->request->getQuery('isOnlineEvent'));
             }
 
             $newUrl = str_replace('//', '/', $newUrl);
@@ -739,6 +746,11 @@ class EventsController extends AppController
                 });
             }
         }
+
+        if ($isOnlineEvent) {
+            $query->where(['Events.is_online_event' => 1]);
+        }
+
         $query->distinct($this->Events->getListFields());
 
         $events = $this->paginate($query, [

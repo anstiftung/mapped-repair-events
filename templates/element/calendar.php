@@ -163,7 +163,11 @@ function getEvents() {
             for (i in workshops[j].Workshop.Events) {
 
                 var ev = workshops[j].Workshop.Events[i];
-                $('td.fc-day[data-date='+ev.datumstart_formatted+']').addClass('fc-has-event '+( ev.status == 1 ? 'online' : 'offline' ));
+                $('td.fc-day[data-date='+ev.datumstart_formatted+']')
+                    .addClass('fc-has-event '
+                        + (ev.status == 1 ? 'online' : 'offline')
+                        + (ev.is_online_event == 1 ? ' fc-has-online-event' : '')
+                    );
 
                 var calEvent = MappedRepairEvents.Helper.getCalEventHtml(
                     ev,
