@@ -22,7 +22,7 @@ class WorkshopsController extends AppController
         $this->AppAuth->allow([
             'ajaxGetAllWorkshopsForMap',
             'ajaxGetWorkshopDetail',
-            'ajaxGetWorkshopsAndUsersForKeyword',
+            'ajaxGetWorkshopsAndUsersForKeywords',
             'home',
             'cluster',
             'detail',
@@ -222,7 +222,7 @@ class WorkshopsController extends AppController
         }
     }
 
-    public function ajaxGetWorkshopsAndUsersForKeyword() {
+    public function ajaxGetWorkshopsAndUsersForKeywords() {
 
         if (!$this->request->is('ajax')) {
             throw new ForbiddenException();
