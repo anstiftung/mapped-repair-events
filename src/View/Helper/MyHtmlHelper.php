@@ -480,12 +480,9 @@ class MyHtmlHelper extends HtmlHelper {
         return $url;
     }
 
-    function getUserProfileImage($user)
+    public function getUserProfileImageSrc($user, $userImage)
     {
-        $userAltText = isset($user->image_alt_text) ? $user->image_alt_text : $user['image_alt_text'];
-        $userImage = isset($user->image) ? $user->image : $user['image'];
-
-        $imageHtml = '<img alt="'.$userAltText.'"  class="rounded" src="/files/uploadify/users/thumbs-150/'.$userImage.'" >';
+        $userImageSrc = '/files/uploadify/users/thumbs-150/' . $userImage;
         if(empty($userImage)) {
             if (!empty($user->categories)) {
                 $categoryIdForUserProfileImage = $user->categories[rand(0, count($user->categories) - 1)]->id;
@@ -494,9 +491,17 @@ class MyHtmlHelper extends HtmlHelper {
                 $files = $dir->find('.*\.png');
                 $categoryIdForUserProfileImage = preg_replace('/[^0-9]/', '', $files[rand(0, count($files) - 1)]);
             }
-            $userProfileImage = '/img/user-profile/user-profile-image-'.$categoryIdForUserProfileImage.'.png';
-            $imageHtml = '<img class="rounded" src="'.$userProfileImage.'" >';
+            $userImageSrc = '/img/user-profile/user-profile-image-'.$categoryIdForUserProfileImage.'.png';
         }
+        return $userImageSrc;
+    }
+
+    function getUserProfileImage($user)
+    {
+        $userAltText = isset($user->image_alt_text) ? $user->image_alt_text : $user['image_alt_text'];
+        $userImage = isset($user->image) ? $user->image : $user['image'];
+        $userImageSrc = $this->getUserProfileImageSrc($user, $userImage);
+        $imageHtml = '<img alt="'.$userAltText.'"  class="rounded" src="'.$userImageSrc.'" >';
         return $imageHtml;
     }
 

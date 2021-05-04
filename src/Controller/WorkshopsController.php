@@ -339,7 +339,7 @@ class WorkshopsController extends AppController
                 'city' => $user->city,
                 'website' => $user->website,
                 'url' => Configure::read('AppConfig.serverName') . Configure::read('AppConfig.htmlHelper')->urlUserProfile($user->uid),
-                'image' => $user->image != '' ?  Configure::read('AppConfig.serverName') . Configure::read('AppConfig.htmlHelper')->getThumbs150Image($user->image, 'users') : '',
+                'image' => Configure::read('AppConfig.serverName') . Configure::read('AppConfig.htmlHelper')->getUserProfileImageSrc($user, $user->image),
                 'country' => [
                     'name_de' => !empty($user->country) ? $user->country->name_de : '',
                 ],
