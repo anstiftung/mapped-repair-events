@@ -222,6 +222,20 @@ class WorkshopsController extends AppController
         }
     }
 
+    private function getPreparedCategoryIcons($categories)
+    {
+        $preparedCategories = [];
+        $i = 0;
+        if (!empty($categories)) {
+            foreach($categories as $category) {
+                if ($i >= 5) break;
+                $preparedCategories[] = Configure::read('AppConfig.serverName') . '/img/icons-skills/' . $category->icon . '.png';
+                $i++;
+            }
+        }
+        return $preparedCategories;
+    }
+
     public function ajaxGetWorkshopsAndUsersForKeywords() {
 
         if (!$this->request->is('ajax')) {
@@ -285,7 +299,7 @@ class WorkshopsController extends AppController
                 'country' => [
                     'name_de' => !empty($workshop->country) ? $workshop->country->name_de : '',
                 ],
-                'categories' => [],
+                'categories' => $this->getPreparedCategoryIcons($workshop->categories),
             ];
         }
 
@@ -297,6 +311,7 @@ class WorkshopsController extends AppController
             'contain' => [
                 'Countries',
                 'Skills',
+                'Categories',
             ],
             'order' => [
                 'Users.firstname' => 'ASC',
@@ -328,7 +343,7 @@ class WorkshopsController extends AppController
                 'country' => [
                     'name_de' => !empty($user->country) ? $user->country->name_de : '',
                 ],
-                'categories' => [],
+                'categories' => $this->getPreparedCategoryIcons($user->categories),
             ];
         }
 
