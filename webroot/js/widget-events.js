@@ -58,9 +58,7 @@ MappedRepairEvents.WidgetEvents = {
 
         }
 
-        if ((itemCount > 0 && itemCount > num) || itemCount == num) {
-            $('.item').slice(0, num).show();
-        }
+        $('.item').slice(0, num).show();
     }
 
 };

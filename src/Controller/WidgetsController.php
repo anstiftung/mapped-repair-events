@@ -34,31 +34,24 @@ class WidgetsController extends AppController
 
         $this->set('assetNamespace', 'events');
 
-        $workshopUid = 0;
-        if (!empty($_GET['id'])) {
-            $workshopUid = (int) $_GET['id'];
-        }
+        $workshopUid = h($this->request->getQuery('id')) ?? 0;
         $this->Workshop = $this->getTableLocator()->get('Workshops');
-        $workshop = $this->Workshop->find('all', [
+        $workshopFound = $this->Workshop->find('all', [
             'conditions' => [
-                'Workshops.uid' => $workshopUid
+                'Workshops.uid' => (int) $workshopUid
             ]
-        ])->first();
-        if (empty($workshop)) {
+        ])->count();
+        if (!$workshopFound) {
             throw new NotFoundException('workshop uid not correct');
         }
         $this->set('workshopUid', $workshopUid);
 
-        $num = 1;
-        if (!empty($_GET['num'])) {
-            $num = (int) $_GET['num'];
-        }
+        $num = h($this->request->getQuery('num')) ?? 1;
+        $num = (int) $num;
         $this->set('num', $num);
 
-        $trunc = 300;
-        if (!empty($_GET['trunc'])) {
-            $trunc = abs((int) $_GET['trunc']);
-        }
+        $trunc = h($this->request->getQuery('trunc')) ?? 300;
+        $trunc = (int) $trunc;
         $this->set('trunc', $trunc);
 
     }
