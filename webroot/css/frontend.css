@@ -3636,7 +3636,7 @@ body.users.profil .add-skill {
     font-size: 30px;
 }
 #covid-19-banner a:hover {
-    color: #924A6A;
+    opacity: .9;
 }
 
 body.workshops.detail #covid-19-banner {
