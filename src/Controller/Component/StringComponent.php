@@ -649,7 +649,15 @@ class StringComponent extends Component
         }
 
         for ($i = 0; $i < strlen($email); $i++) {
-            $cipher_text .= $key[strpos($character_set, $email[$i])];
+            if (!strpos($character_set, $email[$i]) > 0) {
+                $email[$i] = '+';
+            }
+            $cipher_text .= $key[
+                strpos(
+                    $character_set,
+                    $email[$i]
+                )
+            ];
         }
 
         $script = 'var a="' . $key . '";var b=a.split("").sort().join("");var c="' . $cipher_text . '";var d="";';
