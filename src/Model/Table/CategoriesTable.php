@@ -25,6 +25,22 @@ class CategoriesTable extends Table
             'className' => 'Users',
             'foreignKey' => 'owner'
         ]);
+        $this->belongsToMany('Workshops', [
+            'through' => 'WorkshopsCategories',
+            'foreignKey' => 'category_id',
+            'targetForeignKey' => 'workshop_uid',
+            'sort' => [
+                'Workshops.name' => 'ASC',
+            ],
+        ]);
+        $this->belongsToMany('Users', [
+            'through' => 'UsersCategories',
+            'foreignKey' => 'category_id',
+            'targetForeignKey' => 'user_uid',
+            'sort' => [
+                'Users.firstname' => 'ASC',
+            ],
+        ]);
     }
 
     public function validationDefault(Validator $validator): \Cake\Validation\Validator

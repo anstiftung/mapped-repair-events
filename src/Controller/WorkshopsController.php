@@ -9,6 +9,7 @@ use Cake\I18n\Time;
 use Cake\Mailer\Mailer;
 use Cake\Http\Exception\ForbiddenException;
 use Cake\Http\Exception\NotFoundException;
+use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
 
 class WorkshopsController extends AppController
@@ -22,10 +23,11 @@ class WorkshopsController extends AppController
         $this->AppAuth->allow([
             'ajaxGetAllWorkshopsForMap',
             'ajaxGetWorkshopDetail',
+            'ajaxGetWorkshopsAndUsersForTags',
             'home',
             'cluster',
             'detail',
-            'all'
+            'all',
         ]);
 
     }
@@ -219,6 +221,171 @@ class WorkshopsController extends AppController
         if (!empty($errors)) {
             $this->render('edit');
         }
+    }
+
+    private function getPreparedCategoryIcons($categories)
+    {
+        $preparedCategories = [];
+        $i = 0;
+        if (!empty($categories)) {
+            foreach($categories as $category) {
+                if ($i >= 5) break;
+                $preparedCategories[] = Configure::read('AppConfig.serverName') . '/img/icons-skills/' . $category->icon . '.png';
+                $i++;
+            }
+        }
+        return $preparedCategories;
+    }
+
+    public function ajaxGetWorkshopsAndUsersForTags() {
+
+        $this->RequestHandler->renderAs($this, 'json');
+
+        if (!$this->request->is('ajax')) {
+            throw new ForbiddenException();
+        }
+
+        $tags = h($this->request->getQuery('tags')) ?? [];
+        if (empty($tags)) {
+            throw new NotFoundException('no tag passed');
+        }
+
+        $tagCategoriesAssociation = [
+            '3dreparieren' => [630],
+        ];
+        $implementedTags = array_keys($tagCategoriesAssociation);
+
+        $categoryIds = [];
+        foreach($tags as $tag) {
+            if (in_array($tag, $implementedTags)) {
+                $categoryIds = array_merge($tagCategoriesAssociation[$tag], $categoryIds);
+            }
+        }
+        $categoryIds = array_unique($categoryIds);
+
+        $this->Category = $this->getTableLocator()->get('Categories');
+        $categories = [];
+        $workshopsAssociation = $this->Category->getAssociation('Workshops');
+        $workshopsAssociation->setConditions([
+            'Workshops.status' => APP_ON,
+        ]);
+        if (!empty($categoryIds)) {
+            $categories = $this->Category->find('all', [
+                'conditions' => [
+                    'Categories.status' => APP_ON,
+                    'Categories.id IN' => $categoryIds,
+                ],
+                'contain' => [
+                    'Workshops',
+                    'Users',
+                ],
+            ])->toArray();
+        }
+
+        if (empty($categories)) {
+            $this->set([
+                'status' => 1,
+                'message' => 'ok',
+                'workshops' => [],
+                'users' => [],
+            ]);
+            $this->viewBuilder()->setOption('serialize', ['status', 'message', 'workshops', 'users']);
+        }
+
+        $workshopUids = Hash::extract($categories, '{n}.workshops.{n}.uid');
+        $userUids = Hash::extract($categories, '{n}.users.{n}.uid');
+
+        $preparedWorkshops = [];
+        if (!empty($workshopUids)) {
+
+            $this->Workshop = $this->getTableLocator()->get('Workshops');
+            $categoriesAssociation = $this->Workshop->getAssociation('Categories');
+            $categoriesAssociation->setConditions([
+                'Categories.status' => APP_ON,
+            ]);
+
+            $workshops = $this->Workshop->find('all', [
+                'conditions' => [
+                    'Workshops.uid IN' => $workshopUids,
+                ],
+                'contain' => [
+                    'Categories',
+                    'Countries',
+                ],
+                'order' => ['Workshops.name' => 'ASC'],
+            ]);
+
+            foreach($workshops as $workshop) {
+                $preparedWorkshops[] = [
+                    'uid' => $workshop->uid,
+                    'name' => $workshop->name,
+                    'lat' => $workshop->lat,
+                    'lng' => $workshop->lng,
+                    'url' => Configure::read('AppConfig.serverName') . Configure::read('AppConfig.htmlHelper')->urlWorkshopDetail($workshop->url),
+                    'street' => $workshop->street,
+                    'zip' => $workshop->zip,
+                    'city' => $workshop->city,
+                    'website' => $workshop->website,
+                    'image' => $workshop->image != '' ?  Configure::read('AppConfig.serverName') . Configure::read('AppConfig.htmlHelper')->getThumbs150Image($workshop->image, 'workshops') : Configure::read('AppConfig.serverName') . Configure::read('AppConfig.htmlHelper')->getThumbs100Image('rclogo-100.jpg', 'workshops'),
+                    'country' => [
+                        'name_de' => !empty($workshop->country) ? $workshop->country->name_de : '',
+                    ],
+                    'categories' => $this->getPreparedCategoryIcons($workshop->categories),
+                ];
+            }
+        }
+
+        $preparedUsers = [];
+        if (!empty($userUids)) {
+
+            $this->User = $this->getTableLocator()->get('Users');
+            $users = $this->User->find('all', [
+                'conditions' => [
+                    'Users.uid IN' => $userUids,
+                ],
+                'contain' => [
+                    'Countries',
+                    'Skills',
+                    'Categories',
+                ],
+                'order' => [
+                    'Users.firstname' => 'ASC',
+                    'Users.nick' => 'ASC',
+                ],
+            ]);
+
+            $foundUserUids = [];
+            foreach($users as $user) {
+                if (in_array($user->uid, $foundUserUids)) {
+                    continue;
+                }
+                $foundUserUids[] = $user->uid;
+                $preparedUsers[] = [
+                    'uid' => $user->uid,
+                    'nick' => $user->nick,
+                    'firstname' => $user->firstname,
+                    'lastname' => $user->lastname,
+                    'city' => $user->city,
+                    'website' => $user->website,
+                    'url' => Configure::read('AppConfig.serverName') . Configure::read('AppConfig.htmlHelper')->urlUserProfile($user->uid),
+                    'image' => Configure::read('AppConfig.serverName') . Configure::read('AppConfig.htmlHelper')->getUserProfileImageSrc($user, $user->image),
+                    'country' => [
+                        'name_de' => !empty($user->country) ? $user->country->name_de : '',
+                    ],
+                    'categories' => $this->getPreparedCategoryIcons($user->categories),
+                ];
+            }
+        }
+
+        $this->set([
+            'status' => 1,
+            'message' => 'ok',
+            'workshops' => $preparedWorkshops,
+            'users' => $preparedUsers,
+        ]);
+
+        $this->viewBuilder()->setOption('serialize', ['status', 'message', 'workshops', 'users']);
+
     }
 
     public function ajaxGetAllWorkshopsForMap() {
