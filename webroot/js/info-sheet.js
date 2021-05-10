@@ -34,7 +34,7 @@ MappedRepairEvents.InfoSheet = {
     bindDependentRadioButtonOnClick : function(wrapperClass, radioButtonId, selectorToShow, selectorToHideIfNotSelected) {
         $(wrapperClass).find('input').on('click', function() {
             if ($(this).attr('id') == radioButtonId) {
-                $(selectorToShow).show('slow');
+                $(selectorToShow).show();
             } else {
                 $(selectorToShow).hide();
                 $(selectorToHideIfNotSelected).hide();

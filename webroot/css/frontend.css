@@ -736,13 +736,23 @@ body.users .profile .categories-checkbox-wrapper .input label,
     float: left;
     margin-top: 0;
 }
-#infoSheetEditForm .edit.column-1,
-#infoSheetEditForm .edit.column-2 {
+#infoSheetEditForm .edit.column-1 {
     width: 1140px;
+}
+#infoSheetEditForm .edit.column-2 {
+    width: 560px;
 }
 div.admin div.edit.column-1 label,
 div.admin div.edit.column-2 label {
-    width: 225px ! important;
+    width: 150px ! important;
+}
+div.admin div.edit.column-2 textarea,
+div.admin div.edit.column-2 .input input {
+    width: 360px;
+}
+div.admin div.edit.column-2 .input select,
+div.admin div.edit.column-2 .select2-container {
+    width: 371px ! important
 }
 div.admin div.edit.column-1 .dependent-form-field:not(.no_repair_reason_text_wrapper) {
     width: 370px ! important;
@@ -771,6 +781,9 @@ div.admin div.edit.column-1 textarea {
 }
 #infoSheetEditForm .input.radio {
     margin-top: 5px;
+}
+#infoSheetEditForm .input.radio label {
+    width: 375px ! important;
 }
 
 #eventEditForm .custom-coordinates-wrapper,

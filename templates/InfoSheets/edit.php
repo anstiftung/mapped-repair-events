@@ -107,7 +107,7 @@ use Cake\Core\Configure;
     ?>
     </div>
 
-    <div class="edit<?php echo !$this->request->getSession()->read('isMobile') ? ' column-1' : ''; ?>">
+    <div class="edit<?php echo !$this->request->getSession()->read('isMobile') ? ' column-2' : ''; ?>">
     <?php
         echo $this->Form->fieldset(
             $this->Form->control('InfoSheets.defect_description', ['type' => 'textarea', 'label' => 'Fehlerbeschreibung:', 'placeholder' => 'Helft mit einer genauen Fehlerbeschreibung, wiederkehrende Defekte herauszufinden und so Schwachstellen in der Konstruktion von Geräten zu identifizieren! Maximal 1.000 Zeichen.', 'maxlength' => 1000]).
@@ -131,11 +131,16 @@ use Cake\Core\Configure;
                 'redirectUrl' => $this->getRequest()->getRequestTarget(),
             ];
         }
-        echo $this->element('cancelAndSaveButton', [
-            'saveLabel' => 'Speichern',
-            'showSaveAndRedirectToUrlButton' => $showSaveAndRedirectToUrlButton,
-        ]);
     ?>
+    </div>
+
+    <div class="edit<?php echo !$this->request->getSession()->read('isMobile') ? ' column-1' : ''; ?>">
+        <?php
+            echo $this->element('cancelAndSaveButton', [
+                'saveLabel' => 'Speichern',
+                'showSaveAndRedirectToUrlButton' => $showSaveAndRedirectToUrlButton,
+            ]);
+        ?>
     </div>
     <?php
         echo $this->Form->end();
