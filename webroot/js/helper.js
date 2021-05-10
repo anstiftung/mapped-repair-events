@@ -366,6 +366,13 @@ MappedRepairEvents.Helper = {
         button.find('i').addClass(iconClass);
     },
 
+    bindSaveAndRedirectToUrlButton: function() {
+        $('#save-and-redirect-to-url-button').on('click', function() {
+            $('input[name="referer"]').val($(this).data('redirect-url'));
+            $(this).closest('form').submit();
+        });
+    },
+
     bindCancelButton : function(uid) {
 
         uid = uid || 0;

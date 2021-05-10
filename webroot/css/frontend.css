@@ -3468,7 +3468,7 @@ div.admin.edit #cancel-button,
 div.admin.edit button[type="submit"] {
     display: block;
     float: right;
-    margin: 0px 5%;
+    margin: 0;
     max-width: 250px;
     min-width: 130px;
 }
@@ -3606,7 +3606,10 @@ div.admin.edit .iframe-preview-heading {
   clear: none;
   margin-left: 0;
 }
-
+#infoSheetEditForm #save-and-redirect-to-url-button {
+    margin-right: 10px;
+    padding: 5px 10px;
+}
 #infoSheetEditForm .add-subcategory,
 #infoSheetEditForm .add-brand,
 body.users.profil .add-skill {

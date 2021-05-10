@@ -9,6 +9,7 @@ use Cake\Core\Configure;
 
     $this->element('addScript', array('script' =>
         JS_NAMESPACE.".Helper.bindCancelButton(".$infoSheet->uid.");".
+        JS_NAMESPACE.".Helper.bindSaveAndRedirectToUrlButton();".
         JS_NAMESPACE.".InfoSheet.initSubCategoryDropdown('#infosheets-category-id');".
         JS_NAMESPACE.".InfoSheet.initMainCategoryDropdown('#infosheets-new-subcategory-parent-id');".
         JS_NAMESPACE.".InfoSheet.initBrandDropdown('#infosheets-brand-id');".
@@ -123,7 +124,17 @@ use Cake\Core\Configure;
             ]
         );
 
-        echo $this->element('cancelAndSaveButton', ['saveLabel' => 'Speichern']);
+        $showSaveAndRedirectToUrlButton = false;
+        if ($infoSheet->uid == 0) {
+            $showSaveAndRedirectToUrlButton = [
+                'label' => 'Speichern und neuen Laufzettel für diesen Termin öffnen',
+                'redirectUrl' => $this->getRequest()->getRequestTarget(),
+            ];
+        }
+        echo $this->element('cancelAndSaveButton', [
+            'saveLabel' => 'Speichern',
+            'showSaveAndRedirectToUrlButton' => $showSaveAndRedirectToUrlButton,
+        ]);
     ?>
     </div>
     <?php
