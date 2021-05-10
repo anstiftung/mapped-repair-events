@@ -3463,7 +3463,9 @@ div.admin div.edit div.input.select div.checkbox, div.admin div.edit div.input.s
     div.admin div.edit div.input.select input {
     float: left;
 }
-
+.select2-container--default .select2-results > .select2-results__options {
+    max-height: 325px ! important;
+}
 div.admin.edit #cancel-button,
 div.admin.edit button[type="submit"] {
     display: block;
