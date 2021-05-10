@@ -19,8 +19,6 @@ class InfoSheetsControllerTest extends AppTestCase
     use LogFileAssertionsTrait;
 
     private $newInfoSheetData = [
-        'visitor_gender' => 'm',
-        'visitor_age' => '',
         'category_id' => '',
         'new_subcategory_parent_id' => '',
         'new_subcategory_name' => '',
@@ -52,7 +50,6 @@ class InfoSheetsControllerTest extends AppTestCase
             ]
         );
         $this->assertResponseContains('Bitte gib die Fehlerbeschreibung an (maximal 1.000 Zeichen).');
-        $this->assertResponseContains('Bitte trage ein, um welches Gerät es sich handelt.');
         $this->assertResponseContains('Bitte wähle eine Kategorie aus.');
         $this->assertResponseContains('Wurde der Fehler gefunden?');
     }
