@@ -47,21 +47,6 @@ use Cake\Core\Configure;
     </div>
 
     <div class="edit<?php echo !$this->request->getSession()->read('isMobile') ? ' column-2' : ''; ?>">
-        <?php
-            $visitorFields = '<div class="gender-radio-button-wrapper">';
-                $visitorFields .= $this->Form->control('InfoSheets.visitor_gender', ['type' => 'radio', 'options' => $this->Html->getGenders(), 'label' => 'Geschlecht:']).'<br />';
-            $visitorFields .= '</div">';
-            $visitorFields .= $this->Form->control('InfoSheets.visitor_age', ['div' => 'input text long', 'type' => 'text', 'label' => 'Alter:']).'<br />';
-            echo $this->Form->fieldset(
-                $visitorFields,
-                [
-                    'legend' => 'BesucherIn'
-                ]
-            );
-        ?>
-    </div>
-
-    <div class="edit<?php echo !$this->request->getSession()->read('isMobile') ? ' column-2' : ''; ?>">
     <?php
 
         echo $this->Form->fieldset(

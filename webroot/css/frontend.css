@@ -736,11 +736,9 @@ body.users .profile .categories-checkbox-wrapper .input label,
     float: left;
     margin-top: 0;
 }
-#infoSheetEditForm .edit.column-1 {
-    width: 1140px;
-}
+#infoSheetEditForm .edit.column-1,
 #infoSheetEditForm .edit.column-2 {
-    width: 560px;
+    width: 1140px;
 }
 div.admin div.edit.column-1 label,
 div.admin div.edit.column-2 label {
@@ -3401,6 +3399,7 @@ div.admin div.edit div.input {
     float: left;
     margin-right: 6px;
     margin-bottom: 4px;
+    width: 100%;
 }
 
 div.admin div.edit select {
