@@ -3,6 +3,7 @@
     "description": "Mapped repair events",
     "homepage": "https://github.com/anstiftung/mapped-repair-events",
     "config": {
+        "platform-check": false,
         "platform": {
             "php": "8.0"
         }
