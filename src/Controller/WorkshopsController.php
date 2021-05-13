@@ -367,6 +367,7 @@ class WorkshopsController extends AppController
                     'lastname' => $user->lastname,
                     'city' => $user->city,
                     'website' => $user->website,
+                    'email' => $user->email,
                     'url' => Configure::read('AppConfig.serverName') . Configure::read('AppConfig.htmlHelper')->urlUserProfile($user->uid),
                     'image' => Configure::read('AppConfig.serverName') . Configure::read('AppConfig.htmlHelper')->getUserProfileImageSrc($user, $user->image),
                     'country' => [
