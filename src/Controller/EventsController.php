@@ -137,10 +137,6 @@ class EventsController extends AppController
             'order' => $this->Event->getListOrder(),
         ]);
 
-        if ($events->count() == 0) {
-            throw new NotFoundException();
-        }
-
         foreach($events as $event) {
 
             $icalEvent = new Event();
