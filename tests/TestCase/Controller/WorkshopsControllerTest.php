@@ -98,7 +98,7 @@ class WorkshopsControllerTest extends AppTestCase
         $this->assertMailContainsTextAt(0, '"Test Workshop" geändert');
 
     }
-    
+
     public function testAjaxGetWorkshopsAndUsersForTags()
     {
         $this->configRequest([
@@ -106,9 +106,10 @@ class WorkshopsControllerTest extends AppTestCase
                 'X_REQUESTED_WITH' => 'XMLHttpRequest'
             ],
         ]);
-        $this->_compareBasePath = ROOT . DS . 'tests' . DS . 'comparisons' . DS;
+        $expectedResult = file_get_contents(TESTS . 'comparisons' . DS . 'data-for-vow-tags-widget.json');
+        $expectedResult = $this->correctServerName($expectedResult);
+        print_r($expectedResult);
         $this->get('/workshops/ajaxGetWorkshopsAndUsersForTags?tags[]=3dreparieren');
-        $this->assertSameAsFile('data-for-vow-tags-widget.json', $this->_response);
     }
 
 }

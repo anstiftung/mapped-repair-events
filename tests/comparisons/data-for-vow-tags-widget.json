@@ -7,17 +7,17 @@
             "name": "Test Workshop",
             "lat": 0,
             "lng": 0,
-            "url": "http:\\/\\/www.mapped-repair-events.test\\/test-workshop",
+            "url": "{{serverName}}\\/test-workshop",
             "street": null,
             "zip": null,
             "city": null,
             "website": null,
-            "image": "http:\\/\\/www.mapped-repair-events.test\\/files\\/uploadify\\/workshops\\/thumbs-100\\/rclogo-100.jpg",
+            "image": "{{serverName}}\\/files\\/uploadify\\/workshops\\/thumbs-100\\/rclogo-100.jpg",
             "country": {
                 "name_de": ""
             },
             "categories": [
-                "http:\\/\\/www.mapped-repair-events.test\\/img\\/icons-skills\\/drei-d-reparatur.png"
+                "{{serverName}}\\/img\\/icons-skills\\/drei-d-reparatur.png"
             ]
         }
     ],
@@ -30,13 +30,13 @@
             "city": null,
             "website": null,
             "email": null,
-            "url": "http:\\/\\/www.mapped-repair-events.test\\/users\\/profile\\/1",
-            "image": "http:\\/\\/www.mapped-repair-events.test\\/img\\/user-profile\\/user-profile-image-630.png",
+            "url": "{{serverName}}\\/users\\/profile\\/1",
+            "image": "{{serverName}}\\/img\\/user-profile\\/user-profile-image-630.png",
             "country": {
                 "name_de": ""
             },
             "categories": [
-                "http:\\/\\/www.mapped-repair-events.test\\/img\\/icons-skills\\/drei-d-reparatur.png"
+                "{{serverName}}\\/img\\/icons-skills\\/drei-d-reparatur.png"
             ]
         }
     ]
