@@ -39,7 +39,7 @@ class AppTestCase extends TestCase
 
     protected function correctServerName($html)
     {
-        return preg_replace('/\{\{serverName\}\}/', str_replace('/', '\\\\\/', Configure::read('AppConfig.serverName')), $html);
+        return preg_replace('/\{\{serverName\}\}/', str_replace('/', '\\\/', Configure::read('AppConfig.serverName')), $html);
     }
 
 }
