@@ -1,5 +1,6 @@
 <?php
 namespace App\Test\TestCase;
+use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
 
 class AppTestCase extends TestCase
@@ -35,6 +36,11 @@ class AppTestCase extends TestCase
         'app.Workshops',
         'app.WorkshopsCategories',
     ];
+
+    protected function correctServerName($html)
+    {
+        return preg_replace('/\{\{serverName\}\}/', str_replace('/', '\\\/', Configure::read('AppConfig.serverName')), $html);
+    }
 
 }
 

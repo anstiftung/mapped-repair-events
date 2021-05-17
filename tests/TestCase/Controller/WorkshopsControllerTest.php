@@ -99,5 +99,18 @@ class WorkshopsControllerTest extends AppTestCase
 
     }
 
+    public function testAjaxGetWorkshopsAndUsersForTags()
+    {
+        $this->configRequest([
+            'headers' => [
+                'X_REQUESTED_WITH' => 'XMLHttpRequest'
+            ],
+        ]);
+        $expectedResult = file_get_contents(TESTS . 'comparisons' . DS . 'data-for-vow-tags-widget.json');
+        $expectedResult = $this->correctServerName($expectedResult);
+        $this->get('/workshops/ajaxGetWorkshopsAndUsersForTags?tags[]=3dreparieren');
+        $this->assertResponseContains($expectedResult);
+    }
+
 }
 ?>
