@@ -98,6 +98,18 @@ class WorkshopsControllerTest extends AppTestCase
         $this->assertMailContainsTextAt(0, '"Test Workshop" geändert');
 
     }
+    
+    public function testAjaxGetWorkshopsAndUsersForTags()
+    {
+        $this->configRequest([
+            'headers' => [
+                'X_REQUESTED_WITH' => 'XMLHttpRequest'
+            ],
+        ]);
+        $this->_compareBasePath = ROOT . DS . 'tests' . DS . 'comparisons' . DS;
+        $this->get('/workshops/ajaxGetWorkshopsAndUsersForTags?tags[]=3dreparieren');
+        $this->assertSameAsFile('data-for-vow-tags-widget.json', $this->_response);
+    }
 
 }
 ?>
