@@ -108,7 +108,9 @@ class WorkshopsControllerTest extends AppTestCase
         ]);
         $expectedResult = file_get_contents(TESTS . 'comparisons' . DS . 'data-for-vow-tags-widget.json');
         $expectedResult = $this->correctServerName($expectedResult);
+        print_r($expectedResult);
         $this->get('/workshops/ajaxGetWorkshopsAndUsersForTags?tags[]=3dreparieren');
+        print_r($this->_response);
         $this->assertResponseContains($expectedResult);
     }
 
