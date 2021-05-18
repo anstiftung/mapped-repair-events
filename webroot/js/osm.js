@@ -266,16 +266,12 @@ MappedRepairEvents.Map.prototype = {
         if (bounds) {
             this.map.fitBounds(new L.LatLngBounds(new L.LatLng(bounds.minLat, bounds.maxLng), new L.LatLng(bounds.maxLat, bounds.minLng)));
         }
+
     },
 
     initMarkers : function() {
 
         this.map = L.map('map').setView([0,0],0);
-
-        var tp = 'ls';
-        if (L.Browser.retina) {
-            tp = 'lr';
-        }
 
         L.tileLayer('https://tile-{s}.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
             attribution: 'Tiles courtesy of <a href="https://hotosm.org/">Humanitarian OSM Team</a>. Map data by <a href="https://openstreetmap.org">OSM</a>',
@@ -562,7 +558,7 @@ MappedRepairEvents.Map.prototype = {
 
             if ($.inArray(parseInt($(this).attr('rel').split(' ')[0]), visibleEvents) == -1) {
 
-                $(this).addClass('isntInRadius'); // needed for when elements are traversed again in calendar.ctp
+                $(this).addClass('isntInRadius'); // needed for when elements are traversed again in calendar.php
                 $(this).removeClass('isInRadius');
 
             } else {
@@ -572,7 +568,7 @@ MappedRepairEvents.Map.prototype = {
                 }
 
                 $(this).addClass('isInRadius');
-                $(this).removeClass('isntInRadius'); // needed for when elements are traversed again in calendar.ctp
+                $(this).removeClass('isntInRadius'); // needed for when elements are traversed again in calendar.php
             }
         });
 
