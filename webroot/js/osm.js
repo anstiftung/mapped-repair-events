@@ -330,6 +330,7 @@ MappedRepairEvents.Map.prototype = {
     },
 
     showHomeImageOverlay : function() {
+        this.map.off('movestart');
         $('#mapHomeInfoBox').stop(true).show('slow');
     },
 
