@@ -309,7 +309,11 @@ class WorkshopsController extends AppController
                     'Workshops.uid IN' => $workshopUids,
                 ],
                 'contain' => [
-                    'Categories',
+                    'Categories' => [
+                        'sort' => [
+                            'Categories.name' => 'ASC', //3D-Reparatur should be first
+                        ],
+                    ],
                     'Countries',
                 ],
                 'order' => ['Workshops.name' => 'ASC'],
@@ -346,7 +350,11 @@ class WorkshopsController extends AppController
                 'contain' => [
                     'Countries',
                     'Skills',
-                    'Categories',
+                    'Categories' => [
+                        'sort' => [
+                            'Categories.name' => 'ASC', //3D-Reparatur should be first
+                        ],
+                    ]
                 ],
                 'order' => [
                     'Users.firstname' => 'ASC',
