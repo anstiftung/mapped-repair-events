@@ -744,7 +744,15 @@ body.users .profile .categories-checkbox-wrapper .input label,
 }
 div.admin div.edit.column-1 label,
 div.admin div.edit.column-2 label {
-    width: 225px ! important;
+    width: 150px ! important;
+}
+div.admin div.edit.column-2 textarea,
+div.admin div.edit.column-2 .input input {
+    width: 360px;
+}
+div.admin div.edit.column-2 .input select,
+div.admin div.edit.column-2 .select2-container {
+    width: 371px ! important
 }
 div.admin div.edit.column-1 .dependent-form-field:not(.no_repair_reason_text_wrapper) {
     width: 370px ! important;
@@ -773,6 +781,9 @@ div.admin div.edit.column-1 textarea {
 }
 #infoSheetEditForm .input.radio {
     margin-top: 5px;
+}
+#infoSheetEditForm .input.radio label {
+    width: 375px ! important;
 }
 
 #eventEditForm .custom-coordinates-wrapper,
@@ -3401,6 +3412,7 @@ div.admin div.edit div.input {
     float: left;
     margin-right: 6px;
     margin-bottom: 4px;
+    width: 100%;
 }
 
 div.admin div.edit select {
@@ -3464,12 +3476,14 @@ div.admin div.edit div.input.select div.checkbox, div.admin div.edit div.input.s
     div.admin div.edit div.input.select input {
     float: left;
 }
-
+.select2-container--default .select2-results > .select2-results__options {
+    max-height: 325px ! important;
+}
 div.admin.edit #cancel-button,
 div.admin.edit button[type="submit"] {
     display: block;
     float: right;
-    margin: 0px 5%;
+    margin: 0;
     max-width: 250px;
     min-width: 130px;
 }
@@ -3607,7 +3621,10 @@ div.admin.edit .iframe-preview-heading {
   clear: none;
   margin-left: 0;
 }
-
+#infoSheetEditForm #save-and-redirect-to-url-button {
+    margin-right: 10px;
+    padding: 5px 10px;
+}
 #infoSheetEditForm .add-subcategory,
 #infoSheetEditForm .add-brand,
 body.users.profil .add-skill {

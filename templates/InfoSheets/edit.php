@@ -9,6 +9,7 @@ use Cake\Core\Configure;
 
     $this->element('addScript', array('script' =>
         JS_NAMESPACE.".Helper.bindCancelButton(".$infoSheet->uid.");".
+        JS_NAMESPACE.".Helper.bindSaveAndRedirectToUrlButton();".
         JS_NAMESPACE.".InfoSheet.initSubCategoryDropdown('#infosheets-category-id');".
         JS_NAMESPACE.".InfoSheet.initMainCategoryDropdown('#infosheets-new-subcategory-parent-id');".
         JS_NAMESPACE.".InfoSheet.initBrandDropdown('#infosheets-brand-id');".
@@ -44,21 +45,6 @@ use Cake\Core\Configure;
             ?>
             <a id="print-button" href="javascript:window.print();" class="button rounded gray">Drucken</a>
         </div>
-    </div>
-
-    <div class="edit<?php echo !$this->request->getSession()->read('isMobile') ? ' column-2' : ''; ?>">
-        <?php
-            $visitorFields = '<div class="gender-radio-button-wrapper">';
-                $visitorFields .= $this->Form->control('InfoSheets.visitor_gender', ['type' => 'radio', 'options' => $this->Html->getGenders(), 'label' => 'Geschlecht:']).'<br />';
-            $visitorFields .= '</div">';
-            $visitorFields .= $this->Form->control('InfoSheets.visitor_age', ['div' => 'input text long', 'type' => 'text', 'label' => 'Alter:']).'<br />';
-            echo $this->Form->fieldset(
-                $visitorFields,
-                [
-                    'legend' => 'BesucherIn'
-                ]
-            );
-        ?>
     </div>
 
     <div class="edit<?php echo !$this->request->getSession()->read('isMobile') ? ' column-2' : ''; ?>">
@@ -104,7 +90,7 @@ use Cake\Core\Configure;
                 'type' => 'text',
                 'label' => 'Marke:'
             ]).
-            $this->Form->control('InfoSheets.device_name', ['div' => 'input text long', 'type' => 'text', 'label' => 'Gerät / Gegenstand:']).'<br />'.
+            $this->Form->control('InfoSheets.device_name', ['div' => 'input text long', 'type' => 'text', 'label' => 'Modell:']).'<br />'.
             $this->Form->control('InfoSheets.device_age', ['div' => 'input text long', 'type' => 'text', 'label' => 'Alter in Jahren:']).'<br />'.
             '<div class="form-fields-checkbox-wrapper power_supply">'.
                 '<label>'.$powerSupplyFormField->name.':</label>'.
@@ -121,7 +107,7 @@ use Cake\Core\Configure;
     ?>
     </div>
 
-    <div class="edit<?php echo !$this->request->getSession()->read('isMobile') ? ' column-1' : ''; ?>">
+    <div class="edit<?php echo !$this->request->getSession()->read('isMobile') ? ' column-2' : ''; ?>">
     <?php
         echo $this->Form->fieldset(
             $this->Form->control('InfoSheets.defect_description', ['type' => 'textarea', 'label' => 'Fehlerbeschreibung:', 'placeholder' => 'Helft mit einer genauen Fehlerbeschreibung, wiederkehrende Defekte herauszufinden und so Schwachstellen in der Konstruktion von Geräten zu identifizieren! Maximal 1.000 Zeichen.', 'maxlength' => 1000]).
@@ -138,8 +124,23 @@ use Cake\Core\Configure;
             ]
         );
 
-        echo $this->element('cancelAndSaveButton', ['saveLabel' => 'Speichern']);
+        $showSaveAndRedirectToUrlButton = false;
+        if ($infoSheet->uid == 0) {
+            $showSaveAndRedirectToUrlButton = [
+                'label' => 'Speichern und neuen Laufzettel für diesen Termin öffnen',
+                'redirectUrl' => $this->getRequest()->getRequestTarget(),
+            ];
+        }
     ?>
+    </div>
+
+    <div class="edit<?php echo !$this->request->getSession()->read('isMobile') ? ' column-1' : ''; ?>">
+        <?php
+            echo $this->element('cancelAndSaveButton', [
+                'saveLabel' => 'Speichern',
+                'showSaveAndRedirectToUrlButton' => $showSaveAndRedirectToUrlButton,
+            ]);
+        ?>
     </div>
     <?php
         echo $this->Form->end();

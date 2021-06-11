@@ -32,8 +32,6 @@ class InfoSheetsTable extends AppTable
     public function validationDefault(Validator $validator): \Cake\Validation\Validator
     {
         $validator->notEmptyString('category_id', 'Bitte wähle eine Kategorie aus.');
-        $validator->notEmptyString('device_name', 'Bitte trage ein, um welches Gerät es sich handelt.');
-        $validator->minLength('device_name', 2, 'Mindestens 2 Zeichen bitte.');
         $validator = $this->getNumberRangeValidator($validator, 'device_age', 0, 120);
         $validator->allowEmptyString('device_age');
         $validator = $this->getNumberRangeValidator($validator, 'visitor_age', 0, 120);

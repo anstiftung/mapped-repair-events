@@ -402,6 +402,10 @@
     #infoSheetEditForm .form-fields-checkbox-wrapper .input.radio {
        width: 100%;
     }
+    #infoSheetEditForm button {
+        margin-bottom: 5px;
+        margin-right: 0 ! important;
+    }
     body.events #eventEditForm .input label {
         width: 100%;
         margin-left: 5px;
