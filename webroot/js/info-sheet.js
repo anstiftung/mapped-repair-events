@@ -14,6 +14,8 @@ MappedRepairEvents.InfoSheet = {
             escapeMarkup: function (markup) {
                 return markup;
             }
+        }).on('select2:open', function(e){
+            $('.select2-search__field').attr('placeholder', 'Suchbegriff eingeben');
         });
 
         // class for button does not yet exist, so use $('body').on-syntax to add click event for button
