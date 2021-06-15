@@ -3383,7 +3383,7 @@ body.events.add .date-time-wrapper .fa-minus-circle {
 }
 div.admin div.edit.column-1 .error-message,
 div.admin div.edit.column-2 .error-message {
-    margin-left: 230px;
+    margin-left: 165px;
 }
 #infoSheetEditForm .input.radio .error-message {
     margin-left: 0px;
