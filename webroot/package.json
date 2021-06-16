@@ -23,7 +23,7 @@
     "components-jqueryui": "~1.12",
     "detect_swipe": "^2.1.4",
     "featherlight": "^1.7.14",
-    "fullcalendar": "^5.7.2",
+    "fullcalendar": "^5.8.0",
     "jQuery-Impromptu": "https://github.com/trentrichardson/jQuery-Impromptu/tarball/master",
     "jquery": "^3.6.0",
     "jquery-knob": "https://github.com/aterrien/jQuery-Knob/tarball/master",
