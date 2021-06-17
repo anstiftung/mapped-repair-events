@@ -324,7 +324,11 @@ class InfoSheetsController extends AppController
 
                 if ($this->InfoSheet->save($entity)) {
                     $this->AppFlash->setFlashMessage($this->InfoSheet->name_de . ' erfolgreich gespeichert.');
-                    $this->redirect($this->getPreparedReferer());
+                    if (in_array('save-button', array_keys($this->request->getData()))) {
+                        $this->redirect(Configure::read('AppConfig.htmlHelper')->urlMyEvents());
+                    } else {
+                        $this->redirect($this->getPreparedReferer());
+                    }
                 } else {
                     $this->AppFlash->setFlashError($this->InfoSheet->name_de . ' <b>nicht</b>erfolgreich gespeichert.');
                 }
