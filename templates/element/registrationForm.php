@@ -12,6 +12,8 @@
         'id' => 'UserReg' . $userGroup
     ]);
 
+    $this->Form->unlockField('botEwX482');
+
     echo $this->Form->control('Users.nick', [
         'label' => __('Register: Your Nickname'),
         'required' => true,
@@ -116,8 +118,16 @@
     <div class="sc"></div>
         <br>
 
-        <button class="button" type="submit" style="padding: 15px 25px;"><?php echo __('Submit Form'); ?></button>
+    <?php
 
-    </form>
+        echo $this->Form->button(__('Submit Form'), [
+            'type' => 'submit',
+            'class' => 'button',
+            'style' => 'padding: 15px 25px;'
+        ]);
+
+        echo $this->Form->end();
+
+    ?>
 
 </div>

@@ -58,7 +58,9 @@ class AppController extends Controller
         $this->loadComponent('AppFlash', [
             'clear' => true
         ]);
-
+        if (!$this->getRequest()->is('json')) {
+            $this->loadComponent('FormProtection');
+        }
         $this->loadComponent('AppAuth', [
             'logoutRedirect' => '/',
             'authError' => 'Zugriff verweigert, bitte melde dich an.',

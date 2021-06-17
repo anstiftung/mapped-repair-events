@@ -40,7 +40,8 @@ $this->element('addScript', ['script' =>
             ?>
             <a class="button" href="<?php echo $resetCategoriesUrl; ?>" ><?php echo __('Select all'); ?></a>
        </div>
-   </form>
+
+   <?php echo $this->Form->end(); ?>
 
     <?php
     $paginationParams = [

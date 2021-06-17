@@ -1,19 +1,30 @@
 <div class="cancel-and-save-button-wrapper">
 
-    <button type="submit" name="save-button" class="rounded">
-        <?php echo isset($saveLabel) ? $saveLabel : 'Speichern'; ?>
-    </button>
+    <?php
+        $saveLabel = isset($saveLabel) ? $saveLabel : 'Speichern';
+        echo $this->Form->button($saveLabel, [
+            'type' => 'submit',
+            'name' => 'save-button',
+            'class' => 'rounded',
+        ]);
 
-    <?php if (isset($showSaveAndRedirectToUrlButton) && !empty($showSaveAndRedirectToUrlButton)) { ?>
-        <button id="save-and-redirect-to-url-button" name="save-and-redirect-to-url-button" type="button" class="rounded" data-redirect-url="<?php echo $showSaveAndRedirectToUrlButton['redirectUrl']; ?>">
-            <?php echo $showSaveAndRedirectToUrlButton['label']; ?>
-        </button>
-    <?php } ?>
+        if (isset($showSaveAndRedirectToUrlButton) && !empty($showSaveAndRedirectToUrlButton)) {
+            echo $this->Form->button($showSaveAndRedirectToUrlButton['label'], [
+                'type' => 'button',
+                'id' => 'save-and-redirect-to-url-button',
+                'name' => 'save-and-redirect-to-url-button',
+                'class' => 'rounded',
+                'data-redirect-url' => $showSaveAndRedirectToUrlButton['redirectUrl'],
+            ]);
+        }
 
-    <?php if (!isset($hideCancelButton) || !$hideCancelButton) { ?>
-        <button id="cancel-button" type="button" class="rounded gray">
-            Abbrechen
-        </button>
-    <?php } ?>
+        if (!isset($hideCancelButton) || !$hideCancelButton) {
+            echo $this->Form->button('Abbrechen', [
+                'type' => 'button',
+                'id' => 'cancel-button',
+                'class' => 'rounded gray',
+            ]);
+        }
+    ?>
 
 </div>

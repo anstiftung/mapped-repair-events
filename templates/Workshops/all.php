@@ -19,7 +19,7 @@ echo $this->element('highlightNavi', ['main' => 'ORTE']);
                 'useTimeRange' => false,
                 'showIsOnlineEventCheckbox' => false,
             ]);
-            echo '</form>';
+            echo $this->Form->end();
         ?>
 
     <div class="sort">
