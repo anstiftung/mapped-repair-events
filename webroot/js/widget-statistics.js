@@ -124,38 +124,50 @@ MappedRepairEvents.WidgetStatistics = {
 
         var config = {
             type: 'doughnut',
+            plugins: [ChartDataLabels],
             data: {
                 datasets: [{
                     data: data.data,
                     backgroundColor: data.backgroundColor,
                     borderColor: data.borderColor,
-                    borderWidth: data.borderWidth
+                    borderWidth: data.borderWidth,
+                    datalabels: {
+                        labels: {
+                            outer: {
+                                color: '#333333',
+                                font: {
+                                    size: 15
+                                },
+                                formatter: function(value, ctx) {
+                                    return value.toLocaleString();
+                                },
+                                offset: 15,
+                            }
+                        }
+                    }
                 }],
                 labels: data.labels
             },
             options: {
-                responsive: true,
-                tooltips: {
-                    callbacks: {
-                        label: function(item, data) {
-                            var sumItems = data.datasets[0].data[0] + data.datasets[0].data[1];
-                            var datasetLabel = '';
-                            if (data.labels[item.index]) {
-                                datasetLabel = data.labels[item.index].replace(/\((.*)\)/, '').trim();
+                aspectRatio: 1.3,
+                layout: {
+                    padding: 10
+                },
+                plugins: {
+                    legend: {
+                        display: displayLabel
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(ctx) {
+                                var sumItems = ctx.dataset.data[0] + ctx.dataset.data[1];
+                                var value = ctx.parsed.toLocaleString();
+                                var newLabel = value + 'x ' + ctx.label.replace(/\((.*)\)/, '').trim();
+                                newLabel += ' (' + Math.round(ctx.parsed / sumItems * 100) + ' %)';
+                                return newLabel;
                             }
-                            var value = data.datasets[item.datasetIndex].data[item.index].toLocaleString();
-                            var newLabel = value + 'x ' + datasetLabel;
-                            newLabel += ' (' + Math.round(value / sumItems * 100) + ' %)';
-                            return newLabel;
                         }
-                    }
-                },
-                legend: {
-                    display: displayLabel
-                },
-                pieceLabel: {
-                    render: 'value',
-                    fontSize: 20
+                    },
                 }
             }
         };
@@ -180,40 +192,37 @@ MappedRepairEvents.WidgetStatistics = {
                 labels: data.labels
             },
             options: {
-                responsive: true,
-                tooltips: {
-                    callbacks: {
-                        label: function(item, data) {
-                            var datasetLabel = '';
-                            if (data.datasets[item.datasetIndex].label) {
-                                datasetLabel = data.datasets[item.datasetIndex].label[0].replace(/\((.*)\)/, '').trim();
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(ctx) {
+                                var newLabel = ctx.formattedValue + 'x ' + ctx.dataset.label.toString().replace(/\((.*)\)/, '').trim();
+                                return newLabel;
                             }
-                            var value = data.datasets[item.datasetIndex].data[item.index].toLocaleString();
-                            var newLabel = value + 'x ' + datasetLabel;
-                            return newLabel;
                         }
-                    }
+                    },
                 },
                 scales: {
-                    xAxes: [{
+                    x: {
                         stacked: true,
                         ticks: {
                             autoSkip: false,
                             maxRotation: 90,
-                            minRotation: 90
+                            minRotation: 90,
+                            labelOffset: -5
                         },
-                        gridLines: {
+                        grid: {
                             display: false
                         }
-                    }],
-                    yAxes: [{
+                    },
+                    y: {
                         stacked: true,
                         ticks: {
-                            callback: function(value, index, values) {
+                            callback: function(value) {
                                 return value.toLocaleString();
                             }
                         }
-                    }]
+                    }
                 }
             }
         };

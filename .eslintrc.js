@@ -7,6 +7,7 @@ module.exports = {
     "ignorePatterns": ["webroot/js/elFinder/"],
     "globals": {
         "Chart": true,
+        "ChartDataLabels": true,
         "CKEDITOR": true,
         "MappedRepairEvents": true,
         "PruneCluster": true,
