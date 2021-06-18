@@ -88,13 +88,14 @@ class EventsControllerTest extends AppTestCase
             'uhrzeitend' => '22:00',
         ];
 
+        $data = [
+            'referer' => '/',
+            $this->newEventData,
+            $newEventData2,
+        ];
         $this->post(
             Configure::read('AppConfig.htmlHelper')->urlEventNew(2),
-            [
-                'referer' => '/',
-                $this->newEventData,
-                $newEventData2
-            ]
+            $data,
         );
         $this->assertResponseNotContains('error');
 
