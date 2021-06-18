@@ -373,6 +373,31 @@ MappedRepairEvents.Helper = {
         });
     },
 
+    bindCancelButtonWithFixedRedirect: function(uid, redirect) {
+
+        uid = uid || 0;
+
+        $('#cancel-button').on('click', function() {
+
+            MappedRepairEvents.Helper.ajaxCall(
+                '/admin/' + 'intern/' + 'ajaxCancelAdminEditPage/',
+                {
+                    uid: uid,
+                    referer: redirect
+                },
+                { onOk : function(data) {
+                    document.location.href = data.referer;
+                },
+                onError : function(data) {
+                    alert(data.message);
+                }
+                }
+            );
+        });
+
+
+    },
+
     bindCancelButton : function(uid) {
 
         uid = uid || 0;
@@ -398,6 +423,7 @@ MappedRepairEvents.Helper = {
                 }
             );
         });
+
     },
 
     addSpinner: function (button) {
