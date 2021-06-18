@@ -36,6 +36,7 @@ class EventsController extends AppController
         $this->loadComponent('FormProtection', [
             'unlockedFields' => $unlockedFields,
         ]);
+
     }
 
     public function isAuthorized($user)
