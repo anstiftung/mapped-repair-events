@@ -24,6 +24,18 @@ class EventsController extends AppController
             'feed',
             'ical',
         ]);
+
+        $unlockedFields= [];
+        $i = 100;
+        while($i > 0) {
+            $unlockedFields[] = $i . '.datumstart';
+            $unlockedFields[] = $i . '.uhrzeitstart';
+            $unlockedFields[] = $i . '.uhrzeitend';
+            $i--;
+        }
+        $this->loadComponent('FormProtection', [
+            'unlockedFields' => $unlockedFields,
+        ]);
     }
 
     public function isAuthorized($user)
@@ -504,6 +516,7 @@ class EventsController extends AppController
                 $event = clone($events[0]);
                 $patchedEvents[] = $this->Event->patchEntity($event, $data);
                 $i++;
+
             }
 
             $events = $patchedEvents;
