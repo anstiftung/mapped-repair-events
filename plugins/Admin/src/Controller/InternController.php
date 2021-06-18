@@ -4,14 +4,21 @@ namespace Admin\Controller;
 
 use App\Controller\Component\StringComponent;
 use Cake\Core\Configure;
-use Cake\Core\Exception\Exception;
 use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
+use Cake\Event\EventInterface;
 use Cake\Filesystem\Folder;
 use Intervention\Image\ImageManagerStatic as Image;
 
 class InternController extends AdminAppController
 {
+
+    public function beforeFilter(EventInterface $event)
+    {
+        parent::beforeFilter($event);
+        $this->loadComponent('FormProtection');
+        $this->FormProtection->setConfig('validate', false);
+    }
 
     public function isAuthorized($user)
     {
