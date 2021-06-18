@@ -73,6 +73,7 @@ class EventsControllerTest extends AppTestCase
         $this->loadNewEventData();
         $this->loginAsOrga();
         $this->newEventData['eventbeschreibung'] = 'description</title></script><img src=n onerror=alert("x")>';
+        $this->newEventData['workshop_uid'] = 2;
         $this->newEventData['ort'] = 'Berlin';
         $this->newEventData['strasse'] = 'Demo Street 1';
         $this->newEventData['zip'] = '10999';
@@ -114,6 +115,7 @@ class EventsControllerTest extends AppTestCase
         $this->assertEquals($events[1]->uhrzeitend, new FrozenTime($this->newEventData['uhrzeitend']));
         $this->assertEquals($events[1]->categories[0]->id, $this->newEventData['categories']['_ids'][0]);
         $this->assertEquals($events[1]->owner, 1);
+        $this->assertEquals($events[1]->workshop_uid, 2);
 
         $this->assertEquals($events[2]->datumstart, new FrozenDate($newEventData2['datumstart']));
         $this->assertEquals($events[2]->uhrzeitstart, new FrozenTime($newEventData2['uhrzeitstart']));
