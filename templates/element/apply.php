@@ -154,7 +154,7 @@ $this->element('addScript', ['script' =>
 <?php
     echo $this->Form->create(null, [
         'id' => 'workshopApply',
-    ]),
+    ]);
 
     if ($appAuth->isAdmin()) {
         echo '<div style="margin-right:10px;float: left;">';
