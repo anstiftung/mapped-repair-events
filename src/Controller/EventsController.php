@@ -26,7 +26,7 @@ class EventsController extends AppController
         ]);
 
         $unlockedFields= [];
-        $i = 100;
+        $i = 50;
         while($i > 0) {
             $unlockedFields[] = $i . '.datumstart';
             $unlockedFields[] = $i . '.uhrzeitstart';
