@@ -746,6 +746,9 @@ div.admin div.edit.column-1 label,
 div.admin div.edit.column-2 label {
     width: 150px ! important;
 }
+div.admin div.edit .checkbox label {
+    width: 100% ! important;
+}
 div.admin div.edit.column-2 textarea,
 div.admin div.edit.column-2 .input input {
     width: 360px;
