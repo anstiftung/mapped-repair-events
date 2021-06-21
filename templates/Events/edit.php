@@ -43,6 +43,10 @@ $this->element('addScript', ['script' =>
         ]);
         echo $this->Form->hidden('referer', ['value' => $referer]);
 
+        foreach($unlockedFields as $unlockedField) {
+            $this->Form->unlockedFields($unlockedField);
+        }
+
         $i = 0;
         foreach($events as $event) {
 

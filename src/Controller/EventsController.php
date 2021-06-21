@@ -25,18 +25,6 @@ class EventsController extends AppController
             'ical',
         ]);
 
-        $unlockedFields= [];
-        $i = 50;
-        while($i > 0) {
-            $unlockedFields[] = $i . '.datumstart';
-            $unlockedFields[] = $i . '.uhrzeitstart';
-            $unlockedFields[] = $i . '.uhrzeitend';
-            $i--;
-        }
-        $this->loadComponent('FormProtection', [
-            'unlockedFields' => $unlockedFields,
-        ]);
-
     }
 
     public function isAuthorized($user)
@@ -483,6 +471,16 @@ class EventsController extends AppController
         $this->set('uid', $events[0]->uid);
 
         $this->setReferer();
+
+        $unlockedFields= [];
+        $i = 50;
+        while($i > 0) {
+            $unlockedFields[] = $i . '.datumstart';
+            $unlockedFields[] = $i . '.uhrzeitstart';
+            $unlockedFields[] = $i . '.uhrzeitend';
+            $i--;
+        }
+        $this->set('unlockedFields', $unlockedFields);
 
         if (!empty($this->request->getData())) {
             $i = 0;
