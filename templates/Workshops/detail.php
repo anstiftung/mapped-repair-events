@@ -74,6 +74,8 @@ if (!$this->request->getSession()->read('isMobile')) {
                 'id' => 'WorknewsForm' . $workshop->uid,
             ]);
 
+                $this->Form->unlockField('botEwX482');
+
                 echo $this->Form->hidden('Worknews.workshop_uid', [
                     'value' => $workshop->uid
                 ]);
@@ -84,7 +86,10 @@ if (!$this->request->getSession()->read('isMobile')) {
                     'label' => false,
                     'style' => 'float:left; margin:0px 10px 0px 0px;'
                 ]);
-                echo '<div class="submit"><input type="submit" value="'.__('Submit').'"></div>';
+
+                echo '<div class="submit">';
+                    echo $this->Form->input(__('Submit'), ['type' => 'submit']);
+                echo '</div>';
 
             echo $this->Form->end();
         }

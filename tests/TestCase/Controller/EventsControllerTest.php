@@ -73,6 +73,7 @@ class EventsControllerTest extends AppTestCase
         $this->loadNewEventData();
         $this->loginAsOrga();
         $this->newEventData['eventbeschreibung'] = 'description</title></script><img src=n onerror=alert("x")>';
+        $this->newEventData['workshop_uid'] = 2;
         $this->newEventData['ort'] = 'Berlin';
         $this->newEventData['strasse'] = 'Demo Street 1';
         $this->newEventData['zip'] = '10999';
@@ -88,13 +89,14 @@ class EventsControllerTest extends AppTestCase
             'uhrzeitend' => '22:00',
         ];
 
+        $data = [
+            'referer' => '/',
+            $this->newEventData,
+            $newEventData2,
+        ];
         $this->post(
             Configure::read('AppConfig.htmlHelper')->urlEventNew(2),
-            [
-                'referer' => '/',
-                $this->newEventData,
-                $newEventData2
-            ]
+            $data,
         );
         $this->assertResponseNotContains('error');
 
@@ -113,6 +115,7 @@ class EventsControllerTest extends AppTestCase
         $this->assertEquals($events[1]->uhrzeitend, new FrozenTime($this->newEventData['uhrzeitend']));
         $this->assertEquals($events[1]->categories[0]->id, $this->newEventData['categories']['_ids'][0]);
         $this->assertEquals($events[1]->owner, 1);
+        $this->assertEquals($events[1]->workshop_uid, 2);
 
         $this->assertEquals($events[2]->datumstart, new FrozenDate($newEventData2['datumstart']));
         $this->assertEquals($events[2]->uhrzeitstart, new FrozenTime($newEventData2['uhrzeitstart']));

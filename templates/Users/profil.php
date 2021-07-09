@@ -39,6 +39,9 @@ if ($isMyProfile) {
                     'id' => 'userProfileForm'
                 ]
             );
+
+                $this->Form->unlockField('Users.private_as_array');
+
                 echo $this->Form->hidden('referer', ['value' => $referer]);
 
                 echo $this->element('heading', ['first' => 'Deine Rollen' ]);

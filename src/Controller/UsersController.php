@@ -189,7 +189,9 @@ class UsersController extends AppController
         ];
         $this->set('metaTags', $metaTags);
 
-        $user = $this->User->newEntity([]);
+        $user = $this->User->newEntity([], [
+            'validate' => false,
+        ]);
 
         if (! empty($this->request->getData())) {
 

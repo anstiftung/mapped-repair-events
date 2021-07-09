@@ -24,6 +24,7 @@ class EventsController extends AppController
             'feed',
             'ical',
         ]);
+
     }
 
     public function isAuthorized($user)
@@ -472,7 +473,6 @@ class EventsController extends AppController
         $this->setReferer();
 
         if (!empty($this->request->getData())) {
-            $i = 0;
             $patchedEvents = [];
             foreach($this->request->getData() as $data) {
                 if (!is_array($data)) {
@@ -503,7 +503,6 @@ class EventsController extends AppController
                 }
                 $event = clone($events[0]);
                 $patchedEvents[] = $this->Event->patchEntity($event, $data);
-                $i++;
             }
 
             $events = $patchedEvents;

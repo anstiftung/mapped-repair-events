@@ -17,6 +17,7 @@ use Cake\Core\Configure;
       <?php
         echo $this->Form->create($page, ['novalidate']);
         echo $this->Form->hidden('referer', ['value' => $referer]);
+        $this->Form->unlockField('referer');
         echo $this->Form->control('Pages.name').'<br />';
         echo $this->element('urlEditField', [
             'type' => 'Pages',

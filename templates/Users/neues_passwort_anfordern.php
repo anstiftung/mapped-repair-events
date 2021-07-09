@@ -2,20 +2,26 @@
 
   <?php echo $this->element('heading', ['first' => 'Neues Passwort anfordern']); ?>
 
-    <form novalidate id="NeuesPasswortAnfordernForm" action="<?php echo $this->Html->urlNeuesPasswortAnfordern();?>" method="post">
-
-        <?php
-        $this->Form->create($user);
+    <?php
+        echo $this->Form->create($user, [
+            'id' => 'NeuesPasswortAnfordernForm',
+            'novalidate' => 'novalidate',
+        ]);
         echo $this->Form->control('Users.email', ['label' => 'E-Mail']);
         echo '<div class="sc"></div>';
-        ?>
+    ?>
 
-            <div class="right">
-                <button type="submit" class="rounded">
-                    Senden
-                </button>
-            </div>
+        <div class="right">
+            <?php
+                echo $this->Form->button('Senden', [
+                    'type' => 'submit',
+                    'class' => 'rounded',
+                ]);
+            ?>
+        </div>
 
-        </form>
+    <?php
+        echo $this->Form->end();
+    ?>
 
 </div>

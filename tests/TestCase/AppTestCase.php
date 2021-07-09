@@ -42,6 +42,18 @@ class AppTestCase extends TestCase
         return preg_replace('/\{\{serverName\}\}/', str_replace('/', '\\\/', Configure::read('AppConfig.serverName')), $html);
     }
 
+    public function setUp(): void
+    {
+        parent::setUp();
+        if (method_exists($this, 'enableSecurityToken') &&
+            !in_array($this->getName(), [
+                'testAddEventsOk',
+            ])
+            ) {
+                $this->enableSecurityToken();
+        }
+    }
+
 }
 
 

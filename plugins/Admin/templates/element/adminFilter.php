@@ -1,8 +1,10 @@
-<form action="" method="get" id="admin-list-form">
+<?php
+    echo $this->Form->create(null, [
+        'method' => 'GET',
+        'id' => 'admin-list-form',
+    ]);
 
-    <?php
-    use Cake\Core\Configure;
-use Cake\Utility\Inflector;
+    use Cake\Utility\Inflector;
 
     echo $this->Form->control('key-standard', [
         'type' => 'select',
@@ -71,9 +73,12 @@ use Cake\Utility\Inflector;
         'value' => isset($this->request->getQueryParams()['direction']) ? $this->request->getQueryParams()['direction'] : ''
     ]);
 
-    ?>
+    echo $this->Form->button('Suchen', [
+        'type' => 'submit',
+        'class' => 'rounded',
+    ]);
 
-    <button type="submit" class="rounded">Suchen</button>
+    ?>
 
     <?php if (!empty($this->request->getQueryParams())) { ?>
         <button type="button" class="rounded gray"
@@ -82,5 +87,6 @@ use Cake\Utility\Inflector;
     </button>
     <?php } ?>
 
-</form>
+<?php echo $this->Form->end(); ?>
+
 <div class="sc"></div>

@@ -43,6 +43,7 @@ echo $this->element('upload/base', [
             ]
         );
         echo $this->Form->hidden($field, ['class' => 'image-field', 'value' => !empty($image) ? $image : '']);
+        $this->Form->unlockField($field);
     }
     ?>
 </div>

@@ -25,6 +25,8 @@ use Cake\Core\Configure;
                 ]
             );
             echo $this->Form->hidden('referer', ['value' => $referer]);
+            $this->Form->unlockField('referer');
+
             echo $this->Form->control('Posts.name', ['label' => 'Titel']).'<br />';
 
             echo $this->element('urlEditField', [

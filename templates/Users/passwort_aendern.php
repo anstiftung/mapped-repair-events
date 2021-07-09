@@ -3,23 +3,30 @@
 ?>
 <div id="passwort-aendern">
 
-    <?php echo $this->element('heading', ['first' => 'Passwort ändern']); ?>
+    <?php echo $this->element('heading', ['first' => 'Passwort ändern']);
 
-        <form novalidate id="UserChangePasswordForm" action="<?php echo $this->Html->urlPasswortAendern();?>" method="post">
+    echo $this->Form->create($user, [
+        'id' => 'UserChangePasswordForm',
+        'novalidate' => 'novalidate',
+    ]);
 
+        $this->Form->create($user);
+        echo $this->Form->control('Users.password', ['label' => 'Altes Passwort*']);
+        echo $this->Form->control('Users.password_new_1', ['label' => 'Neues Passwort*', 'type' => 'password']);
+        echo $this->Form->control('Users.password_new_2', ['label' => 'Neues Passwort*', 'type' => 'password']);
+    ?>
+
+    <div class="right">
         <?php
-            $this->Form->create($user);
-            echo $this->Form->control('Users.password', ['label' => 'Altes Passwort*']);
-            echo $this->Form->control('Users.password_new_1', ['label' => 'Neues Passwort*', 'type' => 'password']);
-            echo $this->Form->control('Users.password_new_2', ['label' => 'Neues Passwort*', 'type' => 'password']);
+            echo $this->Form->button('Passwort ändern', [
+                'type' => 'submit',
+                'class' => 'rounded',
+            ]);
         ?>
+    </div>
 
-            <div class="right">
-                <button type="submit" class="rounded">
-                    Password ändern
-                </button>
-            </div>
-
-        </form>
+    <?php
+        echo $this->Form->end();
+    ?>
 
 </div>

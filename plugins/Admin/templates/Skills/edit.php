@@ -18,6 +18,7 @@ $this->element('addScript', array('script' =>
         <?php
             echo $this->element('heading', ['first' => $metaTags['title']]);
             echo $this->Form->hidden('referer', ['value' => $referer]);
+            $this->Form->unlockField('referer');
             echo $this->Form->control('Skills.name', ['label' => 'Name']).'<br />';
             echo $this->Form->control('Skills.status', ['type' => 'select', 'options' => Configure::read('AppConfig.approvalStatus')]).'<br />';
         ?>

@@ -47,7 +47,7 @@
 <a id="registrieren-link" href="<?php echo $this->Html->urlRegister();?>"><?php echo __('Loginbox:Register');?></a>
 <button style="float:right;margin-top:10px;" type="submit" class="rounded" ><?php echo __('Loginbox:LoginButton');?></button>
 
-</form>
+<?php echo $this->Form->end(); ?>
 </div>
 
 <?php } ?>

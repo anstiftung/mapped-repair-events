@@ -151,9 +151,11 @@ $this->element('addScript', ['script' =>
 <h2 style="margin-top: 20px;"><?php echo $applicationText; ?></h2>
 <p><?php echo $explainationText; ?></p>
 
-<form id="workshopApply" action="<?php echo $this->request->getAttribute('here'); ?>" method="post">
+<?php
+    echo $this->Form->create(null, [
+        'id' => 'workshopApply',
+    ]);
 
-    <?php
     if ($appAuth->isAdmin()) {
         echo '<div style="margin-right:10px;float: left;">';
             echo $this->Form->control($relationModel.'.user_uid', [
@@ -169,11 +171,16 @@ $this->element('addScript', ['script' =>
         'options' => $workshopsForDropdown,
         'label' => ''
     ]);
-    ?>
-    <button id="mitarbeits-anfrage-stellen" type="button" class="rounded" style="margin-left: 10px;">
-      <?php echo $buttonText; ?>
-    </button>
 
-</form>
+    echo $this->Form->button($buttonText, [
+        'id' => 'mitarbeits-anfrage-stellen',
+        'type' => 'button',
+        'class' => 'rounded',
+        'style' => 'margin-left:10px;',
+    ]);
 
-<?php } ?>
+    echo $this->Form->end();
+
+}
+
+?>
