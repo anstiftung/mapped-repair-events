@@ -472,18 +472,7 @@ class EventsController extends AppController
 
         $this->setReferer();
 
-        $unlockedFields= [];
-        $i = 50;
-        while($i > 0) {
-            $unlockedFields[] = $i . '.datumstart';
-            $unlockedFields[] = $i . '.uhrzeitstart';
-            $unlockedFields[] = $i . '.uhrzeitend';
-            $i--;
-        }
-        $this->set('unlockedFields', $unlockedFields);
-
         if (!empty($this->request->getData())) {
-            $i = 0;
             $patchedEvents = [];
             foreach($this->request->getData() as $data) {
                 if (!is_array($data)) {
@@ -514,8 +503,6 @@ class EventsController extends AppController
                 }
                 $event = clone($events[0]);
                 $patchedEvents[] = $this->Event->patchEntity($event, $data);
-                $i++;
-
             }
 
             $events = $patchedEvents;

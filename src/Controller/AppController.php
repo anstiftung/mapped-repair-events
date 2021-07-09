@@ -58,7 +58,7 @@ class AppController extends Controller
         $this->loadComponent('AppFlash', [
             'clear' => true
         ]);
-        if (!$this->getRequest()->is('json')) {
+        if (!$this->getRequest()->is('json') && !in_array($this->name, ['Events'])) {
             $this->loadComponent('FormProtection');
         }
         $this->loadComponent('AppAuth', [
