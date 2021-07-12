@@ -33,6 +33,7 @@ use Cake\Core\Configure;
             <?php
                 echo $this->element('heading', ['first' => $metaTags['title']]);
                 echo $this->Form->hidden('referer', ['value' => $referer]);
+                $this->Form->unlockField('referer');
                 echo '<p style="margin-bottom:10px;">' . Configure::read('AppConfig.initiativeNameSingular').': <b>' . $infoSheet->event->workshop->name.'</b>';
                 echo ', Termin: <b> ' . $infoSheet->event->datumstart->i18nFormat(Configure::read('DateFormat.de.DateLong2')).'</b>';
                 echo ', Laufzettel-Id: ';
