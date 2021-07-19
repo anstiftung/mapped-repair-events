@@ -24,6 +24,7 @@ $this->element('addScript', array('script' =>
             echo $this->Form->control('Categories.carbon_footprint', ['type' => 'text', 'label' => 'Carbon Footprint']).'<br />';
             echo $this->Form->control('Categories.material_footprint', ['type' => 'text', 'label' => 'Material Footprint']).'<br />';
             echo $this->Form->control('Categories.parent_id', ['style' => 'width: 295px;', 'type' => 'select', 'label' => 'Oberkategorie', 'options' => $mainCategories, 'empty' => 'Oberkategorie auswählen...']).'<br />';
+            echo $this->Form->control('Categories.ords_category_id', ['style' => 'width: 295px;', 'type' => 'select', 'label' => 'ORDS-Kategorie', 'options' => $ordsCategories, 'empty' => 'ORDS-Kateogrie auswählen...']).'<br />';
             echo $this->Form->control('Categories.status', ['type' => 'select', 'options' => Configure::read('AppConfig.approvalStatus')]).'<br />';
         ?>
     </div>
