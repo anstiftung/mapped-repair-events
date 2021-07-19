@@ -38,6 +38,6 @@
     "swiper": "^6.7.5"
   },
   "devDependencies": {
-    "eslint": "^7.30.0"
+    "eslint": "^7.31.0"
   }
 }
