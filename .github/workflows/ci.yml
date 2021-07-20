@@ -39,6 +39,11 @@ jobs:
         env:
           update: true #forces minor release update
           
+      - name: Setup NodeJS
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+                      
       - uses: actions/checkout@v2
 
       - name: Setup DB
