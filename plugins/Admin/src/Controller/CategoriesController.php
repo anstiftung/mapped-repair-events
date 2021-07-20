@@ -70,6 +70,8 @@ class CategoriesController extends AdminAppController
         $metaTags = ['title' => 'Kategorie bearbeiten'];
         $this->set('metaTags', $metaTags);
 
+        $this->OrdsCategory = $this->getTableLocator()->get('OrdsCategories');
+        $this->set('ordsCategories', $this->OrdsCategory->getForDropdown());
         $this->set('mainCategories', $this->Category->getForDropdown([APP_ON, APP_OFF]));
 
     }
@@ -87,7 +89,8 @@ class CategoriesController extends AdminAppController
             'conditions' => $conditions,
             'contain' => [
                 'OwnerUsers',
-                'ParentCategories'
+                'ParentCategories',
+                'OrdsCategories',
             ],
             'order' => [
                 'ParentCategories.name' => 'ASC',

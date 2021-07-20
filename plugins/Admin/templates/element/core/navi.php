@@ -30,6 +30,11 @@ echo $this->Html->createMenuEntry(array(
     'level' => 'main'
 ));
 echo $this->Html->createMenuEntry(array(
+    'name' => 'ORDS',
+    'url' => '/admin/ordsCategories/index',
+    'level' => 'main'
+));
+echo $this->Html->createMenuEntry(array(
     'name' => 'Kenntnisse',
     'url' => '/admin/skills/index',
     'level' => 'main'

@@ -25,6 +25,9 @@ class CategoriesTable extends Table
             'className' => 'Users',
             'foreignKey' => 'owner'
         ]);
+        $this->belongsTo('OrdsCategories', [
+            'foreignKey' => 'ords_category_id'
+        ]);
         $this->belongsToMany('Workshops', [
             'through' => 'WorkshopsCategories',
             'foreignKey' => 'category_id',

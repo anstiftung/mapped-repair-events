@@ -2,18 +2,13 @@
 echo $this->element('list',
     [
         'objects' => $objects
-        ,'heading' => 'Kategorien'
-        ,'newMethod' => ['url' => 'urlCategoryNew']
-        ,'editMethod' => ['url' => 'urlCategoryEdit']
+        ,'heading' => 'ORDS-Kategorien'
+        ,'newMethod' => ['url' => 'urlOrdsCategoryNew']
+        ,'editMethod' => ['url' => 'urlOrdsCategoryEdit']
         ,'hideDeleteLink' => true
         ,'fields' => [
             ['name' => 'id', 'label' => 'ID']
-            ,['name' => 'parent_category.name', 'label' => 'Oberkategorie']
             ,['name' => 'name', 'label' => 'Unterkategorie']
-            ,['name' => 'ords_category.name', 'label' => 'ORDS-Kategorie']
-            ,['name' => 'visible_on_platform', 'label' => 'Sichtbar']
-            ,['name' => 'carbon_footprint', 'label' => 'CF']
-            ,['name' => 'material_footprint', 'label' => 'MF']
             ,['name' => 'owner_user.name', 'label' => 'Owner']
             ,['name' => 'status', 'label' => 'Status']
             ,['name' => 'created', 'type' => 'datetime', 'label' => 'erstellt']

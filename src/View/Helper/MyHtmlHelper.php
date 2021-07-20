@@ -346,6 +346,12 @@ class MyHtmlHelper extends HtmlHelper {
     function urlCategoryEdit($id) {
         return '/admin/categories/edit/' . $id;
     }
+    function urlOrdsCategoryNew() {
+        return '/admin/ordsCategories/insert/';
+    }
+    function urlOrdsCategoryEdit($id) {
+        return '/admin/ordsCategories/edit/' . $id;
+    }
     function urlSkillNew() {
         return '/admin/skills/insert/';
     }
