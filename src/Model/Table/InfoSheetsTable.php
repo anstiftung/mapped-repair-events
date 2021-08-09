@@ -33,6 +33,7 @@ class InfoSheetsTable extends AppTable
     {
         $validator->notEmptyString('category_id', 'Bitte wähle eine Kategorie aus.');
         $validator = $this->getNumberRangeValidator($validator, 'device_age', 0, 120);
+        $validator->naturalNumber('device_age', 'Die Eingabe muss eine ganze Zahl sein.');
         $validator->allowEmptyString('device_age');
         $validator = $this->getNumberRangeValidator($validator, 'visitor_age', 0, 120);
         $validator->allowEmptyString('visitor_age');

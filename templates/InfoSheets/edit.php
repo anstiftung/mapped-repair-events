@@ -92,7 +92,7 @@ use Cake\Core\Configure;
                 'label' => 'Marke:'
             ]).
             $this->Form->control('InfoSheets.device_name', ['div' => 'input text long', 'type' => 'text', 'label' => 'Modell:']).'<br />'.
-            $this->Form->control('InfoSheets.device_age', ['div' => 'input text long', 'type' => 'text', 'label' => 'Alter in Jahren:']).'<br />'.
+            $this->Form->control('InfoSheets.device_age', ['div' => 'input', 'label' => 'Alter in Jahren:']).'<br />'.
             '<div class="form-fields-checkbox-wrapper power_supply">'.
                 '<label>'.$powerSupplyFormField->name.':</label>'.
                 $this->Form->control('InfoSheets.form_field_options._ids', [

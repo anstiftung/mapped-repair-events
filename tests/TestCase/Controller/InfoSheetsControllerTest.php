@@ -25,7 +25,7 @@ class InfoSheetsControllerTest extends AppTestCase
         'brand_id' => 1,
         'new_brand_name' => '',
         'device_name' => '',
-        'device_age' => 1,
+        'device_age' => 1.5,
         'form_field_options' => [
             '_ids' => [
                 '0' => 1
@@ -52,6 +52,7 @@ class InfoSheetsControllerTest extends AppTestCase
         $this->assertResponseContains('Bitte gib die Fehlerbeschreibung an (maximal 1.000 Zeichen).');
         $this->assertResponseContains('Bitte wähle eine Kategorie aus.');
         $this->assertResponseContains('Wurde der Fehler gefunden?');
+        $this->assertResponseContains('Die Eingabe muss eine ganze Zahl sein.');
     }
 
     public function testAddInfoSheetOk()
@@ -61,6 +62,7 @@ class InfoSheetsControllerTest extends AppTestCase
         $this->newInfoSheetData['device_name'] = 'Device name';
         $this->newInfoSheetData['category_id'] = 87;
         $this->newInfoSheetData['defect_found'] = 1;
+        $this->newInfoSheetData['device_age'] = 1;
         $this->post(
             Configure::read('AppConfig.htmlHelper')->urlInfoSheetNew(6),
             [
