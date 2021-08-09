@@ -40,6 +40,8 @@ MappedRepairEvents.InfoSheet = {
             } else {
                 $(selectorToShow).hide();
                 $(selectorToHideIfNotSelected).hide();
+                $(selectorToShow).find('input[type="radio"]').prop('checked', false);
+                $(selectorToHideIfNotSelected).find('input[type="radio"]').prop('checked', false);
             }
         });
         // init edit forms
