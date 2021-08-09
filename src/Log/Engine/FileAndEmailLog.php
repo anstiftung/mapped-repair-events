@@ -28,7 +28,8 @@ class FileAndEmailLog extends FileLog
            'RssHelper is deprecated',
            'UsersController::publicProfile()',
            'workshops\/ajaxGetAllWorkshopsForMap',
-            preg_quote('{"results":[{"address_components"')
+            preg_quote('{"results":[{"address_components"'),
+            'Form tampering protection token validation failed',
         ];
         if (preg_match('`' . join('|', $ignoredExceptionsRegex) . '`', $message)) {
             return false;
