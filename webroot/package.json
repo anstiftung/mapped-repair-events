@@ -14,16 +14,16 @@
     "install": "bash ../bin/cake npm_post_install"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.15.3",
+    "@fortawesome/fontawesome-free": "^5.15.4",
     "@sintef/prune-cluster": "^2.1.0",
     "blueimp-file-upload": "^10.31.0",
-    "chart.js": "^3.4.1",
+    "chart.js": "^3.5.0",
     "chartjs-plugin-datalabels": "^2.0.0",
     "ckeditor4": "^4.16.1",
     "components-jqueryui": "~1.12",
     "detect_swipe": "^2.1.4",
     "featherlight": "^1.7.14",
-    "fullcalendar": "^5.8.0",
+    "fullcalendar": "^5.9.0",
     "jQuery-Impromptu": "https://github.com/trentrichardson/jQuery-Impromptu/tarball/master",
     "jquery": "^3.6.0",
     "jquery-knob": "https://github.com/aterrien/jQuery-Knob/tarball/master",
@@ -34,10 +34,10 @@
     "select2": "^4.0.13",
     "slidebars": "^2.0.2",
     "speakingurl": "^14.0.1",
-    "svelte": "^3.38.3",
-    "swiper": "^6.7.5"
+    "svelte": "^3.42.1",
+    "swiper": "^6.8.1"
   },
   "devDependencies": {
-    "eslint": "^7.31.0"
+    "eslint": "^7.32.0"
   }
 }
