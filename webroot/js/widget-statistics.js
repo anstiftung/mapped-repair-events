@@ -196,8 +196,10 @@ MappedRepairEvents.WidgetStatistics = {
                     tooltip: {
                         callbacks: {
                             label: function(ctx) {
-                                var newLabel = ctx.formattedValue + 'x ' + ctx.dataset.label.toString().replace(/\((.*)\)/, '').trim();
-                                return newLabel;
+                                if (ctx.formattedValue > 0) {
+                                    var newLabel = ctx.formattedValue + 'x ' + ctx.dataset.label.toString().replace(/\((.*)\)/, '').trim();
+                                    return newLabel;
+                                }
                             }
                         }
                     },
