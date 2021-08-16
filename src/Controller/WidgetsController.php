@@ -170,11 +170,30 @@ class WidgetsController extends AppController
         $this->set('metaTags', $metaTags);
         $showBarChart = $this->viewBuilder()->getVar('showBarChart');
         if ($showBarChart) {
-            $this->statisticsGlobalCategories($this->viewBuilder()->getVar('month'), $this->viewBuilder()->getVar('year'), $this->viewBuilder()->getVar('backgroundColorOk'), $this->viewBuilder()->getVar('backgroundColorNotOk'), $this->viewBuilder()->getVar('borderColorOk'), $this->viewBuilder()->getVar('borderColorNotOk'), $this->viewBuilder()->getVar('dataSource'));
+            $this->statisticsGlobalCategories(
+                $this->viewBuilder()->getVar('month'),
+                $this->viewBuilder()->getVar('year'),
+                $this->viewBuilder()->getVar('backgroundColorOk'),
+                $this->viewBuilder()->getVar('backgroundColorRepairable'),
+                $this->viewBuilder()->getVar('backgroundColorNotOk'),
+                $this->viewBuilder()->getVar('borderColorOk'),
+                $this->viewBuilder()->getVar('borderColorRepairable'),
+                $this->viewBuilder()->getVar('borderColorNotOk'),
+                $this->viewBuilder()->getVar('dataSource')
+            );
         }
         $showDonutChart = $this->viewBuilder()->getVar('showDonutChart');
         if ($showDonutChart) {
-            $this->statisticsGlobalRepaired($this->viewBuilder()->getVar('month'), $this->viewBuilder()->getVar('year'), $this->viewBuilder()->getVar('backgroundColorOk'), $this->viewBuilder()->getVar('backgroundColorNotOk'), $this->viewBuilder()->getVar('borderColorOk'), $this->viewBuilder()->getVar('borderColorNotOk'));
+            $this->statisticsGlobalRepaired(
+                $this->viewBuilder()->getVar('month'),
+                $this->viewBuilder()->getVar('year'),
+                $this->viewBuilder()->getVar('backgroundColorOk'),
+                $this->viewBuilder()->getVar('backgroundColorRepairable'),
+                $this->viewBuilder()->getVar('backgroundColorNotOk'),
+                $this->viewBuilder()->getVar('borderColorOk'),
+                $this->viewBuilder()->getVar('borderColorRepairable'),
+                $this->viewBuilder()->getVar('borderColorNotOk'),
+            );
         }
 
     }
@@ -205,18 +224,47 @@ class WidgetsController extends AppController
 
         $showBarChart = $this->viewBuilder()->getVar('showBarChart');
         if ($showBarChart) {
-            $this->statisticsWorkshopCategories($workshop->uid, $this->viewBuilder()->getVar('dateFrom'), $this->viewBuilder()->getVar('dateTo'), $this->viewBuilder()->getVar('backgroundColorOk'), $this->viewBuilder()->getVar('backgroundColorNotOk'), $this->viewBuilder()->getVar('borderColorOk'), $this->viewBuilder()->getVar('borderColorNotOk'));
+            $this->statisticsWorkshopCategories(
+                $workshop->uid,
+                $this->viewBuilder()->getVar('dateFrom'),
+                $this->viewBuilder()->getVar('dateTo'),
+                $this->viewBuilder()->getVar('backgroundColorOk'),
+                $this->viewBuilder()->getVar('backgroundColorRepairable'),
+                $this->viewBuilder()->getVar('backgroundColorNotOk'),
+                $this->viewBuilder()->getVar('borderColorOk'),
+                $this->viewBuilder()->getVar('borderColorRepairable'),
+                $this->viewBuilder()->getVar('borderColorNotOk')
+            );
         }
         $showDonutChart = $this->viewBuilder()->getVar('showDonutChart');
         if ($showDonutChart) {
-            $this->statisticsWorkshopRepaired($workshop->uid, $this->viewBuilder()->getVar('dateFrom'), $this->viewBuilder()->getVar('dateTo'), $this->viewBuilder()->getVar('backgroundColorOk'), $this->viewBuilder()->getVar('backgroundColorNotOk'), $this->viewBuilder()->getVar('borderColorOk'), $this->viewBuilder()->getVar('borderColorNotOk'));
+            $this->statisticsWorkshopRepaired($workshop->uid,
+                $this->viewBuilder()->getVar('dateFrom'),
+                $this->viewBuilder()->getVar('dateTo'),
+                $this->viewBuilder()->getVar('backgroundColorOk'),
+                $this->viewBuilder()->getVar('backgroundColorRepairable'),
+                $this->viewBuilder()->getVar('backgroundColorNotOk'),
+                $this->viewBuilder()->getVar('borderColorOk'),
+                $this->viewBuilder()->getVar('borderColorRepairable'),
+                $this->viewBuilder()->getVar('borderColorNotOk')
+            );
         }
 
         $this->set('workshop', $workshop);
 
     }
 
-    private function statisticsWorkshopCategories($workshopUid, $dateFrom, $dateTo, $backgroundColorOk, $backgroundColorNotOk, $borderColorOk, $borderColorNotOk)
+    private function statisticsWorkshopCategories(
+        $workshopUid,
+        $dateFrom,
+        $dateTo,
+        $backgroundColorOk,
+        $backgroundColorRepairable,
+        $backgroundColorNotOk,
+        $borderColorOk,
+        $borderColorRepairable,
+        $borderColorNotOk
+        )
     {
 
         $this->InfoSheet = $this->getTableLocator()->get('InfoSheets');
@@ -226,19 +274,22 @@ class WidgetsController extends AppController
         $categoriesLabels = [];
         $categoriesDatasets = [];
         $categoriesDataRepaired = [];
+        $categoriesDataRepairable = [];
         $categoriesDataNotRepaired = [];
         $carbonFootprintSum = 0;
         foreach($categoriesForStatistics as &$c) {
             $repaired = $this->InfoSheet->getRepairedByMainCategoryId($workshopUid, $c['id'], $dateFrom, $dateTo);
+            $repairable = $this->InfoSheet->getRepairableByMainCategoryId($workshopUid, $c['id'], $dateFrom, $dateTo);
             $notRepaired = $this->InfoSheet->getNotRepairedByMainCategoryId($workshopUid, $c['id'], $dateFrom, $dateTo);
             $carbonFootprint = $this->Category->getCarbonFootprintByParentCategoryId($c->id);
             $carbonFootprintSum += $this->Category->calculateCarbonFootprint($repaired, $carbonFootprint);
-            if ($repaired == 0 && $notRepaired == 0) {
+            if ($repaired == 0 && $repairable == 0 && $notRepaired == 0) {
                 unset($c);
                 continue;
             }
             $categoriesLabels[] = $c->name;
             $categoriesDataRepaired[] = $repaired;
+            $categoriesDataRepairable[] = $repairable;
             $categoriesDataNotRepaired[] = $notRepaired;
         }
         $categoriesDataset = [
@@ -249,6 +300,16 @@ class WidgetsController extends AppController
             'label' => ['Repariert (' . array_sum($categoriesDataRepaired)  . ')']
         ];
         $categoriesDatasets[] = $categoriesDataset;
+
+        $categoriesDataset = [
+            'backgroundColor' => $backgroundColorRepairable,
+            'borderColor' => $borderColorRepairable,
+            'borderWidth' => 1,
+            'data' => $categoriesDataRepairable,
+            'label' => ['Reparabel (' . array_sum($categoriesDataRepairable)  . ')']
+        ];
+        $categoriesDatasets[] = $categoriesDataset;
+
         $categoriesDataset = [
             'backgroundColor' => $backgroundColorNotOk,
             'borderColor' => $borderColorNotOk,
@@ -268,24 +329,37 @@ class WidgetsController extends AppController
 
     }
 
-    private function statisticsWorkshopRepaired($workshopUid, $dateFrom, $dateTo, $backgroundColorOk, $backgroundColorNotOk, $borderColorOk, $borderColorNotOk)
+    private function statisticsWorkshopRepaired(
+        $workshopUid,
+        $dateFrom,
+        $dateTo,
+        $backgroundColorOk,
+        $backgroundColorRepairable,
+        $backgroundColorNotOk,
+        $borderColorOk,
+        $borderColorRepairable,
+        $borderColorNotOk
+        )
     {
 
         $this->InfoSheet = $this->getTableLocator()->get('InfoSheets');
 
         $dataRepaired = $this->InfoSheet->getRepairedByWorkshopUid($workshopUid, $dateFrom, $dateTo);
+        $dataRepairable = $this->InfoSheet->getRepairableByWorkshopUid($workshopUid, $dateFrom, $dateTo);
         $dataNotRepaired = $this->InfoSheet->getNotRepairedByWorkshopUid($workshopUid, $dateFrom, $dateTo);
         $this->set('statisticsRepairedData', [
-            'backgroundColor' => [$backgroundColorOk, $backgroundColorNotOk],
-            'borderColor' => [$borderColorOk, $borderColorNotOk],
+            'backgroundColor' => [$backgroundColorOk, $backgroundColorRepairable, $backgroundColorNotOk],
+            'borderColor' => [$borderColorOk, $borderColorRepairable, $borderColorNotOk],
             'borderWidth' => 1,
             'labels' => [
                 'Repariert (' . $dataRepaired . ')',
+                'Reparabel (' . $dataRepairable . ')',
                 'Nicht repariert (' . $dataNotRepaired . ')',
             ],
             'data' => [
                 $dataRepaired,
-                $dataNotRepaired
+                $dataRepairable,
+                $dataNotRepaired,
             ]
         ]);
 
@@ -387,6 +461,12 @@ class WidgetsController extends AppController
         }
         $this->set('backgroundColorOk', $backgroundColorOk);
 
+        $backgroundColorRepairable = Configure::read('AppConfig.widgetHelper')->getDefaultChartBackgroundColorRepairable();
+        if (!empty($this->request->getQuery('backgroundColorRepairable')) && $this->validateHtmlColor($this->request->getQuery('backgroundColorRepairable'))) {
+            $backgroundColorRepairable = $this->validateHtmlColor(h($this->request->getQuery('backgroundColorRepairable')));
+        }
+        $this->set('backgroundColorRepairable', $backgroundColorRepairable);
+
         $backgroundColorNotOk = Configure::read('AppConfig.widgetHelper')->getDefaultChartBackgroundColorNotOk();
         if (!empty($this->request->getQuery('backgroundColorNotOk')) && $this->validateHtmlColor($this->request->getQuery('backgroundColorNotOk'))) {
             $backgroundColorNotOk = $this->validateHtmlColor(h($this->request->getQuery('backgroundColorNotOk')));
@@ -404,6 +484,12 @@ class WidgetsController extends AppController
             $borderColorNotOk = $this->validateHtmlColor(h($this->request->getQuery('borderColorNotOk')));
         }
         $this->set('borderColorNotOk', $borderColorNotOk);
+
+        $borderColorRepairable = Configure::read('AppConfig.widgetHelper')->getDefaultChartBorderColorRepairable();
+        if (!empty($this->request->getQuery('borderColorRepairable')) && $this->validateHtmlColor($this->request->getQuery('borderColorRepairable'))) {
+            $borderColorRepairable = $this->validateHtmlColor(h($this->request->getQuery('borderColorRepairable')));
+        }
+        $this->set('borderColorRepairable', $borderColorRepairable);
 
     }
 
@@ -434,7 +520,17 @@ class WidgetsController extends AppController
         ];
     }
 
-    private function statisticsGlobalCategories($month, $year, $backgroundColorOk, $backgroundColorNotOk, $borderColorOk, $borderColorNotOk, $dataSource)
+    private function statisticsGlobalCategories(
+        $month,
+        $year,
+        $backgroundColorOk,
+        $backgroundColorRepairable,
+        $backgroundColorNotOk,
+        $borderColorOk,
+        $borderColorRepairable,
+        $borderColorNotOk,
+        $dataSource
+        )
     {
 
         $dates = $this->getDateFromByMonthAndYear($month, $year);
@@ -451,6 +547,7 @@ class WidgetsController extends AppController
         $categoriesLabels = [];
         $categoriesDatasets = [];
         $categoriesDataRepaired = [];
+        $categoriesDataRepairable = [];
         $categoriesDataNotRepaired = [];
         $carbonFootprintSum = 0;
         $materialFootprintSum = 0;
@@ -461,6 +558,7 @@ class WidgetsController extends AppController
             $categoriesCarbonFootprint[] = $category['carbon_footprint'];
             $categoriesMaterialFootprint[] = $category['material_footprint'];
             $categoriesDataRepaired[] = 0;
+            $categoriesDataRepairable[] = 0;
             $categoriesDataNotRepaired[] = 0;
         }
 
@@ -474,7 +572,9 @@ class WidgetsController extends AppController
                 $materialFootprint = $this->Category->getMaterialFootprintByParentCategoryId($mainCategoryId);
                 $materialFootprintSum += $this->Category->calculateMaterialFootprint($repaired, $materialFootprint);
                 $notRepaired = $this->InfoSheet->getNotRepairedGlobalByMainCategoryId($mainCategoryId, $dateFrom, $dateTo);
+                $repairable = $this->InfoSheet->getRepairableGlobalByMainCategoryId($mainCategoryId, $dateFrom, $dateTo);
                 $categoriesDataRepaired[$index] += $repaired;
+                $categoriesDataRepairable[$index] += $repairable;
                 $categoriesDataNotRepaired[$index] += $notRepaired;
             }
 
@@ -510,6 +610,7 @@ class WidgetsController extends AppController
         }
         $categoriesLabels = array_values($categoriesLabels);
         $categoriesDataRepaired = array_values($categoriesDataRepaired);
+        $categoriesDataRepairable = array_values($categoriesDataRepairable);
         $categoriesDataNotRepaired = array_values($categoriesDataNotRepaired);
 
         $categoriesDataset = [
@@ -519,8 +620,17 @@ class WidgetsController extends AppController
             'data' => $categoriesDataRepaired,
             'label' => ['Repariert (' . Configure::read('AppConfig.numberHelper')->format(array_sum($categoriesDataRepaired)) . ')']
         ];
-
         $categoriesDatasets[] = $categoriesDataset;
+
+        $categoriesDataset = [
+            'backgroundColor' => $backgroundColorRepairable,
+            'borderColor' => $borderColorRepairable,
+            'borderWidth' => 1,
+            'data' => $categoriesDataRepairable,
+            'label' => ['Reparabel (' . Configure::read('AppConfig.numberHelper')->format(array_sum($categoriesDataRepairable)) . ')']
+        ];
+        $categoriesDatasets[] = $categoriesDataset;
+
         $categoriesDataset = [
             'backgroundColor' => $backgroundColorNotOk,
             'borderColor' => $borderColorNotOk,
@@ -541,7 +651,16 @@ class WidgetsController extends AppController
 
     }
 
-    private function statisticsGlobalRepaired($month, $year, $backgroundColorOk, $backgroundColorNotOk, $borderColorOk, $borderColorNotOk)
+    private function statisticsGlobalRepaired(
+        $month,
+        $year,
+        $backgroundColorOk,
+        $backgroundColorRepairable,
+        $backgroundColorNotOk,
+        $borderColorOk,
+        $borderColorRepairable,
+        $borderColorNotOk
+        )
     {
 
         $dates = $this->getDateFromByMonthAndYear($month, $year);
@@ -551,23 +670,24 @@ class WidgetsController extends AppController
         $this->InfoSheet = $this->getTableLocator()->get('InfoSheets');
 
         $dataRepaired = $this->InfoSheet->getRepaired($dateFrom, $dateTo);
+        $dataRepairable = $this->InfoSheet->getRepairable($dateFrom, $dateTo);
         $dataNotRepaired = $this->InfoSheet->getNotRepaired($dateFrom, $dateTo);
+
         $this->set('statisticsRepairedData', [
-            'backgroundColor' => [$backgroundColorOk, $backgroundColorNotOk],
-            'borderColor' => [$borderColorOk, $borderColorNotOk],
+            'backgroundColor' => [$backgroundColorOk, $backgroundColorRepairable, $backgroundColorNotOk],
+            'borderColor' => [$borderColorOk, $borderColorRepairable, $borderColorNotOk],
             'borderWidth' => 1,
             'labels' => [
                 'Repariert (' . Configure::read('AppConfig.numberHelper')->format($dataRepaired) . ')',
+                'Reparabel (' . Configure::read('AppConfig.numberHelper')->format($dataRepairable) . ')',
                 'Nicht Repariert (' . Configure::read('AppConfig.numberHelper')->format($dataNotRepaired) . ')',
             ],
             'data' => [
                 $dataRepaired,
-                $dataNotRepaired
+                $dataRepairable,
+                $dataNotRepaired,
             ]
         ]);
-
-        // not yet sure if only pie chart should EVER be shown in global stats
-//         $this->setDonutChartHasData($this->viewBuilder()->getVar('statisticsRepairedData'));
 
     }
 

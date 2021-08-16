@@ -79,7 +79,7 @@ class InfoSheetsTable extends AppTable
         return $validator;
     }
 
-    private function prepareRepairedNotRepairedGlobal($dateFrom=null, $dateTo=null)
+    private function prepareStatisticsDataGlobal($dateFrom=null, $dateTo=null)
     {
         $query = $this->find();
         $query->contain([
@@ -101,18 +101,18 @@ class InfoSheetsTable extends AppTable
         return $query;
     }
 
-    private function prepareRepairedNotRepairedByWorkshopUid($workshopUid, $dateFrom, $dateTo)
+    private function prepareStatisticsDataByWorkshopUid($workshopUid, $dateFrom, $dateTo)
     {
-        $query = $this->prepareRepairedNotRepairedGlobal($dateFrom, $dateTo);
+        $query = $this->prepareStatisticsDataGlobal($dateFrom, $dateTo);
         $query->where([
             'Events.workshop_uid' => $workshopUid
         ]);
         return $query;
     }
 
-    private function prepareRepairedNotRepairedGlobalByMainCategory($categoryId, $dateFrom, $dateTo)
+    private function prepareStatisticsDataGlobalByMainCategory($categoryId, $dateFrom, $dateTo)
     {
-        $query = $this->prepareRepairedNotRepairedGlobal($dateFrom, $dateTo);
+        $query = $this->prepareStatisticsDataGlobal($dateFrom, $dateTo);
         $query->contain([
             'Categories'
         ]);
@@ -122,9 +122,9 @@ class InfoSheetsTable extends AppTable
         return $query;
     }
 
-    private function prepareRepairedNotRepairedByMainCategory($workshopUid, $categoryId, $dateFrom, $dateTo)
+    private function prepareStatisticsDataByMainCategory($workshopUid, $categoryId, $dateFrom, $dateTo)
     {
-        $query = $this->prepareRepairedNotRepairedByWorkshopUid($workshopUid, $dateFrom, $dateTo);
+        $query = $this->prepareStatisticsDataByWorkshopUid($workshopUid, $dateFrom, $dateTo);
         $query->contain([
             'Categories'
         ]);
@@ -136,56 +136,84 @@ class InfoSheetsTable extends AppTable
 
     public function getRepairedGlobalByMainCategoryId($categoryId, $dateFrom, $dateTo)
     {
-        $query = $this->prepareRepairedNotRepairedGlobalByMainCategory($categoryId, $dateFrom, $dateTo);
+        $query = $this->prepareStatisticsDataGlobalByMainCategory($categoryId, $dateFrom, $dateTo);
         $query->where($this->getRepairedConditions());
+        return $query->count();
+    }
+
+    public function getRepairableGlobalByMainCategoryId($categoryId, $dateFrom, $dateTo)
+    {
+        $query = $this->prepareStatisticsDataGlobalByMainCategory($categoryId, $dateFrom, $dateTo);
+        $query->where($this->getRepairableConditions());
         return $query->count();
     }
 
     public function getNotRepairedGlobalByMainCategoryId($categoryId, $dateFrom, $dateTo)
     {
-        $query = $this->prepareRepairedNotRepairedGlobalByMainCategory($categoryId, $dateFrom, $dateTo);
+        $query = $this->prepareStatisticsDataGlobalByMainCategory($categoryId, $dateFrom, $dateTo);
         $query->where($this->getNotRepairedConditions());
         return $query->count();
     }
 
     public function getRepairedByMainCategoryId($workshopUid, $categoryId, $dateFrom, $dateTo)
     {
-        $query = $this->prepareRepairedNotRepairedByMainCategory($workshopUid, $categoryId, $dateFrom, $dateTo);
+        $query = $this->prepareStatisticsDataByMainCategory($workshopUid, $categoryId, $dateFrom, $dateTo);
         $query->where($this->getRepairedConditions());
+        return $query->count();
+    }
+
+    public function getRepairableByMainCategoryId($workshopUid, $categoryId, $dateFrom, $dateTo)
+    {
+        $query = $this->prepareStatisticsDataByMainCategory($workshopUid, $categoryId, $dateFrom, $dateTo);
+        $query->where($this->getRepairableConditions());
         return $query->count();
     }
 
     public function getNotRepairedByMainCategoryId($workshopUid, $categoryId, $dateFrom, $dateTo)
     {
-        $query = $this->prepareRepairedNotRepairedByMainCategory($workshopUid, $categoryId, $dateFrom, $dateTo);
+        $query = $this->prepareStatisticsDataByMainCategory($workshopUid, $categoryId, $dateFrom, $dateTo);
         $query->where($this->getNotRepairedConditions());
         return $query->count();
     }
 
     public function getRepaired($dateFrom, $dateTo)
     {
-        $query = $this->prepareRepairedNotRepairedGlobal($dateFrom, $dateTo);
+        $query = $this->prepareStatisticsDataGlobal($dateFrom, $dateTo);
         $query->where($this->getRepairedConditions());
+        return $query->count();
+    }
+
+    public function getRepairable($dateFrom, $dateTo)
+    {
+        $query = $this->prepareStatisticsDataGlobal($dateFrom, $dateTo);
+        $query->where($this->getRepairableConditions());
         return $query->count();
     }
 
     public function getNotRepaired($dateFrom, $dateTo)
     {
-        $query = $this->prepareRepairedNotRepairedGlobal($dateFrom, $dateTo);
+        $query = $this->prepareStatisticsDataGlobal($dateFrom, $dateTo);
         $query->where($this->getNotRepairedConditions());
         return $query->count();
     }
 
     public function getRepairedByWorkshopUid($workshopUid, $dateFrom, $dateTo)
     {
-        $query = $this->prepareRepairedNotRepairedByWorkshopUid($workshopUid, $dateFrom, $dateTo);
+        $query = $this->prepareStatisticsDataByWorkshopUid($workshopUid, $dateFrom, $dateTo);
         $query->where($this->getRepairedConditions());
+        return $query->count();
+    }
+
+    public function getRepairableByWorkshopUid($workshopUid, $dateFrom, $dateTo)
+    {
+        $query = $this->prepareStatisticsDataByWorkshopUid($workshopUid, $dateFrom, $dateTo);
+        $query->where($this->getRepairableConditions());
         return $query->count();
     }
 
     public function getNotRepairedByWorkshopUid($workshopUid, $dateFrom, $dateTo)
     {
-        $query = $this->prepareRepairedNotRepairedByWorkshopUid($workshopUid, $dateFrom, $dateTo);
+        $query = $this->prepareStatisticsDataByWorkshopUid($workshopUid, $dateFrom, $dateTo);
         $query->where($this->getNotRepairedConditions());
         return $query->count();
     }
@@ -202,6 +230,13 @@ class InfoSheetsTable extends AppTable
     {
         return [
             '!' . $this->getRepairedConditions()[0]
+        ];
+    }
+
+    private function getRepairableConditions()
+    {
+        return [
+            '(InfoSheets.defect_found_reason = 1)'
         ];
     }
 
