@@ -22,8 +22,10 @@
             echo $this->Form->hidden('showCarbonFootprint', ['value' => $showCarbonFootprint]);
         }
         echo $this->Form->hidden('backgroundColorOk', ['value' => $backgroundColorOk]);
+        echo $this->Form->hidden('backgroundColorRepairable', ['value' => $backgroundColorRepairable]);
         echo $this->Form->hidden('backgroundColorNotOk', ['value' => $backgroundColorNotOk]);
         echo $this->Form->hidden('borderColorOk', ['value' => $borderColorOk]);
+        echo $this->Form->hidden('borderColorRepairable', ['value' => $borderColorRepairable]);
         echo $this->Form->hidden('borderColorNotOk', ['value' => $borderColorNotOk]);
         echo $this->Form->hidden('today', ['value' => date('d.m.Y')]);
         if (isset($defaultDataSource)) {
