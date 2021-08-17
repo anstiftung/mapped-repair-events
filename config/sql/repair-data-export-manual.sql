@@ -43,11 +43,11 @@ LEFT JOIN form_field_options defect_found_ffo3 ON defect_found_ffo3.form_field_i
 LEFT JOIN form_field_options defect_found_ffo4 ON defect_found_ffo4.form_field_id = 4 AND defect_found_ffo4.value = i.repair_postponed_reason
 LEFT JOIN form_field_options defect_found_ffo5 ON defect_found_ffo5.form_field_id = 5 AND defect_found_ffo5.value = i.no_repair_reason
 LEFT JOIN form_field_options defect_found_ffo6 ON defect_found_ffo6.form_field_id = 6 AND defect_found_ffo6.value = i.device_must_not_be_used_anymore
-LEFT JOIN form_field_options_extra_info ffoeiA ON ffoeiA.form_field_options_id = defect_found_ffo2.id
-LEFT JOIN form_field_options_extra_info ffoeiB ON ffoeiB.form_field_options_id = defect_found_ffo3.id
-LEFT JOIN form_field_options_extra_info ffoeiC ON ffoeiC.form_field_options_id = defect_found_ffo4.id
-LEFT JOIN form_field_options_extra_info ffoeiD ON ffoeiD.form_field_options_id = defect_found_ffo5.id
-LEFT JOIN form_field_options_extra_info ffoeiE ON ffoeiE.form_field_options_id = defect_found_ffo6.id
+LEFT JOIN form_field_options_extra_infos ffoeiA ON ffoeiA.form_field_options_id = defect_found_ffo2.id
+LEFT JOIN form_field_options_extra_infos ffoeiB ON ffoeiB.form_field_options_id = defect_found_ffo3.id
+LEFT JOIN form_field_options_extra_infos ffoeiC ON ffoeiC.form_field_options_id = defect_found_ffo4.id
+LEFT JOIN form_field_options_extra_infos ffoeiD ON ffoeiD.form_field_options_id = defect_found_ffo5.id
+LEFT JOIN form_field_options_extra_infos ffoeiE ON ffoeiE.form_field_options_id = defect_found_ffo6.id
 WHERE 1
 AND i.status = 1
 AND e.datumstart <= '2021-09-30'
