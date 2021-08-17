@@ -137,84 +137,84 @@ class InfoSheetsTable extends AppTable
     public function getRepairedGlobalByMainCategoryId($categoryId, $dateFrom, $dateTo)
     {
         $query = $this->prepareStatisticsDataGlobalByMainCategory($categoryId, $dateFrom, $dateTo);
-        $query->where($this->getRepairedConditions());
+        $query = $this->setRepairedConditions($query);
         return $query->count();
     }
 
     public function getRepairableGlobalByMainCategoryId($categoryId, $dateFrom, $dateTo)
     {
         $query = $this->prepareStatisticsDataGlobalByMainCategory($categoryId, $dateFrom, $dateTo);
-        $query->where($this->getRepairableConditions());
+        $query = $this->setRepairableConditions($query);
         return $query->count();
     }
 
     public function getNotRepairedGlobalByMainCategoryId($categoryId, $dateFrom, $dateTo)
     {
         $query = $this->prepareStatisticsDataGlobalByMainCategory($categoryId, $dateFrom, $dateTo);
-        $query->where($this->getNotRepairedConditions());
+        $query = $this->setNotRepairedConditions($query);
         return $query->count();
     }
 
     public function getRepairedByMainCategoryId($workshopUid, $categoryId, $dateFrom, $dateTo)
     {
         $query = $this->prepareStatisticsDataByMainCategory($workshopUid, $categoryId, $dateFrom, $dateTo);
-        $query->where($this->getRepairedConditions());
+        $query = $this->setRepairedConditions($query);
         return $query->count();
     }
 
     public function getRepairableByMainCategoryId($workshopUid, $categoryId, $dateFrom, $dateTo)
     {
         $query = $this->prepareStatisticsDataByMainCategory($workshopUid, $categoryId, $dateFrom, $dateTo);
-        $query->where($this->getRepairableConditions());
+        $query = $this->setRepairableConditions($query);
         return $query->count();
     }
 
     public function getNotRepairedByMainCategoryId($workshopUid, $categoryId, $dateFrom, $dateTo)
     {
         $query = $this->prepareStatisticsDataByMainCategory($workshopUid, $categoryId, $dateFrom, $dateTo);
-        $query->where($this->getNotRepairedConditions());
+        $query = $this->setNotRepairedConditions($query);
         return $query->count();
     }
 
     public function getRepaired($dateFrom, $dateTo)
     {
         $query = $this->prepareStatisticsDataGlobal($dateFrom, $dateTo);
-        $query->where($this->getRepairedConditions());
+        $query = $this->setRepairedConditions($query);
         return $query->count();
     }
 
     public function getRepairable($dateFrom, $dateTo)
     {
         $query = $this->prepareStatisticsDataGlobal($dateFrom, $dateTo);
-        $query->where($this->getRepairableConditions());
+        $query = $this->setRepairableConditions($query);
         return $query->count();
     }
 
     public function getNotRepaired($dateFrom, $dateTo)
     {
         $query = $this->prepareStatisticsDataGlobal($dateFrom, $dateTo);
-        $query->where($this->getNotRepairedConditions());
+        $query = $this->setNotRepairedConditions($query);
         return $query->count();
     }
 
     public function getRepairedByWorkshopUid($workshopUid, $dateFrom, $dateTo)
     {
         $query = $this->prepareStatisticsDataByWorkshopUid($workshopUid, $dateFrom, $dateTo);
-        $query->where($this->getRepairedConditions());
+        $query = $this->setRepairedConditions($query);
         return $query->count();
     }
 
     public function getRepairableByWorkshopUid($workshopUid, $dateFrom, $dateTo)
     {
         $query = $this->prepareStatisticsDataByWorkshopUid($workshopUid, $dateFrom, $dateTo);
-        $query->where($this->getRepairableConditions());
+        $query = $this->setRepairableConditions($query);
         return $query->count();
     }
 
     public function getNotRepairedByWorkshopUid($workshopUid, $dateFrom, $dateTo)
     {
         $query = $this->prepareStatisticsDataByWorkshopUid($workshopUid, $dateFrom, $dateTo);
-        $query->where($this->getNotRepairedConditions());
+        $query = $this->setNotRepairedConditions($query);
         return $query->count();
     }
 
@@ -226,25 +226,53 @@ class InfoSheetsTable extends AppTable
         return $count;
     }
 
-    private function getNotRepairedConditions()
+    private function setNotRepairedConditions($query)
     {
-        return [
-            '!' . $this->getRepairedConditions()[0]
-        ];
+        $query->where(function ($exp, $query) {
+            return $exp->or([
+                $query->newExpr()->and([
+                    'InfoSheets.defect_found' => 0,
+                ]),
+                $query->newExpr()->and([
+                    'InfoSheets.defect_found' => 1,
+                    'InfoSheets.defect_found_reason' => 4,
+                ]),
+                $query->newExpr()->and([
+                    'InfoSheets.defect_found' => 1,
+                    'InfoSheets.defect_found_reason' => 3,
+                    'InfoSheets.no_repair_reason IN' => [2,11,3,4,12,13,14,6,10],
+                ]),
+            ]);
+        });
+        return $query;
     }
 
-    private function getRepairableConditions()
+    private function setRepairableConditions($query)
     {
-        return [
-            '(InfoSheets.defect_found_reason = 1)'
-        ];
+        $query->where(function ($exp, $query) {
+            return $exp->or([
+                $query->newExpr()->and([
+                    'InfoSheets.defect_found' => 1,
+                    'InfoSheets.defect_found_reason' => 2,
+                    'InfoSheets.repair_postponed_reason IN' => [1,2,3],
+                ]),
+                $query->newExpr()->and([
+                    'InfoSheets.defect_found' => 1,
+                    'InfoSheets.defect_found_reason' => 3,
+                    'InfoSheets.no_repair_reason IN' => [1,5,9],
+                ]),
+            ]);
+        });
+        return $query;
     }
 
-    private function getRepairedConditions()
+    private function setRepairedConditions($query)
     {
-        return [
-            '(InfoSheets.defect_found = 1 AND InfoSheets.defect_found_reason = 1)'
-        ];
+        $query->where([
+            'InfoSheets.defect_found' => 1,
+            'InfoSheets.defect_found_reason' => 1,
+        ]);
+        return $query;
     }
 
     private function isSubcategoryCreateModeEnabled($context)
