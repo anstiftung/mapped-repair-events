@@ -602,10 +602,13 @@ class WidgetsController extends AppController
 
         // clean categories with no data
         foreach($categoriesLabels as $index => $categoryLabel) {
-            if ($categoriesDataRepaired[$index] == 0 && $categoriesDataNotRepaired[$index] == 0) {
-                unset($categoriesLabels[$index]);
-                unset($categoriesDataRepaired[$index]);
-                unset($categoriesDataNotRepaired[$index]);
+            if ($categoriesDataRepaired[$index] == 0 &&
+                $categoriesDataRepairable[$index] == 0 &&
+                $categoriesDataNotRepaired[$index] == 0) {
+                    unset($categoriesLabels[$index]);
+                    unset($categoriesDataRepaired[$index]);
+                    unset($categoriesDataRepairable[$index]);
+                    unset($categoriesDataNotRepaired[$index]);
             }
         }
         $categoriesLabels = array_values($categoriesLabels);
