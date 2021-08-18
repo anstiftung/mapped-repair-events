@@ -19,6 +19,12 @@ class InfoSheetsController extends AppController
     public function isAuthorized($user)
     {
 
+        if (in_array($this->request->getParam('action'), ['fullDownload'])) {
+            if ($this->AppAuth->isAdmin()) {
+                return true;
+            }
+        }
+
         if (in_array($this->request->getParam('action'), ['download'])) {
 
             if ($this->AppAuth->isAdmin()) {
@@ -89,6 +95,51 @@ class InfoSheetsController extends AppController
 
     }
 
+    public function fullDownload($date=null)
+    {
+
+        $query = file_get_contents(ROOT . DS . 'config' . DS. 'sql' . DS . 'repair-data-full-export.sql');
+        $params = [];
+        $filename = 'repair-data-export';
+        if (!is_null($date)) {
+            $query = preg_replace('/WHERE 1/', 'WHERE 1 AND e.datumstart <= :date', $query);
+            $params['date'] = $date;
+            $filename .= '-until-' . $date;
+        }
+
+        $statement = $this->InfoSheet->getConnection()->prepare($query);
+        $statement->execute($params);
+        $records = $statement->fetchAll('assoc');
+        if (empty($records)) {
+            throw new NotFoundException('no repair data found');
+        }
+
+        $writer = Writer::createFromString();
+        $writer->insertOne(array_keys($records[0]));
+        $id = 0;
+        foreach($records as &$record) {
+            $record['id'] = 'anstiftung_' . $id;
+            $id++;
+        }
+        $writer->insertAll($records);
+
+        // force download
+        $this->RequestHandler->renderAs(
+            $this,
+            'csv',
+            [
+                'charset' => 'UTF-8'
+            ],
+            );
+        $this->disableAutoRender();
+
+        $response = $this->response;
+        $response = $response->withStringBody($writer->toString());
+        $response = $response->withDownload($filename . '.csv');
+
+        return $response;
+
+    }
 
     public function download($workshopUid, $year=null) {
 
