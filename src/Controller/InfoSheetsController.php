@@ -136,7 +136,7 @@ class InfoSheetsController extends AppController
         $this->disableAutoRender();
 
         $response = $this->response;
-        $response = $response->withStringBody($writer->getContent());
+        $response = $response->withStringBody($writer->toString());
         $response = $response->withDownload($filename . '.csv');
 
         return $response;
