@@ -3,7 +3,7 @@ SELECT
     i.uid as "uid_laufzettel",
     " " as "id",
     "anstiftung" as "data_provider",
-    country.code as "country",
+    country.iso3 as "country",
     pc.name as "partner_product_category_main",
     c.name as "partner_product_category_sub",
     i.device_name as "partner_product_category_device",
