@@ -17,6 +17,11 @@ class WidgetHelper extends HtmlHelper {
         return 'rgba(181,124,219,.6)';
     }
 
+    function getDefaultChartBackgroundColorRepairable()
+    {
+        return 'rgba(77,142,162,1)';
+    }
+
     function getDefaultChartBorderColorOk()
     {
         return 'rgba(200,210,24,1)';
@@ -25,6 +30,11 @@ class WidgetHelper extends HtmlHelper {
     function getDefaultChartBorderColorNotOk()
     {
         return 'rgba(181,124,219,1)';
+    }
+
+    function getDefaultChartBorderColorRepairable()
+    {
+        return 'rgba(77,142,162,1)';
     }
 
 }

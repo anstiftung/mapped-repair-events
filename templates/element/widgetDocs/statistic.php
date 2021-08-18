@@ -45,7 +45,7 @@ use Cake\Core\Configure;
     </ul>
 
     <code class="inlinecode">
-        &lt;iframe frameborder="0" width="100%" height="700" src="<?php echo Configure::read('AppConfig.serverName'); ?>/widgets/statistics-global?<span class="highlight">borderColorOk=rgb(14,113,184)</span>&<span class="highlight">backgroundColorOk=rgba(14,113,184,0.6)</span>&<span class="highlight">borderColorNotOk=rgb(181,24,33)</span>&<span class="highlight">backgroundColorNotOk=rgba(181,24,33,0.6)</span>"&gt;&lt;/iframe&gt;
+        &lt;iframe frameborder="0" width="100%" height="700" src="<?php echo Configure::read('AppConfig.serverName'); ?>/widgets/statistics-global?<span class="highlight">borderColorOk=rgb(14,113,184)</span>&<span class="highlight">backgroundColorOk=rgba(14,113,184,0.6)</span>&<span class="highlight">borderColorNotOk=rgb(181,24,33)</span>&<span class="highlight">backgroundColorNotOk=rgba(181,24,33,0.6)</span>&<span class="highlight">borderColorRepairable=rgb(242,217,164)</span>&<span class="highlight">backgroundColorRepairable=rgba(242,217,164,0.6)</span>"&gt;&lt;/iframe&gt;
     </code>
 
     <br />

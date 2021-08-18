@@ -1352,6 +1352,7 @@ div[id*="collapse"] a:visited {
     background-color: #f2f2f2;
     border: 1px solid #ccc;
     padding: 10px 25px;
+    word-break: break-word;
 }
 .highlight {
     color: black;
