@@ -98,7 +98,7 @@ class InfoSheetsController extends AppController
     public function fullDownload($date=null)
     {
 
-        $query = file_get_contents(ROOT . DS . 'config' . DS. 'sql' . DS . 'repair-data-full-export.sql');
+        $query = file_get_contents(ROOT . DS . 'config' . DS. 'sql' . DS . 'info-sheets-full-download.sql');
         $params = [];
         $filename = 'repair-data-export';
         if (!is_null($date)) {
@@ -154,7 +154,7 @@ class InfoSheetsController extends AppController
             throw new NotFoundException('workshop not found');
         }
 
-        $query = file_get_contents(ROOT . DS . 'config' . DS. 'sql' . DS . 'repair-data-export-csv.sql');
+        $query = file_get_contents(ROOT . DS . 'config' . DS. 'sql' . DS . 'info-sheets-download.sql');
         $params = [
             'workshopUid' => $workshopUid
         ];
