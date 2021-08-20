@@ -116,7 +116,7 @@ class InfoSheetsController extends AppController
 
         $writer = Writer::createFromString();
         $writer->insertOne(array_keys($records[0]));
-        $id = 0;
+        $id = 1;
         foreach($records as &$record) {
             $record['id'] = 'anstiftung_' . $id;
             $id++;
@@ -130,7 +130,7 @@ class InfoSheetsController extends AppController
             [
                 'charset' => 'UTF-8'
             ],
-            );
+        );
         $this->disableAutoRender();
 
         $response = $this->response;
