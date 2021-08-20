@@ -87,7 +87,6 @@ class InfoSheetsTable extends AppTable
         ]);
         $query->where([
             'InfoSheets.status >= ' . APP_OFF,
-            'Events.status >= ' . APP_OFF
         ]);
 
         if (!is_null($dateFrom) && !is_null($dateTo)) {
@@ -105,7 +104,7 @@ class InfoSheetsTable extends AppTable
     {
         $query = $this->prepareStatisticsDataGlobal($dateFrom, $dateTo);
         $query->where([
-            'Events.workshop_uid' => $workshopUid
+            'Events.workshop_uid' => $workshopUid,
         ]);
         return $query;
     }
