@@ -263,7 +263,7 @@ MappedRepairEvents.Helper = {
 
         this.destroyCkeditor(name);
 
-        CKEDITOR.timestamp = 'v4.16.1';
+        CKEDITOR.timestamp = 'v4.16.2';
         $('textarea#' + name + '.ckeditor').ckeditor({
             customConfig: '/js/ckeditor/config.js',
             height: isMobile ? 350 : 650,
@@ -294,7 +294,7 @@ MappedRepairEvents.Helper = {
 
         this.destroyCkeditor(name);
 
-        CKEDITOR.timestamp = 'v4.16.1';
+        CKEDITOR.timestamp = 'v4.16.2';
         $('textarea#' + name + '.ckeditor').ckeditor({
             customConfig: '/js/ckeditor/config-without-elfinder.js',
             height: isMobile ? 350 : 650,

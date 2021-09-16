@@ -17,9 +17,9 @@
     "@fortawesome/fontawesome-free": "^5.15.4",
     "@sintef/prune-cluster": "^2.1.0",
     "blueimp-file-upload": "^10.31.0",
-    "chart.js": "^3.5.0",
+    "chart.js": "^3.5.1",
     "chartjs-plugin-datalabels": "^2.0.0",
-    "ckeditor4": "^4.16.1",
+    "ckeditor4": "^4.16.2",
     "components-jqueryui": "~1.12",
     "detect_swipe": "^2.1.4",
     "featherlight": "^1.7.14",
@@ -34,8 +34,8 @@
     "select2": "^4.0.13",
     "slidebars": "^2.0.2",
     "speakingurl": "^14.0.1",
-    "svelte": "^3.42.1",
-    "swiper": "^6.8.1"
+    "svelte": "^3.42.6",
+    "swiper": "^7.0.6"
   },
   "devDependencies": {
     "eslint": "^7.32.0"
