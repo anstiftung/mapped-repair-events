@@ -63,6 +63,7 @@ if (isset($hidden) && $hidden) {
     echo '<div class="url-edit-field" style="display:'.$display.'";float: left;">';
 }
 echo $this->Form->control($type . '.url', $htmlAttributes);
+$this->Form->unlockField('show-url-edit-field');
 
 if (isset($hidden) && $hidden) {
     echo '</div>';
