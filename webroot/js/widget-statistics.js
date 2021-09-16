@@ -160,7 +160,7 @@ MappedRepairEvents.WidgetStatistics = {
                     tooltip: {
                         callbacks: {
                             label: function(ctx) {
-                                var sumItems = ctx.dataset.data[0] + ctx.dataset.data[1];
+                                var sumItems = ctx.dataset.data[0] + ctx.dataset.data[1] + ctx.dataset.data[2];
                                 var value = ctx.parsed.toLocaleString();
                                 var newLabel = value + 'x ' + ctx.label.replace(/\((.*)\)/, '').trim();
                                 newLabel += ' (' + Math.round(ctx.parsed / sumItems * 100) + ' %)';
