@@ -132,7 +132,7 @@ $this->element('addScript', ['script' =>
             echo '<div class="sc"></div>';
 
             echo $this->Form->control($i.'.eventbeschreibung', ['label' => __('Add Event: event description')]).'<br />';
-            echo $this->Form->control($i.'.is_online_event', ['type' => 'checkbox', 'label' => 'Online-Termin?']).'<br />';
+            echo $this->Form->control($i.'.is_online_event', ['type' => 'checkbox', 'label' => 'Termin findet nur als Online-Reparaturcafé über Videokonferenz statt']).'<br />';
 
             if (!$isEditMode && isset($preselectedWorkshopUid)) {
                 echo '<br /><br />';
