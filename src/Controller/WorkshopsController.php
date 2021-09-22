@@ -991,9 +991,10 @@ class WorkshopsController extends AppController
             $user = $um->find('all', [
                 'conditions' => [
                     $userModel . '.uid' => $userUid,
-                    $userModel . '.status > ' => APP_DELETED
+                    $userModel . '.status > ' => APP_DELETED,
                 ]
             ])->first();
+            $user->revertPrivatizeData();
 
             /* START email-versand an alle initiativen-orgas */
             if (!$this->AppAuth->isAdmin()) {
@@ -1009,22 +1010,19 @@ class WorkshopsController extends AppController
                     ]
                 ])->first();
 
-                foreach($workshop->users as $workshopUser) {
-                    $workshopUser->revertPrivatizeData();
-                }
-
                 $email = new Mailer('default');
                 $email->viewBuilder()->setTemplate('workshop_application');
                 $email->setSubject($subject)
                     ->setViewVars([
-                    'user' => ($user->user ? $user->user: $user),
+                    'user' => $user,
                     'userModel' => $userModel,
-                    'workshop' => $workshop
+                    'workshop' => $workshop,
                 ]);
 
                 $orgaTeam = $this->Workshop->getOrgaTeam($workshop);
                 if (!empty($orgaTeam)) {
                     foreach($orgaTeam as $orgaUser) {
+                        $orgaUser->revertPrivatizeData();
                         $email->addTo($orgaUser->email);
                     }
                 } else {

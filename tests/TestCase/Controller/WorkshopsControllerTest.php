@@ -10,6 +10,7 @@ use Cake\Core\Configure;
 use Cake\TestSuite\EmailTrait;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\StringCompareTrait;
+use Cake\TestSuite\TestEmailTransport;
 
 class WorkshopsControllerTest extends AppTestCase
 {
@@ -38,6 +39,43 @@ class WorkshopsControllerTest extends AppTestCase
         $this->assertResponseOk();
         $this->assertResponseNotEmpty();
         $this->doUserPrivacyAssertions();
+    }
+
+    public function testApplyToWorkshopAsRepairhelper()
+    {
+        $workshopUid = 2;
+        $userUid = 3;
+        $this->loginAsRepairhelper();
+
+        $this->post(
+            Configure::read('AppConfig.htmlHelper')->urlUserWorkshopApplicationUser(),
+            [
+                'referer' => '/',
+                'users_workshops' => [
+                    'workshop_uid' => $workshopUid,
+                    'user_uid' => $userUid,
+                ]
+            ]
+        );
+
+        $this->Workshop = $this->getTableLocator()->get('Workshops');
+        $workshop = $this->Workshop->find('all', [
+            'conditions' => [
+                'Workshops.uid' => $workshopUid,
+            ],
+            'contain' => [
+                'Users',
+            ]
+        ])->first();
+
+        $this->assertEquals(2, count($workshop->users));
+        $this->assertEquals($userUid, $workshop->users[1]->uid);
+        $this->assertEquals(null, $workshop->users[1]->_joinData->approved);
+
+        $this->assertMailCount(1);
+        $this->assertMailContainsAt(0, 'Max Muster (maxmuster@mailinator.com) möchte bei ');
+        $this->assertMailSentToAt(0, 'johndoe@mailinator.com');
+
     }
 
     public function testAddWorkshop()

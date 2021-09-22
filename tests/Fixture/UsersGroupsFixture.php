@@ -14,6 +14,10 @@ class UsersGroupsFixture extends TestFixture
               'group_id' => GROUPS_ORGA,
           ],
           [
+              'user_uid' => 3,
+              'group_id' => GROUPS_REPAIRHELPER,
+          ],
+          [
               'user_uid' => 8,
               'group_id' => GROUPS_ADMIN,
           ],

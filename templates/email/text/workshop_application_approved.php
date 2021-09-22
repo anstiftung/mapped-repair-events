@@ -5,4 +5,4 @@ deine Anfrage zur Mitarbeit bei der <?php echo Configure::read('AppConfig.initia
 
 Hier gelangst du zur Profil-Seite der <?php Configure::read('AppConfig.initiativeNameSingular'); ?>:
 
-https://<?php echo $_SERVER['SERVER_NAME'] . $this->MyHtml->urlWorkshopDetail($workshop->url); ?>
+<?php echo Configure::read('AppConfig.serverName') . $this->MyHtml->urlWorkshopDetail($workshop->url); ?>

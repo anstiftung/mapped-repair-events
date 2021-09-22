@@ -9,14 +9,36 @@ trait LoginTrait
 
     protected function loginAsOrga()
     {
-        $orgaUserEmail = 'johndoe@mailinator.com';
+        $userEmail = 'johndoe@mailinator.com';
         $this->User = FactoryLocator::get('Table')->get('Users');
         $user = $this->User->find('all', [
             'conditions' => [
-                'Users.email' => $orgaUserEmail
+                'Users.email' => $userEmail,
             ],
             'contain' => [
-                'Groups'
+                'Groups',
+            ]
+        ])->first();
+        $user->revertPrivatizeData();
+
+        $this->session([
+            'Auth' => [
+                'User' => $user->toArray(),
+            ]
+        ]);
+
+    }
+
+    protected function loginAsAdmin()
+    {
+        $userEmail = 'admin@mailinator.com';
+        $this->User = FactoryLocator::get('Table')->get('Users');
+        $user = $this->User->find('all', [
+            'conditions' => [
+                'Users.email' => $userEmail,
+            ],
+            'contain' => [
+                'Groups',
             ]
         ])->first();
         $user->revertPrivatizeData();
@@ -29,16 +51,16 @@ trait LoginTrait
 
     }
 
-    protected function loginAsAdmin()
+    protected function loginAsRepairhelper()
     {
-        $adminUserEmail = 'admin@mailinator.com';
+        $userEmail = 'maxmuster@mailinator.com';
         $this->User = FactoryLocator::get('Table')->get('Users');
         $user = $this->User->find('all', [
             'conditions' => [
-                'Users.email' => $adminUserEmail
+                'Users.email' => $userEmail,
             ],
             'contain' => [
-                'Groups'
+                'Groups',
             ]
         ])->first();
         $user->revertPrivatizeData();

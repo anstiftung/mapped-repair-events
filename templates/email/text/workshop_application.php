@@ -5,4 +5,4 @@ Hallo,
 
 Du kannst die Anfrage hier bestätigen (dazu du musst eingeloggt sein):
 
-https://<?php echo $_SERVER['SERVER_NAME'] . $this->MyHtml->urlUserWorkshopAdmin(); ?>
+<?php echo Configure::read('AppConfig.serverName') . $this->MyHtml->urlUserWorkshopAdmin(); ?>
