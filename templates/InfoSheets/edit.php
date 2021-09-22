@@ -32,16 +32,27 @@ use Cake\Core\Configure;
         <div style="padding:0 10px;">
             <?php
                 echo $this->element('heading', ['first' => $metaTags['title']]);
+
                 echo $this->Form->hidden('referer', ['value' => $referer]);
                 $this->Form->unlockField('referer');
-                echo '<p style="margin-bottom:10px;">' . Configure::read('AppConfig.initiativeNameSingular').': <b>' . $infoSheet->event->workshop->name.'</b>';
-                echo ', Termin: <b> ' . $infoSheet->event->datumstart->i18nFormat(Configure::read('DateFormat.de.DateLong2')).'</b>';
-                echo ', Laufzettel-Id: ';
-                if ($infoSheet->uid > 0) {
-                    echo '<b>' . $infoSheet->uid . '</b>';
-                } else {
-                    echo 'nach dem Speichern verfügbar';
-                }
+
+                echo '<p>' . Configure::read('AppConfig.initiativeNameSingular').': <b>' . $infoSheet->event->workshop->name.'</b>';
+                    echo ', Laufzettel-Id: ';
+                    if ($infoSheet->uid > 0) {
+                        echo '<b>' . $infoSheet->uid . '</b>';
+                    } else {
+                        echo 'nach dem Speichern verfügbar';
+                    }
+
+                    if (!$isEditMode) {
+                        echo ', Termin: <b> ' . $infoSheet->event->datumstart->i18nFormat(Configure::read('DateFormat.de.DateLong2')).'</b>';
+                    } else {
+                        echo $this->Form->control('InfoSheets.event_uid', [
+                            'type' => 'select',
+                            'label' => 'Termin:',
+                            'options' => $eventsForDropdown,
+                        ]);
+                    }
                 echo '</p>';
             ?>
             <a id="print-button" href="javascript:window.print();" class="button rounded gray">Drucken</a>

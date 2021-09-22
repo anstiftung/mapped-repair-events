@@ -753,6 +753,13 @@ div.admin div.edit.column-2 textarea,
 div.admin div.edit.column-2 .input input {
     width: 360px;
 }
+body.info_sheets #print-button {
+    float: left;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+div.admin div.edit.column-1 .input select,
+div.admin div.edit.column-1 .select2-container,
 div.admin div.edit.column-2 .input select,
 div.admin div.edit.column-2 .select2-container {
     width: 371px ! important
