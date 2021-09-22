@@ -217,10 +217,10 @@
         right: 5px ! important;
         top: -12px;
     }
-    body.workshops.home .swiper-container {
+    body.workshops.home .swiper {
        height: auto ! important;
     }
-    body.workshops.home .swiper-container,
+    body.workshops.home .swiper,
     body.workshops.home .swiper-slide img {
         width: 100% ! important;
     }

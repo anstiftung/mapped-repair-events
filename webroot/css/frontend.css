@@ -263,14 +263,14 @@ body.pages.detail.statistik iframe {
     width: 75%;
     margin-top: 15px;
 }
-body.workshops.home .swiper-container .swiper-pagination-bullet-active {
+body.workshops.home .swiper .swiper-pagination-bullet-active {
     background-color: #4D8EA2;
 }
-body.workshops.home .swiper-container-horizontal > .swiper-pagination-bullets {
+body.workshops.home .swiper-horizontal > .swiper-pagination-bullets {
     top: 20px;
     height: 12px;
 }
-body.workshops.home .swiper-container-horizontal > .swiper-pagination-bullets span {
+body.workshops.home .swiper-horizontal > .swiper-pagination-bullets span {
     height: 12px;
     width: 12px;
 }
@@ -1717,7 +1717,7 @@ iframe .rc,
     background-position: 0 -290px;
 }
 
-#workshops-home .swiper-container {
+#workshops-home .swiper {
     border: 1px solid #ddd;
     padding: 0;
     height: 480px;
@@ -1726,7 +1726,7 @@ iframe .rc,
     margin-top: -2px;
     width: 573px;
 }
-#workshops-home .swiper-container img {
+#workshops-home .swiper img {
     width: 573px;
 }
 #workshops-home .news-box {

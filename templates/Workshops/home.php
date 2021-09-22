@@ -130,10 +130,10 @@ $tl_search_input_field = __('Map search field preentered');
     <div class="left">
         <?php
             $this->element('addScript', ['script' =>
-                JS_NAMESPACE.".Helper.initSlider('body.workshops.home .swiper-container');
+                JS_NAMESPACE.".Helper.initSlider('body.workshops.home .swiper');
             "]);
         ?>
-        <div class="swiper-container">
+        <div class="swiper">
             <div class="swiper-wrapper">
                 <?php echo $this->element('home/slides'); ?>
             </div>
