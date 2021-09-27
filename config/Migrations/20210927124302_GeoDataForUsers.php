@@ -31,9 +31,12 @@ class GeoDataForUsers extends AbstractMigration
             $address = Configure::read('AppConfig.htmlHelper')->replaceAddressAbbreviations($address);
             $address = trim($address);
             $baseUrl = 'https://maps.googleapis.com/maps/api/geocode/json?key='.Configure::read('googleMapApiKey').'&address=';
-            $url = $baseUrl . urlencode(utf8_encode($address));
-            $geocodeAddress = json_decode(file_get_contents($url));
-            sleep(1);
+            $address = urlencode(utf8_encode($address));
+            if ($address == '') {
+                echo 'no address given for ' . $user->uid . ' ' . $user->name . LF;
+                continue;
+            }
+            $geocodeAddress = json_decode(file_get_contents($baseUrl . $address));
             if ($geocodeAddress->status == 'OK' && empty($geocodeAddress->results[0]->partial_match)) {
                 $user->lat = $geocodeAddress->results[0]->geometry->location->lat;
                 $user->lng = $geocodeAddress->results[0]->geometry->location->lng;
@@ -42,6 +45,8 @@ class GeoDataForUsers extends AbstractMigration
             } else {
                 echo 'no geo data found: ' . $user->uid . ' ' . $user->name . ' - ' . $address . LF;
             }
+
+            sleep(.5);
 
         }
 
