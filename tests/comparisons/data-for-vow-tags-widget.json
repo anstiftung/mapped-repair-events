@@ -37,6 +37,12 @@
             },
             "categories": [
                 "{{serverName}}\/img\/icons-skills\/drei-d-reparatur.png"
+            ],
+            "geoData": [
+                {
+                    "lat": 0,
+                    "lng": 0
+                }
             ]
         }
     ]

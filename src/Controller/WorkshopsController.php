@@ -354,7 +354,12 @@ class WorkshopsController extends AppController
                         'sort' => [
                             'Categories.name' => 'ASC', //3D-Reparatur should be first
                         ],
-                    ]
+                    ],
+                    'Workshops' => function($q) {
+                        return $q->where([
+                            'UsersWorkshops.approved <> \'0000-00-00 00:00:00\'',
+                        ]);
+                    }
                 ],
                 'order' => [
                     'Users.firstname' => 'ASC',
@@ -364,10 +369,33 @@ class WorkshopsController extends AppController
 
             $foundUserUids = [];
             foreach($users as $user) {
+
                 if (in_array($user->uid, $foundUserUids)) {
                     continue;
                 }
+
                 $foundUserUids[] = $user->uid;
+
+                $geoData = [];
+
+                // add user's geo data as geoData object
+                if (!is_null($user->lat) && !is_null($user->lng != 0)) {
+                    $geoData[] = [
+                        'lat' => $user->lat,
+                        'lng' => $user->lng,
+                    ];
+                }
+
+                // add user's workshops geoData object
+                foreach($user->workshops as $workshop) {
+                    if (!is_null($workshop->lat) && !is_null($workshop->lng != 0)) {
+                        $geoData[] = [
+                            'lat' => $workshop->lat,
+                            'lng' => $workshop->lng,
+                        ];
+                    }
+                }
+
                 $preparedUsers[] = [
                     'uid' => $user->uid,
                     'nick' => $user->nick,
@@ -382,10 +410,10 @@ class WorkshopsController extends AppController
                         'name_de' => !empty($user->country) ? $user->country->name_de : '',
                     ],
                     'categories' => $this->getPreparedCategoryIcons($user->categories),
+                    'geoData' => $geoData,
                 ];
             }
         }
-
         $this->set([
             'status' => 1,
             'message' => 'ok',
