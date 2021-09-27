@@ -46,7 +46,7 @@ class GeoDataForUsers extends AbstractMigration
                 echo 'no geo data found: ' . $user->uid . ' ' . $user->name . ' - ' . $address . LF;
             }
 
-            sleep(.5);
+            sleep(1);
 
         }
 
