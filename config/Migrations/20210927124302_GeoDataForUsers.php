@@ -24,11 +24,12 @@ class GeoDataForUsers extends AbstractMigration
 
         foreach($users as $user) {
 
-            $address = $user->city;
+            $address = $user->zip . ' ' . $user->city;
             if ($user->country_code != '') {
                 $address .= ', ' . $user->country_code;
             }
             $address = Configure::read('AppConfig.htmlHelper')->replaceAddressAbbreviations($address);
+            $address = trim($address);
             $baseUrl = 'https://maps.googleapis.com/maps/api/geocode/json?key='.Configure::read('googleMapApiKey').'&address=';
             $url = $baseUrl . urlencode(utf8_encode($address));
             $geocodeAddress = json_decode(file_get_contents($url));
