@@ -275,6 +275,12 @@ class UsersController extends AppController
             $user->private_as_array = explode(',', $user->private);
             $this->request = $this->request->withParsedBody($user);
         } else {
+
+            $addressString = trim($this->request->getData('Users.zip') . ', ' . $this->request->getData('Users.city') . ', ' . $this->request->getData('Users.country_code'));
+            $coordinates = $this->getLatLngFromGeoCodingService($addressString);
+            $this->request = $this->request->withData('Users.lat', $coordinates['lat']);
+            $this->request = $this->request->withData('Users.lng', $coordinates['lng']);
+
             if (!empty($this->request->getData('Users.private_as_array'))) {
                 $private = implode(',', $this->request->getData('Users.private_as_array'));
             } else {
