@@ -361,7 +361,7 @@ class AppController extends Controller
 
         $addressString = Configure::read('AppConfig.htmlHelper')->replaceAddressAbbreviations($addressString);
         $addressString = trim($addressString);
-        $geocode = file_get_contents('https://maps.googleapis.com/maps/api/geocode/json?key='.Configure::read('googleMapApiKey').'&address=' . urlencode(utf8_encode($addressString)));
+        $geocode = file_get_contents('https://maps.googleapis.com/maps/api/geocode/json?key='.Configure::read('googleMapApiKey').'&address=' . urlencode($addressString));
         $output = json_decode($geocode);
 
         if ($output->status == 'OK' && empty($output->results[0]->partial_match)) {
