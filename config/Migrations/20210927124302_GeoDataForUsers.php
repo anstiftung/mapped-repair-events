@@ -24,6 +24,8 @@ class GeoDataForUsers extends AbstractMigration
 
         foreach($users as $user) {
 
+            $user->revertPrivatizeData();
+
             $address = $user->zip . ' ' . $user->city;
             if ($user->country_code != '') {
                 $address .= ', ' . $user->country_code;
