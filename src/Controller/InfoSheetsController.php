@@ -292,6 +292,24 @@ class InfoSheetsController extends AppController
         $this->setIsCurrentlyUpdated($infoSheet->uid);
         $this->set('metaTags', ['title' => 'Laufzettel bearbeiten']);
         $this->set('editFormUrl', Configure::read('AppConfig.htmlHelper')->urlInfoSheetEdit($infoSheet->uid));
+
+        $events = $this->InfoSheet->Events->find('all', [
+            'conditions' => [
+                'Events.workshop_uid' => $infoSheet->event->workshop_uid,
+                'Events.status >' . APP_DELETED,
+            ],
+            'order' => $this->InfoSheet->Events->getListOrder(),
+        ]);
+        $eventsForDropdown = [];
+        foreach($events as $event) {
+            $label = $event->datumstart->i18nFormat(Configure::read('DateFormat.de.DateLong2'));
+            if ($event->uhrzeitstart_formatted != '00:00' && $event->uhrzeitend_formatted != '00:00') {
+                $label .= ', ' . $event->uhrzeitstart_formatted . ' - ' . $event->uhrzeitend_formatted . ' Uhr';
+            }
+            $label .= ', Termin-ID: ' . $event->uid;
+            $eventsForDropdown[$event->uid] = $label;
+        }
+        $this->set('eventsForDropdown', $eventsForDropdown);
         $this->_edit($infoSheet, true);
     }
 
