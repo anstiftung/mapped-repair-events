@@ -122,6 +122,11 @@ class MyHtmlHelper extends HtmlHelper {
         return $result;
     }
 
+    public function getWorkshopsCountForGlobalStatisticsString($workshopCount)
+    {
+        return Configure::read('AppConfig.numberHelper')->precision($workshopCount, 0) . ' Reparatur-Initiativen haben mit ihren Reparaturdaten zu dieser Statistik beigetragen.';
+    }
+
     function roundUpToAny($n,$x) {
         return round($n*$x) / $x;
     }

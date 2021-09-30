@@ -3,6 +3,7 @@
 namespace App\Model\Table;
 
 use Cake\I18n\Time;
+use Cake\Utility\Hash;
 use Cake\Validation\Validator;
 
 class InfoSheetsTable extends AppTable
@@ -221,8 +222,36 @@ class InfoSheetsTable extends AppTable
     {
         $count = 0;
         $count += $this->getRepairedByWorkshopUid($workshopUid, null, null);
+        $count += $this->getRepairableByWorkshopUid($workshopUid, null, null);
         $count += $this->getNotRepairedByWorkshopUid($workshopUid, null, null);
         return $count;
+    }
+
+    public function getWorkshopCountWithInfoSheets($dateFrom, $dateTo)
+    {
+        $workshopUids = [];
+
+        $query = $this->prepareStatisticsDataGlobal($dateFrom, $dateTo);
+        $query->select(['Events.workshop_uid']);
+        $query->group('Events.workshop_uid');
+        $result = $this->setRepairedConditions($query)->toArray();
+        $workshopUids += Hash::extract($result, '{n}.event.workshop_uid');
+
+        $query = $this->prepareStatisticsDataGlobal($dateFrom, $dateTo);
+        $query->select(['Events.workshop_uid']);
+        $query->group('Events.workshop_uid');
+        $result = $this->setRepairableConditions($query)->toArray();
+        $workshopUids += Hash::extract($result, '{n}.event.workshop_uid');
+
+        $query = $this->prepareStatisticsDataGlobal($dateFrom, $dateTo);
+        $query->select(['Events.workshop_uid']);
+        $query->group('Events.workshop_uid');
+        $result = $this->setnotRepairedConditions($query)->toArray();
+        $workshopUids += $workshopUids + Hash::extract($result, '{n}.event.workshop_uid');
+
+        array_unique($workshopUids);
+
+        return count($workshopUids);
     }
 
     private function setNotRepairedConditions($query)

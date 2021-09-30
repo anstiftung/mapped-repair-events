@@ -181,6 +181,10 @@ class WidgetsController extends AppController
                 $this->viewBuilder()->getVar('borderColorNotOk'),
                 $this->viewBuilder()->getVar('dataSource')
             );
+            $this->InfoSheet = $this->getTableLocator()->get('InfoSheets');
+            $dates = $this->getDateFromByMonthAndYear($this->viewBuilder()->getVar('month'), $this->viewBuilder()->getVar('year'));
+            $workshopCount = $this->InfoSheet->getWorkshopCountWithInfoSheets($dates['dateFrom'], $dates['dateTo']);
+            $this->set('workshopCount', $workshopCount);
         }
         $showDonutChart = $this->viewBuilder()->getVar('showDonutChart');
         if ($showDonutChart) {

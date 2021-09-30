@@ -32,6 +32,12 @@ if ($materialFootprintSum > 0) { ?>
     </div>
 <?php } ?>
 
+<?php if (isset($workshopCount) && $workshopCount > 0) { ?>
+    <div class="workshop-count-wrapper">
+        <span class="info-text"><?php echo $this->Html->getWorkshopsCountForGlobalStatisticsString($workshopCount); ?></span>
+    </div>
+<?php } ?>
+
 <?php
 if ($showBarChart && $chartHasData) {
     $this->element('addScript', ['script' =>
