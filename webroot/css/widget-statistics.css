@@ -62,13 +62,18 @@ p.info {
     -webkit-border-radius: 3px;
 }
 
-.material-footprint-wrapper {
+.material-footprint-wrapper,
+.workshop-count-wrapper {
     float: left;
     clear: both;
     text-align: center;
     width: 100%;
 }
-.material-footprint-wrapper span {
+.workshop-count-wrapper {
+    margin-top: 10px;
+}
+.material-footprint-wrapper span,
+.workshop-count-wrapper span {
     float: none;
 }
 .material-footprint-wrapper .img-wrapper {
@@ -86,7 +91,8 @@ p.info {
 .material-footprint-wrapper.small b {
     top: -7px;
 }
-.material-footprint-wrapper span.info-text {
+.material-footprint-wrapper span.info-text,
+.workshop-count-wrapper span.info-text {
     margin-top: 10px;
     line-height: 16px;
 }

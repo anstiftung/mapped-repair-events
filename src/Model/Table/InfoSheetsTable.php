@@ -221,8 +221,17 @@ class InfoSheetsTable extends AppTable
     {
         $count = 0;
         $count += $this->getRepairedByWorkshopUid($workshopUid, null, null);
+        $count += $this->getRepairableByWorkshopUid($workshopUid, null, null);
         $count += $this->getNotRepairedByWorkshopUid($workshopUid, null, null);
         return $count;
+    }
+
+    public function getWorkshopCountWithInfoSheets($dateFrom, $dateTo)
+    {
+        $query = $this->prepareStatisticsDataGlobal($dateFrom, $dateTo);
+        $query->select(['Events.workshop_uid']);
+        $query->group('Events.workshop_uid');
+        return $query->count();
     }
 
     private function setNotRepairedConditions($query)

@@ -10,7 +10,7 @@
                margin-right: 5px;
                margin-bottom: 5px;
                width: 400px;
-               height: 750px;
+               height: 780px;
                border: 1px solid gray;
                padding: 5px;
            }
