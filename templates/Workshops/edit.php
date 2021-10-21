@@ -94,7 +94,7 @@ use Cake\Core\Configure;
             }
                 echo $this->Form->control('Workshops.status', [
                     'type' => 'select',
-                    'options' => Configure::read('AppConfig.status'),
+                    'options' => Configure::read('AppConfig.status2'),
                 ]).'<br />';
             if ($workshop->status < APP_ON) {
                 echo '</div>';
