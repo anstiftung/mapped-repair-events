@@ -9,11 +9,11 @@
     <img src="https://img.shields.io/github/v/release/anstiftung/mapped-repair-events?label=stable&style=for-the-badge" alt="Latest stable version">
   </a>
     <a href="https://github.com/anstiftung/mapped-repair-events/actions">
-        <img src="https://img.shields.io/github/workflow/status/anstiftung/mapped-repair-events/Mapped%20Repair%20Events%20CI/master?style=flat-square"
+        <img src="https://img.shields.io/github/workflow/status/anstiftung/mapped-repair-events/Mapped%20Repair%20Events%20CI/master?style=for-the-badge"
             alt="Build status">
   </a>
     <a href="LICENSE">
-    <img src="https://img.shields.io/github/license/anstiftung/mapped-repair-events"
+    <img src="https://img.shields.io/github/license/anstiftung/mapped-repair-events?style=for-the-badge"
          alt="Software license">
   </a>
 </p>
