@@ -76,7 +76,7 @@ class CptNewsletterComponent extends AppComponent
                 $this->Newsletter->get($newsletter->id),
                 [
                     'confirm' => 'ok',
-                    'modified' => Time::now()
+                    'modified' => FrozenTime::now()
                 ]
             )
         );
