@@ -50,7 +50,8 @@ jobs:
         run: |
           sudo /etc/init.d/mysql start
           mysql --version
-          mysql -h 127.0.0.1 --port 8888 -u root -ppassword db_test < ./config/sql/database.sql
+          mysql -h 127.0.0.1 --port 8888 -uroot -ppassword db_default < ./config/sql/database.sql
+          mysql -h 127.0.0.1 --port 8888 -uroot -ppassword -e "CREATE DATABASE IF NOT EXISTS db_test;"          
           
       - name: Install vendors 
         run: |
