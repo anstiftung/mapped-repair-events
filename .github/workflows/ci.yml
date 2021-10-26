@@ -51,7 +51,7 @@ jobs:
           sudo /etc/init.d/mysql start
           mysql --version
           mysql -h 127.0.0.1 --port 8888 -u root -ppassword db_test < ./config/sql/database.sql
-          mysql -h 127.0.0.0 --port 8888 -u root -ppassword db_test -e "mysql -Nse 'show tables' db_test | while read table; do mysql -e 'truncate table $table" db_test; done'"
+          mysql -h 127.0.0.0 --port 8888 -u root -ppassword db_test -e "mysql -Nse 'show tables' db_test | while read table; do mysql -e 'truncate table $table' db_test; done"
           
       - name: Install vendors 
         run: |
