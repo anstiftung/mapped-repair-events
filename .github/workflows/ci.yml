@@ -25,7 +25,7 @@ jobs:
           - 8888:3306
         env:
           MYSQL_ROOT_PASSWORD: password
-          MYSQL_DATABASE: db_test
+          MYSQL_DATABASE: db_default
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     name: PHP ${{ matrix.php-version }}
 
