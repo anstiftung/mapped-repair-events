@@ -62,10 +62,10 @@ class Application extends BaseApplication
 
     public function routes(RouteBuilder $routes): void
     {
-        parent::routes($routes);
         if (file_exists($this->configDir . '/routes_custom.php')) {
             require $this->configDir . '/routes_custom.php';
         }
+        parent::routes($routes);
     }
 
     /**
