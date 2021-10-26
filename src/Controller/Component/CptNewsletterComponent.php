@@ -4,7 +4,7 @@ namespace App\Controller\Component;
 use Cake\Controller\ComponentRegistry;
 use Cake\Core\Configure;
 use Cake\Datasource\FactoryLocator;
-use Cake\I18n\Time;
+use Cake\I18n\FrozenTime;
 use Cake\Mailer\Mailer;
 
 class CptNewsletterComponent extends AppComponent
@@ -60,7 +60,7 @@ class CptNewsletterComponent extends AppComponent
         $mergedData = array_merge(
             $data,
             [
-                'created' => Time::now(),
+                'created' => FrozenTime::now(),
                 'confirm' => $this->getConfirmationCode(),
                 'unsub' => $this->getUnsubscribeCode()
             ]

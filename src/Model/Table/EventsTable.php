@@ -3,7 +3,7 @@
 namespace App\Model\Table;
 
 use Cake\Core\Configure;
-use Cake\I18n\Time;
+use Cake\I18n\FrozenTime;
 use Cake\ORM\Query;
 use Cake\Validation\Validator;
 
@@ -82,7 +82,7 @@ class EventsTable extends AppTable
             if ($timeRange == '90days') {
                 $days = 90;
             }
-            $now = new Time();
+            $now = new FrozenTime();
             $maxDate = $now->addDays($days);
             $result = $exp->lte('Events.datumstart', $maxDate, 'date');
             if ($negate) {

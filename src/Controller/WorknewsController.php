@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use Cake\Event\EventInterface;
-use Cake\I18n\Time;
+use Cake\I18n\FrozenTime;
 use Cake\Http\Exception\NotFoundException;
 
 class WorknewsController extends AppController {
@@ -46,7 +46,7 @@ class WorknewsController extends AppController {
                 $this->Worknews->get($worknews->id),
                 [
                     'confirm' => 'ok',
-                    'modified' => Time::now()
+                    'modified' => FrozenTime::now()
                 ]
             )
         );

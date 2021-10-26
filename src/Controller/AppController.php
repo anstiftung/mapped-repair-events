@@ -5,7 +5,7 @@ use Cake\Controller\Controller;
 use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
 use Cake\Event\EventInterface;
-use Cake\I18n\Time;
+use Cake\I18n\FrozenTime;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Http\Exception\ServiceUnavailableException;
 use Cake\Utility\Hash;
@@ -278,7 +278,7 @@ class AppController extends Controller
         $modelName = $this->modelName;
         $entity = $this->$modelName->patchEntity($entity, [
             'currently_updated_by' => 0,
-            'currently_updated_start' => new Time()
+            'currently_updated_start' => new FrozenTime()
         ]);
         return $entity;
     }
@@ -342,7 +342,7 @@ class AppController extends Controller
         // if not currently updated, set logged user as updating one
         $saveData = [
             'currently_updated_by' => $this->AppAuth->getUserUid(),
-            'currently_updated_start' => new Time()
+            'currently_updated_start' => new FrozenTime()
         ];
         $entity = $this->$modelName->patchEntity($data, $saveData);
         $this->$modelName->save($entity);
