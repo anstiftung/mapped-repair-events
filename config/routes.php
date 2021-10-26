@@ -18,7 +18,7 @@ return function (RouteBuilder $routes) {
         $routes->connect('/', ['controller'=>'workshops', 'action'=>'home']);
 
         $routes->connect('/feed', ['controller' => 'blogs', 'action' => 'feed']); // url for "neuigkeiten"
-        $routes->connect('/feed/:blogUrl', ['controller' => 'blogs', 'action' => 'feed'], ['blogUrl' => Configure::read('AppConfig.htmlHelper')->getAdditionalBlogCategoryUrl()]); // sic! no "neuigkeiten"
+        $routes->connect('/feed/{blogUrl}', ['controller' => 'blogs', 'action' => 'feed'], ['blogUrl' => Configure::read('AppConfig.htmlHelper')->getAdditionalBlogCategoryUrl()]); // sic! no "neuigkeiten"
 
         $routes->connect('/initiativen/newsact/*', ['controller'=>'worknews', 'action'=>'worknewsActivate']);
         $routes->connect('/initiativen/newsunsub/*', ['controller'=>'worknews', 'action'=>'worknewsUnsubscribe']);
@@ -49,14 +49,14 @@ return function (RouteBuilder $routes) {
         $routes->connect('/users/passwortAendern', ['controller'=>'users', 'action'=>'passwortAendern']);
         $routes->connect('/users/activate/*', ['controller'=>'users', 'action'=>'activate']);
 
-        $routes->connect('/users/profile/:id', ['controller'=>'users', 'action'=>'publicProfile'])
+        $routes->connect('/users/profile/{id}', ['controller'=>'users', 'action'=>'publicProfile'])
             ->setPatterns(['id' => '\d+'])
             ->setPass(['id']);
         $routes->connect('/users/profil/*', ['controller'=>'users', 'action'=>'profil']);
         $routes->connect('/registrierung', ['controller'=>'users', 'action'=>'intro']);
 
         $routes->connect('/events', ['controller'=>'events', 'action'=>'ical']);
-        $routes->connect('/events/:uid', ['controller'=>'events', 'action'=>'ical'])
+        $routes->connect('/events/{uid}', ['controller'=>'events', 'action'=>'ical'])
             ->setPatterns(['uid' => '\d+'])
             ->setPass(['uid']);
         $routes->connect('/reparatur-termine/*', ['controller'=>'events', 'action'=>'all']);
@@ -84,7 +84,7 @@ return function (RouteBuilder $routes) {
         $routes->connect('/seite/*', ['controller' => 'pages', 'action' => 'detail']);
 
         $routes->connect('/post/*', ['controller'=>'posts', 'action'=>'detail']);
-        $routes->connect('/:blogUrl/*', ['controller'=>'blogs', 'action'=>'detail'], ['blogUrl' => 'neuigkeiten|'.Configure::read('AppConfig.htmlHelper')->getAdditionalBlogCategoryUrl()]);
+        $routes->connect('/{blogUrl}/*', ['controller'=>'blogs', 'action'=>'detail'], ['blogUrl' => 'neuigkeiten|'.Configure::read('AppConfig.htmlHelper')->getAdditionalBlogCategoryUrl()]);
 
         // für normale cake routings (users controller)
         $routes->connect('/{controller}/{action}/*');
