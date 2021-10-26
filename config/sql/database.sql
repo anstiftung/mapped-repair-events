@@ -88,14 +88,6 @@ CREATE TABLE `blogs` (
   `url` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Daten für Tabelle `blogs`
---
-
-INSERT INTO `blogs` (`id`, `name`, `text`, `url`) VALUES
-(1, 'Aktuelles', '', 'neuigkeiten'),
-(2, 'Kategorie 2', '', 'kategorie-2');
-
 -- --------------------------------------------------------
 
 --
