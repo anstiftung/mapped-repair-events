@@ -53,7 +53,7 @@ jobs:
           mysql -h 127.0.0.1 --port 8888 -uroot -ppassword db_default < ./config/sql/database.sql
           mysql -h 127.0.0.1 --port 8888 -uroot -ppassword -e "CREATE DATABASE IF NOT EXISTS db_test;"          
           mysql -h 127.0.0.1 --port 8888 -uroot -ppassword db_test < ./config/sql/database.sql
-          mysql -h 127.0.0.1 --port 8888 -uroot -ppassword db_test < ./config/sql/truncte-all-tables.sql
+          mysql -h 127.0.0.1 --port 8888 -uroot -ppassword db_test < ./config/sql/truncate-all-tables.sql
           
       - name: Install vendors 
         run: |
