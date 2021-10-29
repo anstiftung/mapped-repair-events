@@ -11,6 +11,22 @@ return function (RouteBuilder $routes) {
 
     $routes->scope('/', function (RouteBuilder $routes) {
 
+        /* START custom redirects */
+        $routes->redirect('/ax', 'http://anstiftung.pageflow.io/reparieren#17589');
+        $routes->redirect('/dutz', 'http://anstiftung.pageflow.io/reparieren#17725');
+        $routes->redirect('/eisenriegler', 'http://anstiftung.pageflow.io/reparieren#17594');
+        $routes->redirect('/heckl', 'http://anstiftung.pageflow.io/reparieren#16303');
+        $routes->redirect('/huisken', 'http://anstiftung.pageflow.io/reparieren#17593');
+        $routes->redirect('/kreiss', 'http://anstiftung.pageflow.io/reparieren#16309');
+        $routes->redirect('/paech', 'http://anstiftung.pageflow.io/reparieren#17725');
+        $routes->redirect('/schridde', 'http://anstiftung.pageflow.io/reparieren#17595');
+        $routes->redirect('/vangerow', 'http://anstiftung.pageflow.io/reparieren#17590');
+        $routes->redirect('/versicherung', '/seite/sicherheit-haftung#Haftpflichtversicherung');
+        $routes->redirect('/initiativen', '/orte');
+        $routes->redirect('/splitter', '/seite/splitter');
+        $routes->redirect('/online-reparaturcafe', '/seite/online-reparaturcafe');
+        /* END custom redirects */
+
         $routes->setExtensions(['html', 'rss', 'xml', 'ics']);
 
         $routes->connect('/sitemap', ['controller' => 'Sitemaps', 'action' => 'index']);

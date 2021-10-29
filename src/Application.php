@@ -60,14 +60,6 @@ class Application extends BaseApplication
 
     }
 
-    public function routes(RouteBuilder $routes): void
-    {
-        if (file_exists($this->configDir . '/routes_custom.php')) {
-            require $this->configDir . '/routes_custom.php';
-        }
-        parent::routes($routes);
-    }
-
     /**
      * Setup the middleware queue your application will use.
      *
