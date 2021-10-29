@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Erstellungszeit: 22. Sep 2021 um 10:42
+-- Erstellungszeit: 27. Okt 2021 um 09:33
 -- Server-Version: 5.7.33-log
 -- PHP-Version: 8.0.1
 
@@ -11,14 +11,8 @@ SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
 
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
 --
--- Datenbank: `mapped-repair-events_dev`
+-- Datenbank: `mapped-repair-events_test`
 --
 
 -- --------------------------------------------------------
@@ -2515,8 +2509,6 @@ CREATE TABLE `pages` (
   `rght` int(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
 --
 -- Daten für Tabelle `pages`
 --
@@ -2526,6 +2518,8 @@ INSERT INTO `pages` (`_id`, `uid`, `name`, `text`, `url`, `status`, `owner`, `cr
 (103, 1959, 'Was.ist.ein.Organisator', '<p>Setze hier den Haken, wenn du eine Reparatur-Initiative organisierst, d.h. die Veranstaltungen planst und vorbereitest, Termine koordinierst und als AnsprechpartnerIn für das Reparatur-Team, BesucherInnen oder die Presse tätig bist.</p>', 'was-ist-ein-organisator', 1, 1815, '2015-03-06 01:17:12', '2019-06-06 09:35:51', 1825, 1825, '2019-06-06 09:35:51', 'de', 0, 'no-menu', 0, 0, 0),
 (104, 1960, 'Was.ist.ein.Reparateur', '<p>Setze hier den Haken, wenn du ehrenamtlich bei einer Reparatur-Initiative reparierst oder reparieren möchtest oder du eine Initiative am Empfang, im Café-Bereich oder anderweitig unterstützt. Wenn du das auswählst, kannst du unten deine speziellen Fähigkeiten und Fachkenntnisse in deinem Gebiet eintragen.</p>', 'was-ist-ein-reparateur', 1, 1815, '2015-03-06 01:18:13', '2019-06-06 09:36:34', 1825, 1825, '2019-06-06 09:36:34', 'de', 0, 'no-menu', 0, 0, 0),
 (134, 27829, 'Reparaturarchiv', '<p>An dieser Stelle entsteht eine Sammlung aus Reparaturwissen von Aktiven aus dem Netzwerk Reparatur-Initiativen. Vorschläge für Ergänzungen etc. sind willkommen - wendet euch an reparieren@anstiftung.de</p>\n\n<p> </p>\n\n<p>Die Urheberrechte der einzelnen Beiträge liegen bei den Verfasser*innen.</p>\n\n<p> </p>\n\n<ul><li><strong>3D-Reparatur</strong><br /><a href=\"https://3d-reparatur.de/\" target=\"_blank\" rel=\"noreferrer noopener\">www.3d-reparatur.de, </a>Broschüre \"<a href=\"https://3d-reparatur.de/wp-content/uploads/2018/12/SDC_Broschu%CC%88re_3D-Druck-und-Reparatur_Dez-2018_digitale-Version.pdf\" target=\"_blank\" rel=\"noreferrer noopener\">3D-Druck &amp; Reparatur\"</a><br /><a href=\"https://www.reparatur-initiativen.de/post/3d-druck-fuer-reparatur-initiativen/\" target=\"_blank\" rel=\"noreferrer noopener\">3D-Druck (allgemeine Informationen)</a><br /><a href=\"https://www.reparatur-initiativen.de/files/kcfinder/pages/1724/3D%20Printing%20in%20Repair%20Cafes.pdf\" target=\"_blank\" rel=\"noreferrer noopener\">3D-Konstruktion mit FreeCAD (c) Ulrich Libal, RC Landsberg</a><br />\n   </li>\n    <li><strong>Kaffeevollautomaten</strong><br /><a href=\"https://www.reparatur-initiativen.de/post/kaffeevollautomaten-reparieren-manual-reparaturwissen\" target=\"_blank\" rel=\"noreferrer noopener\">Handreichung von Ulrich Libal (Repaircafé Landsberg a.L.) und Video-Tutorials der Schweizer Stiftung für Konsumentenschutz</a><br />\n   </li>\n    <li><strong>Kleben: Reparieren mit Klebstoffen</strong><br /><a href=\"https://www.reparatur-initiativen.de/files/kcfinder/pages/27829/Klebetipps%20f%C3%BCr%20Macher%201.7%20-%20Matthias%20Wild%20Gro%C3%9F-Gerau.pdf\" target=\"_blank\" rel=\"noreferrer noopener\">Tipps und Tricks für Klebereparaturen von Mathias Wild, Reparatur-Treff Groß-Gerau</a></li>\n</ul>', 'reparaturarchiv', 1, 1825, '2020-01-27 11:31:36', '2020-01-28 12:16:07', 1825, 0, '2020-01-28 12:16:07', NULL, NULL, 'no-menu', 18664, 7, 8);
+
+-- --------------------------------------------------------
 
 --
 -- Tabellenstruktur für Tabelle `phinxlog`
@@ -2551,7 +2545,8 @@ INSERT INTO `phinxlog` (`version`, `migration_name`, `start_time`, `end_time`, `
 (20210512072704, 'AddOrdsCategories', '2021-06-11 06:52:20', '2021-06-11 06:52:23', 0),
 (20210719093143, 'AddAdditionalInfoSheetData', '2021-07-19 14:47:02', '2021-07-19 14:47:03', 0),
 (20210816093411, 'RenameTable', '2021-08-20 07:42:38', '2021-08-20 07:42:38', 0),
-(20210818075040, 'AddIso3CodeToCountries', '2021-08-20 07:42:38', '2021-08-20 07:42:39', 0);
+(20210818075040, 'AddIso3CodeToCountries', '2021-08-20 07:42:38', '2021-08-20 07:42:39', 0),
+(20210927124302, 'GeoDataForUsers', '2021-10-27 07:33:29', '2021-10-27 07:33:30', 0);
 
 -- --------------------------------------------------------
 
@@ -2752,6 +2747,8 @@ CREATE TABLE `users` (
   `street` varchar(255) DEFAULT NULL,
   `city` varchar(255) DEFAULT NULL,
   `country_code` char(2) DEFAULT NULL,
+  `lat` double DEFAULT NULL,
+  `lng` double DEFAULT NULL,
   `phone` varchar(24) DEFAULT NULL,
   `twitter_username` varchar(99) DEFAULT NULL,
   `feed_url` varchar(99) DEFAULT NULL,
@@ -3127,7 +3124,7 @@ ALTER TABLE `blocked_workshop_slugs`
 -- AUTO_INCREMENT für Tabelle `blogs`
 --
 ALTER TABLE `blogs`
-  MODIFY `id` int(8) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT für Tabelle `brands`
@@ -3205,7 +3202,7 @@ ALTER TABLE `ords_categories`
 -- AUTO_INCREMENT für Tabelle `pages`
 --
 ALTER TABLE `pages`
-  MODIFY `_id` int(8) NOT NULL AUTO_INCREMENT;
+  MODIFY `_id` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=135;
 
 --
 -- AUTO_INCREMENT für Tabelle `photos`
@@ -3223,7 +3220,7 @@ ALTER TABLE `posts`
 -- AUTO_INCREMENT für Tabelle `roots`
 --
 ALTER TABLE `roots`
-  MODIFY `uid` int(8) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `uid` int(8) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27830;
 
 --
 -- AUTO_INCREMENT für Tabelle `skills`
@@ -3255,7 +3252,3 @@ ALTER TABLE `worknews`
 ALTER TABLE `workshops`
   MODIFY `_id` int(8) NOT NULL AUTO_INCREMENT;
 COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

@@ -2,7 +2,7 @@
 
 namespace App\Model\Table;
 
-use Cake\I18n\Time;
+use Cake\I18n\FrozenTime;
 use Cake\Validation\Validator;
 
 class InfoSheetsTable extends AppTable
@@ -90,8 +90,8 @@ class InfoSheetsTable extends AppTable
         ]);
 
         if (!is_null($dateFrom) && !is_null($dateTo)) {
-            $dateFrom = new Time($dateFrom);
-            $dateTo = new Time($dateTo);
+            $dateFrom = new FrozenTime($dateFrom);
+            $dateTo = new FrozenTime($dateTo);
             $query->where(function($exp) use ($dateFrom, $dateTo) {
                 return $exp->between('Events.datumstart', $dateFrom, $dateTo, 'date');
             });

@@ -25,7 +25,7 @@ jobs:
           - 8888:3306
         env:
           MYSQL_ROOT_PASSWORD: password
-          MYSQL_DATABASE: db_test
+          MYSQL_DATABASE: db_default
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     name: PHP ${{ matrix.php-version }}
 
@@ -50,7 +50,10 @@ jobs:
         run: |
           sudo /etc/init.d/mysql start
           mysql --version
-          mysql -h 127.0.0.1 --port 8888 -u root -ppassword db_test < ./config/sql/database.sql
+          mysql -h 127.0.0.1 --port 8888 -uroot -ppassword db_default < ./config/sql/database.sql
+          mysql -h 127.0.0.1 --port 8888 -uroot -ppassword -e "CREATE DATABASE IF NOT EXISTS db_test;"          
+          mysql -h 127.0.0.1 --port 8888 -uroot -ppassword db_test < ./config/sql/database.sql
+          mysql -h 127.0.0.1 --port 8888 -uroot -ppassword db_test < ./config/sql/truncate-all-tables.sql
           
       - name: Install vendors 
         run: |

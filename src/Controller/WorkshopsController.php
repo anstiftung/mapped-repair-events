@@ -5,7 +5,7 @@ use App\Controller\Component\StringComponent;
 use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
 use Cake\Event\EventInterface;
-use Cake\I18n\Time;
+use Cake\I18n\FrozenTime;
 use Cake\Mailer\Mailer;
 use Cake\Http\Exception\ForbiddenException;
 use Cake\Http\Exception\NotFoundException;
@@ -660,8 +660,8 @@ class WorkshopsController extends AppController
             $mergedData = array_merge(
                 $this->request->getData(),
                 [
-                    'created' => Time::now(),
-                    'modified' => Time::now(),
+                    'created' => FrozenTime::now(),
+                    'modified' => FrozenTime::now(),
                     'confirm' => $confirmationCode,
                     'unsub' => $unsubscribeCode
                 ]

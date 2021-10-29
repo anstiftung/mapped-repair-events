@@ -19,7 +19,7 @@ return [
             'host' => '127.0.0.1',
             'username' => 'root',
             'password' => 'password',
-            'database' => 'db_test',
+            'database' => 'db_default',
             'port' => '8888',
         ],
         'test' => [
