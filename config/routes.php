@@ -25,7 +25,7 @@ return function (RouteBuilder $routes) {
 
         $routes->connect('/initiativen/verwalten', ['controller'=>'workshops', 'action'=>'verwalten']);
         $routes->connect('/initiativen/mitmachen', ['controller'=>'workshops', 'action'=>'applyAsUser']);
-        $routes->connect('/meine-termine', ['controller'=>'events', 'action'=>'myevents']);
+        $routes->connect('/meine-termine', ['controller'=>'events', 'action'=>'myEvents']);
         $routes->connect('/initiativen/anlegen', ['controller'=>'workshops', 'action'=>'add']);
         $routes->connect('/initiativen/bearbeiten/*', ['controller'=>'workshops', 'action'=>'edit']);
         $routes->connect('/initiativen/loeschen/*', ['controller'=>'workshops', 'action'=>'delete']);
