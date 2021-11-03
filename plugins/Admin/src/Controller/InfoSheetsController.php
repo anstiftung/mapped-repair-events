@@ -46,7 +46,7 @@ class InfoSheetsController extends AdminAppController
                 'Events',
                 'Events.Workshops',
                 'Brands',
-                'Categories.ParentCategories'
+                'Categories.ParentCategories',
             ]
         ]);
 
@@ -54,7 +54,7 @@ class InfoSheetsController extends AdminAppController
             'order' => [
                 'InfoSheets.created' => 'DESC'
             ],
-            'limit' => 100,
+            'limit' => 1000,
         ]);
 
         foreach($objects as $object) {
