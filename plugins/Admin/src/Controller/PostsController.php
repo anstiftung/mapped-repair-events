@@ -4,7 +4,7 @@ namespace Admin\Controller;
 use App\Controller\Component\StringComponent;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
-use Cake\I18n\Date;
+use Cake\I18n\FrozenDate;
 use Cake\Http\Exception\NotFoundException;
 
 class PostsController extends AdminAppController
@@ -24,7 +24,7 @@ class PostsController extends AdminAppController
         // admin defaults
         $post = [
             'name' => 'Neuer Post von ' . $this->AppAuth->getUserName(),
-            'publish' => Date::now(),
+            'publish' => FrozenDate::now(),
             'url' => StringComponent::createRandomString(6)
         ];
 
@@ -124,7 +124,7 @@ class PostsController extends AdminAppController
         if (!empty($this->request->getData())) {
 
             if ($this->request->getData('Posts.publish')) {
-                $this->request = $this->request->withData('Posts.publish', new Date($this->request->getData('Posts.publish')));
+                $this->request = $this->request->withData('Posts.publish', new FrozenDate($this->request->getData('Posts.publish')));
             }
             $patchedEntity = $this->Post->getPatchedEntityForAdminEdit($post, $this->request->getData(), $this->useDefaultValidation);
 
