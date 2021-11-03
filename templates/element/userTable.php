@@ -33,7 +33,6 @@ if ($object->status == APP_ON) {
         <th>Status</th>
         <th>Erstellt am</th>
         <th>Zuletzt bearbeitet</th>
-        <th class="icon">löschen</th>
         <th class="icon">bearbeiten</th>
         <th class="icon">anzeigen</th>
       </tr>
@@ -62,18 +61,6 @@ if ($object->status == APP_ON) {
 
       echo '<td>';
         echo $object->updated->i18nFormat(Configure::read('DateFormat.de.DateNTimeShort'));
-      echo '</td>';
-
-      echo '<td class="icon">';
-          echo $this->Html->link(
-              '<i class="far fa-trash-alt fa-border"></i>',
-              'javascript:void(0);',
-              [
-                  'title' => $objectNameDe . ' löschen',
-                  'escape' => false,
-                  'class' => 'delete-workshop'
-              ]
-          );
       echo '</td>';
 
       echo '<td class="icon">';

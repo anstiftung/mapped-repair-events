@@ -1218,26 +1218,6 @@ MappedRepairEvents.Helper = {
         }
     },
 
-    bindDeleteWorkshopButton : function() {
-
-        $('a.delete-workshop').on('click', function() {
-            var message = 'Soll diese Initiative wirklich gelöscht werden? Dies kann nicht rückgängig gemacht werden!<br />Alle anderen Organisatoren (falls vorhanden) werden automatisch per E-Mail darüber informiert.';
-            var workshopUid = $(this).closest('tr').find('div.workshopUid').html();
-            $.prompt(message, {
-                buttons : {
-                    Ja : true,
-                    Nein : false
-                },
-                submit : function(v, m, f) {
-                    if (m) {
-                        var url = '/initiativen/loeschen/' + workshopUid;
-                        document.location.href = url;
-                    }
-                }
-            });
-        });
-    },
-
     bindWorkshopUserActions : function() {
 
         $('a.resign-not-possible').on('click', function() {
