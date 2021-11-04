@@ -68,12 +68,12 @@ class WorknewsController extends AppController {
                 'Worknews.unsub' => $this->request->getParam('pass')['0'],
             ],
             'contain' => [
-                'Workshops'
+                'Workshops',
             ]
         ])->first();
 
         if (empty($worknews)) {
-            $this->AppFlash->setFlashError(__('Invalid unsubscribe code.'));
+            $this->AppFlash->setFlashError('Der Abmeldecode ist ungültig oder wurde bereits verwendet.');
             $this->redirect('/');
             return;
         }
@@ -81,7 +81,7 @@ class WorknewsController extends AppController {
         $this->Worknews->delete(
             $this->Worknews->get($worknews->id)
         );
-        $this->AppFlash->setFlashMessage($worknews->email . ' ' . __('is removed!'));
+        $this->AppFlash->setFlashMessage('Deine Abmeldung aus der abonnierten Liste ist erfolgt.');
         $this->redirect($worknews->workshop->url);
 
     }
