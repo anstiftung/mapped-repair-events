@@ -80,7 +80,12 @@ return [
             'TimeWithSeconds' => 'HH:mm:ss',
             'DateNTimeForDatepicker' => 'dd.MM.yyyy HH:mm'
         ]
-    ]
+    ],
+    'Error' => [
+        'ignoredDeprecationPaths' => [
+            'vendor/dereuromark/cakephp-feed/src/View/RssView.php',
+        ]
+    ],
 ];
 
 ?>
