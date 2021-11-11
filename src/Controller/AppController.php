@@ -52,6 +52,7 @@ class AppController extends Controller
 
         $this->loadComponent('Common');
         $this->loadComponent('String');
+        $this->loadComponent('Paginator');
         $this->loadComponent('RequestHandler', [
             'enableBeforeRedirect' => false
         ]);

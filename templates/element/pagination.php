@@ -1,37 +1,44 @@
 <?php
 
-  /*
-  $counter = $this->Paginator->counter();
-  if ($counter == '1 of 1' || $counter == '0 of 1') return;
-  */
-  if( empty($urlOptions) ) $urlOptions = ['url' => []];
+if( empty($urlOptions) ) $urlOptions = ['url' => []];
 
-  $named = [];
-  if (!empty($this->request->getParam('named'))) {
-      $named = $this->request->getParam('named');
-  }
+$named = [];
+if (!empty($this->request->getParam('named'))) {
+    $named = $this->request->getParam('named');
+}
 
-  $mergedUrlOptions = array_merge($named, ['escape' => false], $urlOptions);
+$mergedUrlOptions = array_merge($named, ['escape' => false], $urlOptions);
 
-  $this->Paginator->options($mergedUrlOptions);
+$this->Paginator->options($mergedUrlOptions);
 
-  $this->element('addScript', ['script' =>
-      JS_NAMESPACE.".Helper.initPagination();
-  "]);
+if (!isset($objectNameSingular)) { $objectNameSingular = 'Datensatz'; };
+if (!isset($objectNamePlural)) { $objectNamePlural = 'Datensätze'; };
 
-  if (!isset($objectNameSingular)) { $objectNameSingular = 'Datensatz'; };
-  if (!isset($objectNamePlural)) { $objectNamePlural = 'Datensätze'; };
+$options = ['url' => []];
 
-  echo '<div class="pagination">';
-        echo '<div class="numbers">';
-            echo $this->Number->precision($this->Paginator->param('count'), 0);
-            if (isset($allCount) && $allCount > $this->Paginator->param('count')) {
-                echo ' von insgesamt ' . $this->Number->precision($allCount, 0);
-                echo ' ' . ($allCount == 1 ? $objectNameSingularDativ : $objectNamePluralDativ);
-            } else {
-                echo ' ' . ($this->Paginator->param('count') == 1 ? $objectNameSingular : $objectNamePlural);
-            }
-            echo ' gefunden';
-        echo '</div>';
-    echo '</div>';
+if (isset($this->request->getQueryParams()['key-standard']) && isset($this->request->getQueryParams()['val-standard'])) {
+    $options['url']['?']['key-standard'] = $this->request->getQueryParams()['key-standard'];
+    $options['url']['?']['val-standard'] = $this->request->getQueryParams()['val-standard'];
+}
+if (isset($this->request->getQueryParams()['key-status']) && isset($this->request->getQueryParams()['val-status'])) {
+    $options['url']['?']['key-status'] = $this->request->getQueryParams()['key-status'];
+    $options['url']['?']['val-status'] = $this->request->getQueryParams()['val-status'];
+}
+if (isset($this->request->getQueryParams()['key-opt-1']) && isset($this->request->getQueryParams()['val-opt-1'])) {
+    $options['url']['?']['key-opt-1'] = $this->request->getQueryParams()['key-opt-1'];
+    $options['url']['?']['val-opt-1'] = $this->request->getQueryParams()['val-opt-1'];
+}
+if (isset($this->request->getQueryParams()['key-opt-2']) && isset($this->request->getQueryParams()['val-opt-2'])) {
+    $options['url']['?']['key-opt-2'] = $this->request->getQueryParams()['key-opt-2'];
+    $options['url']['?']['val-opt-2'] = $this->request->getQueryParams()['val-opt-2'];
+}
+
+echo '<div class="pagination">';
+    echo $this->Paginator->first(1);
+    echo $this->Paginator->prev(' << ');
+    echo $this->Paginator->numbers($options);
+    echo $this->Paginator->next(' >> ');
+    echo $this->Paginator->last(1);
+echo '</div>';
+
 ?>

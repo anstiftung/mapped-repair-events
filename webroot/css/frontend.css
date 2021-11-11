@@ -2377,48 +2377,41 @@ div.hint h1 {
     line-height: normal;
 }
 /* END rounded buttons */
-/* START pagination */
 
+/* START pagination */
 div.pagination {
     text-align: center;
     margin: 10px 0 20px -5px;
     float: left;
     width: 100%;
 }
-div.pagination span {
+div.pagination li {
+    list-style: none;
     float: left;
-    width: 30px;
     font-weight: bold;
-    height: 22px;
-    background-color: #4D8EA2;
-    color: #fff;
+    background-color: #fff;
     margin: 0 5px;
-    padding-top: 7px;
-}
-div.pagination span a {
     display: block;
-    float: left;
+    border: 1px solid #4D8EA2;
+    border-radius: 3px;
+}
+div.pagination li a {
+    display: block;
     width: 30px;
-    height: 20px;
+    height: 22px;
+    padding-top: 8px;
     text-decoration: none;
-    color: #fff;
+    color: #4D8EA2;
 }
-div.pagination span.current,
-div.pagination span:hover,
-div.pagination span a:hover {
-    background-color: #77B1C5;
-    color: #333 ! important;
+div.pagination li.active a,
+div.pagination li a:hover {
+    background-color: #4D8EA2 ! important;
+    color: #fff! important;
 }
-div.pagination span.current {
+div.pagination li.active a {
     background-color: transparent;
 }
-div.pagination span.next {
-    border-right: none;
-}
-div.pagination div.numbers {
-    text-align: left;
-    margin: 0 0 10px 7px;
-}
+
 .sort {
   clear: both;
 }

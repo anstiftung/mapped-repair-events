@@ -1287,14 +1287,6 @@ MappedRepairEvents.Helper = {
         });
     },
 
-    initPagination : function() {
-        $('.pagination span:last').css('border-right', 'none');
-        $('.pagination span:contains(\'«\')').attr('title', 'Zurück');
-        $('.pagination span:contains(\'»\')').attr('title', 'Vor');
-        $('.pagination span:contains(\'««\')').attr('title', 'Erste Seite');
-        $('.pagination span:contains(\'»»\')').attr('title', 'Letzte Seite');
-    },
-
     highlightFormFields : function() {
         var formFieldsToHighlight = $(
             'input[type="text"], input[type="password"], textarea, select').not(

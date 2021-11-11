@@ -45,6 +45,7 @@ class AppView extends View
         ]);
         $this->loadHelper('Widget');
         $this->loadHelper('Menu');
+        $this->loadHelper('Paginator');
         $this->loadHelper('AssetCompress.AssetCompress');
     }
 }
