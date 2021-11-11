@@ -83,6 +83,7 @@ return [
     ],
     'Error' => [
         'ignoredDeprecationPaths' => [
+            'vendor/cakephp/cakephp/src/I18n/Time.php',
             'vendor/dereuromark/cakephp-feed/src/View/RssView.php',
         ]
     ],
