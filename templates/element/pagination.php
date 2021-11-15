@@ -1,19 +1,5 @@
 <?php
 
-if( empty($urlOptions) ) $urlOptions = ['url' => []];
-
-$named = [];
-if (!empty($this->request->getParam('named'))) {
-    $named = $this->request->getParam('named');
-}
-
-$mergedUrlOptions = array_merge($named, ['escape' => false], $urlOptions);
-
-$this->Paginator->options($mergedUrlOptions);
-
-if (!isset($objectNameSingular)) { $objectNameSingular = 'Datensatz'; };
-if (!isset($objectNamePlural)) { $objectNamePlural = 'Datensätze'; };
-
 $options = ['url' => []];
 
 if (isset($this->request->getQueryParams()['key-standard']) && isset($this->request->getQueryParams()['val-standard'])) {

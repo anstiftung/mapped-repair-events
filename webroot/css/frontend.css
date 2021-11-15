@@ -2411,7 +2411,14 @@ div.pagination li a:hover {
 div.pagination li.active a {
     background-color: transparent;
 }
-
+div.pagination-search {
+    float: left;
+    margin: 10px 0 20px -5px;
+}
+div.pagination-search div.numbers {
+    text-align: left;
+    margin: 0 0 10px 7px;
+}
 .sort {
   clear: both;
 }

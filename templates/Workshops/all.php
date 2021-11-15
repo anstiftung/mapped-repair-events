@@ -34,7 +34,7 @@ echo $this->element('highlightNavi', ['main' => 'ORTE']);
 
     <?php
     $paginationParams = ['objectNameSingular' => 'Initiative', 'objectNamePlural' => 'Initiativen'];
-    echo $this->element('pagination', $paginationParams);
+    echo $this->element('paginationSearch', $paginationParams);
 
     echo '</div>'; // div.top
     foreach($workshops as $workshop) {
@@ -75,7 +75,7 @@ echo $this->element('highlightNavi', ['main' => 'ORTE']);
 
     }
     if (count($workshops) > 0) {
-        echo $this->element('pagination', $paginationParams);
+        echo $this->element('paginationSearch', $paginationParams);
     }
 ?>
 
