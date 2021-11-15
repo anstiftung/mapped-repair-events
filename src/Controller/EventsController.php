@@ -211,12 +211,12 @@ class EventsController extends AppController
         $workshops->contain([
             'Events.InfoSheets.OwnerUsers',
             'Events.InfoSheets.Brands' => function($q) {
-            return $q->select($this->Workshop->Events->InfoSheets->Brands);
+                return $q->select($this->Workshop->Events->InfoSheets->Brands);
             },
             'Events.InfoSheets.Categories' => function($q) {
-            return $q->select($this->Workshop->Events->InfoSheets->Categories);
+                return $q->select($this->Workshop->Events->InfoSheets->Categories);
             }
-            ]);
+        ]);
 
         $this->Workshop->getAssociation('Events')->setConditions(['Events.status > ' . APP_DELETED])
         ->setSort([
@@ -238,7 +238,10 @@ class EventsController extends AppController
         ->setSort([
             'InfoSheets.device_name' => 'ASC'
         ]);
-        $workshops->limit(1000000);
+
+        $workshops = $this->paginate($workshops, [
+            'limit' => 500,
+        ]);
 
         foreach($workshops as $workshop) {
             $workshop->infoSheetCount = 0;

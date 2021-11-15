@@ -2399,9 +2399,10 @@ div.pagination li a {
     display: block;
     width: 30px;
     height: 22px;
-    padding-top: 8px;
+    padding-top: 8px ! important;
     text-decoration: none;
     color: #4D8EA2;
+    margin: 0 ! important;
 }
 div.pagination li.active a,
 div.pagination li a:hover {
