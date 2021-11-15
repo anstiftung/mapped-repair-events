@@ -61,7 +61,7 @@ a {
 div.admin #admin-list-form label {
     float: left;
     margin-right: 5px;
-    margin-top: 5px;
+    margin-top: 10px;
 }
 
 div.admin #admin-list-form .input {

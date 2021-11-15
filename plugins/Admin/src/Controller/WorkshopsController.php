@@ -56,7 +56,7 @@ class WorkshopsController extends AdminAppController
         $objects = $this->paginate($query, [
             'order' => [
                 'Workshops.name' => 'ASC'
-            ]
+            ],
         ]);
 
         $this->InfoSheet = $this->getTableLocator()->get('InfoSheets');

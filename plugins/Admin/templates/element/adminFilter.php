@@ -82,7 +82,7 @@
 
     <?php if (!empty($this->request->getQueryParams())) { ?>
         <button type="button" class="rounded gray"
-            onclick="document.location.href='/<?php echo strtolower($this->request->getParam('plugin')).'/'.strtolower($this->request->getParam('controller')).'/'.$this->request->getParam('action');?>';">
+            onclick="document.location.href='/<?php echo strtolower($this->request->getParam('plugin')).'/'.Inflector::dasherize($this->request->getParam('controller')).'/'.$this->request->getParam('action');?>';">
         Filter zurücksetzen<span></span>
     </button>
     <?php } ?>

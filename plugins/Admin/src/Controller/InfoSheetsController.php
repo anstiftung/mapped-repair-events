@@ -54,7 +54,6 @@ class InfoSheetsController extends AdminAppController
             'order' => [
                 'InfoSheets.created' => 'DESC'
             ],
-            'limit' => 1000,
         ]);
 
         foreach($objects as $object) {

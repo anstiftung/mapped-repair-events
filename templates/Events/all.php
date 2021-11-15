@@ -51,7 +51,7 @@ $this->element('addScript', ['script' =>
         'objectNamePluralDativ' => 'Reparaturterminen',
         'allCount' => $allEventsCount
     ];
-    echo $this->element('pagination', $paginationParams);
+    echo $this->element('paginationSearch', $paginationParams);
 
     echo '</div>'; // div.top
     foreach($events as $event) {
@@ -106,7 +106,7 @@ $this->element('addScript', ['script' =>
 
     }
     if (count($events) > 0) {
-        echo $this->element('pagination', $paginationParams);
+        echo $this->element('paginationSearch', $paginationParams);
     }
 ?>
 

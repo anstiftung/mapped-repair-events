@@ -29,6 +29,15 @@ class AdminAppController extends AppController
 
     public $matchings = [];
 
+    public function initialize(): void
+    {
+        parent::initialize();
+        $this->paginate = [
+            'limit' => 500,
+            'maxLimit' => 100000
+        ];
+    }
+
     public function isAuthorized($user)
     {
         if (! $this->AppAuth->isAdmin()) {

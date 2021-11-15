@@ -28,7 +28,7 @@ if (!isset($hideDeleteLink) || !$hideDeleteLink) {
             $heading = ucfirst($this->request->getParam('controller'));
         }
         $paginatorParams = $this->Paginator->params();
-        $heading .= $count = ' (' . $paginatorParams['count'] . ')';
+        $heading .= $count = ' (' . $this->Number->precision($paginatorParams['count'], 0) . ')';
         echo $this->element('heading', [
             'first' => $heading
         ]);
@@ -373,7 +373,7 @@ if (!isset($hideDeleteLink) || !$hideDeleteLink) {
         </table>
 
         <?php
-        // echo $this->element('pagination');
+            echo $this->element('pagination');
         ?>
 
     </div>
