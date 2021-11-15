@@ -19,12 +19,13 @@ if (isset($this->request->getQueryParams()['key-opt-2']) && isset($this->request
     $options['url']['?']['val-opt-2'] = $this->request->getQueryParams()['val-opt-2'];
 }
 
-echo '<div class="pagination">';
-    echo $this->Paginator->first(1);
-    echo $this->Paginator->prev(' << ');
-    echo $this->Paginator->numbers($options);
-    echo $this->Paginator->next(' >> ');
-    echo $this->Paginator->last(1);
-echo '</div>';
-
+if ($this->Paginator->hasNext() || $this->Paginator->hasPrev()) {
+    echo '<div class="pagination">';
+        echo $this->Paginator->first(1);
+        echo $this->Paginator->prev(' << ');
+        echo $this->Paginator->numbers($options);
+        echo $this->Paginator->next(' >> ');
+        echo $this->Paginator->last(1);
+    echo '</div>';
+}
 ?>
