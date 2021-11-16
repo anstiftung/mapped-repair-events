@@ -63,6 +63,7 @@ jobs:
           bash bin/cake migrations migrate
           
       - name: Upload Files to Server
+        if: ${{ github.event_name == 'push' }}
         uses: up9cloud/action-rsync@master
         env:
           HOST: ${{secrets.DEPLOY_HOST}}
