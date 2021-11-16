@@ -61,8 +61,6 @@ jobs:
           cp ./.github/workflows/*.php ./config/
           npm --prefix ./webroot install ./webroot
           bash bin/cake migrations migrate
-          echo ${{secrets.DEPLOY_PATH}}/builds/${GITHUB_REF_NAME}/webroot
-          mkdir -p ${{secrets.DEPLOY_PATH}}/builds/${GITHUB_REF_NAME}/webroot
           
       - name: Upload Files to Server
         uses: up9cloud/action-rsync@master
@@ -72,8 +70,9 @@ jobs:
           KEY: ${{secrets.DEPLOY_SSH_KEY}}
           SOURCE: ./webroot/node_modules
           TARGET: ${{secrets.DEPLOY_PATH}}/builds/${GITHUB_REF_NAME}/webroot
+          PRE_SCRIPT: mkdir -p ${{secrets.DEPLOY_PATH}}/builds/${GITHUB_REF_NAME}/webroot
           SSH_ARGS: '-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
-                  
+          
       - name: PHPStan
         if: always()
         run: vendor/bin/phpstan analyze -c phpstan.neon --no-interaction --no-progress
