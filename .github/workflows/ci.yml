@@ -72,7 +72,7 @@ jobs:
           SOURCE: ./webroot/node_modules
           TARGET: ${{secrets.DEPLOY_PATH}}/builds/${GITHUB_REF_NAME}/webroot
           RUN_SCRIPT_ON: remote
-          PRE_SCRIPT: mkdir -p ${{secrets.DEPLOY_PATH}}/builds/${GITHUB_REF_NAME}/webroot
+          PRE_SCRIPT: "mkdir -p ${{secrets.DEPLOY_PATH}}/builds/${GITHUB_REF_NAME}/webroot"
           SSH_ARGS: '-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
           
       - name: PHPStan
