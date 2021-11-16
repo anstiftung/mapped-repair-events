@@ -61,7 +61,8 @@ jobs:
           cp ./.github/workflows/*.php ./config/
           npm --prefix ./webroot install ./webroot
           bash bin/cake migrations migrate
-          mkdir -p ${{secrets.DEPLOY_PATH}}/builds/${GITHUB_REF_NAME}
+          echo ${{secrets.DEPLOY_PATH}}/builds/${GITHUB_REF_NAME}/webroot
+          mkdir -p ${{secrets.DEPLOY_PATH}}/builds/${GITHUB_REF_NAME}/webroot
           
       - name: Upload Files to Server
         uses: up9cloud/action-rsync@master
