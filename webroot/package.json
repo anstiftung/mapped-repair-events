@@ -19,7 +19,7 @@
     "blueimp-file-upload": "^10.32.0",
     "chart.js": "^3.6.0",
     "chartjs-plugin-datalabels": "^2.0.0",
-    "ckeditor4": "^4.16.2",
+    "ckeditor4": "^4.17.0",
     "components-jqueryui": "~1.12",
     "detect_swipe": "^2.1.4",
     "featherlight": "^1.7.14",
