@@ -37,7 +37,7 @@ echo $this->element('highlightNavi', ['main' => 'Aktive']);
         <div id="sklill_icons">
             <?php
                 foreach($user->categories as $category) {
-                    echo '<div title="'.h($category->name).'" class="sklill_icon small '.h($category->icon).'"></div>';
+                    echo '<a href="' . $this->Html->urlUsers($category->name) . '" title="'.h($category->name).'" class="sklill_icon small '.h($category->icon).'"></a>';
                 }
             ?>
         </div>

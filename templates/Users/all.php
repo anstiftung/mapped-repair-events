@@ -7,7 +7,9 @@
 
 <h1>
     <?php if (isset($skill)) { ?>
-        <a class="button" href="javascript:void(0);"><?php echo $skill->name; ?></a> (<?php echo $this->Number->precision($users->count(), 0); ?> Aktive)</h1>
+        <a class="button" href="javascript:void(0);"><?php echo $skill->name; ?></a> (<?php echo $this->Number->precision($users->count(), 0); ?> Aktive)
+    <?php } else if (!is_null($filteredCategoryName)) { ?>
+        <a class="button" href="javascript:void(0);"><?php echo $filteredCategoryName; ?></a> (<?php echo $this->Number->precision($users->count(), 0); ?> Aktive)
     <?php } else { ?>
         <?php echo $metaTags['title']; ?> (<?php echo $this->Number->precision($users->count(), 0); ?>)
     <?php } ?>
@@ -30,9 +32,9 @@
 <div class="dotted-line-full-width"></div>
 
 <?php if (isset($skill)) {
-    echo $this->element('users/userFilter', ['urlMethod' => 'urlSkillDetail', 'skill' => $skill]);
+    echo $this->element('users/userFilter', ['urlMethod' => 'urlSkillDetail', 'skill' => $skill, 'filteredCategoryName' => null]);
 } else {
-    echo $this->element('users/userFilter', ['urlMethod' => 'urlUsers']);
+    echo $this->element('users/userFilter', ['urlMethod' => 'urlUsers', 'filteredCategoryName' => $filteredCategoryName]);
 }
 ?>
 

@@ -53,8 +53,21 @@ class UsersController extends AppController
     public function all()
     {
 
-        $skillId = 0;
+        $filteredCategory = null;
         if (isset($this->getRequest()->getParam('pass')[0])) {
+            $this->Category = $this->getTableLocator()->get('Categories');
+            $categories = $this->Category->getMainCategoriesForFrontend();
+            $categorySlug = $this->getRequest()->getParam('pass')[0];
+            foreach($categories as $category) {
+                if (StringComponent::slugify($category->name) == $categorySlug) {
+                    $filteredCategory = $category;
+                }
+            }
+        }
+        $this->set('filteredCategoryName', !is_null($filteredCategory) ? $filteredCategory->name : null);
+
+        $skillId = 0;
+        if (is_null($filteredCategory) && isset($this->getRequest()->getParam('pass')[0])) {
             $skillId = (int) $this->getRequest()->getParam('pass')[0];
             $this->Skill = $this->getTableLocator()->get('Skills');
             $skill = $this->Skill->find('all', [
@@ -75,6 +88,7 @@ class UsersController extends AppController
             'Users.status' => APP_ON
         ];
 
+
         if ($this->getRequest()->getQuery('zip') != '') {
             $conditions['LEFT(Users.zip, 1) = '] = (int) $this->getRequest()->getQuery('zip');
             $conditions['FIND_IN_SET("zip", private) = '] = 0; // Users.private would be converted to users.private on prod so leave it out!
@@ -82,17 +96,27 @@ class UsersController extends AppController
         if ($skillId > 0) {
             $conditions['FIND_IN_SET("skills", private) = '] = 0; // Users.private would be converted to users.private on prod so leave it out!
         }
+        if (!is_null($filteredCategory)) {
+            $conditions['FIND_IN_SET("categories", private) = '] = 0; // Users.private would be converted to users.private on prod so leave it out!
+        }
 
         $users = $this->User->find('all', [
             'conditions' => $conditions,
             'contain' => [
-                'Skills'
+                'Skills',
+                'Categories',
             ]
         ]);
 
         if ($skillId > 0) {
             $users->matching('Skills', function(Query $q) use ($skillId) {
                 return $q->where(['Skills.id' => $skillId]);
+            });
+        }
+
+        if (!is_null($filteredCategory)) {
+            $users->matching('Categories', function(Query $q) use ($filteredCategory) {
+                return $q->where(['Categories.id' => $filteredCategory->id]);
             });
         }
 
