@@ -284,7 +284,7 @@ class UsersController extends AppController
             if (!empty($this->request->getData('Users.private_as_array'))) {
                 $private = implode(',', $this->request->getData('Users.private_as_array'));
             } else {
-                $private = [];
+                $private = '';
             }
             $this->request = $this->request->withData('Users.private', $private);
 
