@@ -24,8 +24,8 @@
     "detect_swipe": "^2.1.4",
     "featherlight": "^1.7.14",
     "fullcalendar": "^5.9.0",
-    "jQuery-Impromptu": "https://github.com/trentrichardson/jQuery-Impromptu/tarball/master",
     "jquery": "^3.6.0",
+    "jQuery-Impromptu": "https://github.com/trentrichardson/jQuery-Impromptu/tarball/master",
     "jquery-knob": "https://github.com/aterrien/jQuery-Knob/tarball/master",
     "jquery-slugify": "^1.2.5",
     "leaflet": "^1.7.1",
@@ -36,8 +36,5 @@
     "speakingurl": "^14.0.1",
     "svelte": "^3.44.0",
     "swiper": "^7.1.0"
-  },
-  "devDependencies": {
-    "eslint": "^8.1.0"
   }
 }
