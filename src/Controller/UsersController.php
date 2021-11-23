@@ -53,6 +53,7 @@ class UsersController extends AppController
     public function all()
     {
 
+        // pass[0] can contain "44-tag-name" or "category-name"
         $filteredCategory = null;
         if (isset($this->getRequest()->getParam('pass')[0])) {
             $this->Category = $this->getTableLocator()->get('Categories');
