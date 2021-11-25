@@ -65,6 +65,7 @@ class UsersController extends AppController
                 }
             }
         }
+        $this->set('filteredCategoryIcon', !is_null($filteredCategory) ? $filteredCategory->icon : null);
         $this->set('filteredCategoryName', !is_null($filteredCategory) ? $filteredCategory->name : null);
 
         $skillId = 0;

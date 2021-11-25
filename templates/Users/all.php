@@ -7,9 +7,14 @@
 
 <h1>
     <?php if (isset($skill)) { ?>
-        <a class="button" href="javascript:void(0);"><?php echo $skill->name; ?></a> (<?php echo $this->Number->precision($users->count(), 0); ?> Aktive)
+        <a class="button" href="javascript:void(0);">
+            <?php echo $skill->name; ?>
+        </a> (<?php echo $this->Number->precision($users->count(), 0); ?> Aktive)
     <?php } else if (!is_null($filteredCategoryName)) { ?>
-        <a class="button" href="javascript:void(0);"><?php echo $filteredCategoryName; ?></a> (<?php echo $this->Number->precision($users->count(), 0); ?> Aktive)
+        <a class="button" href="javascript:void(0);">
+            <?php echo '<img class="skill-icon" title="'.h($filteredCategoryName).'" src="/img/icons-skills/'.h($filteredCategoryIcon).'.png" /> '; ?>
+            <span><?php echo $filteredCategoryName; ?></span>
+        </a> (<?php echo $this->Number->precision($users->count(), 0); ?> Aktive)
     <?php } else { ?>
         <?php echo $metaTags['title']; ?> (<?php echo $this->Number->precision($users->count(), 0); ?>)
     <?php } ?>

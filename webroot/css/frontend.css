@@ -3131,6 +3131,11 @@ body.users.all .public-user-wrapper {
     height: 130px;
     padding: 10px;
 }
+body.users.all img.skill-icon {
+    width: 40px;
+    height: auto;
+    margin-bottom: -10px;
+}
 body.users.all .public-user-wrapper .left-wrapper {
     width: 125px;
 }
@@ -3271,7 +3276,12 @@ body.users.all .skills-wrapper .input.select {
 }
 body.users.all h1 a,
 body.skills.all h1 a {
-    cursor: default;
+    cursor: text;
+    margin-right: 10px;
+}
+body.users.all h1 a:hover,
+body.skills.all h1 a:hover {
+    background-color: #4D8EA2 ! important;
 }
 body.skills.all .letter {
     font-size: 22px;

@@ -49,6 +49,20 @@
     body.users.all .public-user-wrapper {
        padding: 10px 0;
     }
+    body.users.all img.skill-icon {
+        margin-bottom: 0px;
+        float: left;
+    }
+    body.users.all h1 a.button {
+        margin-right: 0;
+        text-align: left;
+    }
+    body.users.all h1 a.button span {
+        line-height: 25px;
+        margin-top: 7px;
+        margin-left: 5px;
+        float: left;
+    }
     body.users.all .public-user-wrapper .left-wrapper {
        width: 34%;
     }
