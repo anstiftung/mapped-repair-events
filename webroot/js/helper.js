@@ -579,7 +579,7 @@ MappedRepairEvents.Helper = {
     },
 
     getCategoryIcon : function(category) {
-        return '<div title="' + category.name + '" class="sklill_icon small ' + category.icon + '"></div>';
+        return '<div title="' + category.name + '" class="skill_icon small ' + category.icon + '"></div>';
     },
 
     getCalEventHtml : function(ev, wuid, showDate, stringEventIsOnline, stringEventIsOffline, stringEditEvent, stringDuplicateEvent, stringConfirmDeleteEvent, stringDeleteEvent, stringNoCategories) {
@@ -649,7 +649,7 @@ MappedRepairEvents.Helper = {
 
             if (ev.categories && ev.categories.length > 0) {
                 for(var i in ev.categories) {
-                    calEvent += '<div title="' + ev.categories[i].name + '" class="lstCatNew sklill_icon small ' + ev.categories[i].icon + '"></div>';
+                    calEvent += '<div title="' + ev.categories[i].name + '" class="lstCatNew skill_icon small ' + ev.categories[i].icon + '"></div>';
                 }
             } else {
                 calEvent += stringNoCategories;
@@ -894,8 +894,8 @@ MappedRepairEvents.Helper = {
 
         $('#tabs, #tabs2').tabs();
 
-        $(document).on('mouseover', '.sklill_icon', function(e){
-            if(!$(this).data('sklill_icon')){
+        $(document).on('mouseover', '.skill_icon', function(e){
+            if(!$(this).data('skill_icon')){
                 $(this).tooltip({
                     content: function() {
                         return $(this).attr('title');

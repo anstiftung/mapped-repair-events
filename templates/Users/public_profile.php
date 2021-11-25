@@ -34,10 +34,10 @@ echo $this->element('highlightNavi', ['main' => 'Aktive']);
         <strong><?php echo __('Skills from this user'); ?> </strong>
         <div class="sc"></div>
 
-        <div id="sklill_icons">
+        <div id="skill_icons">
             <?php
                 foreach($user->categories as $category) {
-                    echo '<a href="' . $this->Html->urlUsers($category->name) . '" title="'.h($category->name).'" class="sklill_icon small '.h($category->icon).'"></a>';
+                    echo '<a href="' . $this->Html->urlUsers($category->name) . '" title="'.h($category->name).'" class="skill_icon small '.h($category->icon).'"></a>';
                 }
             ?>
         </div>
