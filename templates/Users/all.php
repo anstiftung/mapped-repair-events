@@ -1,4 +1,6 @@
 <?php
+    use App\Controller\Component\StringComponent;
+
     echo $this->element('highlightNavi', ['main' => 'Aktive']);
     $this->element('addScript', ['script' => "
         MappedRepairEvents.Helper.initSkillFilter();
@@ -28,7 +30,7 @@
             'label' => false,
             'empty' => 'Alle anzeigen',
             'options' => $skillsForDropdown,
-            'value' => isset($skill) ? $skill->id : ''
+            'value' => is_null($filteredCategoryName) ? (isset($skill) ? $skill->id : '') : StringComponent::slugify($filteredCategoryName),
         ]);
     echo '</div>';
 ?>

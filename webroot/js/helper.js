@@ -134,8 +134,10 @@ MappedRepairEvents.Helper = {
     initSkillFilter : function() {
         $('select#skills').on('change', function() {
             var url = '/aktive';
-            if ($(this).val() > 0) {
+            if (parseInt($(this).val()) == $(this).val()) {
                 url = '/aktive/' + $(this).val() + '-' + $.slugify($(this).find('option:selected').text());
+            } else {
+                url = '/aktive/' + $(this).val();
             }
             document.location.href = url;
         });

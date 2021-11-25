@@ -142,6 +142,16 @@ class UsersController extends AppController
 
         $this->Skill = $this->getTableLocator()->get('Skills');
         $skillsForDropdown = $this->Skill->getForDropdown(false);
+
+        $this->Category = $this->getTableLocator()->get('Categories');
+        $categoriesForDropdown = $this->Category->getMainCategoriesForFrontend();
+        $preparedCategoriesForDropdown = [];
+        foreach($categoriesForDropdown as $c) {
+            $slugifiedCategoryName = StringComponent::slugify($c->name);
+            $preparedCategoriesForDropdown[$slugifiedCategoryName] = $c->name . ' (Kenntnis)';
+        }
+        $skillsForDropdown = $preparedCategoriesForDropdown + $skillsForDropdown;
+        asort($skillsForDropdown);
         $this->set('skillsForDropdown', $skillsForDropdown);
 
         $metaTags = [
