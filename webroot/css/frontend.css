@@ -3319,6 +3319,9 @@ body.skills.all .skills a.skill-40 {
 body.skills.all .skills a.skill-50 {
     font-size: 24px;
 }
+body.skills.all .skills a.skill-60 {
+    font-size: 28px;
+}
 body.workshops.verwalten small,
 #workshop-detail small {
     font-size: 11px;
