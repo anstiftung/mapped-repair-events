@@ -4,6 +4,7 @@ namespace App\Controller;
 use App\Controller\Component\StringComponent;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
+use Cake\Utility\Hash;
 
 class SkillsController extends AppController
 {
@@ -82,6 +83,9 @@ class SkillsController extends AppController
             }
         }
 
+        foreach($preparedSkills as &$preparedSkill) {
+            $preparedSkill = Hash::sort($preparedSkill, '{n}.name');
+        }
         ksort($preparedSkills, SORT_STRING);
 
         $this->set('skills', $preparedSkills);
