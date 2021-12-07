@@ -148,7 +148,7 @@ class UsersController extends AppController
         $preparedCategoriesForDropdown = [];
         foreach($categoriesForDropdown as $c) {
             $slugifiedCategoryName = StringComponent::slugify($c->name);
-            $preparedCategoriesForDropdown[$slugifiedCategoryName] = $c->name . ' (Kenntnis)';
+            $preparedCategoriesForDropdown[$slugifiedCategoryName] = $c->name;
         }
         $skillsForDropdown = $preparedCategoriesForDropdown + $skillsForDropdown;
         asort($skillsForDropdown);
