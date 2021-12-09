@@ -33,7 +33,7 @@ $this->element('addScript', ['script' =>
                     echo '<a href="'.$category['href'].'"
                              title="'.$category['name'].'"
                              id="category-'.$category['id'].'"
-                             class="lstCat sklill_icon '.$category['icon'].' '.$category['class'] .'">
+                             class="lstCat skill_icon '.$category['icon'].' '.$category['class'] .'">
                     </a>';
 
                 }
@@ -98,7 +98,7 @@ $this->element('addScript', ['script' =>
                 }
                 echo '<div
                          title="'.$preparedCategory['name'].'"
-                         class="lstCatNew sklill_icon small '.$preparedCategory['icon'].' '.$categoryClass .'">
+                         class="lstCatNew skill_icon small '.$preparedCategory['icon'].' '.$categoryClass .'">
                     </div>';
             }
 

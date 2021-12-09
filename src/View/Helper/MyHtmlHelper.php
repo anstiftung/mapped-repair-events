@@ -206,8 +206,11 @@ class MyHtmlHelper extends HtmlHelper {
     }
 
 
-    function urlUsers($zip=-1) {
+    function urlUsers($categoryName = null, $zip=-1) {
         $url = '/aktive';
+        if (!is_null($categoryName)) {
+            $url .= '/' . StringComponent::slugify($categoryName);
+        }
         if ($zip >= 0) {
             $url .= '?zip=' . $zip;
         }

@@ -19,6 +19,9 @@ foreach($skills as $letter => $letterSkills) {
                 continue;
             }
             switch($count) {
+                case ($count > 50):
+                    $class = 'skill-60';
+                    break;
                 case ($count > 16):
                     $class = 'skill-50';
                     break;
@@ -35,7 +38,7 @@ foreach($skills as $letter => $letterSkills) {
                     $class = 'skill-10';
                     break;
             }
-            echo '<a href="'.$this->Html->urlSkillDetail($skill->id, StringComponent::slugify($skill->name)).'" class="'.$class.'">' . $skill->name . '</a>';
+            echo '<a href="'.$skill->url.'" class="'.$class.'">' . $skill->name . '</a>';
         }
     echo '</div>';
 

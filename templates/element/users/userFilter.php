@@ -8,8 +8,8 @@
                    $class[] = 'active';
                }
                if ($urlMethod == 'urlUsers') {
-                   $url = $this->Html->urlUsers($i);
-                   $unfilteredUrl = $this->Html->urlUsers();
+                   $url = $this->Html->urlUsers($filteredCategoryName, $i);
+                   $unfilteredUrl = $this->Html->urlUsers($filteredCategoryName);
                } else {
                    $url = $this->Html->urlSkillDetail($skill->id, $skill->name, $i);
                    $unfilteredUrl = $this->Html->urlSkillDetail($skill->id, $skill->name);

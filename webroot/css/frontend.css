@@ -1118,7 +1118,7 @@ div.input.checkbox.long label {
     margin: 0px;
     display: none
 }
-.wsbeschreibung {} .eventskills .sklill_icon {
+.wsbeschreibung {} .eventskills .skill_icon {
     background-size: 85% 85%;
     background-repeat: no-repeat
 }
@@ -2644,17 +2644,17 @@ body..featherlight:not(.featherlight-swipe-aware) .featherlight-image {
     width: 40px;
     height: 40px;
 }
-.lstCat.sklill_icon,
-body.workshops.detail .skill-icons .sklill_icon {
+.lstCat.skill_icon,
+body.workshops.detail .skill-icons .skill_icon {
     width: 38px;
     height: 38px;
     background-size: 38px 38px;
 }
-.lstCat.sklill_icon {
+.lstCat.skill_icon {
     cursor: pointer;
 }
-body.workshops.detail .sklill_icon.small,
-body.users.publicProfile .sklill_icon.small {
+body.workshops.detail .skill_icon.small,
+body.users.publicProfile .skill_icon.small {
     width: 50px;
     height: 50px;
     background-size: 50px 50px;
@@ -2797,24 +2797,23 @@ body.workshops.detail article.full {
 .allHeaders {} .allSearch {} .allCoaches {
     padding-top: 50px;
 }
-#sklill_icons_new {
+#skill_icons_new {
     float: left;
     padding: 0%;
     width: auto;
 }
-#sklill_icons {
+#skill_icons {
     position: relative;
     left: 36%;
     padding: 0%;
     width: 300px;
     margin: 30px 0px;
 }
-.sklill_icon {
+.skill_icon {
     width: 100px;
     text-align: center;
     float: left;
     margin: 0 auto;
-    cursor: help;
 }
 .rsslink-wrapper {
     float: right;
@@ -2900,7 +2899,7 @@ body.workshops.detail article.full {
     width: 100px;
     height: 100px;
 }
-#sklill_icons_new .sklill_icon {
+#skill_icons_new .skill_icon {
     background-size: 75px 75px;
     background-repeat: no-repeat;
 }
@@ -3045,7 +3044,8 @@ body.events.all #category-icons a.button {
     margin-left: 5px;
 }
 body.events.all #category-icons a.not-selected,
-body.events.all #category-icons a.selected:hover {
+body.events.all #category-icons a.selected:hover,
+body.users.publicProfile #skill_icons a:hover {
     opacity: 0.2;
 }
 body.events.all #category-icons a.not-selected:hover,
@@ -3057,12 +3057,12 @@ body.events.all .lstCatNew {
     width: 40px;
     height: 40px;
 }
-body.events.all .lstCatNew.sklill_icon {
+body.events.all .lstCatNew.skill_icon {
     width: 42px;
     height: 42px;
     background-size: 42px 42px;
 }
-body.users.publicProfile #sklill_icons {
+body.users.publicProfile #skill_icons {
   position: static;
   margin-top: 0;
   float: left;
@@ -3108,7 +3108,7 @@ body.users.publicProfile .dotted-line-full-width {
     margin-bottom: 15px;
 }
 body.users.publicProfile .bottom-wrapper,
-body.users.publicProfile #sklill_icons {
+body.users.publicProfile #skill_icons {
     width: 500px;
 }
 .public-user-wrapper {
@@ -3130,6 +3130,11 @@ a.public-user-wrapper:hover {
 body.users.all .public-user-wrapper {
     height: 130px;
     padding: 10px;
+}
+body.users.all img.skill-icon {
+    width: 40px;
+    height: auto;
+    margin-bottom: -10px;
 }
 body.users.all .public-user-wrapper .left-wrapper {
     width: 125px;
@@ -3271,7 +3276,12 @@ body.users.all .skills-wrapper .input.select {
 }
 body.users.all h1 a,
 body.skills.all h1 a {
-    cursor: default;
+    cursor: text;
+    margin-right: 10px;
+}
+body.users.all h1 a:hover,
+body.skills.all h1 a:hover {
+    background-color: #4D8EA2 ! important;
 }
 body.skills.all .letter {
     font-size: 22px;
@@ -3309,17 +3319,20 @@ body.skills.all .skills a.skill-40 {
 body.skills.all .skills a.skill-50 {
     font-size: 24px;
 }
+body.skills.all .skills a.skill-60 {
+    font-size: 28px;
+}
 body.workshops.verwalten small,
 #workshop-detail small {
     font-size: 11px;
 }
-body.events.all .lstCatNew.sklill_icon.small {
+body.events.all .lstCatNew.skill_icon.small {
     width: 28px;
     height: 28px;
     background-size: 28px 28px;
     margin-top: 5px;
 }
-body.events.all .lstCatNew.sklill_icon.small.elektro {
+body.events.all .lstCatNew.skill_icon.small.elektro {
     margin-left: -2px;
     margin-bottom: 10px;
 }
@@ -3720,7 +3733,7 @@ body.workshops.detail #covid-19-banner {
         width: 97%;
         padding: 1.5%;
     }
-    #sklill_icons {
+    #skill_icons {
         position: relative;
         left: 27%;
         padding: 0%;
