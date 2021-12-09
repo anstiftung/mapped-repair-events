@@ -109,7 +109,7 @@ if(!empty($workshop->categories)) { ?>
         <div class="skill-icons">
         <?php
             foreach($workshop->categories as $category) {
-                echo '<div title="'.$category->name.'" class="sklill_icon '.$category->icon.'"></div>';
+                echo '<div title="'.$category->name.'" class="skill_icon '.$category->icon.'"></div>';
             }
         ?>
         </div>
