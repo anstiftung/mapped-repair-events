@@ -409,10 +409,13 @@ class UsersTable extends AppTable
     public function getForDropdown()
     {
         $users = $this->find('all', [
+            'conditions' => [
+                'Users.status > ' . APP_DELETED,
+            ],
             'order' => [
                 'firstname' => 'ASC',
                 'lastname' => 'ASC'
-            ]
+            ],
         ]);
 
         $preparedUsers = [];
