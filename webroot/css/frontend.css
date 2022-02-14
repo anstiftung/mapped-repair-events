@@ -3398,11 +3398,11 @@ body.events.add .date-time-wrapper .row {
 body.events .date-time-wrapper .row .time-fields-wrapper {
     float: left;
 }
-body.events.add .date-time-wrapper .fa {
+body.events .date-time-wrapper .fa {
     line-height: 35px;
     font-size: 20px;
 }
-body.events.add .date-time-wrapper .fa-minus-circle {
+body.events .date-time-wrapper .fa-minus-circle {
     color: red;
     margin-right: 5px;
 }
