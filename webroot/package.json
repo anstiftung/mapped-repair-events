@@ -17,13 +17,13 @@
     "@fortawesome/fontawesome-free": "^5.15.4",
     "@sintef/prune-cluster": "^2.1.0",
     "blueimp-file-upload": "^10.32.0",
-    "chart.js": "^3.7.0",
+    "chart.js": "^3.7.1",
     "chartjs-plugin-datalabels": "^2.0.0",
-    "ckeditor4": "^4.17.1",
+    "ckeditor4": "^4.17.2",
     "components-jqueryui": "~1.12",
     "detect_swipe": "^2.1.4",
     "featherlight": "^1.7.14",
-    "fullcalendar": "^5.10.1",
+    "fullcalendar": "^5.10.2",
     "jquery": "^3.6.0",
     "jQuery-Impromptu": "https://github.com/trentrichardson/jQuery-Impromptu/tarball/master",
     "jquery-knob": "https://github.com/aterrien/jQuery-Knob/tarball/master",
@@ -34,7 +34,7 @@
     "select2": "^4.0.13",
     "slidebars": "^2.0.2",
     "speakingurl": "^14.0.1",
-    "svelte": "^3.46.2",
-    "swiper": "^7.4.1"
+    "svelte": "^3.46.4",
+    "swiper": "^8.0.7"
   }
 }

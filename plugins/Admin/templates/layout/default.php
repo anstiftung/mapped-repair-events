@@ -67,8 +67,8 @@ use Cake\Utility\Inflector;
   <?php
     echo $this->AssetCompress->script('_admin', array('raw' => Configure::read('debug')));
 
-    echo $this->Html->script('/node_modules/ckeditor4/ckeditor.js?v4.17.1');
-    echo $this->Html->script('/node_modules/ckeditor4/adapters/jquery.js?v4.17.1');
+    echo $this->Html->script('/node_modules/ckeditor4/ckeditor.js?v4.17.2');
+    echo $this->Html->script('/node_modules/ckeditor4/adapters/jquery.js?v4.17.2');
 
     echo $this->Html->scriptBlock(
         $this->Html->wrapJavascriptBlock(
