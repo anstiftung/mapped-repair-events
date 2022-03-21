@@ -118,7 +118,7 @@ class WorkshopsTable extends AppTable
         $workshops->matching('Users', function ($q) use ($userUid) {
             return $q->where([
                 'UsersWorkshops.user_uid' => $userUid,
-                'UsersWorkshops.approved <> \'0000-00-00 00:00:00\''
+                'UsersWorkshops.approved <> \'1970-01-01 00:00:00\''
             ]);
         });
         // revertPrivatizeData needs to be called again (although already applied in getWorkshopsWithUsers)
@@ -225,7 +225,7 @@ class WorkshopsTable extends AppTable
     {
         $usersAssociation = $this->getAssociation('Users');
         $usersAssociation->setConditions([
-            'UsersWorkshops.approved <> \'0000-00-00 00:00:00\''
+            'UsersWorkshops.approved <> \'1970-01-01 00:00:00\''
         ]);
         $workshop = $this->find('all', [
             'conditions' => [
