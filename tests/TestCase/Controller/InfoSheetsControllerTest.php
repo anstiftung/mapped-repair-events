@@ -81,9 +81,9 @@ class InfoSheetsControllerTest extends AppTestCase
             ]
         ])->toArray();
         $this->assertEquals(2, count($infoSheets));
-        $this->assertEquals($infoSheets[0]->device_name, $this->newInfoSheetData['device_name']);
-        $this->assertEquals($infoSheets[0]->defect_description, $this->newInfoSheetData['defect_description']);
-        $this->assertEquals($infoSheets[0]->owner, 1);
+        $this->assertEquals($infoSheets[1]->device_name, $this->newInfoSheetData['device_name']);
+        $this->assertEquals($infoSheets[1]->defect_description, $this->newInfoSheetData['defect_description']);
+        $this->assertEquals($infoSheets[1]->owner, 1);
     }
 
     public function testDeleteInfoSheetAsOrga()
