@@ -33,7 +33,7 @@ class WorkshopsTable extends AppTable
         $this->hasMany('Events', [
             'foreignKey' => 'workshop_uid',
             'conditions' => [
-                'Events.datumstart != \'0000-00-00\'',
+                'Events.datumstart != \'1970-01-01\'',
                 'Events.status' => APP_ON
             ],
             'sort' => [
@@ -302,7 +302,7 @@ class WorkshopsTable extends AppTable
         $usersAssociation = $this->getAssociation('UsersWorkshops');
         $usersAssociation->setConditions([
             'user_uid' => $userUid,
-            'approved <> ' => '0000-00-00 00:00'
+            'approved <> ' => '1970-01-01 00:00'
         ]);
         $workshop = $this->find('all', [
             'conditions' => [
