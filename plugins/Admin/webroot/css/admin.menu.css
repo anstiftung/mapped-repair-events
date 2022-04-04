@@ -77,12 +77,13 @@
     padding-bottom:7px;
 }
 
-#navadmin>ul>li:not ( :last-child ) > a {
+#navadmin>ul>li:not(:last-child) > a {
     border-right: 1px solid transparent;
 }
 
-#navadmin>ul>li:hover>a, #navadmin>ul:not ( :hover ) > li>a.active {
-    background-color: #ccc ! important;
+#navadmin > ul > li:hover > a,
+#navadmin > ul:not(:hover) > li a.active {
+    text-decoration: underline;
 }
 
 /* second level */

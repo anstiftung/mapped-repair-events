@@ -1,4 +1,4 @@
-#/* START admin layout änderungen */
+/* START admin layout änderungen */
 body, html {
     font-family: 'Open Sans', arial, helvetica;
     font-size: 13px;
@@ -26,7 +26,7 @@ h1 {
     padding: 1%;
     width: 98%;
     display: block;
-    margin-top: 90px;
+    margin-top: 110px;
 }
 
 a {
@@ -43,6 +43,7 @@ a {
     display: block;
     margin: 0px auto;
     z-index: 7000;
+    border-bottom: 1px solid #dfdfdf;
 }
 
 #nav {
@@ -73,7 +74,9 @@ div.admin #admin-list-form div.left {
     margin-top: -3px;
     margin-right: 10px;
 }
-
+div.admin div.list {
+    margin-top: -10px;
+}
 div.admin div.list a.active {
     color: #4C4C4C;
 }
