@@ -141,17 +141,7 @@ class UsersController extends AppController
         }
 
         $this->Skill = $this->getTableLocator()->get('Skills');
-        $skillsForDropdown = $this->Skill->getForDropdown(false);
-
-        $this->Category = $this->getTableLocator()->get('Categories');
-        $categoriesForDropdown = $this->Category->getMainCategoriesForFrontend();
-        $preparedCategoriesForDropdown = [];
-        foreach($categoriesForDropdown as $c) {
-            $slugifiedCategoryName = StringComponent::slugify($c->name);
-            $preparedCategoriesForDropdown[$slugifiedCategoryName] = $c->name;
-        }
-        $skillsForDropdown = $preparedCategoriesForDropdown + $skillsForDropdown;
-        asort($skillsForDropdown);
+        $skillsForDropdown = $this->Skill->getForDropdownIncludingCategories(false);
         $this->set('skillsForDropdown', $skillsForDropdown);
 
         $metaTags = [
@@ -325,7 +315,7 @@ class UsersController extends AppController
             $this->request = $this->request->withData('Users.private', $private);
 
             $this->Skill = $this->getTableLocator()->get('Skills');
-            $this->request = $this->Skill->addSkills($this->request, $this->AppAuth);
+            $this->request = $this->Skill->addSkills($this->request, $this->AppAuth, 'Users');
 
             $user = $this->User->patchEntity($user, $this->request->getData(), ['validate' => 'UserEdit' . ($this->AppAuth->isAdmin() ? 'Admin' : 'User')]);
             if (!$user->hasErrors()) {
@@ -595,7 +585,7 @@ class UsersController extends AppController
             }
 
             $this->Skill = $this->getTableLocator()->get('Skills');
-            $this->request = $this->Skill->addSkills($this->request, $this->AppAuth);
+            $this->request = $this->Skill->addSkills($this->request, $this->AppAuth, 'Users');
 
             if ($this->request->getData('Users.i_want_to_receive_the_newsletter')) {
                 $this->loadComponent('CptNewsletter');
