@@ -25,6 +25,7 @@ return function (RouteBuilder $routes) {
         $routes->redirect('/initiativen', '/orte');
         $routes->redirect('/splitter', '/seite/splitter');
         $routes->redirect('/online-reparaturcafe', '/seite/online-reparaturcafe');
+        $routes->redirect('/seite/reparaturwissen', '/reparaturwissen');
         /* END custom redirects */
 
         $routes->setExtensions(['html', 'rss', 'xml', 'ics']);
@@ -64,6 +65,8 @@ return function (RouteBuilder $routes) {
         $routes->connect('/users/welcome', ['controller'=>'users', 'action'=>'welcome']);
         $routes->connect('/users/passwortAendern', ['controller'=>'users', 'action'=>'passwortAendern']);
         $routes->connect('/users/activate/*', ['controller'=>'users', 'action'=>'activate']);
+
+        $routes->connect('/reparaturwissen', ['controller'=>'knowledges', 'action'=>'all']);
 
         $routes->connect('/users/profile/{id}', ['controller'=>'users', 'action'=>'publicProfile'])
             ->setPatterns(['id' => '\d+'])

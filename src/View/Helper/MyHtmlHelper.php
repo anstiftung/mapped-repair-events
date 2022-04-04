@@ -480,9 +480,9 @@ class MyHtmlHelper extends HtmlHelper {
         return '/admin/knowledges/edit/'.$uid;
     }
     function urlKnowledgeDetail($uid) {
-        return $this->urlKnowledgeList() . '/#' . $uid;
+        return $this->urlKnowledges() . '/#' . $uid;
     }
-    function urlKnowledgeList() {
+    function urlKnowledges() {
         return '/reparaturwissen';
     }
     public function getPostTypesWithPreview() {
