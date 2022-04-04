@@ -26,8 +26,6 @@
 #navadmin li a {
     color: #333;
     display: block;
-    background: #4D8EA2;
-    border-radius: 5px;
 }
 
 #navadmin span:after {
@@ -48,7 +46,7 @@
     width: 100%;
     padding: 0%;
     margin: 0px auto;
-    height: 40px;
+    height: 45px;
     float: left;
 }
 
@@ -57,16 +55,22 @@
     margin-top: 2px;
     display: block;
     float: left;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 45px;
+    background-color: #efefef;
+    border-radius: 5px;
 }
 
 #navadmin>ul>li>a {
     padding: 10px 5px;
     display: block;
-    width: 77px;
-    font-size: 15px;
+    width: 74px;
+    font-size: 14px;
     text-align: center;
     font-weight: normal;
-    color: #fff;
+    word-break: break-all;
 }
 #navadmin>ul>li>a.two-lines {
     padding-top: 9px;
