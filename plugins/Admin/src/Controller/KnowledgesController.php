@@ -105,5 +105,11 @@ class KnowledgesController extends AdminAppController
             }
         }
         $this->set('objects', $objects->toArray());
+
+        $metaTags = [
+            'title' => 'Reparaturwissen'
+        ];
+        $this->set('metaTags', $metaTags);
+
     }
 }
