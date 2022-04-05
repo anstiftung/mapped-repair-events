@@ -1355,6 +1355,7 @@ iframe.eiwsd {
 .collapse {
     display: none;
     padding: 0px 20px;
+    margin-bottom: 20px;
 }
 div[id*="collapse"] a:link,
 div[id*="collapse"] a:visited {

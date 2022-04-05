@@ -29,9 +29,10 @@ foreach($knowledges as $knowledge) {
         echo $knowledge->title;
     echo '</div>';
 
-    echo '<div id="collapse' . $knowledge->uid . '" class="collapse">';
+    echo '<div id="collapse' . $knowledge->uid . '" class="collapse ' . join(' ', $knowledge->itemSkillClasses) .'">';
         echo $knowledge->text;
     echo '</div>';
+
 }
 
 ?>

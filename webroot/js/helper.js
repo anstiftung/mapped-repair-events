@@ -133,7 +133,7 @@ MappedRepairEvents.Helper = {
 
     initSkillFilterForKnowledges : function() {
         $('select#skills').on('change', function() {
-            $('.knowledge-item').hide();
+            $('.knowledge-item, .collapse').hide();
             $('.knowledge-item.' + $(this).val()).show();
         });
     },
