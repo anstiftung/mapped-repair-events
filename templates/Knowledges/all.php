@@ -1,13 +1,11 @@
 <?php
-    use App\Controller\Component\StringComponent;
-
     echo $this->element('highlightNavi', ['main' => 'Reparaturwissen']);
     $this->element('addScript', ['script' => "
-        MappedRepairEvents.Helper.initSkillFilter();
+        MappedRepairEvents.Helper.initSkillFilterForKnowledges();
     "]);
 ?>
 
-<h1></h1>
+<h1><?php echo $metaTags['title']; ?></h1>
 
 <?php
     echo '<div class="skills-wrapper">';
@@ -17,7 +15,6 @@
             'label' => false,
             'empty' => 'Alle anzeigen',
             'options' => $skillsForDropdown,
-            'value' => is_null($filteredCategoryName) ? (isset($skill) ? $skill->id : '') : StringComponent::slugify($filteredCategoryName),
         ]);
     echo '</div>';
 ?>
@@ -26,9 +23,10 @@
 <?php
 
 foreach($knowledges as $knowledge) {
-    echo '<h2>' . $knowledge->title . '</h2>';
-    echo $knowledge->text;
-    echo '<br />';
+    echo '<div id="rw-' . $knowledge->uid . '" class="knowledge-item ' . join(' ', $knowledge->itemSkillClasses) . '">';
+        echo '<h2>' . $knowledge->title . '</h2>';
+        echo $knowledge->text;
+    echo '</div>';
 }
 
 ?>

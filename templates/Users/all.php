@@ -3,7 +3,7 @@
 
     echo $this->element('highlightNavi', ['main' => 'Aktive']);
     $this->element('addScript', ['script' => "
-        MappedRepairEvents.Helper.initSkillFilter();
+        MappedRepairEvents.Helper.initSkillFilterForUsers();
     "]);
 ?>
 

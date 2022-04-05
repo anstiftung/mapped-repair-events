@@ -131,7 +131,14 @@ MappedRepairEvents.Helper = {
         $('#header #login-box').css('right', newRight + 'px');
     },
 
-    initSkillFilter : function() {
+    initSkillFilterForKnowledges : function() {
+        $('select#skills').on('change', function() {
+            $('.knowledge-item').hide();
+            $('.knowledge-item.' + $(this).val()).show();
+        });
+    },
+
+    initSkillFilterForUsers : function() {
         $('select#skills').on('change', function() {
             var url = '/aktive';
             if (parseInt($(this).val()) == $(this).val()) {
