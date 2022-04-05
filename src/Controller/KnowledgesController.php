@@ -46,8 +46,8 @@ class KnowledgesController extends AppController
             foreach($categoryNames as $categoryName) {
                 $itemSkillClasses[] = StringComponent::slugify($categoryName);
             }
-            $skills = Hash::extract($knowledges, '{n}.skills.{n}.id');
-            $itemSkillClasses += $skills;
+            $skills = Hash::extract($knowledge, 'skills.{n}.id');
+            $itemSkillClasses = array_merge($itemSkillClasses, $skills);
             $knowledge->itemSkillClasses = $itemSkillClasses;
         }
         $this->set('knowledges', $knowledges);
