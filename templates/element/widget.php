@@ -1,6 +1,6 @@
 <?php
     $this->element('addScript', ['script' =>
-        JS_NAMESPACE.".Helper.initWidgetDocs();
+        JS_NAMESPACE.".Helper.initBoxToggle();
     "]);
 ?>
 

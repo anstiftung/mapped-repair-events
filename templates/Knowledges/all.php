@@ -1,7 +1,8 @@
 <?php
     echo $this->element('highlightNavi', ['main' => 'Reparaturwissen']);
-    $this->element('addScript', ['script' => "
-        MappedRepairEvents.Helper.initSkillFilterForKnowledges();
+    $this->element('addScript', ['script' =>
+        JS_NAMESPACE.".Helper.initBoxToggle();".
+        JS_NAMESPACE.".Helper.initSkillFilterForKnowledges();
     "]);
 ?>
 
@@ -23,8 +24,12 @@
 <?php
 
 foreach($knowledges as $knowledge) {
-    echo '<div id="rw-' . $knowledge->uid . '" class="knowledge-item ' . join(' ', $knowledge->itemSkillClasses) . '">';
-        echo '<h2>' . $knowledge->title . '</h2>';
+
+    echo '<div id="rw-' . $knowledge->uid . '" href="#collapse' . $knowledge->uid . '" class="box-toggle' . $knowledge->uid . ' box-toggle knowledge-item ' . join(' ', $knowledge->itemSkillClasses) . '">';
+        echo $knowledge->title;
+    echo '</div>';
+
+    echo '<div id="collapse' . $knowledge->uid . '" class="collapse">';
         echo $knowledge->text;
     echo '</div>';
 }

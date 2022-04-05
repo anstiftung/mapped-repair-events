@@ -1323,14 +1323,11 @@ iframe.eiwsd {
     width: 99%;
     margin: 0px;
 }
-#wswidget .nav-toggle1:hover,
-#wswidget .nav-toggle2:hover,
-#wswidget .nav-toggle3:hover {
+.box-toggle:hover {
     background-color: #4D8EA2 !important;
+    color: #fff;
 }
-#wswidget .nav-toggle1,
-#wswidget .nav-toggle2,
-#wswidget .nav-toggle3 {
+.box-toggle {
     cursor: pointer;
     padding: .5%;
     color: black;
@@ -1339,16 +1336,24 @@ iframe.eiwsd {
     background-color: #f2f2f2;
     margin: 10px 0px;
     text-indent: 5px;
+    border-radius: 5px;
 }
-#wswidget .nav-toggle1.active,
-#wswidget .nav-toggle2.active,
-#wswidget .nav-toggle3.active {
+.box-toggle.active {
     background-color: #4D8EA2 !important;
-    text-indent: 15px;
+    color: #fff;
 }
-#collapse1,
-#collapse2,
-#collapse3 {
+.box-toggle:before {
+    content: '▶';
+    font-size: 11px;
+    margin-right: 4px;
+}
+.box-toggle.active:before {
+    content: '▼';
+    font-size: 11px;
+    margin-right: 4px;
+}
+.collapse {
+    display: none;
     padding: 0px 20px;
 }
 div[id*="collapse"] a:link,
@@ -3257,24 +3262,28 @@ body.skills.all h1 {
 body.skills.all .dotted-line-full-width {
     margin-bottom: 15px;
 }
+body.knowledges.all h1,
 body.users.all h1 {
     float: left;
     width: 845px;
     line-height: 45px;
 }
-body.users.all .skills-wrapper {
+body.users.all .skills-wrapper,
+body.knowledges.all .skills-wrapper {
     float: right;
     width: 265px;
     margin-top: 10px;
     margin-bottom: 10px;
 }
-body.users.all .skills-wrapper label {
+body.users.all .skills-wrapper label,
+body.knowledges.all .skills-wrapper label {
     float: right;
     margin-right: 5px;
     margin-top: 5px;
     margin-bottom: 5px;
 }
-body.users.all .skills-wrapper .input.select {
+body.users.all .skills-wrapper .input.select,
+body.knowledges.all .skills-wrapper .input.select {
     float: right;
 }
 body.users.all h1 a,

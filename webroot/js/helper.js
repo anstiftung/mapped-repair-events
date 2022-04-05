@@ -200,24 +200,23 @@ MappedRepairEvents.Helper = {
         return parseFloat(string);
     },
 
-    initWidgetDocs : function() {
-        $('.nav-toggle1,.nav-toggle2,.nav-toggle3').click(function() {
-            var collapse_content_selector = $(this).attr('href');
-            $(this).addClass(' active');
-            var toggle_switch = $(this);
-            $(collapse_content_selector).toggle(function() {
+    initBoxToggle : function() {
+        $('.box-toggle').on('click', function() {
+            var collapseContentSelector = $(this).attr('href');
+            $(this).addClass('active');
+            $(collapseContentSelector).toggle(function() {
                 if ($(this).css('display') == 'none') {
-                    $('.nav-toggle' + myhash).removeClass(' active');
-                    $('.nav-toggle1,.nav-toggle2,.nav-toggle3').removeClass(' active');
+                    $('.box-toggle' + myhash).removeClass('active');
+                    $('.box-toggle').removeClass('active');
                 } else {
-                    $(this).addClass(' active');
+                    $(this).addClass('active');
                 }
             });
         });
         if (window.location.hash) {
             var myhash = window.location.hash.substring(1);
-            $('.nav-toggle' + myhash).trigger('click');
-            $('.nav-toggle' + myhash).addClass(' active');
+            $('.box-toggle' + myhash).trigger('click');
+            $('.box-toggle' + myhash).addClass('active');
         }
     },
 
