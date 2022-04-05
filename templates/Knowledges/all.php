@@ -27,29 +27,33 @@ echo $this->element('highlightNavi', ['main' => 'Reparaturwissen']);
 
 foreach($knowledges as $knowledge) {
 
-    echo '<div id="rw-' . $knowledge->uid . '" href="#collapse' . $knowledge->uid . '" class="box-toggle' . $knowledge->uid . ' box-toggle knowledge-item ' . join(' ', $knowledge->itemSkillClasses) . '">';
-        echo $knowledge->title;
-    echo '</div>';
+    echo '<div class="knowledge-row '. join(' ', $knowledge->itemSkillClasses) .'">';
 
-    echo '<div id="collapse' . $knowledge->uid . '" class="collapse ' . join(' ', $knowledge->itemSkillClasses) .'">';
+        echo '<div id="rw-' . $knowledge->uid . '" href="#collapse' . $knowledge->uid . '" class="box-toggle' . $knowledge->uid . ' box-toggle knowledge-item">';
+            echo $knowledge->title;
+        echo '</div>';
 
-        echo '<div>' . $knowledge->text . '</div>';
+        echo '<div id="collapse' . $knowledge->uid . '" class="collapse">';
 
-        if(!empty($knowledge->categories)) {
-            echo '<div id="skill_icons">';
-                foreach($knowledge->categories as $category) {
-                    echo '<a href="javascript:void(0);" title="'.h($category->name).'" class="skill_icon small '.h($category->icon).'"></a>';
-                }
-            echo '</div>';
-            echo '<div class="sc"></div>';
-        }
+            echo '<div>' . $knowledge->text . '</div>';
 
-        if (!empty($knowledge->skills)) {
-            foreach($knowledge->skills as $skill) {
-                echo '<a href="javascript:void(0);" title="'.h($skill->name).'" class="button">'.h($skill->name).'</a>';
+            if(!empty($knowledge->categories)) {
+                echo '<div id="skill_icons">';
+                    foreach($knowledge->categories as $category) {
+                        echo '<a href="javascript:void(0);" title="'.h($category->name).'" class="skill_icon small '.h($category->icon).'"></a>';
+                    }
+                echo '</div>';
+                echo '<div class="sc"></div>';
             }
-            echo '<div class="sc"></div>';
-        }
+
+            if (!empty($knowledge->skills)) {
+                foreach($knowledge->skills as $skill) {
+                    echo '<a href="javascript:void(0);" title="'.h($skill->name).'" class="button">'.h($skill->name).'</a>';
+                }
+                echo '<div class="sc"></div>';
+            }
+
+        echo '</div>';
 
     echo '</div>';
 

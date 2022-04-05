@@ -1334,13 +1334,15 @@ iframe.eiwsd {
     font-weight: bold;
     line-height: 33px;
     background-color: #f2f2f2;
-    margin: 10px 0px;
+    margin-top: 10px;
     text-indent: 5px;
     border-radius: 5px;
 }
 .box-toggle.active {
     background-color: #4D8EA2 !important;
     color: #fff;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
 }
 .box-toggle:before {
     content: '▶';
@@ -1354,8 +1356,12 @@ iframe.eiwsd {
 }
 .collapse {
     display: none;
-    padding: 0px 20px;
+    padding: 10px;
     margin-bottom: 20px;
+    border: 2px solid #4D8EA2;
+    border-radius: 5px;
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
 }
 .inlinecode {
     margin: 10px 0px;

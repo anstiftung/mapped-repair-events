@@ -133,8 +133,12 @@ MappedRepairEvents.Helper = {
 
     initSkillFilterForKnowledges : function() {
         $('select#skills').on('change', function() {
-            $('.knowledge-item, .collapse').hide();
-            $('.knowledge-item.' + $(this).val()).show();
+            $('.knowledge-row').hide();
+            if ($(this).val() != '') {
+                $('.knowledge-row.' + $(this).val()).show();
+            } else {
+                $('.knowledge-row').show();
+            }
         });
     },
 
@@ -203,21 +207,25 @@ MappedRepairEvents.Helper = {
     initBoxToggle : function() {
         $('.box-toggle').on('click', function() {
             var collapseContentSelector = $(this).attr('href');
-            $(this).addClass('active');
-            $(collapseContentSelector).toggle(function() {
+            if ($(this).hasClass('active')) {
+                $(this).removeClass('active');
+            } else {
+                $(this).addClass('active');
+            }
+            $(collapseContentSelector).fadeToggle(100, function() {
                 if ($(this).css('display') == 'none') {
-                    $('.box-toggle' + myhash).removeClass('active');
-                    $('.box-toggle').removeClass('active');
+                    $(this).removeClass('active');
                 } else {
                     $(this).addClass('active');
                 }
             });
         });
+
         if (window.location.hash) {
             var myhash = window.location.hash.substring(1);
             $('.box-toggle' + myhash).trigger('click');
-            $('.box-toggle' + myhash).addClass('active');
         }
+
     },
 
     initCookieBanner : function() {
