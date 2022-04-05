@@ -1357,10 +1357,6 @@ iframe.eiwsd {
     padding: 0px 20px;
     margin-bottom: 20px;
 }
-div[id*="collapse"] a:link,
-div[id*="collapse"] a:visited {
-    text-decoration: underline
-}
 .inlinecode {
     margin: 10px 0px;
     display: block;
@@ -2663,7 +2659,8 @@ body.workshops.detail .skill-icons .skill_icon {
     cursor: pointer;
 }
 body.workshops.detail .skill_icon.small,
-body.users.publicProfile .skill_icon.small {
+body.users.publicProfile .skill_icon.small,
+body.knowledges.all .skill_icon.small {
     width: 50px;
     height: 50px;
     background-size: 50px 50px;
@@ -3071,11 +3068,15 @@ body.events.all .lstCatNew.skill_icon {
     height: 42px;
     background-size: 42px 42px;
 }
-body.users.publicProfile #skill_icons {
+body.users.publicProfile #skill_icons,
+body.knowledges.all #skill_icons {
   position: static;
   margin-top: 0;
   float: left;
   margin-bottom: 15px;
+}
+body.knowledges.all #skill_icons {
+    margin-top: 10px;
 }
 body.users.publicProfile .workshop-link-wrapper {
   float: left;
@@ -3225,7 +3226,8 @@ body.users.publicProfile .about-me-wrapper .about-me-content {
     width: 100%;
     line-height: 19px;
 }
-body.users.publicProfile .about-me-wrapper .button {
+body.users.publicProfile .about-me-wrapper .button,
+body.knowledges.all .button {
     margin-right: 5px;
     margin-bottom: 5px;
     float: left;

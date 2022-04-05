@@ -1,5 +1,7 @@
 <?php
-    echo $this->element('highlightNavi', ['main' => 'Reparaturwissen']);
+    use App\Controller\Component\StringComponent;
+
+echo $this->element('highlightNavi', ['main' => 'Reparaturwissen']);
     $this->element('addScript', ['script' =>
         JS_NAMESPACE.".Helper.initBoxToggle();".
         JS_NAMESPACE.".Helper.initSkillFilterForKnowledges();
@@ -30,7 +32,25 @@ foreach($knowledges as $knowledge) {
     echo '</div>';
 
     echo '<div id="collapse' . $knowledge->uid . '" class="collapse ' . join(' ', $knowledge->itemSkillClasses) .'">';
-        echo $knowledge->text;
+
+        echo '<div>' . $knowledge->text . '</div>';
+
+        if(!empty($knowledge->categories)) {
+            echo '<div id="skill_icons">';
+                foreach($knowledge->categories as $category) {
+                    echo '<a href="javascript:void(0);" title="'.h($category->name).'" class="skill_icon small '.h($category->icon).'"></a>';
+                }
+            echo '</div>';
+            echo '<div class="sc"></div>';
+        }
+
+        if (!empty($knowledge->skills)) {
+            foreach($knowledge->skills as $skill) {
+                echo '<a href="javascript:void(0);" title="'.h($skill->name).'" class="button">'.h($skill->name).'</a>';
+            }
+            echo '<div class="sc"></div>';
+        }
+
     echo '</div>';
 
 }
