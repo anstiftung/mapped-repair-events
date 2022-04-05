@@ -152,13 +152,20 @@ MappedRepairEvents.Helper = {
                     $(this).addClass('selected');
                 }
             });
+        } else {
+            $('.knowledge-row').show();
         }
     },
 
     bindKnowledgeFilterButtons: function() {
         var allButtons = $('.collapse').find('a.skill_icon, a.button');
         allButtons.on('click', function() {
-            var value = $(this).data('val');
+            var value;
+            if ($(this).hasClass('selected')) {
+                value = '';
+            } else {
+                value = $(this).data('val');
+            }
             $('select#skills').val(value).trigger('change');
         });
     },
