@@ -2672,6 +2672,9 @@ body.knowledges.all .skill_icon.small {
     background-size: 50px 50px;
     margin-top: 5px;
 }
+body.knowledges.all .collapse a.selected {
+    opacity: .7;
+}
 .lstCat.chosenCat {
     background-color: #ddd;
 }

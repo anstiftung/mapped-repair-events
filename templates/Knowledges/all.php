@@ -4,7 +4,8 @@
 echo $this->element('highlightNavi', ['main' => 'Reparaturwissen']);
     $this->element('addScript', ['script' =>
         JS_NAMESPACE.".Helper.initBoxToggle();".
-        JS_NAMESPACE.".Helper.initSkillFilterForKnowledges();
+        JS_NAMESPACE.".Helper.initSkillFilterForKnowledges();".
+        JS_NAMESPACE.".Helper.bindKnowledgeFilterButtons();
     "]);
 ?>
 
@@ -40,7 +41,7 @@ foreach($knowledges as $knowledge) {
             if(!empty($knowledge->categories)) {
                 echo '<div id="skill_icons">';
                     foreach($knowledge->categories as $category) {
-                        echo '<a href="javascript:void(0);" title="'.h($category->name).'" class="skill_icon small '.h($category->icon).'"></a>';
+                        echo '<a href="javascript:void(0);" data-val="'.h(StringComponent::slugify($category->name)).'" title="Filtern nach '.h($category->name).'" class="skill_icon small '.h($category->icon).'"></a>';
                     }
                 echo '</div>';
                 echo '<div class="sc"></div>';
@@ -48,7 +49,7 @@ foreach($knowledges as $knowledge) {
 
             if (!empty($knowledge->skills)) {
                 foreach($knowledge->skills as $skill) {
-                    echo '<a href="javascript:void(0);" title="'.h($skill->name).'" class="button">'.h($skill->name).'</a>';
+                    echo '<a href="javascript:void(0);" data-val="'.$skill->id.'" title="Filtern nach '.h($skill->name).'" class="button">'.h($skill->name).'</a>';
                 }
                 echo '<div class="sc"></div>';
             }

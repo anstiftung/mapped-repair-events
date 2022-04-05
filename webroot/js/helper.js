@@ -133,12 +133,33 @@ MappedRepairEvents.Helper = {
 
     initSkillFilterForKnowledges : function() {
         $('select#skills').on('change', function() {
-            $('.knowledge-row').hide();
-            if ($(this).val() != '') {
-                $('.knowledge-row.' + $(this).val()).show();
-            } else {
-                $('.knowledge-row').show();
-            }
+            MappedRepairEvents.Helper.applyFilterForKnowledge($(this).val());
+        });
+    },
+
+    applyFilterForKnowledge : function(value) {
+
+        var allButtons = $('.collapse').find('a.skill_icon, a.button');
+        allButtons.each(function() {
+            $(this).removeClass('selected');
+        });
+        $('.knowledge-row').hide();
+
+        if (value != '') {
+            $('.knowledge-row.' + value).show();
+            allButtons.each(function() {
+                if ($(this).data('val') == value) {
+                    $(this).addClass('selected');
+                }
+            });
+        }
+    },
+
+    bindKnowledgeFilterButtons: function() {
+        var allButtons = $('.collapse').find('a.skill_icon, a.button');
+        allButtons.on('click', function() {
+            var value = $(this).data('val');
+            $('select#skills').val(value).trigger('change');
         });
     },
 
