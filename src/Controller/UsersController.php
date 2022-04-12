@@ -173,7 +173,7 @@ class UsersController extends AppController
 
         $workshopsAssociation = $this->User->getAssociation('Workshops');
         $workshopsAssociation->setConditions([
-            'UsersWorkshops.approved <> \'0000-00-00 00:00:00\'',
+            'UsersWorkshops.approved <> \'1970-01-01 00:00:00\'',
             'Workshops.status > ' . APP_DELETED
         ]);
         $user = $this->User->find('all', [

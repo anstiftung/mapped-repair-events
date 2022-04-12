@@ -357,7 +357,7 @@ class WorkshopsController extends AppController
                     ],
                     'Workshops' => function($q) {
                         return $q->where([
-                            'UsersWorkshops.approved <> \'0000-00-00 00:00:00\'',
+                            'UsersWorkshops.approved <> \'1970-01-01 00:00:00\'',
                         ]);
                     }
                 ],
@@ -486,7 +486,7 @@ class WorkshopsController extends AppController
         $eventsAssociation->setConditions([
             'Events.status >=' . APP_OFF,
             'Events.datumstart >= \'' . date('Y-m-01').'\'', // first day of current month
-            'Events.datumstart != \'0000-00-00\''
+            'Events.datumstart != \'1970-01-01\''
         ]);
 
         $workshops = $this->Workshop->find('all', [
@@ -720,7 +720,7 @@ class WorkshopsController extends AppController
 
         $usersAssociation = $this->Workshop->getAssociation('Users');
         $usersAssociation->setConditions([
-            'UsersWorkshops.approved <> \'0000-00-00 00:00:00\''
+            'UsersWorkshops.approved <> \'1970-01-01 00:00:00\''
         ]);
 
         $eventsAssociation = $this->Workshop->getAssociation('Events');

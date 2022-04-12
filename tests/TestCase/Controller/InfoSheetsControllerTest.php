@@ -78,6 +78,9 @@ class InfoSheetsControllerTest extends AppTestCase
                 'Events.Workshops',
                 'Categories',
                 'FormFieldOptions'
+            ],
+            'order' => [
+                'InfoSheets.uid' => 'DESC',
             ]
         ])->toArray();
         $this->assertEquals(2, count($infoSheets));

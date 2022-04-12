@@ -16,7 +16,7 @@
                 "owner": 1,
                 "eventbeschreibung": "description",
                 "is_online_event": 0,
-                "uniquePlace": "3bea26eaf1",
+                "uniquePlace": "3bea26eaf1eae7d19e82202a00759d8e",
                 "directurl": "test-workshop?event=6,2040-01-01",
                 "categories": [
                     {
@@ -63,7 +63,7 @@
                     "owner": 1,
                     "eventbeschreibung": "description",
                     "is_online_event": 0,
-                    "uniquePlace": "3bea26eaf1",
+                    "uniquePlace": "3bea26eaf1eae7d19e82202a00759d8e",
                     "directurl": "test-workshop?event=6,2040-01-01",
                     "categories": [
                         {

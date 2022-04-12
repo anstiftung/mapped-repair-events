@@ -119,7 +119,7 @@ class EventsTable extends AppTable
             'Workshops.name',
             'Workshops.url',
             'Workshops.image',
-            'uniquePlace' => 'SUBSTR(MD5(Events.lat * Events.lng), 1, 10)', // create unique lat/lng based field for combining events with same place
+            'uniquePlace' => 'MD5(Events.lat * Events.lng)', // create unique lat/lng based field for combining events with same place
             'directurl' => "CONCAT(Workshops.url, '?event=', Events.uid, ',', Events.datumstart)"
         ];
     }
