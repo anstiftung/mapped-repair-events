@@ -3514,7 +3514,7 @@ div.admin.edit #cancel-button {
     clear: right;
     background-color: #f2f2f2;
     color: #999;
-    padding: 5px 0px;
+    padding: 6px 8px;
 }
 #admin-list-form #cancel-button {
     max-width: 250px;
@@ -3526,7 +3526,7 @@ div.admin.edit #cancel-button {
 }
 div.admin.edit button[type="submit"] {
     right: 15px;
-    padding: 5px 0px;
+    padding: 6px 8px;
 }
 
 div.admin div.edit div.small {
