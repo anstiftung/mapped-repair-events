@@ -43,9 +43,10 @@ if (isset($hidden) && $hidden) {
         $checked = ' checked="checked"';
     }
 
-    echo '<div class="checkbox">
-              <input type="checkbox" name="show-url-edit-field" id="show-url-edit-field"'.$checked.'">
-              <label for="show-url-edit-field">'.__('edit slug').'</label>
+    echo '<div class="input checkbox">
+              <label for="show-url-edit-field">'.__('edit slug').'
+                  <input type="checkbox" name="show-url-edit-field" id="show-url-edit-field"'.$checked.'">
+              </label>
           </div>';
 
     $title = '<ul>';

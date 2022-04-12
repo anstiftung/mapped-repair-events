@@ -33,7 +33,7 @@
 * Server with shell access and cronjobs
 * Apache with `mod_rewrite`
 * PHP >= 8.0
-* MySQL >= 5.7
+* MySQL >= 8.0
 * Node.js and npm ([installation](https://www.npmjs.com/get-npm)) developer packages
 * Composer ([installation](https://getcomposer.org/download/)) developer packages
 
