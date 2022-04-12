@@ -429,11 +429,6 @@
         margin-left: -3px;
         margin-right: 0;
     }
-    body.workshops div.admin .url-edit-field-wrapper label {
-        width: 110px ! important;
-        float: right;
-        margin-left: 5px;
-    }
     body.users .profile .categories-checkbox-wrapper,
     #eventEditForm .categories-checkbox-wrapper div.input.select div.checkbox,
     body.users .profile .input.is-private {
