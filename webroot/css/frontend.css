@@ -2840,76 +2840,76 @@ body.workshops.detail article.full {
     margin: 0 auto;
     cursor: pointer
 }
-.desktop-pcs {
+.desktop-pcs:not(.knowledge-row) {
     background-image: url(/img/icons-skills/desktop-pcs.png);
     height: 100px;
 }
-.elektro {
+.elektro:not(.knowledge-row) {
     background-image: url(/img/icons-skills/elektro.png);
     width: 100px;
     height: 100px;
 }
-.fahrrad {
+.fahrrad:not(.knowledge-row) {
     background-image: url(/img/icons-skills/fahrrad.png);
     width: 100px;
     height: 100px;
 }
-.handy-smartphone-tablet {
+.handy-smartphone-tablet:not(.knowledge-row) {
     background-image: url(/img/icons-skills/handy-smartphone-tablet.png);
     width: 100px;
     height: 100px;
 }
-.haushalt {
+.haushalt:not(.knowledge-row) {
     background-image: url(/img/icons-skills/haushalt.png);
     width: 100px;
     height: 100px;
 }
-.holz {
+.holz:not(.knowledge-row) {
     background-image: url(/img/icons-skills/holz.png);
     width: 100px;
     height: 100px;
 }
-.mechanik {
+.mechanik:not(.knowledge-row) {
     background-image: url(/img/icons-skills/mechanik.png);
     width: 100px;
     height: 100px;
 }
-.metall {
+.metall:not(.knowledge-row) {
     background-image: url(/img/icons-skills/metall.png);
     width: 100px;
     height: 100px;
 }
-.textilien {
+.textilien:not(.knowledge-row) {
     background-image: url(/img/icons-skills/textilien.png);
     width: 100px;
     height: 100px;
 }
-.unterhaltungselektronik {
+.unterhaltungselektronik:not(.knowledge-row) {
     background-image: url(/img/icons-skills/unterhaltungselektronik.png);
     width: 100px;
     height: 100px;
 }
-.upcycling-basteln {
+.upcycling-basteln:not(.knowledge-row) {
     background-image: url(/img/icons-skills/upcycling-basteln.png);
     width: 100px;
     height: 100px;
 }
-.schmuck {
+.schmuck:not(.knowledge-row) {
     background-image: url(/img/icons-skills/schmuck.png);
     width: 100px;
     height: 100px;
 }
-.leder {
+.leder:not(.knowledge-row) {
     background-image: url(/img/icons-skills/leder.png);
     width: 100px;
     height: 100px;
 }
-.drei-d-reparatur {
+.drei-d-reparatur:not(.knowledge-row) {
     background-image: url(/img/icons-skills/drei-d-reparatur.png);
     width: 100px;
     height: 100px;
 }
-.emptyskill {
+.emptyskill:not(.knowledge-row) {
     background-image: url(/img/icons-skills/empty.png);
     width: 100px;
     height: 100px;
