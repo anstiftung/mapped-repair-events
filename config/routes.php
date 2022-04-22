@@ -26,6 +26,7 @@ return function (RouteBuilder $routes) {
         $routes->redirect('/splitter', '/seite/splitter');
         $routes->redirect('/online-reparaturcafe', '/seite/online-reparaturcafe');
         $routes->redirect('/seite/reparaturwissen', '/reparaturwissen');
+        $routes->redirect('/repair-cafe-ulm', '/reparatur-cafe-ulm');
         /* END custom redirects */
 
         $routes->setExtensions(['html', 'rss', 'xml', 'ics']);
