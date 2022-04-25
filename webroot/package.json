@@ -29,12 +29,12 @@
     "jquery-knob": "https://github.com/aterrien/jQuery-Knob/tarball/master",
     "jquery-slugify": "^1.2.5",
     "leaflet": "^1.7.1",
-    "moment": "^2.29.2",
+    "moment": "^2.29.3",
     "scrolltofixed": "^1.0.6",
     "select2": "^4.0.13",
     "slidebars": "^2.0.2",
     "speakingurl": "^14.0.1",
     "svelte": "^3.47.0",
-    "swiper": "^8.1.0"
+    "swiper": "^8.1.4"
   }
 }
