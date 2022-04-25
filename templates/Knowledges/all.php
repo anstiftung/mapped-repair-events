@@ -41,7 +41,7 @@ foreach($knowledges as $knowledge) {
 
         echo '<div id="collapse' . $knowledge->uid . '" class="collapse">';
 
-            echo '<div>' . $knowledge->text . '</div>';
+            echo '<div class="text-wrapper">' . $knowledge->text . '</div>';
 
             if(!empty($knowledge->categories)) {
                 echo '<div id="skill_icons">';
