@@ -1543,17 +1543,6 @@ div.ckeditor-text,
     margin-left: 17px;
     margin-bottom: 10px;
 }
-/* Iframes for Titan Pads
-/* .h_iframe iframe {
-    position:absolute;
-    top:0;
-    left:0;
-    width:100%;
-    height:875px;
-    display:block
-}
-*/
-
 .video-container {
     position: relative;
     padding-bottom: 56.25%;
