@@ -2,7 +2,7 @@
 use Cake\Core\Configure;
 ?>
 
-<div href="#collapse1" class="box-toggle box-toggle1">
+<div id="1" href="#collapse1" class="box-toggle box-toggle1">
     <?php echo __('Widgetpage: Eventsbox Integration'); ?>
 </div>
 <div id="collapse1" class="collapse">

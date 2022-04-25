@@ -2,7 +2,7 @@
 use Cake\Core\Configure;
 ?>
 
-<div href="#collapse3" class="box-toggle box-toggle3">
+<div id="3" href="#collapse3" class="box-toggle box-toggle3">
     Integration Statistik
 </div>
 <div id="collapse3" class="collapse">

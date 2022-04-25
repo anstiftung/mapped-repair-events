@@ -30,7 +30,7 @@ foreach($knowledges as $knowledge) {
 
     echo '<div class="knowledge-row '. join(' ', $knowledge->itemSkillClasses) .'">';
 
-        echo '<div id="rw-' . $knowledge->uid . '" href="#collapse' . $knowledge->uid . '" class="box-toggle' . $knowledge->uid . ' box-toggle knowledge-item">';
+        echo '<div id="' . $knowledge->uid . '" href="#collapse' . $knowledge->uid . '" class="box-toggle' . $knowledge->uid . ' box-toggle knowledge-item">';
             echo $knowledge->title;
             if ($appAuth->isAdmin()) {
                 echo '<a class="knowledge-edit-icon" href="' . $this->Html->urlKnowledgeEdit($knowledge->uid).'">';

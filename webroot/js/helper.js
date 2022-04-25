@@ -247,12 +247,17 @@ MappedRepairEvents.Helper = {
                     $(this).addClass('active');
                 }
             });
+            var currentHash = $(this).attr('id');
+            if (window.location.hash != currentHash) {
+                window.location.hash = currentHash;
+            }
         });
 
         if (window.location.hash) {
             var myhash = window.location.hash.substring(1);
             $('.box-toggle' + myhash).trigger('click');
         }
+
 
     },
 

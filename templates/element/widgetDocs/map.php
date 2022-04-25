@@ -2,7 +2,7 @@
 use Cake\Core\Configure;
 ?>
 
-<div href="#collapse2" class="box-toggle box-toggle2">
+<div id="2" href="#collapse2" class="box-toggle box-toggle2">
     <?php echo __('Widgetpage: Map Integration'); ?>
 </div>
 <div id="collapse2" class="collapse">
