@@ -338,6 +338,7 @@ if (!isset($hideDeleteLink) || !$hideDeleteLink) {
                                 $showMethodCall = null;
                             }
                             break;
+                        case 'urlKnowledgeDetail':
                         case 'urlUserProfile':
                             $showMethodCall = $this->Html->$showMethodUrl($object['uid']);
                             break;

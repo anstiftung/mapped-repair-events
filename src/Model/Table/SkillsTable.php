@@ -1,8 +1,10 @@
 <?php
 namespace App\Model\Table;
 
+use App\Controller\Component\StringComponent;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\Datasource\FactoryLocator;
 
 class SkillsTable extends Table
 {
@@ -34,10 +36,10 @@ class SkillsTable extends Table
         return $validator;
     }
 
-    public function addSkills($request, $appAuth)
+    public function addSkills($request, $appAuth, $entity)
     {
 
-        $skills = $request->getData('Users.skills._ids');
+        $skills = $request->getData($entity . '.skills._ids');
         if (empty($skills)) {
             return $request;
         }
@@ -54,7 +56,7 @@ class SkillsTable extends Table
                 ]);
             }
         }
-        $request = $request->withData('Users.skills._ids', $skills);
+        $request = $request->withData($entity . '.skills._ids', $skills);
 
         $addedSkillIds = [];
         if (!empty($skillsToAdd)) {
@@ -62,17 +64,29 @@ class SkillsTable extends Table
             foreach($addedSkills as $addedSkill) {
                 $addedSkillIds[] = $addedSkill->id;
             }
-            $request = $request->withData('Users.skills._ids', array_merge($skills, $addedSkillIds));
+            $request = $request->withData($entity . '.skills._ids', array_merge($skills, $addedSkillIds));
         }
 
         return $request;
 
     }
 
-    /**
-     * @return array
-     */
-    public function getForDropdown($includeOffline)
+    public function getForDropdownIncludingCategories($includeOffline): array
+    {
+        $skillsForDropdown = $this->getForDropdown(false);
+        $this->Category = FactoryLocator::get('Table')->get('Categories');
+        $categoriesForDropdown = $this->Category->getMainCategoriesForFrontend();
+        $preparedCategoriesForDropdown = [];
+        foreach($categoriesForDropdown as $c) {
+            $slugifiedCategoryName = StringComponent::slugify($c->name);
+            $preparedCategoriesForDropdown[$slugifiedCategoryName] = $c->name;
+        }
+        $skillsForDropdown = $preparedCategoriesForDropdown + $skillsForDropdown;
+        asort($skillsForDropdown);
+        return $skillsForDropdown;
+    }
+
+    public function getForDropdown($includeOffline): array
     {
 
         $conditions = [

@@ -2,7 +2,7 @@
 
 if (isset($main)) {
     $this->element('addScript', ['script' => "
-        var activeElement = $('#nav ul li a').filter(function() {
+        var activeElement = $('#nav ul li a, #navadmin ul li a').filter(function() {
             return $(this).text().toLowerCase() == '" . $main . "'.toLowerCase();
         });
         activeElement.addClass('active');

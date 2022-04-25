@@ -2,12 +2,10 @@
 use Cake\Core\Configure;
 ?>
 
-<div href="#collapse1" class="nav-toggle1">
-
-<?php echo __('Widgetpage: Eventsbox Integration'); ?>
+<div id="1" href="#collapse1" class="box-toggle box-toggle1">
+    <?php echo __('Widgetpage: Eventsbox Integration'); ?>
 </div>
-
-<div id="collapse1" style="display:none">
+<div id="collapse1" class="collapse">
     Kopiere folgenden Code, um den nächsten Reparaturtermin deiner <?php echo Configure::read('AppConfig.initiativeNameSingular'); ?> auf deiner eigenen Webseite anzuzeigen
     <br />
 

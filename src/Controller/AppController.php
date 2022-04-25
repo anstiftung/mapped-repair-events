@@ -292,7 +292,7 @@ class AppController extends Controller
             } else if ($field == 'text') {
                 // ckeditor feld heißt normalerweise 'text'
                 $allowedTags = ALLOWED_TAGS_CKEDITOR_USER;
-                if ($this->AppAuth->isAdmin() && in_array($modelName, ['Post', 'Page'])) {
+                if ($this->AppAuth->isAdmin() && in_array($modelName, ['Post', 'Page', 'Knowledge'])) {
                     $allowedTags =  ALLOWED_TAGS_CKEDITOR_ADMIN;
                 }
                 $entity->$field = strip_tags($data, $allowedTags);

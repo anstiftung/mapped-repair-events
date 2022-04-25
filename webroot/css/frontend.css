@@ -716,7 +716,8 @@ body.users.profil .select2-search__field {
 }
 body.users .profile .categories-checkbox-wrapper .input label,
 #eventEditForm .categories-checkbox-wrapper .input label,
-#workshopEditForm .categories-checkbox-wrapper .input label {
+#workshopEditForm .categories-checkbox-wrapper .input label,
+#knowledgeEditForm .categories-checkbox-wrapper .input label {
   width: 212px;
 }
 #infoSheetEditForm .form-fields-checkbox-wrapper .input.select,
@@ -853,6 +854,7 @@ body.users .profile label.private input,
 body.users .profile .categories-checkbox-wrapper input,
 #infoSheetEditForm .form-fields-checkbox-wrapper input,
 #eventEditForm .categories-checkbox-wrapper input,
+#knowledgeEditForm .categories-checkbox-wrapper input,
 body.users .profile .groups-checkbox-wrapper input {
   float: left;
   margin: 0;
@@ -1321,37 +1323,45 @@ iframe.eiwsd {
     width: 99%;
     margin: 0px;
 }
-#wswidget .nav-toggle1:hover,
-#wswidget .nav-toggle2:hover,
-#wswidget .nav-toggle3:hover {
+.box-toggle:hover {
     background-color: #4D8EA2 !important;
+    color: #fff;
 }
-#wswidget .nav-toggle1,
-#wswidget .nav-toggle2,
-#wswidget .nav-toggle3 {
+.box-toggle {
     cursor: pointer;
     padding: .5%;
     color: black;
     font-weight: bold;
     line-height: 33px;
     background-color: #f2f2f2;
-    margin: 10px 0px;
+    margin-top: 10px;
     text-indent: 5px;
+    border-radius: 5px;
 }
-#wswidget .nav-toggle1.active,
-#wswidget .nav-toggle2.active,
-#wswidget .nav-toggle3.active {
+.box-toggle.active {
     background-color: #4D8EA2 !important;
-    text-indent: 15px;
+    color: #fff;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
 }
-#collapse1,
-#collapse2,
-#collapse3 {
-    padding: 0px 20px;
+.box-toggle:before {
+    content: '▶';
+    font-size: 11px;
+    margin-right: 4px;
 }
-div[id*="collapse"] a:link,
-div[id*="collapse"] a:visited {
-    text-decoration: underline
+.box-toggle.active:before {
+    content: '▼';
+    font-size: 11px;
+    margin-right: 4px;
+}
+.collapse {
+    display: none;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 2px solid #4D8EA2;
+    border-radius: 5px;
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
 }
 .inlinecode {
     margin: 10px 0px;
@@ -1533,17 +1543,6 @@ div.ckeditor-text,
     margin-left: 17px;
     margin-bottom: 10px;
 }
-/* Iframes for Titan Pads
-/* .h_iframe iframe {
-    position:absolute;
-    top:0;
-    left:0;
-    width:100%;
-    height:875px;
-    display:block
-}
-*/
-
 .video-container {
     position: relative;
     padding-bottom: 56.25%;
@@ -2080,7 +2079,8 @@ body.users .profile .groups-checkbox-wrapper {
 }
 body.users .profile .categories-checkbox-wrapper b,
 #eventEditForm .categories-checkbox-wrapper b,
-#workshopEditForm .categories-checkbox-wrapper b {
+#workshopEditForm .categories-checkbox-wrapper b,
+#knowledgeEditForm .categories-checkbox-wrapper b {
   margin-bottom: 15px;
   float: left;
   width: 237px;
@@ -2654,11 +2654,31 @@ body.workshops.detail .skill-icons .skill_icon {
     cursor: pointer;
 }
 body.workshops.detail .skill_icon.small,
-body.users.publicProfile .skill_icon.small {
+body.users.publicProfile .skill_icon.small,
+body.knowledges.all .skill_icon.small {
     width: 50px;
     height: 50px;
     background-size: 50px 50px;
     margin-top: 5px;
+}
+body.knowledges.all .collapse a.selected {
+    opacity: .7;
+}
+body.knowledges.all .knowledge-row {
+    position: relative;
+}
+body.knowledges.all .knowledge-edit-icon {
+    position: absolute;
+    right: 10px;
+}
+body.knowledges.all .knowledge-permalink {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
+body.knowledges.all .knowledge-edit-icon i {
+    padding-left: 1px;
+    padding-right: 4px;
 }
 .lstCat.chosenCat {
     background-color: #ddd;
@@ -2825,76 +2845,76 @@ body.workshops.detail article.full {
     margin: 0 auto;
     cursor: pointer
 }
-.desktop-pcs {
+.desktop-pcs:not(.knowledge-row) {
     background-image: url(/img/icons-skills/desktop-pcs.png);
     height: 100px;
 }
-.elektro {
+.elektro:not(.knowledge-row) {
     background-image: url(/img/icons-skills/elektro.png);
     width: 100px;
     height: 100px;
 }
-.fahrrad {
+.fahrrad:not(.knowledge-row) {
     background-image: url(/img/icons-skills/fahrrad.png);
     width: 100px;
     height: 100px;
 }
-.handy-smartphone-tablet {
+.handy-smartphone-tablet:not(.knowledge-row) {
     background-image: url(/img/icons-skills/handy-smartphone-tablet.png);
     width: 100px;
     height: 100px;
 }
-.haushalt {
+.haushalt:not(.knowledge-row) {
     background-image: url(/img/icons-skills/haushalt.png);
     width: 100px;
     height: 100px;
 }
-.holz {
+.holz:not(.knowledge-row) {
     background-image: url(/img/icons-skills/holz.png);
     width: 100px;
     height: 100px;
 }
-.mechanik {
+.mechanik:not(.knowledge-row) {
     background-image: url(/img/icons-skills/mechanik.png);
     width: 100px;
     height: 100px;
 }
-.metall {
+.metall:not(.knowledge-row) {
     background-image: url(/img/icons-skills/metall.png);
     width: 100px;
     height: 100px;
 }
-.textilien {
+.textilien:not(.knowledge-row) {
     background-image: url(/img/icons-skills/textilien.png);
     width: 100px;
     height: 100px;
 }
-.unterhaltungselektronik {
+.unterhaltungselektronik:not(.knowledge-row) {
     background-image: url(/img/icons-skills/unterhaltungselektronik.png);
     width: 100px;
     height: 100px;
 }
-.upcycling-basteln {
+.upcycling-basteln:not(.knowledge-row) {
     background-image: url(/img/icons-skills/upcycling-basteln.png);
     width: 100px;
     height: 100px;
 }
-.schmuck {
+.schmuck:not(.knowledge-row) {
     background-image: url(/img/icons-skills/schmuck.png);
     width: 100px;
     height: 100px;
 }
-.leder {
+.leder:not(.knowledge-row) {
     background-image: url(/img/icons-skills/leder.png);
     width: 100px;
     height: 100px;
 }
-.drei-d-reparatur {
+.drei-d-reparatur:not(.knowledge-row) {
     background-image: url(/img/icons-skills/drei-d-reparatur.png);
     width: 100px;
     height: 100px;
 }
-.emptyskill {
+.emptyskill:not(.knowledge-row) {
     background-image: url(/img/icons-skills/empty.png);
     width: 100px;
     height: 100px;
@@ -3062,11 +3082,16 @@ body.events.all .lstCatNew.skill_icon {
     height: 42px;
     background-size: 42px 42px;
 }
-body.users.publicProfile #skill_icons {
+body.users.publicProfile #skill_icons,
+body.knowledges.all #skill_icons {
   position: static;
   margin-top: 0;
   float: left;
   margin-bottom: 15px;
+}
+body.knowledges.all #skill_icons {
+    margin-top: 10px;
+    width: 100%;
 }
 body.users.publicProfile .workshop-link-wrapper {
   float: left;
@@ -3216,7 +3241,8 @@ body.users.publicProfile .about-me-wrapper .about-me-content {
     width: 100%;
     line-height: 19px;
 }
-body.users.publicProfile .about-me-wrapper .button {
+body.users.publicProfile .about-me-wrapper .button,
+body.knowledges.all .button {
     margin-right: 5px;
     margin-bottom: 5px;
     float: left;
@@ -3254,24 +3280,28 @@ body.skills.all h1 {
 body.skills.all .dotted-line-full-width {
     margin-bottom: 15px;
 }
+body.knowledges.all h1,
 body.users.all h1 {
     float: left;
     width: 845px;
     line-height: 45px;
 }
-body.users.all .skills-wrapper {
+body.users.all .skills-wrapper,
+body.knowledges.all .skills-wrapper {
     float: right;
     width: 265px;
     margin-top: 10px;
     margin-bottom: 10px;
 }
-body.users.all .skills-wrapper label {
+body.users.all .skills-wrapper label,
+body.knowledges.all .skills-wrapper label {
     float: right;
     margin-right: 5px;
     margin-top: 5px;
     margin-bottom: 5px;
 }
-body.users.all .skills-wrapper .input.select {
+body.users.all .skills-wrapper .input.select,
+body.knowledges.all .skills-wrapper .input.select {
     float: right;
 }
 body.users.all h1 a,

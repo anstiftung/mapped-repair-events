@@ -473,6 +473,18 @@ class MyHtmlHelper extends HtmlHelper {
     function urlPostNew($type='') {
         return '/admin/posts/insert/'.$type;
     }
+    function urlKnowledgeNew() {
+        return '/admin/knowledges/insert';
+    }
+    function urlKnowledgeEdit($uid) {
+        return '/admin/knowledges/edit/'.$uid;
+    }
+    function urlKnowledgeDetail($uid) {
+        return $this->urlKnowledges() . '/#' . $uid;
+    }
+    function urlKnowledges() {
+        return '/reparaturwissen';
+    }
     public function getPostTypesWithPreview() {
         return [
             'neuigkeiten',

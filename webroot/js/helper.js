@@ -131,7 +131,46 @@ MappedRepairEvents.Helper = {
         $('#header #login-box').css('right', newRight + 'px');
     },
 
-    initSkillFilter : function() {
+    initSkillFilterForKnowledges : function() {
+        $('select#skills').on('change', function() {
+            MappedRepairEvents.Helper.applyFilterForKnowledge($(this).val());
+        });
+    },
+
+    applyFilterForKnowledge : function(value) {
+
+        var allButtons = $('.collapse').find('a.skill_icon, a.button');
+        allButtons.each(function() {
+            $(this).removeClass('selected');
+        });
+        $('.knowledge-row').hide();
+
+        if (value != '') {
+            $('.knowledge-row.' + value).show();
+            allButtons.each(function() {
+                if ($(this).data('val') == value) {
+                    $(this).addClass('selected');
+                }
+            });
+        } else {
+            $('.knowledge-row').show();
+        }
+    },
+
+    bindKnowledgeFilterButtons: function() {
+        var allButtons = $('.collapse').find('a.skill_icon, a.button');
+        allButtons.on('click', function() {
+            var value;
+            if ($(this).hasClass('selected')) {
+                value = '';
+            } else {
+                value = $(this).data('val');
+            }
+            $('select#skills').val(value).trigger('change');
+        });
+    },
+
+    initSkillFilterForUsers : function() {
         $('select#skills').on('change', function() {
             var url = '/aktive';
             if (parseInt($(this).val()) == $(this).val()) {
@@ -193,25 +232,29 @@ MappedRepairEvents.Helper = {
         return parseFloat(string);
     },
 
-    initWidgetDocs : function() {
-        $('.nav-toggle1,.nav-toggle2,.nav-toggle3').click(function() {
-            var collapse_content_selector = $(this).attr('href');
-            $(this).addClass(' active');
-            var toggle_switch = $(this);
-            $(collapse_content_selector).toggle(function() {
+    initBoxToggle : function() {
+        $('.box-toggle').on('click', function() {
+            var collapseContentSelector = $(this).attr('href');
+            if ($(this).hasClass('active')) {
+                $(this).removeClass('active');
+            } else {
+                $(this).addClass('active');
+            }
+            $(collapseContentSelector).fadeToggle(100, function() {
                 if ($(this).css('display') == 'none') {
-                    $('.nav-toggle' + myhash).removeClass(' active');
-                    $('.nav-toggle1,.nav-toggle2,.nav-toggle3').removeClass(' active');
+                    $(this).removeClass('active');
                 } else {
-                    $(this).addClass(' active');
+                    $(this).addClass('active');
                 }
             });
         });
+
         if (window.location.hash) {
             var myhash = window.location.hash.substring(1);
-            $('.nav-toggle' + myhash).trigger('click');
-            $('.nav-toggle' + myhash).addClass(' active');
+            $('.box-toggle' + myhash).trigger('click');
         }
+
+
     },
 
     initCookieBanner : function() {

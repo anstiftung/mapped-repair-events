@@ -70,7 +70,8 @@
        width: 63%;
        margin-left: 3%;
     }
-    body.users.all .skills-wrapper {
+    body.users.all .skills-wrapper,
+    body.knowledges.all .skills-wrapper {
         margin-top: -20px;
     }
     body.users.all h1 {

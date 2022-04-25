@@ -2,10 +2,10 @@
 use Cake\Core\Configure;
 ?>
 
-<div href="#collapse3" class="nav-toggle3">
+<div id="3" href="#collapse3" class="box-toggle box-toggle3">
     Integration Statistik
 </div>
-<div id="collapse3" style="display:none">
+<div id="collapse3" class="collapse">
     Kopiere den folgenden Code, um die die Statistik aller <?php echo Configure::read('AppConfig.initiativeNamePlural'); ?> auf deiner eigenen Webseite anzuzeigen:
     <br />
     <br />
