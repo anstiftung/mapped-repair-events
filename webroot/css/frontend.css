@@ -2675,6 +2675,17 @@ body.knowledges.all .skill_icon.small {
 body.knowledges.all .collapse a.selected {
     opacity: .7;
 }
+body.knowledges.all .knowledge-row {
+    position: relative;
+}
+body.knowledges.all .knowledge-edit-icon {
+    position: absolute;
+    right: 10px;
+}
+body.knowledges.all .knowledge-edit-icon i {
+    padding-left: 1px;
+    padding-right: 4px;
+}
 .lstCat.chosenCat {
     background-color: #ddd;
 }

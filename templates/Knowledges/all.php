@@ -32,6 +32,11 @@ foreach($knowledges as $knowledge) {
 
         echo '<div id="rw-' . $knowledge->uid . '" href="#collapse' . $knowledge->uid . '" class="box-toggle' . $knowledge->uid . ' box-toggle knowledge-item">';
             echo $knowledge->title;
+            if ($appAuth->isAdmin()) {
+                echo '<a class="knowledge-edit-icon" href="' . $this->Html->urlKnowledgeEdit($knowledge->uid).'">';
+                echo '<i class="far fa-edit fa-border"></i>';
+                echo '</a>';
+            }
         echo '</div>';
 
         echo '<div id="collapse' . $knowledge->uid . '" class="collapse">';
