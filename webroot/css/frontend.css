@@ -2671,6 +2671,11 @@ body.knowledges.all .knowledge-edit-icon {
     position: absolute;
     right: 10px;
 }
+body.knowledges.all .knowledge-permalink {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
 body.knowledges.all .knowledge-edit-icon i {
     padding-left: 1px;
     padding-right: 4px;

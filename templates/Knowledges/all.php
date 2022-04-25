@@ -31,12 +31,20 @@ foreach($knowledges as $knowledge) {
     echo '<div class="knowledge-row '. join(' ', $knowledge->itemSkillClasses) .'">';
 
         echo '<div id="' . $knowledge->uid . '" href="#collapse' . $knowledge->uid . '" class="box-toggle' . $knowledge->uid . ' box-toggle knowledge-item">';
+
             echo $knowledge->title;
+
             if ($appAuth->isAdmin()) {
-                echo '<a class="knowledge-edit-icon" href="' . $this->Html->urlKnowledgeEdit($knowledge->uid).'">';
-                echo '<i class="far fa-edit fa-border"></i>';
-                echo '</a>';
+                echo $this->Html->link(
+                    '<i class="far fa-edit fa-border"></i>',
+                    $this->Html->urlKnowledgeEdit($knowledge->uid),
+                    [
+                        'class' => 'knowledge-edit-icon',
+                        'escape' => false,
+                    ]
+                );
             }
+
         echo '</div>';
 
         echo '<div id="collapse' . $knowledge->uid . '" class="collapse">';
@@ -58,7 +66,14 @@ foreach($knowledges as $knowledge) {
                 }
                 echo '<div class="sc"></div>';
             }
-
+            echo $this->Html->link(
+                'Permalink',
+                $this->Html->urlKnowledgeDetail($knowledge->uid),
+                [
+                    'class' => 'knowledge-permalink',
+                    'escape' => false,
+                ]
+            );
         echo '</div>';
 
     echo '</div>';
