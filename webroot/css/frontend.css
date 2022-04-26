@@ -3688,30 +3688,6 @@ body.users.profil .add-skill {
     display: block;
     margin-top: 5px ! important;
 }
-
-#covid-19-banner {
-    transform: rotate(-18deg);
-    position: absolute;
-    top: 130px;
-    left: 60px;
-    z-index: 100;
-    display: none;
-}
-#covid-19-banner a {
-    position: absolute;
-    top: 14px;
-    right: 9px;
-    color: #4a8ea3;
-    font-size: 30px;
-}
-#covid-19-banner a:hover {
-    opacity: .9;
-}
-
-body.workshops.detail #covid-19-banner {
-    top: 175px;
-}
-
 #mapHomeInfoBox {
     width: 239px;
 }

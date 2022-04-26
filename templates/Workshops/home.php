@@ -90,11 +90,6 @@ $tl_search_input_field = __('Map search field preentered');
             }
         ?>
         <div class="find-events-box">
-            <?php
-                if ($this->request->getSession()->read('isMobile')) {
-                    echo $this->element('covid19Banner');
-                }
-            ?>
             <div class="inner">
                 <h3><?php echo __('Find nearby repair events.'); ?></h3>
                    <label><?php echo __('Zip or city'); ?>:</label>

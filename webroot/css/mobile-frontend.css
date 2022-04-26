@@ -811,11 +811,6 @@
         font-size: 13px;
         line-height: 15px ! important;
     }
-    #covid-19-banner {
-        display: block;
-        top: 35px;
-        left: 50%;
-        margin-left: -125px;    }
 
     @media (orientation: portrait) {
 
