@@ -3058,6 +3058,10 @@ body.events.all #category-icons {
     float: left;
     margin-bottom: 10px;
 }
+body.events.all #category-icons .skill_icon {
+    width: 38px ! important;
+    height: 38px ! important;
+}
 body.events.all #category-icons a.button {
     float: left;
     margin-top: 6px;
