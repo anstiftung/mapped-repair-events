@@ -2664,6 +2664,13 @@ body.knowledges.all .skill_icon.small {
 body.knowledges.all .collapse a.selected {
     opacity: .7;
 }
+body.knowledges.all #content hr {
+    height: 2px;
+    margin: 0;
+    margin-top: 30px;
+    background-color: #4D8EA2;
+    clear: both;
+}
 body.knowledges.all .knowledge-row {
     position: relative;
 }

@@ -65,6 +65,10 @@ foreach($knowledges as $knowledge) {
 
             echo '<div class="text-wrapper">' . $knowledge->text . '</div>';
 
+            if (!empty($knowledge->categories) || !empty($knowledge->skills)) {
+                echo '<hr />';
+            }
+
             if(!empty($knowledge->categories)) {
                 echo '<div id="skill_icons">';
                     foreach($knowledge->categories as $category) {
