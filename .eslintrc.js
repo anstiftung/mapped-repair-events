@@ -9,6 +9,7 @@ module.exports = {
         "Chart": true,
         "ChartDataLabels": true,
         "CKEDITOR": true,
+        "ClipboardJS": true,
         "MappedRepairEvents": true,
         "PruneCluster": true,
         "PruneClusterForLeaflet": true,
