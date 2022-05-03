@@ -83,6 +83,7 @@ foreach($knowledges as $knowledge) {
             ?>
 
             <?php
+            /*
             echo $this->Html->link(
                 'Permalink kopieren',
                 'javascript:void(0);',
@@ -92,6 +93,7 @@ foreach($knowledges as $knowledge) {
                     'data-url' => Configure::read('AppConfig.serverName') . $this->Html->urlKnowledgeDetail($knowledge->uid),
                 ]
             );
+            */
         echo '</div>';
 
     echo '</div>';
