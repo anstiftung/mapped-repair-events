@@ -15,6 +15,19 @@ MappedRepairEvents.Helper = {
         MappedRepairEvents.Detect.setIsMobile();
     },
 
+    initCopyPermalinkToClipboard : function() {
+        var clipboard = new ClipboardJS('.knowledge-permalink', {
+            text: function(trigger) {
+                return $(trigger).data('url');
+            },
+        });
+        clipboard.on('success', function (e) {
+            console.log(e);
+            $(e.trigger).text('Permalink kopiert!');
+            e.clearSelection();
+        });
+    },
+
     bindAddDateButton : function(dateHtml) {
 
         // remove select2 which is already initialized - it causes problems when the html is copied and pasted

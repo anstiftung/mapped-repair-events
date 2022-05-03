@@ -1,10 +1,12 @@
 <?php
     use App\Controller\Component\StringComponent;
+use Cake\Core\Configure;
 
 echo $this->element('highlightNavi', ['main' => 'Reparaturwissen']);
     $this->element('addScript', ['script' =>
         JS_NAMESPACE.".Helper.initBoxToggle();".
         JS_NAMESPACE.".Helper.initSkillFilterForKnowledges();".
+        JS_NAMESPACE.".Helper.initCopyPermalinkToClipboard();".
         JS_NAMESPACE.".Helper.bindKnowledgeFilterButtons();
     "]);
 ?>
@@ -23,6 +25,18 @@ echo $this->element('highlightNavi', ['main' => 'Reparaturwissen']);
     echo '</div>';
 ?>
 <div class="sc"></div>
+
+<div class="text-wrapper">
+    <p>
+        An dieser Stelle entsteht eine Sammlung aus Reparaturwissen von Aktiven aus dem Netzwerk Reparatur-Initiativen. Vorschläge für Ergänzungen etc. sind willkommen - wendet euch an reparieren@anstiftung.de.
+    </p>
+
+    <p>
+        Die Urheberrechte der einzelnen Beiträge liegen bei den Verfasser*innen. Bei inhaltlichen Rückfragen und Fragen zur weiteren Nutzung bitte direkt an die jeweiligen Verfasser*innen wenden.
+        Alle Webinaraufzeichnungen gesammelt gibt es im <a href="https://www.youtube.com/playlist?list=PL9rt2M0wvLVZLNe8O-nxNwSkZb3OIlXh8" target="_blank">YouTube-Kanal der anstiftung</a>.
+    </p>
+</div>
+
 
 <?php
 
@@ -66,12 +80,16 @@ foreach($knowledges as $knowledge) {
                 }
                 echo '<div class="sc"></div>';
             }
+            ?>
+
+            <?php
             echo $this->Html->link(
-                'Permalink',
-                $this->Html->urlKnowledgeDetail($knowledge->uid),
+                'Permalink kopieren',
+                'javascript:void(0);',
                 [
                     'class' => 'knowledge-permalink',
                     'escape' => false,
+                    'data-url' => Configure::read('AppConfig.serverName') . $this->Html->urlKnowledgeDetail($knowledge->uid),
                 ]
             );
         echo '</div>';
