@@ -20,7 +20,7 @@
     "chart.js": "^3.7.1",
     "chartjs-plugin-datalabels": "^2.0.0",
     "ckeditor4": "^4.18.0",
-    "clipboard": "^2.0.10",
+    "clipboard": "^2.0.11",
     "components-jqueryui": "~1.12",
     "detect_swipe": "^2.1.4",
     "featherlight": "^1.7.14",
@@ -29,13 +29,13 @@
     "jQuery-Impromptu": "https://github.com/trentrichardson/jQuery-Impromptu/tarball/master",
     "jquery-knob": "https://github.com/aterrien/jQuery-Knob/tarball/master",
     "jquery-slugify": "^1.2.5",
-    "leaflet": "^1.7.1",
+    "leaflet": "^1.8.0",
     "moment": "^2.29.3",
     "scrolltofixed": "^1.0.6",
     "select2": "^4.0.13",
     "slidebars": "^2.0.2",
     "speakingurl": "^14.0.1",
-    "svelte": "^3.47.0",
+    "svelte": "^3.48.0",
     "swiper": "^8.1.4"
   }
 }
