@@ -1,5 +1,8 @@
 @media (max-width: 767px) {
 
+    html {
+      scroll-padding-top: 85px; /* height of sticky header + subnavi */
+    }
     html, body {
         overflow-y: auto;
     }
