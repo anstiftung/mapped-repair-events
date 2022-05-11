@@ -128,9 +128,27 @@ MappedRepairEvents.Helper = {
     },
 
     initSkillFilterForKnowledges : function() {
-        $('select#skills').on('change', function() {
-            MappedRepairEvents.Helper.applyFilterForKnowledge($(this).val());
+
+        var select = $('select#skills');
+        select.on('change', function() {
+            var filterValue = $(this).val();
+            MappedRepairEvents.Helper.applyFilterForKnowledge(filterValue);
+            var myhash = '#filter-' + filterValue;
+            if(history.pushState) {
+                history.pushState(null, null, myhash);
+            } else {
+                location.hash = myhash;
+            }
         });
+
+        if (window.location.hash) {
+            var myhash = window.location.hash.substring(1);
+            if (myhash.match(/filter-/)) {
+                var filterValue = myhash.replace(/filter-/, '');
+                select.val(filterValue).trigger('change');
+            }
+        }
+
     },
 
     applyFilterForKnowledge : function(value) {
@@ -247,9 +265,10 @@ MappedRepairEvents.Helper = {
 
         if (window.location.hash) {
             var myhash = window.location.hash.substring(1);
-            $('.box-toggle' + myhash).trigger('click');
+            if (!myhash.match(/filter-/)) {
+                $('.box-toggle' + myhash).trigger('click');
+            }
         }
-
 
     },
 
