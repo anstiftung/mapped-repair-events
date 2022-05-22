@@ -368,8 +368,6 @@ class AppController extends Controller
         if ($output->status == 'OK' && empty($output->results[0]->partial_match)) {
             $lat = str_replace(',', '.', $output->results[0]->geometry->location->lat);
             $lng = str_replace(',', '.', $output->results[0]->geometry->location->lng);
-        } else {
-            $this->log(json_encode($output));
         }
 
         return ['lat' => $lat, 'lng' => $lng];
