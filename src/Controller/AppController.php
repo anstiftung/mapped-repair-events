@@ -364,7 +364,7 @@ class AppController extends Controller
         $geocode = file_get_contents('https://maps.googleapis.com/maps/api/geocode/json?key='.Configure::read('googleMapApiKey').'&address=' . urlencode($addressString));
         $output = json_decode($geocode);
 
-        if ($output->status == 'OK' && empty($output->results[0]->partial_match)) {
+        if ($output->status == 'OK') {
             $lat = str_replace(',', '.', $output->results[0]->geometry->location->lat);
             $lng = str_replace(',', '.', $output->results[0]->geometry->location->lng);
         }
