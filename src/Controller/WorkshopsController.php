@@ -149,6 +149,11 @@ class WorkshopsController extends AppController
                 $coordinates = $this->getLatLngFromGeoCodingService($addressString);
                 $this->request = $this->request->withData('Workshops.lat', $coordinates['lat']);
                 $this->request = $this->request->withData('Workshops.lng', $coordinates['lng']);
+
+                if ($coordinates['lat'] == 'ungültig' || $coordinates['lng'] == 'ungültig') {
+                    $this->AppFlash->setFlashError('Zur eingegebenen Adresse wurden keine Koordinaten gefunden. Bitte klicke auf "Koordinaten selber festlegen" und trage die Koordinaten selbst ein.');
+                }
+
             }
 
             if ($this->request->getData('Workshops.use_custom_coordinates')) {
