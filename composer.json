@@ -25,14 +25,14 @@
         "studio-42/elfinder": "^2.1",
         "ezyang/htmlpurifier": "^4.11",
         "dereuromark/cakephp-feed": "^2.0",
-        "league/csv": "^9.5",
-        "eluceo/ical": "^0.16.1"
+        "league/csv": "^9.8",
+        "eluceo/ical": "2.*"
     },
     "require-dev": {
         "psy/psysh": "@stable",
         "cakephp/debug_kit": "4.*",
         "cakephp/cakephp-codesniffer": "^4.0",
-        "phpstan/phpstan": "0.*",
+        "phpstan/phpstan": "1.*",
         "phpunit/phpunit": "^9.0"
     },
     "autoload": {

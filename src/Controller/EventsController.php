@@ -6,9 +6,15 @@ use Cake\Event\EventInterface;
 use Cake\I18n\FrozenTime;
 use Cake\Mailer\Mailer;
 use Cake\Http\Exception\NotFoundException;
-use Eluceo\iCal\Component\Calendar;
-use Eluceo\iCal\Component\Event;
-use Eluceo\iCal\Property\Event\Geo;
+use Eluceo\iCal\Domain\Entity\Calendar;
+use Eluceo\iCal\Domain\Entity\Event;
+use Eluceo\iCal\Domain\Entity\TimeZone;
+use \DateTimeZone as PhpDateTimeZone;
+use Eluceo\iCal\Domain\ValueObject\DateTime;
+use Eluceo\iCal\Domain\ValueObject\GeographicPosition;
+use Eluceo\iCal\Domain\ValueObject\Location;
+use Eluceo\iCal\Domain\ValueObject\TimeSpan;
+use Eluceo\iCal\Presentation\Factory\CalendarFactory;
 
 class EventsController extends AppController
 {
@@ -104,22 +110,6 @@ class EventsController extends AppController
         }
 
         $this->disableAutoRender();
-        $icalCalendar = new Calendar('reparatur-initiativen.de');
-
-        $tz = Configure::read('App.defaultTimezone');
-        $dtz = new \DateTimeZone($tz);
-        date_default_timezone_set($tz);
-
-        $vTimezoneRuleDst = new \Eluceo\iCal\Component\TimezoneRule(\Eluceo\iCal\Component\TimezoneRule::TYPE_DAYLIGHT);
-        $vTimezoneRuleDst->setTzName($tz);
-        $vTimezoneRuleDst->setDtStart(new \DateTime('1981-03-29 02:00:00', $dtz));
-        $vTimezoneRuleDst->setTzOffsetFrom('+0100');
-        $vTimezoneRuleDst->setTzOffsetTo('+0200');
-
-        $vTimezone = new \Eluceo\iCal\Component\Timezone($tz);
-        $vTimezone->addComponent($vTimezoneRuleDst);
-
-        $icalCalendar->setTimezone($vTimezone);
 
         $filename = 'events';
         $conditions = $this->Event->getListConditions();
@@ -137,6 +127,8 @@ class EventsController extends AppController
             ],
             'order' => $this->Event->getListOrder(),
         ]);
+
+        $icalEvents = [];
 
         foreach($events as $event) {
 
@@ -158,38 +150,59 @@ class EventsController extends AppController
             $description .= LF;
             $description .= Configure::read('AppConfig.serverName') . Configure::read('AppConfig.htmlHelper')->urlEventDetail($event->workshop->url, $event->uid, $event->datumstart);
 
+            $location = new Location(str_replace('"', "'", $location));
+            $location = $location->withGeographicPosition(new GeographicPosition($event->lat, $event->lng));
+
+            $start = new \DateTime(
+                $event->datumstart->i18nFormat(
+                    Configure::read('DateFormat.Database')
+                ) . ' ' .
+                $event->uhrzeitstart->i18nFormat(
+                    Configure::read('DateFormat.de.TimeWithSeconds')
+                )
+            );
+            $start = new DateTime(\DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $start->format('Y-m-d H:i:s')), false);
+
+            $end = new \DateTime(
+                $event->datumstart->i18nFormat(
+                    Configure::read('DateFormat.Database')
+                ) . ' ' .
+                $event->uhrzeitend->i18nFormat(
+                    Configure::read('DateFormat.de.TimeWithSeconds')
+                )
+            );
+            $end = new DateTime(\DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $end->format('Y-m-d H:i:s')), false);
+            $occurrence = new TimeSpan($start, $end);
+
             $icalEvent
                 ->setSummary(str_replace('"', "'", $event->workshop->name))
-                ->setUseTimezone(true)
                 ->setDescription(str_replace('"', "'", strip_tags($description)))
-                ->setDtStart(new \DateTime(
-                    $event->datumstart->i18nFormat(
-                        Configure::read('DateFormat.Database')
-                    ) . ' ' .
-                    $event->uhrzeitstart->i18nFormat(
-                        Configure::read('DateFormat.de.TimeWithSeconds')
-                    )
-                ))
-                ->setDtEnd(new \DateTime(
-                    $event->datumstart->i18nFormat(
-                        Configure::read('DateFormat.Database')
-                    ) . ' ' .
-                    $event->uhrzeitend->i18nFormat(
-                        Configure::read('DateFormat.de.TimeWithSeconds')
-                    )
-                ))
-                ->setLocation(str_replace('"', "'", $location), '', new Geo($event->lat, $event->lng));
+                ->setOccurrence($occurrence)
+                ->setLocation($location);
 
             if ($event->uhrzeitstart_formatted == '00:00' && $event->uhrzeitend_formatted == '00:00') {
                 $icalEvent->setNoTime(true);
             }
 
-            $icalCalendar->addComponent($icalEvent);
+            $icalEvents[] = $icalEvent;
         }
+
+        $icalCalendar = new Calendar($icalEvents);
+
+        $phpDateTimeZone = new PhpDateTimeZone(Configure::read('App.defaultTimezone'));
+        $timeZone = TimeZone::createFromPhpDateTimeZone(
+            $phpDateTimeZone,
+            new \DateTimeImmutable('2010-01-01 00:00:00', $phpDateTimeZone),
+            new \DateTimeImmutable('2050-01-01 00:00:00', $phpDateTimeZone),
+        );
+        $icalCalendar->addTimeZone($timeZone);
+
+        $componentFactory = new CalendarFactory();
+        $calendarComponent = $componentFactory->createCalendar($icalCalendar);
 
         $this->response = $this->response->withHeader('Content-type', 'text/calendar; charset=utf-8');
         $this->response = $this->response->withHeader('Content-Disposition', 'attachment; filename="'.$filename.'"');
-        $this->response = $this->response->withStringBody($icalCalendar->render());
+        $this->response = $this->response->withStringBody($calendarComponent->__toString());
 
         return $this->response;
 
