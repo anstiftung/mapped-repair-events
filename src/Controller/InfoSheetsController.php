@@ -175,7 +175,9 @@ class InfoSheetsController extends AppController
 
         $writer = Writer::createFromString();
         foreach($records as &$record) {
-            $record['Fehlerbeschreibung'] = str_replace("\r\n", " ", $record['Fehlerbeschreibung']);
+            if ($record['Fehlerbeschreibung'] != '') {
+                $record['Fehlerbeschreibung'] = str_replace("\r\n", " ", $record['Fehlerbeschreibung']);
+            }
         }
         $writer->insertOne(array_keys($records[0]));
         $writer->insertAll($records);
