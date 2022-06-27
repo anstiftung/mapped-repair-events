@@ -287,14 +287,18 @@ class AppController extends Controller
     {
         foreach ($entity->toArray() as $field => $data) {
             if (in_array($field, $this->$modelName->allowedBasicHtmlFields)) {
-                $entity->$field = strip_tags($data, ALLOWED_TAGS_USER);
+                if (!is_null($data)) {
+                    $entity->$field = strip_tags($data, ALLOWED_TAGS_USER);
+                }
             } else if ($field == 'text') {
                 // ckeditor feld heißt normalerweise 'text'
                 $allowedTags = ALLOWED_TAGS_CKEDITOR_USER;
                 if ($this->AppAuth->isAdmin() && in_array($modelName, ['Post', 'Page', 'Knowledge'])) {
                     $allowedTags =  ALLOWED_TAGS_CKEDITOR_ADMIN;
                 }
-                $entity->$field = strip_tags($data, $allowedTags);
+                if (!is_null($data)) {
+                    $entity->$field = strip_tags($data, $allowedTags);
+                }
             } else {
                 if (is_string($data)) {
                     $entity->$field = strip_tags($data);

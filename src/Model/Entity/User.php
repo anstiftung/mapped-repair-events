@@ -24,6 +24,11 @@ class User extends Entity
 
     public function privatizeData(&$user)
     {
+
+        if (is_null($user->private)) {
+            return;
+        }
+
         $privateFields = explode(',',  $user->private);
         $privateFields = str_replace('-', '_', $privateFields);
         foreach($user->getVisible() as $property) {
@@ -31,6 +36,7 @@ class User extends Entity
                 $user->$property = null;
             }
         }
+
     }
 
     protected function _getName()

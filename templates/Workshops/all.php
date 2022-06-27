@@ -61,11 +61,13 @@ echo $this->element('highlightNavi', ['main' => 'ORTE']);
                 $workshopText = StringComponent::makeNoFollow($workshopText);
                 $workshopText = StringComponent::cutHtmlString($workshopText, $textLength);
                 // weiterlesen-link vor dem letzten </p> eifügen
-                if (strlen($workshopText) < strlen($workshop->text)) {
-                    if (strlen($workshop->text) >= $textLength) {
-                        $workshopText = substr($workshopText, 0, strlen($workshopText) - 4);
-                        $workshopText .= '... <a href="'.$this->Html->urlWorkshopDetail($workshop->url).'">weiterlesen</a>';
-                        $workshopText .= '</p>';
+                if (!is_null($workshopText) && !is_null($workshop->text)) {
+                    if (strlen($workshopText) < strlen($workshop->text)) {
+                        if (strlen($workshop->text) >= $textLength) {
+                            $workshopText = substr($workshopText, 0, strlen($workshopText) - 4);
+                            $workshopText .= '... <a href="'.$this->Html->urlWorkshopDetail($workshop->url).'">weiterlesen</a>';
+                            $workshopText .= '</p>';
+                        }
                     }
                 }
                 echo $workshopText;

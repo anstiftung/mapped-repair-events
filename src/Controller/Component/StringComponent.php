@@ -147,7 +147,9 @@ class StringComponent extends Component
     }
 
     public static function prepareTextPreview($text) {
-        $text = strip_tags($text, '<ul><li><p><b><a><h2><strong>');
+        if (!is_null($text)) {
+            $text = strip_tags($text, '<ul><li><p><b><a><h2><strong>');
+        }
         return $text;
     }
 
@@ -165,6 +167,11 @@ class StringComponent extends Component
     // $relValue: The rel attribute values you wish to have attached to the anchor
     public static function makeNoFollow(&$str, $relValue = 'nofollow')
     {
+
+        if (is_null($str)) {
+            return $str;
+        }
+
         // See if there is already a "rel" attribute
         if (strpos($str, "rel")) {
             $pattern = "/rel=([\"'])([^\\1]+?)\\1/";
@@ -173,8 +180,11 @@ class StringComponent extends Component
             $pattern = "/<a /";
             $replace = "<a rel=\"$relValue\" ";
         }
+
         $str = preg_replace($pattern, $replace, $str);
+
         return $str;
+
     }
 
     /**
@@ -350,24 +360,15 @@ class StringComponent extends Component
      * @return string generated string
      *
      */
-    public static function createRandomString($length = 8, $salt = null)
+    public static function createRandomString($n = 8)
     {
-        if ($salt !== null) {
-            $salt = strtr($salt, [
-                "a-z" => "abcdefghijklmnopqrstuvw",
-                "A-Z" => "ABCDEFGHIJKLMNOPQRSTUVW",
-                "0-9" => "0123456789",
-                "1-9" => "123456789"
-            ]);
-        } else {
-            $salt = "abcdefghijklmnpqrstuvwxyzABCDEFGHIJKLMNPQRSTUVWXYZ123456789"; // salt to select chars from
+        $characters = "abcdefghijkmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        $randomString = '';
+        for ($i = 0; $i < $n; $i++) {
+            $index = rand(0, strlen($characters) - 1);
+            $randomString .= $characters[$index];
         }
-        srand((double) microtime() * 1000000); // start the random generator
-        $string = "";
-        for ($i = 0; $i < $length; $i ++) {
-            $string .= substr($salt, rand() % strlen($salt), 1);
-        }
-        return $string;
+        return $randomString;
     }
 
     /**
@@ -522,6 +523,11 @@ class StringComponent extends Component
 
     public static function cutHtmlString($text, $length = 100, $ending = '...', $exact = false, $considerHtml = true)
     {
+
+        if (is_null($text)) {
+            return '';
+        }
+
         if ($considerHtml) {
             // if the plain text is shorter than the maximum length, return the whole text
             if (strlen(preg_replace('/<.*?>/', '', $text)) <= $length) {
@@ -633,6 +639,11 @@ class StringComponent extends Component
      */
     public static function hide_email($email, $class = '', $renderAsLink = true)
     {
+
+        if (is_null($email)) {
+            return;
+        }
+
         $classHtml = '';
         if ($class != '') {
             $classHtml = 'class=\"' . $class . '\" ';
