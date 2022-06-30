@@ -35,12 +35,14 @@ class FileAndEmailLog extends FileLog
             return false;
         }
 
-        $session = Router::getRequest()->getSession();
+        $request = Router::getRequest();
         $loggedUser = [];
-        if ($session->read('Auth.User.uid') !== null) {
-            $loggedUser = $session->read('Auth');
+        if ($request) {
+            $session = $request->getSession();
+            if ($session->read('Auth.User.uid') !== null) {
+                $loggedUser = $session->read('Auth');
+            }
         }
-
         $subject = 'ErrorLog RepIni: ' . Text::truncate($message, 90) . ' ' . date('Y-m-d H:i:s');
         try {
             $email = new Mailer('default');
