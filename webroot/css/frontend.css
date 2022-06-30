@@ -288,14 +288,15 @@ body.workshops.home h2 {
     float: right;
     margin-left: 10px;
 }
+
 .left {
-    width: 43%;
+    width: 575px;
     float: left;
-    padding-right: 2%;
+    padding-right: 10px;
     margin-top: 10px;
 }
 .right {
-    width: 55%;
+    width: 575px;
     float: left;
     text-align: center
 }
@@ -500,7 +501,7 @@ body.workshops.edit .checkbox {
     padding: 0px;
 }
 body.workshops.detail #calDottedLine {
-    width: 535px;
+    width: 595px;
 }
 body.workshops.detail .skill-icon-wrapper {
     margin-bottom: 10px;
