@@ -10,6 +10,10 @@
 .fc td.fc-day.fc-has-online-event.selected {
     background-image: url(/img/gotdatedetail-online.png) ! important;
 }
+.fc-theme-standard td,
+.fc .fc-col-header-cell {
+    width: 82px;
+}
 .fc-day-grid-container {
     height: auto ! important;
 }
@@ -124,6 +128,10 @@ div#selectedDate {
 .fc .fc-daygrid-day-number {
     font-weight: normal;
 }
+.fc .fc-daygrid-body-unbalanced .fc-daygrid-day-events {
+    min-height: 0px;
+    height: 52px;
+}
 .fc .fc-button-primary {
     background-color: #4D8EA2;
     border-color: #4D8EA2;
@@ -136,6 +144,10 @@ div#selectedDate {
     background-color: #77B1C5 ! important;
     border-color: #77B1C5 ! important;
 }
+.fc .fc-daygrid-day-top {
+    position: absolute;
+    right: 0;
+}
 .fc .fc-toolbar-title {
     font-size: 18px;
 }
@@ -145,13 +157,12 @@ div#selectedDate {
 .fc td.fc-has-event span.event-count {
     display: none;
     display: block;
-    text-align: center;
     color: #fff;
-    margin-top: -1px;
-    margin-left: 1px;
-}
-.fc-day-past span.event-count {
-    margin-top: -2px ! important;
+    position: absolute;
+    left: 50%;  /* positions p relative to container */
+    top: 50%;
+    transform: translate(-50%, -50%);  /* positions p relative to its height and width */
+    margin: 0;
 }
 .fc .fc-col-header-cell {
     height: 17px;
