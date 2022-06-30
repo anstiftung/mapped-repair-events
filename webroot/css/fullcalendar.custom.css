@@ -8,7 +8,7 @@
 
 .fc td.fc-day.fc-has-online-event.hover,
 .fc td.fc-day.fc-has-online-event.selected {
-    background-image: url(/img/gotdatedetail-online.jpg) ! important;
+    background-image: url(/img/gotdatedetail-online.png) ! important;
 }
 .fc-day-grid-container {
     height: auto ! important;
