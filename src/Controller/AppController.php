@@ -120,9 +120,10 @@ class AppController extends Controller
 
     public function beforeRender(EventInterface $event)
     {
-
+        if (!$this->request->getSession()->check('isMobile') && $this->request->is('mobile')) {
+            $this->request->getSession()->write('isMobile', true);
+        }
         parent::beforeRender($event);
-
         $this->setNavigation();
         $this->set('appAuth', $this->AppAuth);
         $this->set('loggedUser', $this->AppAuth->user());
