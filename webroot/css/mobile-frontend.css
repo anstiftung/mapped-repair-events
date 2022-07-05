@@ -29,6 +29,9 @@
       width: 95%;
       float: left;
     }
+    div.socialicons {
+        display: none;
+    }
     body.users.all .page-wrapper {
        padding: 0;
     }
