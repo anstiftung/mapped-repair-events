@@ -2429,7 +2429,7 @@ div.pagination-search div.numbers {
 }
 .sort a.asc:before,
 .sort a.desc:before {
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'Font Awesome 6 Free';
     padding-right: 5px;
 }
 .sort a.asc:before {
