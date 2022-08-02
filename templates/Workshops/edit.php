@@ -28,6 +28,8 @@ use Cake\Core\Configure;
             'id' => 'workshopEditForm'
         ]);
         echo $this->Form->hidden('referer', ['value' => $referer]);
+        $this->Form->unlockField('referer');
+
         ?>
         <div class="edit">
 

@@ -42,6 +42,7 @@ $this->element('addScript', ['script' =>
             'id' => 'eventEditForm'
         ]);
         echo $this->Form->hidden('referer', ['value' => $referer]);
+        $this->Form->unlockField('referer');
 
         $i = 0;
         foreach($events as $event) {
