@@ -579,7 +579,8 @@ class UsersController extends AppController
             } else {
                 $captchaBuilder = new CaptchaBuilder($this->request->getSession()->read('captchaPhrase'));
             }
-            $captchaBuilder->build();
+            // suppress notice: Implicit conversion from float 28.5 to int loses precision
+            @$captchaBuilder->build();
             $this->set('captchaBuilder', $captchaBuilder);
         }
 

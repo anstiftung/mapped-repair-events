@@ -179,9 +179,6 @@ return [
         'skipLog' => [],
         'log' => true,
         'trace' => true,
-        'ignoredDeprecationPaths' => [
-            'vendor' . DS . 'gregwar' . DS . '*',
-        ],
     ],
 
     /*
