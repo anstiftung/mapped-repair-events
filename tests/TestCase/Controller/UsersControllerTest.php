@@ -98,16 +98,6 @@ class UsersControllerTest extends AppTestCase
 
     }
 
-    public function testRegisterValidationsNoData()
-    {
-        $this->post(
-            Configure::read('AppConfig.htmlHelper')->urlRegisterOrga(),
-            []
-        );
-        $this->assertEmptyData();
-        $this->assertNoRedirect();
-    }
-
     public function testRegisterValidationsEmail()
     {
         $this->post(
