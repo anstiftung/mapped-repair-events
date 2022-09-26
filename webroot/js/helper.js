@@ -529,9 +529,6 @@ MappedRepairEvents.Helper = {
 
     initRegistration : function() {
 
-        this.updateAntiSpamField('#UserReg', $('#UserReg7'), 7);
-        this.updateAntiSpamField('#UserReg', $('#UserReg9'), 9);
-
         // remove double ids because form is rendered twice - all labels are clickable
         var multipleCheckbox = $('.fcph .categories-checkbox-wrapper .checkbox');
         multipleCheckbox.find('label').removeAttr('for');

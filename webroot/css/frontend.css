@@ -960,7 +960,22 @@ body.users .profile .input select {
 #UserRegIntroWrapper .fcph {
   display: none;
 }
-
+#UserRegIntroWrapper .captcha-wrapper {
+    float: left;
+    margin-top: 20px;
+    padding: 0 5px;
+}
+#UserRegIntroWrapper .captcha-wrapper .input.checkbox {
+    float: right;
+    margin-top: 6px;
+    min-width: auto;
+    width: auto ! important;
+    margin-left: 15px;
+}
+#UserRegIntroWrapper .captcha-wrapper .input.checkbox label {
+    min-width: auto;
+    width: auto ! important;
+}
 #eventEditForm {
     text-align: left;
     margin: 0 0 10px 0;
