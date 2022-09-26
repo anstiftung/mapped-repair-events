@@ -594,6 +594,11 @@ class UsersController extends AppController
 
         $this->set('groups', Configure::read('AppConfig.htmlHelper')->getUserGroupsForRegistration());
 
+        $metaTags = [
+            'title' => 'Registrierung - Wähle deine Rolle: OrganisatorIn oder ReparaturhelferIn'
+        ];
+        $this->set('metaTags', $metaTags);
+
         $user = $this->User->newEmptyEntity();
 
         if (! empty($this->request->getData())) {
@@ -666,10 +671,6 @@ class UsersController extends AppController
 
         $this->set('user', $user);
 
-        $metaTags = [
-            'title' => 'Registrierung - Wähle deine Rolle: OrganisatorIn oder ReparaturhelferIn'
-        ];
-        $this->set('metaTags', $metaTags);
     }
 
     public function logout()
