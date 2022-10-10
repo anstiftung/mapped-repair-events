@@ -19,7 +19,7 @@
     "blueimp-file-upload": "^10.32.0",
     "chart.js": "^3.9.1",
     "chartjs-plugin-datalabels": "^2.1.0",
-    "ckeditor4": "^4.19.1",
+    "ckeditor4": "^4.20.0",
     "clipboard": "^2.0.11",
     "components-jqueryui": "~1.12",
     "detect_swipe": "^2.1.4",
@@ -29,13 +29,13 @@
     "jQuery-Impromptu": "https://github.com/trentrichardson/jQuery-Impromptu/tarball/master",
     "jquery-knob": "https://github.com/aterrien/jQuery-Knob/tarball/master",
     "jquery-slugify": "^1.2.5",
-    "leaflet": "^1.8.0",
+    "leaflet": "^1.9.2",
     "moment": "^2.29.4",
     "scrolltofixed": "^1.0.6",
     "select2": "^4.0.13",
     "slidebars": "^2.0.2",
     "speakingurl": "^14.0.1",
     "svelte": "^3.50.1",
-    "swiper": "^8.4.2"
+    "swiper": "^8.4.3"
   }
 }
