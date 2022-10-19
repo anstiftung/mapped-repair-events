@@ -8,6 +8,7 @@ use Cake\Event\EventInterface;
 use Cake\Mailer\Mailer;
 use Cake\Http\Exception\NotFoundException;
 use Cake\ORM\Query;
+use Gregwar\Captcha\CaptchaBuilder;
 
 class UsersController extends AppController
 {
@@ -561,8 +562,27 @@ class UsersController extends AppController
         }
     }
 
+    private function isCalledByTestSuite()
+    {
+        return !empty($_SERVER['argv']) && !empty($_SERVER['argv'][0] && !empty($_SERVER['argv'][0] == 'vendor/bin/phpunit'));
+    }
+
     public function register($userGroup=GROUPS_REPAIRHELPER)
     {
+
+        $this->set('isCalledByTestSuite', $this->isCalledByTestSuite());
+
+        if (!$this->isCalledByTestSuite()) {
+            if (empty($this->request->getData()) || $this->request->getData('Users.reload_captcha')) {
+                $captchaBuilder = new CaptchaBuilder();
+                $this->request->getSession()->write('captchaPhrase', $captchaBuilder->getPhrase());
+            } else {
+                $captchaBuilder = new CaptchaBuilder($this->request->getSession()->read('captchaPhrase'));
+            }
+            // suppress notice: Implicit conversion from float 28.5 to int loses precision
+            @$captchaBuilder->build();
+            $this->set('captchaBuilder', $captchaBuilder);
+        }
 
         $this->Country = $this->getTableLocator()->get('Countries');
         $this->set('countries', $this->Country->getForDropdown());
@@ -584,11 +604,6 @@ class UsersController extends AppController
 
         if (! empty($this->request->getData())) {
 
-            if (!empty($this->getRequest()->getData()) && ($this->getRequest()->getData('botEwX482') == '' || $this->getRequest()->getData('botEwX482') < 3)) {
-                $this->redirect('/');
-                return;
-            }
-
             $this->Skill = $this->getTableLocator()->get('Skills');
             $this->request = $this->Skill->addSkills($this->request, $this->AppAuth, 'Users');
 
@@ -609,6 +624,18 @@ class UsersController extends AppController
 
             $this->request = $this->request->withData('groups', ['_ids' => [$userGroup]]);
             $user = $this->User->patchEntity($user, $this->request->getData(), ['validate' => 'Registration']);
+
+            if (!$this->isCalledByTestSuite()) {
+                pr($this->request->getSession()->read('captchaPhrase'));
+                $captchaBuilder->setPhrase($this->request->getSession()->read('captchaPhrase'));
+                if (!$captchaBuilder->testPhrase($this->request->getData('Users.captcha'))) {
+                    $user->setError('captcha', 'Das Captcha ist nicht korrekt.');
+                }
+                if($this->request->getData('Users.reload_captcha')) {
+                    $this->request = $this->request->withData('Users.captcha', '');
+                    $this->request = $this->request->withData('Users.reload_captcha', false);
+                }
+            }
 
             if (!($user->hasErrors())) {
 

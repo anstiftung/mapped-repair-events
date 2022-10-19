@@ -12,8 +12,6 @@
         'id' => 'UserReg' . $userGroup
     ]);
 
-    $this->Form->unlockField('botEwX482');
-
     echo $this->Form->control('Users.nick', [
         'label' => __('Register: Your Nickname'),
         'required' => true,
@@ -115,8 +113,33 @@
 
     ?>
 
+    <?php if (!$isCalledByTestSuite) { ?>
+
+        <div class="captcha-wrapper">
+            <img src="<?php echo $captchaBuilder->inline(); ?>" />
+
+            <?php
+
+            echo $this->Form->control('Users.reload_captcha', [
+                'label' => 'Captcha neu laden?',
+                'onclick' => "$(this).closest('form').submit();$(this).closest('.checkbox').css('opacity', 0.5);",
+                'type' => 'checkbox',
+                'id' => null,
+            ]);
+            echo $this->Form->control('Users.captcha', [
+                'label' => '',
+                'placeholder' => 'Captcha bitte hier eintippen.',
+                'type' => 'text',
+                'id' => null,
+            ]);
+
+            ?>
+        </div>
+
+    <?php } ?>
+
     <div class="sc"></div>
-        <br>
+    <br />
 
     <?php
 

@@ -66,8 +66,7 @@ class UsersControllerTest extends AppTestCase
         $this->post(
             Configure::read('AppConfig.htmlHelper')->urlRegisterOrga(),
             [
-                'botEwX482' => 100,
-                'Users' => $this->validUserData
+                'Users' => $this->validUserData,
             ]
         );
 
@@ -99,44 +98,11 @@ class UsersControllerTest extends AppTestCase
 
     }
 
-    public function testRegisterValidationsNoData()
-    {
-        $this->post(
-            Configure::read('AppConfig.htmlHelper')->urlRegisterOrga(),
-            [
-                'botEwX482' => 100
-            ]
-        );
-        $this->assertEmptyData();
-        $this->assertNoRedirect();
-    }
-
-    public function testRegisterValidationsEmptyData()
-    {
-        $this->post(
-            Configure::read('AppConfig.htmlHelper')->urlRegisterOrga(),
-            [
-                'botEwX482' => 100,
-                'Users' => [
-                    'nick' => '',
-                    'firstname' => '',
-                    'lastname' => '',
-                    'email' => '',
-                    'zip' => '',
-                    'privacy_policy_accepted' => 0
-                ]
-            ]
-        );
-        $this->assertEmptyData();
-        $this->assertNoRedirect();
-    }
-
     public function testRegisterValidationsEmail()
     {
         $this->post(
             Configure::read('AppConfig.htmlHelper')->urlRegisterOrga(),
             [
-                'botEwX482' => 100,
                 'Users' => [
                     'email' => 'johndoe@mailinator.com',
                 ]
@@ -151,7 +117,6 @@ class UsersControllerTest extends AppTestCase
         $this->post(
             Configure::read('AppConfig.htmlHelper')->urlRegisterOrga(),
             [
-                'botEwX482' => 100,
                 'Users' => [
                     'email' => 'johndoe@gadsfadsewcadfaees.com',
                 ]
@@ -167,7 +132,6 @@ class UsersControllerTest extends AppTestCase
         $this->post(
             Configure::read('AppConfig.htmlHelper')->urlRegisterOrga(),
             [
-                'botEwX482' => 100,
                 'Users' => $this->validUserData
             ]
         );
