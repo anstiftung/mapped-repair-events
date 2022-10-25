@@ -1,0 +1,83 @@
+version: "3.1"
+services:
+  php-fpm:
+    build: .
+    container_name: rep.php
+    working_dir: /app
+    networks:
+      - nginx-frontproxy
+    volumes:
+      - ./:/app
+    environment:
+      - WEB_DOCUMENT_ROOT=/app/webroot
+    ports:
+      - "8111:80"
+
+  mysql-dev:
+    image: mysql:8.0
+    container_name: rep.mysql.dev
+    working_dir: /app
+    volumes:
+      - rep_db:/var/lib/mysql
+    env_file:
+      - mysql.env
+    ports:
+      - "3310:3306"
+    environment:
+      MYSQL_TCP_PORT: 3310
+    networks:
+      - nginx-frontproxy
+
+  mysql-test:
+    image: mysql:8.0
+    container_name: rep.mysql.test
+    restart: always
+    tmpfs: /var/lib/mysql:exec,size=1G #smaller size (eg. 256M) lead to failing tests
+    ports:
+      - '3311:3306'
+    env_file:
+      - mysql.env
+    environment:
+      MYSQL_TCP_PORT: 3311
+    networks:
+      - nginx-frontproxy
+
+  phpmyadmin-dev:
+    depends_on:
+     - mysql-dev
+    image: phpmyadmin/phpmyadmin
+    container_name: rep.phpmyadmin-dev
+    restart: always
+    ports:
+     - '8112:80'
+    environment:
+      PMA_HOST: mysql-dev
+      PMA_USER: my_user
+      PMA_PASSWORD: password
+      PMA_PORT: 3310
+      UPLOAD_LIMIT: 300M
+    networks:
+      - nginx-frontproxy
+
+  phpmyadmin-test:
+    depends_on:
+     - mysql-test
+    image: phpmyadmin/phpmyadmin
+    container_name: rep.phpmyadmin-test
+    restart: always
+    ports:
+     - '8113:80'
+    environment:
+      PMA_HOST: mysql-test
+      PMA_USER: my_user
+      PMA_PASSWORD: password
+      PMA_PORT: 3311
+      UPLOAD_LIMIT: 300M
+    networks:
+      - nginx-frontproxy
+
+volumes:
+  rep_db:
+    external: false
+networks:
+  nginx-frontproxy:
