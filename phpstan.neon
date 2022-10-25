@@ -4,5 +4,8 @@ parameters:
         - php
     paths:
         - src
+        - templates
+        - plugins/Admin/src
+        - plugins/Admin/templates
     bootstrapFiles:
         - tests/bootstrap.php

@@ -70,7 +70,7 @@ class InternController extends AdminAppController
         if (isset($extensions[$mimeType])) {
             return $extensions[$mimeType];
         } else {
-            throw new Exception('mime type not supported');
+            throw new \Exception('mime type not supported');
         }
 
     }
