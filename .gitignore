@@ -29,9 +29,6 @@ nbproject/* # NetBeans
 .sass-cache/ # Sass preprocessor
 
 
-/.settings
-/.project
-/.buildpath
 /webroot/node_modules
-
 /.phpunit.result.cache
+/.history

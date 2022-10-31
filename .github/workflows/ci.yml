@@ -9,7 +9,7 @@ on:
     paths-ignore:
       - '**.md'
       - '**.css'
-  
+
 jobs:
   ci:
     runs-on: ubuntu-22.04
@@ -38,29 +38,29 @@ jobs:
           extensions: mysql
         env:
           update: true #forces minor release update
-          
+
       - name: Setup NodeJS
         uses: actions/setup-node@v2
         with:
           node-version: '18'
-                      
+
       - uses: actions/checkout@v2
 
       - name: Setup DB
         run: |
           mysql --version
           mysql -h 127.0.0.1 --port 8888 -uroot -ppassword db_default < ./config/sql/database.sql
-          mysql -h 127.0.0.1 --port 8888 -uroot -ppassword -e "CREATE DATABASE IF NOT EXISTS db_test;"          
+          mysql -h 127.0.0.1 --port 8888 -uroot -ppassword -e "CREATE DATABASE IF NOT EXISTS db_test;"
           mysql -h 127.0.0.1 --port 8888 -uroot -ppassword db_test < ./config/sql/database.sql
           mysql -h 127.0.0.1 --port 8888 -uroot -ppassword db_test < ./config/sql/truncate-all-tables.sql
-          
-      - name: Install vendors 
+
+      - name: Install vendors
         run: |
           composer install --optimize-autoloader  --no-progress
           cp ./.github/workflows/*.php ./config/
           npm --prefix ./webroot install ./webroot
           bash bin/cake migrations migrate
-          
+
       - name: Upload Files to Server
         if: ${{ github.event_name == 'push' }}
         uses: up9cloud/action-rsync@master
@@ -75,7 +75,7 @@ jobs:
               echo ${{secrets.DEPLOY_PATH}}/builds/${{github.ref}}/webroot
               mkdir -p ${{secrets.DEPLOY_PATH}}/builds/${{github.ref}}/webroot
           SSH_ARGS: '-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
-          
+
       - name: PHPStan
         if: always()
         run: vendor/bin/phpstan analyze -c phpstan.neon --no-interaction --no-progress

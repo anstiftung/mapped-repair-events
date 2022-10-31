@@ -9,4 +9,5 @@ RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm
 
 RUN apk update && \
     apk add nodejs npm && \
-    npm install -g npm-check-updates
+    npm install -g npm-check-updates && \
+    npm install -g eslint

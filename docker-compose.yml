@@ -5,13 +5,16 @@ services:
     container_name: rep.php
     working_dir: /app
     networks:
-      - nginx-frontproxy
+      default:
+        aliases:
+          - mapped-repair-events.test
+      nginx-frontproxy:
     volumes:
       - ./:/app
     environment:
       - WEB_DOCUMENT_ROOT=/app/webroot
     ports:
-      - "8111:80"
+      - "8113:80"
 
   mysql-dev:
     image: mysql:8.0
@@ -22,9 +25,9 @@ services:
     env_file:
       - mysql.env
     ports:
-      - "3310:3306"
+      - "3330:3306"
     environment:
-      MYSQL_TCP_PORT: 3310
+      MYSQL_TCP_PORT: 3330
     networks:
       - nginx-frontproxy
 
@@ -34,11 +37,11 @@ services:
     restart: always
     tmpfs: /var/lib/mysql:exec,size=1G #smaller size (eg. 256M) lead to failing tests
     ports:
-      - '3311:3306'
+      - '3331:3306'
     env_file:
       - mysql.env
     environment:
-      MYSQL_TCP_PORT: 3311
+      MYSQL_TCP_PORT: 3331
     networks:
       - nginx-frontproxy
 
@@ -49,12 +52,12 @@ services:
     container_name: rep.phpmyadmin-dev
     restart: always
     ports:
-     - '8112:80'
+     - '8122:80'
     environment:
       PMA_HOST: mysql-dev
       PMA_USER: my_user
       PMA_PASSWORD: password
-      PMA_PORT: 3310
+      PMA_PORT: 3330
       UPLOAD_LIMIT: 300M
     networks:
       - nginx-frontproxy
@@ -66,12 +69,12 @@ services:
     container_name: rep.phpmyadmin-test
     restart: always
     ports:
-     - '8113:80'
+     - '8123:80'
     environment:
       PMA_HOST: mysql-test
       PMA_USER: my_user
       PMA_PASSWORD: password
-      PMA_PORT: 3311
+      PMA_PORT: 3331
       UPLOAD_LIMIT: 300M
     networks:
       - nginx-frontproxy
