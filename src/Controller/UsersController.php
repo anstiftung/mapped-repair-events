@@ -564,7 +564,7 @@ class UsersController extends AppController
 
     private function isCalledByTestSuite()
     {
-        return !empty($_SERVER['argv']) && !empty($_SERVER['argv'][0] && !empty($_SERVER['argv'][0] == 'vendor/bin/phpunit'));
+        return !empty($_SERVER['argv']) && !empty($_SERVER['argv'][0]) && preg_match('`/vendor/bin/phpunit`', $_SERVER['argv'][0]);
     }
 
     public function register($userGroup=GROUPS_REPAIRHELPER)
