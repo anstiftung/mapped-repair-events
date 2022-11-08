@@ -13,8 +13,9 @@ class WorkshopsFixture extends TestFixture
             'uid' => 2,
             'name' => 'Test Workshop',
             'url' => 'test-workshop',
+            'email' => 'test-workshop@mailinator.com',
             'owner' => 1,
-            'status' => APP_ON
+            'status' => APP_ON,
         ]
     ];
 

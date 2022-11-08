@@ -564,7 +564,7 @@ class UsersController extends AppController
 
     private function isCalledByTestSuite()
     {
-        return !empty($_SERVER['argv']) && !empty($_SERVER['argv'][0]) && preg_match('`/vendor/bin/phpunit`', $_SERVER['argv'][0]);
+        return !empty($_SERVER['argv']) && !empty($_SERVER['argv'][0]) && preg_match('`vendor/bin/phpunit`', $_SERVER['argv'][0]);
     }
 
     public function register($userGroup=GROUPS_REPAIRHELPER)
@@ -626,7 +626,6 @@ class UsersController extends AppController
             $user = $this->User->patchEntity($user, $this->request->getData(), ['validate' => 'Registration']);
 
             if (!$this->isCalledByTestSuite()) {
-                pr($this->request->getSession()->read('captchaPhrase'));
                 $captchaBuilder->setPhrase($this->request->getSession()->read('captchaPhrase'));
                 if (!$captchaBuilder->testPhrase($this->request->getData('Users.captcha'))) {
                     $user->setError('captcha', 'Das Captcha ist nicht korrekt.');

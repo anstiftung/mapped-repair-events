@@ -153,7 +153,7 @@ class EventsControllerTest extends AppTestCase
         ]);
         $this->_compareBasePath = ROOT . DS . 'tests' . DS . 'comparisons' . DS;
         $this->get('/events/ajaxGetAllEventsForMap');
-        $this->assertSameAsFile('events-for-map.json', $this->_response);
+        $this->assertSameAsFile('events-for-map.json', $this->_response->getBody()->__toString());
     }
 
     public function testDeleteEvent()
