@@ -50,6 +50,7 @@ class WorknewsTable extends Table
         $email->viewBuilder()->setTemplate($template);
         foreach ($subscribers as $subscriber) {
             $email->setTo($subscriber->email)
+            ->setReplyTo($workshop->email)
             ->setSubject($subject)
             ->setViewVars([
                 'url' => Configure::read('AppConfig.htmlHelper')->urlEventDetail($workshop->url, $event->uid, $event->datumstart),
