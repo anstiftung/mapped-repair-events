@@ -7,5 +7,3 @@ parameters:
         - templates
         - plugins/Admin/src
         - plugins/Admin/templates
-    bootstrapFiles:
-        - tests/bootstrap.php
