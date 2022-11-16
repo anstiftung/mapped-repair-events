@@ -12,8 +12,7 @@ services:
     volumes:
       - ./:/app
     depends_on:
-      - rep.mysql.dev
-      - rep.mysql.test
+      - mysql-test
     environment:
       - WEB_DOCUMENT_ROOT=/app/webroot
     ports:
