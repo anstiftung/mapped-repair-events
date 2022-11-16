@@ -30,7 +30,6 @@ jobs:
           docker exec -w /app/webroot rep.php npm install
           docker exec -i rep.mysql.test mysql -h 127.0.0.1 --port 3331 -umy_user -ppassword my_app < ./config/sql/database.sql
           docker exec -i rep.mysql.test mysql -h 127.0.0.1 --port 3331 -umy_user -ppassword my_app < ./config/sql/truncate-all-tables.sql
-          docker exec -w /app rep.php bash ./bin/cake migrations migrate --connection=test
 
       - name: Upload Files to Server
         if: ${{ github.event_name == 'push' }}
