@@ -4,6 +4,7 @@ services:
     build: .
     container_name: rep.php
     working_dir: /app
+    user: ${CURRENT_UID}
     networks:
       default:
         aliases:
@@ -11,6 +12,8 @@ services:
       nginx-frontproxy:
     volumes:
       - ./:/app
+    depends_on:
+      - mysql-test
     environment:
       - WEB_DOCUMENT_ROOT=/app/webroot
     ports:

@@ -16,27 +16,26 @@ return [
     ],
     'Datasources' => [
         'default' => [
-            'host' => '127.0.0.1',
-            'username' => 'root',
+            'host' => 'mysql-test',
+            'username' => 'my_user',
             'password' => 'password',
-            'database' => 'db_default',
-            'port' => '8888',
+            'database' => 'my_app',
+            'port' => 3331,
         ],
         'test' => [
-            'host' => '127.0.0.1',
-            'username' => 'root',
+            'host' => 'mysql-test',
+            'username' => 'my_user',
             'password' => 'password',
-            'database' => 'db_test',
-            'port' => '8888',
-        ],
+            'database' => 'my_app',
+            'port' => 3331,
+        ]
     ],
-
     'Security' => [
         'salt' => '1352742f9cf63228087273ae55bdf6bb2d1a75b82c7e3c6c7023c3014c703a85',
     ],
 
     'AppConfig' => [
-        'serverName' => 'http://localhost',
+        'serverName' => 'http://localhost:8113',
     ]
 
 ];

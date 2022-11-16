@@ -6,10 +6,16 @@
  * unit tests in this file.
  */
 use Cake\Core\Configure;
+use Migrations\Migrations;
 
 require dirname(__DIR__) . '/vendor/autoload.php';
 
 require dirname(__DIR__) . '/config/bootstrap.php';
+
+// 2) run new migrations (located in main folder)
+//$migrator->run([], false); // causes "Going to drop all tables in this source, and re-apply migrations."
+$migrations = new Migrations();
+$migrations->migrate(['connection' => 'test']);
 
 $_SERVER['PHP_SELF'] = '/';
 
