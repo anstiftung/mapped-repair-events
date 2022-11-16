@@ -15,13 +15,6 @@ return [
         ],
     ],
     'Datasources' => [
-        'default' => [
-            'host' => 'mysql-test',
-            'username' => 'my_user',
-            'password' => 'password',
-            'database' => 'my_app',
-            'port' => 3331,
-        ],
         'test' => [
             'host' => 'mysql-test',
             'username' => 'my_user',
