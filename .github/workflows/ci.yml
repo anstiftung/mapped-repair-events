@@ -25,7 +25,7 @@ jobs:
       - name: Setup Dev Environment
         run: |
           bash ./devtools/set-permissions.sh
-          cp ./github/workflows/app_custom.php ./config/app_custom.php
+          cp ./.github/workflows/app_custom.php ./config/app_custom.php
           docker exec -w /app rep.php composer install
           docker exec -w /app/webroot rep.php npm install
           docker exec rep.mysql.test mysql -h 127.0.0.1 --port 3331 -umy_user -ppassword my_app < ./config/sql/database.sql
