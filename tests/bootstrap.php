@@ -20,7 +20,7 @@ $migrations->migrate(['connection' => 'test']);
 $_SERVER['PHP_SELF'] = '/';
 
 Configure::write('AppConfig.adminUserUid', 8);
-g
+
 // phpunit with enabled processIsolation sends headers before output
 // https://github.com/cakephp/docs/pull/6988
 session_id('cli');
