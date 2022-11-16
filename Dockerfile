@@ -11,3 +11,8 @@ RUN apk update && \
     apk add nodejs npm && \
     npm install -g npm-check-updates && \
     npm install -g eslint
+
+#avoid permission error on github actions:
+#Your cache folder contains root-owned files, due to a bug in
+#npm ERR! previous versions of npm which has since been addressed.
+RUN npm config set cache /app/tmp --global
