@@ -16,7 +16,6 @@ TRUNCATE `metatags`;
 TRUNCATE `newsletters`;
 TRUNCATE `ords_categories`;
 TRUNCATE `pages`;
-TRUNCATE `phinxlog`;
 TRUNCATE `photos`;
 TRUNCATE `posts`;
 TRUNCATE `roots`;
