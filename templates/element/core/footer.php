@@ -1,8 +1,6 @@
 <?php
 use Cake\Core\Configure;
 
-use function PHPSTORM_META\map;
-
 $menu = [
     [
         'name' => '&copy; ' . date('Y') . ' ' . Configure::read('AppConfig.InitiativeNamePlural'),
