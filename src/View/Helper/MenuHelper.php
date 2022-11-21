@@ -72,6 +72,7 @@ class MenuHelper extends Helper
                 $item['name'],
                 $item['options']['style'] ?? '',
                 $item['options']['class'] ?? [],
+                $item['options']['target'] ?? '',
             );
 
         if (!empty($item['children'])) {
@@ -87,7 +88,7 @@ class MenuHelper extends Helper
         return $tmpMenuItem;
     }
 
-    private function renderMenuElement($slug, $name, $style = '', $class = [])
+    private function renderMenuElement($slug, $name, $style = '', $class = [], $target = '')
     {
 
         if ($style != '') {
@@ -110,7 +111,11 @@ class MenuHelper extends Helper
             $classString = ' class="' . join(' ', $class). '" ';
         }
 
-        $naviElement = '<a' . $classString . $style.' href="'.$slug.'" title="'.h(strip_tags($name)).'">'.$name.'</a>';
+        if ($target != '') {
+            $target = ' target="'.$target.'"';
+        }
+
+        $naviElement = '<a' . $classString . $target . $style.' href="'.$slug.'" title="'.h(strip_tags($name)).'">'.$name.'</a>';
 
         return $naviElement;
     }

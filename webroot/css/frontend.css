@@ -2156,6 +2156,12 @@ body.users .profile .categories-checkbox-wrapper > div.input > label,
     margin-top: 0px;
     margin-right: 8px;
 }
+.user-reg a.newsletter {
+    margin-left: 34px;
+    float: left;
+    text-align: left;
+    margin-bottom: 5px;
+}
 #passwort-aendern label,
 #neues-passwort-anfordern label,
 #registrieren label {

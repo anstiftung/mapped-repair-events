@@ -1,6 +1,8 @@
 <?php
 use Cake\Core\Configure;
 
+use function PHPSTORM_META\map;
+
 $menu = [
     [
         'name' => '&copy; ' . date('Y') . ' ' . Configure::read('AppConfig.InitiativeNamePlural'),
@@ -16,7 +18,10 @@ $staticMenu = [
     ],
     [
         'name' => 'Newsletter',
-        'slug' => '/newsletter'
+        'slug' => Configure::read('AppConfig.externNewsletterUrl'),
+        'options' => [
+            'target' => '_blank',
+        ],
     ],
     [
         'name' => 'Widgets',

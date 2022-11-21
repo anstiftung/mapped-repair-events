@@ -27,7 +27,7 @@ return function (RouteBuilder $routes) {
         $routes->redirect('/online-reparaturcafe', '/seite/online-reparaturcafe');
         $routes->redirect('/seite/reparaturwissen', '/reparaturwissen');
         $routes->redirect('/repair-cafe-ulm', '/reparatur-cafe-ulm');
-        $routes->redirect('/newsletter', 'https://civicrm.anstiftung.de/civicrm_newsletter/subscribe/default');
+        $routes->redirect('/newsletter', Configure::read('AppConfig.externNewsletterUrl'));
         /* END custom redirects */
 
         $routes->setExtensions(['html', 'rss', 'xml', 'ics']);
