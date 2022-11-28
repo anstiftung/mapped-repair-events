@@ -16,7 +16,10 @@ $staticMenu = [
     ],
     [
         'name' => 'Newsletter',
-        'slug' => '/newsletter'
+        'slug' => Configure::read('AppConfig.externNewsletterUrl'),
+        'options' => [
+            'target' => '_blank',
+        ],
     ],
     [
         'name' => 'Widgets',

@@ -27,6 +27,7 @@ return function (RouteBuilder $routes) {
         $routes->redirect('/online-reparaturcafe', '/seite/online-reparaturcafe');
         $routes->redirect('/seite/reparaturwissen', '/reparaturwissen');
         $routes->redirect('/repair-cafe-ulm', '/reparatur-cafe-ulm');
+        $routes->redirect('/newsletter', Configure::read('AppConfig.externNewsletterUrl'));
         /* END custom redirects */
 
         $routes->setExtensions(['html', 'rss', 'xml', 'ics']);
@@ -96,10 +97,6 @@ return function (RouteBuilder $routes) {
         $routes->connect('/laufzettel/delete/*', ['controller'=>'infoSheets', 'action'=>'delete']);
         $routes->connect('/laufzettel/download/*', ['controller'=>'infoSheets', 'action'=>'download']);
         $routes->connect('/laufzettel/full-download/*', ['controller'=>'infoSheets', 'action'=>'fullDownload']);
-
-        $routes->connect('/newsletter', ['controller'=>'newsletters', 'action'=>'index']);
-        $routes->connect('/newsletter/activate/*', ['controller'=>'newsletters', 'action'=>'activate']);
-        $routes->connect('/newsletter/unsubscribe/*', ['controller'=>'newsletters', 'action'=>'unsubscribe']);
 
         $routes->connect('/seite/*', ['controller' => 'pages', 'action' => 'detail']);
 

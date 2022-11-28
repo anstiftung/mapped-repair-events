@@ -526,20 +526,6 @@ class UsersController extends AppController
         $this->User->save($entity);
 
         $this->AppAuth->setUser($user->toArray());
-
-        // activate newsletter if existing
-        $this->Newsletter = $this->getTableLocator()->get('Newsletters');
-        $newsletter = $this->Newsletter->find('all', [
-            'conditions' => [
-                'Newsletters.email' => $user->email,
-                'Newsletters.confirm != \'ok\''
-            ]
-        ])->first();
-        if (!empty($newsletter)) {
-            $this->loadComponent('CptNewsletter');
-            $this->CptNewsletter->activateNewsletterAndSendNotification($newsletter);
-        }
-
         $this->AppFlash->setFlashMessage('Dein Account ist nun aktiviert, du bist eingeloggt und kannst deine Profildaten ergänzen bzw. dein Passwort ändern.');
 
         $this->redirect(Configure::read('AppConfig.htmlHelper')->urlUserHome());

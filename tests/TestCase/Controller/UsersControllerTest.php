@@ -126,28 +126,6 @@ class UsersControllerTest extends AppTestCase
         $this->assertNoRedirect();
     }
 
-    public function testRegisterNewsletter()
-    {
-        $this->validUserData['i_want_to_receive_the_newsletter'] = 1;
-        $this->post(
-            Configure::read('AppConfig.htmlHelper')->urlRegisterOrga(),
-            [
-                'Users' => $this->validUserData
-            ]
-        );
-        $newsletter = $this->getNewsletterData();
-        $this->assertEquals(1, count($newsletter));
-        $this->assertNotEquals('ok', $newsletter[0]->confirm);
-
-        $user = $this->getRegisteredUser();
-        $this->get('/users/activate/' . $user->confirm);
-
-        $newsletter = $this->getNewsletterData();
-        $this->assertEquals('ok', $newsletter[0]->confirm);
-        $this->assertMailCount(2);
-
-    }
-
     public function testDeleteRepairhelperUserWithNonDeletedWorkshop()
     {
         $userUid = 1;
@@ -261,17 +239,6 @@ class UsersControllerTest extends AppTestCase
         ])->first();
         $this->assertEmpty($user);
 
-    }
-
-    private function getNewsletterData()
-    {
-        $this->Newsletter = $this->getTableLocator()->get('Newsletters');
-        $newsletter = $this->Newsletter->find('all', [
-            'conditions' => [
-                'Newsletters.email' => $this->validUserData['email']
-            ]
-        ])->toArray();
-        return $newsletter;
     }
 
     private function getRegisteredUser()

@@ -53,6 +53,7 @@ return [
         'tmpUploadFileSize' => 800,
         'twitterUsername' => 'your-twitter-username',
         'facebookUsername' => 'your-facebook-username',
+        'externNewsletterUrl' => 'https://civicrm.anstiftung.de/civicrm_newsletter/subscribe/default',
         'tmpUploadImagesDir' => '/tmp/images',
         'thumbSizes' => [
              '50' => [],

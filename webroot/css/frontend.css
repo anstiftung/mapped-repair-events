@@ -203,7 +203,6 @@ hr {
     text-align: center;
     margin: 49px 0% 0% 10px;
 }
-#framedContent {}
 /* IFRAME EVENTS */
 
 #framedContent .iframe-events {
@@ -313,26 +312,6 @@ body.workshops.home h2 {
   margin-left: 18px;
   margin-top: 0;
   font-size: 12px;
-}
-body.newsletters.index #content p {
-  line-height: 19px;
-  margin-bottom: 10px;
-}
-body.newsletters.index .input {
-    float: left;
-    margin-right: 10px;
-}
-body.newsletters.index .input label {
-  font-weight: bold;
-  margin-right: 10px;
-}
-body.newsletters.index form {
-  margin-top: 10px;
-  margin-bottom: 40px;
-}
-body.newsletters.index .error-message {
-  margin-top: 5px;
-  text-align: right;
 }
 i.fa-border {
     background-color: #fff;
@@ -663,7 +642,7 @@ body.workshops.detail .calEvent {
     -khtml-border-radius: 3px;
     -webkit-border-radius: 3px;
 }
-#postboxuser {} #welcomeposts h3 {
+#welcomeposts h3 {
     margin-bottom: 8px;
     color: #4D8EA2;
     font-size: 13px
@@ -888,7 +867,7 @@ body.users .profile .input select {
     margin: 0px;
     border-bottom: 1px solid #ccc;
 }
-#cbskillslabel {} .private {
+.private {
     float: left;
 }
 .pzip,
@@ -1121,7 +1100,6 @@ div.input.checkbox.long label {
     width: 60px;
     float: none;
 }
-.hider input {}
 /* Events */
 
 .eventwrap,
@@ -1139,7 +1117,7 @@ div.input.checkbox.long label {
     margin: 0px;
     display: none
 }
-.wsbeschreibung {} .eventskills .skill_icon {
+.eventskills .skill_icon {
     background-size: 85% 85%;
     background-repeat: no-repeat
 }
@@ -1154,16 +1132,14 @@ div.input.checkbox.long label {
     font-size: 18px;
     font-weight: bold
 }
-.eventpost,
-.postcontent {} .dotbor {
+.dotbor {
     border-bottom: 2px dotted black;
 }
 .dotbor:last-child {
     border-bottom: none;
 }
 /* Table Lists*/
-
-#tbllist {} #tbllist th {
+#tbllist th {
     text-align: center;
     border-bottom: 2px solid black;
     padding: 8px 0px;
@@ -2156,6 +2132,12 @@ body.users .profile .categories-checkbox-wrapper > div.input > label,
     margin-top: 0px;
     margin-right: 8px;
 }
+.user-reg a.newsletter {
+    margin-left: 34px;
+    float: left;
+    text-align: left;
+    margin-bottom: 5px;
+}
 #passwort-aendern label,
 #neues-passwort-anfordern label,
 #registrieren label {
@@ -2245,8 +2227,7 @@ div.sortable-list td.alphabet {
     height: 22px;
     background: url(/img/core/alphabet.gif) no-repeat 0px 3px;
 }
-div.sortable-list table.list tr td:last-child,
-div.sortable-list table.list tr th:last-child {} div.sortable-list .sort {
+div.sortable-list .sort {
     margin-bottom: 10px;
     float: left;
 }
@@ -2489,7 +2470,7 @@ div.pagination-search div.numbers {
 #footer a:hover {
     color: #4D8EA2;
 }
-#metadescText {} #metadescText #metadescTA {
+#metadescText #metadescTA {
     min-width: 300px;
     display: block
 }
@@ -2569,7 +2550,7 @@ body.posts.detail .right .ckeditor-text img,
 body.posts.detail .right .ckeditor-text img {
   height: auto ! important;
 }
-body..featherlight:not(.featherlight-swipe-aware) .featherlight-image {
+body.featherlight:not(.featherlight-swipe-aware) .featherlight-image {
   height: 70vh;
   width: auto;
 }
@@ -2840,7 +2821,7 @@ body.workshops.detail article.full {
     margin-top: -13px;
     padding: 2px;
 }
-.allHeaders {} .allSearch {} .allCoaches {
+.allCoaches {
     padding-top: 50px;
 }
 #skill_icons_new {

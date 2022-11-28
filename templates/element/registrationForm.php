@@ -1,6 +1,9 @@
 <div class="ViewsWrapper">
 
 <?php
+
+use Cake\Core\Configure;
+
     echo $this->element('highlightNavi', [
         'main' => 'Registrieren'
     ]);
@@ -97,12 +100,7 @@
     ]);
     echo '</div>';
 
-    echo $this->Form->control('Users.i_want_to_receive_the_newsletter', [
-        'label' => 'Ich möchte den Netzwerk-Newsletter erhalten.',
-        'escape' => false,
-        'type' => 'checkbox',
-        'id' => null
-    ]);
+    echo '<a class="newsletter" href="'.Configure::read('AppConfig.externNewsletterUrl').'" target="_blank"><i class="fas fa-arrow-right"></i> Hier den Netzwerk-Newsletter abonnieren.</a>';
 
     echo $this->Form->control('Users.privacy_policy_accepted', [
         'label' => ' Ich habe die <a href="'.$this->Html->urlPageDetail('datenschutz').'" target="_blank">Datenschutzerklärung</a> gelesen und stimme dieser zu.',
