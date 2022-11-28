@@ -210,8 +210,7 @@ MappedRepairEvents.WidgetStatistics = {
                         ticks: {
                             autoSkip: false,
                             maxRotation: 90,
-                            minRotation: 90,
-                            labelOffset: -5
+                            minRotation: 90
                         },
                         grid: {
                             display: false
