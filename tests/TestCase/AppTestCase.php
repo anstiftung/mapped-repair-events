@@ -20,7 +20,6 @@ class AppTestCase extends TestCase
         'app.InfoSheets',
         'app.InfoSheetsFormFieldOptions',
         'app.Metatags',
-        'app.Newsletters',
         'app.Pages',
         'app.Posts',
         'app.Photos',

@@ -98,10 +98,6 @@ return function (RouteBuilder $routes) {
         $routes->connect('/laufzettel/download/*', ['controller'=>'infoSheets', 'action'=>'download']);
         $routes->connect('/laufzettel/full-download/*', ['controller'=>'infoSheets', 'action'=>'fullDownload']);
 
-        $routes->connect('/newsletter', ['controller'=>'newsletters', 'action'=>'index']);
-        $routes->connect('/newsletter/activate/*', ['controller'=>'newsletters', 'action'=>'activate']);
-        $routes->connect('/newsletter/unsubscribe/*', ['controller'=>'newsletters', 'action'=>'unsubscribe']);
-
         $routes->connect('/seite/*', ['controller' => 'pages', 'action' => 'detail']);
 
         $routes->connect('/post/*', ['controller'=>'posts', 'action'=>'detail']);

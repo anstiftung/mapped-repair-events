@@ -631,16 +631,6 @@
         height: 32px;
         background-size: 32px 32px;
     }
-    body.newsletters.index form strong {
-        margin-bottom: 5px;
-        float: left;
-    }
-    body.newsletters.index form .nlep2 {
-        width: 81px;
-    }
-    body.newsletters.index form label {
-        line-height: 25px;
-    }
     body.users .profile {
         width: 100%;
     }

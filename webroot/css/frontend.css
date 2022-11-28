@@ -313,26 +313,6 @@ body.workshops.home h2 {
   margin-top: 0;
   font-size: 12px;
 }
-body.newsletters.index #content p {
-  line-height: 19px;
-  margin-bottom: 10px;
-}
-body.newsletters.index .input {
-    float: left;
-    margin-right: 10px;
-}
-body.newsletters.index .input label {
-  font-weight: bold;
-  margin-right: 10px;
-}
-body.newsletters.index form {
-  margin-top: 10px;
-  margin-bottom: 40px;
-}
-body.newsletters.index .error-message {
-  margin-top: 5px;
-  text-align: right;
-}
 i.fa-border {
     background-color: #fff;
     border-radius: 3px;
