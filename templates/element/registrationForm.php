@@ -100,7 +100,7 @@ use Cake\Core\Configure;
     ]);
     echo '</div>';
 
-    echo '<a class="newsletter" href="'.Configure::read('AppConfig.externNewsletterUrl').'" target="_blank">Ich möchte den Netzwerk-Newsletter erhalten.</a>';
+    echo '<a class="newsletter" href="'.Configure::read('AppConfig.externNewsletterUrl').'" target="_blank"><i class="fas fa-arrow-right"></i> Hier den Netzwerk-Newsletter abonnieren.</a>';
 
     echo $this->Form->control('Users.privacy_policy_accepted', [
         'label' => ' Ich habe die <a href="'.$this->Html->urlPageDetail('datenschutz').'" target="_blank">Datenschutzerklärung</a> gelesen und stimme dieser zu.',
