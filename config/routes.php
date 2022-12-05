@@ -103,6 +103,8 @@ return function (RouteBuilder $routes) {
         $routes->connect('/post/*', ['controller'=>'posts', 'action'=>'detail']);
         $routes->connect('/{blogUrl}/*', ['controller'=>'blogs', 'action'=>'detail'], ['blogUrl' => 'neuigkeiten|'.Configure::read('AppConfig.htmlHelper')->getAdditionalBlogCategoryUrl()]);
 
+        $routes->connect('/api/splitter', ['controller' => 'posts', 'action' => 'getSplitter']);
+
         // für normale cake routings (users controller)
         $routes->connect('/{controller}/{action}/*');
 
