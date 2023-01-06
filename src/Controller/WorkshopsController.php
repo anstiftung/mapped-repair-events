@@ -24,6 +24,7 @@ class WorkshopsController extends AppController
             'ajaxGetAllWorkshopsForMap',
             'ajaxGetWorkshopDetail',
             'ajaxGetWorkshopsAndUsersForTags',
+            'getWorkshopsForHyperModeWebsite',
             'home',
             'cluster',
             'detail',
@@ -427,6 +428,45 @@ class WorkshopsController extends AppController
         ]);
 
         $this->viewBuilder()->setOption('serialize', ['status', 'message', 'workshops', 'users']);
+
+    }
+
+    public function getWorkshopsForHyperModeWebsite()
+    {
+
+        $this->RequestHandler->renderAs($this, 'json');
+
+        $workshops = $this->Workshop->find('all', [
+            'conditions' => [
+                'Workshops.status' => APP_ON,
+            ],
+            'contain' => [
+                'Categories' => [
+                    'sort' => [
+                        'Categories.name' => 'ASC', //3D-Reparatur should be first
+                    ],
+                ],
+                'Countries',
+            ],
+            'order' => ['Workshops.created' => 'DESC'],
+        ]);
+
+        $preparedWorkshops = [];
+        foreach($workshops as $workshop) {
+            $preparedWorkshops[] = [
+                'name' => $workshop->name,
+                'city' => $workshop->city,
+                'url' => Configure::read('AppConfig.serverName') . Configure::read('AppConfig.htmlHelper')->urlWorkshopDetail($workshop->url),
+                'image' => $workshop->image != '' ?  Configure::read('AppConfig.serverName') . Configure::read('AppConfig.htmlHelper')->getThumbs150Image($workshop->image, 'workshops') : Configure::read('AppConfig.serverName') . Configure::read('AppConfig.htmlHelper')->getThumbs100Image('rclogo-100.jpg', 'workshops'),
+                'hasOwnLogo' => $workshop->image == '' ? false : true,
+                'categories' => Hash::extract($workshop->categories, '{n}.name'),
+            ];
+        }        
+
+        $this->set([
+            'workshops' => $preparedWorkshops,
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['workshops']);
 
     }
 

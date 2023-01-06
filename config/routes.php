@@ -103,6 +103,9 @@ return function (RouteBuilder $routes) {
         $routes->connect('/post/*', ['controller'=>'posts', 'action'=>'detail']);
         $routes->connect('/{blogUrl}/*', ['controller'=>'blogs', 'action'=>'detail'], ['blogUrl' => 'neuigkeiten|'.Configure::read('AppConfig.htmlHelper')->getAdditionalBlogCategoryUrl()]);
 
+        $routes->connect('/api/splitter', ['controller' => 'posts', 'action' => 'getSplitter']);
+        $routes->connect('/api/workshops', ['controller' => 'workshops', 'action' => 'getWorkshopsForHyperModeWebsite']);
+
         // für normale cake routings (users controller)
         $routes->connect('/{controller}/{action}/*');
 
