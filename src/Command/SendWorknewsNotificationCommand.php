@@ -9,6 +9,10 @@ use Cake\Console\ConsoleIo;
 class SendWorknewsNotificationCommand extends Command
 {
 
+    public $Event;
+
+    public $Worknews;
+
     public function execute(Arguments $args, ConsoleIo $io)
     {
 

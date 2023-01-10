@@ -12,6 +12,11 @@ class NpmPostInstallCommand extends Command
 {
 
     public $vendorDir;
+    public $leafletPath;
+    public $featherlightPath;
+    public $fontawesomePath;
+    public $jqueryUiPath;
+    public $jqueryKnobPath;
     
     public function execute(Arguments $args, ConsoleIo $io)
     {
