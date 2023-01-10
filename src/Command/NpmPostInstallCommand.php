@@ -1,20 +1,26 @@
 <?php
 
-namespace App\Shell;
+namespace App\Command;
 
+use Cake\Command\Command;
+use Cake\Console\Arguments;
+use Cake\Console\ConsoleIo;
 use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
 
-class NpmPostInstallShell extends AppShell
+class NpmPostInstallCommand extends Command
 {
 
     public $vendorDir;
-    /**
-     * do not call parent::main because db connection might not be available
-     * @see AppShell::main()
-     */
-    public function main()
+    public $leafletPath;
+    public $featherlightPath;
+    public $fontawesomePath;
+    public $jqueryUiPath;
+    public $jqueryKnobPath;
+    
+    public function execute(Arguments $args, ConsoleIo $io)
     {
+
         $this->vendorDir = WWW_ROOT . 'node_modules';
 
         $this->fontawesomePath = $this->vendorDir . DS . '@fortawesome' . DS . 'fontawesome-free' . DS;
@@ -24,10 +30,13 @@ class NpmPostInstallShell extends AppShell
         $this->featherlightPath = $this->vendorDir . DS . 'featherlight' . DS;
 
         $this->cleanOverheadFromDependencies();
-        $this->copyAdaptedElfinderFiles();
-        $this->copyJqueryUiImages();
-        $this->copyFontawesomeFonts();
-        $this->copyLeafletImages();
+        $this->copyAdaptedElfinderFiles($io);
+        $this->copyJqueryUiImages($io);
+        $this->copyFontawesomeFonts($io);
+        $this->copyLeafletImages($io);
+
+        return static::CODE_SUCCESS;
+
     }
 
     private function cleanOverheadFromDependencies()
@@ -61,35 +70,34 @@ class NpmPostInstallShell extends AppShell
         $file = new File($this->featherlightPath . 'assets' . DS . 'stylesheets' . DS . 'bootstrap.min.css');
         $file->delete();
 
-
     }
 
-    private function copyFontawesomeFonts()
+    private function copyFontawesomeFonts($io)
     {
         $folder = new Folder($this->fontawesomePath . 'webfonts' . DS);
         $folder->copy(WWW_ROOT . 'webfonts');
-        $this->out('Fontawesome fonts copied.');
+        $io->out('Fontawesome fonts copied.');
     }
 
     /**
      * if asset compress is on (debug=0=)
      * images linked in css files have to be located in WEBROOT/cache
      */
-    private function copyJqueryUiImages()
+    private function copyJqueryUiImages($io)
     {
         $folder = new Folder($this->jqueryUiPath . 'themes' . DS . 'smoothness' . DS . 'images' . DS);
         $folder->copy(WWW_ROOT . 'cache' . DS . 'images');
-        $this->out('JQueryUI images copied.');
+        $io->out('JQueryUI images copied.');
     }
 
-    private function copyLeafletImages()
+    private function copyLeafletImages($io)
     {
         $folder = new Folder($this->leafletPath . 'dist' . DS . 'images' . DS);
         $folder->copy(WWW_ROOT . 'cache' . DS . 'images');
-        $this->out('Leaflet images copied.');
+        $io->out('Leaflet images copied.');
     }
 
-    private function copyAdaptedElfinderFiles()
+    private function copyAdaptedElfinderFiles($io)
     {
         $elfinderConfigDir = ROOT . DS . 'config' . DS . 'elfinder' . DS;
 
@@ -100,7 +108,7 @@ class NpmPostInstallShell extends AppShell
 
         foreach ($adaptedFiles as $file) {
             copy($file, preg_replace('/config/', 'webroot' . DS . 'js', $file, 1));
-            $this->out('Elfinder config file ' . $file . ' copied successfully.');
+            $io->out('Elfinder config file ' . $file . ' copied successfully.');
         }
     }
 }

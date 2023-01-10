@@ -1,11 +1,15 @@
 <?php
 
-namespace App\Shell;
+namespace App\Command;
 
-class CleanSessionsShell extends AppShell
+use Cake\Command\Command;
+use Cake\Console\Arguments;
+use Cake\Console\ConsoleIo;
+
+class CleanSessionsCommand extends Command
 {
 
-    public function main()
+    public function execute(Arguments $args, ConsoleIo $io)
     {
 
         $path = TMP . 'sessions' . DS;
@@ -23,6 +27,8 @@ class CleanSessionsShell extends AppShell
             }
             closedir($handle);
         }
+
+        return static::CODE_SUCCESS;
 
     }
 

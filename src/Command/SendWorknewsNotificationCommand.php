@@ -1,11 +1,19 @@
 <?php
 
-namespace App\Shell;
+namespace App\Command;
 
-class SendWorknewsNotificationShell extends AppShell
+use Cake\Command\Command;
+use Cake\Console\Arguments;
+use Cake\Console\ConsoleIo;
+
+class SendWorknewsNotificationCommand extends Command
 {
 
-    public function main()
+    public $Event;
+
+    public $Worknews;
+
+    public function execute(Arguments $args, ConsoleIo $io)
     {
 
         $this->Event = $this->getTableLocator()->get('Events');
@@ -33,6 +41,8 @@ class SendWorknewsNotificationShell extends AppShell
                 $this->Worknews->sendNotifications($subscribers, 'Reparatur-Termin nächste Woche: ' . $event->workshop->name, 'event_next_week', $event->workshop, $event);
             }
         }
+
+        return static::CODE_SUCCESS;
 
     }
 
