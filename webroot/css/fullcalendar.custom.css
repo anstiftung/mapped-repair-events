@@ -133,8 +133,8 @@ div#selectedDate {
     height: 52px;
 }
 .fc .fc-button-primary {
-    background-color: #4D8EA2;
-    border-color: #4D8EA2;
+    background-color: #4D8EA2 ! important;
+    border-color: #4D8EA2 ! important;
 }
 .fc .fc-button-primary:focus {
     box-shadow: inherit;
@@ -149,10 +149,10 @@ div#selectedDate {
     right: 0;
 }
 .fc .fc-toolbar-title {
-    font-size: 18px;
+    font-size: 18px ! important;
 }
 .fc .fc-toolbar.fc-header-toolbar {
-    margin-bottom: 7px;
+    margin-bottom: 7px ! important;
 }
 .fc td.fc-has-event span.event-count {
     display: none;
