@@ -2,12 +2,11 @@
 
 namespace App\View\Helper;
 
-use Cake\Core\Configure;
-use Cake\Filesystem\Folder;
 use Cake\View\View;
+use Cake\Core\Configure;
 use Cake\View\Helper\HtmlHelper;
-use App\Controller\Component\StringComponent;
 use Cake\Datasource\FactoryLocator;
+use App\Controller\Component\StringComponent;
 
 class MyHtmlHelper extends HtmlHelper {
 
@@ -513,9 +512,16 @@ class MyHtmlHelper extends HtmlHelper {
             if (!empty($user->categories)) {
                 $categoryIdForUserProfileImage = $user->categories[rand(0, count($user->categories) - 1)]->id;
             } else {
-                $dir = new Folder(WWW_ROOT . '/img/user-profile');
-                $files = $dir->find('.*\.png');
-                $categoryIdForUserProfileImage = preg_replace('/[^0-9]/', '', $files[rand(0, count($files) - 1)]);
+                $path = WWW_ROOT . '/img/user-profile';
+                $dir = new \DirectoryIterator($path);
+                $files = [];
+                foreach ($dir as $fileinfo) {
+                    if ($fileinfo->isFile() && $fileinfo->getExtension() == 'png') {
+                        $files[] = $fileinfo->getFilename();
+                    }
+                    $categoryIdForUserProfileImage = preg_replace('/[^0-9]/', '', $files[rand(0, count($files) - 1)]);
+                }
+                
             }
             $userImageSrc = '/img/user-profile/user-profile-image-'.$categoryIdForUserProfileImage.'.png';
         }

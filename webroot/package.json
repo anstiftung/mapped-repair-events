@@ -11,7 +11,7 @@
   "license": "MIT",
   "homepage": "https://github.com/anstiftung/mapped-repair-events",
   "scripts": {
-    "install": "bash ../bin/cake npm_post_install"
+    "install": "bash ../devtools/npm-post-install.sh"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "6.2.1",
@@ -21,7 +21,6 @@
     "chartjs-plugin-datalabels": "^2.2.0",
     "ckeditor4": "^4.20.1",
     "clipboard": "^2.0.11",
-    "components-jqueryui": "~1.12",
     "detect_swipe": "^2.1.4",
     "featherlight": "^1.7.14",
     "fullcalendar": "^5.11.3",
@@ -29,6 +28,7 @@
     "jQuery-Impromptu": "https://github.com/trentrichardson/jQuery-Impromptu/tarball/master",
     "jquery-knob": "https://github.com/aterrien/jQuery-Knob/tarball/master",
     "jquery-slugify": "^1.2.5",
+    "jquery-ui": "^1.13.2",
     "leaflet": "^1.9.3",
     "moment": "^2.29.4",
     "scrolltofixed": "^1.0.6",

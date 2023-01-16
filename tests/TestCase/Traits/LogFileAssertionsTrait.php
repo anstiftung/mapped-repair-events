@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Test\TestCase\Traits;
-use Cake\Filesystem\File;
 
 trait LogFileAssertionsTrait
 {
@@ -14,13 +13,15 @@ trait LogFileAssertionsTrait
 
     private function getLogFile($name)
     {
-        return new File(ROOT . DS . 'logs' . DS . 'cli-' . $name . '.log');
+        return ROOT . DS . 'logs' . DS . 'cli-' . $name . '.log';
     }
 
-    private function resetLogs()
+    protected function resetLogs(): void
     {
-        $this->getLogFile('debug')->write('');
-        $this->getLogFile('error')->write('');
+        file_put_contents($this->getLogFile('debug'), '');
+        file_put_contents($this->getLogFile('error'), '');
+        file_put_contents($this->getLogFile('cli-debug'), '');
+        file_put_contents($this->getLogFile('cli-error'), '');
     }
 
     public function tearDown(): void
@@ -29,13 +30,13 @@ trait LogFileAssertionsTrait
         $this->assertLogFilesForErrors();
     }
 
-    private function assertLogFilesForErrors()
+    protected function assertLogFilesForErrors()
     {
-        $log = $this->getLogFile('debug')->read(true, 'r');
-        $log .= $this->getLogFile('error')->read(true, 'r');
-        $this->assertTextNotContains('Warning', $log);
-        $this->assertTextNotContains('Notice', $log);
-        $this->assertTextNotContains('Error: ', $log);
+        $log = file_get_contents($this->getLogFile('debug'));
+        $log .= file_get_contents($this->getLogFile('error'));
+        $log .= file_get_contents($this->getLogFile('cli-debug'));
+        $log .= file_get_contents($this->getLogFile('cli-error'));
+        $this->assertDoesNotMatchRegularExpression('/(Warning|Notice|Error)/', $log);
     }
 
 }
