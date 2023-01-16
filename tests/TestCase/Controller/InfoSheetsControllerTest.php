@@ -110,7 +110,7 @@ class InfoSheetsControllerTest extends AppTestCase
         $this->get('/laufzettel/download/2');
         $this->assertResponseCode(200);
         $this->_compareBasePath = ROOT . DS . 'tests' . DS . 'comparisons' . DS;
-        $this->assertSameAsFile('info-sheets-download.csv', $this->_response);
+        $this->assertSameAsFile('info-sheets-download.csv', $this->_response->getBody()->__toString());
     }
 
 }

@@ -30,7 +30,7 @@ class WorkshopsControllerTest extends AppTestCase
         ]);
         $this->_compareBasePath = ROOT . DS . 'tests' . DS . 'comparisons' . DS;
         $this->get('/workshops/ajaxGetAllWorkshopsForMap');
-        $this->assertSameAsFile('workshops-for-map.json', $this->_response);
+        $this->assertSameAsFile('workshops-for-map.json', $this->_response->getBody()->__toString());
     }
 
     public function testWorkshopDetail()
