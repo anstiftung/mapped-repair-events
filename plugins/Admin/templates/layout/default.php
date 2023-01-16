@@ -10,7 +10,8 @@ use Cake\Utility\Inflector;
         $defaultMetaTags = [
             'title' => !empty($defaultMetaTags) && !empty($defaultMetaTags['title']) ? $defaultMetaTags['title'] : '',
             'description' => !empty($defaultMetaTags) && !empty($defaultMetaTags['description']) ? $defaultMetaTags['description'] : Configure::read('AppConfig.titleSuffix'),
-            'keywords' => !empty($defaultMetaTags) && !empty($defaultMetaTags['keywords']) ? $defaultMetaTags['keywords'] : ''
+            'keywords' => !empty($defaultMetaTags) && !empty($defaultMetaTags['keywords']) ? $defaultMetaTags['keywords'] : '',
+            'csrfToken' => $this->request->getAttribute('csrfToken'),
         ];
         if (Configure::read('debug') === true) {
             $defaultMetaTags['robots'] = 'noindex, nofollow';
