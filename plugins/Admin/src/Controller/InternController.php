@@ -7,7 +7,6 @@ use Cake\Core\Configure;
 use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
 use Cake\Event\EventInterface;
-use Cake\Filesystem\Folder;
 use Intervention\Image\ImageManagerStatic as Image;
 
 class InternController extends AdminAppController
@@ -204,10 +203,7 @@ class InternController extends AdminAppController
 
                 $thumbMethod = 'getThumbs' . $thumbSize . 'ImageMultiple';
                 $thumbsFileName = Configure::read('AppConfig.htmlHelper')->$thumbMethod($fileNamePlain);
-
                 $targetFileAbsolute = str_replace('//', '/', $_SERVER['DOCUMENT_ROOT'] . $thumbsFileName);
-                $path = dirname($targetFileAbsolute);
-                $dir = new Folder($path, true, 0755);
 
                 Image::make($_SERVER['DOCUMENT_ROOT'] . $filename)
                     ->widen($thumbSize)
