@@ -729,7 +729,7 @@ MappedRepairEvents.Helper = {
     bindDownloadInfoSheetButton : function() {
         $('a.download-info-sheets').on('click', function() {
             var workshopUid = $(this).data('workshop-uid');
-            var year = $(this).closest('.workshop-content-wrapper').find('select[name="info-sheets-year"').val();
+            var year = $(this).closest('.workshop-content-wrapper').find('select[name="info-sheets-year"]').val();
             var yearUrlString = '';
             if (year != '') {
                 yearUrlString = '/' + year;
