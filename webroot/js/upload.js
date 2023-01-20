@@ -8,6 +8,7 @@ MappedRepairEvents.Upload = {
         var multiple = uploadType === 'multiple';
 
         var html = '<form data-uid="'+uid+'" data-object-type="'+objectType+'" id="mini-upload-form-' + uploadType + '-' + uid + '" class="mini-upload-form ' + (multiple ? 'multiple' : 'single') + ' " method="post" action="/admin/intern/ajaxMiniUploadFormTmpImageUpload/" enctype="multipart/form-data">';
+        html += '<input type="hidden" name="_csrfToken" value="' + $('meta[name="csrfToken"]').attr('content') + '" />';
         if (multiple) {
             html += '<ul class="images-container"></ul>';
             html += '<div class="sc"></div>';
