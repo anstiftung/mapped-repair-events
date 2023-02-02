@@ -46,7 +46,8 @@ class BlogsController extends AppController
             ],
             'conditions' => $conditions,
             'contain' => [
-                'Blogs'
+                'Blogs',
+                'Photos',
             ]
         ));
         if ($posts->count() == 0) throw new NotFoundException('Kein RSS-Feeds gefunden');

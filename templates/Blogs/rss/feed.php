@@ -3,7 +3,6 @@ use Cake\Core\Configure;
 
 $items = [];
 foreach ($posts as $post) {
-
     $link = $this->Html->urlPostDetail($post->url);
 
     $body = $post->publish->i18nFormat(Configure::read('DateFormat.de.DateLong2'));
@@ -15,13 +14,23 @@ foreach ($posts as $post) {
         'exact'  => true,
         'html'   => true,
     ]);
-    $items[] = [
+
+    $preparedItem = [
         'title' => $post->name,
         'link' => $link,
         'guid' => ['url' => $link],
         'description' => $body,
         'pubDate' => $post->publish->i18nFormat(Configure::read('DateFormat.de.DateLong2'))
     ];
+
+    if (!empty($post->photos)) {
+        $imageUrl = $this->Html->getThumbs800ImageMultiple($post->photos[0]->name);
+        $length = filesize(WWW_ROOT . $imageUrl);
+        $mimeType = mime_content_type(WWW_ROOT . $imageUrl);
+        $preparedItem['enclosure'] = ['url' => $imageUrl, 'length' => $length, 'type' => $mimeType];
+    }
+
+    $items[] = $preparedItem;
 }
 
 $this->set('channelData', [
