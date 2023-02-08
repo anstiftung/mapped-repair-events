@@ -7,12 +7,12 @@
 <?php
 
   $isLoggedUserApproved = false;
-  if (isset($context) && $context['className'] == 'Workshop' && $appAuth->user()) {
+  if (isset($context) && $context['className'] == 'Workshop' && !empty($loggedUser)) {
       $workshopTable = FactoryLocator::get('Table')->get('Workshops');
-    $isLoggedUserApproved = $workshopTable->isLoggedUserApproved($context['object']->uid, $appAuth->getUserUid());
+    $isLoggedUserApproved = $workshopTable->isLoggedUserApproved($context['object']->uid, $loggedUser->uid);
   }
-  if (isset($context) && $appAuth->user() &&
-    ($appAuth->isAdmin() && ($context['className'] != 'Workshop')
+  if (isset($context) && !empty($loggedUser) &&
+    ($loggedUser->isAdmin() && ($context['className'] != 'Workshop')
     )
   ) {
       $editMethod = 'url' . $context['className'] . 'Edit';

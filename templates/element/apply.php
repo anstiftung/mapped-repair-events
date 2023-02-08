@@ -31,7 +31,7 @@ $this->element('addScript', ['script' =>
 <?php foreach($associatedWorkshops as $associatedWorkshop) {
 
     foreach($associatedWorkshop->users as $user) {
-        if ($user->uid == $appAuth->getUserUid()) {
+        if ($user->uid == $loggedUser->uid) {
             $userEntity = $user;
         }
     }
@@ -40,7 +40,7 @@ $this->element('addScript', ['script' =>
 
       echo '<td>';
         if ($type == 'user') {
-          $userUid = $appAuth->getUserUid();
+          $userUid = $loggedUser->uid;
         }
         echo '<div class="hide userUid">'.$userUid.'</div>';
         echo '<div class="hide workshopUid">'.$associatedWorkshop->uid.'</div>';
@@ -61,7 +61,7 @@ $this->element('addScript', ['script' =>
       echo '</td>';
 
       echo '<td class="icon">';
-      if (in_array($associatedWorkshop->uid, $workshopsWhereUserIsLastOrgaUserUids) && $appAuth->isOrga() && !is_null($userEntity->_joinData->approved)) {
+      if (in_array($associatedWorkshop->uid, $workshopsWhereUserIsLastOrgaUserUids) && $loggedUser->isOrga() && !is_null($userEntity->_joinData->approved)) {
               $deleteClass = 'resign-not-possible';
               $deleteIcon = '<i class="fas fa-times fa-border"></i>';
               $deleteTitle = 'Austreten nicht möglich';
@@ -156,7 +156,7 @@ $this->element('addScript', ['script' =>
         'id' => 'workshopApply',
     ]);
 
-    if ($appAuth->isAdmin()) {
+    if ($loggedUser->isAdmin()) {
         echo '<div style="margin-right:10px;float: left;">';
             echo $this->Form->control($relationModel.'.user_uid', [
                 'type' => 'select',

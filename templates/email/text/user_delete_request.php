@@ -1,11 +1,11 @@
 <?php use Cake\Core\Configure; ?>
 Ein User möchte gelöscht werden:
 
-<?php echo 'UID: ' . $appAuth->getUserUid(); ?>
+<?php echo 'UID: ' . $loggedUser->uid; ?>
 
-<?php echo 'Name: ' . $appAuth->getUsername(); ?>
+<?php echo 'Name: ' . $loggedUser->name; ?>
 
-<?php echo 'Nick: ' . $appAuth->getUserNick();?>
+<?php echo 'Nick: ' . $loggedUser->nick;?>
 
 <?php
 if ($deleteMessage != '') {

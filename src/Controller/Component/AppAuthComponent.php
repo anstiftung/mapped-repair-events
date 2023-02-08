@@ -13,7 +13,6 @@ class AppAuthComponent extends AuthComponent {
 
     public $controller;
 
-
     /**
      * also private data of logged user is needed sometimes (internally)
      */
@@ -47,15 +46,6 @@ class AppAuthComponent extends AuthComponent {
 
         return null;
 
-    }
-
-    public function flash($message): void
-    {
-        $this->AppFlash->setFlashError($message);
-    }
-
-    public function getGroupId() {
-        return $this->user('group_id');
     }
 
     private function prepareGroupModel() {
@@ -134,44 +124,6 @@ class AppAuthComponent extends AuthComponent {
     return false;
 
   }
-
-      /**
-       * @return int/boolean logged in User's uid or false if empty $this->User['uid']
-       */
-      public function getUserUid() {
-          if (!$this->user()) return 0;
-          return $this->user()['uid'];
-      }
-
-      public function getUserName() {
-          if (!$this->user()) return '';
-          return $this->user()['firstname'] . ' ' . $this->user()['lastname'];
-      }
-
-      public function getUserFirstname() {
-          if (!$this->user()) return '';
-          return $this->user()['firstname'];
-      }
-
-      public function getUserLastname() {
-          if (!$this->user()) return '';
-          return $this->user()['lastname'];
-      }
-
-      public function getUserEmail() {
-          if (!$this->user()) return '';
-          return $this->user()['email'];
-      }
-
-      public function getUserNick() {
-          if (!$this->user()) return '';
-          return $this->user()['nick'];
-      }
-
-      public function getUser() {
-          if (!$this->user()) return 0;
-          return $this->user();
-      }
 
 }
 

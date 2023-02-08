@@ -50,6 +50,7 @@ class AppController extends Controller
 
         parent::initialize();
 
+        $this->loadComponent('Authentication.Authentication');
         $this->loadComponent('Common');
         $this->loadComponent('String');
         $this->loadComponent('RequestHandler', [
@@ -61,25 +62,6 @@ class AppController extends Controller
         if (!$this->getRequest()->is('json') && !in_array($this->name, ['Events'])) {
             $this->loadComponent('FormProtection');
         }
-        $this->loadComponent('AppAuth', [
-            'logoutRedirect' => '/',
-            'authError' => 'Zugriff verweigert, bitte melde dich an.',
-            'authorize' => [
-                'Controller'
-            ],
-            'loginError' => 'Sorry, der Login ist fehlgeschlagen.',
-            'unauthorizedRedirect' => false,
-            'authenticate' => [
-                'Form' => [
-                    'userModel' => 'Users',
-                    'fields' => [
-                        'username' => 'email'
-                    ],
-                    'finder' => 'auth' // UserTable::findAuth
-                ]
-            ],
-            'storage' => 'Session'
-        ]);
 
         $this->paginate = [
             'limit' => 100000,
@@ -125,8 +107,12 @@ class AppController extends Controller
         }
         parent::beforeRender($event);
         $this->setNavigation();
-        $this->set('appAuth', $this->AppAuth);
-        $this->set('loggedUser', $this->AppAuth->user());
+        
+        $loggedUser = $this->request->getAttribute('identity');
+        if (!empty($loggedUser)) {
+            $loggedUser = $loggedUser->getOriginalData();
+        }
+        $this->set('loggedUser', $loggedUser);
     }
 
     public function isAuthorized($user)

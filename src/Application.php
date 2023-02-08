@@ -19,12 +19,17 @@ namespace App;
 use Cake\Core\Configure;
 use Cake\Http\BaseApplication;
 use Cake\Http\MiddlewareQueue;
-use Cake\Routing\RouteBuilder;
+use Authentication\AuthenticationService;
 use Cake\Routing\Middleware\AssetMiddleware;
+use Psr\Http\Message\ServerRequestInterface;
 use Cake\Routing\Middleware\RoutingMiddleware;
 use Cake\Core\Exception\MissingPluginException;
 use Cake\Error\Middleware\ErrorHandlerMiddleware;
+use Authentication\AuthenticationServiceInterface;
+use Authentication\Identifier\IdentifierInterface;
 use Cake\Http\Middleware\CsrfProtectionMiddleware;
+use Authentication\Middleware\AuthenticationMiddleware;
+use Authentication\AuthenticationServiceProviderInterface;
 
 /**
  * Application setup class.
@@ -32,7 +37,7 @@ use Cake\Http\Middleware\CsrfProtectionMiddleware;
  * This defines the bootstrapping logic and middleware layers you
  * want to use in your application.
  */
-class Application extends BaseApplication
+class Application extends BaseApplication implements AuthenticationServiceProviderInterface
 {
 
     /**
@@ -44,6 +49,9 @@ class Application extends BaseApplication
     {
         // Call parent to load bootstrap from files.
         parent::bootstrap();
+
+        $this->addPlugin('Authentication');
+
         if (Configure::read('debug')) {
             $this->addPlugin('DebugKit', ['bootstrap' => true]);
         }
@@ -87,7 +95,10 @@ class Application extends BaseApplication
         // creating the middleware instance specify the cache config name by
         // using it's second constructor argument:
         // `new RoutingMiddleware($this, '_cake_routes_')`
-        ->add(new RoutingMiddleware($this));
+        ->add(new RoutingMiddleware($this))
+    
+        ->add(new AuthenticationMiddleware($this));
+    
 
         return $middlewareQueue;
     }
@@ -109,6 +120,41 @@ class Application extends BaseApplication
 
         $this->addPlugin('Migrations');
 
-        // Load more plugins here
     }
+
+    public function getAuthenticationService(ServerRequestInterface $request): AuthenticationServiceInterface
+    {
+        $service = new AuthenticationService();
+
+        // Define where users should be redirected to when they are not authenticated
+        $service->setConfig([
+            'unauthenticatedRedirect' => false,
+            'queryParam' => 'redirect',
+            'logoutRedirect' => '/',
+            'authError' => 'Zugriff verweigert, bitte melde dich an.',
+            'authorize' => [
+                'Controller',
+            ],
+            'loginError' => 'Sorry, der Login ist fehlgeschlagen.',
+        ]);
+
+        $service->loadIdentifier('Authentication.Password', [
+            'fields' => [
+                'username' => 'email',
+                'password' => 'password',
+            ]
+        ]);
+        
+        // Load the authenticators
+        $service->loadAuthenticator('Authentication.Session');
+        $service->loadAuthenticator('Authentication.Form', [
+            'userModel' => 'Users',
+            'fields' => [
+                'username' => 'email'
+            ],
+            'finder' => 'auth' // UserTable::findAuth
+        ]);
+
+        return $service;
+    }    
 }

@@ -38,7 +38,7 @@ class UsersController extends AppController
     public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);
-        $this->AppAuth->allow([
+        $this->Authentication->allowUnauthenticated([
             'neuesPasswortAnfordern',
             'login',
             'register',
@@ -452,9 +452,8 @@ class UsersController extends AppController
         ];
         $this->set('metaTags', $metaTags);
         if ($this->request->is('post')) {
-            $user = $this->AppAuth->identify();
-            if ($user) {
-                $this->AppAuth->setUser($user);
+            $result = $this->Authentication->getResult();
+            if ($result->isValid()) {
                 $redirectUrl = Configure::read('AppConfig.htmlHelper')->urlUserHome();
                 $this->redirect($redirectUrl);
             } else {
@@ -662,7 +661,7 @@ class UsersController extends AppController
     public function logout()
     {
         $this->AppFlash->setFlashMessage('Du hast dich erfolgreich ausgeloggt.');
-        $this->redirect($this->AppAuth->logout());
+        $this->redirect($this->Authentication->logout());
     }
 
 }

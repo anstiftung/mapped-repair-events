@@ -73,7 +73,7 @@ class CommonComponent extends AppComponent {
         $config->set('HTML.SafeIframe', true);
         $config->set('Attr.AllowedFrameTargets', ['_blank']);
         $config->set('Attr.EnableID', true); // enables anchors: <a name="xxx">Text</a>
-        if ($this->controller->AppAuth->isAdmin()) {
+        if ($this->controller->getRequest()->getAttribute('identity')->getOriginalData()->isAdmin()) {
             $config->set('URI.SafeIframeRegexp', '%(.*)%');
         } else {
             $config->set('URI.SafeIframeRegexp', '%^(https?:)?//(www\.youtube(?:-nocookie)?\.com/embed/|player\.vimeo\.com/video/)%');

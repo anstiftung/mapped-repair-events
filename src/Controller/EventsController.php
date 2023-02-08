@@ -23,7 +23,7 @@ class EventsController extends AppController
 
         parent::beforeFilter($event);
         $this->Event = $this->getTableLocator()->get('Events');
-        $this->AppAuth->allow([
+        $this->Authentication->allowUnauthenticated([
             'detail',
             'all',
             'ajaxGetAllEventsForMap',

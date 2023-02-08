@@ -9,6 +9,16 @@ class User extends Entity
 
     protected $_virtual = ['name'];
 
+    public function isAdmin()
+    {
+        return true;
+    }
+
+    public function isOrga()
+    {
+        return true;
+    }
+
     public function __construct(array $properties = [], array $options = [])
     {
         parent::__construct($properties, $options);

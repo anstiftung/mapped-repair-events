@@ -20,7 +20,7 @@ class WorkshopsController extends AppController
         parent::beforeFilter($event);
         $this->Workshop = $this->getTableLocator()->get('Workshops');
         $this->connection = ConnectionManager::get('default');
-        $this->AppAuth->allow([
+        $this->Authentication->allowUnauthenticated([
             'ajaxGetAllWorkshopsForMap',
             'ajaxGetWorkshopDetail',
             'ajaxGetWorkshopsAndUsersForTags',
@@ -30,7 +30,6 @@ class WorkshopsController extends AppController
             'detail',
             'all',
         ]);
-
     }
 
     public function isAuthorized($user)

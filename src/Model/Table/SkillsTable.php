@@ -36,7 +36,7 @@ class SkillsTable extends Table
         return $validator;
     }
 
-    public function addSkills($request, $appAuth, $entity)
+    public function addSkills($request, $loggedUser, $entity)
     {
 
         $skills = $request->getData($entity . '.skills._ids');
@@ -51,8 +51,8 @@ class SkillsTable extends Table
                 $preparedSkill = strip_tags($skill);
                 $skillsToAdd[] = $this->newEntity([
                     'name' => $preparedSkill,
-                    'status' => $appAuth->isAdmin() ? APP_ON : APP_OFF,
-                    'owner' => $appAuth->getUserUid(),
+                    'status' => $loggedUser->isAdmin() ? APP_ON : APP_OFF,
+                    'owner' => $loggedUser->uid,
                 ]);
             }
         }
