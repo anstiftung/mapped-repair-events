@@ -152,11 +152,9 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
         // Load the authenticators
         $service->loadAuthenticator('Authentication.Session');
         $service->loadAuthenticator('Authentication.Form', [
-            'userModel' => 'Users',
             'fields' => [
-                'username' => 'email'
+                'username' => 'email',
             ],
-            'finder' => 'auth' // UserTable::findAuth
         ]);
 
         return $service;
