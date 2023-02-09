@@ -128,7 +128,7 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
 
         // Define where users should be redirected to when they are not authenticated
         $service->setConfig([
-            'unauthenticatedRedirect' => false,
+            'unauthenticatedRedirect' => '/users/login',
             'queryParam' => 'redirect',
             'logoutRedirect' => '/',
             'authError' => 'Zugriff verweigert, bitte melde dich an.',
