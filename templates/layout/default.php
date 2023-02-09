@@ -97,7 +97,7 @@ use Cake\Utility\Inflector;
             <?php } ?>
 
             <?php
-                if (!empty($loggedUser)) {
+                if (empty($loggedUser)) {
                     $this->element('addScript', ['script' =>
                         JS_NAMESPACE.".Helper.doLoginFormActions();
                     "]);
