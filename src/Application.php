@@ -139,6 +139,10 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
         ]);
 
         $service->loadIdentifier('Authentication.Password', [
+            'resolver' => [
+                'className' => 'Authentication.Orm',
+                'finder' => 'auth', // UsersTable::findAuth
+            ],
             'fields' => [
                 'username' => 'email',
                 'password' => 'password',

@@ -1,28 +1,95 @@
 <?php
 namespace App\Model\Entity;
 
-use Cake\Auth\DefaultPasswordHasher;
 use Cake\ORM\Entity;
+use Cake\Utility\Inflector;
+use Cake\Datasource\FactoryLocator;
+use Cake\Auth\DefaultPasswordHasher;
 
 class User extends Entity
 {
 
     protected $_virtual = ['name'];
 
-    public function isAdmin()
-    {
-        return true;
-    }
-
-    public function isOrga()
-    {
-        return true;
-    }
-
     public function __construct(array $properties = [], array $options = [])
     {
         parent::__construct($properties, $options);
         $this->privatizeData($this);
+    }
+
+    public function isAdmin(): bool
+    {
+        $group = FactoryLocator::get('Table')->get('Groups');
+        return $group->isAdmin($this);
+    }
+
+    public function isOrga(): bool
+    {
+        $group = FactoryLocator::get('Table')->get('Groups');
+        return $group->isOrga($this);
+    }
+
+    public function isRepairhelper(): bool
+    {
+        $group = FactoryLocator::get('Table')->get('Groups');
+        return $group->isRepairhelper($this);
+    }
+
+    public function IsInGroup($groups): bool
+    {
+        $group = FactoryLocator::get('Table')->get('Groups');
+        return $group->isInGroup($this, $groups);
+    }
+
+    /**
+     * diese methode ist für das frontend (keine uid in url)
+     * checks if the logged user is the owner of the passed modelName / url or not
+     * @param string $modelName
+     * @param string url
+     */
+    public function isOwnerByModelNameAndUrl($modelName, $url): bool
+    {
+
+        $pluralizedModelName = Inflector::pluralize($modelName);
+        $objectTable = FactoryLocator::get('Table')->get($pluralizedModelName);
+        $object = $objectTable->find('all', [
+            'conditions' => [
+                $pluralizedModelName.'.owner' => $this->uid,
+                $pluralizedModelName.'.url' => $url,
+                $pluralizedModelName.'.status >= '.APP_DELETED,
+        ]]);
+
+        if ($object->count() == 1) {
+            return true;
+        }
+
+        return false;
+
+    }
+
+  /**
+   * diese methode ist für den admin (uid in url)
+   */
+    public function isOwner(int $uid): bool
+    {
+        $rootTable = FactoryLocator::get('Table')->get('Roots');
+        $objectType = $rootTable->getType($uid);
+        $objectClass = Inflector::classify($objectType);
+        $pluralizedClass = Inflector::pluralize($objectClass);
+        $objectTable = FactoryLocator::get('Table')->get($pluralizedClass);
+
+        $object = $objectTable->find('all', [
+            'conditions' => [
+                $pluralizedClass.'.owner' => $this->uid,
+                $pluralizedClass.'.uid' => $uid,
+                $pluralizedClass.'.status >= '.APP_DELETED,
+        ]]);
+
+        if ($object->count() == 1) {
+            return true;
+        }
+        return false;
+
     }
 
     public function revertPrivatizeData()
