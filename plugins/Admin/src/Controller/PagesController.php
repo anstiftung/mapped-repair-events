@@ -16,7 +16,7 @@ class PagesController extends AdminAppController
     public function insert()
     {
         $page = [
-            'name' => 'Neue Seite von ' . $this->AppAuth->getUserName(),
+            'name' => 'Neue Seite von ' . $this->loggedUser->name,
             'url' => StringComponent::createRandomString(6)
         ];
         $entity = $this->Page->newEntity($page);

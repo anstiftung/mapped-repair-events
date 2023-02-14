@@ -23,7 +23,7 @@ class PostsController extends AdminAppController
 
         // admin defaults
         $post = [
-            'name' => 'Neuer Post von ' . $this->AppAuth->getUserName(),
+            'name' => 'Neuer Post von ' . $this->loggedUser->name,
             'publish' => FrozenDate::now(),
             'url' => StringComponent::createRandomString(6)
         ];
@@ -44,11 +44,11 @@ class PostsController extends AdminAppController
     {
         if ($this->request->getParam('action') == 'edit') {
 
-            if (! $this->AppAuth->user()) {
+            if (!$this->isLoggedIn()) {
                 return false;
             }
 
-            if ($this->AppAuth->isAdmin()) {
+            if ($this->isAdmin()) {
                 $this->useDefaultValidation = false;
                 return true;
             }
@@ -56,7 +56,7 @@ class PostsController extends AdminAppController
             $postUid = (int) $this->request->getParam('pass')[0];
 
             // NUR der owner des posts darf ihn bearbeiten
-            if ($this->AppAuth->isBlog() && $this->AppAuth->isOwner($postUid)) {
+            if ($this->loggedUser->isOwner($postUid)) {
                 return true;
             }
 
@@ -68,16 +68,12 @@ class PostsController extends AdminAppController
             'index'
         ])) {
 
-            if (! $this->AppAuth->user()) {
+            if (! $this->isLoggedIn()) {
                 return false;
             }
 
-            if ($this->AppAuth->isAdmin()) {
+            if ($this->isAdmin()) {
                 $this->useDefaultValidation = false;
-                return true;
-            }
-
-            if ($this->AppAuth->isBlog()) {
                 return true;
             }
 
@@ -182,7 +178,7 @@ class PostsController extends AdminAppController
         ];
 
         if ($this->useDefaultValidation) {
-            $conditions['Posts.owner'] = $this->AppAuth->getUserUid();
+            $conditions['Posts.owner'] = $this->isLoggedIn() ? $this->loggedUser->uid : 0;
         }
 
         $conditions = array_merge($this->conditions, $conditions);

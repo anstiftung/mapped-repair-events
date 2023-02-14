@@ -16,7 +16,7 @@ class SkillsController extends AdminAppController
     {
         $skill = [
             'name' => 'Neue Kenntnis',
-            'owner' => $this->AppAuth->getUserUid(),
+            'owner' => $this->isLoggedIn() ? $this->loggedUser->uid : 0,
             'status' => APP_OFF
         ];
         $entity = $this->Skill->newEntity($skill);

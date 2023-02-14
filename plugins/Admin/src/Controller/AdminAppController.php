@@ -40,7 +40,7 @@ class AdminAppController extends AppController
 
     public function isAuthorized($user)
     {
-        if (! $this->AppAuth->isAdmin()) {
+        if (! $this->isAdmin()) {
             return false;
         }
         return parent::isAuthorized($user);

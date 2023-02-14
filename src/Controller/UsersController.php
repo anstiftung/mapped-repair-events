@@ -24,10 +24,10 @@ class UsersController extends AppController
         switch($this->request->getParam('action')) {
             case 'passwortAendern':
             case 'profil':
-                return $this->AppAuth->user();
+                return $this->isLoggedIn();
                 break;
             case 'add':
-                return $this->AppAuth->isAdmin();
+                return $this->isAdmin();
                 break;
         }
 
@@ -295,7 +295,7 @@ class UsersController extends AppController
         $this->Country = $this->getTableLocator()->get('Countries');
         $this->set('countries', $this->Country->getForDropdown());
 
-        $this->set('groups', Configure::read('AppConfig.htmlHelper')->getUserGroupsForUserEdit($this->AppAuth->isAdmin()));
+        $this->set('groups', Configure::read('AppConfig.htmlHelper')->getUserGroupsForUserEdit($this->isAdmin()));
 
         $this->setReferer();
         if (empty($this->request->getData())) {
@@ -316,9 +316,9 @@ class UsersController extends AppController
             $this->request = $this->request->withData('Users.private', $private);
 
             $this->Skill = $this->getTableLocator()->get('Skills');
-            $this->request = $this->Skill->addSkills($this->request, $this->AppAuth, 'Users');
+            $this->request = $this->Skill->addSkills($this->request, $this->loggedUser, 'Users');
 
-            $user = $this->User->patchEntity($user, $this->request->getData(), ['validate' => 'UserEdit' . ($this->AppAuth->isAdmin() ? 'Admin' : 'User')]);
+            $user = $this->User->patchEntity($user, $this->request->getData(), ['validate' => 'UserEdit' . ($this->isAdmin() ? 'Admin' : 'User')]);
             if (!$user->hasErrors()) {
                 $this->User->save($user);
 
@@ -355,18 +355,18 @@ class UsersController extends AppController
     public function profil($userUid=null)
     {
 
-        if ($userUid === null && !$this->AppAuth->user()) {
+        if ($userUid === null && !$this->isLoggedIn()) {
             throw new NotFoundException('not logged in and no userUid passed');
         }
 
-        if ($userUid !== null && !$this->AppAuth->isAdmin()) {
+        if ($userUid !== null && !$this->isAdmin()) {
             throw new NotFoundException('only admins can change other profiles');
         }
 
         // own profile
         $isMyProfile = false;
-        if ($userUid === null && $this->AppAuth->user()) {
-            $userUid = $this->AppAuth->getUserUid();
+        if ($userUid === null && $this->isLoggedIn()) {
+            $userUid = $this->isLoggedIn() ? $this->loggedUser->uid : 0;
             $metaTags = [
                 'title' => 'Mein Profil'
             ];
@@ -397,7 +397,7 @@ class UsersController extends AppController
         $this->_profil($user, $isMyProfile, true);
 
         // profile from other user
-        if (!$isMyProfile && $this->AppAuth->isAdmin()) {
+        if (!$isMyProfile && $this->isAdmin()) {
             $metaTags = [
                 'title' => 'Profil von ' . $user->name
             ];
@@ -424,7 +424,7 @@ class UsersController extends AppController
         $user = $this->User->newEntity([]);
         $this->set('user', $user);
 
-        $userUid = $this->AppAuth->getUserUid();
+        $userUid = $this->isLoggedIn() ? $this->loggedUser->uid : 0;
         $this->User->id = $userUid;
 
         $user = $this->User->newEntity($this->request->getData(), [
@@ -432,7 +432,7 @@ class UsersController extends AppController
         ]);
 
         if (!($user->hasErrors())) {
-            $user = $this->User->get($this->AppAuth->getUserUid());
+            $user = $this->User->get($this->isLoggedIn() ? $this->loggedUser->uid : 0);
             $user->revertPrivatizeData();
             $user2save = [
                 'password' => $this->request->getData('Users.password_new_1')
@@ -474,14 +474,13 @@ class UsersController extends AppController
             $email = new Mailer('default');
             $email->viewBuilder()->setTemplate('user_delete_request');
             $email->setTo(Configure::read('AppConfig.notificationMailAddress'))
-            ->setSubject('User "'.$this->AppAuth->getUserNick().'" möchte gelöscht werden')
+            ->setSubject('User "'.$this->loggedUser->nick.'" möchte gelöscht werden')
             ->setViewVars([
-                'appAuth' => $this->AppAuth,
+                'loggedUser' => $this->loggedUser,
                 'deleteMessage' => $this->request->getData('deleteMessage')
             ]);
             $email->send();
             $this->AppFlash->setFlashMessage('Deine Lösch-Anfrage wurde erfolgreich übermittelt. Wir werden dein Profil in den nächsten Tagen löschen.');
-            $this->AppAuth->logout();
             $this->redirect('/');
         }
     }
@@ -590,7 +589,7 @@ class UsersController extends AppController
         if (! empty($this->request->getData())) {
 
             $this->Skill = $this->getTableLocator()->get('Skills');
-            $this->request = $this->Skill->addSkills($this->request, $this->AppAuth, 'Users');
+            $this->request = $this->Skill->addSkills($this->request, $this->loggedUser, 'Users');
 
             if ($this->request->getData('Users.i_want_to_receive_the_newsletter')) {
                 $this->loadComponent('CptNewsletter');

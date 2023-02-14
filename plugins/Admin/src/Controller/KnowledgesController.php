@@ -15,7 +15,7 @@ class KnowledgesController extends AdminAppController
     public function insert()
     {
         $knowledge = [
-            'name' => 'Neuer Reparaturwissens-Beitrag von ' . $this->AppAuth->getUserName(),
+            'name' => 'Neuer Reparaturwissens-Beitrag von ' . $this->loggedUser->name,
         ];
         $entity = $this->Knowledge->newEntity($knowledge);
         $knowledge = $this->Knowledge->save($entity);
@@ -53,7 +53,7 @@ class KnowledgesController extends AdminAppController
         if (!empty($this->request->getData())) {
 
             $this->Skill = $this->getTableLocator()->get('Skills');
-            $this->request = $this->Skill->addSkills($this->request, $this->AppAuth, 'Knowledges');
+            $this->request = $this->Skill->addSkills($this->request, $this->loggedUser, 'Knowledges');
 
             $patchedEntity = $this->Knowledge->getPatchedEntityForAdminEdit($knowledge, $this->request->getData(), $this->useDefaultValidation);
 

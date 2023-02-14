@@ -31,7 +31,7 @@ class InternController extends AdminAppController
             'ajaxMiniUploadFormTmpImageUpload',
             'ajaxChangeAppObjectStatus'
         ])) {
-            if ($this->AppAuth->user()) {
+            if ($this->isLoggedIn()) {
                 return true;
             }
         } else {
@@ -194,7 +194,7 @@ class InternController extends AdminAppController
                 'name' => $fileNamePlain,
                 'text' => $file['text'],
                 'status' => APP_ON,
-                'owner' => $this->AppAuth->getUserUid()
+                'owner' => $this->isLoggedIn() ? $this->loggedUser->uid : 0
             ];
             $newEntity = $this->Photo->newEntity($photo2save);
             $this->Photo->save($newEntity);
@@ -412,7 +412,7 @@ class InternController extends AdminAppController
             ])->first();
 
             // eigene bearbeitungs-hinweise bei click auf cancel löschen
-            if ($object->currently_updated_by == $this->AppAuth->getUserUid()) {
+            if ($object->currently_updated_by == $this->isLoggedIn() ? $this->loggedUser->uid : 0) {
                 $entity = $this->$objectClass->patchEntity($object, [
                     'currently_updated_by' => 0
                 ]);

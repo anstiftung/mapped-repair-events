@@ -16,7 +16,7 @@ class CategoriesController extends AdminAppController
     {
         $category = [
             'name' => 'Neue Kategorie',
-            'owner' => $this->AppAuth->getUserUid(),
+            'owner' => $this->isLoggedIn() ? $this->loggedUser->uid : 0,
             'status' => APP_OFF
         ];
         $entity = $this->Category->newEntity($category);
