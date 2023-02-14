@@ -5,8 +5,9 @@ use Cake\ORM\Entity;
 use Cake\Utility\Inflector;
 use Cake\Datasource\FactoryLocator;
 use Cake\Auth\DefaultPasswordHasher;
+use Authentication\IdentityInterface;
 
-class User extends Entity
+class User extends Entity implements IdentityInterface
 {
 
     protected $_virtual = ['name'];
@@ -15,6 +16,17 @@ class User extends Entity
     {
         parent::__construct($properties, $options);
         $this->privatizeData($this);
+    }
+
+    public function getIdentifier()
+    {
+        return $this->id;
+    }
+
+    public function getOriginalData()
+    {
+        $this->revertPrivatizeData();
+        return $this;
     }
 
     public function isAdmin(): bool
