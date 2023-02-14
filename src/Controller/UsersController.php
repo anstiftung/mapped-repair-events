@@ -324,7 +324,7 @@ class UsersController extends AppController
 
                 // update own profile
                 if ($isMyProfile) {
-                    $this->AppAuth->setUser($user->toArray());
+                    $this->Authentication->setIdentity($user);
                 }
 
                 if ($isEditMode) {
@@ -523,7 +523,7 @@ class UsersController extends AppController
         $entity = $this->User->patchEntity($user, $user2save, ['validate' => false]);
         $this->User->save($entity);
 
-        $this->AppAuth->setUser($user->toArray());
+        $this->Authentication->setIdentity($user);
         $this->AppFlash->setFlashMessage('Dein Account ist nun aktiviert, du bist eingeloggt und kannst deine Profildaten ergänzen bzw. dein Passwort ändern.');
 
         $this->redirect(Configure::read('AppConfig.htmlHelper')->urlUserHome());

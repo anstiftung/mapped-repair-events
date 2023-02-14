@@ -106,7 +106,6 @@ class AppController extends Controller
             $this->loggedUser = $this->loggedUser->getOriginalData();
         }
         $this->set('loggedUser', $this->loggedUser);
-
     }
 
     public function beforeRender(EventInterface $event)
