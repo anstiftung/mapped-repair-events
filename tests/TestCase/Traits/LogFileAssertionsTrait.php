@@ -13,7 +13,7 @@ trait LogFileAssertionsTrait
 
     private function getLogFile($name)
     {
-        return ROOT . DS . 'logs' . DS . 'cli-' . $name . '.log';
+        return ROOT . DS . 'logs' . DS . $name . '.log';
     }
 
     protected function resetLogs(): void
