@@ -190,7 +190,7 @@ class AppController extends Controller
         }
 
         // admins oder owner dürfen offline-content im preview-mode sehen
-        if (! $this->isAdmin() && ! $this->loggedUser->isOwnerByModelNameAndUrl($modelName, $url))
+        if ($this->isLoggedIn() && !$this->isAdmin() && !$this->loggedUser->isOwnerByModelNameAndUrl($modelName, $url))
             return $previewConditions;
 
         if ($this->isPreview()) {
