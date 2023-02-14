@@ -674,12 +674,15 @@ class WorkshopsController extends AppController
         }
 
         $this->Worknews = $this->getTableLocator()->get('Worknews');
+        $conditions = [
+            'Worknews.workshop_uid' => $workshop->uid,
+            'Worknews.confirm' => 'ok'
+        ];
+        if ($this->isLoggedIn()) {
+            $conditions['Worknews.email'] = $this->loggedUser->email;
+        }
         $worknews = $this->Worknews->find('all', [
-            'conditions' => [
-                'Worknews.workshop_uid' => $workshop->uid,
-                'Worknews.email' => $this->loggedUser->email,
-                'Worknews.confirm' => 'ok'
-            ]
+            'conditions' => $conditions,
         ])->first();
 
         if (!empty($this->request->getData())) {
@@ -733,9 +736,13 @@ class WorkshopsController extends AppController
         } else {
             if (empty($worknews)) {
                 // prefill field email with email of logged user
-                $worknews = $this->Worknews->newEntity(
-                    ['email' => $this->loggedUser->email], ['validate' => false]
-                );
+                if ($this->isLoggedIn()) {
+                    $worknews = $this->Worknews->newEntity(
+                        ['email' => $this->loggedUser->email], ['validate' => false]
+                    );
+                } else {
+                    $worknews = $this->Worknews->newEmptyEntity(['validate' => false]);
+                }
             }
         }
         $subscribed = $worknews->confirm == 'ok' && $this->isLoggedIn() && $worknews->email == $this->loggedUser->email;
