@@ -23,6 +23,7 @@ class EventsControllerTest extends AppTestCase
     use LogFileAssertionsTrait;
 
     private $newEventData;
+    private $Event;
 
     public function loadNewEventData()
     {
