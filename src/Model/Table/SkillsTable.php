@@ -51,8 +51,8 @@ class SkillsTable extends Table
                 $preparedSkill = strip_tags($skill);
                 $skillsToAdd[] = $this->newEntity([
                     'name' => $preparedSkill,
-                    'status' => $loggedUser->isAdmin() ? APP_ON : APP_OFF,
-                    'owner' => $loggedUser->uid,
+                    'status' => !empty($loggedUser) && $loggedUser->isAdmin() ? APP_ON : APP_OFF,
+                    'owner' => !empty($loggedUser) ? $loggedUser->uid : 0,
                 ]);
             }
         }
