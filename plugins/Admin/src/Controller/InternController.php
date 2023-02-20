@@ -19,26 +19,6 @@ class InternController extends AdminAppController
         $this->FormProtection->setConfig('validate', false);
     }
 
-    public function isAuthorized($user)
-    {
-
-        if (in_array($this->request->getParam('action'), [
-            'ajaxCancelAdminEditPage',
-            'ajaxMiniUploadFormDeleteImage',
-            'ajaxMiniUploadFormRotateImage',
-            'ajaxMiniUploadFormSaveUploadedImage',
-            'ajaxMiniUploadFormSaveUploadedImagesMultiple',
-            'ajaxMiniUploadFormTmpImageUpload',
-            'ajaxChangeAppObjectStatus'
-        ])) {
-            if ($this->isLoggedIn()) {
-                return true;
-            }
-        } else {
-            return parent::isAuthorized($user);
-        }
-    }
-
     public function addCategory($name)
     {
         $categories = $this->getTableLocator()->get('Categories');

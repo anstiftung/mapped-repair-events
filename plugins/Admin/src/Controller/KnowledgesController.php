@@ -55,11 +55,11 @@ class KnowledgesController extends AdminAppController
             $this->Skill = $this->getTableLocator()->get('Skills');
             $this->request = $this->Skill->addSkills($this->request, $this->loggedUser, 'Knowledges');
 
-            $patchedEntity = $this->Knowledge->getPatchedEntityForAdminEdit($knowledge, $this->request->getData(), $this->useDefaultValidation);
+            $patchedEntity = $this->Knowledge->getPatchedEntityForAdminEdit($knowledge, $this->request->getData());
 
             if (!($patchedEntity->hasErrors())) {
                 $patchedEntity = $this->patchEntityWithCurrentlyUpdatedFields($patchedEntity);
-                $this->saveObject($patchedEntity, $this->useDefaultValidation);
+                $this->saveObject($patchedEntity);
             } else {
                 $knowledge = $patchedEntity;
             }

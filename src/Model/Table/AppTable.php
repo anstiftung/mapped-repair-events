@@ -86,12 +86,13 @@ abstract class AppTable extends Table
         return $validator;
     }
 
-    public function getPatchedEntityForAdminEdit($entity, $data, $useDefaultValidation)
+    public function getPatchedEntityForAdminEdit($entity, $data)
     {
+        $isAdmin = Router::getRequest()?->getAttribute('identity')?->isAdmin();
         $patchedEntity = $this->patchEntity(
             $entity,
             $data,
-            ['validate' => !$useDefaultValidation ? 'admin' : true] // calls Table::validationAdmin
+            ['validate' => $isAdmin ? 'admin' : true] // calls Table::validationAdmin
         );
         return $patchedEntity;
     }

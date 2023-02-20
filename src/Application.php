@@ -14,30 +14,34 @@ declare(strict_types=1);
  * @since     3.3.0
  * @license   https://opensource.org/licenses/mit-license.php MIT License
  */
+
 namespace App;
 
 use Cake\Core\Configure;
+use Cake\Http\ServerRequest;
+use App\Policy\RequestPolicy;
 use Cake\Http\BaseApplication;
 use Cake\Http\MiddlewareQueue;
+use Authorization\Policy\MapResolver;
+use Authorization\AuthorizationService;
 use Authentication\AuthenticationService;
 use Cake\Routing\Middleware\AssetMiddleware;
 use Psr\Http\Message\ServerRequestInterface;
 use Cake\Routing\Middleware\RoutingMiddleware;
 use Cake\Core\Exception\MissingPluginException;
+use Authorization\AuthorizationServiceInterface;
 use Cake\Error\Middleware\ErrorHandlerMiddleware;
 use Authentication\AuthenticationServiceInterface;
-use Authentication\Identifier\IdentifierInterface;
 use Cake\Http\Middleware\CsrfProtectionMiddleware;
+use Authorization\Middleware\AuthorizationMiddleware;
 use Authentication\Middleware\AuthenticationMiddleware;
+use Authorization\AuthorizationServiceProviderInterface;
 use Authentication\AuthenticationServiceProviderInterface;
+use Authentication\Identifier\Resolver\OrmResolver;
+use Authorization\Middleware\RequestAuthorizationMiddleware;
 
-/**
- * Application setup class.
- *
- * This defines the bootstrapping logic and middleware layers you
- * want to use in your application.
- */
-class Application extends BaseApplication implements AuthenticationServiceProviderInterface
+class Application extends BaseApplication
+    implements AuthenticationServiceProviderInterface, AuthorizationServiceProviderInterface
 {
 
     /**
@@ -51,6 +55,7 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
         parent::bootstrap();
 
         $this->addPlugin('Authentication');
+        $this->addPlugin('Authorization');
 
         if (Configure::read('debug')) {
             $this->addPlugin('DebugKit', ['bootstrap' => true]);
@@ -87,18 +92,14 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
             'cacheTime' => Configure::read('Asset.cacheTime'),
         ]))
 
-        ->add(new CsrfProtectionMiddleware ())
+        ->add(new CsrfProtectionMiddleware())
 
-        // Add routing middleware.
-        // If you have a large number of routes connected, turning on routes
-        // caching in production could improve performance. For that when
-        // creating the middleware instance specify the cache config name by
-        // using it's second constructor argument:
-        // `new RoutingMiddleware($this, '_cake_routes_')`
         ->add(new RoutingMiddleware($this))
     
-        ->add(new AuthenticationMiddleware($this));
-    
+        ->add(new AuthenticationMiddleware($this))
+
+        ->add(new AuthorizationMiddleware($this))
+        ->add(new RequestAuthorizationMiddleware());
 
         return $middlewareQueue;
     }
@@ -140,7 +141,7 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
 
         $service->loadIdentifier('Authentication.Password', [
             'resolver' => [
-                'className' => 'Authentication.Orm',
+                'className' => OrmResolver::class,
                 'finder' => 'auth', // UsersTable::findAuth
             ],
             'fields' => [
@@ -158,5 +159,13 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
         ]);
 
         return $service;
-    }    
+    }
+
+    public function getAuthorizationService(ServerRequestInterface $request): AuthorizationServiceInterface
+    {
+        $mapResolver = new MapResolver();
+        $mapResolver->map(ServerRequest::class, RequestPolicy::class);
+        return new AuthorizationService($mapResolver);
+    }
+
 }

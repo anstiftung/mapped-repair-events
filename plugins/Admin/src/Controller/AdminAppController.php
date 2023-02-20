@@ -152,7 +152,7 @@ class AdminAppController extends AppController
         return $query;
     }
 
-    protected function saveObject($entity, $useDefaultValidation = true)
+    protected function saveObject($entity)
     {
         $modelName = $this->modelName;
         $entity = $this->stripTagsFromFields($entity, $modelName);

@@ -32,61 +32,6 @@ class WorkshopsController extends AppController
         ]);
     }
 
-    public function isAuthorized($user)
-    {
-
-        if ($this->request->getParam('action') == 'verwalten') {
-            if (!($this->isAdmin() || $this->isOrga())) {
-                return false;
-            }
-            return true;
-        }
-
-
-        // die action "edit" ist für alle eingeloggten user erlaubt, die orga-mitglieder der initiative sind
-        if ($this->request->getParam('action') == 'add') {
-
-            if ($this->isAdmin()) {
-                $this->useDefaultValidation = true;
-                return true;
-            }
-
-            if ($this->isOrga()) {
-                return true;
-            }
-
-            return false;
-
-        }
-
-        if ($this->request->getParam('action') == 'edit') {
-
-            if (!($this->isOrga() || $this->isAdmin())) {
-                return false;
-            }
-
-            if ($this->isAdmin()) {
-                $this->useDefaultValidation = false;
-                return true;
-            }
-
-            $workshopUid = (int) $this->request->getParam('pass')[0];
-
-            // all approved orgas are alloewed to edit and add workshops
-            $this->Workshop = $this->getTableLocator()->get('Workshops');
-
-            $workshop = $this->Workshop->getWorkshopForIsUserInOrgaTeamCheck($workshopUid);
-            if ($this->Workshop->isUserInOrgaTeam($this->isLoggedIn(), $workshop)) {
-                return true;
-            }
-
-            return false;
-        }
-
-        return parent::isAuthorized($user);
-
-    }
-
     public function add()
     {
         $workshop = $this->Workshop->newEntity(
@@ -161,7 +106,7 @@ class WorkshopsController extends AppController
                 $this->request = $this->request->withData('Workshops.lng', str_replace(',', '.', $this->request->getData('Workshops.lng')));
             }
 
-            $patchedEntity = $this->Workshop->getPatchedEntityForAdminEdit($workshop, $this->request->getData(), $this->useDefaultValidation);
+            $patchedEntity = $this->Workshop->getPatchedEntityForAdminEdit($workshop, $this->request->getData());
 
             $errors = $patchedEntity->getErrors();
             if (isset($errors['lat']) && isset($errors['lat']['numeric'])) {
@@ -221,7 +166,6 @@ class WorkshopsController extends AppController
 
         $this->set('workshop', $workshop);
         $this->set('isEditMode', $isEditMode);
-        $this->set('useDefaultValidation', $this->useDefaultValidation);
 
         if (!empty($errors)) {
             $this->render('edit');

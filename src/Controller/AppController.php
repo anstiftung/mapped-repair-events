@@ -22,8 +22,6 @@ use Cake\Utility\Inflector;
 class AppController extends Controller
 {
 
-    public $useDefaultValidation = true;
-
     public $modelName;
 
     public $loggedUser = null;
@@ -99,8 +97,6 @@ class AppController extends Controller
     public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);
-        $this->set('useDefaultValidation', $this->useDefaultValidation);
-
         $this->loggedUser = $this->request->getAttribute('identity');
         if (!empty($this->loggedUser)) {
             $this->loggedUser = $this->loggedUser->getOriginalData();
@@ -135,11 +131,6 @@ class AppController extends Controller
     protected function isRepairhelper(): bool
     {
         return $this->isLoggedIn() && $this->loggedUser->isRepairhelper();
-    }
-
-    public function isAuthorized($user)
-    {
-        return true;
     }
 
     /**

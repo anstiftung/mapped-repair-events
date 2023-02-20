@@ -54,7 +54,7 @@ class PagesController extends AdminAppController
 
         if (!empty($this->request->getData())) {
 
-            $patchedEntity = $this->Page->getPatchedEntityForAdminEdit($page, $this->request->getData(), $this->useDefaultValidation);
+            $patchedEntity = $this->Page->getPatchedEntityForAdminEdit($page, $this->request->getData());
             if (!($patchedEntity->hasErrors())) {
                 $patchedEntity = $this->patchEntityWithCurrentlyUpdatedFields($patchedEntity);
                 $this->saveObject($patchedEntity);

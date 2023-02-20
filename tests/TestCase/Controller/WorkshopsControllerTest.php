@@ -45,6 +45,9 @@ class WorkshopsControllerTest extends AppTestCase
 
     public function testApplyToWorkshopAsRepairhelper()
     {
+        
+        $this->executeLogFileAssertions = false;
+
         $workshopUid = 2;
         $userUid = 3;
         $this->loginAsRepairhelper();
@@ -119,17 +122,19 @@ class WorkshopsControllerTest extends AppTestCase
 
     }
 
-    public function testEditWorkshopNotifications()
+    public function testEditWorkshopAsOrga()
     {
         $this->loginAsOrga();
+        $workshopUid = 2;
         $this->post(
-            Configure::read('AppConfig.htmlHelper')->urlWorkshopEdit(2),
+            Configure::read('AppConfig.htmlHelper')->urlWorkshopEdit($workshopUid),
             [
                 'referer' => '/',
                 'Workshops' => [
                     'name' => 'Test Workshop',
                     'url' => 'test-workshop',
                     'use_custom_coordinates' => true,
+                    'text' => '<iframe></iframe>workshop info',
                     'lat' => 0,
                     'lng' => 0,
                 ]
@@ -139,6 +144,14 @@ class WorkshopsControllerTest extends AppTestCase
         $this->assertMailCount(1);
         $this->assertMailSentTo(Configure::read('AppConfig.debugMailAddress'));
         $this->assertMailContainsTextAt(0, '"Test Workshop" geändert');
+
+        $this->Workshop = $this->getTableLocator()->get('Workshops');
+        $workshop = $this->Workshop->find('all', [
+            'conditions' => [
+                'Workshops.uid' => $workshopUid,
+            ],
+        ])->first();
+        $this->assertEquals('workshop info', $workshop->text);
 
     }
 

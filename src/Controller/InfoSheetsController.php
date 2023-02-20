@@ -16,85 +16,6 @@ class InfoSheetsController extends AppController
         $this->InfoSheet = $this->getTableLocator()->get('InfoSheets');
     }
 
-    public function isAuthorized($user)
-    {
-
-        if (in_array($this->request->getParam('action'), ['fullDownload'])) {
-            if ($this->isAdmin()) {
-                return true;
-            }
-        }
-
-        if (in_array($this->request->getParam('action'), ['download'])) {
-
-            if ($this->isAdmin()) {
-                return true;
-            }
-
-            if ($this->isOrga()) {
-                $workshopUid = (int) $this->request->getParam('pass')[0];
-                $this->Workshop = $this->getTableLocator()->get('Workshops');
-                $workshop = $this->Workshop->getWorkshopForIsUserInOrgaTeamCheck($workshopUid);
-                if ($this->Workshop->isUserInOrgaTeam($this->loggedUser, $workshop)) {
-                    return true;
-                }
-            }
-
-        }
-
-        if (in_array($this->request->getParam('action'), ['edit', 'delete'])) {
-
-            // admin are allowd to edit and delete all info sheets
-            if ($this->isAdmin()) {
-                return true;
-            }
-
-            $infoSheetUid = (int) $this->request->getParam('pass')[0];
-            $this->InfoSheet = $this->getTableLocator()->get('InfoSheets');
-
-            // orgas are allowed to edit and delete only info sheets of associated workshops
-            if ($this->isOrga()) {
-
-                $infoSheet = $this->InfoSheet->find('all', [
-                    'conditions' => [
-                        'InfoSheets.uid' => $infoSheetUid,
-                        'InfoSheets.status > ' . APP_DELETED
-                    ],
-                    'contain' => [
-                        'Events'
-                    ]
-                ])->first();
-
-                $workshopUid = $infoSheet->event->workshop_uid;
-                $this->Workshop = $this->getTableLocator()->get('Workshops');
-                $workshop = $this->Workshop->getWorkshopForIsUserInOrgaTeamCheck($workshopUid);
-                if ($this->Workshop->isUserInOrgaTeam($this->loggedUser, $workshop)) {
-                    return true;
-                }
-
-            }
-
-            // repairhelpers are allowed to edit and delete only own info sheets
-            if ($this->isRepairhelper()) {
-                $infoSheet = $this->InfoSheet->find('all', [
-                    'conditions' => [
-                        'InfoSheets.uid' => $infoSheetUid,
-                        'InfoSheets.owner' => $this->isLoggedIn() ? $this->loggedUser->uid : 0,
-                        'InfoSheets.status > ' . APP_DELETED
-                    ]
-                ])->first();
-                if (!empty($infoSheet)) {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        return $this->isLoggedIn();
-
-    }
-
     public function fullDownload($date=null)
     {
 
@@ -363,7 +284,7 @@ class InfoSheetsController extends AppController
 
         if (!empty($this->request->getData())) {
 
-            $patchedEntity = $this->InfoSheet->getPatchedEntityForAdminEdit($infoSheet, $this->request->getData(), $this->useDefaultValidation);
+            $patchedEntity = $this->InfoSheet->getPatchedEntityForAdminEdit($infoSheet, $this->request->getData());
 
             $errors = $patchedEntity->getErrors();
             if (empty($errors)) {

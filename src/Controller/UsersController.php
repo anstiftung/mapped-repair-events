@@ -19,22 +19,6 @@ class UsersController extends AppController
         $this->User = $this->getTableLocator()->get('Users');
     }
 
-    public function isAuthorized($user)
-    {
-        switch($this->request->getParam('action')) {
-            case 'passwortAendern':
-            case 'profil':
-                return $this->isLoggedIn();
-                break;
-            case 'add':
-                return $this->isAdmin();
-                break;
-        }
-
-        return parent::isAuthorized($user);
-
-    }
-
     public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);

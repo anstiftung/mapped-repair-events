@@ -171,7 +171,7 @@ $this->element('addScript', ['script' =>
             ]);
             echo $this->Form->control($i.'.status', ['type' => 'select', 'options' => Configure::read('AppConfig.status')]).'<br />';
 
-            if (!$useDefaultValidation) {
+            if ($loggedUser?->isAdmin()) {
                 echo $this->element('metatagsFormfields', ['entity' => $i]);
             }
 
