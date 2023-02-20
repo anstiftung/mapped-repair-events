@@ -38,8 +38,8 @@
             }
 
             echo $this->Form->create($loggedUser, ['url' => $action]);
-            echo $this->Form->control('email', ['label' =>  __('Loginbox:Email'), 'value' => '']);
-            echo $this->Form->control('password', ['label' => __('Loginbox:Pass'), 'value' => '']);
+            echo $this->Form->control('email', ['label' =>  __('Loginbox:Email'), 'value' => '', 'id' => 'rep-email']);
+            echo $this->Form->control('password', ['label' => __('Loginbox:Pass'), 'value' => '', 'id' => 'rep-password']);
         ?>
 
 <div class="sc"></div>
