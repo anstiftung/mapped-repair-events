@@ -38,14 +38,6 @@ class AdminAppController extends AppController
         ];
     }
 
-    public function isAuthorized($user)
-    {
-        if (! $this->isAdmin()) {
-            return false;
-        }
-        return parent::isAuthorized($user);
-    }
-
     public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);

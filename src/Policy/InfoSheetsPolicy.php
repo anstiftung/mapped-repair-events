@@ -72,11 +72,11 @@ class InfoSheetsPolicy implements RequestPolicyInterface
             }
 
             // repairhelpers are allowed to edit and delete only own info sheets
-            if ($this->isRepairhelper()) {
+            if ($identity->isRepairhelper()) {
                 $infoSheet = $this->InfoSheet->find('all', [
                     'conditions' => [
                         'InfoSheets.uid' => $infoSheetUid,
-                        'InfoSheets.owner' => $this->isLoggedIn() ? $identity->uid : 0,
+                        'InfoSheets.owner' => $identity !== null ? $identity->uid : 0,
                         'InfoSheets.status > ' . APP_DELETED
                     ]
                 ])->first();
