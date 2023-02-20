@@ -34,7 +34,7 @@ use Cake\Core\Configure;
         &lt;iframe frameborder="0" width="100%" height="700" src="<?php echo Configure::read('AppConfig.serverName'); ?>/widgets/statistics-workshop/<span class="highlight">1234</span>"&gt;&lt;/iframe&gt;
     </code>
 
-    <?php if ($loggedUser->isOrga() || $loggedUser->isAdmin()) { ?>
+    <?php if ($loggedUser?->isOrga() || $loggedUser?->isAdmin()) { ?>
         <strong class="highlight">1234</strong>  / die ID deiner <?php echo Configure::read('AppConfig.initiativeNameSingular'); ?> ist zwingend erforderlich, du findest sie unter <a href="<?php echo $this->Html->urlUserWorkshopAdmin(); ?>">Meine Initiativen</a> in der Spalte ganz links<br />
     <?php } ?>
 

@@ -35,7 +35,7 @@ class InfoSheetsController extends AppController
                 $workshopUid = (int) $this->request->getParam('pass')[0];
                 $this->Workshop = $this->getTableLocator()->get('Workshops');
                 $workshop = $this->Workshop->getWorkshopForIsUserInOrgaTeamCheck($workshopUid);
-                if ($this->Workshop->isUserInOrgaTeam($this->isLoggedIn(), $workshop)) {
+                if ($this->Workshop->isUserInOrgaTeam($this->loggedUser, $workshop)) {
                     return true;
                 }
             }
@@ -68,7 +68,7 @@ class InfoSheetsController extends AppController
                 $workshopUid = $infoSheet->event->workshop_uid;
                 $this->Workshop = $this->getTableLocator()->get('Workshops');
                 $workshop = $this->Workshop->getWorkshopForIsUserInOrgaTeamCheck($workshopUid);
-                if ($this->Workshop->isUserInOrgaTeam($this->isLoggedIn(), $workshop)) {
+                if ($this->Workshop->isUserInOrgaTeam($this->loggedUser, $workshop)) {
                     return true;
                 }
 
