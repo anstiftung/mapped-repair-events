@@ -78,6 +78,9 @@ class WorkshopsControllerTest extends AppTestCase
         $this->assertMailContainsAt(0, 'Max Muster (maxmuster@mailinator.com) möchte bei ');
         $this->assertMailSentToAt(0, 'johndoe@mailinator.com');
 
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlWorkshopEdit($workshopUid));
+        $this->assertResponseCode(403);
+
     }
 
     public function testAddWorkshop()
