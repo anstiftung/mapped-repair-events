@@ -18,6 +18,9 @@ class UsersControllerTest extends AppTestCase
     use LogFileAssertionsTrait;
     use LoginTrait;
 
+    private $User;
+    private $Workshop;
+
     private $validUserData = [
         'nick' => 'JohnDoeA<img onerror="alert();" />',
         'firstname' => 'John<img onerror="alert();" />',

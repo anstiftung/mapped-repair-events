@@ -21,6 +21,8 @@ class WorkshopsControllerTest extends AppTestCase
     use EmailTrait;
     use LogFileAssertionsTrait;
 
+    private $Workshop;
+
     public function testAjaxGetAllWorkshopsForMap()
     {
         $this->configRequest([
