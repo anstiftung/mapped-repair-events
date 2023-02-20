@@ -62,6 +62,24 @@ class HtmlOutputTest extends AppTestCase
         $this->doAssertHtmlOutput();
     }
 
+    public function testSkills()
+    {
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlSkills());
+        $this->doAssertHtmlOutput();
+    }
+
+    public function testKnowledges()
+    {
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlKnowledges());
+        $this->doAssertHtmlOutput();
+    }
+
+    public function testSitemap()
+    {
+        $this->get('/sitemap.xml');
+        $this->assertResponseCode(200);
+    }
+
     public function testEventsWithoutFilter()
     {
         $this->get(Configure::read('AppConfig.htmlHelper')->urlEvents() . '?timeRange=all');
