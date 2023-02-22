@@ -130,10 +130,14 @@ class User extends Entity implements IdentityInterface
 
     protected function _getName()
     {
-        if (isset($this->_fields['firstname']) && isset($this->_fields['lastname'])) {
-            return $this->_fields['firstname'] . ' ' . $this->_fields['lastname'];
+        $names = [];
+        if (isset($this->_fields['firstname'])) {
+            $names[] = $this->_fields['firstname'];
         }
-        return '';
+        if (isset($this->_fields['lastname'])) {
+            $names[] = $this->_fields['lastname'];
+        }
+        return join(' ', $names);
     }
 
     protected function _setPassword($password)
