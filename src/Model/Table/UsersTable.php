@@ -2,17 +2,18 @@
 namespace App\Model\Table;
 
 use ArrayObject;
-use App\Controller\Component\StringComponent;
+use Cake\Utility\Hash;
+use Cake\Core\Configure;
+use Cake\Routing\Router;
+use Cake\ORM\RulesChecker;
+use Cake\Event\EventInterface;
+use Cake\Validation\Validator;
+use Cake\Datasource\FactoryLocator;
+use Cake\Auth\DefaultPasswordHasher;
+use Cake\Datasource\EntityInterface;
 use App\Model\Rule\UserLinkToWorkshopRule;
 use App\Model\Rule\UserIsWorkshopOwnerRule;
-use Cake\Auth\DefaultPasswordHasher;
-use Cake\Core\Configure;
-use Cake\Datasource\EntityInterface;
-use Cake\Datasource\FactoryLocator;
-use Cake\ORM\RulesChecker;
-use Cake\Utility\Hash;
-use Cake\Validation\Validator;
-use Cake\Event\EventInterface;
+use App\Controller\Component\StringComponent;
 
 class UsersTable extends AppTable
 {
@@ -333,9 +334,10 @@ class UsersTable extends AppTable
     {
         $validator->add('password', 'oldPasswordCheck', [
             'rule' => function ($value, $context) {
+                $loggedUserUid = Router::getRequest()?->getAttribute('identity')?->uid;
                 $loggedUser = $this->find('all', [
                    'conditions' => [
-                       'Users.uid' => $_SESSION['Auth']['User']['uid']
+                       'Users.uid' => $loggedUserUid,
                    ]
                 ])->first();
                 return (new DefaultPasswordHasher)->check($value, $loggedUser->password);

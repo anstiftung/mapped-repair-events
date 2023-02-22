@@ -5,6 +5,8 @@ namespace App\Test\TestCase\Traits;
 trait LogFileAssertionsTrait
 {
 
+    public $executeLogFileAssertions = true;
+
     public function setUp(): void
     {
         parent::setUp();
@@ -32,6 +34,9 @@ trait LogFileAssertionsTrait
 
     protected function assertLogFilesForErrors()
     {
+        if (!$this->executeLogFileAssertions) {
+            return;
+        }
         $log = file_get_contents($this->getLogFile('debug'));
         $log .= file_get_contents($this->getLogFile('error'));
         $log .= file_get_contents($this->getLogFile('cli-debug'));

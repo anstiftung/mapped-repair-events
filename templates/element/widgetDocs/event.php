@@ -15,7 +15,7 @@ use Cake\Core\Configure;
         &lt;iframe width="350" height="140" src="<?php echo Configure::read('AppConfig.serverName'); ?>/widgets/events?<span class="highlight">id=1234</span>"&gt;&lt;/iframe&gt;
     </code>
 
-    <?php if ($appAuth->isOrga() || $appAuth->isAdmin()) { ?>
+    <?php if ($loggedUser?->isOrga() || $loggedUser?->isAdmin()) { ?>
         <strong class="highlight">id=1234</strong>  / id= die ID deiner <?php echo Configure::read('AppConfig.initiativeNameSingular'); ?> ist zwingend erforderlich, du findest sie unter <a href="<?php echo $this->Html->urlUserWorkshopAdmin(); ?>">Meine Initiativen</a> in der Spalte ganz links<br />
     <?php } ?>
 

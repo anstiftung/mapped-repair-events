@@ -2,10 +2,10 @@
 
 <?php
 
-  if ($appAuth->user()) {
+  if (!empty($loggedUser)) {
 
       echo '<div class="top">';
-      echo '<div class="greeting">'.__('Welcome&nbsp;').' '.$appAuth->getUserNick().'</div>';
+      echo '<div class="greeting">'.__('Welcome&nbsp;').' ' . $loggedUser->nick . '</div>';
       echo '<div class="links">';
 
       echo $this->Html->link(__('My functions'), $this->Html->urlUserHome(),  [ 'id' => 'function-link'  ]). '<span class="divider"></span>'. $this->Html->link(__('Logout') ,$this->Html->urlLogout() ,['id' => 'abmelden-link']);
@@ -16,7 +16,7 @@
           if ($this->plugin == 'Admin') {
             echo $this->Html->link(__('To frontend'), '/');
           }
-          if (($appAuth->isAdmin() ) && $this->plugin == '') {
+          if (($loggedUser->isAdmin() ) && $this->plugin == '') {
             echo $this->Html->link(__('To backend'), '/admin/pages/index');
           }
 
@@ -38,8 +38,8 @@
             }
 
             echo $this->Form->create($loggedUser, ['url' => $action]);
-            echo $this->Form->control('email', ['label' =>  __('Loginbox:Email'), 'value' => '']);
-            echo $this->Form->control('password', ['label' => __('Loginbox:Pass'), 'value' => '']);
+            echo $this->Form->control('email', ['label' =>  __('Loginbox:Email'), 'value' => '', 'id' => 'rep-email']);
+            echo $this->Form->control('password', ['label' => __('Loginbox:Pass'), 'value' => '', 'id' => 'rep-password']);
         ?>
 
 <div class="sc"></div>

@@ -23,82 +23,13 @@ class EventsController extends AppController
 
         parent::beforeFilter($event);
         $this->Event = $this->getTableLocator()->get('Events');
-        $this->AppAuth->allow([
+        $this->Authentication->allowUnauthenticated([
             'detail',
             'all',
             'ajaxGetAllEventsForMap',
             'feed',
             'ical',
         ]);
-
-    }
-
-    public function isAuthorized($user)
-    {
-
-        if ($this->request->getParam('action') == 'myEvents') {
-            return $this->AppAuth->user();
-        }
-
-        if ($this->request->getParam('action') == 'add') {
-
-            if ($this->AppAuth->isAdmin()) {
-                $this->useDefaultValidation = false;
-                return true;
-            }
-
-            // repair helpers are not allowed to add events
-            if (!$this->AppAuth->isOrga()) {
-                return false;
-            }
-
-            $workshopUid = (int) $this->request->getParam('pass')[0];
-            $this->Workshop = $this->getTableLocator()->get('Workshops');
-            $workshop = $this->Workshop->getWorkshopForIsUserInOrgaTeamCheck($workshopUid);
-            if ($this->Workshop->isUserInOrgaTeam($this->AppAuth->user(), $workshop)) {
-                return true;
-            }
-
-        }
-
-        if (in_array($this->request->getParam('action'), ['edit', 'delete', 'duplicate'])) {
-
-            // repair helpers are not allowed to edit, delete or duplicate events (even not own content - which does not exist because "add" is locked for repairhelpers too)
-            if (!($this->AppAuth->isOrga() || $this->AppAuth->isAdmin())) {
-                return false;
-            }
-
-            $eventUid = (int) $this->request->getParam('pass')[0];
-
-            $this->Event = $this->getTableLocator()->get('Events');
-            $event = $this->Event->find('all', [
-                'conditions' => [
-                    'Events.uid' => $eventUid,
-                    'Events.status > ' . APP_DELETED
-                ]
-            ])->first();
-            $workshopUid = $event->workshop_uid;
-
-            if ($this->request->getParam('action') == 'edit' && $event->datumstart->isPast()) {
-                return false;
-            }
-
-            if ($this->AppAuth->isAdmin()) {
-                $this->useDefaultValidation = false;
-                return true;
-            }
-
-            // all approved orgas are allowed to edit their events
-            $this->Workshop = $this->getTableLocator()->get('Workshops');
-            $workshop = $this->Workshop->getWorkshopForIsUserInOrgaTeamCheck($workshopUid);
-            if ($this->Workshop->isUserInOrgaTeam($this->AppAuth->user(), $workshop)) {
-                return true;
-            }
-
-            return false;
-        }
-
-        return parent::isAuthorized($user);
 
     }
 
@@ -211,14 +142,14 @@ class EventsController extends AppController
     public function myEvents()
     {
 
-        $hasEditEventPermissions = $this->AppAuth->isAdmin() || $this->AppAuth->isOrga();
+        $hasEditEventPermissions = $this->isAdmin() || $this->isOrga();
 
         $this->Workshop = $this->getTableLocator()->get('Workshops');
         // complicated is-user-orga-check no needed again because this page is only accessible for orga users
-        if ($this->AppAuth->isAdmin()) {
+        if ($this->isAdmin()) {
             $workshops = $this->Workshop->getWorkshopsForAdmin(APP_DELETED);
         } else {
-            $workshops = $this->Workshop->getWorkshopsForAssociatedUser($this->AppAuth->getUserUid(), APP_DELETED);
+            $workshops = $this->Workshop->getWorkshopsForAssociatedUser($this->isLoggedIn() ? $this->loggedUser->uid : 0, APP_DELETED);
         }
 
         $workshops->contain([
@@ -243,7 +174,7 @@ class EventsController extends AppController
 
         // show only own content for repair helper
         if (!$hasEditEventPermissions) {
-            $conditions['InfoSheets.owner'] = $this->AppAuth->getUserUid();
+            $conditions['InfoSheets.owner'] = $this->isLoggedIn() ? $this->loggedUser->uid : 0;
         }
 
         $this->Workshop->getAssociation('Events')->getAssociation('InfoSheets')
@@ -386,10 +317,10 @@ class EventsController extends AppController
 
         $this->Workshop = $this->getTableLocator()->get('Workshops');
         // complicated is-user-orga-check no needed again because this page is only accessible for orga users
-        if ($this->AppAuth->isAdmin()) {
+        if ($this->isAdmin()) {
             $workshops = $this->Workshop->getWorkshopsForAdmin(APP_DELETED);
         } else {
-            $workshops = $this->Workshop->getWorkshopsForAssociatedUser($this->AppAuth->getUserUid(), APP_DELETED);
+            $workshops = $this->Workshop->getWorkshopsForAssociatedUser($this->isLoggedIn() ? $this->loggedUser->uid : 0, APP_DELETED);
         }
 
         $this->set('workshopsForDropdown', $this->Workshop->transformForDropdown($workshops));

@@ -86,12 +86,13 @@ abstract class AppTable extends Table
         return $validator;
     }
 
-    public function getPatchedEntityForAdminEdit($entity, $data, $useDefaultValidation)
+    public function getPatchedEntityForAdminEdit($entity, $data)
     {
+        $isAdmin = Router::getRequest()?->getAttribute('identity')?->isAdmin();
         $patchedEntity = $this->patchEntity(
             $entity,
             $data,
-            ['validate' => !$useDefaultValidation ? 'admin' : true] // calls Table::validationAdmin
+            ['validate' => $isAdmin ? 'admin' : true] // calls Table::validationAdmin
         );
         return $patchedEntity;
     }
@@ -99,13 +100,8 @@ abstract class AppTable extends Table
     public function beforeSave(EventInterface $event, $entity, $options)
     {
 
-        $request = Router::getRequest();
-        if ($request) {
-            $session = $request->getSession();
-            if ($session->read('Auth.User.uid') !== null) {
-                $this->loggedUserUid = $session->read('Auth.User.uid');
-            }
-        }
+        $this->loggedUserUid = Router::getRequest()?->getAttribute('identity')?->uid;
+
         if ($entity->isNew()) {
 
             /*

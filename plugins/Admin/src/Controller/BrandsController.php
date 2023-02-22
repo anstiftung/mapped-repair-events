@@ -16,7 +16,7 @@ class BrandsController extends AdminAppController
     {
         $brand = [
             'name' => 'Neue Marke',
-            'owner' => $this->AppAuth->getUserUid(),
+            'owner' => $this->isLoggedIn() ? $this->loggedUser->uid : 0,
             'status' => APP_OFF
         ];
         $entity = $this->Brand->newEntity($brand);

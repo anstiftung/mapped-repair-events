@@ -5,7 +5,7 @@ $this->element('addScript', ['script' =>
 "]);
 
 echo $this->element('jqueryTabsWithoutAjax', [
-    'links' => $this->Html->getUserBackendNaviLinks($appAuth->getUserUid(), true, $appAuth->isOrga())
+    'links' => $this->Html->getUserBackendNaviLinks($loggedUser->uid, true, $loggedUser->isOrga())
 ]);
 ?>
 

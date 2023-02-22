@@ -19,26 +19,6 @@ class InternController extends AdminAppController
         $this->FormProtection->setConfig('validate', false);
     }
 
-    public function isAuthorized($user)
-    {
-
-        if (in_array($this->request->getParam('action'), [
-            'ajaxCancelAdminEditPage',
-            'ajaxMiniUploadFormDeleteImage',
-            'ajaxMiniUploadFormRotateImage',
-            'ajaxMiniUploadFormSaveUploadedImage',
-            'ajaxMiniUploadFormSaveUploadedImagesMultiple',
-            'ajaxMiniUploadFormTmpImageUpload',
-            'ajaxChangeAppObjectStatus'
-        ])) {
-            if ($this->AppAuth->user()) {
-                return true;
-            }
-        } else {
-            return parent::isAuthorized($user);
-        }
-    }
-
     public function addCategory($name)
     {
         $categories = $this->getTableLocator()->get('Categories');
@@ -194,7 +174,7 @@ class InternController extends AdminAppController
                 'name' => $fileNamePlain,
                 'text' => $file['text'],
                 'status' => APP_ON,
-                'owner' => $this->AppAuth->getUserUid()
+                'owner' => $this->isLoggedIn() ? $this->loggedUser->uid : 0
             ];
             $newEntity = $this->Photo->newEntity($photo2save);
             $this->Photo->save($newEntity);
@@ -412,7 +392,7 @@ class InternController extends AdminAppController
             ])->first();
 
             // eigene bearbeitungs-hinweise bei click auf cancel löschen
-            if ($object->currently_updated_by == $this->AppAuth->getUserUid()) {
+            if ($object->currently_updated_by == $this->isLoggedIn() ? $this->loggedUser->uid : 0) {
                 $entity = $this->$objectClass->patchEntity($object, [
                     'currently_updated_by' => 0
                 ]);

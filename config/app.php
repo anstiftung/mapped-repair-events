@@ -1,10 +1,10 @@
 <?php
 
-use App\Log\Engine\FileAndEmailLog;
-use Cake\Cache\Engine\FileEngine;
+use Cake\Log\Engine\FileLog;
 use Cake\Database\Connection;
 use Cake\Database\Driver\Mysql;
-use Cake\Log\Engine\FileLog;
+use Cake\Cache\Engine\FileEngine;
+use App\Log\Engine\FileAndEmailLog;
 
 return [
     /*
@@ -176,9 +176,7 @@ return [
      */
     'Error' => [
         'errorLevel' => E_ALL,
-        'skipLog' => [
-            Cake\Http\Exception\ForbiddenException::class, // for testing isAuthorized
-        ],
+        'skipLog' => [],
         'log' => true,
         'trace' => true,
     ],

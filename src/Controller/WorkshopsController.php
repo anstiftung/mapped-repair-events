@@ -20,7 +20,7 @@ class WorkshopsController extends AppController
         parent::beforeFilter($event);
         $this->Workshop = $this->getTableLocator()->get('Workshops');
         $this->connection = ConnectionManager::get('default');
-        $this->AppAuth->allow([
+        $this->Authentication->allowUnauthenticated([
             'ajaxGetAllWorkshopsForMap',
             'ajaxGetWorkshopDetail',
             'ajaxGetWorkshopsAndUsersForTags',
@@ -30,62 +30,6 @@ class WorkshopsController extends AppController
             'detail',
             'all',
         ]);
-
-    }
-
-    public function isAuthorized($user)
-    {
-
-        if ($this->request->getParam('action') == 'verwalten') {
-            if (!($this->AppAuth->isAdmin() || $this->AppAuth->isOrga())) {
-                return false;
-            }
-            return true;
-        }
-
-
-        // die action "edit" ist für alle eingeloggten user erlaubt, die orga-mitglieder der initiative sind
-        if ($this->request->getParam('action') == 'add') {
-
-            if ($this->AppAuth->isAdmin()) {
-                $this->useDefaultValidation = true;
-                return true;
-            }
-
-            if ($this->AppAuth->isOrga()) {
-                return true;
-            }
-
-            return false;
-
-        }
-
-        if ($this->request->getParam('action') == 'edit') {
-
-            if (!($this->AppAuth->isOrga() || $this->AppAuth->isAdmin())) {
-                return false;
-            }
-
-            if ($this->AppAuth->isAdmin()) {
-                $this->useDefaultValidation = false;
-                return true;
-            }
-
-            $workshopUid = (int) $this->request->getParam('pass')[0];
-
-            // all approved orgas are alloewed to edit and add workshops
-            $this->Workshop = $this->getTableLocator()->get('Workshops');
-
-            $workshop = $this->Workshop->getWorkshopForIsUserInOrgaTeamCheck($workshopUid);
-            if ($this->Workshop->isUserInOrgaTeam($this->AppAuth->user(), $workshop)) {
-                return true;
-            }
-
-            return false;
-        }
-
-        return parent::isAuthorized($user);
-
     }
 
     public function add()
@@ -162,7 +106,7 @@ class WorkshopsController extends AppController
                 $this->request = $this->request->withData('Workshops.lng', str_replace(',', '.', $this->request->getData('Workshops.lng')));
             }
 
-            $patchedEntity = $this->Workshop->getPatchedEntityForAdminEdit($workshop, $this->request->getData(), $this->useDefaultValidation);
+            $patchedEntity = $this->Workshop->getPatchedEntityForAdminEdit($workshop, $this->request->getData());
 
             $errors = $patchedEntity->getErrors();
             if (isset($errors['lat']) && isset($errors['lat']['numeric'])) {
@@ -179,7 +123,7 @@ class WorkshopsController extends AppController
                     $this->AppFlash->setFlashMessage($this->Workshop->name_de . ' erfolgreich gespeichert.');
 
                     // add orga user to workshop if workshop was created - id is kinda hard to retrieve...
-                    if (!$isEditMode && $this->AppAuth->isOrga() &&!$this->AppAuth->isAdmin()) {
+                    if (!$isEditMode && $this->isOrga() &&!$this->isAdmin()) {
                         $usersWorkshop = $this->getTableLocator()->get('UsersWorkshops');
                         $savedWorkshop = $this->Workshop->find('all', [
                             'conditions' => [
@@ -188,7 +132,7 @@ class WorkshopsController extends AppController
                             ]
                         ])->first();
                         if (!empty($savedWorkshop)) {
-                            $usersWorkshop->addApprovedUser($savedWorkshop->uid, $this->AppAuth->getUserUid());
+                            $usersWorkshop->addApprovedUser($savedWorkshop->uid, $this->isLoggedIn() ? $this->loggedUser->uid : 0);
                         }
                     }
 
@@ -201,7 +145,7 @@ class WorkshopsController extends AppController
                     $email->setSubject(Configure::read('AppConfig.initiativeNameSingular') . ' "'.$entity->name.'" erfolgreich ' . $userAction)
                     ->setViewVars([
                         'workshop' => $entity,
-                        'username' => $this->AppAuth->getUserName(),
+                        'username' => $this->loggedUser->name,
                         'userAction' => $userAction,
                     ]);
                     $email->setTo(Configure::read('AppConfig.notificationMailAddress'));
@@ -222,7 +166,6 @@ class WorkshopsController extends AppController
 
         $this->set('workshop', $workshop);
         $this->set('isEditMode', $isEditMode);
-        $this->set('useDefaultValidation', $this->useDefaultValidation);
 
         if (!empty($errors)) {
             $this->render('edit');
@@ -587,7 +530,7 @@ class WorkshopsController extends AppController
 
         foreach ($workshops as &$workshop) {
 
-            $hasModifyPermissions = $this->AppAuth->isAdmin() || $this->Workshop->isUserInOrgaTeam($this->AppAuth->user(), $workshop);
+            $hasModifyPermissions = $this->isAdmin() || $this->Workshop->isUserInOrgaTeam($this->isLoggedIn(), $workshop);
             $i = 0;
 
             foreach ($workshop->events as &$event) {
@@ -675,12 +618,15 @@ class WorkshopsController extends AppController
         }
 
         $this->Worknews = $this->getTableLocator()->get('Worknews');
+        $conditions = [
+            'Worknews.workshop_uid' => $workshop->uid,
+            'Worknews.confirm' => 'ok'
+        ];
+        if ($this->isLoggedIn()) {
+            $conditions['Worknews.email'] = $this->loggedUser->email;
+        }
         $worknews = $this->Worknews->find('all', [
-            'conditions' => [
-                'Worknews.workshop_uid' => $workshop->uid,
-                'Worknews.email' => $this->AppAuth->getUserEmail(),
-                'Worknews.confirm' => 'ok'
-            ]
+            'conditions' => $conditions,
         ])->first();
 
         if (!empty($this->request->getData())) {
@@ -734,12 +680,16 @@ class WorkshopsController extends AppController
         } else {
             if (empty($worknews)) {
                 // prefill field email with email of logged user
-                $worknews = $this->Worknews->newEntity(
-                    ['email' => $this->AppAuth->getUserEmail()], ['validate' => false]
-                );
+                if ($this->isLoggedIn()) {
+                    $worknews = $this->Worknews->newEntity(
+                        ['email' => $this->loggedUser->email], ['validate' => false]
+                    );
+                } else {
+                    $worknews = $this->Worknews->newEmptyEntity(['validate' => false]);
+                }
             }
         }
-        $subscribed = $worknews->confirm == 'ok' && $this->AppAuth->user() && $worknews->email == $this->AppAuth->getUserEmail();
+        $subscribed = $worknews->confirm == 'ok' && $this->isLoggedIn() && $worknews->email == $this->loggedUser->email;
         $this->set('subscribed', $subscribed);
         $this->set('worknews', $worknews);
 
@@ -868,7 +818,7 @@ class WorkshopsController extends AppController
 
         $this->set('workshop', $workshop);
 
-        $hasModifyPermissions = $this->AppAuth->isAdmin() || $this->Workshop->isUserInOrgaTeam($this->AppAuth->user(), $workshop);
+        $hasModifyPermissions = $this->isAdmin() || $this->Workshop->isUserInOrgaTeam($this->isLoggedIn(), $workshop);
         $this->set('hasModifyPermissions', $hasModifyPermissions);
 
         $event = false;
@@ -916,7 +866,7 @@ class WorkshopsController extends AppController
      */
     private function prepareUserWorkshopActions()
     {
-        if (! $this->AppAuth->user()) {
+        if (! $this->isLoggedIn()) {
             throw new NotFoundException('nicht eingeloggt');
         }
 
@@ -949,7 +899,7 @@ class WorkshopsController extends AppController
             ]
         ]);
 
-        if (!$this->AppAuth->isAdmin()) {
+        if (!$this->isAdmin()) {
             $query->matching('Users', function ($q) use ($userUid) {
                 return $q->where([
                     'UsersWorkshops.user_uid' => $userUid
@@ -1048,7 +998,7 @@ class WorkshopsController extends AppController
             $this->connection->execute($query);
 
             // immediately approve relation, if done by admin
-            if ($this->AppAuth->isAdmin()) {
+            if ($this->isAdmin()) {
                 $query = 'UPDATE ' . $relationTable . ' SET approved = NOW() WHERE workshop_uid = :workshopUid AND user_uid = :userUid';
                 $params = [
                   'workshopUid' => $workshopUid,
@@ -1070,7 +1020,7 @@ class WorkshopsController extends AppController
             $user->revertPrivatizeData();
 
             /* START email-versand an alle initiativen-orgas */
-            if (!$this->AppAuth->isAdmin()) {
+            if (!$this->isAdmin()) {
                 $this->Workshop = $this->getTableLocator()->get('Workshops');
                 $workshop = $this->Workshop->find('all', [
                     'conditions' => [
@@ -1106,7 +1056,7 @@ class WorkshopsController extends AppController
             /* END email-versand an alle orgas */
 
             $message = 'Deine Anfrage wurde gestellt. Bitte warte, bis sie vom Verantwortlichen der Initiative bestätigt wird. Er wurde per E-Mail benachrichtigt.';
-            if ($this->AppAuth->isAdmin()) {
+            if ($this->isAdmin()) {
                 $message = 'Die Zuordnung wurde erstellt und ist bereits bestätigt. Es wurden <b>keine</b> E-Mails versendet.';
             }
             $this->AppFlash->setFlashMessage($message);
@@ -1132,7 +1082,7 @@ class WorkshopsController extends AppController
 
         $workshopsForDropdown = $this->Workshop->getForDropdown();
 
-        if (!$this->AppAuth->isAdmin()) {
+        if (!$this->isAdmin()) {
             // initiative aus dropdown löschen, damit nicht doppelt angefragt werden kann
             $i = 0;
             foreach ($associatedWorkshops as $associatedWorkshop) {
@@ -1153,19 +1103,19 @@ class WorkshopsController extends AppController
         ];
         $this->set('metaTags', $metaTags);
         $filterCondition = [
-            'UsersWorkshops.user_uid' => $this->AppAuth->getUserUid()
+            'UsersWorkshops.user_uid' => $this->isLoggedIn() ? $this->loggedUser->uid : 0
         ];
 
         // admins can apply in the name of another user
-        $userUid = $this->AppAuth->getUserUid();
-        if ($this->AppAuth->isAdmin() && $this->request->getData('users_workshops.user_uid') > 0) {
+        $userUid = $this->isLoggedIn() ? $this->loggedUser->uid : 0;
+        if ($this->isAdmin() && $this->request->getData('users_workshops.user_uid') > 0) {
             $userUid = $this->request->getData('users_workshops.user_uid');
         }
 
         $this->associationTable = $this->getTableLocator()->get('UsersWorkshops');
         $this->apply('UsersWorkshops', 'users_workshops', 'user_uid', 'Users', $userUid, $filterCondition);
 
-        if ($this->AppAuth->isAdmin()) {
+        if ($this->isAdmin()) {
             $this->User = $this->getTableLocator()->get('Users');
             $this->set('usersForDropdown', $this->User->getForDropdown());
         }
@@ -1176,10 +1126,10 @@ class WorkshopsController extends AppController
     {
         $this->Workshop = $this->getTableLocator()->get('Workshops');
         // complicated is-user-orga-check no needed again because this page is only accessible for orga users
-        if ($this->AppAuth->isAdmin()) {
+        if ($this->isAdmin()) {
             $workshops = $this->Workshop->getWorkshopsForAdmin(APP_DELETED);
         } else {
-            $workshops = $this->Workshop->getWorkshopsForAssociatedUser($this->AppAuth->getUserUid(), APP_DELETED);
+            $workshops = $this->Workshop->getWorkshopsForAssociatedUser($this->isLoggedIn() ? $this->loggedUser->uid : 0, APP_DELETED);
         }
 
         $this->User = $this->getTableLocator()->get('Users');

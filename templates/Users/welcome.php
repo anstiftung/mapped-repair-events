@@ -12,7 +12,7 @@ if ($this->request->getSession()->read('isMobile')) {
 
     <?php
         echo $this->element('jqueryTabsWithoutAjax', [
-                'links' => $this->Html->getUserBackendNaviLinks($appAuth->getUserUid(), true, $appAuth->isOrga())
+                'links' => $this->Html->getUserBackendNaviLinks($loggedUser->uid, true, $loggedUser->isOrga())
             ]
         );
     ?>
@@ -21,14 +21,14 @@ if ($this->request->getSession()->read('isMobile')) {
         <div class="ui-tabs-panel">
             <div id="profile">
                 <?php
-                    echo $this->Html->getUserProfileImage($appAuth->getUser());
+                    echo $this->Html->getUserProfileImage($loggedUser);
                 ?>
                 <div class="sc"></div>
-                <?php echo '<span class="greenbold">'.$appAuth->getUserFirstname().' '.$appAuth->getUserLastname().'</span><span> ( '.$appAuth->getUserNick().' )</span>'; ?>
-                <?php echo '<div>'.$appAuth->getUserEmail().' ( ID: '.$appAuth->getUserUid().' )</div>'; ?>
+                <?php echo '<span class="greenbold">'.$loggedUser->firstname.' '.$loggedUser->lastname.'</span><span> ( '.$loggedUser->nick.' )</span>'; ?>
+                <?php echo '<div>'.$loggedUser->email.' ( ID: '.$loggedUser->uid.' )</div>'; ?>
                 <div style="height:8px;"></div>
-                <?php echo '<div>'.$appAuth->getUser()['street'].'</div>'; ?>
-                <?php echo '<div>'.$appAuth->getUser()['zip']. ' '. $appAuth->getUser()['city'].' / '. $appAuth->getUser()['country_code'].'</div>'; ?>
+                <?php echo '<div>'.$loggedUser['street'].'</div>'; ?>
+                <?php echo '<div>'.$loggedUser['zip']. ' '. $loggedUser['city'].' / '. $loggedUser['country_code'].'</div>'; ?>
 
                 <br /><br />
             </div>

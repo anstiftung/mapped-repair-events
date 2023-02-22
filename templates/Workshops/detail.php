@@ -96,7 +96,7 @@ if (!$this->request->getSession()->read('isMobile')) {
 
         echo '<div class="sc"></div><br>';
         if ($subscribed) {
-            echo '<div>Deine E-Mail-Adresse <strong>(', $appAuth->getUserEmail(), ')</strong> ', __('is already subscribed to news from this workshop.'), ' <a href="/initiativen/newsunsub/', $worknews->unsub, '">', __('Click here to unsubscribe'), '.</a></div>';
+            echo '<div>Deine E-Mail-Adresse <strong>(', $loggedUser->email, ')</strong> ', __('is already subscribed to news from this workshop.'), ' <a href="/initiativen/newsunsub/', $worknews->unsub, '">', __('Click here to unsubscribe'), '.</a></div>';
         }
         ?>
 

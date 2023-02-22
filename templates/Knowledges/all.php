@@ -48,7 +48,7 @@ foreach($knowledges as $knowledge) {
 
             echo $knowledge->title;
 
-            if ($appAuth->isAdmin()) {
+            if ($loggedUser?->isAdmin()) {
                 echo $this->Html->link(
                     '<i class="far fa-edit fa-border"></i>',
                     $this->Html->urlKnowledgeEdit($knowledge->uid),

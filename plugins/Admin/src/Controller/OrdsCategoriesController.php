@@ -16,7 +16,7 @@ class OrdsCategoriesController extends AdminAppController
     {
         $ordsCategory = [
             'name' => 'Neue ORDS-Kategorie',
-            'owner' => $this->AppAuth->getUserUid(),
+            'owner' => $this->isLoggedIn() ? $this->loggedUser->uid : 0,
             'status' => APP_ON,
         ];
         $entity = $this->OrdsCategory->newEntity($ordsCategory);

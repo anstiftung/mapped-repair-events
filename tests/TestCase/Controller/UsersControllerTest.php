@@ -18,7 +18,9 @@ class UsersControllerTest extends AppTestCase
     use LogFileAssertionsTrait;
     use LoginTrait;
 
+    private $Group;
     private $User;
+    private $UsersWorkshop;
     private $Workshop;
 
     private $validUserData = [

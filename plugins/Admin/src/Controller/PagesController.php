@@ -16,7 +16,7 @@ class PagesController extends AdminAppController
     public function insert()
     {
         $page = [
-            'name' => 'Neue Seite von ' . $this->AppAuth->getUserName(),
+            'name' => 'Neue Seite von ' . $this->loggedUser->name,
             'url' => StringComponent::createRandomString(6)
         ];
         $entity = $this->Page->newEntity($page);
@@ -54,7 +54,7 @@ class PagesController extends AdminAppController
 
         if (!empty($this->request->getData())) {
 
-            $patchedEntity = $this->Page->getPatchedEntityForAdminEdit($page, $this->request->getData(), $this->useDefaultValidation);
+            $patchedEntity = $this->Page->getPatchedEntityForAdminEdit($page, $this->request->getData());
             if (!($patchedEntity->hasErrors())) {
                 $patchedEntity = $this->patchEntityWithCurrentlyUpdatedFields($patchedEntity);
                 $this->saveObject($patchedEntity);

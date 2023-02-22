@@ -1,7 +1,7 @@
 <?php
 use Cake\Core\Configure;
 echo $this->element('jqueryTabsWithoutAjax', [
-    'links' => $this->Html->getUserBackendNaviLinks($appAuth->getUserUid(), true, $appAuth->isOrga())
+    'links' => $this->Html->getUserBackendNaviLinks($loggedUser->uid, true, $loggedUser->isOrga())
 ]);
 $this->element('addScript', array('script' =>
     JS_NAMESPACE.".Helper.bindToggleLinks(false, true);".

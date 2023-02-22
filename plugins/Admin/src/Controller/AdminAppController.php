@@ -38,14 +38,6 @@ class AdminAppController extends AppController
         ];
     }
 
-    public function isAuthorized($user)
-    {
-        if (! $this->AppAuth->isAdmin()) {
-            return false;
-        }
-        return parent::isAuthorized($user);
-    }
-
     public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);
@@ -152,7 +144,7 @@ class AdminAppController extends AppController
         return $query;
     }
 
-    protected function saveObject($entity, $useDefaultValidation = true)
+    protected function saveObject($entity)
     {
         $modelName = $this->modelName;
         $entity = $this->stripTagsFromFields($entity, $modelName);

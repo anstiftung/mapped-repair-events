@@ -20,13 +20,7 @@ trait LoginTrait
             ]
         ])->first();
         $user->revertPrivatizeData();
-
-        $this->session([
-            'Auth' => [
-                'User' => $user->toArray(),
-            ]
-        ]);
-
+        $this->session(['Auth' => $user]);
     }
 
     protected function loginAsAdmin()
@@ -42,13 +36,7 @@ trait LoginTrait
             ]
         ])->first();
         $user->revertPrivatizeData();
-
-        $this->session([
-            'Auth' => [
-                'User' => $user->toArray()
-            ]
-        ]);
-
+        $this->session(['Auth' => $user]);
     }
 
     protected function loginAsRepairhelper()
@@ -64,13 +52,7 @@ trait LoginTrait
             ]
         ])->first();
         $user->revertPrivatizeData();
-
-        $this->session([
-            'Auth' => [
-                'User' => $user->toArray()
-            ]
-        ]);
-
+        $this->session(['Auth' => $user]);
     }
 
 }

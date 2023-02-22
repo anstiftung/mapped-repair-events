@@ -23,7 +23,7 @@ class PostsController extends AdminAppController
 
         // admin defaults
         $post = [
-            'name' => 'Neuer Post von ' . $this->AppAuth->getUserName(),
+            'name' => 'Neuer Post von ' . $this->loggedUser->name,
             'publish' => FrozenDate::now(),
             'url' => StringComponent::createRandomString(6)
         ];
@@ -38,53 +38,6 @@ class PostsController extends AdminAppController
         $this->AppFlash->setFlashMessage('Post erfolgreich erstellt. UID: ' . $post->uid); // uid for fixture
         $this->redirect($this->getReferer());
 
-    }
-
-    public function isAuthorized($user)
-    {
-        if ($this->request->getParam('action') == 'edit') {
-
-            if (! $this->AppAuth->user()) {
-                return false;
-            }
-
-            if ($this->AppAuth->isAdmin()) {
-                $this->useDefaultValidation = false;
-                return true;
-            }
-
-            $postUid = (int) $this->request->getParam('pass')[0];
-
-            // NUR der owner des posts darf ihn bearbeiten
-            if ($this->AppAuth->isBlog() && $this->AppAuth->isOwner($postUid)) {
-                return true;
-            }
-
-            return false;
-
-            // blog und admin user dürfen auf die index- bzw index-seite
-        } elseif (in_array($this->request->getParam('action'), [
-            'insert',
-            'index'
-        ])) {
-
-            if (! $this->AppAuth->user()) {
-                return false;
-            }
-
-            if ($this->AppAuth->isAdmin()) {
-                $this->useDefaultValidation = false;
-                return true;
-            }
-
-            if ($this->AppAuth->isBlog()) {
-                return true;
-            }
-
-            return false;
-        } else {
-            return parent::isAuthorized($user);
-        }
     }
 
     public function edit($uid)
@@ -126,11 +79,11 @@ class PostsController extends AdminAppController
             if ($this->request->getData('Posts.publish')) {
                 $this->request = $this->request->withData('Posts.publish', new FrozenDate($this->request->getData('Posts.publish')));
             }
-            $patchedEntity = $this->Post->getPatchedEntityForAdminEdit($post, $this->request->getData(), $this->useDefaultValidation);
+            $patchedEntity = $this->Post->getPatchedEntityForAdminEdit($post, $this->request->getData());
 
             if (!($patchedEntity->hasErrors())) {
                 $patchedEntity = $this->patchEntityWithCurrentlyUpdatedFields($patchedEntity);
-                $this->saveObject($patchedEntity, $this->useDefaultValidation);
+                $this->saveObject($patchedEntity);
             } else {
                 $post = $patchedEntity;
             }
@@ -180,10 +133,6 @@ class PostsController extends AdminAppController
         $conditions = [
             'Posts.status > ' . APP_DELETED
         ];
-
-        if ($this->useDefaultValidation) {
-            $conditions['Posts.owner'] = $this->AppAuth->getUserUid();
-        }
 
         $conditions = array_merge($this->conditions, $conditions);
 

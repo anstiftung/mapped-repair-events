@@ -12,7 +12,7 @@ $this->element('addScript', ['script' =>
 "]);
 if ($isMyProfile) {
     echo $this->element('jqueryTabsWithoutAjax', [
-            'links' => $this->Html->getUserBackendNaviLinks($user->uid, $isMyProfile, $appAuth->isOrga())
+            'links' => $this->Html->getUserBackendNaviLinks($user->uid, $isMyProfile, $loggedUser->isOrga())
         ]
     );
 }
@@ -23,7 +23,7 @@ if ($isMyProfile) {
         <?php echo $this->element('heading', ['first' => $metaTags['title'] ]); ?>
 
         <p><?php echo __('Profil: introtext'); ?></p>
-        <p><a href="<?php echo $this->Html->urlUserProfile($appAuth->getUserUid()); ?>" target="_blank">Mein öffentliches Profil anzeigen</a><p>
+        <p><a href="<?php echo $this->Html->urlUserProfile($loggedUser->uid); ?>" target="_blank">Mein öffentliches Profil anzeigen</a><p>
         <br />
 
         <?php if ($isMyProfile) { ?>
@@ -122,7 +122,7 @@ if ($isMyProfile) {
 
                 echo $this->Form->control('Users.about_me', ['label' => 'Über mich (max. 1.000 Zeichen)', 'type' => 'textarea', 'data-private' => true]).'<br />';
 
-                if ($appAuth->isAdmin()) {
+                if ($loggedUser->isAdmin()) {
                     echo $this->Form->control('Users.status', ['type' => 'select', 'options' => Configure::read('AppConfig.status2')]). '<br />';
                 }
 

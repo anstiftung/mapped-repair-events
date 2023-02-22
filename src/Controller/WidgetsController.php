@@ -13,7 +13,7 @@ class WidgetsController extends AppController
     public function beforeFilter(EventInterface $event) {
 
         parent::beforeFilter($event);
-        $this->AppAuth->allow([
+        $this->Authentication->allowUnauthenticated([
             'events',
             'map',
             'integration',

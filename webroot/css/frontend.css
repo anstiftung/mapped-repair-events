@@ -54,6 +54,13 @@ a.vg:visited {
 .address-wrapper a {
     font-weight: normal;
 }
+body.users.login #ViewsWrapper {
+    width: 400px;
+}
+body.users.login #ViewsWrapper button[type="submit"] {
+    float: right;
+    margin-right: 28px;
+}
 div.jqibox {
     margin-top: 10%;
     z-index: 10000 ! important;
@@ -3716,6 +3723,9 @@ body.users.profil .add-skill {
     }
     .greeting {
         display: none
+    }
+    body.users.login #ViewsWrapper {
+        width: 100%;
     }
     #login-box {
         margin-top: 18px;

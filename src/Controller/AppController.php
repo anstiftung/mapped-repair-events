@@ -22,9 +22,9 @@ use Cake\Utility\Inflector;
 class AppController extends Controller
 {
 
-    public $useDefaultValidation = true;
-
     public $modelName;
+
+    public $loggedUser = null;
 
     public function __construct($request = null, $response = null)
     {
@@ -50,6 +50,7 @@ class AppController extends Controller
 
         parent::initialize();
 
+        $this->loadComponent('Authentication.Authentication');
         $this->loadComponent('Common');
         $this->loadComponent('String');
         $this->loadComponent('RequestHandler', [
@@ -61,25 +62,6 @@ class AppController extends Controller
         if (!$this->getRequest()->is('json') && !in_array($this->name, ['Events'])) {
             $this->loadComponent('FormProtection');
         }
-        $this->loadComponent('AppAuth', [
-            'logoutRedirect' => '/',
-            'authError' => 'Zugriff verweigert, bitte melde dich an.',
-            'authorize' => [
-                'Controller'
-            ],
-            'loginError' => 'Sorry, der Login ist fehlgeschlagen.',
-            'unauthorizedRedirect' => false,
-            'authenticate' => [
-                'Form' => [
-                    'userModel' => 'Users',
-                    'fields' => [
-                        'username' => 'email'
-                    ],
-                    'finder' => 'auth' // UserTable::findAuth
-                ]
-            ],
-            'storage' => 'Session'
-        ]);
 
         $this->paginate = [
             'limit' => 100000,
@@ -115,7 +97,11 @@ class AppController extends Controller
     public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);
-        $this->set('useDefaultValidation', $this->useDefaultValidation);
+        $this->loggedUser = $this->request->getAttribute('identity');
+        if (!empty($this->loggedUser)) {
+            $this->loggedUser = $this->loggedUser->getOriginalData();
+        }
+        $this->set('loggedUser', $this->loggedUser);
     }
 
     public function beforeRender(EventInterface $event)
@@ -125,13 +111,26 @@ class AppController extends Controller
         }
         parent::beforeRender($event);
         $this->setNavigation();
-        $this->set('appAuth', $this->AppAuth);
-        $this->set('loggedUser', $this->AppAuth->user());
     }
 
-    public function isAuthorized($user)
+    protected function isLoggedIn(): bool
     {
-        return true;
+        return $this->loggedUser !== null;
+    }
+
+    protected function isAdmin(): bool
+    {
+        return $this->isLoggedIn() && $this->loggedUser->isAdmin();
+    }
+
+    protected function isOrga(): bool
+    {
+        return $this->isLoggedIn() && $this->loggedUser->isOrga();
+    }
+
+    protected function isRepairhelper(): bool
+    {
+        return $this->isLoggedIn() && $this->loggedUser->isRepairhelper();
     }
 
     /**
@@ -182,7 +181,7 @@ class AppController extends Controller
         }
 
         // admins oder owner dürfen offline-content im preview-mode sehen
-        if (! $this->AppAuth->isAdmin() && ! $this->AppAuth->isOwnerByModelNameAndUrl($modelName, $url))
+        if ($this->isLoggedIn() && !$this->isAdmin() && !$this->loggedUser->isOwnerByModelNameAndUrl($modelName, $url))
             return $previewConditions;
 
         if ($this->isPreview()) {
@@ -240,12 +239,12 @@ class AppController extends Controller
      */
     protected function doUserGroupAccessCheck($groups)
     {
+
         return true;
 
-        $loggedUser = $this->AppAuth->getUser();
         $loggedUserGroups = [];
-        if (! empty($loggedUser->groups)) {
-            $loggedUserGroups = Hash::extract($loggedUser->groups, '{n}.id');
+        if (!empty($this->loggedUser) && !empty($this->loggedUser->groups)) {
+            $loggedUserGroups = Hash::extract($this->loggedUser->groups, '{n}.id');
         }
 
         $objectGroups = [];
@@ -253,7 +252,7 @@ class AppController extends Controller
             $objectGroups = Hash::extract($groups, '{n}.id');
         }
 
-        if (! $this->AppAuth->user()) {
+        if (! $this->isLoggedIn()) {
             // ausgeloggt und page hat rechte gesetzt => 404
             if (! empty($objectGroups)) {
                 throw new NotFoundException('user nicht eingeloggt und page verlangt view-rechte');
@@ -294,7 +293,7 @@ class AppController extends Controller
             } else if ($field == 'text') {
                 // ckeditor feld heißt normalerweise 'text'
                 $allowedTags = ALLOWED_TAGS_CKEDITOR_USER;
-                if ($this->AppAuth->isAdmin() && in_array($modelName, ['Post', 'Page', 'Knowledge'])) {
+                if ($this->isAdmin() && in_array($modelName, ['Post', 'Page', 'Knowledge'])) {
                     $allowedTags =  ALLOWED_TAGS_CKEDITOR_ADMIN;
                 }
                 if (!is_null($data)) {
@@ -338,7 +337,7 @@ class AppController extends Controller
             $diffInSeconds = time() - $currentlyUpdatedStart;
         }
 
-        if (! empty($data->currently_updated_by_user) && $data->currently_updated_by_user->uid != $this->AppAuth->getUserUid() && $data->currently_updated_by_user->uid > 0 && $diffInSeconds < 60 * 60) {
+        if (! empty($data->currently_updated_by_user) && $data->currently_updated_by_user->uid != $this->isLoggedIn() ? $this->loggedUser->uid : 0 && $data->currently_updated_by_user->uid > 0 && $diffInSeconds < 60 * 60) {
             $updatingUser = $data->currently_updated_by_user->firstname . ' ' . $data->currently_updated_by_user->lastname;
             $this->AppFlash->setFlashError('<b>Diese Seite ist gesperrt. ' . $updatingUser . ' hat ' . Configure::read('AppConfig.timeHelper')->timeAgoInWords($data->currentlyUpdatedStart) . ' begonnen, sie zu bearbeiten. <a id="unlockEditPageLink" href="javascript:void(0);">Entsperren?</a></b>');
             return true;
@@ -346,7 +345,7 @@ class AppController extends Controller
 
         // if not currently updated, set logged user as updating one
         $saveData = [
-            'currently_updated_by' => $this->AppAuth->getUserUid(),
+            'currently_updated_by' => $this->isLoggedIn() ? $this->loggedUser->uid : 0,
             'currently_updated_start' => new FrozenTime()
         ];
         $entity = $this->$modelName->patchEntity($data, $saveData);

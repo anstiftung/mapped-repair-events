@@ -102,7 +102,7 @@ use Cake\Core\Configure;
                 echo '</div>';
             };
 
-            if (!$useDefaultValidation) {
+            if ($loggedUser->isAdmin()) {
                 echo $this->element('metatagsFormfields', ['entity' => 'Workshops']);
             }
         ?>
