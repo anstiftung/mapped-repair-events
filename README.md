@@ -40,16 +40,6 @@
 ## Netzwerk Reparatur-Initiativen
 * [https://www.reparatur-initiativen.de/](https://www.reparatur-initiativen.de/)
 
-## Demo page
-* [https://open-source.reparatur-initiativen.de/](https://open-source.reparatur-initiativen.de/)
-* [Login data - credentials](https://open-source.reparatur-initiativen.de/post/test-logins)
-
-### Login data demo page
-
-* **Admin**: mapped-repair-events-admin@mailinator.com PW: OSTestAdmin
-* **Orga**: mapped-repair-events-orga@mailinator.com PW: OSTestOrga
-* **Helper**: mapped-repair-events-helper@mailinator.com PW: OSTestHelper
-
 <h1 align="center">
   <a href="https://www.anstiftung.de">
     <img src="https://anstiftung.de/images/anstiftung-logo.svg" alt="anstiftung" />
