@@ -95,26 +95,28 @@ $this->element('addScript', ['script' =>
 
       if ($type == 'user') {
           echo '<td class="icon">';
-            if ($userEntity->_joinData->approved) {
-                echo $this->Html->link(
-                    '<i class="far fa-edit fa-border"></i>',
-                    $this->Html->urlWorkshopEdit($associatedWorkshop->uid),
-                    [
-                        'title' => Configure::read('AppConfig.initiativeNameSingular') . ' bearbeiten',
-                        'escape' => false
-                    ]
+            if ($loggedUser->isAdmin() || $loggedUser->isOrga()) {
+              if ($userEntity->_joinData->approved) {
+                  echo $this->Html->link(
+                      '<i class="far fa-edit fa-border"></i>',
+                      $this->Html->urlWorkshopEdit($associatedWorkshop->uid),
+                      [
+                          'title' => Configure::read('AppConfig.initiativeNameSingular') . ' bearbeiten',
+                          'escape' => false
+                      ]
+                    );
+              } else {
+                  echo $this->Html->link(
+                      '<i class="far fa-edit fa-border"></i>',
+                      'javascript:alert(\'Mitgliedschaft ist noch nicht bestätigt.\');',
+                      [
+                          'title' => Configure::read('AppConfig.initiativeNameSingular') . ' bearbeiten',
+                          'escape' => false,
+                          'disabled' => 'disabled',
+                          'class' => 'disabled'
+                      ]
                   );
-            } else {
-                echo $this->Html->link(
-                    '<i class="far fa-edit fa-border"></i>',
-                    'javascript:alert(\'Mitgliedschaft ist noch nicht bestätigt.\');',
-                    [
-                        'title' => Configure::read('AppConfig.initiativeNameSingular') . ' bearbeiten',
-                        'escape' => false,
-                        'disabled' => 'disabled',
-                        'class' => 'disabled'
-                    ]
-                );
+              }
             }
            echo '</td>';
       }
