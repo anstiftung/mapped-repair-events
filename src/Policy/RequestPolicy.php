@@ -5,6 +5,7 @@ namespace App\Policy;
 
 use Cake\Http\ServerRequest;
 use Authorization\Policy\RequestPolicyInterface;
+use Cake\Http\Exception\NotFoundException;
 
 class RequestPolicy implements RequestPolicyInterface
 {
@@ -24,7 +25,12 @@ class RequestPolicy implements RequestPolicyInterface
             default => 'App\\Policy\\' . $controller . 'Policy',
         };
 
-        return (new $policy())->canAccess($identity, $request);
+        if (class_exists($policy)) {
+            return (new $policy())->canAccess($identity, $request);
+        }
+
+        // !sic default == true to throw correct 404Error for not available files /files/uploadify/users/thumbs-150/39430.jpeg
+        return true;
 
     }
 
