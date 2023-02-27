@@ -83,9 +83,6 @@ class Application extends BaseApplication
     public function middleware(MiddlewareQueue $middlewareQueue): MiddlewareQueue
     {
         $middlewareQueue
-        // Catch any exceptions in the lower layers,
-        // and make an error page/response
-        ->add(new ErrorHandlerMiddleware(Configure::read('Error')))
 
         // Handle plugin/theme assets like CakePHP normally does.
         ->add(new AssetMiddleware([
@@ -99,7 +96,12 @@ class Application extends BaseApplication
         ->add(new AuthenticationMiddleware($this))
 
         ->add(new AuthorizationMiddleware($this))
-        ->add(new RequestAuthorizationMiddleware());
+        ->add(new RequestAuthorizationMiddleware())
+
+        // Catch any exceptions in the lower layers, and make an error page/response
+        // needs to be added as last middleware to make production error page work (identity, csrf token)
+        ->add(new ErrorHandlerMiddleware(Configure::read('Error')))
+        ;
 
         return $middlewareQueue;
     }
