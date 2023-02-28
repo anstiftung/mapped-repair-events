@@ -12,7 +12,7 @@ class AdminPolicy implements RequestPolicyInterface
     public function canAccess($identity, ServerRequest $request)
     {
 
-        if ($request->getParam('controller') != 'Intern') {
+        if ($request->getParam('controller') != 'Intern' && $identity !== null) {
             return $identity->isAdmin();
         }
 
