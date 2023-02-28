@@ -25,6 +25,7 @@ class UsersController extends AppController
         $this->Authentication->allowUnauthenticated([
             'neuesPasswortAnfordern',
             'login',
+            'logout',
             'register',
             'registerRepairhelper',
             'registerOrga',
@@ -644,7 +645,8 @@ class UsersController extends AppController
     public function logout()
     {
         $this->AppFlash->setFlashMessage('Du hast dich erfolgreich ausgeloggt.');
-        $this->redirect($this->Authentication->logout());
+        $this->Authentication->logout();
+        $this->redirect('/');
     }
 
 }
