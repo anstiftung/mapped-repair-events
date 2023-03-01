@@ -17,7 +17,7 @@ class InfoSheetsPolicy implements RequestPolicyInterface
     public function canAccess($identity, ServerRequest $request)
     {
 
-        if (Configure::read('AppConfig.statisticsEnabled')) {
+        if (!Configure::read('AppConfig.statisticsEnabled')) {
             return false;
         }
 
