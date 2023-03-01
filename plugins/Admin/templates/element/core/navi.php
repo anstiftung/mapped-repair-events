@@ -1,4 +1,6 @@
 <?php
+
+use Cake\Core\Configure;
 echo $this->Html->createMenuEntry(array(
     'name' => 'Kategorien',
     'url' => '/admin/categories/index',
@@ -9,26 +11,30 @@ echo $this->Html->createMenuEntry(array(
     'url' => '/admin/skills/index',
     'level' => 'main'
 ));
-echo $this->Html->createMenuEntry(array(
-    'name' => 'Laufzettel',
-    'url' => '/admin/info-sheets/index',
-    'level' => 'main'
-));
-echo $this->Html->createMenuEntry(array(
-    'name' => 'Marken',
-    'url' => '/admin/brands/index?sort=status&direction=asc',
-    'level' => 'main'
-));
+if (Configure::read('AppConfig.statisticsEnabled')) {
+    echo $this->Html->createMenuEntry(array(
+        'name' => 'Laufzettel',
+        'url' => '/admin/info-sheets/index',
+        'level' => 'main'
+    ));
+    echo $this->Html->createMenuEntry(array(
+        'name' => 'Marken',
+        'url' => '/admin/brands/index?sort=status&direction=asc',
+        'level' => 'main'
+    ));
+}
 echo $this->Html->createMenuEntry(array(
     'name' => 'Posts',
     'url' => '/admin/posts/index/?val-opt-2=1&key-opt-2=Posts.blog_id',
     'level' => 'main'
 ));
-echo $this->Html->createMenuEntry(array(
-    'name' => 'ORDS',
-    'url' => '/admin/ordsCategories/index',
-    'level' => 'main'
-));
+if (Configure::read('AppConfig.statisticsEnabled')) {
+    echo $this->Html->createMenuEntry(array(
+        'name' => 'ORDS',
+        'url' => '/admin/ordsCategories/index',
+        'level' => 'main'
+    ));
+}
 echo $this->Html->createMenuEntry(array(
     'name' => 'Reparatur-Initiativen',
     'url' => '/admin/workshops/index',

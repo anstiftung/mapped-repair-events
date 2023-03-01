@@ -46,6 +46,7 @@ return [
         'debugMailAddress' => 'office@example.com',
         'additionalBackupNotificationReceivers' => [],
         'notificationMailAddress' => 'office@example.com',
+        'statisticsEnabled' => true,
         'adminUserUid' => 1,
         'additionalBlogCategoryEnabled' => false,
         'serverName' => 'http://www.example.org',

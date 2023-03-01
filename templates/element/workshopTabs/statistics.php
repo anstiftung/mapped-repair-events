@@ -1,6 +1,8 @@
 <?php
 
-if ($workshop->show_statistics == 0) {
+use Cake\Core\Configure;
+
+if (!Configure::read('AppConfig.statisticsEnabled') || $workshop->show_statistics == 0) {
     return;
 }
 

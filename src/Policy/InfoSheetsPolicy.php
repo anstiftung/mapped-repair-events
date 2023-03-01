@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Policy;
 
+use Cake\Core\Configure;
 use Cake\Http\ServerRequest;
 use Cake\Datasource\FactoryLocator;
 use Authorization\Policy\RequestPolicyInterface;
@@ -15,6 +16,10 @@ class InfoSheetsPolicy implements RequestPolicyInterface
 
     public function canAccess($identity, ServerRequest $request)
     {
+
+        if (Configure::read('AppConfig.statisticsEnabled')) {
+            return false;
+        }
 
         if (in_array($request->getParam('action'), ['fullDownload'])) {
             if ($identity->isAdmin()) {
