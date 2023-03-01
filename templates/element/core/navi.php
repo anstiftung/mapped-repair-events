@@ -33,16 +33,20 @@ if (Configure::read('AppConfig.additionalBlogCategoryEnabled') && !empty($menu[2
     ];
     array_splice($menu[2]['children'], count($menu[2]['children']), 0, $additionalBlogCategory);
 }
-
-// add aktive link as last child in 5th main menu item
-$userMenu[] = [
-    'name' => 'Aktive',
-    'slug' => $this->Html->urlUsers()
-];
-$tagCloud[] = [
-    'name' => 'Kenntnisse & Interessen',
-    'slug' => $this->Html->urlSkills()
-];
+$userMenu = [];
+if (Configure::read('AppConfig.activeUsersFrontendEnabled')) {
+    $userMenu[] = [
+        'name' => 'Aktive',
+        'slug' => $this->Html->urlUsers()
+    ];
+}
+$tagCloud = [];
+if (Configure::read('AppConfig.tagsFrontendEnabled')) {
+    $tagCloud[] = [
+        'name' => 'Kenntnisse & Interessen',
+        'slug' => $this->Html->urlSkills()
+    ];
+}
 if (!empty($menu[5])) {
     array_splice($menu[5]['children'], count($menu[5]['children']), 0, $userMenu);
     // add tagCloud link as last child in 5th main menu item

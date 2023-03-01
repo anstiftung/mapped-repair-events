@@ -48,6 +48,8 @@ return [
         'notificationMailAddress' => 'office@example.com',
         'statisticsEnabled' => true,
         'mapWidgetEnabled' => true,
+        'activeUsersFrontendEnabled' => true,
+        'tagsFrontendEnabled' => true,
         'adminUserUid' => 1,
         'additionalBlogCategoryEnabled' => false,
         'serverName' => 'http://www.example.org',
