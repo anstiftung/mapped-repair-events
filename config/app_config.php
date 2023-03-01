@@ -44,6 +44,7 @@ return [
         'status2' => [APP_ON => 'online', APP_OFF => 'offline'],
         'yesno' => [0=>'nein',1=>'ja'],
         'debugMailAddress' => 'office@example.com',
+        'additionalBackupNotificationReceivers' => [],
         'notificationMailAddress' => 'office@example.com',
         'adminUserUid' => 1,
         'additionalBlogCategoryEnabled' => false,
