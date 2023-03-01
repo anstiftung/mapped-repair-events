@@ -48,13 +48,21 @@ if (Configure::read('AppConfig.tagsFrontendEnabled')) {
     ];
 }
 if (!empty($menu[5])) {
-    array_splice($menu[5]['children'], count($menu[5]['children']), 0, $userMenu);
+    if (!empty($userMenu)) {
+        array_splice($menu[5]['children'], count($menu[5]['children']), 0, $userMenu);
+    }
     // add tagCloud link as last child in 5th main menu item
-    array_splice($menu[5]['children'], count($menu[5]['children']), 0, $tagCloud);
+    if (!empty($tagCloud)) {
+        array_splice($menu[5]['children'], count($menu[5]['children']), 0, $tagCloud);
+    }
 } else {
     // add to main menu if 5th menu item is empty
-    $menu[] = $userMenu[0];
-    $menu[] = $tagCloud[0];
+    if (!empty($userMenu)) {
+        $menu[] = $userMenu[0];
+    }
+    if (!empty($tagCloud)) {
+        $menu[] = $tagCloud[0];
+    }
 }
 
 echo $this->Menu->render($menu, ['id' => 'menu', 'class' => 'mainmenu']);
