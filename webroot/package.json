@@ -36,6 +36,6 @@
     "slidebars": "^2.0.2",
     "speakingurl": "^14.0.1",
     "svelte": "^3.55.1",
-    "swiper": "^9.0.5"
+    "swiper": "^9.1.0"
   }
 }
