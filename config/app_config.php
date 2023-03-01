@@ -47,6 +47,7 @@ return [
         'additionalBackupNotificationReceivers' => [],
         'notificationMailAddress' => 'office@example.com',
         'statisticsEnabled' => true,
+        'mapWidgetEnabled' => true,
         'adminUserUid' => 1,
         'additionalBlogCategoryEnabled' => false,
         'serverName' => 'http://www.example.org',

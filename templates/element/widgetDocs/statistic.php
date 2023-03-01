@@ -1,5 +1,8 @@
 <?php
-use Cake\Core\Configure;
+    use Cake\Core\Configure;
+    if (!Configure::read('AppConfig.statisticsEnabled')) {
+        return;
+    }
 ?>
 
 <div id="3" href="#collapse3" class="box-toggle box-toggle3">
