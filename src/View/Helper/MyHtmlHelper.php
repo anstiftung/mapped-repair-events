@@ -11,6 +11,15 @@ use App\Controller\Component\StringComponent;
 class MyHtmlHelper extends HtmlHelper {
 
 
+    public function getHostWithoutProtocol($hostnameWithProtocol)
+    {
+        $parsedHostnameWithProtocol = (parse_url($hostnameWithProtocol));
+        if (!empty($parsedHostnameWithProtocol['host'])) {
+            return $parsedHostnameWithProtocol['host'];
+        }
+        return false;
+    }
+
     public function getWorkshopStatisticTypes()
     {
         $workshop = FactoryLocator::get('Table')->get('Workshops');
