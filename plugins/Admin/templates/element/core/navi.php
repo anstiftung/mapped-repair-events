@@ -36,7 +36,7 @@ if (Configure::read('AppConfig.statisticsEnabled')) {
     ));
 }
 echo $this->Html->createMenuEntry(array(
-    'name' => 'Reparatur-Initiativen',
+    'name' => Configure::read('AppConfig.initiativeNamePlural'),
     'url' => '/admin/workshops/index',
     'level' => 'main'
 ));
