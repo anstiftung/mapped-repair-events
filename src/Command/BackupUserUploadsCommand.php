@@ -55,7 +55,7 @@ class BackupUserUploadsCommand extends Command
             $zip->close();
         }
 
-        $message = 'Monatliches User-Uploads-Backup ('.Number::toReadableSize(filesize($zipFilename)).') für  '. Configure::read('AppConfig.htmlHelper')->getHostName() . ' erfolgreich erstellt.';
+        $message = 'Monatliches User-Uploads-Backup ('.Number::toReadableSize(filesize($zipFilename)).') für '. Configure::read('AppConfig.htmlHelper')->getHostName() . ' erfolgreich erstellt.';
 
         $to = [Configure::read('AppConfig.debugMailAddress')];
         if (!empty(Configure::read('AppConfig.additionalBackupNotificationReceivers'))) {
