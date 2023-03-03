@@ -242,7 +242,7 @@ class WorkshopsTable extends AppTable
 
     public function isUserInOrgaTeam($user, $workshop)
     {
-        if ($user === false) {
+        if ($user === null) {
             return false;
         }
         $orgaTeam = $this->getOrgaTeam($workshop);

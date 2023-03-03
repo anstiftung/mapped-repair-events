@@ -530,7 +530,7 @@ class WorkshopsController extends AppController
 
         foreach ($workshops as &$workshop) {
 
-            $hasModifyPermissions = $this->isAdmin() || $this->Workshop->isUserInOrgaTeam($this->isLoggedIn(), $workshop);
+            $hasModifyPermissions = $this->isAdmin() || $this->Workshop->isUserInOrgaTeam($this->loggedUser, $workshop);
             $i = 0;
 
             foreach ($workshop->events as &$event) {
@@ -818,7 +818,7 @@ class WorkshopsController extends AppController
 
         $this->set('workshop', $workshop);
 
-        $hasModifyPermissions = $this->isAdmin() || $this->Workshop->isUserInOrgaTeam($this->isLoggedIn(), $workshop);
+        $hasModifyPermissions = $this->isAdmin() || $this->Workshop->isUserInOrgaTeam($this->loggedUser, $workshop);
         $this->set('hasModifyPermissions', $hasModifyPermissions);
 
         $event = false;
