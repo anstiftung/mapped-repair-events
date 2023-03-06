@@ -23,7 +23,7 @@ class FileAndEmailLog extends FileLog
     {
 
         $ignoredExceptionsRegex = [
-           '(MissingController|MissingAction|RecordNotFound|NotFound|InvalidCsrfToken)Exception',
+           '(MissingController|MissingAction|RecordNotFound|NotFound|InvalidCsrfToken|Forbidden)Exception',
            'Workshops\/rss\/home\.ctp',
            'RssHelper is deprecated',
            'UsersController::publicProfile()',
