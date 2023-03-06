@@ -1,3 +1,7 @@
+<?php
+    use Cake\Core\Configure;
+?>
+
 <p style="margin:15px 0 5px 0;"><?php echo $label; ?></p>
 
 <?php
@@ -13,7 +17,7 @@ if (!empty($categories)) {
 if ($useTimeRange) {
     echo $this->Form->control('timeRange', ['type' => 'select', 'label' => '', 'options' => $timeRangeOptions, 'value' => $timeRange]);
 }
-if ($showIsOnlineEventCheckbox) {
+if (Configure::read('AppConfig.onlineEventsEnabled') && $showIsOnlineEventCheckbox) {
     echo $this->Form->control('isOnlineEvent', ['hiddenField' => false, 'type' => 'checkbox', 'label' => 'Online-Event?', 'checked' => $isOnlineEvent]);
 }
 echo $this->Form->button(__('Search'), [

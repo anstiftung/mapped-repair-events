@@ -50,6 +50,7 @@ return [
         'mapWidgetEnabled' => true,
         'activeUsersFrontendEnabled' => true,
         'tagsFrontendEnabled' => true,
+        'onlineEventsEnabled' => true,
         'adminUserUid' => 1,
         'additionalBlogCategoryEnabled' => false,
         'serverName' => 'http://www.example.org',
