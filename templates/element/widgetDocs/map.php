@@ -1,5 +1,8 @@
 <?php
 use Cake\Core\Configure;
+if (!Configure::read('AppConfig.mapWidgetEnabled')) {
+    return;
+}
 ?>
 
 <div id="2" href="#collapse2" class="box-toggle box-toggle2">

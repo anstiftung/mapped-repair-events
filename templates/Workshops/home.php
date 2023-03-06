@@ -1,6 +1,7 @@
 <?php
 
 use Cake\Utility\Text;
+use Cake\Core\Configure;
 use App\Controller\Component\StringComponent;
 
 echo $this->element('highlightNavi', [
@@ -65,9 +66,11 @@ $tl_search_input_field = __('Map search field preentered');
                 </div>
                 <div id="mapHomeInfoBox">
                     <img id="mapHomeInfoBoxA" src="/img/home/home-info-box-A.jpg" width="239" height="116" />
-                    <a id="mapHomeInfoBoxB" href="<?php echo $this->Html->urlEvents(); ?>?isOnlineEvent=1">
-                        <img src="/img/home/home-info-box-B.jpg" width="239" height="63" />
-                    </a>
+                    <?php if (Configure::read('AppConfig.onlineEventsEnabled')) { ?>
+                        <a id="mapHomeInfoBoxB" href="<?php echo $this->Html->urlEvents(); ?>?isOnlineEvent=1">
+                            <img src="/img/home/home-info-box-B.jpg" width="239" height="63" />
+                        </a>
+                    <?php } ?>
                 </div>
             </div>
 

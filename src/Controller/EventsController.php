@@ -15,6 +15,7 @@ use Eluceo\iCal\Domain\ValueObject\GeographicPosition;
 use Eluceo\iCal\Domain\ValueObject\Location;
 use Eluceo\iCal\Domain\ValueObject\TimeSpan;
 use Eluceo\iCal\Presentation\Factory\CalendarFactory;
+use InvalidArgumentException;
 
 class EventsController extends AppController
 {
@@ -556,6 +557,15 @@ class EventsController extends AppController
         ];
         $this->set('metaTags', $metaTags);
 
+        // check if all categories are integers (sometimes bots call ?categories=87/ - with a trailing slash)
+        if (!empty($this->request->getQuery('categories'))) {
+            $categories = explode(',', h($this->request->getQuery('categories')));
+            $categoriesAsIntegers = array_map('intval', $categories);
+            if ($categories != $categoriesAsIntegers) {
+                throw new InvalidArgumentException('categories must only contain integers');
+            }
+        }
+
         $conditions = $this->Event->getListConditions();
 
         // get count without any filters
@@ -587,6 +597,7 @@ class EventsController extends AppController
 
         $preparedCategories = [];
         foreach ($categories as $category) {
+            
             // category is selected
             if (count($selectedCategories) > 0) {
                 if (in_array($category->id, $selectedCategories)) {
@@ -678,7 +689,7 @@ class EventsController extends AppController
         }
         $this->set('resetCategoriesUrl', $resetCategoriesUrl);
 
-        if (!empty($this->request->getQuery('categories'))) {
+        if (!empty($this->request->getQuery('categories'))) {  
             $categories = explode(',', h($this->request->getQuery('categories')));
             if (!empty($categories)) {
                 $query->matching('Categories', function(\Cake\ORM\Query $q) use ($categories) {

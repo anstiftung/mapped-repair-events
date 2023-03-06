@@ -6,10 +6,14 @@ echo $this->element('jqueryTabsWithoutAjax', [
 $this->element('addScript', array('script' =>
     JS_NAMESPACE.".Helper.bindToggleLinks(false, true);".
     JS_NAMESPACE.".Helper.bindToggleLinksForSubtables();".
-    JS_NAMESPACE.".Helper.bindDeleteEventButton();".
-    JS_NAMESPACE.".Helper.bindDownloadInfoSheetButton();".
-    JS_NAMESPACE.".Helper.bindDeleteInfoSheetButton();"
+    JS_NAMESPACE.".Helper.bindDeleteEventButton();"
 ));
+if (Configure::read('AppConfig.statisticsEnabled')) {
+    $this->element('addScript', array('script' =>
+        JS_NAMESPACE.".Helper.bindDownloadInfoSheetButton();".
+        JS_NAMESPACE.".Helper.bindDeleteInfoSheetButton();"
+));
+}
 ?>
 
 <div class="profile ui-tabs custom-ui-tabs ui-widget-content">
@@ -34,7 +38,15 @@ $this->element('addScript', array('script' =>
                 <h2 class="<?php echo join(' ', $workshopRowClass); ?>"><?php echo $workshop->name . ' (' . count($workshop->events) . ' Termine)' . $workshopTitleSuffix; ?></h2>
             <?php } else { ?>
                 <a class="toggle-link heading <?php echo join(' ', $workshopRowClass); ?>" href="javascript:void(0);">
-                    <i class="fa fa-plus"></i> <?php echo $workshop->name . ' (' . count($workshop->events) . ' Termin' . (count($workshop->events) == 1 ? '' : 'e') . ', ' . $this->Number->precision($workshop->infoSheetCount, 0) . ' Laufzettel)' . $workshopTitleSuffix; ?>
+                    <?php
+                        $workshopToggleLinkLabel = $workshop->name;
+                        $workshopToggleLinkLabelAdditionalInfos = [count($workshop->events) . ' Termin' . (count($workshop->events) == 1 ? '' : 'e')];
+                        if (Configure::read('AppConfig.statisticsEnabled')) {
+                            $workshopToggleLinkLabelAdditionalInfos[] = $this->Number->precision($workshop->infoSheetCount, 0) . ' Laufzettel';
+                        }
+                        $workshopToggleLinkLabel .= ' (' . join(', ', $workshopToggleLinkLabelAdditionalInfos) . ') ' . $workshopTitleSuffix;
+                    ?>
+                    <i class="fa fa-plus"></i> <?php echo $workshopToggleLinkLabel; ?>
                 </a>
             <?php } ?>
 
@@ -45,25 +57,29 @@ $this->element('addScript', array('script' =>
                 <div class="workshop-content-wrapper">
 
                     <?php
-                      if ($workshop->infoSheetCount > 0 && $hasEditEventPermissions) {
-                        echo $this->Html->link(
-                            '<i class="fa fa-download"></i> Statistik-Download',
-                            'javascript:void(0);',
-                            [
-                                'class' => 'download-info-sheets button',
-                                'escape' => false,
-                                'data-workshop-uid' => $workshop->uid,
-                            ]
-                        );
-                        echo '<div class="info-sheets-year-wrapper">';
-                         echo $this->Form->year('info-sheets-year', ['empty' => 'Gesamt', 'min' => 2010, 'max' => date('Y')]);
-                        echo '</div>';
+                      if (Configure::read('AppConfig.statisticsEnabled')) {
+                        if ($workshop->infoSheetCount > 0 && $hasEditEventPermissions) {
+                            echo $this->Html->link(
+                                '<i class="fa fa-download"></i> Statistik-Download',
+                                'javascript:void(0);',
+                                [
+                                    'class' => 'download-info-sheets button',
+                                    'escape' => false,
+                                    'data-workshop-uid' => $workshop->uid,
+                                ]
+                            );
+                            echo '<div class="info-sheets-year-wrapper">';
+                            echo $this->Form->year('info-sheets-year', ['empty' => 'Gesamt', 'min' => 2010, 'max' => date('Y')]);
+                            echo '</div>';
+                        }
                       } ?>
 
                     <table class="list">
 
                         <tr>
-                            <th>Laufzettel</th>
+                            <?php if (Configure::read('AppConfig.statisticsEnabled')) { ?>
+                                <th>Laufzettel</th>
+                            <?php } ?>
                             <th>Id</th>
                             <th>Status</th>
                             <th>Datum, Uhrzeit</th>
@@ -91,21 +107,23 @@ $this->element('addScript', array('script' =>
                             <tr class="<?php echo join(' ', $rowClass); ?>">
 
                                 <?php
-                                    echo '<td>';
+                                    if (Configure::read('AppConfig.statisticsEnabled')) {
+                                        echo '<td>';
 
-                                        if (count($event->info_sheets) > 0) {
-                                            echo '<a class="toggle-link-for-subtable" href="javascript:void(0);">';
-                                                echo '<i class="fa fa-plus"></i>' . ' (' . count($event->info_sheets) . ')';
-                                            echo '</a>';
-                                        }
+                                            if (count($event->info_sheets) > 0) {
+                                                echo '<a class="toggle-link-for-subtable" href="javascript:void(0);">';
+                                                    echo '<i class="fa fa-plus"></i>' . ' (' . count($event->info_sheets) . ')';
+                                                echo '</a>';
+                                            }
 
-                                        echo $this->Html->link(
-                                           '<i class="far fa-calendar-plus fa-border"></i>',
-                                           $this->Html->urlInfoSheetNew($event->uid),
-                                              ['title' => 'Neuen Laufzettel erstellen', 'escape' => false, 'class' => 'add-info-sheet']
-                                           );
+                                            echo $this->Html->link(
+                                            '<i class="far fa-calendar-plus fa-border"></i>',
+                                            $this->Html->urlInfoSheetNew($event->uid),
+                                                ['title' => 'Neuen Laufzettel erstellen', 'escape' => false, 'class' => 'add-info-sheet']
+                                            );
 
-                                    echo '</td>';
+                                        echo '</td>';
+                                    }
                                 ?>
 
                                 <td class="eventUid"><?php echo $event->uid; ?></td>

@@ -23,7 +23,7 @@ class FileAndEmailLog extends FileLog
     {
 
         $ignoredExceptionsRegex = [
-           '(MissingController|MissingAction|RecordNotFound|NotFound|InvalidCsrfToken)Exception',
+           '(MissingController|MissingAction|RecordNotFound|NotFound|InvalidCsrfToken|Forbidden|Unauthenticated)Exception',
            'Workshops\/rss\/home\.ctp',
            'RssHelper is deprecated',
            'UsersController::publicProfile()',
@@ -43,7 +43,9 @@ class FileAndEmailLog extends FileLog
                 $loggedUser = $session->read('Auth');
             }
         }
-        $subject = 'ErrorLog RepIni: ' . Text::truncate($message, 90) . ' ' . date('Y-m-d H:i:s');
+        $preparedHostWithoutProtocol = Configure::read('AppConfig.htmlHelper')->getHostWithoutProtocol(Configure::read('AppConfig.serverName'));
+        $preparedHostWithoutProtocol = str_replace('www.', '', $preparedHostWithoutProtocol);
+        $subject = 'ErrorLog ' . $preparedHostWithoutProtocol . ': ' . Text::truncate($message, 150) . ' ' . date('Y-m-d H:i:s');
         try {
             $email = new Mailer('default');
             $email->viewBuilder()->setTemplate('debug');

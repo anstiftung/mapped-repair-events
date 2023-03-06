@@ -22,7 +22,7 @@ $staticMenu = [
         ],
     ],
     [
-        'name' => 'Widgets',
+        'name' => Configure::read('AppConfig.mapWidgetEnabled') && Configure::read('AppConfig.statisticsEnabled') ? 'Widgets' : 'Widget',
         'slug' => '/widgets/integration'
     ]
 
