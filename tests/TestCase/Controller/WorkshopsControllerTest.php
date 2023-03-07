@@ -82,7 +82,8 @@ class WorkshopsControllerTest extends AppTestCase
         $this->assertMailSentToAt(0, 'johndoe@mailinator.com');
 
         $this->get(Configure::read('AppConfig.htmlHelper')->urlWorkshopEdit($workshopUid));
-        $this->assertResponseCode(403);
+        $this->assertResponseCode(302);
+        $this->assertRedirectContains('/users/login?redirect=%2Finitiativen%2Fbearbeiten%2F2');
 
     }
 

@@ -40,7 +40,7 @@ if ($this->request->getSession()->read('isMobile')) {
 
                 <br />
                 <p>
-                <?php echo $homepageIntrotext->text; ?>
+                <?php echo $homepageIntrotext?->text; ?>
                 </p>
 
                 <div class="sc"></div>

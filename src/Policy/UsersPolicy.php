@@ -15,6 +15,7 @@ class UsersPolicy implements RequestPolicyInterface
         switch($request->getParam('action')) {
             case 'passwortAendern':
             case 'profil':
+            case 'welcome':
                 return $identity !== null;
                 break;
             case 'add':

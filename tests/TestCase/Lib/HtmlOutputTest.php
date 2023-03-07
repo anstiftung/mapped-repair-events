@@ -2,17 +2,19 @@
 
 namespace App\Test\TestCase\Lib;
 
-use App\Test\TestCase\AppTestCase;
-use App\Test\TestCase\Traits\HtmlOutputAssertionsTrait;
-use App\Test\TestCase\Traits\LogFileAssertionsTrait;
 use Cake\Core\Configure;
+use App\Test\TestCase\AppTestCase;
+use App\Test\TestCase\Traits\LoginTrait;
 use Cake\TestSuite\IntegrationTestTrait;
+use App\Test\TestCase\Traits\LogFileAssertionsTrait;
+use App\Test\TestCase\Traits\HtmlOutputAssertionsTrait;
 
 class HtmlOutputTest extends AppTestCase
 {
     use IntegrationTestTrait;
     use HtmlOutputAssertionsTrait;
     use LogFileAssertionsTrait;
+    use LoginTrait;
 
     public function testHome()
     {
@@ -71,6 +73,21 @@ class HtmlOutputTest extends AppTestCase
     public function testKnowledges()
     {
         $this->get(Configure::read('AppConfig.htmlHelper')->urlKnowledges());
+        $this->doAssertHtmlOutput();
+    }
+
+    public function testUserBackendLoggedOut()
+    {
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlUserHome());
+        $this->assertResponseCode(302);
+        $this->assertRedirectContains('/users/login?redirect=%2Fusers%2Fwelcome');
+        $this->assertResponseCode(302);
+    }
+
+    public function testUserBackendLoggedIn()
+    {
+        $this->loginAsRepairhelper();
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlUserHome());
         $this->doAssertHtmlOutput();
     }
 
