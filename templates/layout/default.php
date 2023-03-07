@@ -171,7 +171,7 @@ use Cake\Utility\Inflector;
 
     </div><!--everything-->
 
-    <?php echo $this->element('core/piwik'); ?>
+    <?php echo $this->element('core/matomo'); ?>
 
 </body>
 </html>
