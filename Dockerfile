@@ -10,7 +10,7 @@ RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm
 RUN apk update && \
     npm install -g npm-check-updates && \
     npm install -g eslint && \
-    npm install -g npm@9.5.1
+    npm install -g npm@9.6.0
 
 
 #avoid permission error on github actions:
