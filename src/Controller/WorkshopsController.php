@@ -620,11 +620,9 @@ class WorkshopsController extends AppController
         $this->Worknews = $this->getTableLocator()->get('Worknews');
         $conditions = [
             'Worknews.workshop_uid' => $workshop->uid,
-            'Worknews.confirm' => 'ok'
+            'Worknews.confirm' => 'ok',
+            'Worknews.email' => $this->isLoggedIn() ? $this->loggedUser->email : '',
         ];
-        if ($this->isLoggedIn()) {
-            $conditions['Worknews.email'] = $this->loggedUser->email;
-        }
         $worknews = $this->Worknews->find('all', [
             'conditions' => $conditions,
         ])->first();
