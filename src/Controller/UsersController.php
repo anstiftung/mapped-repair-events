@@ -439,8 +439,12 @@ class UsersController extends AppController
         if ($this->request->is('post')) {
             $result = $this->Authentication->getResult();
             if ($result->isValid()) {
-                $redirectUrl = Configure::read('AppConfig.htmlHelper')->urlUserHome();
-                $this->redirect($redirectUrl);
+                // Use the redirect parameter if present.
+                $target = $this->Authentication->getLoginRedirect();
+                if (!$target) {
+                    $target = Configure::read('AppConfig.htmlHelper')->urlUserHome();
+                }                
+                $this->redirect($target);
             } else {
                 $this->AppFlash->setFlashError('Der Login hat nicht funktioniert. Benutzername oder Passwort falsch? Konto aktiviert?');
             }
