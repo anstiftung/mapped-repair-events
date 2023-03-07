@@ -39,6 +39,8 @@ use Authorization\AuthorizationServiceProviderInterface;
 use Authentication\AuthenticationServiceProviderInterface;
 use Authentication\Identifier\Resolver\OrmResolver;
 use Authorization\Middleware\RequestAuthorizationMiddleware;
+use Authorization\Exception\MissingIdentityException;
+use Authorization\Exception\ForbiddenException;
 
 class Application extends BaseApplication
     implements AuthenticationServiceProviderInterface, AuthorizationServiceProviderInterface
@@ -96,12 +98,25 @@ class Application extends BaseApplication
     
         ->add(new AuthenticationMiddleware($this))
 
-        ->add(new AuthorizationMiddleware($this))
+        ->add(
+            new AuthorizationMiddleware($this, [
+                'unauthorizedHandler' => [
+                    'className' => 'CustomRedirect',
+                    'url' => '/users/login',
+                    'exceptions' => [
+                        MissingIdentityException::class,
+                        ForbiddenException::class,
+                    ],
+                ],
+            ])
+        )
+
         ->add(new RequestAuthorizationMiddleware())
 
         // Catch any exceptions in the lower layers, and make an error page/response
         // needs to be added as last middleware to make production error page work (identity, csrf token)
         ->add(new ErrorHandlerMiddleware(Configure::read('Error')))
+
         ;
 
         return $middlewareQueue;
@@ -130,16 +145,8 @@ class Application extends BaseApplication
     {
         $service = new AuthenticationService();
 
-        // Define where users should be redirected to when they are not authenticated
         $service->setConfig([
-            'unauthenticatedRedirect' => '/users/login',
             'queryParam' => 'redirect',
-            'logoutRedirect' => '/',
-            'authError' => 'Zugriff verweigert, bitte melde dich an.',
-            'authorize' => [
-                'Controller',
-            ],
-            'loginError' => 'Sorry, der Login ist fehlgeschlagen.',
         ]);
 
         $service->loadIdentifier('Authentication.Password', [
