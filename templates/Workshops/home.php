@@ -166,38 +166,43 @@ $tl_search_input_field = __('Map search field preentered');
     <div class="sc"></div>
 
     <?php
-        if ($this->request->getSession()->read('isMobile')) {
-            $this->element('addScript', ['script' =>
-                JS_NAMESPACE.".MobileFrontend.adaptTeaserButtonSize('body.workshops.home .about-us-box a', 1);
-            "]);
-        }
-    ?>
 
-    <?php echo $this->element('home/aboutUsBox'); ?>
+        if (Configure::read('AppConfig.showLastRowOnHome')) {
 
-    <div class="right">
-        <?php
-            $this->element('addScript', ['script' =>
-               JS_NAMESPACE.".Helper.adaptHeightOfWorkshopsBoxLogo('body.workshops.home .workshops-box', '".$this->request->getSession()->read('isMobile')."');
-            "]);
-        ?>
-        <div class="workshops-box">
-               <a class="header" href="/orte/"><?php echo __('Initiatives from the network'); ?><span><?php echo __('Show all'); ?></span></a>
-            <?php foreach($latestWorkshops as $workshop) { ?>
-                <a class="row" href="<?php echo $this->Html->urlWorkshopDetail($workshop->url); ?>">
-                    <span class="inner">
-                        <img alt="<?php echo h($workshop->name); ?>"
-                             src="<?php echo $this->Html->getThumbs100Image($workshop->image, 'workshops'); ?>" />
-                        <span class="info">
-                            <span class="name"><?php echo $workshop->name; ?></span><br />
-                            <span class="address"><?php echo $workshop->street . ', ' .$workshop->zip . ' ' . $workshop->city; ?></span>
+                if ($this->request->getSession()->read('isMobile')) {
+                    $this->element('addScript', ['script' =>
+                        JS_NAMESPACE.".MobileFrontend.adaptTeaserButtonSize('body.workshops.home .about-us-box a', 1);
+                    "]);
+                }
+            ?>
+
+        <?php echo $this->element('home/aboutUsBox'); ?>
+
+        <div class="right">
+            <?php
+                $this->element('addScript', ['script' =>
+                JS_NAMESPACE.".Helper.adaptHeightOfWorkshopsBoxLogo('body.workshops.home .workshops-box', '".$this->request->getSession()->read('isMobile')."');
+                "]);
+            ?>
+            <div class="workshops-box">
+                <a class="header" href="/orte/"><?php echo __('Initiatives from the network'); ?><span><?php echo __('Show all'); ?></span></a>
+                <?php foreach($latestWorkshops as $workshop) { ?>
+                    <a class="row" href="<?php echo $this->Html->urlWorkshopDetail($workshop->url); ?>">
+                        <span class="inner">
+                            <img alt="<?php echo h($workshop->name); ?>"
+                                src="<?php echo $this->Html->getThumbs100Image($workshop->image, 'workshops'); ?>" />
+                            <span class="info">
+                                <span class="name"><?php echo $workshop->name; ?></span><br />
+                                <span class="address"><?php echo $workshop->street . ', ' .$workshop->zip . ' ' . $workshop->city; ?></span>
+                            </span>
                         </span>
-                    </span>
-                </a>
-            <?php } ?>
+                    </a>
+                <?php } ?>
+            </div>
         </div>
-    </div>
 
-    <div class="sc"></div>
+        <div class="sc"></div>
 
+    <?php } ?>
+    
 </div>

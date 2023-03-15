@@ -51,6 +51,7 @@ return [
         'activeUsersFrontendEnabled' => true,
         'tagsFrontendEnabled' => true,
         'onlineEventsEnabled' => true,
+        'showLastRowOnHome' => true,
         'adminUserUid' => 1,
         'additionalBlogCategoryEnabled' => false,
         'serverName' => 'http://www.example.org',
