@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2018-08-09 10:16+0200\n"
+"POT-Creation-Date: 2023-03-15 14:09+0100\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -14,13 +14,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-msgid "New workshop event"
+msgid "An error occurred while saving the form. Please check your form."
 msgstr ""
 
-msgid "Please activate your newsletter subscription"
-msgstr ""
-
-msgid "Please activate your subscription using the activation link sent to"
+msgid "Invalid parameters."
 msgstr ""
 
 msgid "Invalid activation code."
@@ -29,25 +26,118 @@ msgstr ""
 msgid "Your subscription is activated!"
 msgstr ""
 
-msgid "Invalid unsubscribe code."
-msgstr ""
-
-msgid "is removed!"
-msgstr ""
-
-msgid "An error occurred while saving the form. Please check your form."
-msgstr ""
-
-msgid "Invalid parameters."
-msgstr ""
-
 msgid "Please activate your worknews subscription"
+msgstr ""
+
+msgid "Please activate your subscription using the activation link sent to"
+msgstr ""
+
+msgid "offline"
 msgstr ""
 
 msgid "get platform news via E-Mail"
 msgstr ""
 
-msgid "Events on"
+msgid "Select all"
+msgstr ""
+
+msgid "Workshop"
+msgstr ""
+
+msgid "Add Event: Start Date"
+msgstr ""
+
+msgid "Add Event: Start Time"
+msgstr ""
+
+msgid "Add Event: End Time"
+msgstr ""
+
+msgid "Add Event: event description"
+msgstr ""
+
+msgid "Add Event: Venue"
+msgstr ""
+
+msgid "Add Event: Street and Number"
+msgstr ""
+
+msgid "Add Event: Zip Code"
+msgstr ""
+
+msgid "Add Event: City"
+msgstr ""
+
+msgid "Add Event: Country"
+msgstr ""
+
+msgid "LoginPage"
+msgstr ""
+
+msgid "LoginPagetext"
+msgstr ""
+
+msgid "Login: Your Email"
+msgstr ""
+
+msgid "Login: Your Password"
+msgstr ""
+
+msgid "Profil: introtext"
+msgstr ""
+
+msgid "Change password"
+msgstr ""
+
+msgid "Skills from this user"
+msgstr ""
+
+msgid "More contact possibilities"
+msgstr ""
+
+msgid "This user is working for the following Repair Initiatives"
+msgstr ""
+
+msgid "IntroScreen: Welcome - Choose your role and take part"
+msgstr ""
+
+msgid "Intro:Take part as Orga"
+msgstr ""
+
+msgid "Intro:Take part as Repair"
+msgstr ""
+
+msgid "User Welcome Dashboard Headline"
+msgstr ""
+
+msgid "User Welcome Dashboard Introtext"
+msgstr ""
+
+msgid "Edit Repair Initiative"
+msgstr ""
+
+msgid "Events on your website"
+msgstr ""
+
+msgid "Add a new event"
+msgstr ""
+
+msgid "Submit"
+msgstr ""
+
+msgid "is already subscribed to news from this workshop."
+msgstr ""
+
+msgid "Click here to unsubscribe"
+msgstr ""
+
+msgid "WHO WE ARE"
+msgstr ""
+
+msgid "TEAM"
+msgstr ""
+
+msgid "Next Events"
 msgstr ""
 
 msgid "This event is online"
@@ -71,49 +161,43 @@ msgstr ""
 msgid "Skills will be added shortly."
 msgstr ""
 
-msgid "Search"
+msgid "Map Search Location "
+msgstr ""
+
+msgid "Map Search Button"
+msgstr ""
+
+msgid "Map Button reset"
+msgstr ""
+
+msgid "Map search field preentered"
+msgstr ""
+
+msgid "Location"
 msgstr ""
 
 msgid "Clear"
 msgstr ""
 
-msgid "News read on"
+msgid "Search"
 msgstr ""
 
-msgid "Go to overview"
+msgid "Find nearby repair events."
 msgstr ""
 
-msgid "Register: Your Nickname"
+msgid "Zip or city"
 msgstr ""
 
-msgid "Register: Your Email"
+msgid "Latest posts"
 msgstr ""
 
-msgid "Register: Firstname"
+msgid "Initiatives from the network"
 msgstr ""
 
-msgid "Register: Lastname"
+msgid "Show all"
 msgstr ""
 
-msgid "Register: Street and Number"
-msgstr ""
-
-msgid "Register: Your zip code"
-msgstr ""
-
-msgid "Register: City"
-msgstr ""
-
-msgid "Register: Country"
-msgstr ""
-
-msgid "Profil: Skills-extra Info"
-msgstr ""
-
-msgid "Submit Form"
-msgstr ""
-
-msgid "edit slug"
+msgid "Events on"
 msgstr ""
 
 msgid "Welcome&nbsp;"
@@ -149,6 +233,45 @@ msgstr ""
 msgid "Loginbox:LoginButton"
 msgstr ""
 
+msgid "Intro: Not sure yet, Inform me via email if there is something new."
+msgstr ""
+
+msgid "News read on"
+msgstr ""
+
+msgid "Go to overview"
+msgstr ""
+
+msgid "Register: Your Nickname"
+msgstr ""
+
+msgid "Register: Your Email"
+msgstr ""
+
+msgid "Register: Firstname"
+msgstr ""
+
+msgid "Register: Lastname"
+msgstr ""
+
+msgid "Register: Street and Number"
+msgstr ""
+
+msgid "Register: Your zip code"
+msgstr ""
+
+msgid "Register: City"
+msgstr ""
+
+msgid "Register: Country"
+msgstr ""
+
+msgid "Submit Form"
+msgstr ""
+
+msgid "edit slug"
+msgstr ""
+
 msgid "Widgetpage: Eventsbox Integration"
 msgstr ""
 
@@ -176,204 +299,24 @@ msgstr ""
 msgid "Additional Contact possibilities: "
 msgstr ""
 
-msgid "Edit your profile"
-msgstr ""
-
 msgid "CONTACT PERSON"
 msgstr ""
 
 msgid "Workshop Detail headline Description"
 msgstr ""
 
-msgid "To remove your email from the subscription list, you can click here:"
-msgstr ""
-
-msgid "An event has been published or was significantly changed in a workshop you are subscribed to."
-msgstr ""
-
 msgid "Click here to learn more:"
 msgstr ""
 
+msgid "To remove your email from the subscription list, you can click here:"
+msgstr ""
+
 msgid "Thank you."
-msgstr ""
-
-msgid "Select all"
-msgstr ""
-
-msgid "Workshop"
-msgstr ""
-
-msgid "Edit Event: Button apply workshop data"
-msgstr ""
-
-msgid "Add Event: Start Date"
-msgstr ""
-
-msgid "Add Event: Start Time"
-msgstr ""
-
-msgid "Add Event: End Time"
-msgstr ""
-
-msgid "Add Event: Venue"
-msgstr ""
-
-msgid "Add Event: Street and Number"
-msgstr ""
-
-msgid "Add Event: Zip Code"
-msgstr ""
-
-msgid "Add Event: City"
-msgstr ""
-
-msgid "Add Event: Country"
-msgstr ""
-
-msgid "Add Event: event description"
 msgstr ""
 
 msgid "Error"
 msgstr ""
 
 msgid "Back"
-msgstr ""
-
-msgid "Newsletter: Keep me updated."
-msgstr ""
-
-msgid "Stay informed"
-msgstr ""
-
-msgid "Insert your Email"
-msgstr ""
-
-msgid "Your zip code"
-msgstr ""
-
-msgid "Submit"
-msgstr ""
-
-msgid "is already subscribed to news from this workshop."
-msgstr ""
-
-msgid "Click here to unsubscribe"
-msgstr ""
-
-msgid "LoginPage"
-msgstr ""
-
-msgid "LoginPagetext"
-msgstr ""
-
-msgid "Login: Your Email"
-msgstr ""
-
-msgid "Login: Your Password"
-msgstr ""
-
-msgid "Profil: introtext"
-msgstr ""
-
-msgid "Change password"
-msgstr ""
-
-msgid "Userprofile: "
-msgstr ""
-
-msgid "Skills from this user"
-msgstr ""
-
-msgid "Additional skills by this user"
-msgstr ""
-
-msgid "More contact possibilities"
-msgstr ""
-
-msgid "Go to Users Twitter profile"
-msgstr ""
-
-msgid "Go to Users Facebook profile"
-msgstr ""
-
-msgid "Go to Users RSS Feed"
-msgstr ""
-
-msgid "Get in contact with this user"
-msgstr ""
-
-msgid "This user is working for the following Repair Initiatives"
-msgstr ""
-
-msgid "RI-ID:"
-msgstr ""
-
-msgid "IntroScreen: Welcome - Choose your role and take part"
-msgstr ""
-
-msgid "Intro:Take part as Orga"
-msgstr ""
-
-msgid "Intro:Take part as Repair"
-msgstr ""
-
-msgid "Intro: Not sure yet, Inform me via email if there is something new."
-msgstr ""
-
-msgid "User Welcome Dashboard Headline"
-msgstr ""
-
-msgid "User Welcome Dashboard Introtext"
-msgstr ""
-
-msgid "Edit Repair Initiative"
-msgstr ""
-
-msgid "Events on your website"
-msgstr ""
-
-msgid "Add a new event"
-msgstr ""
-
-msgid "WHO WE ARE"
-msgstr ""
-
-msgid "TEAM"
-msgstr ""
-
-msgid "Next Events"
-msgstr ""
-
-msgid "Map Search Location "
-msgstr ""
-
-msgid "Map Search Button"
-msgstr ""
-
-msgid "Map Button reset"
-msgstr ""
-
-msgid "Map search field preentered"
-msgstr ""
-
-msgid "Location"
-msgstr ""
-
-msgid "Find nearby repair events."
-msgstr ""
-
-msgid "Zip or city"
-msgstr ""
-
-msgid "Latest posts"
-msgstr ""
-
-msgid "Initiatives from the network"
-msgstr ""
-
-msgid "Show all"
-msgstr ""
-
-msgid "View"
 msgstr ""
 
