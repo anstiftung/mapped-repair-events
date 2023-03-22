@@ -116,7 +116,7 @@ class HtmlOutputTest extends AppTestCase
     {
         $this->get(Configure::read('AppConfig.htmlHelper')->urlEvents() . '?categories=88');
         $this->doAssertHtmlOutput();
-        $this->assertResponseContains('<div class="numbers">0 von insgesamt 1 Terminen gefunden</div>');
+        $this->assertResponseContains('<div class="numbers">0 von insgesamt 1 Termin gefunden</div>');
     }
 
 }
