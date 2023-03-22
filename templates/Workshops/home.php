@@ -94,7 +94,7 @@ $tl_search_input_field = __('Map search field preentered');
         ?>
         <div class="find-events-box">
             <div class="inner">
-                <h3><?php echo __('Find nearby repair events.'); ?></h3>
+                <h3><?php echo __('Find nearby {0}.', [Configure::read('AppConfig.specialEventNamePlural')]); ?></h3>
                    <label><?php echo __('Zip or city'); ?>:</label>
                    <input type="text" />
                    <a class="button violet" href="javascript:void(0);"><?php echo __('Search'); ?></a>

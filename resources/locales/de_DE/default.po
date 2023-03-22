@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2023-03-22 08:52+0100\n"
-"PO-Revision-Date: 2023-03-22 08:52+0100\n"
+"POT-Creation-Date: 2023-03-22 09:04+0100\n"
+"PO-Revision-Date: 2023-03-22 09:04+0100\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: EMAIL@ADDRESS\n"
 "Language: de_DE\n"
@@ -180,8 +180,8 @@ msgstr "Suche zurücksetzen"
 msgid "Search"
 msgstr "Suche"
 
-msgid "Find nearby repair events."
-msgstr "Finde hier Reparatur-Termine in deiner Nähe."
+msgid "Find nearby {0}."
+msgstr "Finde hier {0} in deiner Nähe."
 
 msgid "Zip or city"
 msgstr "Postleitzahl oder Ort"
@@ -194,9 +194,6 @@ msgstr "Initiativen aus dem Netzwerk"
 
 msgid "Show all"
 msgstr "Alle anzeigen"
-
-msgid "Events on"
-msgstr "Termine am"
 
 msgid "Welcome&nbsp;"
 msgstr "Willkommen"
@@ -317,3 +314,6 @@ msgstr "Fehler"
 
 msgid "Back"
 msgstr "Zurück"
+
+#~ msgid "Events on"
+#~ msgstr "Termine am"

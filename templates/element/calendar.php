@@ -100,7 +100,7 @@ function initCal(){
                 $('.eventBox').hide();
                 $('#calDottedLine').show();
 
-                $('#selectedDate').attr('data-date', date).html('<?php echo __('Events on'); ?> ' +  MappedRepairEvents.Helper.niceDate(date));
+                $('#selectedDate').attr('data-date', date).html('<?php echo Configure::read('AppConfig.specialEventNamePlural') . ' am '; ?> ' +  MappedRepairEvents.Helper.niceDate(date));
 
                 $('.calEvent').each(function() {
                     var display = 'none';
