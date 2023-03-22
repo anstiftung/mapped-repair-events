@@ -10,7 +10,7 @@ use Cake\Core\Configure;
 </a>
 </div>
 
-<div id="claim"><?php echo Configure::read('AppConfig.initiativeNamePlural'); ?> finden, unterstützen und gründen - Vernetzung, Beratung und Austausch</div>
+<div id="claim"><?php echo Configure::read('AppConfig.claim'); ?></div>
 
 <?php
     echo $this->element('core/loginBox');

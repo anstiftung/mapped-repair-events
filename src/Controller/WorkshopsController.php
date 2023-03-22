@@ -602,7 +602,7 @@ class WorkshopsController extends AppController
 
         $metaTags = [
             'title' => Configure::read('AppConfig.initiativeNamePlural') . ' finden, unterstützen und gründen',
-            'description' => 'Mach mit im Reparatur-Café! ' . Configure::read('AppConfig.initiativeNamePlural') . ' finden, unterstützen und gründen - Vernetzung, Beratung und Austausch',
+            'description' => 'Mach mit im Reparatur-Café! ' . Configure::read('AppConfig.claim'),
             'keywords' => 'repair café, repair cafe, reparieren, repair, reparatur, reparatur-initiativen, netzwerk reparatur-initiativen'
         ];
         $this->set('metaTags', $metaTags);
