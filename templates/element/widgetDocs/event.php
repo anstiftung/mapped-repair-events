@@ -6,7 +6,7 @@ use Cake\Core\Configure;
     <?php echo __('Widgetpage: Eventsbox Integration'); ?>
 </div>
 <div id="collapse1" class="collapse">
-    Kopiere folgenden Code, um den nächsten Termin deiner <?php echo Configure::read('AppConfig.initiativeNameSingular'); ?> auf deiner eigenen Webseite anzuzeigen
+    Kopiere folgenden Code, um den nächsten Termin deiner Initiative auf deiner eigenen Webseite anzuzeigen
     <br />
 
     <strong class="highlight">Beispiel-Link:</strong> <a title="Voransicht" target="_blank" href="/widgets/test-widget-event.php">Voransicht Terminbox</a>
@@ -16,7 +16,7 @@ use Cake\Core\Configure;
     </code>
 
     <?php if ($loggedUser?->isOrga() || $loggedUser?->isAdmin()) { ?>
-        <strong class="highlight">id=1234</strong>  / id= die ID deiner <?php echo Configure::read('AppConfig.initiativeNameSingular'); ?> ist zwingend erforderlich, du findest sie unter <a href="<?php echo $this->Html->urlUserWorkshopAdmin(); ?>">Meine Initiativen</a> in der Spalte ganz links<br />
+        <strong class="highlight">id=1234</strong>  / id= die ID deiner Initiative ist zwingend erforderlich, du findest sie unter <a href="<?php echo $this->Html->urlUserWorkshopAdmin(); ?>">Meine Initiativen</a> in der Spalte ganz links<br />
     <?php } ?>
 
     <br />

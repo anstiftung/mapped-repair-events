@@ -3,7 +3,7 @@ use Cake\Core\Configure;
 
 echo $this->element('list', [
       'objects' => $objects,
-      'heading' => Configure::read('AppConfig.initiativeNamePlural'),
+      'heading' => 'Initiativen',
       'newMethod' => ['url' => 'urlWorkshopNew'],
       'editMethod' => ['url' => 'urlWorkshopEdit'],
       'showMethod' => ['url' => 'urlWorkshopDetail'],

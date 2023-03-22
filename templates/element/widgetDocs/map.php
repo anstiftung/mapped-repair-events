@@ -10,7 +10,7 @@ if (!Configure::read('AppConfig.mapWidgetEnabled')) {
 </div>
 <div id="collapse2" class="collapse">
     <h2>Schnell-Einbindung</h2>
-    Kopiere den folgenden Code, um die komplette Landkarte aller <?php echo Configure::read('AppConfig.initiativeNamePlural'); ?> auf deiner eigenen Webseite anzuzeigen:
+    Kopiere den folgenden Code, um die komplette Landkarte aller Initiativen auf deiner eigenen Webseite anzuzeigen:
     <br />
     <strong class="highlight">Beispiel-Link:</strong> <a title="Voransicht" target="_blank" href="/widgets/test-widget-map.php">Voransicht Landkarte</a>
     <br />

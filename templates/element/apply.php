@@ -101,7 +101,7 @@ $this->element('addScript', ['script' =>
                       '<i class="far fa-edit fa-border"></i>',
                       $this->Html->urlWorkshopEdit($associatedWorkshop->uid),
                       [
-                          'title' => Configure::read('AppConfig.initiativeNameSingular') . ' bearbeiten',
+                          'title' => 'Initiative bearbeiten',
                           'escape' => false
                       ]
                     );
@@ -110,7 +110,7 @@ $this->element('addScript', ['script' =>
                       '<i class="far fa-edit fa-border"></i>',
                       'javascript:alert(\'Mitgliedschaft ist noch nicht bestätigt.\');',
                       [
-                          'title' => Configure::read('AppConfig.initiativeNameSingular') . ' bearbeiten',
+                          'title' => 'Initiative bearbeiten',
                           'escape' => false,
                           'disabled' => 'disabled',
                           'class' => 'disabled'

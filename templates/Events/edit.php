@@ -67,7 +67,7 @@ $this->element('addScript', ['script' =>
 
             if (!empty($event->workshop->name)) {
                 echo '<div class="input">';
-                echo '<label>' . Configure::read('AppConfig.initiativeNameSingular').'</label>';
+                echo '<label>Initiative</label>';
                 echo '<b style="margin-top:-2px;float:left;">'.$event->workshop->name.'</b>';
                 echo '</div>';
             }
@@ -170,7 +170,7 @@ $this->element('addScript', ['script' =>
             }
 
             echo $this->element('hint', [
-                'content' => 'Achtung! Wenn der Status des Termins auf „online“ gesetzt ist und du auf speichern klickst, dann ist der Termin sofort sichtbar und alle Interessenten, die deiner ' . Configure::read('AppConfig.initiativeNameSingular').' folgen ("Ich möchte über anstehende Veranstaltungen dieser Initiative per E-Mail informiert werden") werden informiert.'
+                'content' => 'Achtung! Wenn der Status des Termins auf „online“ gesetzt ist und du auf speichern klickst, dann ist der Termin sofort sichtbar und alle Interessenten, die deiner Initiative folgen ("Ich möchte über anstehende Veranstaltungen dieser Initiative per E-Mail informiert werden") werden informiert.'
             ]);
             echo $this->Form->control($i.'.status', ['type' => 'select', 'options' => Configure::read('AppConfig.status')]).'<br />';
 

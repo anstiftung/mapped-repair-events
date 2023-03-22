@@ -25,7 +25,7 @@ class WorkshopsTable extends AppTable
     {
         parent::initialize($config);
 
-        $this->name_de = Configure::read('AppConfig.initiativeNameSingular');
+        $this->name_de = 'Initiative';
 
         $this->belongsTo('Countries', [
             'foreignKey' => 'country_code'
@@ -88,7 +88,7 @@ class WorkshopsTable extends AppTable
         $validator = $this->getNumberRangeValidator($validator, 'lat', -90, 90);
         $validator = $this->getNumberRangeValidator($validator, 'lng', -180, 180);
         $validator = parent::addUrlValidation($validator);
-        $validator->notEmptyString('name', 'Bitte trage den Namen der '.Configure::read('AppConfig.initiativeNameSingular') .' ein.');
+        $validator->notEmptyString('name', 'Bitte trage den Namen der Initiative ein.');
         $validator->minLength('name', 2, 'Bitte gib einen gültigen Namen an.');
         $validator = $this->addBlockedWorkshopSlugsValidationRule($validator);
         $validator->url('website', 'Bitte trage eine gültige Url ein.');

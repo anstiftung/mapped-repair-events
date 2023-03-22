@@ -15,7 +15,7 @@ echo $this->element('jqueryTabsWithoutAjax', [
 
         <a href="<?php echo Configure::read('AppConfig.htmlHelper')->urlWorkshopNew(); ?>" class="button add-workshop">Neue Initiative erstellen</a>
 
-        <p><br />Erstelle und verwalte deine <?php echo Configure::read('AppConfig.initiativeNamePlural'); ?></p>
+        <p><br />Erstelle und verwalte deine Initiativen</p>
 
         <?php
         $i = 0;

@@ -17,4 +17,4 @@ if ($deleteMessage != '') {
 ?>
 
 
-Beim Löschen Überprüfung, ob der User der letzte Organisator bei <?php echo Configure::read('AppConfig.initiativeNamePlural'); ?> ist, nicht vergessen!
+Beim Löschen Überprüfung, ob der User der letzte Organisator bei Initiativen ist, nicht vergessen!

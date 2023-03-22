@@ -36,7 +36,7 @@ use Cake\Core\Configure;
                 echo $this->Form->hidden('referer', ['value' => $referer]);
                 $this->Form->unlockField('referer');
 
-                echo '<p>' . Configure::read('AppConfig.initiativeNameSingular').': <b>' . $infoSheet->event->workshop->name.'</b>';
+                echo '<p>Initiative: <b>' . $infoSheet->event->workshop->name.'</b>';
                     echo ', Laufzettel-Id: ';
                     if ($infoSheet->uid > 0) {
                         echo '<b>' . $infoSheet->uid . '</b>';

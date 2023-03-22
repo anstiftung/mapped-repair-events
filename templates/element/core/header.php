@@ -5,7 +5,7 @@ use Cake\Core\Configure;
 <div id="navToggle"></div>
 
 <div id="logoouter">
-<a href="/" title="<?php echo Configure::read('AppConfig.initiativeNamePlural'); ?> finden, unterstützen und gründen">
+<a href="/" title="Initiativen finden, unterstützen und gründen">
     <img id="logo" alt="Logo <?php echo Configure::read('AppConfig.platformName'); ?>" src="/img/core/logo.jpg"  />
 </a>
 </div>
