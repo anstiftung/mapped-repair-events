@@ -1,5 +1,6 @@
 <?php
 use App\Controller\Component\StringComponent;
+use Cake\Core\Configure;
 echo $this->element('highlightNavi', ['main' => 'Aktive']);
 ?>
 
@@ -31,7 +32,7 @@ echo $this->element('highlightNavi', ['main' => 'Aktive']);
     <?php }?>
 
     <?php if(!empty($user->categories)) { ?>
-        <strong><?php echo __('Skills from this user'); ?> </strong>
+        <strong><?php echo Configure::read('AppConfig.categoriesNameUsers'); ?> </strong>
         <div class="sc"></div>
 
         <div id="skill_icons">

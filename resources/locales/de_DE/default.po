@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2023-03-22 08:45+0100\n"
-"PO-Revision-Date: 2023-03-22 08:42+0100\n"
+"POT-Creation-Date: 2023-03-22 08:52+0100\n"
+"PO-Revision-Date: 2023-03-22 08:52+0100\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: EMAIL@ADDRESS\n"
 "Language: de_DE\n"
@@ -89,9 +89,6 @@ msgstr "Kontaktdaten, Rollen und Benutzerbild verwalten"
 
 msgid "Change password"
 msgstr "Passwort ändern"
-
-msgid "Skills from this user"
-msgstr "Reparatur-Kenntnisse"
 
 msgid "More contact possibilities"
 msgstr "Weitere Kontaktmöglichkeiten"

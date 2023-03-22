@@ -33,7 +33,7 @@ use Cake\Core\Configure;
 
 
             echo '<div class="categories-checkbox-wrapper">';
-                echo '<b id="knowledges-categories" class="pseudo-field">Reparatur-Kenntnisse</b>';
+                echo '<b id="knowledges-categories" class="pseudo-field">' . Configure::read('AppConfig.categoriesNameUsers') . '</b>';
                 echo $this->Form->control('Knowledges.categories._ids', [
                     'multiple' => 'checkbox',
                     'label' => false,
