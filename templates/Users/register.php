@@ -24,9 +24,8 @@ echo '<div align="center">' . $this->element('heading', [
                 <br />
                 <br />
                 <p>
-                    Du planst oder organisierst bereits eine <?php echo Configure::read('AppConfig.initiativeNameSingular'); ?>?<br /> Du
-                    bist AnsprechpartnerIn und koordinierst die Mitwirkenden?<br />
-                    <br /><br /><br /><strong>Registriere dich als OrganisatorIn und</strong>
+                    <?php echo Configure::read('AppConfig.registerAsOrgaInfoText'); ?>
+                    <br /><br /><br /><br /><strong>Registriere dich als OrganisatorIn und</strong>
                 </p>
                 <br />
                 <ul>
@@ -61,19 +60,7 @@ echo '<div align="center">' . $this->element('heading', [
             <div class="description">
                 <br />
                 <br />
-                <p>
-                    Du bist handwerklich geschickt und möchtest dein Wissen weitergeben?<br />
-                    Du bist bereits als als ReparateurIn in einer Initiative aktiv?<br />
-                    Du unterstützt ein Repair-Café beim Empfang, Cafébetrieb oder auf anderem Wege?<br />
-                    <br /> <strong>Registriere dich als ReparaturhelferIn und</strong>
-                </p>
-                <br />
-                <ul>
-                    <li>gib Kenntnisse und Spezialgebiete an</li>
-                    <li>tritt <?php echo Configure::read('AppConfig.platformName'); ?> bei</li>
-                    <li>teile dein Wissen</li>
-                </ul>
-
+                <?php echo Configure::read('AppConfig.registerAsRepairHelperInfoText'); ?>
                 <a class="button registration-button" href="<?php echo $this->request->getSession()->read('isMobile') ? 'javascript:void(0);' : '#reg'?>"
                     title="<?php echo __('Intro:Take part as Repair') ?>"><?php echo __('Intro:Take part as Repair') ?></a>
                 <div class="sc"></div>

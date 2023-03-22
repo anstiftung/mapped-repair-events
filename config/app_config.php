@@ -42,6 +42,19 @@ return [
         'claim' => 'Reparatur-Initiativen finden, unterstützen und gründen - Vernetzung, Beratung und Austausch',
         'specialEventNameSingular' => 'Reparaturtermin',
         'specialEventNamePlural' => 'Reparaturtermine',
+        'registerAsOrgaInfoText' => 'Du planst oder organisierst bereits eine Initiative?<br /> Du bist AnsprechpartnerIn und koordinierst die Mitwirkenden?',
+        'registerAsRepairhelperInfoText' => '<p>
+                Du bist handwerklich geschickt und möchtest dein Wissen weitergeben?<br />
+                Du bist bereits als als ReparateurIn in einer Initiative aktiv?<br />
+                Du unterstützt ein Repair-Café beim Empfang, Cafébetrieb oder auf anderem Wege?<br />
+                <br /> <strong>Registriere dich als ReparaturhelferIn und</strong>
+            </p>
+            <br />
+            <ul>
+                <li>gib Kenntnisse und Spezialgebiete an</li>
+                <li>tritt Reparatur-Initiativen bei</li>
+                <li>teile dein Wissen</li>
+            </ul>',
         'thirdPartyStatisticsProviderName' => 'Statistik-Daten Drittanbieter',
         'mainCategoryIdsWhereSubCategoriesAreShown' => [504],
         'status' => [APP_ON => 'online', APP_OFF => 'offline', APP_DELETED => 'gelöscht'],
