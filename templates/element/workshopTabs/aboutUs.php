@@ -5,6 +5,7 @@
 <?php
 
 use App\Controller\Component\StringComponent;
+use Cake\Core\Configure;
 
 if ($workshop->image != '') echo '<img title="' . h($workshop->name). '" alt="' . h($workshop->name) . '" class="detail-image"
 src="' . $this->Html->getThumbs150Image($workshop->image, 'workshops') . '" />';
@@ -105,7 +106,7 @@ if (!$this->request->getSession()->read('isMobile')) {
 
 if(!empty($workshop->categories)) { ?>
     <div class="skill-icon-wrapper">
-        <h2>Unsere Reparaturbereiche</h2>
+        <h2>Unsere <?php echo Configure::read('AppConfig.categoriesNameWorkshops'); ?></h2>
         <div class="skill-icons">
         <?php
             foreach($workshop->categories as $category) {

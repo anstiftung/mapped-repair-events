@@ -1,4 +1,6 @@
 <?php
+
+use Cake\Core\Configure;
 if ($this->request->getSession()->read('isMobile')) {
     $this->element('addScript', ['script' =>
         JS_NAMESPACE.".MobileFrontend.adaptWorkshopDetail();
@@ -144,7 +146,7 @@ if (!$this->request->getSession()->read('isMobile')) {
                             '".__('Duplicate this event')."',
                             '".__('Are you sure you want to delete this event?')."',
                             '".__('Delete this event')."',
-                            '".__('Skills will be added shortly.')."'
+                            '".__('{0} will be added shortly.', [Configure::read('AppConfig.categoriesNameWorkshops')])."'
                         );
                         calEvents.push(calEvent);
                     }

@@ -37,6 +37,8 @@ return [
         'titleSuffix' => 'Meine Plattform',
         'initiativeNameSingular' => 'Initiative',
         'initiativeNamePlural' => 'Initiativen',
+        'categoriesNameWorkshops' => 'Reparatur-Bereiche',
+        'categoriesNameUsers' => 'Reparatur-Kenntnisse',
         'thirdPartyStatisticsProviderName' => 'Statistik-Daten Drittanbieter',
         'mainCategoryIdsWhereSubCategoriesAreShown' => [504],
         'status' => [APP_ON => 'online', APP_OFF => 'offline', APP_DELETED => 'gelöscht'],

@@ -157,7 +157,7 @@ $this->element('addScript', ['script' =>
 
             echo '<br />';
             echo '<div class="categories-checkbox-wrapper">';
-            echo '<b>Reparaturbereiche</b>';
+            echo '<b>' . Configure::read('AppConfig.categoriesNameWorkshops') . '</b>';
             echo $this->Form->control($i.'.categories._ids', [
                 'multiple' => 'checkbox',
                 'label' => false

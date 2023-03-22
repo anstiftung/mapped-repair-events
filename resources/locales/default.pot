@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2023-03-15 14:09+0100\n"
+"POT-Creation-Date: 2023-03-22 08:45+0100\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -158,7 +158,7 @@ msgstr ""
 msgid "Delete this event"
 msgstr ""
 
-msgid "Skills will be added shortly."
+msgid "{0} will be added shortly."
 msgstr ""
 
 msgid "Map Search Location "
