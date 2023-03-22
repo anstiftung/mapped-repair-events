@@ -11,8 +11,8 @@
 ?>
 
 <div id="wrapper">
-    <div id="title">Anstehende Reparaturtermine</div>
+    <div id="title">Anstehende Termine</div>
     <div id="items"><div class="loading"><img src="/img/ajax-loader.gif" alt="loading" /></div></div>
-    <div id="next">Weitere Reparaturtermine</div>
+    <div id="next">Weitere Termine</div>
     <div id="prev">Zurück</div>
 </div>

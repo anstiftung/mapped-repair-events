@@ -37,7 +37,7 @@ foreach ($events as $event) {
 }
 
 $this->set('channelData', [
-    'title' => Configure::read('AppConfig.titleSuffix') . ' Reparaturtermine',
+    'title' => Configure::read('AppConfig.titleSuffix') . ' Termine',
     'link' => $this->Url->build('/', ['fullBase' => true]),
     'description' => 'RSS-Feed vom ' . Configure::read('AppConfig.titleSuffix'),
     'language' => 'de-DE',

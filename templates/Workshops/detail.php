@@ -62,7 +62,7 @@ if (!$this->request->getSession()->read('isMobile')) {
         echo '<div class="sc"></div>';
 
         if ($onlineEventsCount > 0) {
-            echo 'Ich möchte die anstehenden Reparaturtermine mit meinem digitalen Kalender synchronisieren: <a href="/events/'.$workshop->uid.'.ics">Hier klicken</a>.';
+            echo 'Ich möchte die anstehenden Termine mit meinem digitalen Kalender synchronisieren: <a href="/events/'.$workshop->uid.'.ics">Hier klicken</a>.';
         }
 
         if (!$subscribed) {
@@ -80,7 +80,7 @@ if (!$this->request->getSession()->read('isMobile')) {
                     'value' => $workshop->uid
                 ]);
 
-                echo '<span style="float:left;margin:10px 0px;width:100%;">Ich möchte über anstehende Reparaturtermine dieser Initiative per E-Mail informiert werden.</span>';
+                echo '<span style="float:left;margin:10px 0px;width:100%;">Ich möchte über anstehende Termine dieser Initiative per E-Mail informiert werden.</span>';
                 echo $this->Form->control('Worknews.email', [
                     'type' => 'email',
                     'label' => false,

@@ -21,7 +21,7 @@ MappedRepairEvents.WidgetEvents = {
                         }
                     }
                 } else {
-                    eventHtml = 'Es wurden leider keine Reparaturtermine gefunden.';
+                    eventHtml = 'Es wurden leider keine Termine gefunden.';
                 }
                 $('#items').html(eventHtml);
                 $('#title').append(' (' + j + ')');

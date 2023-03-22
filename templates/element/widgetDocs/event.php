@@ -6,7 +6,7 @@ use Cake\Core\Configure;
     <?php echo __('Widgetpage: Eventsbox Integration'); ?>
 </div>
 <div id="collapse1" class="collapse">
-    Kopiere folgenden Code, um den nächsten Reparaturtermin deiner <?php echo Configure::read('AppConfig.initiativeNameSingular'); ?> auf deiner eigenen Webseite anzuzeigen
+    Kopiere folgenden Code, um den nächsten Termin deiner <?php echo Configure::read('AppConfig.initiativeNameSingular'); ?> auf deiner eigenen Webseite anzuzeigen
     <br />
 
     <strong class="highlight">Beispiel-Link:</strong> <a title="Voransicht" target="_blank" href="/widgets/test-widget-event.php">Voransicht Terminbox</a>
@@ -25,8 +25,8 @@ use Cake\Core\Configure;
         &lt;iframe width="350" height="140" src="<?php echo Configure::read('AppConfig.serverName'); ?>/widgets/events?id=<?php if(isset($wsuid)){ echo $wsuid; }else { echo '1234'; } ?>&<span class="highlight">num=2</span>&<span class="highlight">trunc=330px</span>"&gt;&lt;/iframe&gt;
     </code>
     <strong>Folgende optionale Parameter stehen zur Verfügung:</strong><br />
-    <strong class="highlight">num=2</strong>  / num= die Anzahl der anzuzeigenden Reparaturtermine<br />
-    <strong class="highlight">trunc=300px</strong>  / trunc= die Breite der Reparaturtermine in Pixel
+    <strong class="highlight">num=2</strong>  / num= die Anzahl der anzuzeigenden Termine<br />
+    <strong class="highlight">trunc=300px</strong>  / trunc= die Breite der Termine in Pixel
     <br />
     <br />
     <strong class="highlight">Anpassen Aussehen:</strong><br />
