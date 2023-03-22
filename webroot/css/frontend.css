@@ -2037,6 +2037,13 @@ a.button.violet {
 }
 /* END rounded buttons */
 
+
+a.registration-button {
+    float: left;
+    width: 95%;
+    line-height: 25px ! important;
+}
+
 .user-reg input[type="text"],
 .user-reg input[type="email"],
 .user-reg label,
