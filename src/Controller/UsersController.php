@@ -569,7 +569,7 @@ class UsersController extends AppController
         $this->set('groups', Configure::read('AppConfig.htmlHelper')->getUserGroupsForRegistration());
 
         $metaTags = [
-            'title' => 'Registrierung - Wähle deine Rolle: OrganisatorIn oder ReparaturhelferIn'
+            'title' => 'Registrierung - Wähle deine Rolle: OrganisatorIn oder ' . Configure::read('AppConfig.repairHelperName')
         ];
         $this->set('metaTags', $metaTags);
 

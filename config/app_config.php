@@ -43,7 +43,7 @@ return [
         'specialEventNameSingular' => 'Reparaturtermin',
         'specialEventNamePlural' => 'Reparaturtermine',
         'registerAsOrgaInfoText' => 'Du planst oder organisierst bereits eine Initiative?<br /> Du bist AnsprechpartnerIn und koordinierst die Mitwirkenden?',
-        'registerAsRepairhelperInfoText' => '<p>
+        'registerAsRepairHelperInfoText' => '<p>
                 Du bist handwerklich geschickt und möchtest dein Wissen weitergeben?<br />
                 Du bist bereits als als ReparateurIn in einer Initiative aktiv?<br />
                 Du unterstützt ein Repair-Café beim Empfang, Cafébetrieb oder auf anderem Wege?<br />
@@ -55,6 +55,7 @@ return [
                 <li>tritt Reparatur-Initiativen bei</li>
                 <li>teile dein Wissen</li>
             </ul>',
+        'repairHelperName' => 'ReparaturhelferIn',
         'thirdPartyStatisticsProviderName' => 'Statistik-Daten Drittanbieter',
         'mainCategoryIdsWhereSubCategoriesAreShown' => [504],
         'status' => [APP_ON => 'online', APP_OFF => 'offline', APP_DELETED => 'gelöscht'],

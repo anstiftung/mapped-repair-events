@@ -553,7 +553,7 @@ class MyHtmlHelper extends HtmlHelper {
     function getUserGroupsForRegistration() {
         $userGroups = [
             GROUPS_ORGA         => 'OrganisatorIn',
-            GROUPS_REPAIRHELPER => 'ReparaturhelferIn'
+            GROUPS_REPAIRHELPER => Configure::read('AppConfig.repairHelperName'),
         ];
         return $userGroups;
     }
@@ -562,7 +562,7 @@ class MyHtmlHelper extends HtmlHelper {
         $userGroups = [
             GROUPS_ADMIN        => 'Admin',
             GROUPS_ORGA         => 'OrganisatorIn',
-            GROUPS_REPAIRHELPER => 'ReparaturhelferIn'
+            GROUPS_REPAIRHELPER => Configure::read('AppConfig.repairHelperName'),
         ];
         return $userGroups;
     }

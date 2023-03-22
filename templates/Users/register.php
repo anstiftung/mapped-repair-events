@@ -35,7 +35,7 @@ echo '<div align="center">' . $this->element('heading', [
                 </ul>
 
                 <a class="button registration-button" href="<?php echo $this->request->getSession()->read('isMobile') ? 'javascript:void(0);' : '#reg'?>"
-                    title="<?php echo __('Intro:Take part as Orga') ?>"><?php echo __('Intro:Take part as Orga') ?></a>
+                    title="<?php echo __('Intro:Take part as {0}', ['OrganisatorIn']) ?>"><?php echo __('Intro:Take part as {0}', ['OrganisatorIn']) ?></a>
                 <div class="sc"></div>
                 <br />
             </div>
@@ -56,13 +56,13 @@ echo '<div align="center">' . $this->element('heading', [
             <br />
             <br />
 
-            <?php echo $this->Html->Tag('h1', 'ReparaturhelferIn'); ?>
+            <?php echo $this->Html->Tag('h1', Configure::read('AppConfig.repairHelperName')); ?>
             <div class="description">
                 <br />
                 <br />
                 <?php echo Configure::read('AppConfig.registerAsRepairHelperInfoText'); ?>
                 <a class="button registration-button" href="<?php echo $this->request->getSession()->read('isMobile') ? 'javascript:void(0);' : '#reg'?>"
-                    title="<?php echo __('Intro:Take part as Repair') ?>"><?php echo __('Intro:Take part as Repair') ?></a>
+                    title="<?php echo __('Intro:Take part as {0}', [Configure::read('AppConfig.repairHelperName')]) ?>"><?php echo __('Intro:Take part as {0}', [Configure::read('AppConfig.repairHelperName')]) ?></a>
                 <div class="sc"></div>
                 <br />
             </div>

@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2023-03-22 09:04+0100\n"
-"PO-Revision-Date: 2023-03-22 09:04+0100\n"
+"POT-Creation-Date: 2023-03-22 09:20+0100\n"
+"PO-Revision-Date: 2023-03-22 09:24+0100\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: EMAIL@ADDRESS\n"
 "Language: de_DE\n"
@@ -99,11 +99,8 @@ msgstr "DieseR BenutzerIn arbeitet bei den folgenden Initiativen"
 msgid "IntroScreen: Welcome - Choose your role and take part"
 msgstr "Herzlich willkommen! Wähle deine Rolle und mach mit!"
 
-msgid "Intro:Take part as Orga"
-msgstr "Als OrganisatorIn mitmachen"
-
-msgid "Intro:Take part as Repair"
-msgstr "Als ReparaturhelferIn mitmachen"
+msgid "Intro:Take part as {0}"
+msgstr "Als {0} mitmachen"
 
 msgid "User Welcome Dashboard Headline"
 msgstr "Herzlich willkommen!"
@@ -314,6 +311,3 @@ msgstr "Fehler"
 
 msgid "Back"
 msgstr "Zurück"
-
-#~ msgid "Events on"
-#~ msgstr "Termine am"
