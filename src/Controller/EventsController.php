@@ -112,10 +112,6 @@ class EventsController extends AppController
                 ->setOccurrence($occurrence)
                 ->setLocation($location);
 
-            if ($event->uhrzeitstart_formatted == '00:00' && $event->uhrzeitend_formatted == '00:00') {
-                $icalEvent->setNoTime(true);
-            }
-
             $icalEvents[] = $icalEvent;
         }
 
