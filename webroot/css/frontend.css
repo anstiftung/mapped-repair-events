@@ -1580,9 +1580,12 @@ iframe .rc,
     bottom: 50px;
     opacity: 0.9;
     z-index: 1000;
+}
+#workshops-home #mapHomeInfoBoxA {
     width: 239px;
     height: 116px;
 }
+
 #workshops-home #mapContainer {
     float: left;
     background: url(/img/ajax-loader.gif) no-repeat 50% 50%;
