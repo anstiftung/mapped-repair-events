@@ -9,3 +9,6 @@
     max-height: 150px;
     overflow-y: auto;
 }
+.leaflet-container a {
+    color: var(--theme-color-a);
+}
