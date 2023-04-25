@@ -127,6 +127,7 @@ div#selectedDate {
 /* fullcalendar v5 */
 .fc .fc-daygrid-day-number {
     font-weight: normal;
+    color: #666;
 }
 .fc .fc-daygrid-body-unbalanced .fc-daygrid-day-events {
     min-height: 0px;
