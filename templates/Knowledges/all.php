@@ -28,7 +28,7 @@ echo $this->element('highlightNavi', ['main' => 'Reparaturwissen']);
 
 <div class="text-wrapper">
     <p>
-        An dieser Stelle entsteht eine Sammlung aus Reparaturwissen von Aktiven aus dem <?php echo Configure::read('AppConfig.titleSuffix'); ?>. Vorschläge für Ergänzungen etc. sind willkommen - wendet euch an reparieren@anstiftung.de.
+        An dieser Stelle entsteht eine Sammlung aus Reparaturwissen von Aktiven aus dem <?php echo Configure::read('AppConfig.titleSuffix'); ?>. Vorschläge für Ergänzungen etc. sind willkommen - wendet euch an <?php echo Configure::read('AppConfig.notificationMailAddress'); ?>.
     </p>
 
     <p>

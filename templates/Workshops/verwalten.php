@@ -1,7 +1,7 @@
 <?php
 use Cake\Core\Configure;
 $this->element('addScript', ['script' =>
-  JS_NAMESPACE.".Helper.bindWorkshopUserActions();
+  JS_NAMESPACE.".Helper.bindWorkshopUserActions('".Configure::read('AppConfig.notificationMailAddress')."');
 "]);
 
 echo $this->element('jqueryTabsWithoutAjax', [
