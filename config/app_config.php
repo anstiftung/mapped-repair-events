@@ -80,6 +80,8 @@ return [
         'themeColorA' => '#4D8EA2',
         'themeColorB' => '#e3d3e9',
         'themeColorC' => '#ffffff',
+        'themeColorD' => '#EFAD11',
+        'themeColorE' => '#F4C961',
         'externNewsletterUrl' => 'https://civicrm.anstiftung.de/civicrm_newsletter/subscribe/default',
         'splitterPath' => '/files/kcfinder/pages/15203',
         'tmpUploadImagesDir' => '/tmp/images',

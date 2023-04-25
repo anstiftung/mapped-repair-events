@@ -1,9 +1,9 @@
 .prunecluster {
-    background-color: #F4C961;
+    background-color: var(--theme-color-e);
     color: #fff;
 }
 .prunecluster div {
-    background-color: #EFAD11;
+    background-color: var(--theme-color-d);
 }
 .leaflet-popup-content {
     max-height: 150px;
