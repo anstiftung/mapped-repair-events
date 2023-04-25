@@ -1,6 +1,6 @@
 .ui-widget,
 .ui-widget select {
-    font-family: 'Open Sans', arial, helvetica;
+    font-family: 'var(--theme-font)', arial, helvetica;
 }
 .ui-tabs .ui-widget-header {
     background: transparent;
