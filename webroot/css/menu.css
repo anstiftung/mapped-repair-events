@@ -1,7 +1,7 @@
 /*-------------- Navigation -------------------*/
 #nav {
     width: 100%;
-    font-family: 'var(--theme-font)', sans-serif;
+    font-family: var(--theme-font), sans-serif;
     font-weight: 400;
     margin-top: 80px;
     border-top: 2px dotted #000;

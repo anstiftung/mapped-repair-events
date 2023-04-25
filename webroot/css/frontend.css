@@ -3,7 +3,7 @@ html {
 }
 body {
     line-height: 1;
-    font-family: 'var(--theme-font)', arial, helvetica;
+    font-family: var(--theme-font), arial, helvetica;
     font-size: 13px;
     color: #727374;
     background-color: #f2f2f2;
@@ -78,7 +78,7 @@ div.jqi .jqibuttons button:hover {
 div.jqi{
     width: 400px;
     max-width:90%;
-    font-family: 'var(--theme-font)', arial, helvetica, sans-serif;
+    font-family: var(--theme-font), arial, helvetica, sans-serif;
     position: absolute;
     background-color: #ffffff;
     font-size: 11px;
@@ -2820,7 +2820,7 @@ body.workshops.detail article.full {
     font-size: 10px;
 }
 #framedContent {
-    font-family: 'var(--theme-font)', arial, helvetica, sans-serif;
+    font-family: var(--theme-font), arial, helvetica, sans-serif;
     font-size: 12px;
 }
 #framedContent .buttonSubmit {

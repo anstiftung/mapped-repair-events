@@ -1,6 +1,6 @@
 /* START admin layout änderungen */
 body, html {
-    font-family: 'var(--theme-font)', arial, helvetica;
+    font-family: var(--theme-font), arial, helvetica;
     font-size: 13px;
     color: #727374;
     background-color: #f2f2f2;
@@ -49,7 +49,7 @@ a {
 #nav {
     width: auto;
     margin: 0px;
-    font-family: 'var(--theme-font)', sans-serif;
+    font-family: var(--theme-font), sans-serif;
     font-weight: 400;
 }
 
