@@ -1,7 +1,7 @@
 /*-------------- Navigation -------------------*/
 #nav {
     width: 100%;
-    font-family: 'Open Sans', sans-serif;
+    font-family: var(--theme-font), sans-serif;
     font-weight: 400;
     margin-top: 80px;
     border-top: 2px dotted #000;
@@ -109,7 +109,7 @@
 
 #nav li ul.submenu li a:hover,
 #nav li ul.submenu li a.active {
-    color: #4D8EA2 ! important;
+    color: var(--theme-color-a) ! important;
     background-color: transparent
 }
 

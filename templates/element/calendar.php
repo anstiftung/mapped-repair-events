@@ -1,5 +1,7 @@
 <?php
 
+use Cake\Core\Configure;
+
     $wuid = !empty($wuid) ? $wuid : '';
     $isHomeCalendar = $wuid == '';
     empty($event) and $event = false;
@@ -98,7 +100,7 @@ function initCal(){
                 $('.eventBox').hide();
                 $('#calDottedLine').show();
 
-                $('#selectedDate').attr('data-date', date).html('<?php echo __('Events on'); ?> ' +  MappedRepairEvents.Helper.niceDate(date));
+                $('#selectedDate').attr('data-date', date).html('<?php echo Configure::read('AppConfig.specialEventNamePlural') . ' am '; ?> ' +  MappedRepairEvents.Helper.niceDate(date));
 
                 $('.calEvent').each(function() {
                     var display = 'none';
@@ -167,7 +169,7 @@ function getEvents() {
                     '<?php echo __('Duplicate this event'); ?>',
                     '<?php echo __('Are you sure you want to delete this event?'); ?>',
                     '<?php echo __('Delete this event'); ?>',
-                    '<?php echo __('Skills will be added shortly.'); ?>'
+                    '<?php echo __('{0} will be added shortly.', [Configure::read('AppConfig.categoriesNameWorkshops')]); ?>'
                 );
                 calEvents.push(calEvent);
             }

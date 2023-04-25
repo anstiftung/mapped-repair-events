@@ -128,7 +128,7 @@ use Cake\Core\Configure;
     <?php
     echo '<div class="edit categories-edit">';
         echo '<div class="categories-checkbox-wrapper">';
-            echo '<b>Reparaturbereiche</b>';
+            echo '<b>' . Configure::read('AppConfig.categoriesNameWorkshops') . '</b>';
             echo $this->Form->control('Workshops.categories._ids', [
                 'multiple' => 'checkbox',
                 'label' => false

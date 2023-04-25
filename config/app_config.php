@@ -35,8 +35,25 @@ return [
     'AppConfig' => [
         'platformName' => 'Meine Plattform',
         'titleSuffix' => 'Meine Plattform',
-        'initiativeNameSingular' => 'Initiative',
-        'initiativeNamePlural' => 'Initiativen',
+        'categoriesNameWorkshops' => 'Reparatur-Bereiche',
+        'categoriesNameUsers' => 'Reparatur-Kenntnisse',
+        'claim' => 'Reparatur-Initiativen finden, unterstützen und gründen - Vernetzung, Beratung und Austausch',
+        'specialEventNameSingular' => 'Reparaturtermin',
+        'specialEventNamePlural' => 'Reparaturtermine',
+        'registerAsOrgaInfoText' => 'Du planst oder organisierst bereits eine Initiative?<br /> Du bist AnsprechpartnerIn und koordinierst die Mitwirkenden?',
+        'registerAsRepairHelperInfoText' => '<p>
+                Du bist handwerklich geschickt und möchtest dein Wissen weitergeben?<br />
+                Du bist bereits als als ReparateurIn in einer Initiative aktiv?<br />
+                Du unterstützt ein Repair-Café beim Empfang, Cafébetrieb oder auf anderem Wege?<br />
+                <br /> <strong>Registriere dich als ReparaturhelferIn und</strong>
+            </p>
+            <br />
+            <ul>
+                <li>gib Kenntnisse und Spezialgebiete an</li>
+                <li>tritt Reparatur-Initiativen bei</li>
+                <li>teile dein Wissen</li>
+            </ul>',
+        'repairHelperName' => 'ReparaturhelferIn',
         'thirdPartyStatisticsProviderName' => 'Statistik-Daten Drittanbieter',
         'mainCategoryIdsWhereSubCategoriesAreShown' => [504],
         'status' => [APP_ON => 'online', APP_OFF => 'offline', APP_DELETED => 'gelöscht'],
@@ -51,6 +68,7 @@ return [
         'activeUsersFrontendEnabled' => true,
         'tagsFrontendEnabled' => true,
         'onlineEventsEnabled' => true,
+        'showLastRowOnHome' => true,
         'adminUserUid' => 1,
         'additionalBlogCategoryEnabled' => false,
         'serverName' => 'http://www.example.org',
@@ -59,6 +77,13 @@ return [
         'tmpUploadFileSize' => 800,
         'twitterUsername' => '',
         'facebookUsername' => '',
+        'themeColorA' => '#4D8EA2',
+        'themeColorB' => '#e3d3e9',
+        'themeColorC' => '#ffffff',
+        'themeColorD' => '#EFAD11',
+        'themeColorE' => '#F4C961',
+        'themeColorF' => '#77B1C5',
+        'themeFont' => 'Open Sans',
         'externNewsletterUrl' => 'https://civicrm.anstiftung.de/civicrm_newsletter/subscribe/default',
         'splitterPath' => '/files/kcfinder/pages/15203',
         'tmpUploadImagesDir' => '/tmp/images',

@@ -10,6 +10,8 @@
         if(!window.<?php echo JS_NAMESPACE; ?>) { <?php echo JS_NAMESPACE; ?> = window.<?php echo JS_NAMESPACE; ?> = {}; }
     </script>
 
+    <?php echo $this->element('core/cssVariables'); ?>
+
     <?php
         echo $this->AssetCompress->css('_widget-' . $assetNamespace, ['raw' => Configure::read('debug')]);
     ?>

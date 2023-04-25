@@ -59,7 +59,7 @@ div#selectedDate {
     margin: 20px 0 5px 0;
     font-weight: bold;
     font-size: 20px;
-    color: #4D8EA2;
+    color: var(--theme-color-a);
 }
 
 .roundedsmall {
@@ -127,22 +127,23 @@ div#selectedDate {
 /* fullcalendar v5 */
 .fc .fc-daygrid-day-number {
     font-weight: normal;
+    color: #666;
 }
 .fc .fc-daygrid-body-unbalanced .fc-daygrid-day-events {
     min-height: 0px;
     height: 52px;
 }
 .fc .fc-button-primary {
-    background-color: #4D8EA2 ! important;
-    border-color: #4D8EA2 ! important;
+    background-color: var(--theme-color-a) ! important;
+    border-color: var(--theme-color-a) ! important;
 }
 .fc .fc-button-primary:focus {
     box-shadow: inherit;
 }
 .fc .fc-button-primary:hover,
 .fc .fc-button-primary:active {
-    background-color: #77B1C5 ! important;
-    border-color: #77B1C5 ! important;
+    background-color: var(--theme-color-f) ! important;
+    border-color: var(--theme-color-f) ! important;
 }
 .fc .fc-daygrid-day-top {
     position: absolute;

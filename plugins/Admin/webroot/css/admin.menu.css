@@ -1,6 +1,6 @@
 /*-------------- Navigation -------------------*/
 #navadmin {
-    font-family: 'Open Sans', sans-serif;
+    font-family: var(--theme-font), sans-serif;
     font-weight: 400;
     width: 80%;
     margin-top: 7px;

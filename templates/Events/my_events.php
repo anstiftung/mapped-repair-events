@@ -20,7 +20,7 @@ if (Configure::read('AppConfig.statisticsEnabled')) {
     <div class="ui-tabs-panel">
         <?php echo $this->element('heading', ['first' => $metaTags['title']]); ?>
 
-        <p><br /><b>Erstelle und verwalte deine Reparaturtermine.</b><br />Vergangene Termine werden ausgegraut angezeigt, offline Termine sind durchgestrichen.<br /><br /></p>
+        <p><br /><b>Erstelle und verwalte deine Termine.</b><br />Vergangene Termine werden ausgegraut angezeigt, offline Termine sind durchgestrichen.<br /><br /></p>
 
         <?php
         $i = 0;

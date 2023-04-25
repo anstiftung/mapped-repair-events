@@ -14,7 +14,7 @@ button, .button, input[type=submit] {
 }
 
 .eindrittel .button {
-    background-color: #4D8EA2;
+    background-color: var(--theme-color-a);
     font-size: 20px;
 }
 
@@ -27,7 +27,7 @@ a.button,
     -khtml-border-radius: 3px;
     -webkit-border-radius: 3px;
     line-height: 20px ! important;
-    background-color: #4D8EA2;
+    background-color: var(--theme-color-a);
     padding: 6px 8px;
     text-align: center;
     cursor: pointer;
@@ -37,7 +37,7 @@ a.button,
 }
 
 button.rounded:hover, button:hover, .button:hover, a.button:hover, input[type=submit]:hover {
-    background-color: #77B1C5 !important;
+    background-color: var(--theme-color-f) !important;
     text-decoration: none;
 }
 
@@ -46,7 +46,7 @@ button:visited,
 .button:visited,
 a.button:visited,
 input[type=submit]:visited {
-    background: #4D8EA2;
+    background: var(--theme-color-a);
     color: #fff;
     text-decoration: none;
 }

@@ -31,6 +31,7 @@ use Cake\Utility\Inflector;
         echo $this->Html->meta('favicon.ico','img/favicon.ico',['type' => 'icon']);
     ?>
 
+    <?php echo $this->element('core/cssVariables'); ?>
     <?php
         echo $this->AssetCompress->css('_admin', array('raw' => Configure::read('debug')));
     ?>

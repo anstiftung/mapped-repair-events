@@ -142,7 +142,7 @@ class WorkshopsController extends AppController
                     }
                     $email = new Mailer('default');
                     $email->viewBuilder()->setTemplate('workshop_added_or_changed');
-                    $email->setSubject(Configure::read('AppConfig.initiativeNameSingular') . ' "'.$entity->name.'" erfolgreich ' . $userAction)
+                    $email->setSubject('Initiative "'.$entity->name.'" erfolgreich ' . $userAction)
                     ->setViewVars([
                         'workshop' => $entity,
                         'username' => $this->loggedUser->name,
@@ -601,8 +601,8 @@ class WorkshopsController extends AppController
         $this->set('latestPosts', $latestPosts);
 
         $metaTags = [
-            'title' => Configure::read('AppConfig.initiativeNamePlural') . ' finden, unterstützen und gründen',
-            'description' => 'Mach mit im Reparatur-Café! ' . Configure::read('AppConfig.initiativeNamePlural') . ' finden, unterstützen und gründen - Vernetzung, Beratung und Austausch',
+            'title' => 'Initiativen finden, unterstützen und gründen',
+            'description' => 'Mach mit im Reparatur-Café! ' . Configure::read('AppConfig.claim'),
             'keywords' => 'repair café, repair cafe, reparieren, repair, reparatur, reparatur-initiativen, netzwerk reparatur-initiativen'
         ];
         $this->set('metaTags', $metaTags);
@@ -1008,7 +1008,7 @@ class WorkshopsController extends AppController
             $userModel = Inflector::pluralize($model);
             $this->set('userModel', $userModel);
             $um = $this->getTableLocator()->get($userModel);
-            $subject = 'Anfrage zur Mitarbeit bei deiner ' . Configure::read('AppConfig.initiativeNameSingular');
+            $subject = 'Anfrage zur Mitarbeit bei deiner Initiative';
             $user = $um->find('all', [
                 'conditions' => [
                     $userModel . '.uid' => $userUid,
@@ -1179,8 +1179,8 @@ class WorkshopsController extends AppController
     public function all() {
 
         $metaTags = [
-            'title' => 'Suche ' . Configure::read('AppConfig.initiativeNamePlural') . ' in deiner Nähe',
-            'description' => Configure::read('AppConfig.initiativeNamePlural'). ', Repair Cafés und andere Reparaturprojekte in der Umgebung suchen',
+            'title' => 'Suche Initiativen in deiner Nähe',
+            'description' => 'Initiativen, Repair Cafés und andere Reparaturprojekte in der Umgebung suchen',
             'keywords' => Configure::read('AppConfig.platformName') . ', repair café, reparieren, Reparatur, repair, reparaturcafé, reparatur-café, repair-café, repaircafé'
         ];
         $this->set('metaTags', $metaTags);

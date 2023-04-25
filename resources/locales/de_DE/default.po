@@ -1,313 +1,313 @@
 # LANGUAGE translation of CakePHP Application
 # Copyright YEAR NAME <EMAIL@ADDRESS>
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "POT-Creation-Date: 2023-03-22 09:20+0100\n"
-"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"PO-Revision-Date: 2023-03-22 09:33+0100\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"Language-Team: EMAIL@ADDRESS\n"
+"Language: de_DE\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.2.2\n"
 
 msgid "An error occurred while saving the form. Please check your form."
-msgstr ""
+msgstr "Fehler beim Speichern des Formulars. Bitte Eingaben überprüfen."
 
 msgid "Invalid parameters."
-msgstr ""
+msgstr "Ungültige Eingabe."
 
 msgid "Invalid activation code."
-msgstr ""
+msgstr "Ungültiger Aktivierungscode oder Du hast den Aktivierungslink bereits angeklickt ... dann kannst Du Dich anmelden."
 
 msgid "Your subscription is activated!"
-msgstr ""
+msgstr "Deine Eintragung ist aktiviert!"
 
 msgid "Please activate your worknews subscription"
-msgstr ""
+msgstr "Bitte aktiviere dein Terminabonnement"
 
 msgid "Please activate your subscription using the activation link sent to"
-msgstr ""
+msgstr "Bitte aktiviere dein Abonnement über den Aktivierungs-Link, den du per E-Mail erhalten hast."
 
 msgid "offline"
-msgstr ""
+msgstr "offline"
 
 msgid "get platform news via E-Mail"
-msgstr ""
+msgstr "News per E-Mail bekommen"
 
 msgid "Select all"
-msgstr ""
+msgstr "Alle auswählen"
 
 msgid "Workshop"
-msgstr ""
+msgstr "Initiative"
 
 msgid "Add Event: Start Date"
-msgstr ""
+msgstr "Datum"
 
 msgid "Add Event: Start Time"
-msgstr ""
+msgstr "von"
 
 msgid "Add Event: End Time"
-msgstr ""
+msgstr "bis"
 
 msgid "Add Event: event description"
-msgstr ""
+msgstr "Beschreibung"
 
 msgid "Add Event: Venue"
-msgstr ""
+msgstr "Adresszusatz"
 
 msgid "Add Event: Street and Number"
-msgstr ""
+msgstr "Straße und Hausnummer"
 
 msgid "Add Event: Zip Code"
-msgstr ""
+msgstr "Postleitzahl"
 
 msgid "Add Event: City"
-msgstr ""
+msgstr "Ort"
 
 msgid "Add Event: Country"
-msgstr ""
+msgstr "Land"
 
 msgid "LoginPage"
-msgstr ""
+msgstr "Bitte einloggen."
 
 msgid "LoginPagetext"
-msgstr ""
+msgstr "Melde dich mit deiner E-Mail-Adresse an."
 
 msgid "Login: Your Email"
-msgstr ""
+msgstr "E-Mail"
 
 msgid "Login: Your Password"
-msgstr ""
+msgstr "Passwort"
 
 msgid "Profil: introtext"
-msgstr ""
+msgstr "Kontaktdaten, Rollen und Benutzerbild verwalten"
 
 msgid "Change password"
-msgstr ""
+msgstr "Passwort ändern"
 
 msgid "More contact possibilities"
-msgstr ""
+msgstr "Weitere Kontaktmöglichkeiten"
 
 msgid "This user is working for the following Repair Initiatives"
-msgstr ""
+msgstr "DieseR BenutzerIn engagiert sich bei den folgenden Initiativen"
 
 msgid "IntroScreen: Welcome - Choose your role and take part"
-msgstr ""
+msgstr "Herzlich willkommen! Wähle deine Rolle und mach mit!"
 
 msgid "Intro:Take part as {0}"
-msgstr ""
+msgstr "Als {0} mitmachen"
 
 msgid "User Welcome Dashboard Headline"
-msgstr ""
+msgstr "Herzlich willkommen!"
 
 msgid "User Welcome Dashboard Introtext"
-msgstr ""
+msgstr "Du bist angemeldet."
 
 msgid "Edit Repair Initiative"
-msgstr ""
+msgstr "Initiativenprofil bearbeiten"
 
 msgid "Events on your website"
-msgstr ""
+msgstr "Termine auf deiner Webseite?"
 
 msgid "Add a new event"
-msgstr ""
+msgstr "Termin hinzufügen"
 
 msgid "Submit"
-msgstr ""
+msgstr "Abschicken"
 
 msgid "is already subscribed to news from this workshop."
-msgstr ""
+msgstr "erhält bereits den Newsletter dieser Initiative."
 
 msgid "Click here to unsubscribe"
-msgstr ""
+msgstr "Klicke hier, um deine E-Mail-Adresse wieder zu entfernen"
 
 msgid "WHO WE ARE"
-msgstr ""
+msgstr "ÜBER UNS"
 
 msgid "TEAM"
-msgstr ""
+msgstr "TEAM"
 
 msgid "Next Events"
-msgstr ""
+msgstr "Nächste Termine"
 
 msgid "This event is online"
-msgstr ""
+msgstr "Termin online"
 
 msgid "This event is offline"
-msgstr ""
+msgstr "Termin offline"
 
 msgid "Edit this event"
-msgstr ""
+msgstr "Termin bearbeiten"
 
 msgid "Duplicate this event"
-msgstr ""
+msgstr "Termin duplizieren"
 
 msgid "Are you sure you want to delete this event?"
-msgstr ""
+msgstr "Bist Du sicher, dass Du den Termin löschen willst?"
 
 msgid "Delete this event"
-msgstr ""
+msgstr "Termin löschen"
 
 msgid "{0} will be added shortly."
-msgstr ""
+msgstr "{0} werden in Kürze ergänzt."
 
 msgid "Map Search Location "
-msgstr ""
+msgstr "PLZ oder Ort"
 
 msgid "Map Search Button"
-msgstr ""
+msgstr "Suche starten"
 
 msgid "Map Button reset"
-msgstr ""
+msgstr "Neue Suche"
 
 msgid "Map search field preentered"
-msgstr ""
+msgstr "z.B. Berlin oder Postleitzahl."
 
 msgid "Location"
-msgstr ""
+msgstr "Ort"
 
 msgid "Clear"
-msgstr ""
+msgstr "Suche zurücksetzen"
 
 msgid "Search"
-msgstr ""
+msgstr "Suche"
 
 msgid "Find nearby {0}."
-msgstr ""
+msgstr "Finde hier {0} in deiner Nähe."
 
 msgid "Zip or city"
-msgstr ""
+msgstr "Postleitzahl oder Ort"
 
 msgid "Latest posts"
-msgstr ""
+msgstr "Aktuelles & Neuigkeiten"
 
 msgid "Initiatives from the network"
-msgstr ""
+msgstr "Initiativen aus dem Netzwerk"
 
 msgid "Show all"
-msgstr ""
+msgstr "Alle anzeigen"
 
 msgid "Welcome&nbsp;"
-msgstr ""
+msgstr "Willkommen"
 
 msgid "My functions"
-msgstr ""
+msgstr "Meine Funktionen"
 
 msgid "Logout"
-msgstr ""
+msgstr "Logout"
 
 msgid "To frontend"
-msgstr ""
+msgstr "Zum Frontend"
 
 msgid "To backend"
-msgstr ""
+msgstr "Zum Backend"
 
 msgid "Loginbox:Login"
-msgstr ""
+msgstr "Anmelden"
 
 msgid "Loginbox:Forgot Pass?"
-msgstr ""
+msgstr "Passwort vergessen?"
 
 msgid "Loginbox:Email"
-msgstr ""
+msgstr "E-Mail"
 
 msgid "Loginbox:Pass"
-msgstr ""
+msgstr "Passwort"
 
 msgid "Loginbox:Register"
-msgstr ""
+msgstr "Registrieren"
 
 msgid "Loginbox:LoginButton"
-msgstr ""
+msgstr "Anmelden"
 
 msgid "Intro: Not sure yet, Inform me via email if there is something new."
-msgstr ""
+msgstr "Noch unentschlossen – bitte informiert mich über Neuigkeiten aus dem Netzwerk."
 
 msgid "News read on"
-msgstr ""
+msgstr "weiterlesen"
 
 msgid "Go to overview"
-msgstr ""
+msgstr "Zur Übersicht"
 
 msgid "Register: Your Nickname"
-msgstr ""
+msgstr "Dein Nickname"
 
 msgid "Register: Your Email"
-msgstr ""
+msgstr "Deine E-Mail-Adresse"
 
 msgid "Register: Firstname"
-msgstr ""
+msgstr "Vorname"
 
 msgid "Register: Lastname"
-msgstr ""
+msgstr "Nachname"
 
 msgid "Register: Street and Number"
-msgstr ""
+msgstr "Straße + Hausnummer"
 
 msgid "Register: Your zip code"
-msgstr ""
+msgstr "Deine Postleitzahl"
 
 msgid "Register: City"
-msgstr ""
+msgstr "Ort"
 
 msgid "Register: Country"
-msgstr ""
+msgstr "Land"
 
 msgid "Submit Form"
-msgstr ""
+msgstr "Abschicken"
 
 msgid "edit slug"
-msgstr ""
+msgstr "Slug bearbeiten"
 
 msgid "Widgetpage: Eventsbox Integration"
-msgstr ""
+msgstr "Integration Terminbox"
 
 msgid "Widgetpage: Map Integration"
-msgstr ""
+msgstr "Integration der Karte"
 
 msgid "Email:"
-msgstr ""
+msgstr "E-Mail:"
 
 msgid "Website:"
-msgstr ""
+msgstr "Website:"
 
 msgid "Facebook:"
-msgstr ""
+msgstr "Facebook:"
 
 msgid "Supporter of this repair initiative"
-msgstr ""
+msgstr "TrägerIn dieser Initiative"
 
 msgid "Legal status this repair initiative"
-msgstr ""
+msgstr "Rechtsform der Initiative"
 
 msgid "Legally represented by"
-msgstr ""
+msgstr "Rechtlich vertreten durch"
 
 msgid "Additional Contact possibilities: "
-msgstr ""
+msgstr "Weitere Kontaktmöglichkeiten:"
 
 msgid "CONTACT PERSON"
-msgstr ""
+msgstr "ANSPRECHPERSON"
 
 msgid "Workshop Detail headline Description"
-msgstr ""
+msgstr "Weitere Informationen zur Initiative"
 
 msgid "Click here to learn more:"
-msgstr ""
+msgstr "Klicke hier für weitere Informationen:"
 
 msgid "To remove your email from the subscription list, you can click here:"
-msgstr ""
+msgstr "Um das Abonnement zu beenden und deine E-Mail-Adresse zu entfernen, klicke hier:"
 
 msgid "Thank you."
-msgstr ""
+msgstr "Danke."
 
 msgid "Error"
-msgstr ""
+msgstr "Fehler"
 
 msgid "Back"
-msgstr ""
-
+msgstr "Zurück"

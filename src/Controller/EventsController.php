@@ -547,8 +547,8 @@ class EventsController extends AppController
     {
 
         $metaTags = [
-            'title' => 'Suche Reparaturtermine in deiner Nähe',
-            'description' => 'Termine und Veranstaltungen von Repair Cafés und anderen ' . Configure::read('AppConfig.initiativeNamePlural') . ' in deiner Nähe',
+            'title' => 'Suche Termine in deiner Nähe',
+            'description' => 'Termine und Veranstaltungen von Repair Cafés und anderen Initiativen in deiner Nähe',
             'keywords' => 'repair café, repair cafe, reparieren, repair, reparatur, reparatur-initiativen, netzwerk reparatur-initiativen, reparaturtermin, reparaturveranstaltung'
         ];
         $this->set('metaTags', $metaTags);

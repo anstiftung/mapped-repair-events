@@ -9,7 +9,7 @@
     Integration Statistik
 </div>
 <div id="collapse3" class="collapse">
-    Kopiere den folgenden Code, um die die Statistik aller <?php echo Configure::read('AppConfig.initiativeNamePlural'); ?> auf deiner eigenen Webseite anzuzeigen:
+    Kopiere den folgenden Code, um die die Statistik aller Initiativen auf deiner eigenen Webseite anzuzeigen:
     <br />
     <br />
 
@@ -31,14 +31,14 @@
 
     <br />
     <h2><?php echo Configure::read('AppConfig.platformName'); ?>-Statistik: Schnell-Einbindung</h2>
-    <strong class="highlight">Beispiel-Link:</strong> <a title="Voransicht" target="_blank" href="/widgets/test-widget-statistic-workshop.php">Voransicht Statistik <?php echo Configure::read('AppConfig.initiativeNameSingular'); ?></a>
+    <strong class="highlight">Beispiel-Link:</strong> <a title="Voransicht" target="_blank" href="/widgets/test-widget-statistic-workshop.php">Voransicht Statistik Initiative</a>
 
     <code class="inlinecode">
         &lt;iframe frameborder="0" width="100%" height="700" src="<?php echo Configure::read('AppConfig.serverName'); ?>/widgets/statistics-workshop/<span class="highlight">1234</span>"&gt;&lt;/iframe&gt;
     </code>
 
     <?php if ($loggedUser?->isOrga() || $loggedUser?->isAdmin()) { ?>
-        <strong class="highlight">1234</strong>  / die ID deiner <?php echo Configure::read('AppConfig.initiativeNameSingular'); ?> ist zwingend erforderlich, du findest sie unter <a href="<?php echo $this->Html->urlUserWorkshopAdmin(); ?>">Meine Initiativen</a> in der Spalte ganz links<br />
+        <strong class="highlight">1234</strong>  / die ID deiner Initiative ist zwingend erforderlich, du findest sie unter <a href="<?php echo $this->Html->urlUserWorkshopAdmin(); ?>">Meine Initiativen</a> in der Spalte ganz links<br />
     <?php } ?>
 
     <br />
@@ -52,9 +52,9 @@
     </code>
 
     <br />
-    <h2><?php echo Configure::read('AppConfig.initiativeNamePlural'); ?>-Name ausblenden</h2>
+    <h2>Initiativen-Name ausblenden</h2>
     <ul>
-        <li>Beim Widget für <?php echo Configure::read('AppConfig.initiativeNamePlural'); ?> kann der Name der Initiative ausgeblendet werden.</li>
+        <li>Beim Widget für Initiativen kann der Name der Initiative ausgeblendet werden.</li>
     </ul>
 
     <code class="inlinecode">
@@ -64,7 +64,7 @@
     <br />
     <h2>Umweltentlastung ausblenden</h2>
     <ul>
-        <li>Beim Widget für <?php echo Configure::read('AppConfig.initiativeNamePlural'); ?> kann die Umweltentlastung in Form von eingesparten Flug-Kilometer ausgeblendet werden. Die Umweltentlastung wird nie angezeigt, wenn nur das Donut-Diagramm angezeigt wird.</li>
+        <li>Beim Widget für Initiativen kann die Umweltentlastung in Form von eingesparten Flug-Kilometer ausgeblendet werden. Die Umweltentlastung wird nie angezeigt, wenn nur das Donut-Diagramm angezeigt wird.</li>
     </ul>
 
     <code class="inlinecode">

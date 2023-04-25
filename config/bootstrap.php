@@ -31,17 +31,18 @@ require __DIR__ . '/paths.php';
  */
 require CORE_PATH . 'config' . DS . 'bootstrap.php';
 
-use Cake\Cache\Cache;
-use Cake\Core\Configure;
-use Cake\Core\Configure\Engine\PhpConfig;
-use Cake\Datasource\ConnectionManager;
-use Cake\Error\ErrorTrap;
-use Cake\Error\ExceptionTrap;
-use Cake\Http\ServerRequest;
 use Cake\Log\Log;
+use Cake\I18n\I18n;
+use Cake\Cache\Cache;
 use Cake\Mailer\Mailer;
-use Cake\Mailer\TransportFactory;
+use Cake\Core\Configure;
+use Cake\Error\ErrorTrap;
 use Cake\Utility\Security;
+use Cake\Http\ServerRequest;
+use Cake\Error\ExceptionTrap;
+use Cake\Mailer\TransportFactory;
+use Cake\Datasource\ConnectionManager;
+use Cake\Core\Configure\Engine\PhpConfig;
 
 /*
  * Read configuration file and inject configuration into various
@@ -152,6 +153,9 @@ ServerRequest::addDetector('tablet', function ($request) {
 //Inflector::rules('uninflected', ['dontinflectme']);
 //Inflector::rules('transliteration', ['/å/' => 'aa']);
 
-locale_set_default('de');
-setlocale(LC_CTYPE, 'de_DE.UTF-8');
+ini_set('intl.default_locale', 'de_DE');
+locale_set_default('de_DE');
+I18n::setLocale('de_DE');
+setlocale(LC_CTYPE, 'de_DE'.'.UTF-8');
+setlocale(LC_COLLATE, 'de_DE'.'.UTF-8');
 mb_internal_encoding('UTF-8');

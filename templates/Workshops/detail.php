@@ -1,4 +1,6 @@
 <?php
+
+use Cake\Core\Configure;
 if ($this->request->getSession()->read('isMobile')) {
     $this->element('addScript', ['script' =>
         JS_NAMESPACE.".MobileFrontend.adaptWorkshopDetail();
@@ -62,7 +64,7 @@ if (!$this->request->getSession()->read('isMobile')) {
         echo '<div class="sc"></div>';
 
         if ($onlineEventsCount > 0) {
-            echo 'Ich möchte die anstehenden Reparaturtermine mit meinem digitalen Kalender synchronisieren: <a href="/events/'.$workshop->uid.'.ics">Hier klicken</a>.';
+            echo 'Ich möchte die anstehenden Termine mit meinem digitalen Kalender synchronisieren: <a href="/events/'.$workshop->uid.'.ics">Hier klicken</a>.';
         }
 
         if (!$subscribed) {
@@ -80,7 +82,7 @@ if (!$this->request->getSession()->read('isMobile')) {
                     'value' => $workshop->uid
                 ]);
 
-                echo '<span style="float:left;margin:10px 0px;width:100%;">Ich möchte über anstehende Reparaturtermine dieser Initiative per E-Mail informiert werden.</span>';
+                echo '<span style="float:left;margin:10px 0px;width:100%;">Ich möchte über anstehende Termine dieser Initiative per E-Mail informiert werden.</span>';
                 echo $this->Form->control('Worknews.email', [
                     'type' => 'email',
                     'label' => false,
@@ -144,7 +146,7 @@ if (!$this->request->getSession()->read('isMobile')) {
                             '".__('Duplicate this event')."',
                             '".__('Are you sure you want to delete this event?')."',
                             '".__('Delete this event')."',
-                            '".__('Skills will be added shortly.')."'
+                            '".__('{0} will be added shortly.', [Configure::read('AppConfig.categoriesNameWorkshops')])."'
                         );
                         calEvents.push(calEvent);
                     }

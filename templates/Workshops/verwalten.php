@@ -1,7 +1,7 @@
 <?php
 use Cake\Core\Configure;
 $this->element('addScript', ['script' =>
-  JS_NAMESPACE.".Helper.bindWorkshopUserActions();
+  JS_NAMESPACE.".Helper.bindWorkshopUserActions('".Configure::read('AppConfig.notificationMailAddress')."');
 "]);
 
 echo $this->element('jqueryTabsWithoutAjax', [
@@ -15,7 +15,7 @@ echo $this->element('jqueryTabsWithoutAjax', [
 
         <a href="<?php echo Configure::read('AppConfig.htmlHelper')->urlWorkshopNew(); ?>" class="button add-workshop">Neue Initiative erstellen</a>
 
-        <p><br />Erstelle und verwalte deine <?php echo Configure::read('AppConfig.initiativeNamePlural'); ?></p>
+        <p><br />Erstelle und verwalte deine Initiativen</p>
 
         <?php
         $i = 0;

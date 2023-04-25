@@ -74,7 +74,7 @@ use Cake\Core\Configure;
     echo '<div class="categories-checkbox-wrapper">';
         echo $this->Form->control('Users.categories._ids', [
             'multiple' => 'checkbox',
-            'label' => 'Reparatur-Kenntnisse',
+            'label' => Configure::read('AppConfig.categoriesNameUsers'),
             'id' => 'UserRegCategory' . $userGroup,
         ]);
     echo '</div>';

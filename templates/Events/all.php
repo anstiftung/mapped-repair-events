@@ -11,7 +11,7 @@ $this->element('addScript', ['script' =>
 <div class="left">
 
     <div class="top">
-        <h1>Gesamtansicht Reparaturtermine</h1>
+        <h1>Gesamtansicht Termine</h1>
 
         <?php
             echo $this->element('listSearchForm', [
@@ -45,10 +45,10 @@ $this->element('addScript', ['script' =>
 
     <?php
     $paginationParams = [
-        'objectNameSingular' => 'Reparaturtermin',
-        'objectNamePlural' => 'Reparaturtermine',
-        'objectNameSingularDativ' => 'Reparaturtermin',
-        'objectNamePluralDativ' => 'Reparaturterminen',
+        'objectNameSingular' => 'Termin',
+        'objectNamePlural' => 'Termine',
+        'objectNameSingularDativ' => 'Termin',
+        'objectNamePluralDativ' => 'Terminen',
         'allCount' => $allEventsCount
     ];
     echo $this->element('paginationSearch', $paginationParams);

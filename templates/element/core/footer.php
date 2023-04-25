@@ -3,7 +3,7 @@ use Cake\Core\Configure;
 
 $menu = [
     [
-        'name' => '&copy; ' . date('Y') . ' ' . Configure::read('AppConfig.InitiativeNamePlural'),
+        'name' => '&copy; ' . date('Y'),
         'slug' => '/'
     ]
 ];

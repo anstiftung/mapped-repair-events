@@ -689,7 +689,7 @@
         display: block;
         cursor: pointer;
         padding: 5px 10px;
-        background-color: #4D8EA2;
+        background-color: var(--theme-color-a);
         padding: 5px 8px 1px 8px;
         margin-top: 22px;
         margin-left: 5px;
@@ -720,7 +720,7 @@
     #nav>ul>li {
         width: 100%;
         float: none;
-        border-bottom: 1px solid #4D8EA2;
+        border-bottom: 1px solid var(--theme-color-a);
         background-color: #fff !important;
         padding: 0px !important;
     }
@@ -772,7 +772,7 @@
     }
     #nav li ul.submenu  li a:hover,
     #nav li ul.submenu  li.active a {
-        color: #4D8EA2;
+        color: var(--theme-color-a);
         background-color: transparent
     }
     #nav ul.mainmenu {

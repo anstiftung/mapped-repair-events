@@ -101,7 +101,7 @@ if ($isMyProfile) {
                 echo $this->Form->control('Users.additional_contact', ['label' => 'Weitere Kontaktmöglichkeiten', 'type' => 'textarea', 'escape' => false, 'data-private' => true]).'<br />';
 
                 echo '<div class="categories-checkbox-wrapper">';
-                    echo '<b id="users-categories" class="pseudo-field" data-private="true" >Reparatur-Kenntnisse</b>';
+                    echo '<b id="users-categories" class="pseudo-field" data-private="true" >' . Configure::read('AppConfig.categoriesNameUsers') . '</b>';
                     echo $this->Form->control('Users.categories._ids', [
                         'multiple' => 'checkbox',
                         'label' => false

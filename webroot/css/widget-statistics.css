@@ -1,5 +1,5 @@
 html, body {
-    font-family: 'Open Sans', arial, helvetica, sans-serif;
+    font-family: var(--theme-font), arial, helvetica, sans-serif;
     font-size: 13px;
     color: #727374;
     background-color: transparent;

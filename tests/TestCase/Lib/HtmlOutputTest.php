@@ -101,7 +101,7 @@ class HtmlOutputTest extends AppTestCase
     {
         $this->get(Configure::read('AppConfig.htmlHelper')->urlEvents() . '?timeRange=all');
         $this->doAssertHtmlOutput();
-        $this->assertResponseContains('<div class="numbers">1 Reparaturtermin gefunden</div>');
+        $this->assertResponseContains('<div class="numbers">1 Termin gefunden</div>');
         $this->assertResponseContains('href="/test-workshop?event=6,2040-01-01#datum"');
     }
 
@@ -109,14 +109,14 @@ class HtmlOutputTest extends AppTestCase
     {
         $this->get(Configure::read('AppConfig.htmlHelper')->urlEvents() . '?categories=87&timeRange=all');
         $this->doAssertHtmlOutput();
-        $this->assertResponseContains('<div class="numbers">1 Reparaturtermin gefunden</div>');
+        $this->assertResponseContains('<div class="numbers">1 Termin gefunden</div>');
     }
 
     public function testEventsWithCategoryFilterNotFound()
     {
         $this->get(Configure::read('AppConfig.htmlHelper')->urlEvents() . '?categories=88');
         $this->doAssertHtmlOutput();
-        $this->assertResponseContains('<div class="numbers">0 von insgesamt 1 Reparaturtermin gefunden</div>');
+        $this->assertResponseContains('<div class="numbers">0 von insgesamt 1 Termin gefunden</div>');
     }
 
 }

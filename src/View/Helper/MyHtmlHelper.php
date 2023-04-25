@@ -132,7 +132,7 @@ class MyHtmlHelper extends HtmlHelper {
 
     public function getWorkshopsCountForGlobalStatisticsString($workshopCount)
     {
-        return Configure::read('AppConfig.numberHelper')->precision($workshopCount, 0) . ' Reparatur-Initiativen haben mit ihren Reparaturdaten zu dieser Statistik beigetragen.';
+        return Configure::read('AppConfig.numberHelper')->precision($workshopCount, 0) . ' ' . 'Initiativen haben mit ihren Reparaturdaten zu dieser Statistik beigetragen.';
     }
 
     function roundUpToAny($n,$x) {
@@ -553,7 +553,7 @@ class MyHtmlHelper extends HtmlHelper {
     function getUserGroupsForRegistration() {
         $userGroups = [
             GROUPS_ORGA         => 'OrganisatorIn',
-            GROUPS_REPAIRHELPER => 'ReparaturhelferIn'
+            GROUPS_REPAIRHELPER => Configure::read('AppConfig.repairHelperName'),
         ];
         return $userGroups;
     }
@@ -562,7 +562,7 @@ class MyHtmlHelper extends HtmlHelper {
         $userGroups = [
             GROUPS_ADMIN        => 'Admin',
             GROUPS_ORGA         => 'OrganisatorIn',
-            GROUPS_REPAIRHELPER => 'ReparaturhelferIn'
+            GROUPS_REPAIRHELPER => Configure::read('AppConfig.repairHelperName'),
         ];
         return $userGroups;
     }

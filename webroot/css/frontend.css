@@ -3,7 +3,7 @@ html {
 }
 body {
     line-height: 1;
-    font-family: 'Open Sans', arial, helvetica;
+    font-family: var(--theme-font), arial, helvetica;
     font-size: 13px;
     color: #727374;
     background-color: #f2f2f2;
@@ -33,12 +33,12 @@ a:visited,
 a#urlHelpLink {
     font-weight: bold;
     text-decoration: none;
-    color: #4D8EA2;
+    color: var(--theme-color-a);
 }
 a:hover,
 a#urlHelpLink:hover {
     text-decoration: underline;
-    color: #4D8EA2;
+    color: var(--theme-color-a);
 }
 a.disabled {
     opacity: 0.5;
@@ -48,7 +48,7 @@ a:hover img {
 }
 a.vg:visited {
     text-decoration: none;
-    color: #4D8EA2;
+    color: var(--theme-color-a);
 }
 #login-box a,
 .address-wrapper a {
@@ -78,7 +78,7 @@ div.jqi .jqibuttons button:hover {
 div.jqi{
     width: 400px;
     max-width:90%;
-    font-family: 'Open Sans', arial, helvetica, sans-serif;
+    font-family: var(--theme-font), arial, helvetica, sans-serif;
     position: absolute;
     background-color: #ffffff;
     font-size: 11px;
@@ -89,21 +89,21 @@ div.jqi{
     -webkit-border-radius: 6px;
     padding: 7px;
     z-index: 9910001;
-    border:3px solid #4D8EA2;
+    border:3px solid var(--theme-color-a);
     box-shadow: 0px 0px 7px 3px #000000; -moz-box-shadow: 0px 0px 7px 3px #000000; -webkit-box-shadow: 0px 0px 7px 3px #000000;
 }
 h1 {
     margin: 5px 0px;
     font-weight: bold;
     font-size: 24px;
-    color: #4D8EA2;
+    color: var(--theme-color-a);
     line-height: 28px;
 }
 h2 {
     margin: 5px 0px;
     font-weight: bold;
     font-size: 18px;
-    color: #4D8EA2;
+    color: var(--theme-color-a);
     line-height: 20px;
 }
 h3 {
@@ -115,15 +115,15 @@ h3 {
     color: black;
 }
 .green {
-    color: #4D8EA2;
+    color: var(--theme-color-a);
 }
 a.green:link,
 a.green:visited {
-    color: #4D8EA2;
+    color: var(--theme-color-a);
     text-decoration: none
 }
 .greenbold {
-    color: #4D8EA2;
+    color: var(--theme-color-a);
     font-weight: bold
 }
 .red {
@@ -131,18 +131,18 @@ a.green:visited {
 }
 @keyframes blink {
     0% {
-        background-color: #4D8EA2;
+        background-color: var(--theme-color-a);
     }
     100% {
-        background-color: #77B1C5;
+        background-color: var(--theme-color-f);
     }
 }
 @-webkit-keyframes blink {
     0% {
-        background-color: #4D8EA2;
+        background-color: var(--theme-color-a);
     }
     100% {
-        background-color: #77B1C5;
+        background-color: var(--theme-color-f);
     }
 }
 .blink {
@@ -273,7 +273,7 @@ body.pages.detail.statistik iframe {
     margin-top: 15px;
 }
 body.workshops.home .swiper .swiper-pagination-bullet-active {
-    background-color: #4D8EA2;
+    background-color: var(--theme-color-a);
 }
 body.workshops.home .swiper-horizontal > .swiper-pagination-bullets {
     top: 20px;
@@ -353,10 +353,10 @@ i.fa-times {
     border-radius: 125px;
     -webkit-border-radius: 125px;
     -moz-border-radius: 125px;
-    background-color: #4D8EA2;
+    background-color: var(--theme-color-a);
     text-align: center;
     margin: 0px auto;
-    border: 22px solid #4D8EA2;
+    border: 22px solid var(--theme-color-a);
 }
 .icon-helper {
     background-image: url(/img/icon-helper.png);
@@ -520,7 +520,7 @@ div.calEvent {
 }
 div.calEvent span.is-online-event,
 body.events.all span.is-online-event {
-    color: #4D8EA2;
+    color: var(--theme-color-a);
     font-weight: bold;
 }
 div.calEvent span.is-online-event {
@@ -528,7 +528,7 @@ div.calEvent span.is-online-event {
     float: left;
 }
 body.events.all a:hover span.is-online-event {
-    color: #4D8EA2;
+    color: var(--theme-color-a);
 }
 div.calEvent:hover {
     text-decoration: underline;
@@ -651,7 +651,7 @@ body.workshops.detail .calEvent {
 }
 #welcomeposts h3 {
     margin-bottom: 8px;
-    color: #4D8EA2;
+    color: var(--theme-color-a);
     font-size: 13px
 }
 #welcomeposts .headerpost {
@@ -1326,7 +1326,7 @@ iframe.eiwsd {
     margin: 0px;
 }
 .box-toggle:hover {
-    background-color: #4D8EA2 !important;
+    background-color: var(--theme-color-a) !important;
     color: #fff;
 }
 .box-toggle {
@@ -1341,7 +1341,7 @@ iframe.eiwsd {
     border-radius: 5px;
 }
 .box-toggle.active {
-    background-color: #4D8EA2 !important;
+    background-color: var(--theme-color-a) !important;
     color: #fff;
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
@@ -1360,7 +1360,7 @@ iframe.eiwsd {
     display: none;
     padding: 10px;
     margin-bottom: 20px;
-    border: 2px solid #4D8EA2;
+    border: 2px solid var(--theme-color-a);
     border-radius: 5px;
     border-top-right-radius: 0;
     border-top-left-radius: 0;
@@ -1375,7 +1375,7 @@ iframe.eiwsd {
 }
 .highlight {
     color: black;
-    background-color: #4D8EA2 !important;
+    background-color: var(--theme-color-a) !important;
 }
 .orgaansprech {
     float: left;
@@ -1581,6 +1581,11 @@ iframe .rc,
     opacity: 0.9;
     z-index: 1000;
 }
+#workshops-home #mapHomeInfoBoxA {
+    width: 239px;
+    height: 116px;
+}
+
 #workshops-home #mapContainer {
     float: left;
     background: url(/img/ajax-loader.gif) no-repeat 50% 50%;
@@ -1629,7 +1634,7 @@ iframe .rc,
   }
 }
 #workshops-home .find-events-box:not(.no-hover):hover {
-    background-color: #4D8EA2;
+    background-color: var(--theme-color-a);
 }
 #workshops-home .find-events-box:not(.no-hover):hover h3 {
     color: #fff;
@@ -1738,7 +1743,7 @@ iframe .rc,
     width: 573px;
 }
 #workshops-home .news-box {
-    background-color: #e3d3e9;
+    background-color: var(--theme-color-b);
     float: left;
     height: 442px;
     text-align: left;
@@ -1754,7 +1759,7 @@ iframe .rc,
     transform: translateY(-50%);
 }
 #workshops-home .news-box .number {
-    color: #fff;
+    color: var(--theme-color-c);
     font-size: 65px;
     font-style: italic;
     font-weight: 300;
@@ -1786,11 +1791,11 @@ iframe .rc,
     font-size: 16px;
 }
 #workshops-home .news-box .row:hover {
-    color: #fff;
+    color: var(--theme-color-c);
     text-decoration: none;
 }
 #workshops-home .news-box a.header {
-    color: #fff;
+    color: var(--theme-color-c);
     font-size: 24px;
     display: block;
     margin-left: 80px;
@@ -1958,7 +1963,7 @@ iframe .rc,
 }
 .rsslink-wrapper a:hover i,
 .socialicons a:hover i {
-    color: #77B1C5;
+    color: var(--theme-color-f);
 }
 /* START rounded buttons */
 
@@ -1978,7 +1983,7 @@ input[type=submit] {
     font-weight: 700;
 }
 .half .button {
-    background-color: #4D8EA2;
+    background-color: var(--theme-color-a);
     font-size: 20px;
 }
 button.rounded,
@@ -1990,7 +1995,7 @@ a.button,
     -khtml-border-radius: 3px;
     -webkit-border-radius: 3px;
     line-height: 20px!important;
-    background-color: #4D8EA2;
+    background-color: var(--theme-color-a);
     padding: 6px 8px;
     text-align: center;
     cursor: pointer;
@@ -2003,7 +2008,7 @@ button:not(.fc-button):hover,
 .button:hover,
 a.button:hover,
 input[type=submit]:hover {
-    background-color: #77B1C5 !important;
+    background-color: var(--theme-color-f) !important;
     text-decoration: none;
 }
 button.rounded:visited,
@@ -2011,7 +2016,7 @@ button:visited,
 .button:visited,
 a.button:visited,
 input[type=submit]:visited {
-    background: #4D8EA2;
+    background: var(--theme-color-a);
     text-decoration: none;
 }
 button::-moz-focus-inner {
@@ -2036,6 +2041,13 @@ a.button.violet {
     color: #fff;
 }
 /* END rounded buttons */
+
+
+a.registration-button {
+    float: left;
+    width: 95%;
+    line-height: 25px ! important;
+}
 
 .user-reg input[type="text"],
 .user-reg input[type="email"],
@@ -2309,7 +2321,7 @@ div.addthis_toolbox a {
 }
 #flashMessage.success,
 #flashMessage.success .closer i {
-    background: #4D8EA2;
+    background: var(--theme-color-a);
     color: white;
 }
 #flashMessage.error,
@@ -2368,7 +2380,7 @@ div.hint h1 {
 }
 .ui-widget-content:not(.ui-datepicker) a:not(.button) {
     margin: 5px 0px;
-    color: #4D8EA2;
+    color: var(--theme-color-a);
 }
 .custom-ui-tabs {
   background: none ! important;
@@ -2399,7 +2411,7 @@ div.pagination li {
     background-color: #fff;
     margin: 0 5px;
     display: block;
-    border: 1px solid #4D8EA2;
+    border: 1px solid var(--theme-color-a);
     border-radius: 3px;
 }
 div.pagination li a {
@@ -2408,12 +2420,12 @@ div.pagination li a {
     height: 22px;
     padding-top: 8px ! important;
     text-decoration: none;
-    color: #4D8EA2;
+    color: var(--theme-color-a);
     margin: 0 ! important;
 }
 div.pagination li.active a,
 div.pagination li a:hover {
-    background-color: #4D8EA2 ! important;
+    background-color: var(--theme-color-a) ! important;
     color: #fff! important;
 }
 div.pagination li.active a {
@@ -2475,7 +2487,7 @@ div.pagination-search div.numbers {
     color: black
 }
 #footer a:hover {
-    color: #4D8EA2;
+    color: var(--theme-color-a);
 }
 #metadescText #metadescTA {
     min-width: 300px;
@@ -2675,7 +2687,7 @@ body.knowledges.all #content hr {
     height: 2px;
     margin: 0;
     margin-top: 30px;
-    background-color: #4D8EA2;
+    background-color: var(--theme-color-a);
     clear: both;
 }
 body.knowledges.all .knowledge-row {
@@ -2716,11 +2728,11 @@ body.knowledges.all .knowledge-edit-icon i {
     padding: 7px 10px;
     cursor: pointer;
     color: #fff;
-    background-color: #4D8EA2;
+    background-color: var(--theme-color-a);
     font-weight: bold;
 }
 .lstPage:hover {
-    background-color: #77B1C5 !important;
+    background-color: var(--theme-color-f) !important;
     color: #333;
 }
 .lstPage.thisPage {
@@ -2778,7 +2790,7 @@ body.workshops.detail article.full {
   text-align: center;
   font: 25px FontAwesome;
   line-height: 23px;
-  color: #4D8EA2;
+  color: var(--theme-color-a);
   transition: 0.6s;
   background: transparent;
 }
@@ -2808,7 +2820,7 @@ body.workshops.detail article.full {
     font-size: 10px;
 }
 #framedContent {
-    font-family: 'Open Sans', arial, helvetica, sans-serif;
+    font-family: var(--theme-font), arial, helvetica, sans-serif;
     font-size: 12px;
 }
 #framedContent .buttonSubmit {
@@ -3025,7 +3037,7 @@ body.events.all .item-wrapper .title {
 }
 body.workshops.all .item-wrapper .title:hover,
 body.events.all .item-wrapper .title:hover {
-    color: #4D8EA2;
+    color: var(--theme-color-a);
 }
 body.workshops.all .item-wrapper img.detail-image,
 body.events.all .item-wrapper img.detail-image {
@@ -3235,7 +3247,7 @@ body.users.publicProfile .about-me-wrapper {
     width: 500px;
 }
 body.users.publicProfile .about-me-wrapper b {
-    color: #4D8EA2;
+    color: var(--theme-color-a);
     font-size: 24px;
     margin-bottom: 15px;
     float: left;
@@ -3253,7 +3265,7 @@ body.users.publicProfile ul li {
 body.users.publicProfile .about-me-wrapper .about-me-content {
     background-color: #f2f2f2;
     padding: 10px;
-    color: #4D8EA2;
+    color: var(--theme-color-a);
     float: left;
     border-radius: 5px;
     width: 100%;
@@ -3283,7 +3295,7 @@ body.users.all .zip-wrapper .zip a.active {
     text-decoration: underline;
 }
 body.users.all .sort a {
-    color: #4D8EA2;
+    color: var(--theme-color-a);
     margin-left: 0;
 }
 body.users.all h1,
@@ -3329,13 +3341,13 @@ body.skills.all h1 a {
 }
 body.users.all h1 a:hover,
 body.skills.all h1 a:hover {
-    background-color: #4D8EA2 ! important;
+    background-color: var(--theme-color-a) ! important;
 }
 body.skills.all .letter {
     font-size: 22px;
     float: left;
     width: 40px;
-    color: #4D8EA2;
+    color: var(--theme-color-a);
     clear: both;
     font-weight: bold;
 }
