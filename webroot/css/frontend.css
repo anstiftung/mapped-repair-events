@@ -1580,6 +1580,8 @@ iframe .rc,
     bottom: 50px;
     opacity: 0.9;
     z-index: 1000;
+    width: 239px;
+    height: 116px;
 }
 #workshops-home #mapContainer {
     float: left;
