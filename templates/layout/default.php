@@ -74,16 +74,7 @@ use Cake\Utility\Inflector;
 <meta name="msapplication-wide310x150logo" content="/img/win8-tile-310x150.png"/>
 <meta name="msapplication-square310x310logo" content="/img/win8-tile-310x310.png"/>
 
-<style>
-    :root {
-        --theme-color-a: <?php echo Configure::read('AppConfig.themeColorA'); ?>;
-        --theme-color-b: <?php echo Configure::read('AppConfig.themeColorB'); ?>;
-        --theme-color-c: <?php echo Configure::read('AppConfig.themeColorC'); ?>;
-        --theme-color-d: <?php echo Configure::read('AppConfig.themeColorD'); ?>;
-        --theme-color-e: <?php echo Configure::read('AppConfig.themeColorE'); ?>;
-        --theme-color-f: <?php echo Configure::read('AppConfig.themeColorF'); ?>;
-    }
-</style>
+<?php echo $this->element('core/cssVariables'); ?>
 
 <?php
     echo $this->AssetCompress->css('_frontend' . ($this->request->getSession()->read('isMobile') ? '_mobile' : ''), ['raw' => Configure::read('debug')]);
