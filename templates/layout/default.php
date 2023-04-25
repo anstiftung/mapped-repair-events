@@ -77,6 +77,8 @@ use Cake\Utility\Inflector;
 <style>
     :root {
         --theme-color-a: <?php echo Configure::read('AppConfig.themeColorA'); ?>;
+        --theme-color-b: <?php echo Configure::read('AppConfig.themeColorB'); ?>;
+        --theme-color-c: <?php echo Configure::read('AppConfig.themeColorC'); ?>;
     }
 </style>
 

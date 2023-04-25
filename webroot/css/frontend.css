@@ -1754,7 +1754,7 @@ iframe .rc,
     transform: translateY(-50%);
 }
 #workshops-home .news-box .number {
-    color: #fff;
+    color: var(--theme-color-c);
     font-size: 65px;
     font-style: italic;
     font-weight: 300;
@@ -1786,11 +1786,11 @@ iframe .rc,
     font-size: 16px;
 }
 #workshops-home .news-box .row:hover {
-    color: #fff;
+    color: var(--theme-color-c);
     text-decoration: none;
 }
 #workshops-home .news-box a.header {
-    color: #fff;
+    color: var(--theme-color-c);
     font-size: 24px;
     display: block;
     margin-left: 80px;
