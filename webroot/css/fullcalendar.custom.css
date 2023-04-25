@@ -59,7 +59,7 @@ div#selectedDate {
     margin: 20px 0 5px 0;
     font-weight: bold;
     font-size: 20px;
-    color: #4D8EA2;
+    color: var(--theme-color-a);
 }
 
 .roundedsmall {
@@ -133,8 +133,8 @@ div#selectedDate {
     height: 52px;
 }
 .fc .fc-button-primary {
-    background-color: #4D8EA2 ! important;
-    border-color: #4D8EA2 ! important;
+    background-color: var(--theme-color-a) ! important;
+    border-color: var(--theme-color-a) ! important;
 }
 .fc .fc-button-primary:focus {
     box-shadow: inherit;

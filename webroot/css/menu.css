@@ -109,7 +109,7 @@
 
 #nav li ul.submenu li a:hover,
 #nav li ul.submenu li a.active {
-    color: #4D8EA2 ! important;
+    color: var(--theme-color-a) ! important;
     background-color: transparent
 }
 

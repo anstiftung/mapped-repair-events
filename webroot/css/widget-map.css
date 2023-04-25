@@ -178,7 +178,7 @@ input[readonly="readonly"] {
 }
 
 #flashMessage.success {
-    background: #4D8EA2;
+    background: var(--theme-color-a);
     color: white;
 }
 

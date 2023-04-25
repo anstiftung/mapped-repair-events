@@ -77,6 +77,7 @@ return [
         'tmpUploadFileSize' => 800,
         'twitterUsername' => '',
         'facebookUsername' => '',
+        'themeColorA' => '#4D8EA2',
         'externNewsletterUrl' => 'https://civicrm.anstiftung.de/civicrm_newsletter/subscribe/default',
         'splitterPath' => '/files/kcfinder/pages/15203',
         'tmpUploadImagesDir' => '/tmp/images',

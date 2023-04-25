@@ -144,7 +144,7 @@ form.mini-upload-form {
   line-height: 30px;
   float: right;
   margin-right: 225px;
-  
+
 }
 .featherlight-content .mini-upload-form .drop {
     min-height: 100px;
@@ -243,14 +243,14 @@ form.mini-upload-form {
     margin-left: 26px;
 }
 .featherlight-content .form-buttons button[disabled="disabled"] {
-    opacity: 0.65; 
-    cursor: not-allowed;    
+    opacity: 0.65;
+    cursor: not-allowed;
 }
 .featherlight-content .form-buttons button {
     padding: 10px;
 }
 .featherlight-content .form-buttons button.save {
-    background-color: #4D8EA2 ! important;
+    background-color: var(--theme-color-a) ! important;
     color: #fff ! important;
     float: left;
 }
