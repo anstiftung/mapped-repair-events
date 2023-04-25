@@ -81,6 +81,7 @@ use Cake\Utility\Inflector;
         --theme-color-c: <?php echo Configure::read('AppConfig.themeColorC'); ?>;
         --theme-color-d: <?php echo Configure::read('AppConfig.themeColorD'); ?>;
         --theme-color-e: <?php echo Configure::read('AppConfig.themeColorE'); ?>;
+        --theme-color-f: <?php echo Configure::read('AppConfig.themeColorF'); ?>;
     }
 </style>
 

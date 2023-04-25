@@ -37,7 +37,7 @@ a.button,
 }
 
 button.rounded:hover, button:hover, .button:hover, a.button:hover, input[type=submit]:hover {
-    background-color: #77B1C5 !important;
+    background-color: var(--theme-color-f) !important;
     text-decoration: none;
 }
 

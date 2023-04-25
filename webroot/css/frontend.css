@@ -134,7 +134,7 @@ a.green:visited {
         background-color: var(--theme-color-a);
     }
     100% {
-        background-color: #77B1C5;
+        background-color: var(--theme-color-f);
     }
 }
 @-webkit-keyframes blink {
@@ -142,7 +142,7 @@ a.green:visited {
         background-color: var(--theme-color-a);
     }
     100% {
-        background-color: #77B1C5;
+        background-color: var(--theme-color-f);
     }
 }
 .blink {
@@ -1963,7 +1963,7 @@ iframe .rc,
 }
 .rsslink-wrapper a:hover i,
 .socialicons a:hover i {
-    color: #77B1C5;
+    color: var(--theme-color-f);
 }
 /* START rounded buttons */
 
@@ -2008,7 +2008,7 @@ button:not(.fc-button):hover,
 .button:hover,
 a.button:hover,
 input[type=submit]:hover {
-    background-color: #77B1C5 !important;
+    background-color: var(--theme-color-f) !important;
     text-decoration: none;
 }
 button.rounded:visited,
@@ -2732,7 +2732,7 @@ body.knowledges.all .knowledge-edit-icon i {
     font-weight: bold;
 }
 .lstPage:hover {
-    background-color: #77B1C5 !important;
+    background-color: var(--theme-color-f) !important;
     color: #333;
 }
 .lstPage.thisPage {

@@ -142,8 +142,8 @@ div#selectedDate {
 }
 .fc .fc-button-primary:hover,
 .fc .fc-button-primary:active {
-    background-color: #77B1C5 ! important;
-    border-color: #77B1C5 ! important;
+    background-color: var(--theme-color-f) ! important;
+    border-color: var(--theme-color-f) ! important;
 }
 .fc .fc-daygrid-day-top {
     position: absolute;
