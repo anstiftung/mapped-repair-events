@@ -36,43 +36,25 @@ use Cake\Utility\Inflector;
 ?>
 <title><?php echo $metaTags['title'] . ' | ' . Configure::read('AppConfig.titleSuffix'); ?></title>
 <?php
-    echo $this->Html->meta('favicon.ico','img/favicon.ico',['type' => 'icon']);
     if (isset($canonicalUrl)) {
         echo '<link rel="canonical" href="'.$canonicalUrl.'" />';
     }
 ?>
-<link rel="icon" type="image/x-icon" href="/img/favicon.ico"/>
-<link rel="icon" type="image/gif" href="/img/favicon.gif"/>
-<link rel="icon" type="image/png" href="/img/favicon.png"/>
-<link rel="apple-touch-icon" href="/img/apple-touch-icon.png"/>
-<link rel="apple-touch-icon" href="/img/apple-touch-icon-57x57.png" sizes="57x57"/>
-<link rel="apple-touch-icon" href="/img/apple-touch-icon-60x60.png" sizes="60x60"/>
-<link rel="apple-touch-icon" href="/img/apple-touch-icon-72x72.png" sizes="72x72"/>
-<link rel="apple-touch-icon" href="/img/apple-touch-icon-76x76.png" sizes="76x76"/>
-<link rel="apple-touch-icon" href="/img/apple-touch-icon-114x114.png" sizes="114x114"/>
-<link rel="apple-touch-icon" href="/img/apple-touch-icon-120x120.png" sizes="120x120"/>
-<link rel="apple-touch-icon" href="/img/apple-touch-icon-128x128.png" sizes="128x128"/>
-<link rel="apple-touch-icon" href="/img/apple-touch-icon-144x144.png" sizes="144x144"/>
-<link rel="apple-touch-icon" href="/img/apple-touch-icon-152x152.png" sizes="152x152"/>
-<link rel="apple-touch-icon" href="/img/apple-touch-icon-180x180.png" sizes="180x180"/>
-<link rel="apple-touch-icon" href="/img/apple-touch-icon-precomposed.png"/>
-<link rel="icon" type="image/png" href="/img/favicon-16x16.png" sizes="16x16"/>
-<link rel="icon" type="image/png" href="/img/favicon-32x32.png" sizes="32x32"/>
-<link rel="icon" type="image/png" href="/img/favicon-96x96.png" sizes="96x96"/>
-<link rel="icon" type="image/png" href="/img/favicon-160x160.png" sizes="160x160"/>
-<link rel="icon" type="image/png" href="/img/favicon-192x192.png" sizes="192x192"/>
-<link rel="icon" type="image/png" href="/img/favicon-196x196.png" sizes="196x196"/>
-<meta name="msapplication-TileImage" content="/img/win8-tile-144x144.png"/>
-<meta name="msapplication-TileColor" content="#c8d218"/>
-<meta name="msapplication-navbutton-color" content="#c8d217"/>
+
+<?php // generated with https://realfavicongenerator.net ?>
+<link rel="apple-touch-icon" sizes="180x180" href="/img/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16x16.png">
+<link rel="manifest" href="/img/site.webmanifest">
+<link rel="mask-icon" href="/img/safari-pinned-tab.svg" color="#5bbad5">
+<link rel="shortcut icon" href="/img/favicon.ico">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="msapplication-config" content="/img/browserconfig.xml">
+<meta name="theme-color" content="#ffffff">
+
 <meta name="application-name" content="<?php echo Configure::read('AppConfig.serverName'); ?>"/>
 <meta name="msapplication-tooltip" content="<?php echo Configure::read('AppConfig.serverName'); ?>"/>
 <meta name="apple-mobile-web-app-title" content="<?php echo Configure::read('AppConfig.serverName'); ?>"/>
-<meta name="msapplication-square70x70logo" content="/img/win8-tile-70x70.png"/>
-<meta name="msapplication-square144x144logo" content="/img/win8-tile-144x144.png"/>
-<meta name="msapplication-square150x150logo" content="/img/win8-tile-150x150.png"/>
-<meta name="msapplication-wide310x150logo" content="/img/win8-tile-310x150.png"/>
-<meta name="msapplication-square310x310logo" content="/img/win8-tile-310x310.png"/>
 
 <?php echo $this->element('core/cssVariables'); ?>
 
