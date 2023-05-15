@@ -588,7 +588,7 @@ body.workshops.detail .calEvent {
     margin-bottom: 10px;
 }
 #workshop-detail div#selectedDate {
-    color: #B57CDB;
+    color: --var(theme-color-g);
     line-height: 20px;
 }
 #workshop-detail {
