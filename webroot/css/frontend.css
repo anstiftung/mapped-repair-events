@@ -536,7 +536,7 @@ div.calEvent:hover {
 }
 
 #workshop-detail div#calEvents {
-    background-color: #d7cbdf;
+    background-color: var(--theme-color-i);
 }
 #workshop-detail .calEvent {
     visibility: hidden;

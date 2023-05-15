@@ -118,7 +118,7 @@ div#selectedDate {
 }
 
 #workshop-detail .fc-unthemed .fc-day-today {
-    background-color: #d7cbdf !important;
+    background-color: var(--theme-color-i) ! important;
 }
 .fc-basic-view .fc-week-number, .fc-basic-view .fc-day-number {
     padding: 1px 2px 0 0;

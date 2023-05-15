@@ -158,10 +158,10 @@
         margin-top: 0 ! important;
     }
     #workshop-detail .calEvent {
-        background-color: #d7cbdf;
+        background-color: var(--theme-color-i);
     }
     body.workshops.detail .eventBox {
-        background-color: rgba(215,203,223,0.8); ! important;
+        background-color: var(--theme-color-h);
     }
     body.workshops.detail .eventBox .button {
         clear: both;
