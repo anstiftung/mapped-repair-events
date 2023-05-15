@@ -395,6 +395,9 @@
         width: 20%;
         height: auto;
     }
+    body.events.all .item-wrapper {
+        min-height: 120px;
+    }
     body.workshops.all .item-wrapper .title,
     body.events.all .item-wrapper .title {
         font-size: 15px;
