@@ -3021,6 +3021,9 @@ body.events.all .item-wrapper {
     min-height: 70px;
     float: left;
 }
+body.events.all .item-wrapper {
+    min-height: 110px;
+}
 body.workshops.all .text-wrapper,
 body.events.all .text-wrapper {
     margin-top: 10px;
