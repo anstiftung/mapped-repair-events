@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img src="https://open-source.reparatur-initiativen.de/img/core/logo.jpg" alt="Mapped repair events" />
+  <img src="https://raw.githubusercontent.com/anstiftung/mapped-repair-events/main/webroot/img/core/logo.jpg" alt="Mapped repair events" />
 </h1>
 
 <h4 align="center">Mapped repair events. A platform for community repair.</h4>
@@ -22,7 +22,7 @@
 
 * set up vhost and start webserver and mysql-server
 * clone repository from github
-* import [config/sql/database.sql](https://raw.githubusercontent.com/anstiftung/mapped-repair-events/master/config/sql/database.sql) in your mysql database
+* import [config/sql/database.sql](https://raw.githubusercontent.com/anstiftung/mapped-repair-events/main/config/sql/database.sql) in your mysql database
 * rename config/app\_custom.default.php to app\_custom.php and configure the database
 * run `$ composer install --optimize-autoloader`
 * run `$ npm --prefix ./webroot install ./webroot`
