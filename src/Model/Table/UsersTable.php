@@ -235,9 +235,9 @@ class UsersTable extends AppTable
             );
             $workshopNames[] = '"'.$workshop->name.'"';
         }
-        $result = 'Du kannst die Gruppe OrganisatorIn nicht verlassen, da du bei folgenden Initiativen der/die letzte OrganisatorIn bist: ';
+        $result = 'Du kannst die Gruppe Organisator*in nicht verlassen, da du bei folgenden Initiativen der/die letzte Organisator*in bist: ';
         $result .= join(',', $workshopLinks);
-        $result .= '<br /><br /><a href="mailto:'.Configure::read('AppConfig.notificationMailAddress').'?subject=Rücktrittsanfrage für '.urlencode(join(',', $workshopNames)).'&body='.$_SESSION['Auth']['User']['name'].' ('.$_SESSION['Auth']['User']['email'].') möchte die Rolle OrganisatorIn aufgeben.">Benachrichtige den Administrator über deine Rücktrittsanfrage.</a>';
+        $result .= '<br /><br /><a href="mailto:'.Configure::read('AppConfig.notificationMailAddress').'?subject=Rücktrittsanfrage für '.urlencode(join(',', $workshopNames)).'&body='.$_SESSION['Auth']['User']['name'].' ('.$_SESSION['Auth']['User']['email'].') möchte die Rolle Organisator*in aufgeben.">Benachrichtige den Administrator über deine Rücktrittsanfrage.</a>';
         return $result;
     }
 

@@ -443,7 +443,7 @@ class UsersController extends AppController
                 $target = $this->Authentication->getLoginRedirect();
                 if (!$target) {
                     $target = Configure::read('AppConfig.htmlHelper')->urlUserHome();
-                }                
+                }
                 $this->redirect($target);
             } else {
                 $this->AppFlash->setFlashError('Der Login hat nicht funktioniert. Benutzername oder Passwort falsch? Konto aktiviert?');
@@ -569,7 +569,7 @@ class UsersController extends AppController
         $this->set('groups', Configure::read('AppConfig.htmlHelper')->getUserGroupsForRegistration());
 
         $metaTags = [
-            'title' => 'Registrierung - Wähle deine Rolle: OrganisatorIn oder ' . Configure::read('AppConfig.repairHelperName')
+            'title' => 'Registrierung - Wähle deine Rolle: Organisator*in oder ' . Configure::read('AppConfig.repairHelperName')
         ];
         $this->set('metaTags', $metaTags);
 

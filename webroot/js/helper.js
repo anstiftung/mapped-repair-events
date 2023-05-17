@@ -1278,12 +1278,12 @@ MappedRepairEvents.Helper = {
     bindWorkshopUserActions : function(email) {
 
         $('a.resign-not-possible').on('click', function() {
-            $.prompt('Du bist der letzte aktive Organisator der Initiative, daher ist das Austreten nicht möglich. <br /><br />Bei Fragen wende dich bitte an ' + email);
+            $.prompt('Du bist der/die letzte aktive Organisator*in der Initiative, daher ist das Austreten nicht möglich. <br /><br />Bei Fragen wende dich bitte an ' + email);
         });
 
         $('a.refuse-not-possible').on('click', function() {
             var name = $(this).closest('tr').find('td:first').html();
-            $.prompt('<b>' + name + '</b> ist der letzte aktive Organisator der Initiative, daher ist das Beenden der Mitarbeit nicht möglich. <br /><br />Bei Fragen wende dich bitte an ' + email);
+            $.prompt('<b>' + name + '</b> ist der/die letzte aktive Organisator*in der Initiative, daher ist das Beenden der Mitarbeit nicht möglich. <br /><br />Bei Fragen wende dich bitte an ' + email);
         });
 
         $('a.refuse, a.approve, a.resign').on('click', function() {

@@ -1,4 +1,3 @@
-<?php use Cake\Core\Configure; ?>
 Ein User möchte gelöscht werden:
 
 <?php echo 'UID: ' . $loggedUser->uid; ?>
@@ -17,4 +16,4 @@ if ($deleteMessage != '') {
 ?>
 
 
-Beim Löschen Überprüfung, ob der User der letzte Organisator bei Initiativen ist, nicht vergessen!
+Beim Löschen Überprüfung, ob der User der/die letzte Organisator*in bei Initiativen ist, nicht vergessen!

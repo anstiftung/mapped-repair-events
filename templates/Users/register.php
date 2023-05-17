@@ -19,13 +19,13 @@ echo '<div align="center">' . $this->element('heading', [
             <br />
             <br />
 
-            <?php echo $this->Html->Tag('h1', 'OrganisatorIn'); ?>
+            <?php echo $this->Html->Tag('h1', 'Organisator*in'); ?>
             <div class="description">
                 <br />
                 <br />
                 <p>
                     <?php echo Configure::read('AppConfig.registerAsOrgaInfoText'); ?>
-                    <br /><br /><br /><br /><strong>Registriere dich als OrganisatorIn und</strong>
+                    <br /><br /><br /><br /><strong>Registriere dich als Organisator*in und</strong>
                 </p>
                 <br />
                 <ul>
@@ -35,7 +35,7 @@ echo '<div align="center">' . $this->element('heading', [
                 </ul>
 
                 <a class="button registration-button" href="<?php echo $this->request->getSession()->read('isMobile') ? 'javascript:void(0);' : '#reg'?>"
-                    title="<?php echo __('Intro:Take part as {0}', ['OrganisatorIn']) ?>"><?php echo __('Intro:Take part as {0}', ['OrganisatorIn']) ?></a>
+                    title="<?php echo __('Intro:Take part as {0}', ['Organisator*in']) ?>"><?php echo __('Intro:Take part as {0}', ['Organisator*in']) ?></a>
                 <div class="sc"></div>
                 <br />
             </div>

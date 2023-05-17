@@ -177,7 +177,7 @@ class UsersControllerTest extends AppTestCase
         // 1. try to delete user with workshop relation
         $this->User->delete($user);
         $this->assertArrayHasKey('workshops', $user->getErrors());
-        $this->assertEquals('Der User ist bei folgenden Initiativen als letzter Organisator zugeordnet: Test Workshop', $user->getErrors()['workshops'][0]);
+        $this->assertEquals('Der User ist bei folgenden Initiativen als letzte(r) Organisator*in zugeordnet: Test Workshop', $user->getErrors()['workshops'][0]);
 
         // 2. manually remove workshop relation
         $ownerAndAssociatedWorkshopId = 2;

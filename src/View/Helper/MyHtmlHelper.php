@@ -192,14 +192,14 @@ class MyHtmlHelper extends HtmlHelper {
     function getRoleHint($repairhelperInfotext, $orgaInfotext)
     {
         $html = '<strong>Wichtige Informationen über die verschiedenen Benutzerrollen</strong><br />
-                <a class="open-with-featherlight" href="#repairhelperHelp" id="urlHelpLink">Was ist ein(e) <strong>ReparaturhelferIn</strong> ?</a>
+                <a class="open-with-featherlight" href="#repairhelperHelp" id="urlHelpLink">Was ist ein(e) <strong>Reparaturhelfer*in</strong> ?</a>
                 <div class="hide">
                     <div id="repairhelperHelp" class="help-layer">
                     '.$repairhelperInfotext.'
                     </div>
                 </div>
                 &nbsp; &#x2016; &nbsp;
-                <a class="open-with-featherlight" href="#orgaHelp" id="urlHelpLink">Was ist ein(e) <strong>OrgansiatorIn</strong> ?</a>
+                <a class="open-with-featherlight" href="#orgaHelp" id="urlHelpLink">Was ist ein(e) <strong>Organisator*in</strong> ?</a>
                 <div class="hide">
                     <div id="orgaHelp" class="help-layer">
                         '.$orgaInfotext.'
@@ -530,7 +530,7 @@ class MyHtmlHelper extends HtmlHelper {
                     }
                     $categoryIdForUserProfileImage = preg_replace('/[^0-9]/', '', $files[rand(0, count($files) - 1)]);
                 }
-                
+
             }
             $userImageSrc = '/img/user-profile/user-profile-image-'.$categoryIdForUserProfileImage.'.png';
         }
@@ -552,7 +552,7 @@ class MyHtmlHelper extends HtmlHelper {
 
     function getUserGroupsForRegistration() {
         $userGroups = [
-            GROUPS_ORGA         => 'OrganisatorIn',
+            GROUPS_ORGA         => 'Organisator*in',
             GROUPS_REPAIRHELPER => Configure::read('AppConfig.repairHelperName'),
         ];
         return $userGroups;
@@ -561,7 +561,7 @@ class MyHtmlHelper extends HtmlHelper {
     function getUserGroupsForWorkshopDetail() {
         $userGroups = [
             GROUPS_ADMIN        => 'Admin',
-            GROUPS_ORGA         => 'OrganisatorIn',
+            GROUPS_ORGA         => 'Organisator*in',
             GROUPS_REPAIRHELPER => Configure::read('AppConfig.repairHelperName'),
         ];
         return $userGroups;
@@ -579,8 +579,8 @@ class MyHtmlHelper extends HtmlHelper {
         if ($isAdmin) {
             $userGroups[GROUPS_ADMIN] = 'Admin';
         }
-        $userGroups[GROUPS_ORGA] = 'OrganisatorIn';
-        $userGroups[GROUPS_REPAIRHELPER] = 'ReparaturhelferIn';
+        $userGroups[GROUPS_ORGA] = 'Organisator*in';
+        $userGroups[GROUPS_REPAIRHELPER] = Configure::read('AppConfig.repairHelperName');
         return $userGroups;
     }
 
