@@ -16,15 +16,15 @@ class EventsPolicy implements RequestPolicyInterface
     public function canAccess($identity, ServerRequest $request)
     {
 
-        if (is_null($identity)) {
-            return false;
-        }
-
         if ($request->getParam('action') == 'myEvents') {
             return $identity !== null;
         }
 
         if ($request->getParam('action') == 'add') {
+
+            if (is_null($identity)) {
+                return false;
+            }
 
             if ($identity->isAdmin()) {
                 return true;
@@ -45,6 +45,10 @@ class EventsPolicy implements RequestPolicyInterface
         }
 
         if (in_array($request->getParam('action'), ['edit', 'delete', 'duplicate'])) {
+
+            if (is_null($identity)) {
+                return false;
+            }
 
             // repair helpers are not allowed to edit, delete or duplicate events (even not own content - which does not exist because "add" is locked for repairhelpers too)
             if (!($identity->isOrga() || $identity->isAdmin())) {

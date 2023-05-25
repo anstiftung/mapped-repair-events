@@ -15,19 +15,26 @@ class WorkshopsPolicy implements RequestPolicyInterface
     public function canAccess($identity, ServerRequest $request)
     {
 
-        if (is_null($identity)) {
-            return false;
-        }
-
         if ($request->getParam('action') == 'verwalten') {
+
+            if (is_null($identity)) {
+                return false;
+            }
+
             if (!($identity->isAdmin() || $identity->isOrga())) {
                 return false;
             }
+
             return true;
+            
         }
 
         // die action "edit" ist für alle eingeloggten user erlaubt, die orga-mitglieder der initiative sind
         if ($request->getParam('action') == 'add') {
+
+            if (is_null($identity)) {
+                return false;
+            }
 
             if ($identity->isAdmin()) {
                 return true;
@@ -42,6 +49,10 @@ class WorkshopsPolicy implements RequestPolicyInterface
         }
 
         if ($request->getParam('action') == 'edit') {
+
+            if (is_null($identity)) {
+                return false;
+            }
 
             if (!($identity->isOrga() || $identity->isAdmin())) {
                 return false;
