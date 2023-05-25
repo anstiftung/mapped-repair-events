@@ -181,7 +181,7 @@ class EventsController extends AppController
         ]);
 
         $workshops = $this->paginate($workshops, [
-            'limit' => 500,
+            'limit' => 300,
         ]);
 
         foreach($workshops as $workshop) {
