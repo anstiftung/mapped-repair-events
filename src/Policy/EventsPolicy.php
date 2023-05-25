@@ -16,6 +16,10 @@ class EventsPolicy implements RequestPolicyInterface
     public function canAccess($identity, ServerRequest $request)
     {
 
+        if (is_null($identity)) {
+            return false;
+        }
+
         if ($request->getParam('action') == 'myEvents') {
             return $identity !== null;
         }

@@ -15,6 +15,10 @@ class WorkshopsPolicy implements RequestPolicyInterface
     public function canAccess($identity, ServerRequest $request)
     {
 
+        if (is_null($identity)) {
+            return false;
+        }
+
         if ($request->getParam('action') == 'verwalten') {
             if (!($identity->isAdmin() || $identity->isOrga())) {
                 return false;
