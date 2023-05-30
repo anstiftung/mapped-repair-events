@@ -3,16 +3,20 @@ use Cake\Core\Configure;
 echo $this->element('jqueryTabsWithoutAjax', [
     'links' => $this->Html->getUserBackendNaviLinks($loggedUser->uid, true, $loggedUser->isOrga())
 ]);
-$this->element('addScript', array('script' =>
-    JS_NAMESPACE.".Helper.bindToggleLinks(false, true);".
+$openFirstElement = 'true';
+if ($workshops->count() > 1) {
+    $openFirstElement = 'false';
+}
+$this->element('addScript', ['script' =>
+    JS_NAMESPACE.".Helper.bindToggleLinks(false, " . $openFirstElement . ");".
     JS_NAMESPACE.".Helper.bindToggleLinksForSubtables();".
     JS_NAMESPACE.".Helper.bindDeleteEventButton();"
-));
+]);
 if (Configure::read('AppConfig.statisticsEnabled')) {
-    $this->element('addScript', array('script' =>
+    $this->element('addScript', ['script' =>
         JS_NAMESPACE.".Helper.bindDownloadInfoSheetButton();".
         JS_NAMESPACE.".Helper.bindDeleteInfoSheetButton();"
-));
+]);
 }
 ?>
 
