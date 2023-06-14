@@ -5,6 +5,7 @@ namespace App\Command;
 use Cake\Command\Command;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
+use Cake\Log\Log;
 
 class SendWorknewsNotificationCommand extends Command
 {
@@ -38,6 +39,10 @@ class SendWorknewsNotificationCommand extends Command
         foreach($events as $event) {
             $subscribers = $this->Worknews->getSubscribers($event->workshop_uid);
             if (!empty($subscribers)) {
+                if (empty($event->workshop)) {
+                    Log::error('Workshop not found for event ' . $event->uid);
+                    continue;
+                }
                 $this->Worknews->sendNotifications($subscribers, 'Reparatur-Termin nächste Woche: ' . $event->workshop->name, 'event_next_week', $event->workshop, $event);
             }
         }
