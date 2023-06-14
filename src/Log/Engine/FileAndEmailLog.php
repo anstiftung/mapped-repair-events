@@ -32,7 +32,7 @@ class FileAndEmailLog extends FileLog
             'Form tampering protection token validation failed',
             preg_quote('`FormProtector` instance has not been created.'),
         ];
-        if (preg_match('`' . join('|', $ignoredExceptionsRegex) . '`', $message)) {
+        if (preg_match('/' . join('|', $ignoredExceptionsRegex) . '/', $message)) {
             return false;
         }
 
