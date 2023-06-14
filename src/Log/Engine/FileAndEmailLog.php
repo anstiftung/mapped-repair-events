@@ -14,9 +14,9 @@ class FileAndEmailLog extends FileLog
     public function log($level, $message, array $context = []): void
     {
         parent::log($level, $message, $context);
-        if (Configure::read('emailErrorLoggingEnabled')) {
+        //if (Configure::read('emailErrorLoggingEnabled')) {
             $this->sendEmailWithErrorInformation($message);
-        }
+        //}
     }
 
     private function sendEmailWithErrorInformation($message)
@@ -24,13 +24,13 @@ class FileAndEmailLog extends FileLog
 
         $ignoredExceptionsRegex = [
            '(MissingController|MissingAction|MissingTemplate|RecordNotFound|NotFound|InvalidCsrfToken|Forbidden|Unauthenticated)Exception',
-            preg_quote('Workshops/rss/home.ctp'),
+            preg_quote('Workshops/rss/home.ctp', '/'),
            'RssHelper is deprecated',
            'UsersController::publicProfile()',
-            preg_quote('workshops/ajaxGetAllWorkshopsForMap'),
-            preg_quote('{"results":[{"address_components"'),
+            preg_quote('workshops/ajaxGetAllWorkshopsForMap', '/'),
+            preg_quote('{"results":[{"address_components"', '/'),
             'Form tampering protection token validation failed',
-            preg_quote('`FormProtector` instance has not been created.'),
+            preg_quote('`FormProtector` instance has not been created.', '/'),
         ];
         if (preg_match('/' . join('|', $ignoredExceptionsRegex) . '/', $message)) {
             return false;
