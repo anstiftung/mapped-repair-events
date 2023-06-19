@@ -443,7 +443,7 @@ class MyHtmlHelper extends HtmlHelper {
     }
     function urlEvents()
     {
-        return '/reparatur-termine';
+        return '/termine';
     }
     function urlSkillDetail($id, $name, $zip=-1)
     {

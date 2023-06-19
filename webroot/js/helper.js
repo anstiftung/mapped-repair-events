@@ -925,7 +925,7 @@ MappedRepairEvents.Helper = {
     initFindEventsForm : function(form) {
         $(form).find('input[type="text"]').on('keyup', function(e) {
             var button = $(form).find('a');
-            button.attr('href', '/reparatur-termine/?keyword=' + $(this).val());
+            button.attr('href', '/termine/?keyword=' + $(this).val());
             if (e.which == 13) {
                 window.location.href = button.attr('href');
             }

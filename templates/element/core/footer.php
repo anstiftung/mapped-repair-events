@@ -12,7 +12,7 @@ $menu = array_merge($menu, $this->Menu->buildPageMenu($pagesForFooter));
 $staticMenu = [
     [
         'name' => 'Termine',
-        'slug' => '/reparatur-termine'
+        'slug' => '/termine'
     ],
     [
         'name' => 'Newsletter',

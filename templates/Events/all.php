@@ -15,7 +15,7 @@ $this->element('addScript', ['script' =>
 
         <?php
             echo $this->element('listSearchForm', [
-                'baseUrl' => '/reparatur-termine',
+                'baseUrl' => '/termine',
                 'keyword' => $keyword,
                 'categories' => $this->request->getQuery('categories'),
                 'resetButton' => (($keyword != '' || count($selectedCategories) > 0 || $timeRange != '30days' || $isOnlineEvent) ? true : false),

@@ -28,6 +28,7 @@ return function (RouteBuilder $routes) {
         $routes->redirect('/seite/reparaturwissen', '/reparaturwissen');
         $routes->redirect('/repair-cafe-ulm', '/reparatur-cafe-ulm');
         $routes->redirect('/newsletter', Configure::read('AppConfig.externNewsletterUrl'));
+        $routes->redirect('/reparatur-termine', '/termine');
         /* END custom redirects */
 
         $routes->setExtensions(['html', 'rss', 'xml', 'ics']);
@@ -80,11 +81,11 @@ return function (RouteBuilder $routes) {
         $routes->connect('/events/{uid}', ['controller'=>'events', 'action'=>'ical'])
             ->setPatterns(['uid' => '\d+'])
             ->setPass(['uid']);
-        $routes->connect('/reparatur-termine/*', ['controller'=>'events', 'action'=>'all']);
         $routes->connect('/termine/edit/*', ['controller'=>'events', 'action'=>'edit']);
         $routes->connect('/termine/duplicate/*', ['controller'=>'events', 'action'=>'duplicate']);
         $routes->connect('/termine/add/*', ['controller'=>'events', 'action'=>'add']);
         $routes->connect('/termine/delete/*', ['controller'=>'events', 'action'=>'delete']);
+        $routes->connect('/termine/*', ['controller'=>'events', 'action'=>'all']);
 
         $routes->connect('/rss-termine', ['controller' => 'events', 'action' => 'feed']);
 

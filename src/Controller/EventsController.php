@@ -672,9 +672,9 @@ class EventsController extends AppController
         }
         $this->set('timeRange', $timeRange);
 
-        $resetCategoriesUrl = '/reparatur-termine';
+        $resetCategoriesUrl = '/termine';
         if ($keyword != '') {
-            $resetCategoriesUrl = '/reparatur-termine?keyword=' . $keyword;
+            $resetCategoriesUrl = '/termine?keyword=' . $keyword;
         }
         if (!empty($this->request->getQuery('timeRange')) && $this->request->getQuery('timeRange') != $timeRangeDefault) {
             $queryStringStartsWith = '?';
@@ -728,7 +728,7 @@ class EventsController extends AppController
 
         $urlOptions = [
             'url' => [
-                'controller' => 'reparatur-termine',
+                'controller' => 'termine',
                 'keyword' => $keyword
             ]
         ];

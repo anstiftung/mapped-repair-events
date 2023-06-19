@@ -9,7 +9,7 @@ $menu = [
     ],
     [
         'name' => 'Termine & Orte',
-        'slug' => '/reparatur-termine',
+        'slug' => '/termine',
         'children' => [
             [
                 'name' => 'Termine',
