@@ -40,7 +40,7 @@ return [
         'claim' => 'Reparatur-Initiativen finden, unterstützen und gründen - Vernetzung, Beratung und Austausch',
         'specialEventNameSingular' => 'Reparaturtermin',
         'specialEventNamePlural' => 'Reparaturtermine',
-        'registerAsOrgaInfoText' => 'Du planst oder organisierst bereits eine Initiative?<br /> Du bist AnsprechpartnerIn und koordinierst die Mitwirkenden?',
+        'registerAsOrgaInfoText' => 'Du planst oder organisierst bereits eine Initiative?<br /> Du bist Ansprechpartner*In und koordinierst die Mitwirkenden?',
         'registerAsRepairHelperInfoText' => '<p>
                 Du bist handwerklich geschickt und möchtest dein Wissen weitergeben?<br />
                 Du bist bereits als als Reparateur*In in einer Initiative aktiv?<br />
