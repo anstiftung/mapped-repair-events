@@ -43,7 +43,7 @@ return [
         'registerAsOrgaInfoText' => 'Du planst oder organisierst bereits eine Initiative?<br /> Du bist AnsprechpartnerIn und koordinierst die Mitwirkenden?',
         'registerAsRepairHelperInfoText' => '<p>
                 Du bist handwerklich geschickt und möchtest dein Wissen weitergeben?<br />
-                Du bist bereits als als ReparateurIn in einer Initiative aktiv?<br />
+                Du bist bereits als als Reparateur*In in einer Initiative aktiv?<br />
                 Du unterstützt ein Repair-Café beim Empfang, Cafébetrieb oder auf anderem Wege?<br />
                 <br /> <strong>Registriere dich als Reparaturhelfer*in und</strong>
             </p>
