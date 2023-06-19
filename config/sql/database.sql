@@ -66,8 +66,7 @@ INSERT INTO `blocked_workshop_slugs` (`id`, `url`, `status`) VALUES
 (32, 'eisenriegler', 1),
 (33, 'dutz', 1),
 (34, 'kreiss', 1),
-(35, 'vangerow', 1),
-(36, 'termine', 1);
+(35, 'vangerow', 1);
 
 -- --------------------------------------------------------
 
