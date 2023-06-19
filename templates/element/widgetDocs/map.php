@@ -20,7 +20,7 @@ if (!Configure::read('AppConfig.mapWidgetEnabled')) {
 
     <br />
     <h2>Zoom auf bestimmten Bereich (Land, Region)</h2>
-    Du kannst auch Koordinaten für eine fixe Zentrierung der Karte, sowie ein vordefiniertes Zoom-Level angeben. Die geographischen Daten für deine Stadt, dein Bundesland oder dein Land findest du zum Beispiel auf <a href="http://www.latlong.net" target="_blank">dieser Webseite</a>.<br />
+    Du kannst auch Koordinaten für eine fixe Zentrierung der Karte, sowie ein vordefiniertes Zoom-Level angeben. Die geographischen Daten für deine Stadt, dein Bundesland oder dein Land findest du zum Beispiel auf <a href="https://www.latlong.net" target="_blank">dieser Webseite</a>.<br />
     <strong class="highlight">Beispiel-Link für die Zentrierung auf die Schweiz:</strong> <a title="Voransicht" target="_blank" href="/widgets/test-widget-map-switzerland.php">Voransicht Landkarte</a>
     <br />
     <code class="inlinecode">
