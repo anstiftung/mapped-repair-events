@@ -97,7 +97,7 @@ msgid "This user is working for the following Repair Initiatives"
 msgstr "DieseR BenutzerIn engagiert sich bei den folgenden Initiativen"
 
 msgid "IntroScreen: Welcome - Choose your role and take part"
-msgstr "Herzlich willkommen! Wähle deine Rolle und mach mit!"
+msgstr "Herzlich willkommen! Wähle Deine Rolle und mach mit!"
 
 msgid "Intro:Take part as {0}"
 msgstr "Als {0} mitmachen"
