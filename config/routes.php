@@ -3,6 +3,7 @@
 use Cake\Core\Configure;
 use Cake\Routing\RouteBuilder;
 use Cake\Routing\Route\DashedRoute;
+use Cake\Routing\Router;
 
 
 return function (RouteBuilder $routes) {
@@ -12,21 +13,28 @@ return function (RouteBuilder $routes) {
     $routes->scope('/', function (RouteBuilder $routes) {
 
         /* START custom redirects */
-        $routes->redirect('/ax', 'http://anstiftung.pageflow.io/reparieren#17589');
-        $routes->redirect('/dutz', 'http://anstiftung.pageflow.io/reparieren#17725');
-        $routes->redirect('/eisenriegler', 'http://anstiftung.pageflow.io/reparieren#17594');
-        $routes->redirect('/heckl', 'http://anstiftung.pageflow.io/reparieren#16303');
-        $routes->redirect('/huisken', 'http://anstiftung.pageflow.io/reparieren#17593');
-        $routes->redirect('/kreiss', 'http://anstiftung.pageflow.io/reparieren#16309');
-        $routes->redirect('/paech', 'http://anstiftung.pageflow.io/reparieren#17725');
-        $routes->redirect('/schridde', 'http://anstiftung.pageflow.io/reparieren#17595');
-        $routes->redirect('/vangerow', 'http://anstiftung.pageflow.io/reparieren#17590');
-        $routes->redirect('/versicherung', '/seite/sicherheit-haftung#Haftpflichtversicherung');
+        $request = Router::getRequest();
+        if (preg_match('/' . preg_quote('reparatur-initiativen.de') . '/', $request->domain())) {
+            $routes->redirect('/ax', 'http://anstiftung.pageflow.io/reparieren#17589');
+            $routes->redirect('/dutz', 'http://anstiftung.pageflow.io/reparieren#17725');
+            $routes->redirect('/eisenriegler', 'http://anstiftung.pageflow.io/reparieren#17594');
+            $routes->redirect('/heckl', 'http://anstiftung.pageflow.io/reparieren#16303');
+            $routes->redirect('/huisken', 'http://anstiftung.pageflow.io/reparieren#17593');
+            $routes->redirect('/kreiss', 'http://anstiftung.pageflow.io/reparieren#16309');
+            $routes->redirect('/paech', 'http://anstiftung.pageflow.io/reparieren#17725');
+            $routes->redirect('/schridde', 'http://anstiftung.pageflow.io/reparieren#17595');
+            $routes->redirect('/vangerow', 'http://anstiftung.pageflow.io/reparieren#17590');
+            $routes->redirect('/jaeger-erben', 'https://www.transcript-verlag.de/978-3-8376-5698-5/verhaeltnisse-reparieren/?number=978-3-8394-5698-9');
+            $routes->redirect('/jung', 'https://www1.wdr.de/fernsehen/die-story/sendungen/reparieren-statt-wegwerfen-100.html');
+            $routes->redirect('/opsomer', 'https://repair.eu');
+            $routes->redirect('/weber', 'https://www.transcript-verlag.de/978-3-8376-3860-8/kulturen-des-reparierens/?number=978-3-8394-3860-2');
+            $routes->redirect('/splitter', '/seite/splitter');
+            $routes->redirect('/online-reparaturcafe', '/seite/online-reparaturcafe');
+            $routes->redirect('/versicherung', '/seite/sicherheit-haftung#Haftpflichtversicherung');
+            $routes->redirect('/repair-cafe-ulm', '/reparatur-cafe-ulm');
+        }
         $routes->redirect('/initiativen', '/orte');
-        $routes->redirect('/splitter', '/seite/splitter');
-        $routes->redirect('/online-reparaturcafe', '/seite/online-reparaturcafe');
         $routes->redirect('/seite/reparaturwissen', '/reparaturwissen');
-        $routes->redirect('/repair-cafe-ulm', '/reparatur-cafe-ulm');
         $routes->redirect('/newsletter', Configure::read('AppConfig.externNewsletterUrl'));
         $routes->redirect('/reparatur-termine', '/termine');
         /* END custom redirects */
