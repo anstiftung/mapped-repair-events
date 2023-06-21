@@ -14,7 +14,7 @@ return function (RouteBuilder $routes) {
 
         /* START custom redirects */
         $request = Router::getRequest();
-        if (preg_match('/' . preg_quote('reparatur-initiativen.de') . '/', $request->domain())) {
+        if (!is_null($request) && preg_match('/' . preg_quote('reparatur-initiativen.de') . '/', $request->domain())) {
             $routes->redirect('/ax', 'http://anstiftung.pageflow.io/reparieren#17589');
             $routes->redirect('/dutz', 'http://anstiftung.pageflow.io/reparieren#17725');
             $routes->redirect('/eisenriegler', 'http://anstiftung.pageflow.io/reparieren#17594');
