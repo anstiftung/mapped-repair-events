@@ -21,7 +21,7 @@ $tl_search_input_field = __('Map search field preentered');
         "]);
         if (!$this->request->getSession()->read('isMobile')) {
             $this->element('addScript', ['script' => "
-                var mapObject = new ".JS_NAMESPACE.".Map([], 'search', false, {x:51.4, y:14.7});
+                var mapObject = new ".JS_NAMESPACE.".Map([], 'search', false, {x:51.4, y:14.7}, 4);
                 mapObject.map.on('moveend', function() {
                     mapObject.map.off('movestart').on('movestart', function() {
                        mapObject.hideHomeImageOverlay();
