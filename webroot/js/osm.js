@@ -264,7 +264,8 @@ MappedRepairEvents.Map.prototype = {
         }
         var bounds = this.pruneCluster.Cluster.ComputeBounds(markersForBoundingBox);
         if (bounds) {
-            this.map.fitBounds(new L.LatLngBounds(new L.LatLng(bounds.minLat, bounds.maxLng), new L.LatLng(bounds.maxLat, bounds.minLng)));
+            var boundsForMap = new L.LatLngBounds(new L.LatLng(bounds.minLat, bounds.maxLng), new L.LatLng(bounds.maxLat, bounds.minLng));
+            this.map.fitBounds(boundsForMap, { padding: [20, 20] });
         }
 
     },
