@@ -19,7 +19,7 @@
     "blueimp-file-upload": "^10.32.0",
     "chart.js": "^4.3.0",
     "chartjs-plugin-datalabels": "^2.2.0",
-    "ckeditor4": "^4.21.0",
+    "ckeditor4": "^4.22.1",
     "clipboard": "^2.0.11",
     "detect_swipe": "^2.1.4",
     "featherlight": "^1.7.14",
@@ -35,6 +35,6 @@
     "select2": "^4.0.13",
     "slidebars": "^2.0.2",
     "speakingurl": "^14.0.1",
-    "swiper": "^9.4.1"
+    "swiper": "^10.0.4"
   }
 }
