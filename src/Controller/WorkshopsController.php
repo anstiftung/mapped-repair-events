@@ -795,7 +795,12 @@ class WorkshopsController extends AppController
 
         $descriptionCriterium = $workshop->_id % 3;
 
-        $description = Configure::read('AppConfig.metaTags.' . $this->request->getParam('controller') . '.' . $this->request->getParam('action') . '.descriptions')[$descriptionCriterium];
+        $metaTagsConfig = 'AppConfig.metaTags.' . $this->request->getParam('controller') . '.' . $this->request->getParam('action');
+        $descriptions = Configure::read($metaTagsConfig . '.descriptions-' . Configure::read('AppConfig.platformName'));
+        if (empty($descriptions)) {
+            $descriptions = Configure::read($metaTagsConfig . '.descriptions');
+        }
+        $description = $descriptions[$descriptionCriterium];
         $description = str_replace('%name%', $workshop->name, $description);
         $description = str_replace('%city%', $workshop->city ?? '', $description);
         $metaTags['description'] = $description;
