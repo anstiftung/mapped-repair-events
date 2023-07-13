@@ -76,7 +76,7 @@ $tl_search_input_field = __('Map search field preentered');
 
             <br />
             <div style="float: right; margin: 5px 5px 0px 0px">
-                <a title="Landkarte Repair Cafes" href="/widgets/integration/#2">
+                <a href="/widgets/integration/#2">
                     Diese Karte auf deiner Webseite einfügen
                 </a>
             </div>
