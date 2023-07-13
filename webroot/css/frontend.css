@@ -192,7 +192,7 @@ hr {
     padding: 20px;
     width: 1160px;
     display: block;
-    min-height: 380px;
+    min-height: calc(100vh - 260px);
 }
 #logoouter {
     float: left;
