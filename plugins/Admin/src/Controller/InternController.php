@@ -261,6 +261,7 @@ class InternController extends AdminAppController
 
         $filePathWithTimestamp = str_replace($_SERVER['DOCUMENT_ROOT'], '/', $targetFileAbsolute) . '?' . filemtime($targetFileAbsolute);
         $filePathWithTimestamp = preg_replace('/thumbs\-' . $thumbSize . '/', 'thumbs-150', $filePathWithTimestamp);
+        $filePathWithTimestamp = str_replace('//', '/', $filePathWithTimestamp);
 
         die(json_encode([
             'status' => 0,
