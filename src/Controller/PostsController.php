@@ -84,7 +84,7 @@ class PostsController extends AppController
 
         $metaTags = [
             'title' => $post->name,
-            'keywords' => 'netzwerk reparatur-initiativen, reparatur-initiativen, anstiftung, repair café, repair-café, repair, reparatur, repaircafé, reparieren, reparatur café'
+            'keywords' => Configure::read('AppConfig.metaTags.' . $this->request->getParam('controller') . '.' . $this->request->getParam('action') . '.keywords'),
         ];
         $metaTags = $this->mergeCustomMetaTags($metaTags, $post);
         $this->set('metaTags', $metaTags);

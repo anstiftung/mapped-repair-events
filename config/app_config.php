@@ -37,6 +37,40 @@ return [
         'titleSuffix' => 'Meine Plattform',
         'categoriesNameWorkshops' => 'Reparatur-Bereiche',
         'categoriesNameUsers' => 'Reparatur-Kenntnisse',
+        'metaTags' => [
+            'Workshops' => [
+                'all' => [
+                    'title' => 'Initiativen finden, unterstützen und gründen',
+                    'description' => 'Mach mit im Reparatur-Café!',
+                    'keywords' => 'repair café, repair cafe, reparieren, repair, reparatur, reparatur-initiativen, netzwerk reparatur-initiativen'
+                ],
+                'home' => [
+                    'title' => 'Initiativen finden, unterstützen und gründen',
+                    'description' => 'Mach mit im Reparatur-Café! ',
+                    'keywords' => 'repair café, repair cafe, reparieren, repair, reparatur, reparatur-initiativen, netzwerk reparatur-initiativen'
+                ],
+                'detail' => [
+                    'descriptions' => [
+                        '%name% hilft: Elektrogeräte, Unterhaltungselektronik, Kleidung uvm. gemeinsam reparieren in %city%. Mach mit!',
+                        '%name%: Gemeinsam reparieren in %city%.',
+                        '%name% - mach mit! Gemeinsam Elektrogeräte, Unterhaltungselektronik, Kleidung uvm. reparieren in %city%.',
+                    ],
+                    'keywords' => 'repair café, repair-café, repair, reparatur, repaircafé, reparieren, reparatur café, reparatur-initiativen',
+                ],
+            ],
+            'Events' => [
+                'all' => [
+                    'title' => 'Suche Termine in deiner Nähe',
+                    'description' => 'Termine und Veranstaltungen von Repair Cafés und anderen Initiativen in deiner Nähe',
+                    'keywords' => 'repair café, repair cafe, reparieren, repair, reparatur, reparatur-initiativen, netzwerk reparatur-initiativen, reparaturtermin, reparaturveranstaltung'
+                ],
+            ],
+            'Posts' => [
+                'detail' => [
+                    'keywords' => 'netzwerk reparatur-initiativen, reparatur-initiativen, anstiftung, repair café, repair-café, repair, reparatur, repaircafé, reparieren, reparatur café',
+                ],
+            ],
+        ],
         'claim' => 'Reparatur-Initiativen finden, unterstützen und gründen - Vernetzung, Beratung und Austausch',
         'specialEventNameSingular' => 'Reparaturtermin',
         'specialEventNamePlural' => 'Reparaturtermine',

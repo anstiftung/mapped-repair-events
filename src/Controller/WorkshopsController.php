@@ -600,11 +600,8 @@ class WorkshopsController extends AppController
         $latestPosts = $this->Post->getLatestPosts();
         $this->set('latestPosts', $latestPosts);
 
-        $metaTags = [
-            'title' => 'Initiativen finden, unterstützen und gründen',
-            'description' => 'Mach mit im Reparatur-Café! ' . Configure::read('AppConfig.claim'),
-            'keywords' => 'repair café, repair cafe, reparieren, repair, reparatur, reparatur-initiativen, netzwerk reparatur-initiativen'
-        ];
+        $metaTags = Configure::read('AppConfig.metaTags.' . $this->request->getParam('controller') . '.' . $this->request->getParam('action'));
+        $metaTags['description'] .= Configure::read('AppConfig.claim');
         $this->set('metaTags', $metaTags);
 
     }
@@ -793,22 +790,14 @@ class WorkshopsController extends AppController
 
         $metaTags = [
             'title' => $workshop->name,
-            'keywords' => $workshop->name . ', ' . $workshop->city . ', repair café, repair-café, repair, reparatur, repaircafé, reparieren, reparatur café, reparatur-initiativen'
+            'keywords' => $workshop->name . ', ' . $workshop->city . ', ' . Configure::read('AppConfig.metaTags.' . $this->request->getParam('controller') . '.' . $this->request->getParam('action') . '.keywords'),
         ];
 
         $descriptionCriterium = $workshop->_id % 3;
-        switch($descriptionCriterium) {
-            case 0:
-                $description = $workshop->name . ' hilft: Elektrogeräte, Unterhaltungselektronik, Kleidung uvm. gemeinsam reparieren in '.$workshop->city.'. Mach mit!';
-                break;
-            case 1:
-                $description = $workshop->name . ': Gemeinsam reparieren in '.$workshop->city.'.';
-                break;
-            case 2:
-                $description = $workshop->name . ' - mach mit! Gemeinsam Elektrogeräte, Unterhaltungselektronik, Kleidung uvm. reparieren in '.$workshop->city.'.';
-                break;
-        }
 
+        $description = Configure::read('AppConfig.metaTags.' . $this->request->getParam('controller') . '.' . $this->request->getParam('action') . '.descriptions')[$descriptionCriterium];
+        $description = str_replace('%name%', $workshop->name, $description);
+        $description = str_replace('%city%', $workshop->city ?? '', $description);
         $metaTags['description'] = $description;
 
         $metaTags = $this->mergeCustomMetaTags($metaTags, $workshop);
@@ -1178,11 +1167,8 @@ class WorkshopsController extends AppController
 
     public function all() {
 
-        $metaTags = [
-            'title' => 'Suche Initiativen in deiner Nähe',
-            'description' => 'Initiativen, Repair Cafés und andere Reparaturprojekte in der Umgebung suchen',
-            'keywords' => Configure::read('AppConfig.platformName') . ', repair café, reparieren, Reparatur, repair, reparaturcafé, reparatur-café, repair-café, repaircafé'
-        ];
+        $metaTags = Configure::read('AppConfig.metaTags.' . $this->request->getParam('controller') . '.' . $this->request->getParam('action'));
+        $metaTags['keywords'] = Configure::read('AppConfig.platformName') . ', ' . $metaTags['keywords'];
         $this->set('metaTags', $metaTags);
 
         $conditions = [

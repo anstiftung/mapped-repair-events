@@ -546,11 +546,7 @@ class EventsController extends AppController
     public function all()
     {
 
-        $metaTags = [
-            'title' => 'Suche Termine in deiner Nähe',
-            'description' => 'Termine und Veranstaltungen von Repair Cafés und anderen Initiativen in deiner Nähe',
-            'keywords' => 'repair café, repair cafe, reparieren, repair, reparatur, reparatur-initiativen, netzwerk reparatur-initiativen, reparaturtermin, reparaturveranstaltung'
-        ];
+        $metaTags = Configure::read('AppConfig.metaTags.' . $this->request->getParam('controller') . '.' . $this->request->getParam('action'));
         $this->set('metaTags', $metaTags);
 
         // check if all categories are integers (sometimes bots call ?categories=87/ - with a trailing slash)
