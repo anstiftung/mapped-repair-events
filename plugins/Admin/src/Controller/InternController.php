@@ -297,6 +297,7 @@ class InternController extends AdminAppController
                 $pluralizedClass . '.uid' => $uid
             ]
         ])->first();
+
         $fileName = explode('?', $object->image);
         $fileName = $fileName[0];
 
@@ -309,7 +310,10 @@ class InternController extends AdminAppController
         }
 
         $object = $objectTable->get($object->uid);
-        $entity = $objectTable->patchEntity($object, ['image' => '']);
+        if ($objectClass == 'User') {
+            $object->revertPrivatizeData();
+        }
+        $entity = $objectTable->patchEntity($object, ['image' => ''], ['validate' => false]);
         $objectTable->save($entity);
 
         $this->AppFlash->setFlashMessage('Das Bild wurde erfolgreich gelöscht.');
