@@ -19,6 +19,7 @@ class InfoSheetsControllerTest extends AppTestCase
     use LogFileAssertionsTrait;
 
     private $InfoSheet;
+    private $User;
 
     private $newInfoSheetData = [
         'category_id' => '',

@@ -9,6 +9,8 @@ use Cake\ORM\Table;
 class ThirdPartyStatisticsTable extends Table
 {
 
+    private $Categories;
+
     public function initialize(array $config): void
     {
         parent::initialize($config);

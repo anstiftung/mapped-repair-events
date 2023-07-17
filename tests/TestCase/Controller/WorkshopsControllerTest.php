@@ -22,6 +22,7 @@ class WorkshopsControllerTest extends AppTestCase
     use LogFileAssertionsTrait;
 
     private $Workshop;
+    private $User;
 
     public function testAjaxGetAllWorkshopsForMap()
     {

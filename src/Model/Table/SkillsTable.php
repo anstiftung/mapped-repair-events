@@ -11,6 +11,7 @@ class SkillsTable extends Table
 
     public $allowedBasicHtmlFields = [];
     public $name_de = 'Kenntnis';
+    private $Category;
 
     public function initialize(array $config): void
     {

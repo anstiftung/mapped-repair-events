@@ -5,6 +5,8 @@ use Cake\View\View;
 class MyHtmlHelperTest extends \PHPUnit\Framework\TestCase
 {
 
+    private $MyHtmlHelper;
+    
     public function setUp(): void
     {
         $this->MyHtmlHelper = new MyHtmlHelper(new View());

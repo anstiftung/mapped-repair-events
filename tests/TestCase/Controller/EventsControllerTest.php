@@ -24,6 +24,7 @@ class EventsControllerTest extends AppTestCase
 
     private $newEventData;
     private $Event;
+    private $User;
 
     public function loadNewEventData()
     {
