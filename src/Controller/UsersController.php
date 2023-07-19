@@ -409,9 +409,6 @@ class UsersController extends AppController
         $user = $this->User->newEntity([]);
         $this->set('user', $user);
 
-        $userUid = $this->isLoggedIn() ? $this->loggedUser->uid : 0;
-        $this->User->id = $userUid;
-
         $user = $this->User->newEntity($this->request->getData(), [
             'validate' => 'ChangePassword'
         ]);
