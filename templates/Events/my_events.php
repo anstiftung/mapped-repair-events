@@ -136,7 +136,7 @@ if (Configure::read('AppConfig.statisticsEnabled')) {
                                     echo $status[$event->status];
                                 ?></td>
                                 <td><?php
-                                   echo $event->datumstart->i18nFormat(Configure::read('DateFormat.de.DateLong2')) . ', ';
+                                   echo $event->datumstart->i18nFormat(Configure::read('DateFormat.de.DateLong2WithWeekday')) . ', ';
                                    echo $event->uhrzeitstart->i18nFormat(Configure::read('DateFormat.de.TimeShort')) . ' - ' . $event->uhrzeitend->i18nFormat(Configure::read('DateFormat.de.TimeShort')) . ' Uhr';
                                  ?></td>
                                 <td><?php echo $event->ort . ', ' . $event->strasse; ?></td>

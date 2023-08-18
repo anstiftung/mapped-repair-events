@@ -145,6 +145,7 @@ return [
             'DateShort' => 'dd.MM.yy',
             'DateLong' =>  'dd. MMMM y',
             'DateLong2' => 'dd.MM.yyyy',
+            'DateLong2WithWeekday' => 'EEEE, dd.MM.yyyy',
             'DateNTimeShort' => 'dd.MM.y HH:mm',
             'TimeShort' => 'HH:mm',
             'TimeWithSeconds' => 'HH:mm:ss',
