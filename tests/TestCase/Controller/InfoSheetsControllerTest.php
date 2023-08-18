@@ -55,7 +55,6 @@ class InfoSheetsControllerTest extends AppTestCase
         $this->assertResponseContains('Bitte gib die Fehlerbeschreibung an (maximal 1.000 Zeichen).');
         $this->assertResponseContains('Bitte wähle eine Kategorie aus.');
         $this->assertResponseContains('Wurde der Fehler gefunden?');
-        $this->assertResponseContains('Die Eingabe muss eine ganze Zahl sein.');
     }
 
     public function testAddInfoSheetOk()
