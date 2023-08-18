@@ -138,5 +138,5 @@ if ($isMyProfile) {
 </div>
 
 <?php if ($isMyProfile) { ?>
-    <a style="float:right;" class="button gray" href="/users/delete">Mein Profil löschen</a>
+    <a style="float:right;clear:both;margin-top:5px;" class="button gray" href="/users/delete">Mein Profil löschen</a>
 <?php } ?>

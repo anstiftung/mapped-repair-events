@@ -3694,8 +3694,8 @@ div.admin.edit .iframe-preview-heading {
 #eventEditForm .cancel-and-save-button-wrapper button,
 #infoSheetEditForm .cancel-and-save-button-wrapper button,
 #userDeleteForm .cancel-and-save-button-wrapper button {
-  float: right;
   margin-left: 0;
+  margin-top: 5px;
 }
 
 #workshopEditForm .cancel-and-save-button-wrapper #cancel-button,
@@ -3708,7 +3708,10 @@ div.admin.edit .iframe-preview-heading {
 }
 #infoSheetEditForm #save-and-redirect-to-url-button {
     margin-right: 10px;
-    padding: 5px 10px;
+    padding: 6px 10px;
+}
+.button-wrapper-right {
+    float: right;
 }
 #infoSheetEditForm .add-subcategory,
 #infoSheetEditForm .add-brand,
