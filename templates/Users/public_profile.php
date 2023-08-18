@@ -50,26 +50,44 @@ echo $this->element('highlightNavi', ['main' => 'Aktive']);
            $additionalContactPossibilities[] = $user->additional_contact;
         }
         if ($user->website) {
-            $additionalContactPossibilities[] = $user->website;
+            $additionalContactPossibilities[] = $this->Html->link($user->website, $user->website, ['rel' =>'no-follow', 'target' => '_blank']);
         }
         if ($user->phone) {
             $additionalContactPossibilities[] = $user->phone;
         }
         $additionalSocial = [];
         if ($user->facebook_username) {
-            $additionalSocial[] = '<a href="' . $this->Html->getFacebookUrl($user->facebook_username) . '" target="_blank">
-                <i class="fab fa-facebook-square"></i>
-            </a>';
+            $additionalSocial[] = $this->Html->link(
+                '<i class="fab fa-facebook-square"></i>',
+                $this->Html->getFacebookUrl($user->facebook_username),
+                [
+                    'rel' =>'no-follow',
+                    'target' => '_blank',
+                    'escape' => false,
+                ]
+            );
         }
         if ($user->twitter_username) {
-            $additionalSocial[] = '<a href="https://twitter.com/' . $user->twitter_username . '" target="_blank">
-                <i class="fab fa-twitter-square"></i>
-            </a>';
+            $additionalSocial[] = $this->Html->link(
+                '<i class="fas fa-rss-square"></i>',
+                'https://twitter.com/' . $user->twitter_username,
+                [
+                    'rel' =>'no-follow',
+                    'target' => '_blank',
+                    'escape' => false,
+                ]
+            );
         }
         if ($user->feed_url) {
-            $additionalSocial[] = '<a href="' . $user->feed_url. '" target="_blank">
-                <i class="fas fa-rss-square"></i>
-            </a>';
+            $additionalSocial[] = $this->Html->link(
+                '<i class="fab fa-twitter-square"></i>',
+                $user->feed_url,
+                [
+                    'rel' =>'no-follow',
+                    'target' => '_blank',
+                    'escape' => false,
+                ]
+            );
         }
         if (!empty($additionalSocial)) {
             $additionalContactPossibilities[] = implode('', $additionalSocial);
