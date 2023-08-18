@@ -17,7 +17,7 @@ echo $this->element('highlightNavi', ['main' => 'Aktive']);
             <div class="about-me-content">
                 <?php
                     if ($user->about_me != '') {
-                        echo '<p style="margin-bottom:10px;">' . $user->about_me . '</p>';
+                        echo '<p style="margin-bottom:10px;">' . StringComponent::prepareTextForHTML($user->about_me) . '</p>';
                     }
                     if (!empty($user->skills)) {
                         foreach($user->skills as $skill) {
