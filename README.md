@@ -12,7 +12,10 @@
         <img src="https://img.shields.io/github/actions/workflow/status/anstiftung/mapped-repair-events/ci.yml?branch=main&style=for-the-badge"
             alt="Build status">
   </a>
-    <a href="LICENSE">
+  <a href="https://codecov.io/gh/anstiftung/mapped-repair-events" target="_blank">
+      <img alt="Coverage Status" src="https://img.shields.io/codecov/c/github/anstiftung/mapped-repair-events?style=for-the-badge">
+  </a>
+      <a href="LICENSE">
     <img src="https://img.shields.io/github/license/anstiftung/mapped-repair-events?style=for-the-badge"
          alt="Software license">
   </a>
