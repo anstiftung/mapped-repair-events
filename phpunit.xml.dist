@@ -2,8 +2,10 @@
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" colors="true" processIsolation="false" stopOnFailure="false" verbose="true" bootstrap="./tests/bootstrap.php" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
   <coverage>
     <include>
-      <directory suffix=".php">./src/</directory>
-      <directory suffix=".php">./plugins/*/src/</directory>
+      <directory>./src/</directory>
+      <directory>./templates/</directory>
+      <directory>./plugins/Admin/src/</directory>
+      <directory>./plugins/Admin/templates/</directory>
     </include>
   </coverage>
   <php>
