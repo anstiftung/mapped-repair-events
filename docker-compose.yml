@@ -16,9 +16,6 @@ services:
       - mysql-test
     environment:
       WEB_DOCUMENT_ROOT: /app/webroot
-      # php_debugger is only necessary for code coverage (ci.yml) and slows down local development
-      PHP_DEBUGGER: xdebug
-      XDEBUG_MODE: coverage
     ports:
       - "8113:80"
 

@@ -13,8 +13,13 @@ RUN apk update && \
     npm install -g eslint && \
     npm install -g npm@9.8.1
 
-
 #avoid permission error on github actions:
 #Your cache folder contains root-owned files, due to a bug in
 #npm ERR! previous versions of npm which has since been addressed.
 RUN npm config set cache /app/tmp --global
+
+# install pcov on alpine requires some addtional packages
+RUN apk add gcc musl-dev make autoconf && \
+    pecl install pcov && \
+    docker-php-ext-enable pcov && \
+    echo 'pcov.directory = /app' >> /usr/local/etc/php/php.ini
