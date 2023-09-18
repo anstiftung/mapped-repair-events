@@ -10,8 +10,9 @@ RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm
 RUN apk update && \
     apk add gettext && \
     npm install -g npm-check-updates && \
-    npm install -g eslint && \
-    npm install -g npm@9.8.1
+    npm install -g eslint
+
+RUN npm install -g npm@10.1.0
 
 #avoid permission error on github actions:
 #Your cache folder contains root-owned files, due to a bug in
