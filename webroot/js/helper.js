@@ -1053,7 +1053,7 @@ MappedRepairEvents.Helper = {
         $(form).find('input[type="text"],select').on('change', function() {
             $(form).submit();
         });
-        $(form).find('input[type="checkbox"],select').on('change', function() {
+        $(form).find('input[type="checkbox"]').on('click', function() {
             $(form).submit();
         });
     },
