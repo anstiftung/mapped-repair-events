@@ -1,12 +1,14 @@
 <?php
 namespace App\Model\Table;
 
+use App\Model\Traits\SearchExceptionsTrait;
 use Cake\Validation\Validator;
-use Cake\Core\Configure;
 use Cake\Datasource\FactoryLocator;
 
 class WorkshopsTable extends AppTable
 {
+
+    use SearchExceptionsTrait;
 
     public const STATISTICS_DISABLED = 0;
     public const STATISTICS_SHOW_ALL = 1;
@@ -257,12 +259,21 @@ class WorkshopsTable extends AppTable
     }
 
     public function getKeywordSearchConditions($keyword, $negate) {
-        return function ($exp, $query) use ($keyword, $negate) {
-            $result = $exp->or([
-                'Workshops.city LIKE' => $keyword . '%',
-                'Workshops.zip LIKE' => $keyword . '%',
-                'Workshops.name LIKE' => $keyword . '%',
-            ]);
+
+        $changeableOrConditions = [
+            'Workshops.city LIKE' => "%{$keyword}%",
+            'Workshops.name LIKE' => "%{$keyword}%",
+        ];
+
+        $fixedOrConditions = [
+            'Workshops.zip LIKE' => "{$keyword}%",
+        ];
+
+        $changeableOrConditions = $this->getChangeableOrConditions($keyword, $changeableOrConditions);
+        $orConditions = array_merge($changeableOrConditions, $fixedOrConditions);
+
+        return function ($exp, $query) use ($orConditions, $negate) {
+            $result = $exp->or($orConditions);
             if ($negate) {
                 $result = $exp->not($result);
             }

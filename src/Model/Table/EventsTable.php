@@ -6,10 +6,13 @@ use Cake\Core\Configure;
 use Cake\I18n\FrozenTime;
 use Cake\ORM\Query;
 use Cake\Validation\Validator;
+use App\Model\Traits\SearchExceptionsTrait;
 
 class EventsTable extends AppTable
 {
 
+    use SearchExceptionsTrait;
+    
     public $name_de = 'Termin';
 
     public $allowedBasicHtmlFields = [
@@ -61,12 +64,21 @@ class EventsTable extends AppTable
     }
 
     public function getKeywordSearchConditions($keyword, $negate) {
-        return function ($exp, $query) use ($keyword, $negate) {
-            $result = $exp->or([
-                'Events.zip LIKE' => $keyword . '%',
-                'Workshops.name LIKE' => $keyword . '%',
-                'Events.ort LIKE' => $keyword . '%',
-            ]);
+
+        $changeableOrConditions = [
+            'Workshops.name LIKE' => "%{$keyword}%",
+            'Events.ort LIKE' => "%{$keyword}%",
+        ];
+
+        $fixedOrConditions = [
+            'Events.zip LIKE' => "{$keyword}%",
+        ];
+
+        $changeableOrConditions = $this->getChangeableOrConditions($keyword, $changeableOrConditions);
+        $orConditions = array_merge($changeableOrConditions, $fixedOrConditions);
+
+        return function ($exp, $query) use ($orConditions, $negate) {
+            $result = $exp->or($orConditions);
             if ($negate) {
                 $result = $exp->not($result);
             }
