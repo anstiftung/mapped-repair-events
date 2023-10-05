@@ -1035,7 +1035,8 @@ MappedRepairEvents.Helper = {
 
     },
 
-    bindOnSubmitLoader: function(form) {
+    initSelfSubmittingForm: function(form) {
+        $(form).find('input,select').prop('disabled', false);
         $(form).on('submit', function() {
             $('#content').css('opacity', .5);
         });
@@ -1059,7 +1060,7 @@ MappedRepairEvents.Helper = {
     },
 
     initWorkshopAllForm: function(form) {
-        MappedRepairEvents.Helper.bindOnSubmitLoader(form);
+        MappedRepairEvents.Helper.initSelfSubmittingForm(form);
         MappedRepairEvents.Helper.triggerSubmitAfterTextInputKeyup(form);
     },
 
@@ -1069,7 +1070,7 @@ MappedRepairEvents.Helper = {
      */
     initEventAllForm : function(form) {
 
-        MappedRepairEvents.Helper.bindOnSubmitLoader(form);
+        MappedRepairEvents.Helper.initSelfSubmittingForm(form);
         MappedRepairEvents.Helper.triggerSubmitAfterChange(form);
         MappedRepairEvents.Helper.triggerSubmitAfterTextInputKeyup(form);
 

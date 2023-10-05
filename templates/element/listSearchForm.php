@@ -10,15 +10,15 @@ echo $this->Form->create(null, [
     'type' => 'get',
 ]);
 
-echo $this->Form->control('keyword', ['label' => '', 'value' => $keyword]);
+echo $this->Form->control('keyword', ['label' => '', 'value' => $keyword, 'disabled' => true]);
 if (!empty($categories)) {
     echo $this->Form->hidden('categories', ['label' => '', 'value' => $categories]);
 }
 if ($useTimeRange) {
-    echo $this->Form->control('timeRange', ['type' => 'select', 'label' => '', 'options' => $timeRangeOptions, 'value' => $timeRange]);
+    echo $this->Form->control('timeRange', ['type' => 'select', 'label' => '', 'options' => $timeRangeOptions, 'value' => $timeRange, 'disabled' => true]);
 }
 if (Configure::read('AppConfig.onlineEventsEnabled') && $showIsOnlineEventCheckbox) {
-    echo $this->Form->control('isOnlineEvent', ['hiddenField' => false, 'type' => 'checkbox', 'label' => 'Online-Event?', 'checked' => $isOnlineEvent]);
+    echo $this->Form->control('isOnlineEvent', ['hiddenField' => false, 'type' => 'checkbox', 'label' => 'Online-Event?', 'checked' => $isOnlineEvent, 'disabled' => true]);
 }
 
 if ($resetButton) { ?>
