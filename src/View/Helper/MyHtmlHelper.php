@@ -437,13 +437,21 @@ class MyHtmlHelper extends HtmlHelper {
     {
         return '/kenntnisse';
     }
-    function urlWorkshops()
+    function urlWorkshops($keyword = '')
     {
-        return '/orte';
+        $url = '/orte';
+        if ($keyword != '') {
+            $url .= '?keyword=' . $keyword;
+        }
+        return $url;
     }
-    function urlEvents()
+    function urlEvents($keyword = '')
     {
-        return '/termine';
+        $url = '/termine';
+        if ($keyword != '') {
+            $url .= '?keyword=' . $keyword;
+        }
+        return $url;
     }
     function urlSkillDetail($id, $name, $zip=-1)
     {

@@ -44,6 +44,22 @@ class WorkshopsControllerTest extends AppTestCase
         $this->doUserPrivacyAssertions();
     }
 
+    public function testWorkshopSearchWithExceptionKeyword()
+    {
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlWorkshops('berlin'));
+        $this->assertResponseOk();
+        $this->assertResponseNotEmpty();
+        $this->assertResponseContains('<div class="numbers">0 Initiativen gefunden</div>');
+    }
+
+    public function testWorkshopSearchWithNonExceptionKeyword()
+    {
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlWorkshops('Test'));
+        $this->assertResponseOk();
+        $this->assertResponseNotEmpty();
+        $this->assertResponseContains('<div class="numbers">1 Initiative gefunden</div>');
+    }
+
     public function testApplyToWorkshopAsRepairhelper()
     {
         
