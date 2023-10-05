@@ -1050,8 +1050,11 @@ MappedRepairEvents.Helper = {
     },
 
     triggerSubmitAfterChange: function(form) {
-        $(form).find('input,select').on('change', function() {
-            $(this).closest('form').submit();
+        $(form).find('input[type="text"],select').on('change', function() {
+            $(form).submit();
+        });
+        $(form).find('input[type="checkbox"],select').on('change', function() {
+            $(form).submit();
         });
     },
 

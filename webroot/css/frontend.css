@@ -3062,7 +3062,7 @@ body.events.all button.button {
 }
 body.workshops.all a.button,
 body.events.all a.button {
-    float: left;
+    float: right;
     margin-bottom: 10px;
 }
 body.workshops.all #mapContainer,
