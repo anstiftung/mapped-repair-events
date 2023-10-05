@@ -28,9 +28,13 @@ if ($linkToProfile) {
             }
         echo '</span>';
 
-        echo '<' . $headingTag . '>';
-            echo  $user->nick;
-        echo '</' . $headingTag . '>';
+        if ($user->firstname == '' && $user->lastname == '') {
+            echo '<' . $headingTag . '>';
+                echo  $user->nick;
+            echo '</' . $headingTag . '>';
+        } else {
+            echo '<br />';
+        }
 
         if ($user->email) {
             echo StringComponent::hide_email($user->email, 'email', false);
