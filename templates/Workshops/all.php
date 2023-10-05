@@ -3,6 +3,9 @@
 use App\Controller\Component\StringComponent;
 
 echo $this->element('highlightNavi', ['main' => 'ORTE']);
+$this->element('addScript', ['script' =>
+    JS_NAMESPACE.".Helper.initWorkshopAllForm('body.workshops.all #list-search-form');"
+]);
 ?>
 
 <div class="left">

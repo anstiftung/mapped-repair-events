@@ -1035,11 +1035,40 @@ MappedRepairEvents.Helper = {
 
     },
 
+    bindOnSubmitLoader: function(form) {
+        $(form).on('submit', function() {
+            $('#content').css('opacity', .5);
+        });
+    },
+
+    triggerSubmitAfterTextInputKeyup: function(form) {
+        $(form).find('input[type="text"]').on('keyup', MappedRepairEvents.Helper.debounce(
+            function() {
+                $(form).submit();
+            }, 2000)
+        );
+    },
+
+    triggerSubmitAfterChange: function(form) {
+        $(form).find('input,select').on('change', function() {
+            $(this).closest('form').submit();
+        });
+    },
+
+    initWorkshopAllForm: function(form) {
+        MappedRepairEvents.Helper.bindOnSubmitLoader(form);
+        MappedRepairEvents.Helper.triggerSubmitAfterTextInputKeyup(form);
+    },
+
     /**
      * updates href of category links depending on input field value (keyword)
      * so that keyword is not lost if category button is clicked (instead of submit button)
      */
     initEventAllForm : function(form) {
+
+        MappedRepairEvents.Helper.bindOnSubmitLoader(form);
+        MappedRepairEvents.Helper.triggerSubmitAfterChange(form);
+        MappedRepairEvents.Helper.triggerSubmitAfterTextInputKeyup(form);
 
         $(form).find('input#keyword').on('keyup', function(event) {
 

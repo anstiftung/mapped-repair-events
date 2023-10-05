@@ -20,10 +20,6 @@ if ($useTimeRange) {
 if (Configure::read('AppConfig.onlineEventsEnabled') && $showIsOnlineEventCheckbox) {
     echo $this->Form->control('isOnlineEvent', ['hiddenField' => false, 'type' => 'checkbox', 'label' => 'Online-Event?', 'checked' => $isOnlineEvent]);
 }
-echo $this->Form->button(__('Search'), [
-    'type' => 'submit',
-    'class' => 'button filter',
-]);
 
 if ($resetButton) { ?>
     <a href="<?php echo $baseUrl; ?>" class="button gray"><?php echo __('Clear'); ?></a>
