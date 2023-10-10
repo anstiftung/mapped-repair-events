@@ -59,7 +59,7 @@ class UsersControllerTest extends AppTestCase
     public function testPublicProfileFieldsNotPrivate()
     {
         $this->get(Configure::read('AppConfig.htmlHelper')->urlUserProfile(3));
-        $this->assertResponseNotContains('<h1>MaxMuster</h1>');
+        $this->assertResponseContains('<h1>MaxMuster</h1>');
         $this->assertResponseContains('<span class="public-name-wrapper">Max Muster</span>');
         $this->assertResponseRegExp('`'.preg_quote('[javascript protected email address]</span>').'`');
         $this->assertResponseContains('<span class="address-wrapper">Test Street 4, 66546</span>');
