@@ -24,7 +24,7 @@ class PostsController extends AdminAppController
         // admin defaults
         $post = [
             'name' => 'Neuer Post von ' . $this->loggedUser->name,
-            'publish' => FrozenDate::now(),
+            'publish' => date('Y-m-d'),
             'url' => StringComponent::createRandomString(6)
         ];
 
