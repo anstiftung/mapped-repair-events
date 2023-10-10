@@ -28,7 +28,7 @@ if ($linkToProfile) {
             }
         echo '</span>';
 
-        if (!isset($name) || join(' ', $name) != $user->nick) {
+        if (!isset($name)) {
             echo '<' . $headingTag . '>';
                 echo  $user->nick;
             echo '</' . $headingTag . '>';
