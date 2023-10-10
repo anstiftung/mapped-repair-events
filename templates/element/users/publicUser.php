@@ -16,19 +16,19 @@ if ($linkToProfile) {
 <span class="right-wrapper">
     <?php
         echo '<span class="public-name-wrapper">';
-            if ($user->firstname . ' ' . $user->lastname != $user->nick) {
-               $name = [];
-               if ($user->firstname != '') {
-                      $name[] = $user->firstname;
-               }
-                  if ($user->lastname != '') {
-                      $name[] = $user->lastname;
-                  }
-                  echo join(' ', $name);
+            if ($user->firstname != '' || $user->lastname != '') {
+                $name = [];
+                if ($user->firstname != '') {
+                    $name[] = $user->firstname;
+                }
+                if ($user->lastname != '') {
+                    $name[] = $user->lastname;
+                }
+                echo join(' ', $name);
             }
         echo '</span>';
 
-        if ($user->firstname == '' && $user->lastname == '') {
+        if (!isset($name) || join(' ', $name) != $user->nick) {
             echo '<' . $headingTag . '>';
                 echo  $user->nick;
             echo '</' . $headingTag . '>';
