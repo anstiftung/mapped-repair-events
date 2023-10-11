@@ -38,6 +38,9 @@ class SkillsTable extends Table
     }
 
     public function getNewSkillsFromRequest($associatedSkills) {
+        if ($associatedSkills === null) {
+            return [];
+        }
         $skills = array_filter($associatedSkills, function($value) {
             return !is_numeric($value);
         });
@@ -45,6 +48,9 @@ class SkillsTable extends Table
     }
 
     public function getExistingSkillsFromRequest($associatedSkills) {
+        if ($associatedSkills === null) {
+            return [];
+        }
         $skills = array_filter($associatedSkills, function($value) {
             return is_numeric($value);
         });

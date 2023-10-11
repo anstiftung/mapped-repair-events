@@ -282,8 +282,6 @@ class UsersController extends AppController
 
         $this->set('groups', Configure::read('AppConfig.htmlHelper')->getUserGroupsForUserEdit($this->isAdmin()));
 
-        $this->Skill = $this->getTableLocator()->get('Skills');
-
         $this->setReferer();
         if (empty($this->request->getData())) {
             $user->private_as_array = explode(',', $user->private);
@@ -591,8 +589,11 @@ class UsersController extends AppController
 
         if (! empty($this->request->getData())) {
 
-            $this->Skill = $this->getTableLocator()->get('Skills');
-            $this->request = $this->Skill->addSkills($this->request, $this->loggedUser, 'Users');
+            $associatedSkills = $this->request->getData('Users.skills._ids');
+            $newSkills = $this->Skill->getNewSkillsFromRequest($associatedSkills);
+            $existingSkills = $this->Skill->getExistingSkillsFromRequest($associatedSkills);
+            $this->request->getSession()->write('newSkills', $newSkills);
+            $this->request = $this->request->withData('Users.skills._ids', $existingSkills);
 
             if ($this->request->getData('Users.i_want_to_receive_the_newsletter')) {
                 $this->loadComponent('CptNewsletter');
@@ -642,6 +643,17 @@ class UsersController extends AppController
                     'data' => $user
                 ]);
 
+                $newSkills = $this->request->getSession()->read('newSkills');
+                if (!empty($newSkills)) {
+                    // save new skills
+                    $addedSkillIds = $this->Skill->addSkills($newSkills, $this->loggedUser, 'Users');
+                    // save id associations to user
+                    $this->request = $this->request->withData('Users.skills._ids', array_merge($this->request->getData('Users.skills._ids'), $addedSkillIds));
+                    $userEntity = $this->User->patchEntity($userEntity, $this->request->getData());
+                    $this->User->save($userEntity);
+                    $this->request->getSession()->delete('newSkills');
+                }
+
                 $email->setTo($user['Users']['email']);
 
                 if ($email->send()) {
@@ -654,6 +666,8 @@ class UsersController extends AppController
                 $this->set('user', $user);
                 $this->render('register');
             }
+        } else {
+            $this->request->getSession()->delete('newSkills');
         }
 
         $this->set('user', $user);

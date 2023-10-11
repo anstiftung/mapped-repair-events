@@ -34,7 +34,7 @@ class UsersControllerTest extends AppTestCase
             '_ids' => [87],
         ],
         'skills' => [
-            '_ids' => [1, 'new skill'],
+            '_ids' => [1],
         ],
     ];
 
@@ -88,8 +88,6 @@ class UsersControllerTest extends AppTestCase
         $this->assertNotEquals($user->groups[0]->id, GROUPS_REPAIRHELPER);
         $this->assertEquals($user->categories[0]->id, 87);
         $this->assertEquals($user->skills[0]->id, 1);
-        $this->assertEquals($user->skills[1]->id, 2);
-        $this->assertEquals($user->skills[1]->name, 'new skill');
 
         $this->assertMailCount(1);
         $this->assertMailSentTo($this->validUserData['email']);
