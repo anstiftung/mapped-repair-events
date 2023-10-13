@@ -82,13 +82,11 @@ use Cake\Core\Configure;
     echo '<div class="skills-wrapper">';
         echo '<b>Weitere Kenntnisse / Interessen</b>';
 
-        $this->element('addScript', ['script' => "
-            var userSkillsSelect = $('select#UserRegSkills" . $userGroup . "').select2();".
-            JS_NAMESPACE . ".Helper.addNewTagsToSelect2Multidropdown(userSkillsSelect, ".json_encode($this->request->getSession()->read('newSkillsRegistration')).");
+        $this->element('addScript', ['script' => 
+            JS_NAMESPACE . ".Helper.addNewTagsToSelect2Multidropdown('select#UserRegSkills" . $userGroup . "', ".json_encode($this->request->getSession()->read('newSkillsRegistration')).");
         "]);
 
         echo $this->Form->control('Users.skills._ids', [
-            'class' => 'no-select2',
             'multiple' => 'select',
             'data-tags' => true,
             'data-token-separators' => "[',']",

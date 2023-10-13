@@ -111,18 +111,16 @@ if ($isMyProfile) {
 
                 echo '<div class="skills-wrapper">';
                     echo '<b id="users-skills" class="pseudo-field" data-private="true" >Weitere Kenntnisse / Interessen</b>';
-                    $this->element('addScript', ['script' => "
-                        var userSkillsSelect = $('select#users-skills-ids').select2();".
-                        JS_NAMESPACE . ".Helper.addNewTagsToSelect2Multidropdown(userSkillsSelect, ".json_encode($this->request->getSession()->read('newSkillsProfile')).");
+                    $this->element('addScript', ['script' => 
+                        JS_NAMESPACE . ".Helper.addNewTagsToSelect2Multidropdown('select#users-skills-ids', ".json_encode($this->request->getSession()->read('newSkillsProfile')).");
                     "]);
                 
                     echo $this->Form->control('Users.skills._ids', [
-                        'class' => 'no-select2',
                         'multiple' => 'select',
                         'data-tags' => true,
                         'data-token-separators' => "[',']",
                         'label' => false,
-                        'options' => $skillsForDropdown
+                        'options' => $skillsForDropdown,
                     ]);
                 echo '</div>';
 
