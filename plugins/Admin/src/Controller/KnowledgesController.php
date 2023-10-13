@@ -50,19 +50,38 @@ class KnowledgesController extends AdminAppController
         $this->setReferer();
         $this->setIsCurrentlyUpdated($uid);
 
+        $this->Skill = $this->getTableLocator()->get('Skills');
+
         if (!empty($this->request->getData())) {
 
-            $this->Skill = $this->getTableLocator()->get('Skills');
-            $this->request = $this->Skill->addSkills($this->request, $this->loggedUser, 'Knowledges');
+            $associatedSkills = $this->request->getData('Knowledges.skills._ids');
+            $newSkills = $this->Skill->getNewSkillsFromRequest($associatedSkills);
+            $existingSkills = $this->Skill->getExistingSkillsFromRequest($associatedSkills);
+            $this->request->getSession()->write('newSkillsKnowledges', $newSkills);
+            $this->request = $this->request->withData('Knowledges.skills._ids', $existingSkills);
 
             $patchedEntity = $this->Knowledge->getPatchedEntityForAdminEdit($knowledge, $this->request->getData());
 
             if (!($patchedEntity->hasErrors())) {
                 $patchedEntity = $this->patchEntityWithCurrentlyUpdatedFields($patchedEntity);
                 $this->saveObject($patchedEntity);
+
+                $newSkills = $this->request->getSession()->read('newSkillsKnowledges');
+                if (!empty($newSkills)) {
+                    // save new skills
+                    $addedSkillIds = $this->Skill->addSkills($newSkills, $this->loggedUser->isAdmin(), $this->loggedUser->uid);
+                    // save id associations to knowledge
+                    $this->request = $this->request->withData('Knowledges.skills._ids', array_merge($this->request->getData('Knowledges.skills._ids'), $addedSkillIds));
+                    $patchedEntity = $this->Knowledge->getPatchedEntityForAdminEdit($knowledge, $this->request->getData());
+                    $this->saveObject($patchedEntity);
+                    $this->request->getSession()->delete('newSkillsKnowledges');
+                }
+
             } else {
                 $knowledge = $patchedEntity;
             }
+        } else {
+            $this->request->getSession()->delete('newSkillsKnowledges');
         }
 
         $this->set('knowledge', $knowledge);

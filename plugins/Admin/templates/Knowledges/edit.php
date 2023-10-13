@@ -41,6 +41,10 @@ use Cake\Core\Configure;
             echo '</div>';
             echo '<div class="sc"></div>';
 
+            $this->element('addScript', ['script' => 
+                JS_NAMESPACE . ".Helper.addNewTagsToSelect2Multidropdown('select#knowledges-skills-ids', ".json_encode($this->request->getSession()->read('newSkillsKnowledges')).");
+            "]);
+
             echo '<div class="skills-wrapper">';
                 echo '<b id="knowledges-skills" class="pseudo-field">Weitere Kenntnisse / Interessen</b>';
                 echo $this->Form->control('Knowledges.skills._ids', [
