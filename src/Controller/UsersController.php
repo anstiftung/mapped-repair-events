@@ -286,13 +286,13 @@ class UsersController extends AppController
         if (empty($this->request->getData())) {
             $user->private_as_array = explode(',', $user->private);
             $this->request = $this->request->withParsedBody($user);
-            $this->request->getSession()->delete('newSkills');
+            $this->request->getSession()->delete('newSkillsProfile');
         } else {
 
             $associatedSkills = $this->request->getData('Users.skills._ids');
             $newSkills = $this->Skill->getNewSkillsFromRequest($associatedSkills);
             $existingSkills = $this->Skill->getExistingSkillsFromRequest($associatedSkills);
-            $this->request->getSession()->write('newSkills', $newSkills);
+            $this->request->getSession()->write('newSkillsProfile', $newSkills);
             $this->request = $this->request->withData('Users.skills._ids', $existingSkills);
 
             $addressString = trim($this->request->getData('Users.zip') . ', ' . $this->request->getData('Users.city') . ', ' . $this->request->getData('Users.country_code'));
@@ -316,7 +316,7 @@ class UsersController extends AppController
                     $this->Authentication->setIdentity($user);
                 }
 
-                $newSkills = $this->request->getSession()->read('newSkills');
+                $newSkills = $this->request->getSession()->read('newSkillsProfile');
                 if (!empty($newSkills)) {
                     // save new skills
                     $addedSkillIds = $this->Skill->addSkills($newSkills, $this->loggedUser->isAdmin(), $this->loggedUser->uid);
@@ -324,7 +324,7 @@ class UsersController extends AppController
                     $this->request = $this->request->withData('Users.skills._ids', array_merge($this->request->getData('Users.skills._ids'), $addedSkillIds));
                     $user = $this->User->patchEntity($user, $this->request->getData());
                     $this->User->save($user);
-                    $this->request->getSession()->delete('newSkills');
+                    $this->request->getSession()->delete('newSkillsProfile');
                 }
 
                 if ($isEditMode) {
@@ -592,7 +592,7 @@ class UsersController extends AppController
             $associatedSkills = $this->request->getData('Users.skills._ids');
             $newSkills = $this->Skill->getNewSkillsFromRequest($associatedSkills);
             $existingSkills = $this->Skill->getExistingSkillsFromRequest($associatedSkills);
-            $this->request->getSession()->write('newSkills', $newSkills);
+            $this->request->getSession()->write('newSkillsRegistration', $newSkills);
             $this->request = $this->request->withData('Users.skills._ids', $existingSkills);
 
             if ($this->request->getData('Users.i_want_to_receive_the_newsletter')) {
@@ -643,7 +643,7 @@ class UsersController extends AppController
                     'data' => $user
                 ]);
 
-                $newSkills = $this->request->getSession()->read('newSkills');
+                $newSkills = $this->request->getSession()->read('newSkillsRegistration');
                 if (!empty($newSkills)) {
                     // save new skills
                     $addedSkillIds = $this->Skill->addSkills($newSkills, false, $result->uid);
@@ -651,7 +651,7 @@ class UsersController extends AppController
                     $this->request = $this->request->withData('Users.skills._ids', array_merge($this->request->getData('Users.skills._ids'), $addedSkillIds));
                     $userEntity = $this->User->patchEntity($userEntity, $this->request->getData());
                     $this->User->save($userEntity);
-                    $this->request->getSession()->delete('newSkills');
+                    $this->request->getSession()->delete('newSkillsRegistration');
                 }
 
                 $email->setTo($user['Users']['email']);
@@ -667,7 +667,7 @@ class UsersController extends AppController
                 $this->render('register');
             }
         } else {
-            $this->request->getSession()->delete('newSkills');
+            $this->request->getSession()->delete('newSkillsRegistration');
         }
 
         $this->set('user', $user);

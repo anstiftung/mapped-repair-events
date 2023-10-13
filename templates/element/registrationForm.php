@@ -84,7 +84,7 @@ use Cake\Core\Configure;
 
         $this->element('addScript', ['script' => "
             var userSkillsSelect = $('select#UserRegSkills" . $userGroup . "').select2();".
-            JS_NAMESPACE . ".Helper.addNewTagsToSelect2Multidropdown(userSkillsSelect, ".json_encode($this->request->getSession()->read('newSkills')).");
+            JS_NAMESPACE . ".Helper.addNewTagsToSelect2Multidropdown(userSkillsSelect, ".json_encode($this->request->getSession()->read('newSkillsRegistration')).");
         "]);
 
         echo $this->Form->control('Users.skills._ids', [
