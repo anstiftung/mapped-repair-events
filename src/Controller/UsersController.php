@@ -319,7 +319,7 @@ class UsersController extends AppController
                 $newSkills = $this->request->getSession()->read('newSkills');
                 if (!empty($newSkills)) {
                     // save new skills
-                    $addedSkillIds = $this->Skill->addSkills($newSkills, $this->loggedUser, 'Users');
+                    $addedSkillIds = $this->Skill->addSkills($newSkills, $this->loggedUser->isAdmin(), $this->loggedUser->uid);
                     // save id associations to user
                     $this->request = $this->request->withData('Users.skills._ids', array_merge($this->request->getData('Users.skills._ids'), $addedSkillIds));
                     $user = $this->User->patchEntity($user, $this->request->getData());
@@ -646,7 +646,7 @@ class UsersController extends AppController
                 $newSkills = $this->request->getSession()->read('newSkills');
                 if (!empty($newSkills)) {
                     // save new skills
-                    $addedSkillIds = $this->Skill->addSkills($newSkills, $this->loggedUser, 'Users');
+                    $addedSkillIds = $this->Skill->addSkills($newSkills, false, $result->uid);
                     // save id associations to user
                     $this->request = $this->request->withData('Users.skills._ids', array_merge($this->request->getData('Users.skills._ids'), $addedSkillIds));
                     $userEntity = $this->User->patchEntity($userEntity, $this->request->getData());

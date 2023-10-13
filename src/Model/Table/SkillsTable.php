@@ -57,7 +57,7 @@ class SkillsTable extends Table
         return $skills;
     }
 
-    public function addSkills($newSkills, $loggedUser, $entity)
+    public function addSkills($newSkills, $isAdmin, $userUid)
     {
 
         $skillsToAdd = [];
@@ -65,8 +65,8 @@ class SkillsTable extends Table
             $preparedSkill = strip_tags($skill);
             $skillsToAdd[] = $this->newEntity([
                 'name' => $preparedSkill,
-                'status' => !empty($loggedUser) && $loggedUser->isAdmin() ? APP_ON : APP_OFF,
-                'owner' => !empty($loggedUser) ? $loggedUser->uid : 0,
+                'status' => $isAdmin ? APP_ON : APP_OFF,
+                'owner' => $userUid,
             ]);
         }
 
