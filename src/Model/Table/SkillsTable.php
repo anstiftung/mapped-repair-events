@@ -38,7 +38,7 @@ class SkillsTable extends Table
     }
 
     public function getNewSkillsFromRequest($associatedSkills) {
-        if ($associatedSkills === null) {
+        if (!is_array($associatedSkills)) {
             return [];
         }
         $skills = array_filter($associatedSkills, function($value) {
@@ -48,7 +48,7 @@ class SkillsTable extends Table
     }
 
     public function getExistingSkillsFromRequest($associatedSkills) {
-        if ($associatedSkills === null) {
+        if (!is_array($associatedSkills)) {
             return [];
         }
         $skills = array_filter($associatedSkills, function($value) {
