@@ -11,6 +11,7 @@ use Cake\Http\Exception\ForbiddenException;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
+use Cake\ORM\Query;
 
 class WorkshopsController extends AppController
 {
@@ -298,7 +299,9 @@ class WorkshopsController extends AppController
                 ],
                 'contain' => [
                     'Countries',
-                    'Skills',
+                    'Skills' => function(Query $q) {
+                        return $q->where(['Skills.status' => APP_ON]);
+                    },
                     'Categories' => [
                         'sort' => [
                             'Categories.name' => 'ASC', //3D-Reparatur should be first

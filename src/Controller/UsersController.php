@@ -91,7 +91,9 @@ class UsersController extends AppController
         $users = $this->User->find('all', [
             'conditions' => $conditions,
             'contain' => [
-                'Skills',
+                'Skills' => function(Query $q) {
+                    return $q->where(['Skills.status' => APP_ON]);
+                },
                 'Categories',
             ]
         ]);
@@ -160,7 +162,9 @@ class UsersController extends AppController
             'contain' => [
                 'Groups',
                 'Categories',
-                'Skills',
+                'Skills' => function(Query $q) {
+                    return $q->where(['Skills.status' => APP_ON]);
+                },
                 'Workshops' => [
                     'fields' => [
                         'Workshops.url',
