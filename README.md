@@ -40,8 +40,14 @@
 * Node.js and npm ([installation](https://www.npmjs.com/get-npm)) developer packages
 * Composer ([installation](https://getcomposer.org/download/)) developer packages
 
+## Cronjobs
+* daily, 3:00 `bash ./bin/cake BackupDatabase`
+* daily, 8:00 `bash ./bin/cake SendWorknewsNotification`
+* every 11th of a month, 3:30 `bash ./bin/cake BackupUserUploads`
+
 ## Netzwerk Reparatur-Initiativen
 * [https://www.reparatur-initiativen.de/](https://www.reparatur-initiativen.de/)
+* [https://www.demokratiecafe.de/](https://www.demokratiecafe.de/)
 
 <h1 align="center">
   <a href="https://www.anstiftung.de">
