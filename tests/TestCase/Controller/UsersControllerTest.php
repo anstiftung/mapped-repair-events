@@ -9,6 +9,9 @@ use Cake\Core\Configure;
 use Cake\TestSuite\EmailTrait;
 use Cake\TestSuite\IntegrationTestTrait;
 use App\Test\TestCase\Traits\LoginTrait;
+use AssetCompress\Factory;
+use Cake\Datasource\FactoryLocator;
+use Cake\ORM\Locator\TableLocator;
 
 class UsersControllerTest extends AppTestCase
 {
@@ -34,7 +37,10 @@ class UsersControllerTest extends AppTestCase
             '_ids' => [87],
         ],
         'skills' => [
-            '_ids' => [1, 'new skill'],
+            '_ids' => [
+                0 => 1,
+                1 => 'new skill',
+            ],
         ],
     ];
 
@@ -88,8 +94,11 @@ class UsersControllerTest extends AppTestCase
         $this->assertNotEquals($user->groups[0]->id, GROUPS_REPAIRHELPER);
         $this->assertEquals($user->categories[0]->id, 87);
         $this->assertEquals($user->skills[0]->id, 1);
-        $this->assertEquals($user->skills[1]->id, 2);
-        $this->assertEquals($user->skills[1]->name, 'new skill');
+
+        $skillsTable = $this->getTableLocator()->get('Skills');
+        $skills = $skillsTable->find('all')->toArray();
+        $this->assertCount(2, $skills);
+        $this->assertEquals(9, $skills[1]->owner);
 
         $this->assertMailCount(1);
         $this->assertMailSentTo($this->validUserData['email']);

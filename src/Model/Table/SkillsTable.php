@@ -37,27 +37,38 @@ class SkillsTable extends Table
         return $validator;
     }
 
-    public function addSkills($request, $loggedUser, $entity)
+    public function getNewSkillsFromRequest($associatedSkills) {
+        if (!is_array($associatedSkills)) {
+            return [];
+        }
+        $skills = array_filter($associatedSkills, function($value) {
+            return !is_numeric($value);
+        });
+        return $skills;
+    }
+
+    public function getExistingSkillsFromRequest($associatedSkills) {
+        if (!is_array($associatedSkills)) {
+            return [];
+        }
+        $skills = array_filter($associatedSkills, function($value) {
+            return is_numeric($value);
+        });
+        return $skills;
+    }
+
+    public function addSkills($newSkills, $isAdmin, $userUid)
     {
 
-        $skills = $request->getData($entity . '.skills._ids');
-        if (empty($skills)) {
-            return $request;
-        }
-
         $skillsToAdd = [];
-        foreach($skills as $key => $skill) {
-            if (!is_numeric($skill)) {
-                unset($skills[$key]);
-                $preparedSkill = strip_tags($skill);
-                $skillsToAdd[] = $this->newEntity([
-                    'name' => $preparedSkill,
-                    'status' => !empty($loggedUser) && $loggedUser->isAdmin() ? APP_ON : APP_OFF,
-                    'owner' => !empty($loggedUser) ? $loggedUser->uid : 0,
-                ]);
-            }
+        foreach($newSkills as $skill) {
+            $preparedSkill = strip_tags($skill);
+            $skillsToAdd[] = $this->newEntity([
+                'name' => $preparedSkill,
+                'status' => $isAdmin ? APP_ON : APP_OFF,
+                'owner' => $userUid,
+            ]);
         }
-        $request = $request->withData($entity . '.skills._ids', $skills);
 
         $addedSkillIds = [];
         if (!empty($skillsToAdd)) {
@@ -65,10 +76,9 @@ class SkillsTable extends Table
             foreach($addedSkills as $addedSkill) {
                 $addedSkillIds[] = $addedSkill->id;
             }
-            $request = $request->withData($entity . '.skills._ids', array_merge($skills, $addedSkillIds));
         }
 
-        return $request;
+        return $addedSkillIds;
 
     }
 

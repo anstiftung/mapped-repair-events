@@ -286,6 +286,21 @@ MappedRepairEvents.Helper = {
         $('#band-cookies-ok').addClass('button');
     },
 
+    addNewTagsToSelect2Multidropdown : function(selector, newTags) {
+
+        if (newTags !== null && newTags.length == 0) {
+            return;
+        }
+
+        const selectElement = $(selector);
+
+        for (var i in newTags) {
+            var newOption = new Option(newTags[i], newTags[i], true, true);
+            selectElement.append(newOption);
+        }
+        selectElement.trigger('change');
+    },
+
     beautifyDropdowns : function() {
         $('select').not('.no-select2').select2();
     },
