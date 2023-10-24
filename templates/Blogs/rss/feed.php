@@ -25,8 +25,9 @@ foreach ($posts as $post) {
 
     if (!empty($post->photos)) {
         $imageUrl = $this->Html->getThumbs800ImageMultiple($post->photos[0]->name);
-        $length = filesize(WWW_ROOT . $imageUrl);
-        $mimeType = mime_content_type(WWW_ROOT . $imageUrl);
+        $correctedImageUrl = str_replace('//', '/', WWW_ROOT . $imageUrl);
+        $length = filesize($correctedImageUrl);
+        $mimeType = mime_content_type($correctedImageUrl);
         $preparedItem['enclosure'] = ['url' => $imageUrl, 'length' => $length, 'type' => $mimeType];
     }
 
