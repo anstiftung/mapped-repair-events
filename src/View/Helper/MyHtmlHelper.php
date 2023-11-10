@@ -536,9 +536,8 @@ class MyHtmlHelper extends HtmlHelper {
                     if ($fileinfo->isFile() && $fileinfo->getExtension() == 'png') {
                         $files[] = $fileinfo->getFilename();
                     }
-                    $categoryIdForUserProfileImage = preg_replace('/[^0-9]/', '', $files[rand(0, count($files) - 1)]);
                 }
-
+                $categoryIdForUserProfileImage = preg_replace('/[^0-9]/', '', $files[rand(0, count($files) - 1)]);
             }
             $userImageSrc = '/img/user-profile/user-profile-image-'.$categoryIdForUserProfileImage.'.png';
         }
