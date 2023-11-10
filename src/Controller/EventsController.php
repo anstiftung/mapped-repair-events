@@ -697,28 +697,20 @@ class EventsController extends AppController
         }
 
         $query->distinct($this->Events->getListFields());
-
-        $events = $this->paginate($query, [
-            'fields' => $this->Event->getListFields(),
-            'order' => $this->Event->getListOrder(),
-            'contain' => [
-                'Workshops',
-                'Categories'
-            ]
+        $query->select($this->Events->getListFields());
+        $query->order($this->Events->getListOrder());
+        $query->contain([
+            'Workshops',
+            'Categories'
         ]);
+        $events = $this->paginate($query);
 
         $this->set('events', $events);
 
         // $events needs to be cloned, because unset($e['workshop']); in combineEventsForMap would also remove it from $events
         // $events cannot be cloned because it is a resultset
         // so call $this->pagniate twice - no performance problem!
-        $newEvents = $this->paginate($query, [
-            'fields' => $this->Event->getListFields(),
-            'order' => $this->Event->getListOrder(),
-            'contain' => [
-                'Workshops'
-            ]
-        ]);
+        $newEvents = $this->paginate($query);
         $eventsForMap = $this->combineEventsForMap($newEvents);
         $this->set('eventsForMap', $eventsForMap);
 
