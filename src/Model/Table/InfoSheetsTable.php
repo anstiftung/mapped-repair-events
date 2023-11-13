@@ -247,7 +247,7 @@ class InfoSheetsTable extends AppTable
                 $query->newExpr()->and([
                     'InfoSheets.defect_found' => 1,
                     'InfoSheets.defect_found_reason' => 3,
-                    'InfoSheets.no_repair_reason IN' => [2,11,3,4,12,13,14,6,10],
+                    'InfoSheets.no_repair_reason IN' => [2,3,4,6,10,11,12,13,14],
                 ]),
             ]);
         });
