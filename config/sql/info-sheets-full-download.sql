@@ -12,7 +12,6 @@ SELECT
     DATE_FORMAT(i.created, '%Y') - i.device_age as "year_of_manufacture",
     TRIM(
         CONCAT(
-            COALESCE(ffoeiA.repair_status, ''), ' ',
             COALESCE(ffoeiB.repair_status, ''), ' ',
             COALESCE(ffoeiC.repair_status, ''), ' ',
             COALESCE(ffoeiD.repair_status, ''), ' ',
@@ -21,14 +20,12 @@ SELECT
     ) as "repair_status",
     TRIM(
         CONCAT(
-            COALESCE(ffoeiA.repair_barrier_if_end_of_life, ''), ' ',
             COALESCE(ffoeiB.repair_barrier_if_end_of_life, ''), ' ',
             COALESCE(ffoeiC.repair_barrier_if_end_of_life, ''), ' ',
             COALESCE(ffoeiD.repair_barrier_if_end_of_life, ''), ' ',
             COALESCE(ffoeiE.repair_barrier_if_end_of_life, '')
         )
     ) as "repair_barrier_if_end_of_life",
-    defect_found_ffo2.name as "defect_found_name",
     defect_found_ffo3.name as "defect_found_reason",
     defect_found_ffo4.name as "repair_postponed_reason",
     defect_found_ffo5.name as "no_repair_reason",
@@ -48,12 +45,10 @@ LEFT JOIN ords_categories oc ON c.ords_category_id = oc.id
 JOIN events e ON e.uid = i.event_uid
 JOIN workshops w ON e.workshop_uid = w.uid
 LEFT JOIN countries country ON w.country_code = country.code
-LEFT JOIN form_field_options defect_found_ffo2 ON defect_found_ffo2.form_field_id = 2 AND defect_found_ffo2.value = i.defect_found
 LEFT JOIN form_field_options defect_found_ffo3 ON defect_found_ffo3.form_field_id = 3 AND defect_found_ffo3.value = i.defect_found_reason
 LEFT JOIN form_field_options defect_found_ffo4 ON defect_found_ffo4.form_field_id = 4 AND defect_found_ffo4.value = i.repair_postponed_reason
 LEFT JOIN form_field_options defect_found_ffo5 ON defect_found_ffo5.form_field_id = 5 AND defect_found_ffo5.value = i.no_repair_reason
 LEFT JOIN form_field_options defect_found_ffo6 ON defect_found_ffo6.form_field_id = 6 AND defect_found_ffo6.value = i.device_must_not_be_used_anymore
-LEFT JOIN form_field_options_extra_infos ffoeiA ON ffoeiA.form_field_options_id = defect_found_ffo2.id
 LEFT JOIN form_field_options_extra_infos ffoeiB ON ffoeiB.form_field_options_id = defect_found_ffo3.id
 LEFT JOIN form_field_options_extra_infos ffoeiC ON ffoeiC.form_field_options_id = defect_found_ffo4.id
 LEFT JOIN form_field_options_extra_infos ffoeiD ON ffoeiD.form_field_options_id = defect_found_ffo5.id

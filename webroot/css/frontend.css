@@ -770,7 +770,6 @@ div.admin div.edit.column-1 textarea {
     width: 863px;
 }
 #infoSheetEditForm .power_supply,
-#infoSheetEditForm .defect_found_reason,
 #infoSheetEditForm .repair_postponed_reason,
 #infoSheetEditForm .no_repair_reason,
 #infoSheetEditForm .device_must_not_be_used_anymore,

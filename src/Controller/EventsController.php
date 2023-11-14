@@ -159,6 +159,10 @@ class EventsController extends AppController
             }
         ]);
 
+        $workshops->where([
+            'Workshops.uid' => 54724,
+        ]);
+
         $this->Workshop->getAssociation('Events')->setConditions(['Events.status > ' . APP_DELETED])
         ->setSort([
             'Events.datumstart' => 'DESC',

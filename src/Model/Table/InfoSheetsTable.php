@@ -29,7 +29,12 @@ class InfoSheetsTable extends AppTable
         ]);
     }
 
-    public function validationDefault(Validator $validator): \Cake\Validation\Validator
+    public function validationAdmin(Validator $validator): Validator
+    {
+        return $this->validationDefault($validator);
+    }
+
+    public function validationDefault(Validator $validator): Validator
     {
         $validator->notEmptyString('category_id', 'Bitte wähle eine Kategorie aus.');
         $validator = $this->getNumberRangeValidator($validator, 'device_age', 0, 400);
@@ -56,7 +61,9 @@ class InfoSheetsTable extends AppTable
             return $this->isBrandCreateModeEnabled($context);
         });
 
-        $validator->notEmptyString('defect_description', 'Bitte gib die Fehlerbeschreibung an (maximal 1.000 Zeichen).');
+        $validator->notEmptyString('defect_description', 'Bitte gib die Fehlerbeschreibung an (maximal 1.000 Zeichen).', function($context) {
+            return $this->isDefectFound($context);
+        });
         $validator->maxLength('defect_description', 1000, 'Maximal 1.000 Zeichen bitte.');
         $validator->notEmptyString('defect_found', 'Wurde der Fehler gefunden?');
 
@@ -238,14 +245,12 @@ class InfoSheetsTable extends AppTable
         $query->where(function ($exp, $query) {
             return $exp->or([
                 $query->newExpr()->and([
-                    'InfoSheets.defect_found' => 0,
+                    'InfoSheets.defect_found_reason' => 5,
                 ]),
                 $query->newExpr()->and([
-                    'InfoSheets.defect_found' => 1,
                     'InfoSheets.defect_found_reason' => 4,
                 ]),
                 $query->newExpr()->and([
-                    'InfoSheets.defect_found' => 1,
                     'InfoSheets.defect_found_reason' => 3,
                     'InfoSheets.no_repair_reason IN' => [2,3,4,6,10,11,12,13,14],
                 ]),
@@ -259,12 +264,10 @@ class InfoSheetsTable extends AppTable
         $query->where(function ($exp, $query) {
             return $exp->or([
                 $query->newExpr()->and([
-                    'InfoSheets.defect_found' => 1,
                     'InfoSheets.defect_found_reason' => 2,
                     'InfoSheets.repair_postponed_reason IN' => [1,2,3],
                 ]),
                 $query->newExpr()->and([
-                    'InfoSheets.defect_found' => 1,
                     'InfoSheets.defect_found_reason' => 3,
                     'InfoSheets.no_repair_reason IN' => [1,5,9],
                 ]),
@@ -276,7 +279,6 @@ class InfoSheetsTable extends AppTable
     private function setRepairedConditions($query)
     {
         $query->where([
-            'InfoSheets.defect_found' => 1,
             'InfoSheets.defect_found_reason' => 1,
         ]);
         return $query;
@@ -294,7 +296,7 @@ class InfoSheetsTable extends AppTable
 
     private function isDefectFound($context)
     {
-        return !empty($context['data']) && $context['data']['defect_found'] == 1;
+        return !empty($context['data']) && in_array($context['data']['defect_found_reason'], [1,2,3,4]);
     }
 
     private function isRepairPostponed($context)
