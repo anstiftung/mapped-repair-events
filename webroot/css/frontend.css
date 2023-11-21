@@ -785,7 +785,9 @@ div.admin div.edit.column-1 textarea {
 #infoSheetEditForm .input.radio label {
     width: 375px ! important;
 }
-
+#infoSheetEditForm .input.textarea .error-message {
+    margin-top: -5px;
+}
 #eventEditForm .custom-coordinates-wrapper,
 #workshopEditForm .custom-coordinates-wrapper {
   display: none;
