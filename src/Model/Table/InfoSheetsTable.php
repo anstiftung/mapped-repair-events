@@ -70,9 +70,7 @@ class InfoSheetsTable extends AppTable
         $validator->allowEmptyString('no_repair_reason_text');
         $validator->maxLength('no_repair_reason_text', 200, 'Maximal 200 Zeichen bitte.');
 
-        $validator->notEmptyString('defect_found_reason', 'Bitte gib Details zur Reparatur an.', function($context) {
-            return $this->isDefectFound($context);
-        });
+        $validator->notEmptyString('defect_found_reason', 'Bitte gib Details zur Reparatur an.');
 
         $validator->notEmptyString('repair_postponed_reason', 'Bitte gib an, warum die Reparatur vertagt wurde.', function($context) {
             return $this->isRepairPostponed($context);
