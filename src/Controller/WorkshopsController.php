@@ -576,6 +576,8 @@ class WorkshopsController extends AppController
             // special data structure needed
             $preparedWorkshop = [];
 
+            $workshop['events'] = array_values($workshop['events']); // reindex array
+            
             $tmpEvents = $workshop['events'];
             unset($workshop['events']);
             $preparedWorkshop['Workshop'] = $workshop;
