@@ -18,12 +18,6 @@ class FormFieldsFixture extends TestFixture
                 'status' => 1,
             ],
             [
-                'id' => 2,
-                'name' => 'Fehler gefunden?',
-                'identifier' => 'defect_found',
-                'status' => 1,
-            ],
-            [
                 'id' => 3,
                 'name' => 'Reparatur',
                 'identifier' => 'defect_found_reason',
