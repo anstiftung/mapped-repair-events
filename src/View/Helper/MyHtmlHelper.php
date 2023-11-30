@@ -147,7 +147,7 @@ class MyHtmlHelper extends HtmlHelper {
         ];
     }
 
-    function generateGenericRadioButton($form, $formField, $labelClass = '')
+    function generateGenericRadioButton($form, $formField)
     {
         $result = '<div class="form-fields-checkbox-wrapper dependent-form-field '.$formField->identifier.'">'.
             '<label>'.$formField->name.'</label>'.

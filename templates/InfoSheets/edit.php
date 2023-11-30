@@ -123,7 +123,6 @@ use Cake\Core\Configure;
     <?php
         echo $this->Form->fieldset(
             $this->Form->control('InfoSheets.defect_description', ['type' => 'textarea', 'label' => 'Fehlerbeschreibung:', 'placeholder' => 'Helft mit einer genauen Fehlerbeschreibung, wiederkehrende Defekte herauszufinden und so Schwachstellen in der Konstruktion von Geräten zu identifizieren! Maximal 1.000 Zeichen.', 'maxlength' => 1000]).
-            $this->Html->generateGenericRadioButton($this->Form, $defectFoundFormField).
             $this->Html->generateGenericRadioButton($this->Form, $defectFoundReasonFormField).
             $this->Html->generateGenericRadioButton($this->Form, $repairPostponedReasonFormField).
             $this->Html->generateGenericRadioButton($this->Form, $noRepairReasonFormField).

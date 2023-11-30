@@ -29,6 +29,11 @@ class InfoSheetsTable extends AppTable
         ]);
     }
 
+    public function validationAdmin(Validator $validator): Validator
+    {
+        return $this->validationDefault($validator);
+    }
+    
     public function validationDefault(Validator $validator): \Cake\Validation\Validator
     {
         $validator->notEmptyString('category_id', 'Bitte wähle eine Kategorie aus.');

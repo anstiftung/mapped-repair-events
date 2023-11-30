@@ -265,9 +265,6 @@ class InfoSheetsController extends AppController
         $powerSupplyFormField = $this->FormField->getForForm(1);
         $this->set('powerSupplyFormField', $powerSupplyFormField);
 
-        $defectFoundFormField = $this->FormField->getForForm(2);
-        $this->set('defectFoundFormField', $defectFoundFormField);
-
         $defectFoundReasonFormField = $this->FormField->getForForm(3);
         $this->set('defectFoundReasonFormField', $defectFoundReasonFormField);
 
