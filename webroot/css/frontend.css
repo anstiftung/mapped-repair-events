@@ -788,6 +788,9 @@ div.admin div.edit.column-1 textarea {
 #infoSheetEditForm .input.textarea .error-message {
     margin-top: -5px;
 }
+#infoSheetEditForm .input.radio label::after {
+    content: ''; /* hide required asterisk after radio buttons */
+}
 #eventEditForm .custom-coordinates-wrapper,
 #workshopEditForm .custom-coordinates-wrapper {
   display: none;
