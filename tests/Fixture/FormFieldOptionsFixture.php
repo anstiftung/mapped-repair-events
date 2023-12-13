@@ -47,20 +47,6 @@ class FormFieldOptionsFixture extends TestFixture
                 'status' => 1,
             ],
             [
-                'id' => 6,
-                'form_field_id' => 2,
-                'value' => 1,
-                'name' => '',
-                'status' => 1,
-            ],
-            [
-                'id' => 7,
-                'form_field_id' => 2,
-                'value' => 0,
-                'name' => '',
-                'status' => 1,
-            ],
-            [
                 'id' => 8,
                 'form_field_id' => 4,
                 'value' => 1,

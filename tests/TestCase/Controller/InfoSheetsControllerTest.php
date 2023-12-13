@@ -35,7 +35,6 @@ class InfoSheetsControllerTest extends AppTestCase
             ]
         ],
         'defect_description' => '',
-        'defect_found' => '',
         'defect_found_reason' => 2,
         'repair_postponed_reason' => 3,
         'no_repair_reason' => '',
@@ -54,7 +53,6 @@ class InfoSheetsControllerTest extends AppTestCase
         );
         $this->assertResponseContains('Bitte gib die Fehlerbeschreibung an (maximal 1.000 Zeichen).');
         $this->assertResponseContains('Bitte wähle eine Kategorie aus.');
-        $this->assertResponseContains('Wurde der Fehler gefunden?');
     }
 
     public function testAddInfoSheetOk()
@@ -63,7 +61,6 @@ class InfoSheetsControllerTest extends AppTestCase
         $this->newInfoSheetData['defect_description'] = 'Defect description';
         $this->newInfoSheetData['device_name'] = 'Device name';
         $this->newInfoSheetData['category_id'] = 87;
-        $this->newInfoSheetData['defect_found'] = 1;
         $this->newInfoSheetData['device_age'] = 1;
         $this->post(
             Configure::read('AppConfig.htmlHelper')->urlInfoSheetNew(6),

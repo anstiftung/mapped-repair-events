@@ -7,7 +7,6 @@ SELECT
     DATE_FORMAT(i.created, '%Y') - i.device_age as "Baujahr",
     DATE_FORMAT(e.datumstart, '%d.%m.%Y') as "Datum Reparaturveranstaltung",
     defect_description as Fehlerbeschreibung,
-    defect_found_ffo2.name as "Fehler gefunden?",
     defect_found_ffo3.name as Reparaturerfolg,
     defect_found_ffo4.name as "Reparatur: vertagt",
     defect_found_ffo5.name as "Reparatur: nicht erfolgt",
@@ -20,7 +19,6 @@ LEFT JOIN categories c ON c.id = i.category_id
 LEFT JOIN categories pc ON pc.id = c.parent_id
 JOIN events e ON e.uid = i.event_uid
 JOIN workshops w ON e.workshop_uid = w.uid
-LEFT JOIN form_field_options defect_found_ffo2 ON defect_found_ffo2.form_field_id = 2 AND defect_found_ffo2.value = i.defect_found
 LEFT JOIN form_field_options defect_found_ffo3 ON defect_found_ffo3.form_field_id = 3 AND defect_found_ffo3.value = i.defect_found_reason
 LEFT JOIN form_field_options defect_found_ffo4 ON defect_found_ffo4.form_field_id = 4 AND defect_found_ffo4.value = i.repair_postponed_reason
 LEFT JOIN form_field_options defect_found_ffo5 ON defect_found_ffo5.form_field_id = 5 AND defect_found_ffo5.value = i.no_repair_reason
@@ -28,4 +26,4 @@ LEFT JOIN form_field_options defect_found_ffo6 ON defect_found_ffo6.form_field_i
 WHERE 1
 AND i.status = 1
 AND w.uid = :workshopUid
-ORDER by e.datumstart DESC
+ORDER by e.datumstart DESC, i.uid DESC

@@ -770,7 +770,6 @@ div.admin div.edit.column-1 textarea {
     width: 863px;
 }
 #infoSheetEditForm .power_supply,
-#infoSheetEditForm .defect_found_reason,
 #infoSheetEditForm .repair_postponed_reason,
 #infoSheetEditForm .no_repair_reason,
 #infoSheetEditForm .device_must_not_be_used_anymore,
@@ -786,7 +785,12 @@ div.admin div.edit.column-1 textarea {
 #infoSheetEditForm .input.radio label {
     width: 375px ! important;
 }
-
+#infoSheetEditForm .input.textarea .error-message {
+    margin-top: -5px;
+}
+#infoSheetEditForm .input.radio label::after {
+    content: ''; /* hide required asterisk after radio buttons */
+}
 #eventEditForm .custom-coordinates-wrapper,
 #workshopEditForm .custom-coordinates-wrapper {
   display: none;
