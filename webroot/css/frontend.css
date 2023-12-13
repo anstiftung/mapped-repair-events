@@ -1378,7 +1378,7 @@ iframe.eiwsd {
     word-break: break-word;
 }
 .highlight {
-    color: black;
+    color: #fff;
     background-color: var(--theme-color-a) !important;
 }
 .orgaansprech {
