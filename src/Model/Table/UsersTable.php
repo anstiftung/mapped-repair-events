@@ -9,10 +9,9 @@ use Cake\ORM\RulesChecker;
 use Cake\Event\EventInterface;
 use Cake\Validation\Validator;
 use Cake\Datasource\FactoryLocator;
-use Cake\Auth\DefaultPasswordHasher;
+use Authentication\PasswordHasher\DefaultPasswordHasher;
 use Cake\Datasource\EntityInterface;
 use App\Model\Rule\UserLinkToWorkshopRule;
-use App\Model\Rule\UserIsWorkshopOwnerRule;
 use App\Controller\Component\StringComponent;
 
 class UsersTable extends AppTable

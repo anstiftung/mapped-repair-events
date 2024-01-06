@@ -4,7 +4,7 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 use Cake\Utility\Inflector;
 use Cake\Datasource\FactoryLocator;
-use Cake\Auth\DefaultPasswordHasher;
+use Authentication\PasswordHasher\DefaultPasswordHasher;
 use Authentication\IdentityInterface;
 use ArrayAccess;
 
