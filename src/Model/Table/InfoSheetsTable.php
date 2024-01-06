@@ -95,8 +95,8 @@ class InfoSheetsTable extends AppTable
         ]);
 
         if (!is_null($dateFrom) && !is_null($dateTo)) {
-            $dateFrom = new FrozenTime($dateFrom);
-            $dateTo = new FrozenTime($dateTo);
+            $dateFrom = new \Cake\I18n\DateTime($dateFrom);
+            $dateTo = new \Cake\I18n\DateTime($dateTo);
             $query->where(function($exp) use ($dateFrom, $dateTo) {
                 return $exp->between('Events.datumstart', $dateFrom, $dateTo, 'date');
             });

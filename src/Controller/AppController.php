@@ -275,7 +275,7 @@ class AppController extends Controller
         $modelName = $this->modelName;
         $entity = $this->$modelName->patchEntity($entity, [
             'currently_updated_by' => 0,
-            'currently_updated_start' => new FrozenTime()
+            'currently_updated_start' => new \Cake\I18n\DateTime()
         ]);
         return $entity;
     }
@@ -343,7 +343,7 @@ class AppController extends Controller
         // if not currently updated, set logged user as updating one
         $saveData = [
             'currently_updated_by' => $this->isLoggedIn() ? $this->loggedUser->uid : 0,
-            'currently_updated_start' => new FrozenTime()
+            'currently_updated_start' => new \Cake\I18n\DateTime()
         ];
         $entity = $this->$modelName->patchEntity($data, $saveData);
         $this->$modelName->save($entity);

@@ -36,10 +36,8 @@ class WidgetsController extends AppController
 
         $workshopUid = h($this->request->getQuery('id')) ?? 0;
         $this->Workshop = $this->getTableLocator()->get('Workshops');
-        $workshopFound = $this->Workshop->find('all', [
-            'conditions' => [
-                'Workshops.uid' => (int) $workshopUid
-            ]
+        $workshopFound = $this->Workshop->find('all', conditions: [
+            'Workshops.uid' => (int) $workshopUid
         ])->count();
         if (!$workshopFound) {
             throw new NotFoundException('workshop uid not correct');
@@ -213,11 +211,9 @@ class WidgetsController extends AppController
         $this->viewBuilder()->setLayout('widget');
 
         $this->Workshop = $this->getTableLocator()->get('Workshops');
-        $workshop = $this->Workshop->find('all', [
-            'conditions' => [
-                'Workshops.uid' => $workshopUid,
-                'Workshops.show_statistics > ' => $this->Workshop::STATISTICS_DISABLED,
-            ]
+        $workshop = $this->Workshop->find('all', conditions: [
+            'Workshops.uid' => $workshopUid,
+            'Workshops.show_statistics > ' => $this->Workshop::STATISTICS_DISABLED,
         ])->first();
         if (empty($workshop)) {
             throw new NotFoundException;

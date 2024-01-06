@@ -95,7 +95,7 @@ class EventsTable extends AppTable
             if ($timeRange == '90days') {
                 $days = 90;
             }
-            $now = new FrozenTime();
+            $now = new \Cake\I18n\DateTime();
             $maxDate = $now->addDays($days);
             $result = $exp->lte('Events.datumstart', $maxDate, 'date');
             if ($negate) {

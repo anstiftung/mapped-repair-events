@@ -32,14 +32,13 @@ class WorknewsTable extends Table
 
     public function getSubscribers($workshopUid)
     {
-        $subscribers = $this->find('all', [
-            'conditions' => [
-                'Worknews.workshop_uid' => $workshopUid,
-                'Worknews.confirm' => 'ok'
-            ],
-            'contain' => [
-                'Workshops'
-            ]
+        $subscribers = $this->find('all',
+        conditions: [
+            'Worknews.workshop_uid' => $workshopUid,
+            'Worknews.confirm' => 'ok'
+        ],
+        contain: [
+            'Workshops'
         ]);
         return $subscribers;
     }

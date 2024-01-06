@@ -53,11 +53,10 @@ class PagesController extends AppController
             'Pages.status' => APP_ON
         ], $this->getPreviewConditions('Pages', $url));
 
-        $page = $this->Page->find('all', [
-            'conditions' => $conditions,
-            'contain' => [
-                'Metatags'
-            ]
+        $page = $this->Page->find('all',
+        conditions: $conditions,
+        contain: [
+            'Metatags'
         ])->first();
 
         if (empty($page))

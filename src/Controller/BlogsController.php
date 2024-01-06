@@ -49,16 +49,15 @@ class BlogsController extends AppController
         }
 
         $this->Post = $this->getTableLocator()->get('Posts');
-        $posts = $this->Post->find('all', array(
-            'order' => [
-                'Posts.publish'=> 'DESC'
-            ],
-            'conditions' => $conditions,
-            'contain' => [
-                'Blogs',
-                'Photos',
-            ]
-        ));
+        $posts = $this->Post->find('all',
+        order: [
+            'Posts.publish'=> 'DESC'
+        ],
+        conditions: $conditions,
+        contain: [
+            'Blogs',
+            'Photos',
+        ]);
         if ($posts->count() == 0) throw new NotFoundException('Kein RSS-Feeds gefunden');
 
         $this->set('posts', $posts);
@@ -76,10 +75,8 @@ class BlogsController extends AppController
             throw new NotFoundException('page not found');
 
         $this->Blog = $this->getTableLocator()->get('Blogs');
-        $blog = $this->Blog->find('all', [
-            'conditions' => [
-                'Blogs.url' => $url
-            ]
+        $blog = $this->Blog->find('all', conditions: [
+            'Blogs.url' => $url
         ])->first();
 
         if (empty($blog))
@@ -97,13 +94,12 @@ class BlogsController extends AppController
         if ($blog->id > 1) {
             $conditions['Posts.blog_id'] = $blog->id;
         }
-        $query = $this->Post->find('all', [
-            'conditions' => [
-                $conditions
-            ],
-            'contain' => [
-                'Blogs'
-            ]
+        $query = $this->Post->find('all',
+        conditions: [
+            $conditions
+        ],
+        contain: [
+            'Blogs'
         ]);
         $posts = $this->paginate($query, [
             'order' => [

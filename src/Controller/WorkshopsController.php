@@ -126,11 +126,9 @@ class WorkshopsController extends AppController
                     // add orga user to workshop if workshop was created - id is kinda hard to retrieve...
                     if (!$isEditMode && $this->isOrga() &&!$this->isAdmin()) {
                         $usersWorkshop = $this->getTableLocator()->get('UsersWorkshops');
-                        $savedWorkshop = $this->Workshop->find('all', [
-                            'conditions' => [
-                                'Workshops.url' => $patchedEntity->url,
-                                'Workshops.status >= ' => APP_DELETED
-                            ]
+                        $savedWorkshop = $this->Workshop->find('all', conditions: [
+                            'Workshops.url' => $patchedEntity->url,
+                            'Workshops.status >= ' => APP_DELETED
                         ])->first();
                         if (!empty($savedWorkshop)) {
                             $usersWorkshop->addApprovedUser($savedWorkshop->uid, $this->isLoggedIn() ? $this->loggedUser->uid : 0);
@@ -220,15 +218,14 @@ class WorkshopsController extends AppController
             'Workshops.status' => APP_ON,
         ]);
         if (!empty($categoryIds)) {
-            $categories = $this->Category->find('all', [
-                'conditions' => [
-                    'Categories.status' => APP_ON,
-                    'Categories.id IN' => $categoryIds,
-                ],
-                'contain' => [
-                    'Workshops',
-                    'Users',
-                ],
+            $categories = $this->Category->find('all',
+            conditions: [
+                'Categories.status' => APP_ON,
+                'Categories.id IN' => $categoryIds,
+            ],
+            contain: [
+                'Workshops',
+                'Users',
             ])->toArray();
         }
 
@@ -254,20 +251,19 @@ class WorkshopsController extends AppController
                 'Categories.status' => APP_ON,
             ]);
 
-            $workshops = $this->Workshop->find('all', [
-                'conditions' => [
-                    'Workshops.uid IN' => $workshopUids,
-                ],
-                'contain' => [
-                    'Categories' => [
-                        'sort' => [
-                            'Categories.name' => 'ASC', //3D-Reparatur should be first
-                        ],
+            $workshops = $this->Workshop->find('all',
+            conditions: [
+                'Workshops.uid IN' => $workshopUids,
+            ],
+            contain: [
+                'Categories' => [
+                    'sort' => [
+                        'Categories.name' => 'ASC', //3D-Reparatur should be first
                     ],
-                    'Countries',
                 ],
-                'order' => ['Workshops.name' => 'ASC'],
-            ]);
+                'Countries',
+            ],
+            order: ['Workshops.name' => 'ASC']);
 
             foreach($workshops as $workshop) {
                 $preparedWorkshops[] = [
@@ -293,30 +289,29 @@ class WorkshopsController extends AppController
         if (!empty($userUids)) {
 
             $this->User = $this->getTableLocator()->get('Users');
-            $users = $this->User->find('all', [
-                'conditions' => [
-                    'Users.uid IN' => $userUids,
-                ],
-                'contain' => [
-                    'Countries',
-                    'Skills' => function(Query $q) {
-                        return $q->where(['Skills.status' => APP_ON]);
-                    },
-                    'Categories' => [
-                        'sort' => [
-                            'Categories.name' => 'ASC', //3D-Reparatur should be first
-                        ],
+            $users = $this->User->find('all',
+            conditions: [
+                'Users.uid IN' => $userUids,
+            ],
+            contain: [
+                'Countries',
+                'Skills' => function(Query $q) {
+                    return $q->where(['Skills.status' => APP_ON]);
+                },
+                'Categories' => [
+                    'sort' => [
+                        'Categories.name' => 'ASC', //3D-Reparatur should be first
                     ],
-                    'Workshops' => function($q) {
-                        return $q->where([
-                            'UsersWorkshops.approved <> \'1970-01-01 00:00:00\'',
-                        ]);
-                    }
                 ],
-                'order' => [
-                    'Users.firstname' => 'ASC',
-                    'Users.nick' => 'ASC',
-                ],
+                'Workshops' => function($q) {
+                    return $q->where([
+                        'UsersWorkshops.approved <> \'1970-01-01 00:00:00\'',
+                    ]);
+                }
+            ],
+            order: [
+                'Users.firstname' => 'ASC',
+                'Users.nick' => 'ASC',
             ]);
 
             $foundUserUids = [];
@@ -625,9 +620,7 @@ class WorkshopsController extends AppController
             'Worknews.confirm' => 'ok',
             'Worknews.email' => $this->isLoggedIn() ? $this->loggedUser->email : '',
         ];
-        $worknews = $this->Worknews->find('all', [
-            'conditions' => $conditions,
-        ])->first();
+        $worknews = $this->Worknews->find('all', conditions: $conditions)->first();
 
         if (!empty($this->request->getData())) {
 
@@ -651,8 +644,8 @@ class WorkshopsController extends AppController
             $mergedData = array_merge(
                 $this->request->getData(),
                 [
-                    'created' => FrozenTime::now(),
-                    'modified' => FrozenTime::now(),
+                    'created' => \Cake\I18n\DateTime::now(),
+                    'modified' => \Cake\I18n\DateTime::now(),
                     'confirm' => $confirmationCode,
                     'unsub' => $unsubscribeCode
                 ]
@@ -742,10 +735,9 @@ class WorkshopsController extends AppController
             $contain[] = 'Events.Categories';
         }
 
-        $workshop = $this->Workshop->find('all', [
-            'conditions' => $conditions,
-            'contain' => $contain
-        ])->first();
+        $workshop = $this->Workshop->find('all',
+        conditions: $conditions,
+        contain: $contain)->first();
 
         if (empty($workshop)) {
             throw new NotFoundException('workshop not found');
@@ -1008,26 +1000,23 @@ class WorkshopsController extends AppController
             $this->set('userModel', $userModel);
             $um = $this->getTableLocator()->get($userModel);
             $subject = 'Anfrage zur Mitarbeit bei deiner Initiative';
-            $user = $um->find('all', [
-                'conditions' => [
-                    $userModel . '.uid' => $userUid,
-                    $userModel . '.status > ' => APP_DELETED,
-                ]
+            $user = $um->find('all', conditions: [
+                $userModel . '.uid' => $userUid,
+                $userModel . '.status > ' => APP_DELETED,
             ])->first();
             $user->revertPrivatizeData();
 
             /* START email-versand an alle initiativen-orgas */
             if (!$this->isAdmin()) {
                 $this->Workshop = $this->getTableLocator()->get('Workshops');
-                $workshop = $this->Workshop->find('all', [
-                    'conditions' => [
-                        'Workshops.uid' => $workshopUid,
-                        'Workshops.status > ' => APP_DELETED
-                    ],
-                    'contain' => [
-                        'Users',
-                        'Users.Groups'
-                    ]
+                $workshop = $this->Workshop->find('all',
+                conditions: [
+                    'Workshops.uid' => $workshopUid,
+                    'Workshops.status > ' => APP_DELETED
+                ],
+                contain: [
+                    'Users',
+                    'Users.Groups'
                 ])->first();
 
                 $email = new Mailer('default');
@@ -1156,15 +1145,14 @@ class WorkshopsController extends AppController
 
         $this->Workshop = $this->getTableLocator()->get('Workshops');
 
-        $workshop = $this->Workshop->find('all', [
-            'conditions' => [
-                'Workshops.uid' => $workshopUid,
-                'Workshops.status > ' . APP_DELETED
-            ],
-            'contain' => [
-                'Countries',
-                'Categories'
-            ]
+        $workshop = $this->Workshop->find('all',
+        conditions: [
+            'Workshops.uid' => $workshopUid,
+            'Workshops.status > ' . APP_DELETED
+        ],
+        contain: [
+            'Countries',
+            'Categories'
         ])->first();
         $this->set([
             'status' => 0,

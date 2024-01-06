@@ -25,18 +25,17 @@ class BrandsTable extends Table
     public function getForDropdown()
     {
 
-        $brands = $this->find('all', [
-            'fields' => [
-                'Brands.id',
-                'Brands.name',
-                'Brands.status'
-            ],
-            'order' => [
-                'LOWER(Brands.name)' => 'ASC'
-            ],
-            'conditions' => [
-                'Brands.status > ' . APP_DELETED
-            ]
+        $brands = $this->find('all',
+        fields: [
+            'Brands.id',
+            'Brands.name',
+            'Brands.status'
+        ],
+        order: [
+            'LOWER(Brands.name)' => 'ASC'
+        ],
+        conditions: [
+            'Brands.status > ' . APP_DELETED
         ]);
 
         $preparedBrands = [];

@@ -58,11 +58,9 @@ class UsersController extends AppController
         if (is_null($filteredCategory) && isset($this->getRequest()->getParam('pass')[0])) {
             $skillId = (int) $this->getRequest()->getParam('pass')[0];
             $this->Skill = $this->getTableLocator()->get('Skills');
-            $skill = $this->Skill->find('all', [
-                'conditions' => [
-                    'Skills.id' => $skillId,
-                    'Skills.status' => APP_ON
-                ]
+            $skill = $this->Skill->find('all', conditions: [
+                'Skills.id' => $skillId,
+                'Skills.status' => APP_ON
             ])->first();
 
             if (empty($skill)) {
@@ -502,23 +500,20 @@ class UsersController extends AppController
         ];
 
         $this->User = $this->getTableLocator()->get('Users');
-        $user = $this->User->find('all', [
-            'conditions' => array_merge($conditions, [
-                'Users.confirm' => $this->request->getParam('pass')['0']
-            ])
-        ])->first();
+        $user = $this->User->find('all', conditions: array_merge($conditions, [
+            'Users.confirm' => $this->request->getParam('pass')['0']
+        ]))->first();
 
         if (empty($user)) {
             $this->AppFlash->setFlashError(__('Invalid activation code.'));
             return;
         }
 
-        $user = $this->User->get($user->uid, [
-            'conditions' => $conditions,
-            'contain' => [
-                'Categories',
-                'Groups'
-            ]
+        $user = $this->User->get($user->uid,
+        conditions: $conditions,
+        contain: [
+            'Categories',
+            'Groups'
         ]);
         $user->revertPrivatizeData();
         $user2save = [

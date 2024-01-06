@@ -42,21 +42,20 @@ class PostsTable extends AppTable
     }
 
     public function getLatestPosts() {
-        $posts = $this->find('all', [
-            'fields' => [
-                'Posts.uid',
-                'Posts.name',
-                'Posts.text',
-                'Posts.url',
-                'Posts.image',
-                'Posts.image_alt_text',
-            ]
-            ,'limit' => 3
-            ,'order' => ['Posts.publish' => 'DESC']
-            ,'conditions' => [
-                'Posts.status' => APP_ON,
-                'Posts.image != ' => ''
-            ]
+        $posts = $this->find('all',
+        fields: [
+            'Posts.uid',
+            'Posts.name',
+            'Posts.text',
+            'Posts.url',
+            'Posts.image',
+            'Posts.image_alt_text',
+        ],
+        limit: 3,
+        order: ['Posts.publish' => 'DESC'],
+        conditions: [
+            'Posts.status' => APP_ON,
+            'Posts.image != ' => ''
         ]);
         return $posts;
     }

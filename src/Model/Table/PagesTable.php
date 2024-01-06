@@ -20,10 +20,8 @@ class PagesTable extends AppTable
 
     public function getPageByName($name)
     {
-        $page = $this->find('all', [
-            'conditions' => [
-                'Pages.name' => $name
-            ]
+        $page = $this->find('all', conditions: [
+            'Pages.name' => $name
         ])->first();
         return $page;
     }
@@ -56,14 +54,13 @@ class PagesTable extends AppTable
 
     public function getThreaded($conditions = [])
     {
-        $pages = $this->find('threaded', [
-            'parentField' => 'parent_uid',
-            'conditions' => $conditions,
-            'order' => [
-                'Pages.menu_type' => 'DESC',
-                'Pages.position' => 'ASC',
-                'Pages.name' => 'ASC'
-            ]
+        $pages = $this->find('threaded',
+        parentField: 'parent_uid',
+        conditions: $conditions,
+        order: [
+            'Pages.menu_type' => 'DESC',
+            'Pages.position' => 'ASC',
+            'Pages.name' => 'ASC'
         ]);
         return $pages;
     }

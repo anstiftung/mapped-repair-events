@@ -64,13 +64,12 @@ class PostsController extends AppController
             'Posts.status' => APP_ON
         ], $this->getPreviewConditions('Posts', $url));
 
-        $post = $this->Post->find('all', [
-            'conditions' => $conditions,
-            'contain' => [
-                'Blogs',
-                'Photos',
-                'Metatags'
-            ]
+        $post = $this->Post->find('all',
+        conditions: $conditions,
+        contain: [
+            'Blogs',
+            'Photos',
+            'Metatags'
         ])->first();
 
         if (empty($post))

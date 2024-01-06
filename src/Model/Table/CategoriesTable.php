@@ -55,10 +55,8 @@ class CategoriesTable extends Table
     public function getMaterialFootprintByParentCategoryId($parentCategoryId)
     {
 
-        $category = $this->find('all', [
-            'conditions' => [
-                'Categories.parent_id' => $parentCategoryId
-            ]
+        $category = $this->find('all', conditions: [
+            'Categories.parent_id' => $parentCategoryId
         ])->first();
 
         $result = 0;
@@ -72,10 +70,8 @@ class CategoriesTable extends Table
     public function getCarbonFootprintByParentCategoryId($parentCategoryId)
     {
 
-        $category = $this->find('all', [
-            'conditions' => [
-                'Categories.parent_id' => $parentCategoryId
-            ]
+        $category = $this->find('all', conditions: [
+            'Categories.parent_id' => $parentCategoryId
         ])->first();
 
         $result = 0;
@@ -92,15 +88,14 @@ class CategoriesTable extends Table
     public function getForSubcategoryDropdown()
     {
 
-        $categories = $this->find('threaded', [
-            'conditions' => [
-                'Categories.visible_on_platform' => APP_ON,
-                'Categories.status > ' . APP_DELETED
-            ],
-            'order' => [
-                'Categories.status' => 'DESC',
-                'Categories.icon' => 'ASC'
-            ]
+        $categories = $this->find('threaded',
+        conditions: [
+            'Categories.visible_on_platform' => APP_ON,
+            'Categories.status > ' . APP_DELETED
+        ],
+        order: [
+            'Categories.status' => 'DESC',
+            'Categories.icon' => 'ASC'
         ])
         ->where(function ($exp, $query) {
             return $exp->or([
@@ -152,13 +147,12 @@ class CategoriesTable extends Table
             ];
         }
 
-        $thirdPartySubCategories = $this->find('all', [
-            'conditions' => [
-                'Categories.parent_id IN' => Configure::read('AppConfig.mainCategoryIdsWhereSubCategoriesAreShown')
-            ],
-            'order' => [
-                'Categories.id' => 'ASC'
-            ]
+        $thirdPartySubCategories = $this->find('all',
+        conditions: [
+            'Categories.parent_id IN' => Configure::read('AppConfig.mainCategoryIdsWhereSubCategoriesAreShown')
+        ],
+        order: [
+            'Categories.id' => 'ASC'
         ]);
         foreach($thirdPartySubCategories as $category) {
             $categories[] = [
@@ -176,14 +170,13 @@ class CategoriesTable extends Table
 
     public function getMainCategoriesForFrontend()
     {
-        $categories = $this->find('all', [
-            'conditions' => [
-                'Categories.parent_id IS NULL',
-                'Categories.visible_on_platform' => APP_ON
-            ],
-            'order' => [
-                'Categories.name' => 'ASC'
-            ]
+        $categories = $this->find('all',
+        conditions: [
+            'Categories.parent_id IS NULL',
+            'Categories.visible_on_platform' => APP_ON
+        ],
+        order: [
+            'Categories.name' => 'ASC'
         ]);
         return $categories;
     }
@@ -194,18 +187,17 @@ class CategoriesTable extends Table
     public function getForDropdown($visibleOnPlatform)
     {
 
-        $categories = $this->find('all', [
-            'conditions' => [
-                'Categories.parent_id IS NULL',
-                'Categories.visible_on_platform IN' => $visibleOnPlatform
-            ],
-            'fields' => [
-                'Categories.id',
-                'Categories.name'
-            ],
-            'order' => [
-                'LOWER(Categories.name)' => 'ASC'
-            ]
+        $categories = $this->find('all',
+        conditions: [
+            'Categories.parent_id IS NULL',
+            'Categories.visible_on_platform IN' => $visibleOnPlatform
+        ],
+        fields: [
+            'Categories.id',
+            'Categories.name'
+        ],
+        order: [
+            'LOWER(Categories.name)' => 'ASC'
         ]);
 
         $preparedCategories = [];

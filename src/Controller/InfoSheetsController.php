@@ -66,10 +66,8 @@ class InfoSheetsController extends AppController
     public function download($workshopUid, $year=null) {
 
         $this->Workshop = $this->getTableLocator()->get('Workshops');
-        $workshop = $this->Workshop->find('all', [
-            'conditions' => [
-                'Workshops.uid' => $workshopUid
-            ]
+        $workshop = $this->Workshop->find('all', conditions: [
+            'Workshops.uid' => $workshopUid
         ])->first();
 
         if (empty($workshop)) {
@@ -162,13 +160,12 @@ class InfoSheetsController extends AppController
         $this->Event = $this->getTableLocator()->get('Events');
 
         $this->Event->getAssociation('Workshops')->setConditions(['Workshops.status > ' . APP_DELETED]);
-        $event = $this->Event->find('all', [
-            'conditions' => [
-                'Events.uid' => $eventUid
-            ],
-            'contain' => [
-                'Workshops'
-            ]
+        $event = $this->Event->find('all',
+        conditions: [
+            'Events.uid' => $eventUid
+        ],
+        contain: [
+            'Workshops'
         ]);
 
         $infoSheet = $this->InfoSheet->newEntity(

@@ -28,39 +28,37 @@ class SkillsController extends AppController
         $this->set('metaTags', $metaTags);
 
         $this->Skill = $this->getTableLocator()->get('Skills');
-        $skills = $this->Skill->find('all', [
-            'order' => [
-                'Skills.name'=> 'ASC'
-            ],
-            'conditions' => [
-                'Skills.status' => APP_ON
-            ],
-            'contain' => [
-                'Users' => [
-                    'conditions' => [
-                        'FIND_IN_SET("skills", private) = ' => 0, // Users.private would be converted to users.private on prod so leave it out!
-                        'Users.status' => APP_ON
-                    ]
+        $skills = $this->Skill->find('all',
+        order: [
+            'Skills.name'=> 'ASC'
+        ],
+        conditions: [
+            'Skills.status' => APP_ON
+        ],
+        contain: [
+            'Users' => [
+                'conditions' => [
+                    'FIND_IN_SET("skills", private) = ' => 0, // Users.private would be converted to users.private on prod so leave it out!
+                    'Users.status' => APP_ON
                 ]
             ]
         ]);
 
         $this->Category = $this->getTableLocator()->get('Categories');
-        $categories = $this->Category->find('all', [
-            'order' => [
-                'Categories.name'=> 'ASC'
-            ],
-            'conditions' => [
-                'Categories.parent_id IS NULL',
-                'Categories.status' => APP_ON,
-                'Categories.visible_on_platform' => APP_ON,
-            ],
-            'contain' => [
-                'Users' => [
-                    'conditions' => [
-                        'FIND_IN_SET("categories", private) = ' => 0, // Users.private would be converted to users.private on prod so leave it out!
-                        'Users.status' => APP_ON,
-                    ]
+        $categories = $this->Category->find('all',
+        order: [
+            'Categories.name'=> 'ASC'
+        ],
+        conditions: [
+            'Categories.parent_id IS NULL',
+            'Categories.status' => APP_ON,
+            'Categories.visible_on_platform' => APP_ON,
+        ],
+        contain: [
+            'Users' => [
+                'conditions' => [
+                    'FIND_IN_SET("categories", private) = ' => 0, // Users.private would be converted to users.private on prod so leave it out!
+                    'Users.status' => APP_ON,
                 ]
             ]
         ]);

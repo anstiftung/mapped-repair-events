@@ -16,18 +16,17 @@ class FormFieldsTable extends Table
 
     public function getForForm($formFieldId)
     {
-        $formField = $this->find('all', [
-            'conditions' => [
-                'FormFields.id' => $formFieldId,
-                'FormFields.status' => APP_ON
-            ],
-            'contain' => [
-                'FormFieldOptions' => [
-                    'sort' => [
-                        'FormFieldOptions.rank' => 'ASC'
-                    ]
+        $formField = $this->find('all',
+        conditions: [
+            'FormFields.id' => $formFieldId,
+            'FormFields.status' => APP_ON
+        ],
+        contain: [
+            'FormFieldOptions' => [
+                'sort' => [
+                    'FormFieldOptions.rank' => 'ASC'
                 ]
-            ],
+            ]
         ])->first();
 
         $preparedFormFieldOptions = [];

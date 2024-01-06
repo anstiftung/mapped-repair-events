@@ -25,26 +25,20 @@ class SitemapsController extends AppController
         $this->RequestHandler->renderAs($this, 'xml');
 
         $this->Workshop = $this->getTableLocator()->get('Workshops');
-        $workshops = $this->Workshop->find('all', [
-            'conditions' => [
-                'Workshops.status' => APP_ON
-            ]
+        $workshops = $this->Workshop->find('all', conditions: [
+            'Workshops.status' => APP_ON
         ]);
         $this->set('workshops', $workshops);
 
         $this->Post = $this->getTableLocator()->get('Posts');
-        $posts = $this->Post->find('all', [
-            'conditions' => [
-                'Posts.status' => APP_ON
-            ]
+        $posts = $this->Post->find('all', conditions: [
+            'Posts.status' => APP_ON
         ]);
         $this->set('posts', $posts);
 
         $this->Page = $this->getTableLocator()->get('Pages');
-        $pages = $this->Page->find('all', [
-            'conditions' => [
-                'Pages.status' => APP_ON
-            ]
+        $pages = $this->Page->find('all', conditions: [
+            'Pages.status' => APP_ON
         ]);
         $this->set('pages', $pages);
 

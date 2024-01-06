@@ -215,14 +215,13 @@ class EventsController extends AppController
         }
 
         $this->Event = $this->getTableLocator()->get('Events');
-        $events = $this->Event->find('all', [
-            'conditions' => $this->Event->getListConditions(),
-            'order' => [
-                'Events.datumstart' => 'ASC'
-            ],
-            'contain' => [
-                'Workshops'
-            ]
+        $events = $this->Event->find('all',
+        conditions: $this->Event->getListConditions(),
+        order: [
+            'Events.datumstart' => 'ASC'
+        ],
+        contain: [
+            'Workshops'
         ]);
 
         if ($events->count() == 0) {
@@ -268,11 +267,9 @@ class EventsController extends AppController
             if ($originalEventStatus) {
                 // START notify subscribers
                 $this->Worknews = $this->getTableLocator()->get('Worknews');
-                $subscribers = $this->Worknews->find('all', [
-                    'conditions' => [
-                        'Worknews.workshop_uid' => $event->workshop_uid,
-                        'Worknews.confirm' => 'ok'
-                    ]
+                $subscribers = $this->Worknews->find('all', conditions: [
+                    'Worknews.workshop_uid' => $event->workshop_uid,
+                    'Worknews.confirm' => 'ok'
                 ]);
 
                 if (!empty($subscribers)) {
@@ -424,13 +421,13 @@ class EventsController extends AppController
                 }
                 $data = array_merge($this->request->getData()[0], $data);
                 if ($data['datumstart']) {
-                    $data['datumstart'] = new FrozenTime($data['datumstart']);
+                    $data['datumstart'] = new \Cake\I18n\DateTime($data['datumstart']);
                 }
                 if ($data['uhrzeitstart']) {
-                    $data['uhrzeitstart'] = new FrozenTime($data['uhrzeitstart']);
+                    $data['uhrzeitstart'] = new \Cake\I18n\DateTime($data['uhrzeitstart']);
                 }
                 if ($data['uhrzeitend']) {
-                    $data['uhrzeitend'] = new FrozenTime($data['uhrzeitend']);
+                    $data['uhrzeitend'] = new \Cake\I18n\DateTime($data['uhrzeitend']);
                 }
                 if (!$data['use_custom_coordinates']) {
                     $addressString = $data['strasse'] . ', ' . $data['zip'] . ' ' . $data['ort'] . ', ' . $data['land'];

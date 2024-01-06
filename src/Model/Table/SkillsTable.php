@@ -108,15 +108,14 @@ class SkillsTable extends Table
                 'Skills.status >= ' => APP_OFF,
             ];
         }
-        $skills = $this->find('all', [
-            'conditions' => $conditions,
-            'fields' => [
-                'Skills.id',
-                'Skills.name',
-            ],
-            'order' => [
-                'LOWER(Skills.name)' => 'ASC',
-            ]
+        $skills = $this->find('all',
+        conditions: $conditions,
+        fields: [
+            'Skills.id',
+            'Skills.name',
+        ],
+        order: [
+            'LOWER(Skills.name)' => 'ASC',
         ]);
 
         $preparedSkills = [];

@@ -20,8 +20,8 @@ class ThirdPartyStatisticsTable extends Table
     {
 
         $query = $this->find();
-        $dateFrom = new FrozenTime($dateFrom);
-        $dateTo = new FrozenTime($dateTo);
+        $dateFrom = new \Cake\I18n\DateTime($dateFrom);
+        $dateTo = new \Cake\I18n\DateTime($dateTo);
         $query->where(['ThirdPartyStatistics.date_from >= ' => $dateFrom]);
         $query->where(['ThirdPartyStatistics.date_to <= ' => $dateTo]);
         $query->select(
