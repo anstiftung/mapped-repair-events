@@ -16,6 +16,8 @@ use Cake\I18n\DateTime;
 class WorkshopsController extends AppController
 {
 
+    public $Workshop;
+
     public function beforeFilter(EventInterface $event) {
 
         parent::beforeFilter($event);

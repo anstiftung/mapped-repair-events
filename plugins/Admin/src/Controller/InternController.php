@@ -152,11 +152,9 @@ class InternController extends AdminAppController
         /* START thumbs erstellen */
         $thumbSizes = Configure::read('AppConfig.thumbSizesMultiple');
 
-        $oldPhotos = $this->Photo->find('all', [
-            'conditions' => [
-                'Photos.object_uid' => $objectUid,
-                'Photos.object_type' => $objectType
-            ]
+        $oldPhotos = $this->Photo->find('all', conditions: [
+            'Photos.object_uid' => $objectUid,
+            'Photos.object_type' => $objectType
         ])->toArray();
 
         foreach ($files as $file) {
@@ -292,10 +290,8 @@ class InternController extends AdminAppController
         $objectClass = Inflector::classify($objectType);
         $pluralizedClass = Inflector::pluralize($objectClass);
         $objectTable = $this->getTableLocator()->get($pluralizedClass);
-        $object = $objectTable->find('all', [
-            'conditions' => [
-                $pluralizedClass . '.uid' => $uid
-            ]
+        $object = $objectTable->find('all', conditions: [
+            $pluralizedClass . '.uid' => $uid
         ])->first();
 
         $fileName = explode('?', $object->image);
@@ -335,11 +331,9 @@ class InternController extends AdminAppController
         $pluralizedClass = Inflector::pluralize($objectClass);
         $this->{$objectClass} = $this->getTableLocator()->get($pluralizedClass);
 
-        $entity = $this->{$objectClass}->get($uid, [
-                'conditions' => [
-                    $pluralizedClass.'.status >= ' . APP_DELETED
-                ]
-            ]
+        $entity = $this->{$objectClass}->get($uid, conditions: [
+            $pluralizedClass.'.status >= ' . APP_DELETED
+        ]
         );
         if ($objectType == 'users') {
             $this->User->delete($entity);
@@ -389,11 +383,9 @@ class InternController extends AdminAppController
             $pluralizedClass = Inflector::pluralize($objectClass);
             $this->{$objectClass} = $this->getTableLocator()->get($pluralizedClass);
 
-            $object = $this->$objectClass->find('all', [
-                'conditions' => [
-                    $pluralizedClass . '.uid' => $uid,
-                    $pluralizedClass . '.status >= ' . APP_DELETED
-                ]
+            $object = $this->$objectClass->find('all', conditions: [
+                $pluralizedClass . '.uid' => $uid,
+                $pluralizedClass . '.status >= ' . APP_DELETED
             ])->first();
 
             // eigene bearbeitungs-hinweise bei click auf cancel löschen

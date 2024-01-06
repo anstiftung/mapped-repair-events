@@ -77,7 +77,7 @@ class PostsController extends AdminAppController
         if (!empty($this->request->getData())) {
 
             if ($this->request->getData('Posts.publish')) {
-                $this->request = $this->request->withData('Posts.publish', new FrozenDate($this->request->getData('Posts.publish')));
+                $this->request = $this->request->withData('Posts.publish', new \Cake\I18n\Date($this->request->getData('Posts.publish')));
             }
             $patchedEntity = $this->Post->getPatchedEntityForAdminEdit($post, $this->request->getData());
 

@@ -42,13 +42,12 @@ class WorkshopsController extends AdminAppController
         $this->Workshop = $this->getTableLocator()->get('Workshops');
         $this->User = $this->getTableLocator()->get('Users');
 
-        $query = $this->Workshop->find('all', [
-            'conditions' => $conditions,
-            'contain' => [
-                'Countries',
-                'OwnerUsers',
-                'Users'
-            ]
+        $query = $this->Workshop->find('all',
+        conditions: $conditions,
+        contain: [
+            'Countries',
+            'OwnerUsers',
+            'Users'
         ]);
 
         $query = $this->addMatchingsToQuery($query);
