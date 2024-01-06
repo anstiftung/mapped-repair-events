@@ -94,6 +94,6 @@ class PagesController extends AdminAppController
                 $object->owner_user->revertPrivatizeData();
             }
         }
-        $this->set('objects', $objects->toArray());
+        $this->set('objects', $objects);
     }
 }

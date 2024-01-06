@@ -8,7 +8,7 @@ class UsersCategoriesFixture extends TestFixture
 {
     public $import = ['table' => 'users_categories', 'connection' => 'default'];
 
-    public $records = [
+    public array $records = [
         [
             'user_uid' => '2',
             'category_id' => '87',

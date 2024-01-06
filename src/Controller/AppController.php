@@ -53,9 +53,6 @@ class AppController extends Controller
         $this->loadComponent('Authentication.Authentication');
         $this->loadComponent('Common');
         $this->loadComponent('String');
-        $this->loadComponent('RequestHandler', [
-            'enableBeforeRedirect' => false
-        ]);
         $this->loadComponent('AppFlash', [
             'clear' => true
         ]);

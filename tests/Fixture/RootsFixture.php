@@ -8,7 +8,7 @@ class RootsFixture extends TestFixture
 {
     public $import = ['table' => 'roots', 'connection' => 'default'];
 
-    public $records = [
+    public array $records = [
         [
             'uid' => 1,
             'type' => 'users'

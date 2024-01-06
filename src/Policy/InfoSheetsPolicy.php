@@ -7,6 +7,7 @@ use Cake\Core\Configure;
 use Cake\Http\ServerRequest;
 use Cake\Datasource\FactoryLocator;
 use Authorization\Policy\RequestPolicyInterface;
+use Authorization\Policy\ResultInterface;
 
 class InfoSheetsPolicy implements RequestPolicyInterface
 {
@@ -14,7 +15,7 @@ class InfoSheetsPolicy implements RequestPolicyInterface
     protected $InfoSheet;
     protected $Workshop;
 
-    public function canAccess($identity, ServerRequest $request)
+    public function canAccess($identity, ServerRequest $request): bool|ResultInterface
     {
 
         if (!Configure::read('AppConfig.statisticsEnabled')) {

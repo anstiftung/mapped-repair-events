@@ -6,11 +6,12 @@ use Cake\Utility\Inflector;
 use Cake\Datasource\FactoryLocator;
 use Cake\Auth\DefaultPasswordHasher;
 use Authentication\IdentityInterface;
+use ArrayAccess;
 
 class User extends Entity implements IdentityInterface
 {
 
-    protected $_virtual = ['name'];
+    protected array $_virtual = ['name'];
 
     public function __construct(array $properties = [], array $options = [])
     {
@@ -18,12 +19,12 @@ class User extends Entity implements IdentityInterface
         $this->privatizeData($this);
     }
 
-    public function getIdentifier()
+    public function getIdentifier(): array|string|int|null
     {
         return $this->id;
     }
 
-    public function getOriginalData()
+    public function getOriginalData(): ArrayAccess|array
     {
         $this->revertPrivatizeData();
         return $this;
@@ -147,11 +148,7 @@ class User extends Entity implements IdentityInterface
         }
     }
 
-    /**
-     * Fields that are excluded from JSON versions of the entity.
-     * @var array
-     */
-    protected $_hidden = [
+    protected array $_hidden = [
         'password',
         '_joinData',
         'UsersWorkshops'

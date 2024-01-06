@@ -92,7 +92,7 @@ class UsersController extends AdminAppController
         foreach($objects->toArray() as &$object) {
             $object->revertPrivatizeData();
         }
-        $this->set('objects', $objects->toArray());
+        $this->set('objects', $objects);
 
         $this->Workshop = $this->getTableLocator()->get('Workshops');
         $this->set('workshops', $this->Workshop->getForDropdown());

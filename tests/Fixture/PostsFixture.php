@@ -8,7 +8,7 @@ class PostsFixture extends TestFixture
 {
     public $import = ['table' => 'posts', 'connection' => 'default'];
 
-    public $records = [
+    public array $records = [
         [
             'uid' => 4,
             'name' => 'Test Post',

@@ -8,7 +8,7 @@ class PagesFixture extends TestFixture
 {
     public $import = ['table' => 'pages', 'connection' => 'default'];
 
-    public $records = [
+    public array $records = [
         [
             'uid' => 5,
             'name' => 'Test Page',

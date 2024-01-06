@@ -8,7 +8,7 @@ class BlogsFixture extends TestFixture
 {
     public $import = ['table' => 'blogs', 'connection' => 'default'];
 
-    public $records = [
+    public array $records = [
         [
             'id' => 1,
             'name' => 'Neuigkeiten',

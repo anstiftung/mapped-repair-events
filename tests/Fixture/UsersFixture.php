@@ -8,7 +8,7 @@ class UsersFixture extends TestFixture
 {
     public $import = ['table' => 'users', 'connection' => 'default'];
 
-      public $records = [
+      public array $records = [
           [
               'uid' => 1,
               'firstname' => 'John',

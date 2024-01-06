@@ -7,6 +7,7 @@ use Cake\I18n\FrozenTime;
 use Cake\ORM\Query;
 use Cake\Validation\Validator;
 use App\Model\Traits\SearchExceptionsTrait;
+use Cake\ORM\Query\SelectQuery;
 
 class EventsTable extends AppTable
 {
@@ -143,7 +144,7 @@ class EventsTable extends AppTable
         ];
     }
 
-    public function findAll(Query $query, array $options): Query
+    public function findAll(SelectQuery $query): SelectQuery
     {
         return $query->formatResults(function (\Cake\Collection\CollectionInterface $results) {
 

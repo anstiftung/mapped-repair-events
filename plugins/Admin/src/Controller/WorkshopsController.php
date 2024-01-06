@@ -70,7 +70,7 @@ class WorkshopsController extends AdminAppController
             }
         }
 
-        $this->set('objects', $objects->toArray());
+        $this->set('objects', $objects);
 
         $this->set('users', $this->User->getForDropdown());
     }

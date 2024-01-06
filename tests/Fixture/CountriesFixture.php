@@ -8,7 +8,7 @@ class CountriesFixture extends TestFixture
 {
     public $import = ['table' => 'countries', 'connection' => 'default'];
 
-      public $records = [
+      public array $records = [
           [
               'code' => 'DE',
               'name_de' => 'Deutschland'

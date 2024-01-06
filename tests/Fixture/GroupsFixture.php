@@ -8,7 +8,7 @@ class GroupsFixture extends TestFixture
 {
     public $import = ['table' => 'groups', 'connection' => 'default'];
 
-    public $records = [
+    public array $records = [
         [
           'id' => '2',
           'name' => 'admin'

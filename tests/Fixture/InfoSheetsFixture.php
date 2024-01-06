@@ -8,7 +8,7 @@ class InfoSheetsFixture extends TestFixture
 {
     public $import = ['table' => 'info_sheets', 'connection' => 'default'];
 
-    public $records = [
+    public array $records = [
         [
             'uid' => 7,
             'status' => APP_ON,

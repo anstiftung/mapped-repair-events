@@ -96,7 +96,7 @@ class OrdsCategoriesController extends AdminAppController
             }
         }
 
-        $this->set('objects', $objects->toArray());
+        $this->set('objects', $objects);
 
         $metaTags = [
             'title' => 'ORDS-Kategorien'

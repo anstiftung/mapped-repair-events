@@ -8,7 +8,7 @@ class BrandsFixture extends TestFixture
 {
     public $import = ['table' => 'brands', 'connection' => 'default'];
 
-    public $records = [
+    public array $records = [
         [
             'id' => 1,
             'name' => 'Abacom',

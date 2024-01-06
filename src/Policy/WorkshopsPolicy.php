@@ -6,13 +6,14 @@ namespace App\Policy;
 use Cake\Http\ServerRequest;
 use Cake\Datasource\FactoryLocator;
 use Authorization\Policy\RequestPolicyInterface;
+use Authorization\Policy\ResultInterface;
 
 class WorkshopsPolicy implements RequestPolicyInterface
 {
 
     protected $Workshop;
 
-    public function canAccess($identity, ServerRequest $request)
+    public function canAccess($identity, ServerRequest $request): bool|ResultInterface
     {
 
         if ($request->getParam('action') == 'verwalten') {

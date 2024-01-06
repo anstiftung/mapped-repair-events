@@ -123,7 +123,7 @@ class KnowledgesController extends AdminAppController
                 $object->owner_user->revertPrivatizeData();
             }
         }
-        $this->set('objects', $objects->toArray());
+        $this->set('objects', $objects);
 
         $metaTags = [
             'title' => 'Reparaturwissen'

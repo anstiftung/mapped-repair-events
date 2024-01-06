@@ -8,7 +8,7 @@ class WorkshopsFixture extends TestFixture
 {
     public $import = ['table' => 'workshops', 'connection' => 'default'];
 
-    public $records = [
+    public array $records = [
         [
             'uid' => 2,
             'name' => 'Test Workshop',

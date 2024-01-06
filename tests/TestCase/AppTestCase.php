@@ -6,7 +6,7 @@ use Cake\TestSuite\TestCase;
 class AppTestCase extends TestCase
 {
 
-    protected $fixtures = [
+    protected array $fixtures = [
         'app.BlockedWorkshopSlugs',
         'app.Blogs',
         'app.Brands',

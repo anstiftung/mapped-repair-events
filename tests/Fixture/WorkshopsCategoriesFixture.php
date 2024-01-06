@@ -8,7 +8,7 @@ class WorkshopsCategoriesFixture extends TestFixture
 {
     public $import = ['table' => 'workshops_categories', 'connection' => 'default'];
 
-    public $records = [
+    public array $records = [
         [
             'workshop_uid' => '2',
             'category_id' => '630',

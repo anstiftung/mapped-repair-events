@@ -44,6 +44,8 @@ use Cake\Mailer\TransportFactory;
 use Cake\Datasource\ConnectionManager;
 use Cake\Core\Configure\Engine\PhpConfig;
 
+require CAKE . 'functions.php';
+
 /*
  * Read configuration file and inject configuration into various
  * CakePHP classes.

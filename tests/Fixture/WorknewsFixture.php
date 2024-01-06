@@ -8,7 +8,7 @@ class WorknewsFixture extends TestFixture
 {
     public $import = ['table' => 'worknews', 'connection' => 'default'];
 
-    public $records = [
+    public array $records = [
         [
             'workshop_uid' => 2,
             'email' => 'worknews-test@mailinator.com',

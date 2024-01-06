@@ -7,7 +7,7 @@ use Cake\Http\Exception\NotFoundException;
 class BlogsController extends AppController
 {
 
-    public $paginate = [
+    public array $paginate = [
         'limit' => 10,
         'order' => [
             'Posts.publish' => 'DESC'
@@ -26,12 +26,21 @@ class BlogsController extends AppController
     public function feed()
     {
 
-        if (! $this->RequestHandler->prefers('rss')) {
+        $this->request->addDetector(
+            'rss',
+            [
+                'accept' => ['text/csv'],
+                'param' => '_ext',
+                'value' => 'rss',
+            ]
+        );
+
+        if (! $this->request->is('rss')) {
             throw new NotFoundException('kein rss');
         }
 
         $conditions = array(
-            'Posts.status' => APP_ON
+            'Posts.status' => APP_ON,
         );
 
         // aktuelles blog should contain all blog posts (no blog id filter!)

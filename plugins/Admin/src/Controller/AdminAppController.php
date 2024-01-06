@@ -13,7 +13,7 @@ class AdminAppController extends AppController
 
     public $primaryKey;
 
-    public $paginate;
+    public array $paginate;
 
     public $searchOptions = [];
 

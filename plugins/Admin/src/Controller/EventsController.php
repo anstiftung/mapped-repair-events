@@ -71,7 +71,7 @@ class EventsController extends AdminAppController
                 $object->owner_user->revertPrivatizeData();
             }
         }
-        $this->set('objects', $objects->toArray());
+        $this->set('objects', $objects);
 
         $this->User = $this->getTableLocator()->get('Users');
         $this->set('users', $this->User->getForDropdown());

@@ -8,7 +8,7 @@ class CategoriesFixture extends TestFixture
 {
     public $import = ['table' => 'categories', 'connection' => 'default'];
 
-      public $records = [
+      public array $records = [
           [
               'id' => '87',
               'name' => 'Elektro Sonstiges',

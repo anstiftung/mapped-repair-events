@@ -154,7 +154,7 @@ class PostsController extends AdminAppController
                 $object->owner_user->revertPrivatizeData();
             }
         }
-        $this->set('objects', $objects->toArray());
+        $this->set('objects', $objects);
         $this->set('blogs', $this->Blog->getForDropdown());
         $this->set('users', $this->User->getForDropdown());
     }
