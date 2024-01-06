@@ -10,6 +10,11 @@ use Cake\Http\Exception\NotFoundException;
 class WidgetsController extends AppController
 {
 
+    public $Category;
+    public $InfoSheet;
+    public $ThirdPartyStatistic;
+    public $Workshop;
+
     public function beforeFilter(EventInterface $event) {
 
         parent::beforeFilter($event);

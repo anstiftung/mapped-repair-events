@@ -19,8 +19,11 @@ use InvalidArgumentException;
 class EventsController extends AppController
 {
 
+    public $Category;
     public $Event;
+    public $Events;
     public $Workshop;
+    public $Worknews;
 
     public function beforeFilter(EventInterface $event) {
 

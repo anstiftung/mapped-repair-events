@@ -13,6 +13,11 @@ use Gregwar\Captcha\CaptchaBuilder;
 class UsersController extends AppController
 {
 
+    public $Category;
+    public $Country;
+    public $Skill;
+    public $User;
+
     public function __construct($request = null, $response = null)
     {
         parent::__construct($request, $response);
@@ -593,21 +598,6 @@ class UsersController extends AppController
             $existingSkills = $this->Skill->getExistingSkillsFromRequest($associatedSkills);
             $this->request->getSession()->write('newSkillsRegistration', $newSkills);
             $this->request = $this->request->withData('Users.skills._ids', $existingSkills);
-
-            if ($this->request->getData('Users.i_want_to_receive_the_newsletter')) {
-                $this->loadComponent('CptNewsletter');
-                $newsletter = $this->CptNewsletter->getConfirmedNewsletterForEmail($this->request->getData('Users.email'));
-                // only create new newsletter if not already subscribed
-                if (empty($newsletter)) {
-                    $newsletter = $this->CptNewsletter->prepareEntity(
-                        [
-                            'email' => $this->request->getData('Users.email'),
-                            'plz' => $this->request->getData('Users.zip'),
-                        ]
-                    );
-                    $this->CptNewsletter->save($newsletter);
-                }
-            }
 
             $this->request = $this->request->withData('groups', ['_ids' => [$userGroup]]);
             $user = $this->User->patchEntity($user, $this->request->getData(), ['validate' => 'Registration']);

@@ -7,6 +7,10 @@ use Cake\Http\Exception\NotFoundException;
 class SitemapsController extends AppController
 {
 
+    public $Workshop;
+    public $Post;
+    public $Page;
+    
     public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);

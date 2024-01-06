@@ -8,6 +8,8 @@ use Cake\Http\Exception\NotFoundException;
 class PostsController extends AppController
 {
 
+    public $Post;
+    
     public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);

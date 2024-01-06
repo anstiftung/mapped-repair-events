@@ -11,6 +11,11 @@ class InfoSheetsController extends AppController
 {
 
     public $InfoSheet;
+    public $Event;
+    public $Workshop;
+    public $Category;
+    public $Brand;
+    public $FormField;
     
     public function beforeFilter(EventInterface $event) {
 

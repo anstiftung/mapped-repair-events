@@ -87,6 +87,7 @@ class EventsTable extends AppTable
 
     public function getTimeRangeCondition($timeRange, $negate) {
         return function ($exp, $query) use ($timeRange, $negate) {
+            $days = 0;
             if ($timeRange == '30days') {
                 $days = 30;
             }

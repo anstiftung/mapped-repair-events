@@ -22,7 +22,6 @@ class AppController extends Controller
     public $pluralizedModelName;
     public $Common;
     public $String;
-    public $AppFlash;
     public $FormProtection;
     public $Page;
 

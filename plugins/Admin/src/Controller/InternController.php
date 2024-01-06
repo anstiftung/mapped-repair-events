@@ -13,6 +13,7 @@ class InternController extends AdminAppController
 {
 
     public $Photo;
+    public $User;
 
     public function beforeFilter(EventInterface $event)
     {

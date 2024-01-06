@@ -14,3 +14,7 @@ parameters:
           path: templates
         - message: '#Variable \$.* might not be defined#'
           path: plugins/Admin/templates
+        - message: '#Access to an undefined property#'
+          path: src/View/Helper
+        - message: '#Access to an undefined property.*\$(AppFlash|RequestHandler|Authentication)#'
+          path: .

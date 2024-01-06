@@ -9,6 +9,9 @@ use Cake\Utility\Hash;
 class SkillsController extends AppController
 {
 
+    public $Category;
+    public $Skill;
+    
     public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);
