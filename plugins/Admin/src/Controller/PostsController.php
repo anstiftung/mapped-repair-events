@@ -4,12 +4,15 @@ namespace Admin\Controller;
 use App\Controller\Component\StringComponent;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
-use Cake\I18n\FrozenDate;
 use Cake\Http\Exception\NotFoundException;
 
 class PostsController extends AdminAppController
 {
 
+    public $Post;
+    public $Blog;
+    public $User;
+    
     public function __construct($request = null, $response = null)
     {
         parent::__construct($request, $response);

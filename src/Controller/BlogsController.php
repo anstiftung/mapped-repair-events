@@ -7,6 +7,9 @@ use Cake\Http\Exception\NotFoundException;
 class BlogsController extends AppController
 {
 
+    public $Blog;
+    public $Post;
+
     public array $paginate = [
         'limit' => 10,
         'order' => [

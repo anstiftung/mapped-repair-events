@@ -6,6 +6,10 @@ use Cake\Event\EventInterface;
 class WorkshopsController extends AdminAppController
 {
 
+    public $Workshop;
+    public $User;
+    public $InfoSheet;
+
     public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);

@@ -7,6 +7,9 @@ use Cake\Event\EventInterface;
 class EventsController extends AdminAppController
 {
 
+    public $Event;
+    public $User;
+
     public function __construct($request = null, $response = null)
     {
         parent::__construct($request, $response);

@@ -6,6 +6,8 @@ use Cake\Http\Exception\NotFoundException;
 class BrandsController extends AdminAppController
 {
 
+    public $Brand;
+    
     public function __construct($request = null, $response = null)
     {
         parent::__construct($request, $response);

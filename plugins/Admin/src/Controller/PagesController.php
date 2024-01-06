@@ -7,6 +7,8 @@ use Cake\Http\Exception\NotFoundException;
 class PagesController extends AdminAppController
 {
 
+    public $Page;
+    
     public function __construct($request = null, $response = null)
     {
         parent::__construct($request, $response);

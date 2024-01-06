@@ -10,6 +10,8 @@ use League\Csv\Writer;
 class InfoSheetsController extends AppController
 {
 
+    public $InfoSheet;
+    
     public function beforeFilter(EventInterface $event) {
 
         parent::beforeFilter($event);

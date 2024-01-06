@@ -6,6 +6,9 @@ use Cake\Event\EventInterface;
 class InfoSheetsController extends AdminAppController
 {
 
+    public $InfoSheet;
+    public $User;
+
     public function __construct($request = null, $response = null)
     {
         parent::__construct($request, $response);

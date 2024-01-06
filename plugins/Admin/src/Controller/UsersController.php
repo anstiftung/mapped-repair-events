@@ -6,6 +6,11 @@ use Cake\Event\EventInterface;
 class UsersController extends AdminAppController
 {
 
+    public $User;
+    public $Workshop;
+    public $Country;
+    public $Group;
+    
     public $searchName = false;
 
     public $searchText = false;

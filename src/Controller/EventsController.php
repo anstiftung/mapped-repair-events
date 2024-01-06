@@ -19,6 +19,9 @@ use InvalidArgumentException;
 class EventsController extends AppController
 {
 
+    public $Event;
+    public $Workshop;
+
     public function beforeFilter(EventInterface $event) {
 
         parent::beforeFilter($event);

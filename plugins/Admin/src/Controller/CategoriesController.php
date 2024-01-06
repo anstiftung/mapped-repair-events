@@ -6,6 +6,9 @@ use Cake\Http\Exception\NotFoundException;
 class CategoriesController extends AdminAppController
 {
 
+    public $Category;
+    public $OrdsCategory;
+
     public function __construct($request = null, $response = null)
     {
         parent::__construct($request, $response);

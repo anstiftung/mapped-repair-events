@@ -17,6 +17,8 @@ class WorkshopsController extends AppController
 {
 
     public $Workshop;
+    public $User;
+    public $InfoSheet;
 
     public function beforeFilter(EventInterface $event) {
 

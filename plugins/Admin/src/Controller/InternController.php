@@ -12,6 +12,8 @@ use Intervention\Image\ImageManagerStatic as Image;
 class InternController extends AdminAppController
 {
 
+    public $Photo;
+
     public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);

@@ -10,7 +10,9 @@ use Cake\Utility\Hash;
 class KnowledgesController extends AppController
 {
 
-     public function __construct($request = null, $response = null)
+    public $Knowledge;
+
+    public function __construct($request = null, $response = null)
     {
         parent::__construct($request, $response);
         $this->Knowledge = $this->getTableLocator()->get('Knowledges');

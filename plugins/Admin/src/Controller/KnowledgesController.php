@@ -6,6 +6,10 @@ use Cake\Http\Exception\NotFoundException;
 class KnowledgesController extends AdminAppController
 {
 
+    public $Category;
+    public $Knowledge;
+    public $Skill;
+
     public function __construct($request = null, $response = null)
     {
         parent::__construct($request, $response);

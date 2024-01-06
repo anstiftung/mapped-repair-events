@@ -1,5 +1,5 @@
 parameters:
-    level: 0
+    level: 1
     bootstrapFiles:
         - config/bootstrap.php
     fileExtensions:
@@ -9,3 +9,8 @@ parameters:
         - templates
         - plugins/Admin/src
         - plugins/Admin/templates
+    ignoreErrors:
+        - message: '#Variable \$.* might not be defined#'
+          path: templates
+        - message: '#Variable \$.* might not be defined#'
+          path: plugins/Admin/templates

@@ -7,6 +7,8 @@ use Cake\Http\Exception\NotFoundException;
 
 class WorknewsController extends AppController {
 
+    public $Worknews;
+    
     public function beforeFilter(EventInterface $event) {
 
         parent::beforeFilter($event);
