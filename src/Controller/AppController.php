@@ -20,7 +20,6 @@ class AppController extends Controller
     public $connection;
     public $Root;
     public $pluralizedModelName;
-    public $Authentication;
     public $Common;
     public $String;
     public $AppFlash;
