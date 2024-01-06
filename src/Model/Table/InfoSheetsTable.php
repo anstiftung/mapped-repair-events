@@ -2,7 +2,6 @@
 
 namespace App\Model\Table;
 
-use Cake\I18n\FrozenTime;
 use Cake\Validation\Validator;
 
 class InfoSheetsTable extends AppTable

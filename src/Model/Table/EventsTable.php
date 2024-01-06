@@ -3,8 +3,6 @@
 namespace App\Model\Table;
 
 use Cake\Core\Configure;
-use Cake\I18n\FrozenTime;
-use Cake\ORM\Query;
 use Cake\Validation\Validator;
 use App\Model\Traits\SearchExceptionsTrait;
 use Cake\ORM\Query\SelectQuery;

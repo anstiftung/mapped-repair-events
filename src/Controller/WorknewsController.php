@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use Cake\Event\EventInterface;
-use Cake\I18n\FrozenTime;
 use Cake\Http\Exception\NotFoundException;
 
 class WorknewsController extends AppController {

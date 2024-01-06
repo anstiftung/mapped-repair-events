@@ -146,11 +146,9 @@ class UsersControllerTest extends AppTestCase
         $this->User = $this->getTableLocator()->get('Users');
         $this->Workshop = $this->getTableLocator()->get('Workshops');
         $this->Group = $this->getTableLocator()->get('Groups');
-        $user = $this->User->get($userUid, [
-            'contain' => [
-                'Groups',
-                'OwnerWorkshops',
-            ],
+        $user = $this->User->get($userUid, contain: [
+            'Groups',
+            'OwnerWorkshops',
         ]);
         // change user to repairhelper
         $user->groups = [
@@ -238,10 +236,8 @@ class UsersControllerTest extends AppTestCase
 
         // check if all workshop associations the user were removed automatically
         $this->UsersWorkshop = $this->getTableLocator()->get('UsersWorkshops');
-        $usersWorkshops = $this->UsersWorkshop->find('all', [
-            'conditions' => [
-                'UsersWorkshops.user_uid' => $userUid,
-            ],
+        $usersWorkshops = $this->UsersWorkshop->find('all', conditions: [
+            'UsersWorkshops.user_uid' => $userUid,
         ])->toArray();
         $this->assertEmpty($usersWorkshops);
 
@@ -258,15 +254,14 @@ class UsersControllerTest extends AppTestCase
     private function getRegisteredUser()
     {
         $this->User = $this->getTableLocator()->get('Users');
-        $user = $this->User->find('all', [
-            'conditions' => [
-                'Users.email' => $this->validUserData['email']
-            ],
-            'contain' => [
-                'Groups',
-                'Categories',
-                'Skills',
-            ]
+        $user = $this->User->find('all',
+        conditions: [
+            'Users.email' => $this->validUserData['email']
+        ],
+        contain: [
+            'Groups',
+            'Categories',
+            'Skills',
         ])->first();
         $user->revertPrivatizeData();
         return $user;

@@ -3,7 +3,6 @@ namespace App\Model\Table;
 
 use Cake\Core\Configure;
 use Cake\Datasource\FactoryLocator;
-use Cake\I18n\FrozenTime;
 use Cake\ORM\Table;
 
 class ThirdPartyStatisticsTable extends Table

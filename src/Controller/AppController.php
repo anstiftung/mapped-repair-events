@@ -5,26 +5,21 @@ use Cake\Controller\Controller;
 use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
 use Cake\Event\EventInterface;
-use Cake\I18n\FrozenTime;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Http\Exception\ServiceUnavailableException;
 use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
+use Cake\I18n\DateTime;
 
-/**
- * Application Controller
- *
- * Add your application-wide methods in the class below, your controllers
- * will inherit them.
- *
- * @link https://book.cakephp.org/3.0/en/controllers.html#the-app-controller
- */
 class AppController extends Controller
 {
 
     public $modelName;
 
     public $loggedUser = null;
+    public $connection;
+    public $Root;
+    public $pluralizedModelName;
 
     public function __construct($request = null, $response = null)
     {
@@ -34,7 +29,6 @@ class AppController extends Controller
         $this->modelName = Inflector::classify($this->name);
         $this->pluralizedModelName = Inflector::pluralize($this->modelName);
     }
-
 
     /**
      * Initialization hook method.
@@ -275,7 +269,7 @@ class AppController extends Controller
         $modelName = $this->modelName;
         $entity = $this->$modelName->patchEntity($entity, [
             'currently_updated_by' => 0,
-            'currently_updated_start' => new \Cake\I18n\DateTime()
+            'currently_updated_start' => new DateTime()
         ]);
         return $entity;
     }
@@ -343,7 +337,7 @@ class AppController extends Controller
         // if not currently updated, set logged user as updating one
         $saveData = [
             'currently_updated_by' => $this->isLoggedIn() ? $this->loggedUser->uid : 0,
-            'currently_updated_start' => new \Cake\I18n\DateTime()
+            'currently_updated_start' => new DateTime()
         ];
         $entity = $this->$modelName->patchEntity($data, $saveData);
         $this->$modelName->save($entity);

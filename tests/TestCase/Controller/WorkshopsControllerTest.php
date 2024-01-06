@@ -81,13 +81,12 @@ class WorkshopsControllerTest extends AppTestCase
         );
 
         $this->Workshop = $this->getTableLocator()->get('Workshops');
-        $workshop = $this->Workshop->find('all', [
-            'conditions' => [
-                'Workshops.uid' => $workshopUid,
-            ],
-            'contain' => [
-                'Users',
-            ]
+        $workshop = $this->Workshop->find('all',
+        conditions: [
+            'Workshops.uid' => $workshopUid,
+        ],
+        contain: [
+            'Users',
         ])->first();
 
         $this->assertEquals(2, count($workshop->users));
@@ -125,10 +124,8 @@ class WorkshopsControllerTest extends AppTestCase
         );
 
         $this->Workshop = $this->getTableLocator()->get('Workshops');
-        $workshop = $this->Workshop->find('all', [
-            'conditions' => [
-                'Workshops.url' => $workshopForPost['url']
-            ]
+        $workshop = $this->Workshop->find('all', conditions: [
+            'Workshops.url' => $workshopForPost['url']
         ])->first();
 
         $this->assertEquals($workshop->name, $workshopForPost['name']);
@@ -164,10 +161,8 @@ class WorkshopsControllerTest extends AppTestCase
         $this->assertMailContainsTextAt(0, '"Test Workshop" geändert');
 
         $this->Workshop = $this->getTableLocator()->get('Workshops');
-        $workshop = $this->Workshop->find('all', [
-            'conditions' => [
-                'Workshops.uid' => $workshopUid,
-            ],
+        $workshop = $this->Workshop->find('all', conditions: [
+            'Workshops.uid' => $workshopUid,
         ])->first();
         $this->assertEquals('workshop info', $workshop->text);
 

@@ -3,7 +3,6 @@ namespace App\Controller;
 
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
-use Cake\I18n\FrozenTime;
 use Cake\Mailer\Mailer;
 use Cake\Http\Exception\NotFoundException;
 use Eluceo\iCal\Domain\Entity\Calendar;

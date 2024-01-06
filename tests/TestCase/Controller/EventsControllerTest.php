@@ -10,8 +10,6 @@ use Cake\Core\Configure;
 use Cake\TestSuite\EmailTrait;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\StringCompareTrait;
-use Cake\I18n\FrozenDate;
-use Cake\I18n\FrozenTime;
 
 class EventsControllerTest extends AppTestCase
 {
@@ -103,25 +101,23 @@ class EventsControllerTest extends AppTestCase
         $this->assertResponseNotContains('error');
 
         $this->Event = $this->getTableLocator()->get('Events');
-        $events = $this->Event->find('all', [
-            'contain' => [
-                'Categories',
-            ]
+        $events = $this->Event->find('all', contain: [
+            'Categories',
         ])->toArray();
 
         $this->assertEquals(3, count($events));
         $this->assertEquals($events[1]->eventbeschreibung, 'description<img src="n" alt="n" />');
         $this->assertEquals($events[1]->strasse, $this->newEventData['strasse']);
-        $this->assertEquals($events[1]->datumstart, new FrozenDate($this->newEventData['datumstart']));
-        $this->assertEquals($events[1]->uhrzeitstart, new FrozenTime($this->newEventData['uhrzeitstart']));
-        $this->assertEquals($events[1]->uhrzeitend, new FrozenTime($this->newEventData['uhrzeitend']));
+        $this->assertEquals($events[1]->datumstart, new \Cake\I18n\Date($this->newEventData['datumstart']));
+        $this->assertEquals($events[1]->uhrzeitstart, new \Cake\I18n\DateTime($this->newEventData['uhrzeitstart']));
+        $this->assertEquals($events[1]->uhrzeitend, new \Cake\I18n\DateTime($this->newEventData['uhrzeitend']));
         $this->assertEquals($events[1]->categories[0]->id, $this->newEventData['categories']['_ids'][0]);
         $this->assertEquals($events[1]->owner, 1);
         $this->assertEquals($events[1]->workshop_uid, 2);
 
-        $this->assertEquals($events[2]->datumstart, new FrozenDate($newEventData2['datumstart']));
-        $this->assertEquals($events[2]->uhrzeitstart, new FrozenTime($newEventData2['uhrzeitstart']));
-        $this->assertEquals($events[2]->uhrzeitend, new FrozenTime($newEventData2['uhrzeitend']));
+        $this->assertEquals($events[2]->datumstart, new \Cake\I18n\Date($newEventData2['datumstart']));
+        $this->assertEquals($events[2]->uhrzeitstart, new \Cake\I18n\DateTime($newEventData2['uhrzeitstart']));
+        $this->assertEquals($events[2]->uhrzeitend, new \Cake\I18n\DateTime($newEventData2['uhrzeitend']));
 
         $this->assertMailCount(0);
 
@@ -163,10 +159,8 @@ class EventsControllerTest extends AppTestCase
         $this->loginAsOrga();
         $this->get(Configure::read('AppConfig.htmlHelper')->urlEventDelete(6));
         $this->Event = $this->getTableLocator()->get('Events');
-        $event = $this->Event->find('all', [
-            'conditions' => [
-                'Events.uid' => 6
-            ]
+        $event = $this->Event->find('all', conditions: [
+            'Events.uid' => 6
         ])->first();
         $this->assertEquals($event->status, APP_DELETED);
         $this->assertMailCount(1);
@@ -176,10 +170,8 @@ class EventsControllerTest extends AppTestCase
     private function doTestEditForm($renotify)
     {
         $this->Event = $this->getTableLocator()->get('Events');
-        $event = $this->Event->find('all', [
-            'conditions' => [
-                'Events.uid' => 6
-            ]
+        $event = $this->Event->find('all', conditions: [
+            'Events.uid' => 6
         ])->first();
 
         $eventForPost = [
@@ -212,9 +204,9 @@ class EventsControllerTest extends AppTestCase
 
         $this->assertEquals($event->eventbeschreibung, $eventForPost['eventbeschreibung']);
         $this->assertEquals($event->strasse, $eventForPost['strasse']);
-        $this->assertEquals($event->datumstart, new FrozenDate($eventForPost['datumstart']));
-        $this->assertEquals($event->uhrzeitstart, new FrozenTime($eventForPost['uhrzeitstart']));
-        $this->assertEquals($event->uhrzeitend, new FrozenTime($eventForPost['uhrzeitend']));
+        $this->assertEquals($event->datumstart, new \Cake\I18n\Date($eventForPost['datumstart']));
+        $this->assertEquals($event->uhrzeitstart, new \Cake\I18n\DateTime($eventForPost['uhrzeitstart']));
+        $this->assertEquals($event->uhrzeitend, new \Cake\I18n\DateTime($eventForPost['uhrzeitend']));
 
     }
 

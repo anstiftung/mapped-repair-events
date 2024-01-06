@@ -5,13 +5,13 @@ use App\Controller\Component\StringComponent;
 use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
 use Cake\Event\EventInterface;
-use Cake\I18n\FrozenTime;
 use Cake\Mailer\Mailer;
 use Cake\Http\Exception\ForbiddenException;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
 use Cake\ORM\Query;
+use Cake\I18n\DateTime;
 
 class WorkshopsController extends AppController
 {
@@ -644,8 +644,8 @@ class WorkshopsController extends AppController
             $mergedData = array_merge(
                 $this->request->getData(),
                 [
-                    'created' => \Cake\I18n\DateTime::now(),
-                    'modified' => \Cake\I18n\DateTime::now(),
+                    'created' => DateTime::now(),
+                    'modified' => DateTime::now(),
                     'confirm' => $confirmationCode,
                     'unsub' => $unsubscribeCode
                 ]
