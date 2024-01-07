@@ -124,6 +124,7 @@ class UsersController extends AppController
         $this->set('users', $users);
 
         if ($skillId > 0) {
+            /* @phpstan-ignore-next-line */
             $correctSlug = Configure::read('AppConfig.htmlHelper')->urlSkillDetail($skillId, $skill->name);
             if ($correctSlug != Configure::read('AppConfig.htmlHelper')->urlSkillDetail($skillId, StringComponent::removeIdFromSlug($this->getRequest()->getParam('pass')[0]))) {
                 $this->redirect($correctSlug);
@@ -404,6 +405,7 @@ class UsersController extends AppController
         $this->_profil($user, $isMyProfile, true);
 
         // profile from other user
+        $metaTags = [];
         if (!$isMyProfile && $this->isAdmin()) {
             $metaTags = [
                 'title' => 'Profil von ' . $user->name

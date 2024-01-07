@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use Cake\Event\EventInterface;
 use Cake\Http\Exception\NotFoundException;
+use Cake\View\XmlView;
 
 class SitemapsController extends AppController
 {
@@ -19,14 +20,16 @@ class SitemapsController extends AppController
         ]);
     }
 
+    public function initialize(): void
+    {
+        parent::initialize();
+        $this->addViewClasses([XmlView::class]);
+    }
+
     public function index()
     {
 
-        if (!$this->RequestHandler->prefers('xml')) {
-            throw new NotFoundException();
-        }
-
-        $this->RequestHandler->renderAs($this, 'xml');
+        $this->request = $this->request->withParam('_ext', 'xml');
 
         $this->Workshop = $this->getTableLocator()->get('Workshops');
         $workshops = $this->Workshop->find('all', conditions: [

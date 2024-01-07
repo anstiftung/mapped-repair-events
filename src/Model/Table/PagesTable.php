@@ -45,7 +45,10 @@ class PagesTable extends AppTable
             }
             $this->flattenedArray[$item->uid] = $separator . $item->name . $statusString;
             if (! empty($item['children'])) {
-                $this->flattenNestedArrayWithChildren($item->children, str_repeat('-', $this->getLevel($item) + 1) . ' ');
+                $this->flattenNestedArrayWithChildren($item->children, str_repeat('-', 
+                /* @phpstan-ignore-next-line */
+                $this->getLevel($item) + 1)
+                 . ' ');
             }
         }
 

@@ -4,6 +4,7 @@ namespace App\Controller;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use Cake\Http\Exception\NotFoundException;
+use Cake\View\JsonView;
 
 class PostsController extends AppController
 {
@@ -19,10 +20,15 @@ class PostsController extends AppController
         ]);
     }
 
+    public function initialize(): void
+    {
+        parent::initialize();
+        $this->addViewClasses([JsonView::class]);
+    }
+
     public function getSplitter()
     {
-        $this->RequestHandler->renderAs($this, 'json');
-
+        $this->request = $this->request->withParam('_ext', 'json');
         $dir = new \DirectoryIterator(WWW_ROOT . Configure::read('AppConfig.splitterPath'));
         $prefix = 'SPLiTTER';
         $result = [];

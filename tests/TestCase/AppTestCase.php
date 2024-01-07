@@ -48,7 +48,7 @@ class AppTestCase extends TestCase
 
                 $this->enableCsrfToken();
                 
-                if (!in_array($this->getName(), [
+                if (!in_array($this->toString(), [
                     'testAddEventsOk',
                 ])) {
                     $this->enableSecurityToken();

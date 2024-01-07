@@ -7,6 +7,7 @@ use Cake\Event\EventInterface;
 use Cake\ORM\Table;
 use Cake\Routing\Router;
 use Cake\Validation\Validator;
+use Cake\Datasource\ConnectionManager;
 
 abstract class AppTable extends Table
 {
@@ -19,6 +20,11 @@ abstract class AppTable extends Table
 
     public function initialize(array $config): void
     {
+
+        if ((php_sapi_name() == 'cli' && $_SERVER['argv'][0] && preg_match('/phpunit/', $_SERVER['argv'][0]))) {
+            $this->setConnection(ConnectionManager::get('test'));
+        }
+
         $this->setPrimaryKey('uid');
 
         $this->addBehavior('Timestamp', [

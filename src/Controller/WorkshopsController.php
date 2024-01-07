@@ -12,6 +12,7 @@ use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
 use Cake\ORM\Query;
 use Cake\I18n\DateTime;
+use Cake\View\JsonView;
 
 class WorkshopsController extends AppController
 {
@@ -39,6 +40,12 @@ class WorkshopsController extends AppController
             'detail',
             'all',
         ]);
+    }
+
+    public function initialize(): void
+    {
+        parent::initialize();
+        $this->addViewClasses([JsonView::class]);
     }
 
     public function add()
@@ -195,7 +202,7 @@ class WorkshopsController extends AppController
 
     public function ajaxGetWorkshopsAndUsersForTags() {
 
-        $this->RequestHandler->renderAs($this, 'json');
+        $this->request = $this->request->withParam('_ext', 'json');
 
         if (!$this->request->is('ajax')) {
             throw new ForbiddenException();
@@ -383,7 +390,7 @@ class WorkshopsController extends AppController
     public function getWorkshopsForHyperModeWebsite()
     {
 
-        $this->RequestHandler->renderAs($this, 'json');
+        $this->request = $this->request->withParam('_ext', 'json');
 
         $workshops = $this->Workshop->find('all', [
             'conditions' => [
@@ -425,7 +432,7 @@ class WorkshopsController extends AppController
             throw new ForbiddenException();
         }
 
-        $this->RequestHandler->renderAs($this, 'json');
+        $this->request = $this->request->withParam('_ext', 'json');
 
         $keyword = '';
         $conditions = [
@@ -1106,7 +1113,6 @@ class WorkshopsController extends AppController
             $userUid = $this->request->getData('users_workshops.user_uid');
         }
 
-        $this->associationTable = $this->getTableLocator()->get('UsersWorkshops');
         $this->apply('UsersWorkshops', 'users_workshops', 'user_uid', 'Users', $userUid, $filterCondition);
 
         if ($this->isAdmin()) {
@@ -1149,7 +1155,7 @@ class WorkshopsController extends AppController
             throw new ForbiddenException();
         }
 
-        $this->RequestHandler->renderAs($this, 'json');
+        $this->request = $this->request->withParam('_ext', 'json');
 
         $this->Workshop = $this->getTableLocator()->get('Workshops');
 

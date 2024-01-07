@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use Cake\Core\Configure;
+use Cake\Datasource\FactoryLocator;
 use Cake\Event\EventInterface;
 use Cake\Mailer\Mailer;
 use Cake\Http\Exception\NotFoundException;
@@ -15,13 +16,13 @@ use Eluceo\iCal\Domain\ValueObject\Location;
 use Eluceo\iCal\Domain\ValueObject\TimeSpan;
 use Eluceo\iCal\Presentation\Factory\CalendarFactory;
 use InvalidArgumentException;
+use Cake\View\JsonView;
 
 class EventsController extends AppController
 {
 
     public $Category;
     public $Event;
-    public $Events;
     public $Workshop;
     public $Worknews;
 
@@ -37,6 +38,12 @@ class EventsController extends AppController
             'ical',
         ]);
 
+    }
+
+    public function initialize(): void
+    {
+        parent::initialize();
+        $this->addViewClasses([JsonView::class]);
     }
 
     public function ical()
@@ -56,7 +63,8 @@ class EventsController extends AppController
         }
         $filename .= '.' . $this->request->getParam('_ext');
 
-        $events = $this->Events->find('all', [
+        $eventTable = FactoryLocator::get('Table')->get('Events');
+        $events = $eventTable->find('all', [
             'conditions' => $conditions,
             'contain' => [
                 'Workshops',
@@ -214,10 +222,6 @@ class EventsController extends AppController
 
     public function feed()
     {
-
-        if (! $this->RequestHandler->prefers('rss')) {
-            throw new NotFoundException('kein rss');
-        }
 
         $this->Event = $this->getTableLocator()->get('Events');
         $events = $this->Event->find('all',
@@ -498,7 +502,7 @@ class EventsController extends AppController
             throw new NotFoundException();
         }
 
-        $this->RequestHandler->renderAs($this, 'json');
+        $this->request = $this->request->withParam('_ext', 'json');
 
         $keyword = '';
         $conditions = $this->Event->getListConditions();
@@ -563,7 +567,8 @@ class EventsController extends AppController
         $conditions = $this->Event->getListConditions();
 
         // get count without any filters
-        $allEventsCount = $this->Events->find('all', [
+        $eventTable = FactoryLocator::get('Table')->get('Events');
+        $allEventsCount = $eventTable->find('all', [
             'conditions' => $conditions,
             'contain' => [
                 'Workshops'
@@ -590,6 +595,7 @@ class EventsController extends AppController
         $categories = $this->Category->getMainCategoriesForFrontend();
 
         $preparedCategories = [];
+        $categoryClass = '';
         foreach ($categories as $category) {
             
             // category is selected
@@ -619,7 +625,7 @@ class EventsController extends AppController
                 ]);
             }
 
-
+            /* @phpstan-ignore-next-line */
             $newUrl = 'categories=' . join(',', $categoryIdsForNewUrl);
             $newUrl = str_replace('categories=,', '&categories=', $newUrl);
 
@@ -650,7 +656,7 @@ class EventsController extends AppController
         }
         $this->set('preparedCategories', $preparedCategories);
 
-        $query = $this->Events->find('all', [
+        $query = $eventTable->find('all', [
             'conditions' => $conditions,
         ]);
 
@@ -698,9 +704,9 @@ class EventsController extends AppController
             $query->where(['Events.is_online_event' => 1]);
         }
 
-        $query->distinct($this->Events->getListFields());
-        $query->select($this->Events->getListFields());
-        $query->order($this->Events->getListOrder());
+        $query->distinct($eventTable->getListFields());
+        $query->select($eventTable->getListFields());
+        $query->order($eventTable->getListOrder());
         $query->contain([
             'Workshops',
             'Categories'

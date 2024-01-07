@@ -11,7 +11,7 @@ use Cake\Core\Configure;
 <?php foreach ($pages as $page) { ?>
     <url>
     <loc><?php echo Configure::read('AppConfig.serverName').$this->MyHtml->urlPageDetail($page->url); ?></loc>
-    <lastmod><?php echo $this->Time->toAtom($page->updated); ?></lastmod>
+    <lastmod><?php echo $this->Time->toAtom($page->updated ?? ''); ?></lastmod>
     <priority>0.8</priority>
     </url>
 <?php } ?>
@@ -19,7 +19,7 @@ use Cake\Core\Configure;
 <?php foreach ($posts as $post) { ?>
     <url>
     <loc><?php echo Configure::read('AppConfig.serverName').$this->MyHtml->urlPostDetail($post->url); ?></loc>
-    <lastmod><?php echo $this->Time->toAtom($post->updated); ?></lastmod>
+    <lastmod><?php echo $this->Time->toAtom($post->updated ?? ''); ?></lastmod>
     <priority>0.8</priority>
     </url>
 <?php } ?>
@@ -27,7 +27,7 @@ use Cake\Core\Configure;
 <?php foreach ($workshops as $workshop) { ?>
     <url>
     <loc><?php echo Configure::read('AppConfig.serverName').$this->MyHtml->urlWorkshopDetail($workshop->url); ?></loc>
-    <lastmod><?php echo $this->Time->toAtom($workshop->updated); ?></lastmod>
+    <lastmod><?php echo $this->Time->toAtom($workshop->updated ?? ''); ?></lastmod>
     <priority>0.8</priority>
     </url>
 <?php } ?>

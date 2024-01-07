@@ -6,6 +6,7 @@ use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use Cake\Http\Exception\NotFoundException;
 use League\Csv\Writer;
+use Cake\Http\CallbackStream;
 
 class InfoSheetsController extends AppController
 {
@@ -35,8 +36,7 @@ class InfoSheetsController extends AppController
             $filename .= '-until-' . $date;
         }
 
-        $statement = $this->InfoSheet->getConnection()->prepare($query);
-        $statement->execute($params);
+        $statement = $this->InfoSheet->getConnection()->execute($query, $params);
         $records = $statement->fetchAll('assoc');
         if (empty($records)) {
             throw new NotFoundException('no repair data found');
@@ -52,18 +52,11 @@ class InfoSheetsController extends AppController
         }
         $writer->insertAll($records);
 
-        // force download
-        $this->RequestHandler->renderAs(
-            $this,
-            'csv',
-            [
-                'charset' => 'UTF-8'
-            ],
-        );
         $this->disableAutoRender();
 
         $response = $this->response;
         $response = $response->withStringBody($writer->toString());
+        $response = $response->withCharset('UTF-8');
         $response = $response->withDownload($filename . '.csv');
 
         return $response;
@@ -92,8 +85,7 @@ class InfoSheetsController extends AppController
             $filename .= '-' . $year;
         }
 
-        $statement = $this->InfoSheet->getConnection()->prepare($query);
-        $statement->execute($params);
+        $statement = $this->InfoSheet->getConnection()->execute($query, $params);
         $records = $statement->fetchAll('assoc');
         if (empty($records)) {
             throw new NotFoundException('info sheets not found');
@@ -108,18 +100,11 @@ class InfoSheetsController extends AppController
         $writer->insertOne(array_keys($records[0]));
         $writer->insertAll($records);
 
-        // force download
-        $this->RequestHandler->renderAs(
-            $this,
-            'csv',
-            [
-                'charset' => 'UTF-8'
-            ],
-        );
         $this->disableAutoRender();
 
         $response = $this->response;
         $response = $response->withStringBody($writer->toString());
+        $response = $response->withCharset('UTF-8');
         $response = $response->withDownload($filename . '.csv');
 
         return $response;
