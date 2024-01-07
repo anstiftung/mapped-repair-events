@@ -260,7 +260,9 @@ class InternController extends AdminAppController
 
         $fileNamePlainWithTimestamp = $fileNamePlain . '?' . time();
 
+        /* @phpstan-ignore-next-line */
         $filePathWithTimestamp = str_replace($_SERVER['DOCUMENT_ROOT'], '/', $targetFileAbsolute) . '?' . filemtime($targetFileAbsolute);
+        /* @phpstan-ignore-next-line */
         $filePathWithTimestamp = preg_replace('/thumbs\-' . $thumbSize . '/', 'thumbs-150', $filePathWithTimestamp);
         $filePathWithTimestamp = str_replace('//', '/', $filePathWithTimestamp);
 
