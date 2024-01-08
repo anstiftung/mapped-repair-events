@@ -69,7 +69,7 @@ echo $this->element('highlightNavi', ['main' => 'Aktive']);
         }
         if ($user->twitter_username) {
             $additionalSocial[] = $this->Html->link(
-                '<i class="fas fa-rss-square"></i>',
+                '<i class="fab fa-square-x-twitter"></i>',
                 'https://twitter.com/' . $user->twitter_username,
                 [
                     'rel' =>'no-follow',
@@ -80,7 +80,7 @@ echo $this->element('highlightNavi', ['main' => 'Aktive']);
         }
         if ($user->feed_url) {
             $additionalSocial[] = $this->Html->link(
-                '<i class="fab fa-twitter-square"></i>',
+                '<i class="fas fa-square-rss"></i>',
                 $user->feed_url,
                 [
                     'rel' =>'no-follow',
