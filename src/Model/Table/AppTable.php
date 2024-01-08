@@ -21,10 +21,6 @@ abstract class AppTable extends Table
     public function initialize(array $config): void
     {
 
-        if ((php_sapi_name() == 'cli' && $_SERVER['argv'][0] && preg_match('/phpunit/', $_SERVER['argv'][0]))) {
-            $this->setConnection(ConnectionManager::get('test'));
-        }
-
         $this->setPrimaryKey('uid');
 
         $this->addBehavior('Timestamp', [

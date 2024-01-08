@@ -6,7 +6,7 @@ use Cake\TestSuite\Fixture\TestFixture;
 
 class WorkshopsCategoriesFixture extends TestFixture
 {
-    public $import = ['table' => 'workshops_categories', 'connection' => 'default'];
+    public $import = ['table' => 'workshops_categories'];
 
     public array $records = [
         [

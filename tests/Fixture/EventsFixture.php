@@ -6,7 +6,7 @@ use Cake\TestSuite\Fixture\TestFixture;
 
 class EventsFixture extends TestFixture
 {
-    public $import = ['table' => 'events', 'connection' => 'default'];
+    public $import = ['table' => 'events'];
 
     public function init(): void
     {

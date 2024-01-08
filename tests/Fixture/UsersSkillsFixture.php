@@ -6,7 +6,7 @@ use Cake\TestSuite\Fixture\TestFixture;
 
 class UsersSkillsFixture extends TestFixture
 {
-    public $import = ['table' => 'users_skills', 'connection' => 'default'];
+    public $import = ['table' => 'users_skills'];
 
       public array $records = [
           [

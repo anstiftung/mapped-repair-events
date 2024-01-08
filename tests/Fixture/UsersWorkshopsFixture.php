@@ -7,7 +7,7 @@ use Cake\I18n\FrozenDate;
 
 class UsersWorkshopsFixture extends TestFixture
 {
-    public $import = ['table' => 'users_workshops', 'connection' => 'default'];
+    public $import = ['table' => 'users_workshops'];
 
     public function init(): void
     {

@@ -6,7 +6,7 @@ use Cake\TestSuite\Fixture\TestFixture;
 
 class GroupsFixture extends TestFixture
 {
-    public $import = ['table' => 'groups', 'connection' => 'default'];
+    public $import = ['table' => 'groups'];
 
     public array $records = [
         [

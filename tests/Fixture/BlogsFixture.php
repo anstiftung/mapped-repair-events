@@ -6,7 +6,7 @@ use Cake\TestSuite\Fixture\TestFixture;
 
 class BlogsFixture extends TestFixture
 {
-    public $import = ['table' => 'blogs', 'connection' => 'default'];
+    public $import = ['table' => 'blogs'];
 
     public array $records = [
         [

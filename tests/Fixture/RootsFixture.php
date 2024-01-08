@@ -6,7 +6,7 @@ use Cake\TestSuite\Fixture\TestFixture;
 
 class RootsFixture extends TestFixture
 {
-    public $import = ['table' => 'roots', 'connection' => 'default'];
+    public $import = ['table' => 'roots'];
 
     public array $records = [
         [
