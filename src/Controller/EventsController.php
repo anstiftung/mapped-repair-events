@@ -428,6 +428,9 @@ class EventsController extends AppController
                 if (!is_array($data)) {
                     continue; // skip referer
                 }
+                if (!array_key_exists('datumstart', $data)) {
+                    continue; // skip metadata (fields / unlocked / debug)
+                }
                 $data = array_merge($this->request->getData()[0], $data);
                 if ($data['datumstart']) {
                     $data['datumstart'] = new \Cake\I18n\DateTime($data['datumstart']);
