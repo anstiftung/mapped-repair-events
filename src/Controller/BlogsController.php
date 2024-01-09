@@ -3,6 +3,8 @@ namespace App\Controller;
 
 use Cake\Event\EventInterface;
 use Cake\Http\Exception\NotFoundException;
+use Feed\View\RssView;
+use Cake\Core\Configure;
 
 class BlogsController extends AppController
 {
@@ -16,6 +18,12 @@ class BlogsController extends AppController
             'Posts.publish' => 'DESC'
         ]
     ];
+
+    public function initialize(): void
+    {
+        parent::initialize();
+        $this->addViewClasses([RssView::class]);
+    }
 
     public function beforeFilter(EventInterface $event)
     {
@@ -42,9 +50,11 @@ class BlogsController extends AppController
             throw new NotFoundException('kein rss');
         }
 
-        $conditions = array(
+        $this->viewBuilder()->setClassName('Feed.Rss');
+        
+        $conditions = [
             'Posts.status' => APP_ON,
-        );
+        ];
 
         // aktuelles blog should contain all blog posts (no blog id filter!)
         if (!empty($this->request->getParam('blogUrl'))) {
@@ -54,7 +64,7 @@ class BlogsController extends AppController
         $this->Post = $this->getTableLocator()->get('Posts');
         $posts = $this->Post->find('all',
         order: [
-            'Posts.publish'=> 'DESC'
+            'Posts.publish'=> 'DESC',
         ],
         conditions: $conditions,
         contain: [
@@ -63,8 +73,53 @@ class BlogsController extends AppController
         ]);
         if ($posts->count() == 0) throw new NotFoundException('Kein RSS-Feeds gefunden');
 
-        $this->set('posts', $posts);
+        $data = [
+            'channel' => [
+                'title' => Configure::read('AppConfig.titleSuffix'),
+                'description' => 'Neues von den Initiativen auf ' . Configure::read('AppConfig.titleSuffix'),
+                'language' => 'de-DE',
+            ],
+            'items' => $this->preparePostsForFeed($posts),
+        ];
+        $this->set(['data' => $data, '_serialize' => 'data']);
 
+    }
+
+    private function preparePostsForFeed($posts)
+    {
+        $items = [];
+        foreach ($posts as $post) {
+            $link = Configure::read('AppConfig.htmlHelper')->urlPostDetail($post->url);
+        
+            $body = $post->publish->i18nFormat(Configure::read('DateFormat.de.DateLong2'));
+            $body .= ' // ' . $post->name;
+            $body .= '<br />' . h(strip_tags($post->text));
+        
+            $body = Configure::read('AppConfig.textHelper')->truncate($body, 400, [
+                'ending' => '...',
+                'exact'  => true,
+                'html'   => true,
+            ]);
+        
+            $preparedItem = [
+                'title' => $post->name,
+                'link' => $link,
+                'guid' => ['url' => $link],
+                'description' => $body,
+                'pubDate' => $post->publish->i18nFormat(Configure::read('DateFormat.de.DateLong2'))
+            ];
+        
+            if (!empty($post->photos)) {
+                $imageUrl = Configure::read('AppConfig.htmlHelper')->getThumbs800ImageMultiple($post->photos[0]->name);
+                $correctedImageUrl = str_replace('//', '/', WWW_ROOT . $imageUrl);
+                $length = filesize($correctedImageUrl);
+                $mimeType = mime_content_type($correctedImageUrl);
+                $preparedItem['enclosure'] = ['url' => $imageUrl, 'length' => $length, 'type' => $mimeType];
+            }
+        
+            $items[] = $preparedItem;
+        }
+        return $items;        
     }
 
     public function detail()

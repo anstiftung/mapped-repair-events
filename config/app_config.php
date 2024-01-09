@@ -134,6 +134,7 @@ return [
             '280' => [],
             '800' => [] //800 is maximum! (tmpUploadFileSize)
         ],
+        'textHelper' => new Cake\View\Helper\TextHelper(new Cake\View\View()),
         'numberHelper' => new Cake\View\Helper\NumberHelper(new Cake\View\View()),
         'htmlHelper' => new App\View\Helper\MyHtmlHelper(new Cake\View\View()),
         'timeHelper' => new App\View\Helper\MyTimeHelper(new Cake\View\View()),
