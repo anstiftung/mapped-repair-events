@@ -248,7 +248,7 @@ class WorkshopsTable extends AppTable
         $orgaTeam = $this->getOrgaTeam($workshop);
         $userFound = false;
         foreach($orgaTeam as $orgaTeamUser) {
-            if ($user['uid'] == $orgaTeamUser->uid) {
+            if ($user->uid == $orgaTeamUser->uid) {
                 $userFound = true;
                 break;
             }

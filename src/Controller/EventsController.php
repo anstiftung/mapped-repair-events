@@ -301,7 +301,7 @@ class EventsController extends AppController
             $this->AppFlash->setErrorMessage('Beim Löschen ist ein Fehler aufgetreten');
         }
 
-        $this->redirect($this->request->referer(false));
+        $this->redirect($this->referer());
 
     }
 
