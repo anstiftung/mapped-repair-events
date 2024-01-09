@@ -21,7 +21,7 @@ class User extends Entity implements IdentityInterface
 
     public function getIdentifier(): array|string|int|null
     {
-        return $this->uid;
+        return $this->get('uid');
     }
 
     public function getOriginalData(): ArrayAccess|array
@@ -67,7 +67,7 @@ class User extends Entity implements IdentityInterface
         $objectTable = FactoryLocator::get('Table')->get($pluralizedModelName);
         $object = $objectTable->find('all', [
             'conditions' => [
-                $pluralizedModelName.'.owner' => $this->uid,
+                $pluralizedModelName.'.owner' => $this->get('uid'),
                 $pluralizedModelName.'.url' => $url,
                 $pluralizedModelName.'.status >= '.APP_DELETED,
         ]]);
@@ -93,7 +93,7 @@ class User extends Entity implements IdentityInterface
 
         $object = $objectTable->find('all', [
             'conditions' => [
-                $pluralizedClass.'.owner' => $this->uid,
+                $pluralizedClass.'.owner' => $this->get('uid'),
                 $pluralizedClass.'.uid' => $uid,
                 $pluralizedClass.'.status >= '.APP_DELETED,
         ]]);
