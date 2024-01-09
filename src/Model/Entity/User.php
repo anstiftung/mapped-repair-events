@@ -10,8 +10,6 @@ use ArrayAccess;
 
 class User extends Entity implements IdentityInterface
 {
-
-    public $uid;
     
     protected array $_virtual = ['name'];
 
@@ -23,7 +21,7 @@ class User extends Entity implements IdentityInterface
 
     public function getIdentifier(): array|string|int|null
     {
-        return $this->id;
+        return $this->uid;
     }
 
     public function getOriginalData(): ArrayAccess|array
