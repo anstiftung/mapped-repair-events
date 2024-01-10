@@ -774,8 +774,18 @@ class WorkshopsController extends AppController
         $this->set('groups', Configure::read('AppConfig.htmlHelper')->getUserGroupsForWorkshopDetail());
 
         if ($this->request->getSession()->read('isMobile') && !empty($categories)) {
+            
             $i = 0;
+            $hasModifyPermissions = $this->isAdmin() || $this->Workshop->isUserInOrgaTeam($this->loggedUser, $workshop);
+
             foreach($workshop->events as $event) {
+
+                if (!$hasModifyPermissions && $event->status == APP_OFF) {
+                    unset($workshop->events[$i]);
+                    $i++;
+                    continue;
+                }
+
                 $workshop->events[$i]->eventname = $workshop->name;
                 $preparedEventCategories = [];
                 foreach($categories as $category) {
