@@ -7,6 +7,7 @@ parameters:
     paths:
         - src
         - templates
+        - config/Migrations
         - plugins/Admin/src
         - plugins/Admin/templates
     ignoreErrors:
