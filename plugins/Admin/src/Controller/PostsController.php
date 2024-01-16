@@ -5,13 +5,16 @@ use App\Controller\Component\StringComponent;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use Cake\Http\Exception\NotFoundException;
+use App\Model\Table\PostsTable;
+use App\Model\Table\BlogsTable;
+use App\Model\Table\UsersTable;
 
 class PostsController extends AdminAppController
 {
 
-    public $Post;
-    public $Blog;
-    public $User;
+    public PostsTable $Post;
+    public BlogsTable $Blog;
+    public UsersTable $User;
     
     public function __construct($request = null, $response = null)
     {
@@ -50,15 +53,14 @@ class PostsController extends AdminAppController
             throw new NotFoundException;
         }
 
-        $post = $this->Post->find('all', [
-            'conditions' => [
-                'Posts.uid' => $uid,
-                'Posts.status >= ' . APP_DELETED
-            ],
-            'contain' => [
-                'Photos',
-                'Metatags'
-            ]
+        $post = $this->Post->find('all',
+        conditions: [
+            'Posts.uid' => $uid,
+            'Posts.status >= ' . APP_DELETED
+        ],
+        contain: [
+            'Photos',
+            'Metatags'
         ])->first();
 
         $photos = array();
@@ -139,12 +141,11 @@ class PostsController extends AdminAppController
 
         $conditions = array_merge($this->conditions, $conditions);
 
-        $query = $this->Post->find('all', [
-            'conditions' => $conditions,
-            'contain' => [
-                'OwnerUsers',
-                'Blogs'
-            ]
+        $query = $this->Post->find('all',
+        conditions: $conditions,
+        contain: [
+            'OwnerUsers',
+            'Blogs'
         ]);
 
         $objects = $this->paginate($query, [

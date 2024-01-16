@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller;
 
+use App\Model\Table\RootsTable;
 use Cake\Controller\Controller;
 use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
@@ -10,6 +11,7 @@ use Cake\Http\Exception\ServiceUnavailableException;
 use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
 use Cake\I18n\DateTime;
+use App\Model\Table\PagesTable;
 
 class AppController extends Controller
 {
@@ -18,12 +20,12 @@ class AppController extends Controller
 
     public $loggedUser = null;
     public $connection;
-    public $Root;
+    public RootsTable $Root;
     public $pluralizedModelName;
     public $Common;
     public $String;
     public $FormProtection;
-    public $Page;
+    public PagesTable $Page;
 
     public function __construct($request = null, $response = null)
     {

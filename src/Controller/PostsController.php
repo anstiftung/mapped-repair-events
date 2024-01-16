@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller;
 
+use App\Model\Table\PostsTable;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use Cake\Http\Exception\NotFoundException;
@@ -9,7 +10,7 @@ use Cake\View\JsonView;
 class PostsController extends AppController
 {
 
-    public $Post;
+    public PostsTable $Post;
     
     public function beforeFilter(EventInterface $event)
     {

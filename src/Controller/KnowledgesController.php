@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Controller\Component\StringComponent;
+use App\Model\Table\KnowledgesTable;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use Cake\Utility\Hash;
@@ -10,7 +11,7 @@ use Cake\Utility\Hash;
 class KnowledgesController extends AppController
 {
 
-    public $Knowledge;
+    public KnowledgesTable $Knowledge;
 
     public function __construct($request = null, $response = null)
     {
@@ -29,17 +30,16 @@ class KnowledgesController extends AppController
     public function all()
     {
 
-        $knowledges = $this->Knowledge->find('all', [
-            'conditions' => [
-                'Knowledges.status' => APP_ON
-            ],
-            'contain' => [
-                'Skills',
-                'Categories',
-            ],
-            'order' => [
-                'Knowledges.title' => 'ASC',
-            ],
+        $knowledges = $this->Knowledge->find('all',
+        conditions: [
+            'Knowledges.status' => APP_ON
+        ],
+        contain: [
+            'Skills',
+            'Categories',
+        ],
+        order: [
+            'Knowledges.title' => 'ASC',
         ])->toArray();
 
         foreach($knowledges as &$knowledge) {

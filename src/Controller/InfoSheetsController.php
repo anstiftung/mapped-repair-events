@@ -2,21 +2,26 @@
 namespace App\Controller;
 
 use App\Controller\Component\StringComponent;
+use App\Model\Table\BrandsTable;
+use App\Model\Table\CategoriesTable;
+use App\Model\Table\EventsTable;
+use App\Model\Table\FormFieldsTable;
+use App\Model\Table\InfoSheetsTable;
+use App\Model\Table\WorkshopsTable;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use Cake\Http\Exception\NotFoundException;
 use League\Csv\Writer;
-use Cake\Http\CallbackStream;
 
 class InfoSheetsController extends AppController
 {
 
-    public $InfoSheet;
-    public $Event;
-    public $Workshop;
-    public $Category;
-    public $Brand;
-    public $FormField;
+    public InfoSheetsTable $InfoSheet;
+    public EventsTable $Event;
+    public WorkshopsTable $Workshop;
+    public CategoriesTable $Category;
+    public BrandsTable $Brand;
+    public FormFieldsTable $FormField;
     
     public function beforeFilter(EventInterface $event) {
 
@@ -116,11 +121,9 @@ class InfoSheetsController extends AppController
             throw new NotFoundException;
         }
 
-        $infoSheet = $this->InfoSheet->find('all', [
-            'conditions' => [
-                'InfoSheets.uid' => $infoSheetUid,
-                'InfoSheets.status >= ' . APP_DELETED
-            ]
+        $infoSheet = $this->InfoSheet->find('all', conditions: [
+            'InfoSheets.uid' => $infoSheetUid,
+            'InfoSheets.status >= ' . APP_DELETED
         ])->first();
 
         if (empty($infoSheet)) {
@@ -189,16 +192,15 @@ class InfoSheetsController extends AppController
             throw new NotFoundException;
         }
 
-        $infoSheet = $this->InfoSheet->find('all', [
-            'conditions' => [
-                'InfoSheets.uid' => $infoSheetUid,
-                'InfoSheets.status >= ' . APP_DELETED
-            ],
-            'contain' => [
-                'Events.Workshops',
-                'Categories',
-                'FormFieldOptions'
-            ]
+        $infoSheet = $this->InfoSheet->find('all',
+        conditions: [
+            'InfoSheets.uid' => $infoSheetUid,
+            'InfoSheets.status >= ' . APP_DELETED
+        ],
+        contain: [
+            'Events.Workshops',
+            'Categories',
+            'FormFieldOptions'
         ])->first();
 
         if (empty($infoSheet)) {

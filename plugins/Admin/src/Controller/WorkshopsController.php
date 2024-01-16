@@ -2,13 +2,16 @@
 namespace Admin\Controller;
 
 use Cake\Event\EventInterface;
+use App\Model\Table\InfoSheetsTable;
+use App\Model\Table\UsersTable;
+use App\Model\Table\WorkshopsTable;
 
 class WorkshopsController extends AdminAppController
 {
 
-    public $Workshop;
-    public $User;
-    public $InfoSheet;
+    public WorkshopsTable $Workshop;
+    public UsersTable $User;
+    public InfoSheetsTable $InfoSheet;
 
     public function beforeFilter(EventInterface $event)
     {

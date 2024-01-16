@@ -3,11 +3,12 @@ namespace Admin\Controller;
 
 use App\Controller\Component\StringComponent;
 use Cake\Http\Exception\NotFoundException;
+use App\Model\Table\PagesTable;
 
 class PagesController extends AdminAppController
 {
 
-    public $Page;
+    public PagesTable $Page;
     
     public function __construct($request = null, $response = null)
     {
@@ -34,14 +35,13 @@ class PagesController extends AdminAppController
             throw new NotFoundException;
         }
 
-        $page = $this->Page->find('all', [
-            'conditions' => [
-                'Pages.uid' => $uid,
-                'Pages.status >= ' . APP_DELETED
-            ],
-            'contain' => [
-                'Metatags'
-            ]
+        $page = $this->Page->find('all',
+        conditions: [
+            'Pages.uid' => $uid,
+            'Pages.status >= ' . APP_DELETED
+        ],
+        contain: [
+            'Metatags'
         ])->first();
 
         if (empty($page)) {
@@ -76,12 +76,11 @@ class PagesController extends AdminAppController
         ];
         $conditions = array_merge($this->conditions, $conditions);
 
-        $query = $this->Page->find('all', [
-            'conditions' => $conditions,
-            'contain' => [
-                'OwnerUsers',
-                'ParentPages'
-            ]
+        $query = $this->Page->find('all',
+        conditions: $conditions,
+        contain: [
+            'OwnerUsers',
+            'ParentPages'
         ]);
         $objects = $this->paginate($query, [
             'order' => [

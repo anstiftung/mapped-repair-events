@@ -5,12 +5,14 @@ use Cake\Event\EventInterface;
 use Cake\Http\Exception\NotFoundException;
 use Feed\View\RssView;
 use Cake\Core\Configure;
+use App\Model\Table\BlogsTable;
+use App\Model\Table\PostsTable;
 
 class BlogsController extends AppController
 {
 
-    public $Blog;
-    public $Post;
+    public BlogsTable $Blog;
+    public PostsTable $Post;
 
     public array $paginate = [
         'limit' => 10,

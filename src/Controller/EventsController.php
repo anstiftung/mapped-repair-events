@@ -571,12 +571,12 @@ class EventsController extends AppController
 
         // get count without any filters
         $eventTable = FactoryLocator::get('Table')->get('Events');
-        $allEventsCount = $eventTable->find('all', [
-            'conditions' => $conditions,
-            'contain' => [
+        $allEventsCount = $eventTable->find('all',
+            conditions: $conditions,
+            contain:  [
                 'Workshops'
             ]
-        ])->count();
+        )->count();
         $this->set('allEventsCount', $allEventsCount);
 
         $timeRangeDefault = '30days';
@@ -659,9 +659,9 @@ class EventsController extends AppController
         }
         $this->set('preparedCategories', $preparedCategories);
 
-        $query = $eventTable->find('all', [
-            'conditions' => $conditions,
-        ]);
+        $query = $eventTable->find('all',
+            conditions: $conditions,
+        );
 
         $keyword = '';
         if (!empty($this->request->getQuery('keyword'))) {

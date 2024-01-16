@@ -2,6 +2,10 @@
 
 namespace App\Controller;
 
+use App\Model\Table\CategoriesTable;
+use App\Model\Table\InfoSheetsTable;
+use App\Model\Table\ThirdPartyStatisticsTable;
+use App\Model\Table\WorkshopsTable;
 use stdClass;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
@@ -10,10 +14,10 @@ use Cake\Http\Exception\NotFoundException;
 class WidgetsController extends AppController
 {
 
-    public $Category;
-    public $InfoSheet;
-    public $ThirdPartyStatistic;
-    public $Workshop;
+    public CategoriesTable $Category;
+    public InfoSheetsTable $InfoSheet;
+    public ThirdPartyStatisticsTable $ThirdPartyStatistic;
+    public WorkshopsTable $Workshop;
 
     public function beforeFilter(EventInterface $event) {
 

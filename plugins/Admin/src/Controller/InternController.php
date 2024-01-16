@@ -3,6 +3,8 @@
 namespace Admin\Controller;
 
 use App\Controller\Component\StringComponent;
+use App\Model\Table\PhotosTable;
+use App\Model\Table\UsersTable;
 use Cake\Core\Configure;
 use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
@@ -12,8 +14,8 @@ use Intervention\Image\ImageManagerStatic as Image;
 class InternController extends AdminAppController
 {
 
-    public $Photo;
-    public $User;
+    public PhotosTable $Photo;
+    public UsersTable $User;
 
     public function beforeFilter(EventInterface $event)
     {

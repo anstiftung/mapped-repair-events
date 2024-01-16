@@ -3,6 +3,10 @@
 namespace App\Controller;
 
 use App\Controller\Component\StringComponent;
+use App\Model\Table\CategoriesTable;
+use App\Model\Table\CountriesTable;
+use App\Model\Table\SkillsTable;
+use App\Model\Table\UsersTable;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use Cake\Mailer\Mailer;
@@ -13,10 +17,10 @@ use Gregwar\Captcha\CaptchaBuilder;
 class UsersController extends AppController
 {
 
-    public $Category;
-    public $Country;
-    public $Skill;
-    public $User;
+    public CategoriesTable $Category;
+    public CountriesTable $Country;
+    public SkillsTable $Skill;
+    public UsersTable $User;
 
     public function __construct($request = null, $response = null)
     {
@@ -91,14 +95,13 @@ class UsersController extends AppController
             $conditions['FIND_IN_SET("categories", private) = '] = 0; // Users.private would be converted to users.private on prod so leave it out!
         }
 
-        $users = $this->User->find('all', [
-            'conditions' => $conditions,
-            'contain' => [
-                'Skills' => function(Query $q) {
-                    return $q->where(['Skills.status' => APP_ON]);
-                },
-                'Categories',
-            ]
+        $users = $this->User->find('all',
+        conditions: $conditions,
+        contain: [
+            'Skills' => function(Query $q) {
+                return $q->where(['Skills.status' => APP_ON]);
+            },
+            'Categories',
         ]);
 
         if ($skillId > 0) {
@@ -158,23 +161,22 @@ class UsersController extends AppController
             'UsersWorkshops.approved <> \'1970-01-01 00:00:00\'',
             'Workshops.status > ' . APP_DELETED
         ]);
-        $user = $this->User->find('all', [
-            'conditions' => [
-                'Users.uid' => $userUid,
-                'Users.status > ' . APP_DELETED
-            ],
-            'contain' => [
-                'Groups',
-                'Categories',
-                'Skills' => function(Query $q) {
-                    return $q->where(['Skills.status' => APP_ON]);
-                },
-                'Workshops' => [
-                    'fields' => [
-                        'Workshops.url',
-                        'Workshops.name',
-                        'UsersWorkshops.user_uid'
-                    ]
+        $user = $this->User->find('all',
+        conditions: [
+            'Users.uid' => $userUid,
+            'Users.status > ' . APP_DELETED
+        ],
+        contain: [
+            'Groups',
+            'Categories',
+            'Skills' => function(Query $q) {
+                return $q->where(['Skills.status' => APP_ON]);
+            },
+            'Workshops' => [
+                'fields' => [
+                    'Workshops.url',
+                    'Workshops.name',
+                    'UsersWorkshops.user_uid'
                 ]
             ]
         ])->first();
@@ -221,10 +223,8 @@ class UsersController extends AppController
 
             if (!($user->hasErrors())) {
 
-                $user = $this->User->find('all', [
-                    'conditions' => [
-                        'Users.email' => $this->request->getData('Users.email')
-                    ]
+                $user = $this->User->find('all', conditions: [
+                    'Users.email' => $this->request->getData('Users.email')
                 ]) ->first();
                 $user->revertPrivatizeData();
 
@@ -381,16 +381,15 @@ class UsersController extends AppController
             $isMyProfile = true;
         }
 
-        $user = $this->User->find('all', [
-            'conditions' => [
-                'Users.uid' => $userUid,
-                'Users.status > ' . APP_DELETED
-            ],
-            'contain' => [
-                'Groups',
-                'Categories',
-                'Skills',
-            ]
+        $user = $this->User->find('all',
+        conditions: [
+            'Users.uid' => $userUid,
+            'Users.status > ' . APP_DELETED
+        ],
+        contain: [
+            'Groups',
+            'Categories',
+            'Skills',
         ])->first();
         $user->revertPrivatizeData();
 

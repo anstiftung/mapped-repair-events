@@ -2,6 +2,8 @@
 namespace App\Controller;
 
 use App\Controller\Component\StringComponent;
+use App\Model\Table\CategoriesTable;
+use App\Model\Table\SkillsTable;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use Cake\Utility\Hash;
@@ -9,8 +11,8 @@ use Cake\Utility\Hash;
 class SkillsController extends AppController
 {
 
-    public $Category;
-    public $Skill;
+    public CategoriesTable $Category;
+    public SkillsTable $Skill;
     
     public function beforeFilter(EventInterface $event)
     {

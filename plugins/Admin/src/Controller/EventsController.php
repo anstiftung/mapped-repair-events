@@ -1,14 +1,15 @@
 <?php
 namespace Admin\Controller;
 
-use Cake\Core\Configure;
 use Cake\Event\EventInterface;
+use App\Model\Table\EventsTable;
+use App\Model\Table\UsersTable;
 
 class EventsController extends AdminAppController
 {
 
-    public $Event;
-    public $User;
+    public EventsTable $Event;
+    public UsersTable $User;
 
     public function __construct($request = null, $response = null)
     {
@@ -54,12 +55,11 @@ class EventsController extends AdminAppController
         ];
         $conditions = array_merge($this->conditions, $conditions);
 
-        $query = $this->Event->find('all', [
-            'conditions' => $conditions,
-            'contain' => [
-                'OwnerUsers',
-                'Workshops'
-            ]
+        $query = $this->Event->find('all',
+        conditions: $conditions,
+        contain: [
+            'OwnerUsers',
+            'Workshops'
         ]);
 
         $query = $this->addMatchingsToQuery($query);

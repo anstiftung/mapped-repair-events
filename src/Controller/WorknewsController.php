@@ -2,12 +2,13 @@
 
 namespace App\Controller;
 
+use App\Model\Table\WorknewsTable;
 use Cake\Event\EventInterface;
 use Cake\Http\Exception\NotFoundException;
 
 class WorknewsController extends AppController {
 
-    public $Worknews;
+    public WorknewsTable $Worknews;
     
     public function beforeFilter(EventInterface $event) {
 

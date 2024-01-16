@@ -7,7 +7,6 @@ use Cake\Event\EventInterface;
 use Cake\ORM\Table;
 use Cake\Routing\Router;
 use Cake\Validation\Validator;
-use Cake\Datasource\ConnectionManager;
 
 abstract class AppTable extends Table
 {

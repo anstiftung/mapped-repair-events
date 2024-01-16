@@ -1,16 +1,18 @@
 <?php
 namespace App\Controller;
 
+use App\Model\Table\PagesTable;
+use App\Model\Table\PostsTable;
+use App\Model\Table\WorkshopsTable;
 use Cake\Event\EventInterface;
-use Cake\Http\Exception\NotFoundException;
 use Cake\View\XmlView;
 
 class SitemapsController extends AppController
 {
 
-    public $Workshop;
-    public $Post;
-    public $Page;
+    public WorkshopsTable $Workshop;
+    public PostsTable $Post;
+    public PagesTable $Page;
     
     public function beforeFilter(EventInterface $event)
     {
