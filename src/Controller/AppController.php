@@ -24,7 +24,6 @@ class AppController extends Controller
     public $pluralizedModelName;
     public $Common;
     public $String;
-    public $FormProtection;
     public PagesTable $Page;
 
     public function __construct($request = null, $response = null)
