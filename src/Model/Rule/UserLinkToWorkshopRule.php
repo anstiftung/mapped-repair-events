@@ -19,19 +19,19 @@ class UserLinkToWorkshopRule
         $userUid = $entity->get('uid');
 
         $this->User = FactoryLocator::get('Table')->get('Users');
-        $user = $this->User->find('all', [
-            'conditions' => [
+        $user = $this->User->find('all',
+            conditions: [
                 'Users.uid' => $userUid,
             ],
-            'contain' => [
+            contain: [
                 'Groups',
                 'Workshops' => [
                     'conditions' => [
                         'Workshops.status > ' . APP_DELETED,
-                    ]
-                ]
+                    ],
+                ],
             ],
-        ])->first();
+        )->first();
 
         if (empty($user->workshops)) {
             return true;

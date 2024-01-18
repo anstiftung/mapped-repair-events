@@ -88,12 +88,12 @@ class UsersTable extends AppTable
 
         // 1. set owner to 0 for all deleted workshops where to-be-deleted user was owner
         $workshopTable = FactoryLocator::get('Table')->get('Workshops');
-        $deletedOwnerWorkshops = $workshopTable->find('all', [
-            'conditions' => [
-                'Workshops.owner' =>$userUid,
+        $deletedOwnerWorkshops = $workshopTable->find('all',
+            conditions: [
+                'Workshops.owner' => $userUid,
                 'Workshops.status' => APP_DELETED,
             ],
-        ])->toArray();
+        )->toArray();
 
         if (!empty($deletedOwnerWorkshops)) {
             $workshopTable->updateAll([
@@ -104,12 +104,12 @@ class UsersTable extends AppTable
         }
 
         // 2. set owner to admin-user for all non-deleted workshops where to-be-deleted user was owner
-        $nonDeletedOwnerWorkshops = $workshopTable->find('all', [
-            'conditions' => [
+        $nonDeletedOwnerWorkshops = $workshopTable->find('all',
+            conditions: [
                 'Workshops.owner' =>$userUid,
                 'Workshops.status > ' . APP_DELETED,
             ],
-        ])->toArray();
+        )->toArray();
 
         if (!empty($nonDeletedOwnerWorkshops)) {
             $workshopTable->updateAll([

@@ -64,14 +64,14 @@ class EventsController extends AppController
         $filename .= '.' . $this->request->getParam('_ext');
 
         $eventTable = FactoryLocator::get('Table')->get('Events');
-        $events = $eventTable->find('all', [
-            'conditions' => $conditions,
-            'contain' => [
+        $events = $eventTable->find('all',
+            conditions: $conditions,
+            contain: [
                 'Workshops',
                 'Categories',
             ],
-            'order' => $this->Event->getListOrder(),
-        ]);
+            order: $this->Event->getListOrder(),
+        );
 
         $icalEvents = [];
 
@@ -247,16 +247,16 @@ class EventsController extends AppController
             throw new NotFoundException;
         }
 
-        $event = $this->Event->find('all', [
-            'conditions' => [
+        $event = $this->Event->find('all',
+            conditions: [
                 'Events.uid' => $eventUid,
                 'Events.status >= ' . APP_DELETED
             ],
-            'contain' => [
+            contain: [
                 'Categories',
                 'Workshops'
             ]
-        ])->first();
+        )->first();
 
         if (empty($event)) {
             throw new NotFoundException;
@@ -340,16 +340,16 @@ class EventsController extends AppController
     }
 
     public function duplicate($eventUid) {
-        $event = $this->Event->find('all', [
-            'conditions' => [
+        $event = $this->Event->find('all',
+            conditions: [
                 'Events.uid' => $eventUid,
                 'Events.status >= ' . APP_DELETED
             ],
-            'contain' => [
+            contain: [
                 'Categories',
                 'Workshops'
             ]
-        ])->first();
+        )->first();
 
         if (empty($event)) {
             throw new NotFoundException;
@@ -370,16 +370,16 @@ class EventsController extends AppController
             throw new NotFoundException;
         }
 
-        $event = $this->Event->find('all', [
-            'conditions' => [
+        $event = $this->Event->find('all',
+            conditions: [
                 'Events.uid' => $eventUid,
-                'Events.status >= ' . APP_DELETED
+                'Events.status >= ' . APP_DELETED,
             ],
-            'contain' => [
+            contain: [
                 'Categories',
-                'Workshops'
+                'Workshops',
             ]
-        ])->first();
+        )->first();
 
         if (empty($event)) {
             throw new NotFoundException;
@@ -512,15 +512,15 @@ class EventsController extends AppController
 
         $allParamsEmpty = empty($this->request->getQuery('keyword'));
 
-        $events = $this->Event->find('all', [
-            'conditions' => $conditions,
-            'fields' => $this->Event->getListFields(),
-            'order' => $this->Event->getListOrder(),
-            'contain' => [
+        $events = $this->Event->find('all',
+            conditions:  $conditions,
+            fields:  $this->Event->getListFields(),
+            order:  $this->Event->getListOrder(),
+            contain:  [
                 'Workshops',
                 'Categories'
             ]
-        ]);
+        );
         $events->distinct($this->Event->getListFields());
 
         if (!empty($this->request->getQuery('keyword'))) {

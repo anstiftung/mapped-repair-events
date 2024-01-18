@@ -172,12 +172,12 @@ class WorkshopsTable extends AppTable
         $validator->add('url', 'addBlockedWorkshopSlugsValidationRule', [
             'rule' => function($value, $context) {
                 $bws = FactoryLocator::get('Table')->get('BlockedWorkshopSlugs');
-                $recordCount = $bws->find('all', [
-                    'conditions' => [
+                $recordCount = $bws->find('all',
+                    conditions: [
                         'status' => APP_ON,
-                        'url' => $value
+                        'url' => $value,
                     ],
-                ])->count();
+                )->count();
                 if ($recordCount == 0) {
                     return true;
                 }

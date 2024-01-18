@@ -165,11 +165,11 @@ class UsersControllerTest extends AppTestCase
         $this->assertEquals(8, $workshop->owner);
 
         // 4. check successfully deleted user
-        $user = $this->User->find('all', [
-            'conditions' => [
+        $user = $this->User->find('all',
+            conditions: [
                 'Users.uid' => $userUid,
             ],
-        ])->first();
+        )->first();
         $this->assertEmpty($user);
     }
 
@@ -203,11 +203,11 @@ class UsersControllerTest extends AppTestCase
         $workshop = $this->Workshop->get($user->owner_workshops[0]->uid);
         $this->assertEquals(8, $workshop->owner);
 
-        $user = $this->User->find('all', [
-            'conditions' => [
+        $user = $this->User->find('all',
+            conditions: [
                 'Users.uid' => $userUid,
             ],
-        ])->first();
+        )->first();
         $this->assertEmpty($user);
 
     }
@@ -242,11 +242,11 @@ class UsersControllerTest extends AppTestCase
         $this->assertEmpty($usersWorkshops);
 
         // approve if user is deleted
-        $user = $this->User->find('all', [
-            'conditions' => [
+        $user = $this->User->find('all',
+            conditions: [
                 'Users.uid' => $userUid,
             ],
-        ])->first();
+        )->first();
         $this->assertEmpty($user);
 
     }

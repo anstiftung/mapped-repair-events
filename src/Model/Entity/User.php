@@ -65,12 +65,13 @@ class User extends Entity implements IdentityInterface
 
         $pluralizedModelName = Inflector::pluralize($modelName);
         $objectTable = FactoryLocator::get('Table')->get($pluralizedModelName);
-        $object = $objectTable->find('all', [
-            'conditions' => [
+        $object = $objectTable->find('all',
+            conditions: [
                 $pluralizedModelName.'.owner' => $this->get('uid'),
                 $pluralizedModelName.'.url' => $url,
                 $pluralizedModelName.'.status >= '.APP_DELETED,
-        ]]);
+            ],
+        );
 
         if ($object->count() == 1) {
             return true;
@@ -91,12 +92,13 @@ class User extends Entity implements IdentityInterface
         $pluralizedClass = Inflector::pluralize($objectClass);
         $objectTable = FactoryLocator::get('Table')->get($pluralizedClass);
 
-        $object = $objectTable->find('all', [
-            'conditions' => [
+        $object = $objectTable->find('all',
+            conditions: [
                 $pluralizedClass.'.owner' => $this->get('uid'),
                 $pluralizedClass.'.uid' => $uid,
                 $pluralizedClass.'.status >= '.APP_DELETED,
-        ]]);
+            ],
+        );
 
         if ($object->count() == 1) {
             return true;

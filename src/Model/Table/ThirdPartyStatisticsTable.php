@@ -38,11 +38,11 @@ class ThirdPartyStatisticsTable extends Table
         $preparedSums = [];
         $this->Categories = FactoryLocator::get('Table')->get('Categories');
         foreach($sums as $sum) {
-            $category = $this->Categories->find('all', [
-                'conditions' => [
-                    'Categories.id' => $sum->category_id
+            $category = $this->Categories->find('all',
+                conditions: [
+                    'Categories.id' => $sum->category_id,
                 ]
-            ])->first();
+            )->first();
             if (in_array($category->parent_id, Configure::read('AppConfig.mainCategoryIdsWhereSubCategoriesAreShown'))) {
                 if (!isset($preparedSums[$category->id])) {
                     $preparedSums[$category->id] = 0;
@@ -63,11 +63,11 @@ class ThirdPartyStatisticsTable extends Table
         $preparedSums = [];
         $this->Categories = FactoryLocator::get('Table')->get('Categories');
         foreach($sums as $categoryId => $sum) {
-            $category = $this->Categories->find('all', [
-                'conditions' => [
-                    'Categories.id' => $categoryId
-                ]
-            ])->first();
+            $category = $this->Categories->find('all',
+                conditions: [
+                    'Categories.id' => $categoryId,
+                ],
+            )->first();
             $preparedSums[] = [
                 'name' => $category->name,
                 'id' => $category->id,

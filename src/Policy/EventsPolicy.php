@@ -59,12 +59,12 @@ class EventsPolicy implements RequestPolicyInterface
             $eventUid = (int) $request->getParam('pass')[0];
 
             $this->Event = FactoryLocator::get('Table')->get('Events');
-            $event = $this->Event->find('all', [
-                'conditions' => [
+            $event = $this->Event->find('all',
+                conditions: [
                     'Events.uid' => $eventUid,
-                    'Events.status > ' . APP_DELETED
+                    'Events.status > ' . APP_DELETED,
                 ]
-            ])->first();
+            )->first();
             $workshopUid = $event->workshop_uid;
 
             if ($request->getParam('action') == 'edit' && $event->datumstart->isPast()) {

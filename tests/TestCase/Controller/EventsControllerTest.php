@@ -196,11 +196,11 @@ class EventsControllerTest extends AppTestCase
             ]
         );
 
-        $event = $this->Event->find('all', [
-            'conditions' => [
-                'Events.uid' => 6
+        $event = $this->Event->find('all',
+            conditions: [
+                'Events.uid' => 6,
             ]
-        ])->first();
+        )->first();
 
         $this->assertEquals($event->eventbeschreibung, $eventForPost['eventbeschreibung']);
         $this->assertEquals($event->strasse, $eventForPost['strasse']);

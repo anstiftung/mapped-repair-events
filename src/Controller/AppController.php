@@ -317,15 +317,15 @@ class AppController extends Controller
     protected function isCurrentlyUpdated($uid)
     {
         $modelName = $this->modelName;
-        $data = $this->$modelName->find('all', [
-            'conditions' => [
+        $data = $this->$modelName->find('all',
+            conditions: [
                 $this->pluralizedModelName . '.uid' => $uid,
-                $this->pluralizedModelName . '.status >= ' . APP_DELETED
+                $this->pluralizedModelName . '.status >= ' . APP_DELETED,
             ],
-            'contain' => [
-                'CurrentlyUpdatedByUsers'
+            contain: [
+                'CurrentlyUpdatedByUsers',
             ]
-        ]);
+        );
 
         $data = $data->first();
         $diffInSeconds = 0;
