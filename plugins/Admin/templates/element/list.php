@@ -29,7 +29,7 @@ if (!isset($hideDeleteLink) || !$hideDeleteLink) {
         }
         $this->Paginator->setPaginated($objects);
         $paginatorParams = $this->Paginator->params();
-        $heading .= $count = ' (' . $this->Number->precision($paginatorParams['count'], 0) . ')';
+        $heading .= $count = ' (' . $this->Number->precision($paginatorParams['totalCount'], 0) . ')';
         echo $this->element('heading', [
             'first' => $heading
         ]);
