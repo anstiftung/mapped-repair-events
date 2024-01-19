@@ -404,7 +404,9 @@ class UsersController extends AppController
         $this->_profil($user, $isMyProfile, true);
 
         // profile from other user
-        $metaTags = [];
+        $metaTags = [
+            'title' => 'Mein Profil',
+        ];
         if (!$isMyProfile && $this->isAdmin()) {
             $metaTags = [
                 'title' => 'Profil von ' . $user->name
