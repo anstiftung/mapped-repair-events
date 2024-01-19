@@ -2,9 +2,16 @@
 namespace Admin\Controller;
 
 use Cake\Event\EventInterface;
+use App\Model\Table\InfoSheetsTable;
+use App\Model\Table\UsersTable;
+use App\Model\Table\WorkshopsTable;
 
 class WorkshopsController extends AdminAppController
 {
+
+    public WorkshopsTable $Workshop;
+    public UsersTable $User;
+    public InfoSheetsTable $InfoSheet;
 
     public function beforeFilter(EventInterface $event)
     {
@@ -42,13 +49,12 @@ class WorkshopsController extends AdminAppController
         $this->Workshop = $this->getTableLocator()->get('Workshops');
         $this->User = $this->getTableLocator()->get('Users');
 
-        $query = $this->Workshop->find('all', [
-            'conditions' => $conditions,
-            'contain' => [
-                'Countries',
-                'OwnerUsers',
-                'Users'
-            ]
+        $query = $this->Workshop->find('all',
+        conditions: $conditions,
+        contain: [
+            'Countries',
+            'OwnerUsers',
+            'Users'
         ]);
 
         $query = $this->addMatchingsToQuery($query);
@@ -70,7 +76,7 @@ class WorkshopsController extends AdminAppController
             }
         }
 
-        $this->set('objects', $objects->toArray());
+        $this->set('objects', $objects);
 
         $this->set('users', $this->User->getForDropdown());
     }

@@ -236,6 +236,7 @@ class StringComponent extends Component
         if (!$exact) {
             // ...search the last occurance of a space...
             $spacepos = strrpos($truncate, ' ');
+            /* @phpstan-ignore-next-line */
             if (isset($spacepos)) {
                 // ...and cut the text in this position
                 $truncate = substr($truncate, 0, $spacepos);

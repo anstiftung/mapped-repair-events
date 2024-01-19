@@ -2,6 +2,10 @@
 
 namespace App\Controller;
 
+use App\Model\Table\CategoriesTable;
+use App\Model\Table\InfoSheetsTable;
+use App\Model\Table\ThirdPartyStatisticsTable;
+use App\Model\Table\WorkshopsTable;
 use stdClass;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
@@ -9,6 +13,11 @@ use Cake\Http\Exception\NotFoundException;
 
 class WidgetsController extends AppController
 {
+
+    public CategoriesTable $Category;
+    public InfoSheetsTable $InfoSheet;
+    public ThirdPartyStatisticsTable $ThirdPartyStatistic;
+    public WorkshopsTable $Workshop;
 
     public function beforeFilter(EventInterface $event) {
 
@@ -36,10 +45,8 @@ class WidgetsController extends AppController
 
         $workshopUid = h($this->request->getQuery('id')) ?? 0;
         $this->Workshop = $this->getTableLocator()->get('Workshops');
-        $workshopFound = $this->Workshop->find('all', [
-            'conditions' => [
-                'Workshops.uid' => (int) $workshopUid
-            ]
+        $workshopFound = $this->Workshop->find('all', conditions: [
+            'Workshops.uid' => (int) $workshopUid
         ])->count();
         if (!$workshopFound) {
             throw new NotFoundException('workshop uid not correct');
@@ -213,11 +220,9 @@ class WidgetsController extends AppController
         $this->viewBuilder()->setLayout('widget');
 
         $this->Workshop = $this->getTableLocator()->get('Workshops');
-        $workshop = $this->Workshop->find('all', [
-            'conditions' => [
-                'Workshops.uid' => $workshopUid,
-                'Workshops.show_statistics > ' => $this->Workshop::STATISTICS_DISABLED,
-            ]
+        $workshop = $this->Workshop->find('all', conditions: [
+            'Workshops.uid' => $workshopUid,
+            'Workshops.show_statistics > ' => $this->Workshop::STATISTICS_DISABLED,
         ])->first();
         if (empty($workshop)) {
             throw new NotFoundException;
@@ -593,7 +598,9 @@ class WidgetsController extends AppController
 
             foreach($categoriesIds as $index => $categoryId) {
                 foreach($thirdPartyPreparedSums as $thirdPartyPreparedSum) {
+                    /* @phpstan-ignore-next-line */
                     $carbonFootprintSum += $this->Category->calculateCarbonFootprint($thirdPartyPreparedSum['repaired'], $categoriesCarbonFootprint[$index]);
+                    /* @phpstan-ignore-next-line */
                     $materialFootprintSum += $this->Category->calculateMaterialFootprint($thirdPartyPreparedSum['repaired'], $categoriesMaterialFootprint[$index]);
                     if ($categoryId == $thirdPartyPreparedSum['id']) {
                         @$categoriesDataRepaired[$index] += $thirdPartyPreparedSum['repaired'];

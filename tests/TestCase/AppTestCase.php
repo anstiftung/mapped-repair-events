@@ -6,7 +6,7 @@ use Cake\TestSuite\TestCase;
 class AppTestCase extends TestCase
 {
 
-    protected $fixtures = [
+    protected array $fixtures = [
         'app.BlockedWorkshopSlugs',
         'app.Blogs',
         'app.Brands',
@@ -48,7 +48,7 @@ class AppTestCase extends TestCase
 
                 $this->enableCsrfToken();
                 
-                if (!in_array($this->getName(), [
+                if (!in_array($this->toString(), [
                     'testAddEventsOk',
                 ])) {
                     $this->enableSecurityToken();

@@ -3,7 +3,6 @@ namespace App\Model\Table;
 
 use Cake\Core\Configure;
 use Cake\Datasource\FactoryLocator;
-use Cake\I18n\FrozenTime;
 use Cake\ORM\Table;
 
 class ThirdPartyStatisticsTable extends Table
@@ -20,8 +19,8 @@ class ThirdPartyStatisticsTable extends Table
     {
 
         $query = $this->find();
-        $dateFrom = new FrozenTime($dateFrom);
-        $dateTo = new FrozenTime($dateTo);
+        $dateFrom = new \Cake\I18n\DateTime($dateFrom);
+        $dateTo = new \Cake\I18n\DateTime($dateTo);
         $query->where(['ThirdPartyStatistics.date_from >= ' => $dateFrom]);
         $query->where(['ThirdPartyStatistics.date_to <= ' => $dateTo]);
         $query->select(
@@ -39,11 +38,11 @@ class ThirdPartyStatisticsTable extends Table
         $preparedSums = [];
         $this->Categories = FactoryLocator::get('Table')->get('Categories');
         foreach($sums as $sum) {
-            $category = $this->Categories->find('all', [
-                'conditions' => [
-                    'Categories.id' => $sum->category_id
+            $category = $this->Categories->find('all',
+                conditions: [
+                    'Categories.id' => $sum->category_id,
                 ]
-            ])->first();
+            )->first();
             if (in_array($category->parent_id, Configure::read('AppConfig.mainCategoryIdsWhereSubCategoriesAreShown'))) {
                 if (!isset($preparedSums[$category->id])) {
                     $preparedSums[$category->id] = 0;
@@ -64,11 +63,11 @@ class ThirdPartyStatisticsTable extends Table
         $preparedSums = [];
         $this->Categories = FactoryLocator::get('Table')->get('Categories');
         foreach($sums as $categoryId => $sum) {
-            $category = $this->Categories->find('all', [
-                'conditions' => [
-                    'Categories.id' => $categoryId
-                ]
-            ])->first();
+            $category = $this->Categories->find('all',
+                conditions: [
+                    'Categories.id' => $categoryId,
+                ],
+            )->first();
             $preparedSums[] = [
                 'name' => $category->name,
                 'id' => $category->id,

@@ -10,11 +10,9 @@ class CountriesTable extends Table
 
     public function getForDropdown()
     {
-        $countries = $this->find('all', [
-            'order' => [
-                'rank' => 'ASC',
-                'name_de' => 'ASC'
-            ]
+        $countries = $this->find('all', order: [
+            'rank' => 'ASC',
+            'name_de' => 'ASC'
         ]);
 
         $preparedCountries = [];

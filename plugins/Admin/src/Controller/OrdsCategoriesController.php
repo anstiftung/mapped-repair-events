@@ -2,10 +2,13 @@
 namespace Admin\Controller;
 
 use Cake\Http\Exception\NotFoundException;
+use App\Model\Table\OrdsCategoriesTable;
 
 class OrdsCategoriesController extends AdminAppController
 {
 
+    public OrdsCategoriesTable $OrdsCategory;
+    
     public function __construct($request = null, $response = null)
     {
         parent::__construct($request, $response);
@@ -32,11 +35,9 @@ class OrdsCategoriesController extends AdminAppController
             throw new NotFoundException;
         }
 
-        $ordsCategory = $this->OrdsCategory->find('all', [
-            'conditions' => [
-                'OrdsCategories.id' => $id,
-                'OrdsCategories.status >= ' . APP_DELETED
-            ]
+        $ordsCategory = $this->OrdsCategory->find('all', conditions: [
+            'OrdsCategories.id' => $id,
+            'OrdsCategories.status >= ' . APP_DELETED
         ])->first();
 
         if (empty($ordsCategory)) {
@@ -78,14 +79,13 @@ class OrdsCategoriesController extends AdminAppController
         ];
         $conditions = array_merge($this->conditions, $conditions);
 
-        $query = $this->OrdsCategory->find('all', [
-            'conditions' => $conditions,
-            'contain' => [
-                'OwnerUsers',
-            ],
-            'order' => [
-                'OrdsCategories.name' => 'ASC',
-            ]
+        $query = $this->OrdsCategory->find('all',
+        conditions: $conditions,
+        contain: [
+            'OwnerUsers',
+        ],
+        order: [
+            'OrdsCategories.name' => 'ASC',
         ]);
 
         $objects = $this->paginate($query);
@@ -96,7 +96,7 @@ class OrdsCategoriesController extends AdminAppController
             }
         }
 
-        $this->set('objects', $objects->toArray());
+        $this->set('objects', $objects);
 
         $metaTags = [
             'title' => 'ORDS-Kategorien'

@@ -2,9 +2,14 @@
 namespace Admin\Controller;
 
 use Cake\Http\Exception\NotFoundException;
+use App\Model\Table\CategoriesTable;
+use App\Model\Table\OrdsCategoriesTable;
 
 class CategoriesController extends AdminAppController
 {
+
+    public CategoriesTable $Category;
+    public OrdsCategoriesTable $OrdsCategory;
 
     public function __construct($request = null, $response = null)
     {
@@ -32,11 +37,9 @@ class CategoriesController extends AdminAppController
             throw new NotFoundException;
         }
 
-        $category = $this->Category->find('all', [
-            'conditions' => [
-                'Categories.id' => $id,
-                'Categories.status >= ' . APP_DELETED
-            ]
+        $category = $this->Category->find('all', conditions: [
+            'Categories.id' => $id,
+            'Categories.status >= ' . APP_DELETED
         ])->first();
 
         if (empty($category)) {
@@ -85,17 +88,16 @@ class CategoriesController extends AdminAppController
         ];
         $conditions = array_merge($this->conditions, $conditions);
 
-        $query = $this->Category->find('all', [
-            'conditions' => $conditions,
-            'contain' => [
-                'OwnerUsers',
-                'ParentCategories',
-                'OrdsCategories',
-            ],
-            'order' => [
-                'ParentCategories.name' => 'ASC',
-                'Categories.name' => 'ASC'
-            ]
+        $query = $this->Category->find('all',
+        conditions: $conditions,
+        contain: [
+            'OwnerUsers',
+            'ParentCategories',
+            'OrdsCategories',
+        ],
+        order: [
+            'ParentCategories.name' => 'ASC',
+            'Categories.name' => 'ASC'
         ]);
 
         $objects = $this->paginate($query);
@@ -106,7 +108,7 @@ class CategoriesController extends AdminAppController
             }
         }
 
-        $this->set('objects', $objects->toArray());
+        $this->set('objects', $objects);
 
         $metaTags = [
             'title' => 'Kategorien'

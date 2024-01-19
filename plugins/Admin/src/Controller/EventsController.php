@@ -1,11 +1,15 @@
 <?php
 namespace Admin\Controller;
 
-use Cake\Core\Configure;
 use Cake\Event\EventInterface;
+use App\Model\Table\EventsTable;
+use App\Model\Table\UsersTable;
 
 class EventsController extends AdminAppController
 {
+
+    public EventsTable $Event;
+    public UsersTable $User;
 
     public function __construct($request = null, $response = null)
     {
@@ -51,12 +55,11 @@ class EventsController extends AdminAppController
         ];
         $conditions = array_merge($this->conditions, $conditions);
 
-        $query = $this->Event->find('all', [
-            'conditions' => $conditions,
-            'contain' => [
-                'OwnerUsers',
-                'Workshops'
-            ]
+        $query = $this->Event->find('all',
+        conditions: $conditions,
+        contain: [
+            'OwnerUsers',
+            'Workshops'
         ]);
 
         $query = $this->addMatchingsToQuery($query);
@@ -71,7 +74,7 @@ class EventsController extends AdminAppController
                 $object->owner_user->revertPrivatizeData();
             }
         }
-        $this->set('objects', $objects->toArray());
+        $this->set('objects', $objects);
 
         $this->User = $this->getTableLocator()->get('Users');
         $this->set('users', $this->User->getForDropdown());

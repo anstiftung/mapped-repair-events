@@ -2,6 +2,12 @@
 namespace App\Controller;
 
 use App\Controller\Component\StringComponent;
+use App\Model\Table\BrandsTable;
+use App\Model\Table\CategoriesTable;
+use App\Model\Table\EventsTable;
+use App\Model\Table\FormFieldsTable;
+use App\Model\Table\InfoSheetsTable;
+use App\Model\Table\WorkshopsTable;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use Cake\Http\Exception\NotFoundException;
@@ -10,6 +16,13 @@ use League\Csv\Writer;
 class InfoSheetsController extends AppController
 {
 
+    public InfoSheetsTable $InfoSheet;
+    public EventsTable $Event;
+    public WorkshopsTable $Workshop;
+    public CategoriesTable $Category;
+    public BrandsTable $Brand;
+    public FormFieldsTable $FormField;
+    
     public function beforeFilter(EventInterface $event) {
 
         parent::beforeFilter($event);
@@ -28,8 +41,7 @@ class InfoSheetsController extends AppController
             $filename .= '-until-' . $date;
         }
 
-        $statement = $this->InfoSheet->getConnection()->prepare($query);
-        $statement->execute($params);
+        $statement = $this->InfoSheet->getConnection()->execute($query, $params);
         $records = $statement->fetchAll('assoc');
         if (empty($records)) {
             throw new NotFoundException('no repair data found');
@@ -45,18 +57,11 @@ class InfoSheetsController extends AppController
         }
         $writer->insertAll($records);
 
-        // force download
-        $this->RequestHandler->renderAs(
-            $this,
-            'csv',
-            [
-                'charset' => 'UTF-8'
-            ],
-        );
         $this->disableAutoRender();
 
         $response = $this->response;
         $response = $response->withStringBody($writer->toString());
+        $response = $response->withCharset('UTF-8');
         $response = $response->withDownload($filename . '.csv');
 
         return $response;
@@ -66,10 +71,8 @@ class InfoSheetsController extends AppController
     public function download($workshopUid, $year=null) {
 
         $this->Workshop = $this->getTableLocator()->get('Workshops');
-        $workshop = $this->Workshop->find('all', [
-            'conditions' => [
-                'Workshops.uid' => $workshopUid
-            ]
+        $workshop = $this->Workshop->find('all', conditions: [
+            'Workshops.uid' => $workshopUid
         ])->first();
 
         if (empty($workshop)) {
@@ -87,8 +90,7 @@ class InfoSheetsController extends AppController
             $filename .= '-' . $year;
         }
 
-        $statement = $this->InfoSheet->getConnection()->prepare($query);
-        $statement->execute($params);
+        $statement = $this->InfoSheet->getConnection()->execute($query, $params);
         $records = $statement->fetchAll('assoc');
         if (empty($records)) {
             throw new NotFoundException('info sheets not found');
@@ -103,18 +105,11 @@ class InfoSheetsController extends AppController
         $writer->insertOne(array_keys($records[0]));
         $writer->insertAll($records);
 
-        // force download
-        $this->RequestHandler->renderAs(
-            $this,
-            'csv',
-            [
-                'charset' => 'UTF-8'
-            ],
-        );
         $this->disableAutoRender();
 
         $response = $this->response;
         $response = $response->withStringBody($writer->toString());
+        $response = $response->withCharset('UTF-8');
         $response = $response->withDownload($filename . '.csv');
 
         return $response;
@@ -126,11 +121,9 @@ class InfoSheetsController extends AppController
             throw new NotFoundException;
         }
 
-        $infoSheet = $this->InfoSheet->find('all', [
-            'conditions' => [
-                'InfoSheets.uid' => $infoSheetUid,
-                'InfoSheets.status >= ' . APP_DELETED
-            ]
+        $infoSheet = $this->InfoSheet->find('all', conditions: [
+            'InfoSheets.uid' => $infoSheetUid,
+            'InfoSheets.status >= ' . APP_DELETED
         ])->first();
 
         if (empty($infoSheet)) {
@@ -162,13 +155,12 @@ class InfoSheetsController extends AppController
         $this->Event = $this->getTableLocator()->get('Events');
 
         $this->Event->getAssociation('Workshops')->setConditions(['Workshops.status > ' . APP_DELETED]);
-        $event = $this->Event->find('all', [
-            'conditions' => [
-                'Events.uid' => $eventUid
-            ],
-            'contain' => [
-                'Workshops'
-            ]
+        $event = $this->Event->find('all',
+        conditions: [
+            'Events.uid' => $eventUid
+        ],
+        contain: [
+            'Workshops'
         ]);
 
         $infoSheet = $this->InfoSheet->newEntity(
@@ -200,16 +192,15 @@ class InfoSheetsController extends AppController
             throw new NotFoundException;
         }
 
-        $infoSheet = $this->InfoSheet->find('all', [
-            'conditions' => [
-                'InfoSheets.uid' => $infoSheetUid,
-                'InfoSheets.status >= ' . APP_DELETED
-            ],
-            'contain' => [
-                'Events.Workshops',
-                'Categories',
-                'FormFieldOptions'
-            ]
+        $infoSheet = $this->InfoSheet->find('all',
+        conditions: [
+            'InfoSheets.uid' => $infoSheetUid,
+            'InfoSheets.status >= ' . APP_DELETED
+        ],
+        contain: [
+            'Events.Workshops',
+            'Categories',
+            'FormFieldOptions'
         ])->first();
 
         if (empty($infoSheet)) {
@@ -220,13 +211,13 @@ class InfoSheetsController extends AppController
         $this->set('metaTags', ['title' => 'Laufzettel bearbeiten']);
         $this->set('editFormUrl', Configure::read('AppConfig.htmlHelper')->urlInfoSheetEdit($infoSheet->uid));
 
-        $events = $this->InfoSheet->Events->find('all', [
-            'conditions' => [
+        $events = $this->InfoSheet->Events->find('all',
+            conditions: [
                 'Events.workshop_uid' => $infoSheet->event->workshop_uid,
                 'Events.status >' . APP_DELETED,
             ],
-            'order' => $this->InfoSheet->Events->getListOrder(),
-        ]);
+            order: $this->InfoSheet->Events->getListOrder(),
+        );
         $eventsForDropdown = [];
         foreach($events as $event) {
             $label = $event->datumstart->i18nFormat(Configure::read('DateFormat.de.DateLong2'));

@@ -6,9 +6,9 @@ use Cake\TestSuite\Fixture\TestFixture;
 
 class UsersCategoriesFixture extends TestFixture
 {
-    public $import = ['table' => 'users_categories', 'connection' => 'default'];
+    public $import = ['table' => 'users_categories'];
 
-    public $records = [
+    public array $records = [
         [
             'user_uid' => '2',
             'category_id' => '87',

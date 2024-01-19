@@ -2,8 +2,8 @@
 namespace App\Controller;
 
 use Cake\Core\Configure;
+use Cake\Datasource\FactoryLocator;
 use Cake\Event\EventInterface;
-use Cake\I18n\FrozenTime;
 use Cake\Mailer\Mailer;
 use Cake\Http\Exception\NotFoundException;
 use Eluceo\iCal\Domain\Entity\Calendar;
@@ -16,9 +16,15 @@ use Eluceo\iCal\Domain\ValueObject\Location;
 use Eluceo\iCal\Domain\ValueObject\TimeSpan;
 use Eluceo\iCal\Presentation\Factory\CalendarFactory;
 use InvalidArgumentException;
+use Cake\View\JsonView;
 
 class EventsController extends AppController
 {
+
+    public $Category;
+    public $Event;
+    public $Workshop;
+    public $Worknews;
 
     public function beforeFilter(EventInterface $event) {
 
@@ -32,6 +38,12 @@ class EventsController extends AppController
             'ical',
         ]);
 
+    }
+
+    public function initialize(): void
+    {
+        parent::initialize();
+        $this->addViewClasses([JsonView::class]);
     }
 
     public function ical()
@@ -51,14 +63,15 @@ class EventsController extends AppController
         }
         $filename .= '.' . $this->request->getParam('_ext');
 
-        $events = $this->Events->find('all', [
-            'conditions' => $conditions,
-            'contain' => [
+        $eventTable = FactoryLocator::get('Table')->get('Events');
+        $events = $eventTable->find('all',
+            conditions: $conditions,
+            contain: [
                 'Workshops',
                 'Categories',
             ],
-            'order' => $this->Event->getListOrder(),
-        ]);
+            order: $this->Event->getListOrder(),
+        );
 
         $icalEvents = [];
 
@@ -210,19 +223,14 @@ class EventsController extends AppController
     public function feed()
     {
 
-        if (! $this->RequestHandler->prefers('rss')) {
-            throw new NotFoundException('kein rss');
-        }
-
         $this->Event = $this->getTableLocator()->get('Events');
-        $events = $this->Event->find('all', [
-            'conditions' => $this->Event->getListConditions(),
-            'order' => [
-                'Events.datumstart' => 'ASC'
-            ],
-            'contain' => [
-                'Workshops'
-            ]
+        $events = $this->Event->find('all',
+        conditions: $this->Event->getListConditions(),
+        order: [
+            'Events.datumstart' => 'ASC'
+        ],
+        contain: [
+            'Workshops'
         ]);
 
         if ($events->count() == 0) {
@@ -239,16 +247,16 @@ class EventsController extends AppController
             throw new NotFoundException;
         }
 
-        $event = $this->Event->find('all', [
-            'conditions' => [
+        $event = $this->Event->find('all',
+            conditions: [
                 'Events.uid' => $eventUid,
                 'Events.status >= ' . APP_DELETED
             ],
-            'contain' => [
+            contain: [
                 'Categories',
                 'Workshops'
             ]
-        ])->first();
+        )->first();
 
         if (empty($event)) {
             throw new NotFoundException;
@@ -268,11 +276,9 @@ class EventsController extends AppController
             if ($originalEventStatus) {
                 // START notify subscribers
                 $this->Worknews = $this->getTableLocator()->get('Worknews');
-                $subscribers = $this->Worknews->find('all', [
-                    'conditions' => [
-                        'Worknews.workshop_uid' => $event->workshop_uid,
-                        'Worknews.confirm' => 'ok'
-                    ]
+                $subscribers = $this->Worknews->find('all', conditions: [
+                    'Worknews.workshop_uid' => $event->workshop_uid,
+                    'Worknews.confirm' => 'ok'
                 ]);
 
                 if (!empty($subscribers)) {
@@ -295,7 +301,7 @@ class EventsController extends AppController
             $this->AppFlash->setErrorMessage('Beim Löschen ist ein Fehler aufgetreten');
         }
 
-        $this->redirect($this->request->referer(false));
+        $this->redirect($this->referer());
 
     }
 
@@ -334,16 +340,16 @@ class EventsController extends AppController
     }
 
     public function duplicate($eventUid) {
-        $event = $this->Event->find('all', [
-            'conditions' => [
+        $event = $this->Event->find('all',
+            conditions: [
                 'Events.uid' => $eventUid,
                 'Events.status >= ' . APP_DELETED
             ],
-            'contain' => [
+            contain: [
                 'Categories',
                 'Workshops'
             ]
-        ])->first();
+        )->first();
 
         if (empty($event)) {
             throw new NotFoundException;
@@ -364,16 +370,16 @@ class EventsController extends AppController
             throw new NotFoundException;
         }
 
-        $event = $this->Event->find('all', [
-            'conditions' => [
+        $event = $this->Event->find('all',
+            conditions: [
                 'Events.uid' => $eventUid,
-                'Events.status >= ' . APP_DELETED
+                'Events.status >= ' . APP_DELETED,
             ],
-            'contain' => [
+            contain: [
                 'Categories',
-                'Workshops'
+                'Workshops',
             ]
-        ])->first();
+        )->first();
 
         if (empty($event)) {
             throw new NotFoundException;
@@ -422,15 +428,18 @@ class EventsController extends AppController
                 if (!is_array($data)) {
                     continue; // skip referer
                 }
+                if (!array_key_exists('datumstart', $data)) {
+                    continue; // skip metadata (fields / unlocked / debug)
+                }
                 $data = array_merge($this->request->getData()[0], $data);
                 if ($data['datumstart']) {
-                    $data['datumstart'] = new FrozenTime($data['datumstart']);
+                    $data['datumstart'] = new \Cake\I18n\DateTime($data['datumstart']);
                 }
                 if ($data['uhrzeitstart']) {
-                    $data['uhrzeitstart'] = new FrozenTime($data['uhrzeitstart']);
+                    $data['uhrzeitstart'] = new \Cake\I18n\DateTime($data['uhrzeitstart']);
                 }
                 if ($data['uhrzeitend']) {
-                    $data['uhrzeitend'] = new FrozenTime($data['uhrzeitend']);
+                    $data['uhrzeitend'] = new \Cake\I18n\DateTime($data['uhrzeitend']);
                 }
                 if (!$data['use_custom_coordinates']) {
                     $addressString = $data['strasse'] . ', ' . $data['zip'] . ' ' . $data['ort'] . ', ' . $data['land'];
@@ -496,22 +505,22 @@ class EventsController extends AppController
             throw new NotFoundException();
         }
 
-        $this->RequestHandler->renderAs($this, 'json');
+        $this->request = $this->request->withParam('_ext', 'json');
 
         $keyword = '';
         $conditions = $this->Event->getListConditions();
 
         $allParamsEmpty = empty($this->request->getQuery('keyword'));
 
-        $events = $this->Event->find('all', [
-            'conditions' => $conditions,
-            'fields' => $this->Event->getListFields(),
-            'order' => $this->Event->getListOrder(),
-            'contain' => [
+        $events = $this->Event->find('all',
+            conditions:  $conditions,
+            fields:  $this->Event->getListFields(),
+            order:  $this->Event->getListOrder(),
+            contain:  [
                 'Workshops',
                 'Categories'
             ]
-        ]);
+        );
         $events->distinct($this->Event->getListFields());
 
         if (!empty($this->request->getQuery('keyword'))) {
@@ -561,12 +570,13 @@ class EventsController extends AppController
         $conditions = $this->Event->getListConditions();
 
         // get count without any filters
-        $allEventsCount = $this->Events->find('all', [
-            'conditions' => $conditions,
-            'contain' => [
+        $eventTable = FactoryLocator::get('Table')->get('Events');
+        $allEventsCount = $eventTable->find('all',
+            conditions: $conditions,
+            contain:  [
                 'Workshops'
             ]
-        ])->count();
+        )->count();
         $this->set('allEventsCount', $allEventsCount);
 
         $timeRangeDefault = '30days';
@@ -588,6 +598,7 @@ class EventsController extends AppController
         $categories = $this->Category->getMainCategoriesForFrontend();
 
         $preparedCategories = [];
+        $categoryClass = '';
         foreach ($categories as $category) {
             
             // category is selected
@@ -617,7 +628,7 @@ class EventsController extends AppController
                 ]);
             }
 
-
+            /* @phpstan-ignore-next-line */
             $newUrl = 'categories=' . join(',', $categoryIdsForNewUrl);
             $newUrl = str_replace('categories=,', '&categories=', $newUrl);
 
@@ -648,9 +659,9 @@ class EventsController extends AppController
         }
         $this->set('preparedCategories', $preparedCategories);
 
-        $query = $this->Events->find('all', [
-            'conditions' => $conditions,
-        ]);
+        $query = $eventTable->find('all',
+            conditions: $conditions,
+        );
 
         $keyword = '';
         if (!empty($this->request->getQuery('keyword'))) {
@@ -696,9 +707,9 @@ class EventsController extends AppController
             $query->where(['Events.is_online_event' => 1]);
         }
 
-        $query->distinct($this->Events->getListFields());
-        $query->select($this->Events->getListFields());
-        $query->order($this->Events->getListOrder());
+        $query->distinct($eventTable->getListFields());
+        $query->select($eventTable->getListFields());
+        $query->order($eventTable->getListOrder());
         $query->contain([
             'Workshops',
             'Categories'

@@ -7,7 +7,7 @@ use Cake\I18n\FrozenDate;
 
 class UsersWorkshopsFixture extends TestFixture
 {
-    public $import = ['table' => 'users_workshops', 'connection' => 'default'];
+    public $import = ['table' => 'users_workshops'];
 
     public function init(): void
     {
@@ -15,7 +15,7 @@ class UsersWorkshopsFixture extends TestFixture
             [
                 'user_uid' => '1',
                 'workshop_uid' => '2',
-                'approved' => new FrozenDate('2019-09-19')
+                'approved' => new \Cake\I18n\Date('2019-09-19')
             ]
         ];
         parent::init();

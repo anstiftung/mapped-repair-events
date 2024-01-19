@@ -13,14 +13,14 @@ class GeoDataForUsers extends AbstractMigration
         $this->execute("ALTER TABLE `users` ADD `lat` DOUBLE NULL DEFAULT NULL AFTER `country_code`, ADD `lng` DOUBLE NULL DEFAULT NULL AFTER `lat`;");
 
         $um = FactoryLocator::get('Table')->get('Users');
-        $users = $um->find('all', [
-            'order' => [
+        $users = $um->find('all',
+            order: [
                 'Users.uid' => 'ASC',
             ],
-            'conditions' => [
+            conditions: [
                 'Users.city <> ""',
             ],
-        ]);
+        );
 
         foreach($users as $user) {
 

@@ -29,17 +29,16 @@ class OrdsCategoriesTable extends Table
     public function getForDropdown()
     {
 
-        $categories = $this->find('all', [
-            'conditions' => [
-                'OrdsCategories.status' => APP_ON,
-            ],
-            'fields' => [
-                'OrdsCategories.id',
-                'OrdsCategories.name'
-            ],
-            'order' => [
-                'LOWER(OrdsCategories.name)' => 'ASC'
-            ]
+        $categories = $this->find('all',
+        conditions: [
+            'OrdsCategories.status' => APP_ON,
+        ],
+        fields: [
+            'OrdsCategories.id',
+            'OrdsCategories.name'
+        ],
+        order: [
+            'LOWER(OrdsCategories.name)' => 'ASC'
         ]);
 
         $preparedCategories = [];

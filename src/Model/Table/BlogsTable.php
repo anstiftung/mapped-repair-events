@@ -18,10 +18,8 @@ class BlogsTable extends Table
 
     public function getForDropdown()
     {
-        $blogs = $this->find('all', [
-            'order' => [
-                'Blogs.name' => 'ASC'
-            ]
+        $blogs = $this->find('all', order: [
+            'Blogs.name' => 'ASC'
         ]);
 
         $preparedBlogs = [];

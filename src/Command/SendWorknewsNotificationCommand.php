@@ -20,16 +20,15 @@ class SendWorknewsNotificationCommand extends Command
         $this->Event = $this->getTableLocator()->get('Events');
 
         // find all events that start in one week
-        $events = $this->Event->find('all', [
-            'conditions' => [
-                'Events.status' => APP_ON,
-                'DATEDIFF(Events.datumstart, NOW()) = 7'
-            ],
-            'contain' => [
-                'Workshops' => [
-                    'conditions' => [
-                        'Workshops.status' => APP_ON,
-                    ]
+        $events = $this->Event->find('all',
+        conditions: [
+            'Events.status' => APP_ON,
+            'DATEDIFF(Events.datumstart, NOW()) = 7'
+        ],
+        contain: [
+            'Workshops' => [
+                'conditions' => [
+                    'Workshops.status' => APP_ON,
                 ]
             ]
         ]);

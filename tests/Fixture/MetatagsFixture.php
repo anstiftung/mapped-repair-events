@@ -6,6 +6,6 @@ use Cake\TestSuite\Fixture\TestFixture;
 
 class MetatagsFixture extends TestFixture
 {
-    public $import = ['table' => 'metatags', 'connection' => 'default'];
+    public $import = ['table' => 'metatags'];
 }
 ?>

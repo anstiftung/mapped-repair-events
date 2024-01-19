@@ -2,10 +2,13 @@
 namespace Admin\Controller;
 
 use Cake\Http\Exception\NotFoundException;
+use App\Model\Table\SkillsTable;
 
 class SkillsController extends AdminAppController
 {
 
+    public SkillsTable $Skill;
+    
     public function __construct($request = null, $response = null)
     {
         parent::__construct($request, $response);
@@ -32,11 +35,9 @@ class SkillsController extends AdminAppController
             throw new NotFoundException;
         }
 
-        $skill = $this->Skill->find('all', [
-            'conditions' => [
-                'Skills.id' => $id,
-                'Skills.status >= ' . APP_DELETED
-            ]
+        $skill = $this->Skill->find('all', conditions: [
+            'Skills.id' => $id,
+            'Skills.status >= ' . APP_DELETED
         ])->first();
 
         if (empty($skill)) {
@@ -78,14 +79,13 @@ class SkillsController extends AdminAppController
         ];
         $conditions = array_merge($this->conditions, $conditions);
 
-        $query = $this->Skill->find('all', [
-            'conditions' => $conditions,
-            'contain' => [
-                'OwnerUsers',
-            ],
-            'order' => [
-                'Skills.name' => 'ASC'
-            ]
+        $query = $this->Skill->find('all',
+        conditions: $conditions,
+        contain: [
+            'OwnerUsers',
+        ],
+        order: [
+            'Skills.name' => 'ASC'
         ]);
 
         $objects = $this->paginate($query);
@@ -96,7 +96,7 @@ class SkillsController extends AdminAppController
             }
         }
 
-        $this->set('objects', $objects->toArray());
+        $this->set('objects', $objects);
 
         $metaTags = [
             'title' => 'Kenntnisse'

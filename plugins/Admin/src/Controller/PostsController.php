@@ -4,12 +4,18 @@ namespace Admin\Controller;
 use App\Controller\Component\StringComponent;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
-use Cake\I18n\FrozenDate;
 use Cake\Http\Exception\NotFoundException;
+use App\Model\Table\PostsTable;
+use App\Model\Table\BlogsTable;
+use App\Model\Table\UsersTable;
 
 class PostsController extends AdminAppController
 {
 
+    public PostsTable $Post;
+    public BlogsTable $Blog;
+    public UsersTable $User;
+    
     public function __construct($request = null, $response = null)
     {
         parent::__construct($request, $response);
@@ -47,15 +53,14 @@ class PostsController extends AdminAppController
             throw new NotFoundException;
         }
 
-        $post = $this->Post->find('all', [
-            'conditions' => [
-                'Posts.uid' => $uid,
-                'Posts.status >= ' . APP_DELETED
-            ],
-            'contain' => [
-                'Photos',
-                'Metatags'
-            ]
+        $post = $this->Post->find('all',
+        conditions: [
+            'Posts.uid' => $uid,
+            'Posts.status >= ' . APP_DELETED
+        ],
+        contain: [
+            'Photos',
+            'Metatags'
         ])->first();
 
         $photos = array();
@@ -77,7 +82,7 @@ class PostsController extends AdminAppController
         if (!empty($this->request->getData())) {
 
             if ($this->request->getData('Posts.publish')) {
-                $this->request = $this->request->withData('Posts.publish', new FrozenDate($this->request->getData('Posts.publish')));
+                $this->request = $this->request->withData('Posts.publish', new \Cake\I18n\Date($this->request->getData('Posts.publish')));
             }
             $patchedEntity = $this->Post->getPatchedEntityForAdminEdit($post, $this->request->getData());
 
@@ -136,12 +141,11 @@ class PostsController extends AdminAppController
 
         $conditions = array_merge($this->conditions, $conditions);
 
-        $query = $this->Post->find('all', [
-            'conditions' => $conditions,
-            'contain' => [
-                'OwnerUsers',
-                'Blogs'
-            ]
+        $query = $this->Post->find('all',
+        conditions: $conditions,
+        contain: [
+            'OwnerUsers',
+            'Blogs'
         ]);
 
         $objects = $this->paginate($query, [
@@ -154,7 +158,7 @@ class PostsController extends AdminAppController
                 $object->owner_user->revertPrivatizeData();
             }
         }
-        $this->set('objects', $objects->toArray());
+        $this->set('objects', $objects);
         $this->set('blogs', $this->Blog->getForDropdown());
         $this->set('users', $this->User->getForDropdown());
     }

@@ -6,6 +6,6 @@ use Cake\TestSuite\Fixture\TestFixture;
 
 class BlockedWorkshopSlugsFixture extends TestFixture
 {
-    public $import = ['table' => 'blocked_workshop_slugs', 'connection' => 'default'];
+    public $import = ['table' => 'blocked_workshop_slugs'];
 }
 ?>

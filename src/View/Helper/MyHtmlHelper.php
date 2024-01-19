@@ -10,7 +10,6 @@ use App\Controller\Component\StringComponent;
 
 class MyHtmlHelper extends HtmlHelper {
 
-
     public function getHostWithoutProtocol($hostnameWithProtocol)
     {
         $parsedHostnameWithProtocol = (parse_url($hostnameWithProtocol));
@@ -70,6 +69,7 @@ class MyHtmlHelper extends HtmlHelper {
         $distanceToMoon =      380000;
         $circumferenceOfEarth = 40075;
 
+        $humanUnderstandableComparisonFactor = 0;
         if ($carbonFootprintSumInFlightKilometers >= $circumferenceOfEarth) {
             if ($carbonFootprintSumInFlightKilometers > $distanceToSun) {
                 $humanUnderstandableComparisonString = 'der mittleren Entfernung zur Sonne';

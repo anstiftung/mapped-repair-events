@@ -1,10 +1,15 @@
 <?php
 namespace Admin\Controller;
 
+use App\Model\Table\InfoSheetsTable;
 use Cake\Event\EventInterface;
+use App\Model\Table\UsersTable;
 
 class InfoSheetsController extends AdminAppController
 {
+
+    public InfoSheetsTable $InfoSheet;
+    public UsersTable $User;
 
     public function __construct($request = null, $response = null)
     {
@@ -39,15 +44,14 @@ class InfoSheetsController extends AdminAppController
         ];
         $conditions = array_merge($this->conditions, $conditions);
 
-        $query = $this->InfoSheet->find('all', [
-            'conditions' => $conditions,
-            'contain' => [
-                'OwnerUsers',
-                'Events',
-                'Events.Workshops',
-                'Brands',
-                'Categories.ParentCategories',
-            ]
+        $query = $this->InfoSheet->find('all',
+        conditions: $conditions,
+        contain: [
+            'OwnerUsers',
+            'Events',
+            'Events.Workshops',
+            'Brands',
+            'Categories.ParentCategories',
         ]);
 
         $objects = $this->paginate($query, [
@@ -60,7 +64,7 @@ class InfoSheetsController extends AdminAppController
             $object->owner_user->revertPrivatizeData();
         }
 
-        $this->set('objects', $objects->toArray());
+        $this->set('objects', $objects);
 
         $this->User = $this->getTableLocator()->get('Users');
         $this->set('users', $this->User->getForDropdown());

@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use Cake\Event\EventInterface;
+use Cake\View\JsonView;
 
 class DetectsController extends AppController
 {
@@ -14,9 +15,15 @@ class DetectsController extends AppController
         ]);
     }
 
+    public function initialize(): void
+    {
+        parent::initialize();
+        $this->addViewClasses([JsonView::class]);
+    }
+
     public function setIsMobile()
     {
-        $this->RequestHandler->renderAs($this, 'json');
+        $this->request = $this->request->withParam('_ext', 'json');
         $isMobile = $this->request->getData('width') < 768;
         $this->request->getSession()->write('isMobile', $isMobile);
         $this->set([

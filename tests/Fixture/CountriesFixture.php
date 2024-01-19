@@ -6,9 +6,9 @@ use Cake\TestSuite\Fixture\TestFixture;
 
 class CountriesFixture extends TestFixture
 {
-    public $import = ['table' => 'countries', 'connection' => 'default'];
+    public $import = ['table' => 'countries'];
 
-      public $records = [
+      public array $records = [
           [
               'code' => 'DE',
               'name_de' => 'Deutschland'

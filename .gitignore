@@ -32,3 +32,4 @@ nbproject/* # NetBeans
 /webroot/node_modules
 /.phpunit.result.cache
 /.history
+.phpunit.cache

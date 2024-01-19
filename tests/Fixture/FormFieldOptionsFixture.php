@@ -6,7 +6,7 @@ use Cake\TestSuite\Fixture\TestFixture;
 
 class FormFieldOptionsFixture extends TestFixture
 {
-    public $import = ['table' => 'form_field_options', 'connection' => 'default'];
+    public $import = ['table' => 'form_field_options'];
 
     public function init(): void
     {

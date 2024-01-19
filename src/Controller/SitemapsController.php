@@ -1,12 +1,19 @@
 <?php
 namespace App\Controller;
 
+use App\Model\Table\PagesTable;
+use App\Model\Table\PostsTable;
+use App\Model\Table\WorkshopsTable;
 use Cake\Event\EventInterface;
-use Cake\Http\Exception\NotFoundException;
+use Cake\View\XmlView;
 
 class SitemapsController extends AppController
 {
 
+    public WorkshopsTable $Workshop;
+    public PostsTable $Post;
+    public PagesTable $Page;
+    
     public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);
@@ -15,36 +22,32 @@ class SitemapsController extends AppController
         ]);
     }
 
+    public function initialize(): void
+    {
+        parent::initialize();
+        $this->addViewClasses([XmlView::class]);
+    }
+
     public function index()
     {
 
-        if (!$this->RequestHandler->prefers('xml')) {
-            throw new NotFoundException();
-        }
-
-        $this->RequestHandler->renderAs($this, 'xml');
+        $this->request = $this->request->withParam('_ext', 'xml');
 
         $this->Workshop = $this->getTableLocator()->get('Workshops');
-        $workshops = $this->Workshop->find('all', [
-            'conditions' => [
-                'Workshops.status' => APP_ON
-            ]
+        $workshops = $this->Workshop->find('all', conditions: [
+            'Workshops.status' => APP_ON
         ]);
         $this->set('workshops', $workshops);
 
         $this->Post = $this->getTableLocator()->get('Posts');
-        $posts = $this->Post->find('all', [
-            'conditions' => [
-                'Posts.status' => APP_ON
-            ]
+        $posts = $this->Post->find('all', conditions: [
+            'Posts.status' => APP_ON
         ]);
         $this->set('posts', $posts);
 
         $this->Page = $this->getTableLocator()->get('Pages');
-        $pages = $this->Page->find('all', [
-            'conditions' => [
-                'Pages.status' => APP_ON
-            ]
+        $pages = $this->Page->find('all', conditions: [
+            'Pages.status' => APP_ON
         ]);
         $this->set('pages', $pages);
 

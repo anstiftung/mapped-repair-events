@@ -1,13 +1,17 @@
 <?php
 namespace App\Controller;
 
+use App\Model\Table\PostsTable;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use Cake\Http\Exception\NotFoundException;
+use Cake\View\JsonView;
 
 class PostsController extends AppController
 {
 
+    public PostsTable $Post;
+    
     public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);
@@ -17,10 +21,15 @@ class PostsController extends AppController
         ]);
     }
 
+    public function initialize(): void
+    {
+        parent::initialize();
+        $this->addViewClasses([JsonView::class]);
+    }
+
     public function getSplitter()
     {
-        $this->RequestHandler->renderAs($this, 'json');
-
+        $this->request = $this->request->withParam('_ext', 'json');
         $dir = new \DirectoryIterator(WWW_ROOT . Configure::read('AppConfig.splitterPath'));
         $prefix = 'SPLiTTER';
         $result = [];
@@ -64,13 +73,12 @@ class PostsController extends AppController
             'Posts.status' => APP_ON
         ], $this->getPreviewConditions('Posts', $url));
 
-        $post = $this->Post->find('all', [
-            'conditions' => $conditions,
-            'contain' => [
-                'Blogs',
-                'Photos',
-                'Metatags'
-            ]
+        $post = $this->Post->find('all',
+        conditions: $conditions,
+        contain: [
+            'Blogs',
+            'Photos',
+            'Metatags'
         ])->first();
 
         if (empty($post))

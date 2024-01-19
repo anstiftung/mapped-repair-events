@@ -148,17 +148,16 @@ class WorkshopsTable extends AppTable
 
     public function getWorkshopsWithUsers($workshopStatus)
     {
-        $workshops = $this->find('all', [
-            'conditions' => [
-                'Workshops.status > ' . $workshopStatus
-            ],
-            'contain' => [
-                'Users',
-                'Users.Groups'
-            ],
-            'order' => [
-                'Workshops.name' => 'ASC'
-            ]
+        $workshops = $this->find('all',
+        conditions: [
+            'Workshops.status > ' . $workshopStatus
+        ],
+        contain: [
+            'Users',
+            'Users.Groups'
+        ],
+        order: [
+            'Workshops.name' => 'ASC'
         ]);
         foreach($workshops as $workshop) {
             foreach($workshop->users as $user) {
@@ -173,12 +172,12 @@ class WorkshopsTable extends AppTable
         $validator->add('url', 'addBlockedWorkshopSlugsValidationRule', [
             'rule' => function($value, $context) {
                 $bws = FactoryLocator::get('Table')->get('BlockedWorkshopSlugs');
-                $recordCount = $bws->find('all', [
-                    'conditions' => [
+                $recordCount = $bws->find('all',
+                    conditions: [
                         'status' => APP_ON,
-                        'url' => $value
+                        'url' => $value,
                     ],
-                ])->count();
+                )->count();
                 if ($recordCount == 0) {
                     return true;
                 }
@@ -229,15 +228,14 @@ class WorkshopsTable extends AppTable
         $usersAssociation->setConditions([
             'UsersWorkshops.approved <> \'1970-01-01 00:00:00\''
         ]);
-        $workshop = $this->find('all', [
-            'conditions' => [
-                'Workshops.uid' => $workshopUid,
-                'Workshops.status >= ' . APP_OFF
-            ],
-            'contain' => [
-                'Users',
-                'Users.Groups'
-            ]
+        $workshop = $this->find('all',
+        conditions: [
+            'Workshops.uid' => $workshopUid,
+            'Workshops.status >= ' . APP_OFF
+        ],
+        contain: [
+            'Users',
+            'Users.Groups'
         ])->first();
         return $workshop;
     }
@@ -250,7 +248,7 @@ class WorkshopsTable extends AppTable
         $orgaTeam = $this->getOrgaTeam($workshop);
         $userFound = false;
         foreach($orgaTeam as $orgaTeamUser) {
-            if ($user['uid'] == $orgaTeamUser->uid) {
+            if ($user->uid == $orgaTeamUser->uid) {
                 $userFound = true;
                 break;
             }
@@ -282,23 +280,22 @@ class WorkshopsTable extends AppTable
     }
 
     public function getLatestWorkshops() {
-        $workshops = $this->find('all', [
-            'fields' => [
-                'Workshops.uid',
-                'Workshops.name',
-                'Workshops.text',
-                'Workshops.url',
-                'Workshops.image',
-                'Workshops.city',
-                'Workshops.zip',
-                'Workshops.street'
-            ]
-            ,'limit' => 3
-            ,'order' => 'RAND()'
-            ,'conditions' => [
-                'Workshops.status' => APP_ON,
-                'Workshops.image != ' => ''
-            ]
+        $workshops = $this->find('all',
+        fields: [
+            'Workshops.uid',
+            'Workshops.name',
+            'Workshops.text',
+            'Workshops.url',
+            'Workshops.image',
+            'Workshops.city',
+            'Workshops.zip',
+            'Workshops.street'
+        ],
+        limit: 3,
+        order: 'RAND()',
+        conditions: [
+            'Workshops.status' => APP_ON,
+            'Workshops.image != ' => ''
         ]);
         return $workshops;
     }
@@ -315,14 +312,13 @@ class WorkshopsTable extends AppTable
             'user_uid' => $userUid,
             'approved <> ' => '1970-01-01 00:00'
         ]);
-        $workshop = $this->find('all', [
-            'conditions' => [
-                'Workshops.uid' => $workshopUid,
-                'Workshops.status > ' => APP_DELETED
-            ],
-            'contain' => [
-                'UsersWorkshops'
-            ]
+        $workshop = $this->find('all',
+        conditions: [
+            'Workshops.uid' => $workshopUid,
+            'Workshops.status > ' => APP_DELETED
+        ],
+        contain: [
+            'UsersWorkshops'
         ])->first();
 
         if (!empty($workshop->users_workshops)) {
@@ -334,14 +330,13 @@ class WorkshopsTable extends AppTable
 
     public function getForDropdown()
     {
-        $workshops = $this->find('all', [
-            'conditions' => [
-                'Workshops.name <> ""',
-                'Workshops.status' => APP_ON
-            ],
-            'order' => [
-                'Workshops.name' => 'ASC'
-            ]
+        $workshops = $this->find('all',
+        conditions: [
+            'Workshops.name <> ""',
+            'Workshops.status' => APP_ON
+        ],
+        order: [
+            'Workshops.name' => 'ASC'
         ]);
         $preparedWorkshops = [];
         foreach($workshops as $workshop) {

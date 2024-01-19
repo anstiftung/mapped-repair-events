@@ -6,11 +6,7 @@ use Cake\ORM\Entity;
 class Group extends Entity
 {
 
-    /**
-     * Fields that are excluded from JSON versions of the entity.
-     * @var array
-     */
-    protected $_hidden = [
+    protected array $_hidden = [
         '_joinData',
         'UsersGroups'
     ];

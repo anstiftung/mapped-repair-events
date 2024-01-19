@@ -4,13 +4,14 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 use Cake\Utility\Inflector;
 use Cake\Datasource\FactoryLocator;
-use Cake\Auth\DefaultPasswordHasher;
+use Authentication\PasswordHasher\DefaultPasswordHasher;
 use Authentication\IdentityInterface;
+use ArrayAccess;
 
 class User extends Entity implements IdentityInterface
 {
-
-    protected $_virtual = ['name'];
+    
+    protected array $_virtual = ['name'];
 
     public function __construct(array $properties = [], array $options = [])
     {
@@ -18,12 +19,12 @@ class User extends Entity implements IdentityInterface
         $this->privatizeData($this);
     }
 
-    public function getIdentifier()
+    public function getIdentifier(): array|string|int|null
     {
-        return $this->id;
+        return $this->get('uid');
     }
 
-    public function getOriginalData()
+    public function getOriginalData(): ArrayAccess|array
     {
         $this->revertPrivatizeData();
         return $this;
@@ -64,12 +65,13 @@ class User extends Entity implements IdentityInterface
 
         $pluralizedModelName = Inflector::pluralize($modelName);
         $objectTable = FactoryLocator::get('Table')->get($pluralizedModelName);
-        $object = $objectTable->find('all', [
-            'conditions' => [
-                $pluralizedModelName.'.owner' => $this->uid,
+        $object = $objectTable->find('all',
+            conditions: [
+                $pluralizedModelName.'.owner' => $this->get('uid'),
                 $pluralizedModelName.'.url' => $url,
                 $pluralizedModelName.'.status >= '.APP_DELETED,
-        ]]);
+            ],
+        );
 
         if ($object->count() == 1) {
             return true;
@@ -90,12 +92,13 @@ class User extends Entity implements IdentityInterface
         $pluralizedClass = Inflector::pluralize($objectClass);
         $objectTable = FactoryLocator::get('Table')->get($pluralizedClass);
 
-        $object = $objectTable->find('all', [
-            'conditions' => [
-                $pluralizedClass.'.owner' => $this->uid,
+        $object = $objectTable->find('all',
+            conditions: [
+                $pluralizedClass.'.owner' => $this->get('uid'),
                 $pluralizedClass.'.uid' => $uid,
                 $pluralizedClass.'.status >= '.APP_DELETED,
-        ]]);
+            ],
+        );
 
         if ($object->count() == 1) {
             return true;
@@ -147,11 +150,7 @@ class User extends Entity implements IdentityInterface
         }
     }
 
-    /**
-     * Fields that are excluded from JSON versions of the entity.
-     * @var array
-     */
-    protected $_hidden = [
+    protected array $_hidden = [
         'password',
         '_joinData',
         'UsersWorkshops'

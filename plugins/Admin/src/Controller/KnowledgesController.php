@@ -2,9 +2,16 @@
 namespace Admin\Controller;
 
 use Cake\Http\Exception\NotFoundException;
+use App\Model\Table\CategoriesTable;
+use App\Model\Table\KnowledgesTable;
+use App\Model\Table\SkillsTable;
 
 class KnowledgesController extends AdminAppController
 {
+
+    public CategoriesTable $Category;
+    public KnowledgesTable $Knowledge;
+    public SkillsTable $Skill;
 
     public function __construct($request = null, $response = null)
     {
@@ -30,15 +37,14 @@ class KnowledgesController extends AdminAppController
             throw new NotFoundException;
         }
 
-        $knowledge = $this->Knowledge->find('all', [
-            'conditions' => [
-                'Knowledges.uid' => $uid,
-                'Knowledges.status >= ' . APP_DELETED
-            ],
-            'contain' => [
-                'Categories',
-                'Skills',
-            ]
+        $knowledge = $this->Knowledge->find('all',
+        conditions: [
+            'Knowledges.uid' => $uid,
+            'Knowledges.status >= ' . APP_DELETED
+        ],
+        contain: [
+            'Categories',
+            'Skills',
         ])->first();
 
         if (empty($knowledge)) {
@@ -104,13 +110,12 @@ class KnowledgesController extends AdminAppController
         ];
         $conditions = array_merge($this->conditions, $conditions);
 
-        $query = $this->Knowledge->find('all', [
-            'conditions' => $conditions,
-            'contain' => [
-                'Categories',
-                'OwnerUsers',
-                'Skills',
-            ]
+        $query = $this->Knowledge->find('all',
+        conditions: $conditions,
+        contain: [
+            'Categories',
+            'OwnerUsers',
+            'Skills',
         ]);
 
         $objects = $this->paginate($query, [
@@ -123,7 +128,7 @@ class KnowledgesController extends AdminAppController
                 $object->owner_user->revertPrivatizeData();
             }
         }
-        $this->set('objects', $objects->toArray());
+        $this->set('objects', $objects);
 
         $metaTags = [
             'title' => 'Reparaturwissen'

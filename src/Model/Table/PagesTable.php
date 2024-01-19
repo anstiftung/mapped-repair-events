@@ -20,10 +20,8 @@ class PagesTable extends AppTable
 
     public function getPageByName($name)
     {
-        $page = $this->find('all', [
-            'conditions' => [
-                'Pages.name' => $name
-            ]
+        $page = $this->find('all', conditions: [
+            'Pages.name' => $name
         ])->first();
         return $page;
     }
@@ -47,7 +45,10 @@ class PagesTable extends AppTable
             }
             $this->flattenedArray[$item->uid] = $separator . $item->name . $statusString;
             if (! empty($item['children'])) {
-                $this->flattenNestedArrayWithChildren($item->children, str_repeat('-', $this->getLevel($item) + 1) . ' ');
+                $this->flattenNestedArrayWithChildren($item->children, str_repeat('-', 
+                /* @phpstan-ignore-next-line */
+                $this->getLevel($item) + 1)
+                 . ' ');
             }
         }
 
@@ -56,14 +57,13 @@ class PagesTable extends AppTable
 
     public function getThreaded($conditions = [])
     {
-        $pages = $this->find('threaded', [
-            'parentField' => 'parent_uid',
-            'conditions' => $conditions,
-            'order' => [
-                'Pages.menu_type' => 'DESC',
-                'Pages.position' => 'ASC',
-                'Pages.name' => 'ASC'
-            ]
+        $pages = $this->find('threaded',
+        parentField: 'parent_uid',
+        conditions: $conditions,
+        order: [
+            'Pages.menu_type' => 'DESC',
+            'Pages.position' => 'ASC',
+            'Pages.name' => 'ASC'
         ]);
         return $pages;
     }

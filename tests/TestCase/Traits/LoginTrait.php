@@ -11,14 +11,14 @@ trait LoginTrait
     {
         $userEmail = 'johndoe@mailinator.com';
         $this->User = FactoryLocator::get('Table')->get('Users');
-        $user = $this->User->find('all', [
-            'conditions' => [
+        $user = $this->User->find('all',
+            conditions: [
                 'Users.email' => $userEmail,
             ],
-            'contain' => [
+            contain: [
                 'Groups',
             ]
-        ])->first();
+        )->first();
         $user->revertPrivatizeData();
         $this->session(['Auth' => $user]);
     }
@@ -27,14 +27,14 @@ trait LoginTrait
     {
         $userEmail = 'admin@mailinator.com';
         $this->User = FactoryLocator::get('Table')->get('Users');
-        $user = $this->User->find('all', [
-            'conditions' => [
+        $user = $this->User->find('all',
+            conditions: [
                 'Users.email' => $userEmail,
             ],
-            'contain' => [
+            contain: [
                 'Groups',
             ]
-        ])->first();
+        )->first();
         $user->revertPrivatizeData();
         $this->session(['Auth' => $user]);
     }
@@ -43,14 +43,14 @@ trait LoginTrait
     {
         $userEmail = 'maxmuster@mailinator.com';
         $this->User = FactoryLocator::get('Table')->get('Users');
-        $user = $this->User->find('all', [
-            'conditions' => [
+        $user = $this->User->find('all',
+            conditions: [
                 'Users.email' => $userEmail,
             ],
-            'contain' => [
+            contain: [
                 'Groups',
             ]
-        ])->first();
+        )->first();
         $user->revertPrivatizeData();
         $this->session(['Auth' => $user]);
     }

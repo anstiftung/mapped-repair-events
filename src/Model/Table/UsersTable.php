@@ -9,10 +9,9 @@ use Cake\ORM\RulesChecker;
 use Cake\Event\EventInterface;
 use Cake\Validation\Validator;
 use Cake\Datasource\FactoryLocator;
-use Cake\Auth\DefaultPasswordHasher;
+use Authentication\PasswordHasher\DefaultPasswordHasher;
 use Cake\Datasource\EntityInterface;
 use App\Model\Rule\UserLinkToWorkshopRule;
-use App\Model\Rule\UserIsWorkshopOwnerRule;
 use App\Controller\Component\StringComponent;
 
 class UsersTable extends AppTable
@@ -89,12 +88,12 @@ class UsersTable extends AppTable
 
         // 1. set owner to 0 for all deleted workshops where to-be-deleted user was owner
         $workshopTable = FactoryLocator::get('Table')->get('Workshops');
-        $deletedOwnerWorkshops = $workshopTable->find('all', [
-            'conditions' => [
-                'Workshops.owner' =>$userUid,
+        $deletedOwnerWorkshops = $workshopTable->find('all',
+            conditions: [
+                'Workshops.owner' => $userUid,
                 'Workshops.status' => APP_DELETED,
             ],
-        ])->toArray();
+        )->toArray();
 
         if (!empty($deletedOwnerWorkshops)) {
             $workshopTable->updateAll([
@@ -105,12 +104,12 @@ class UsersTable extends AppTable
         }
 
         // 2. set owner to admin-user for all non-deleted workshops where to-be-deleted user was owner
-        $nonDeletedOwnerWorkshops = $workshopTable->find('all', [
-            'conditions' => [
+        $nonDeletedOwnerWorkshops = $workshopTable->find('all',
+            conditions: [
                 'Workshops.owner' =>$userUid,
                 'Workshops.status > ' . APP_DELETED,
             ],
-        ])->toArray();
+        )->toArray();
 
         if (!empty($nonDeletedOwnerWorkshops)) {
             $workshopTable->updateAll([
@@ -174,13 +173,12 @@ class UsersTable extends AppTable
                 if (is_array($context['data']['groups']['_ids']) && in_array(GROUPS_ORGA, $context['data']['groups']['_ids'])) {
                     return true;
                 } else {
-                    $user = $this->find('all', [
-                        'conditions' => [
-                            'Users.uid' => $context['data']['uid']
-                        ],
-                        'contain' => [
-                            'Groups'
-                        ]
+                    $user = $this->find('all',
+                    conditions: [
+                        'Users.uid' => $context['data']['uid']
+                    ],
+                    contain: [
+                        'Groups'
                     ])->first();
                     $groupsTable = FactoryLocator::get('Table')->get('Groups');
                     if (!$groupsTable->isOrga($user)) {
@@ -316,10 +314,8 @@ class UsersTable extends AppTable
         $validator->email('email', false, 'Die E-Mail-Adresse ist ungültig.');
         $validator->add('email', 'userWithEmailExists', [
             'rule' => function ($value, $context) {
-                $user = $this->find('all', [
-                    'conditions' => [
-                        'Users.email' => $value
-                    ]
+                $user = $this->find('all', conditions: [
+                    'Users.email' => $value
                 ])
                     ->first();
                 return ! empty($user);
@@ -335,10 +331,8 @@ class UsersTable extends AppTable
         $validator->add('password', 'oldPasswordCheck', [
             'rule' => function ($value, $context) {
                 $loggedUserUid = Router::getRequest()?->getAttribute('identity')?->uid;
-                $loggedUser = $this->find('all', [
-                   'conditions' => [
-                       'Users.uid' => $loggedUserUid,
-                   ]
+                $loggedUser = $this->find('all', conditions: [
+                    'Users.uid' => $loggedUserUid,
                 ])->first();
                 return (new DefaultPasswordHasher)->check($value, $loggedUser->password);
             },
@@ -410,14 +404,13 @@ class UsersTable extends AppTable
 
     public function getForDropdown()
     {
-        $users = $this->find('all', [
-            'conditions' => [
-                'Users.status > ' . APP_DELETED,
-            ],
-            'order' => [
-                'firstname' => 'ASC',
-                'lastname' => 'ASC'
-            ],
+        $users = $this->find('all',
+        conditions: [
+            'Users.status > ' . APP_DELETED,
+        ],
+        order: [
+            'firstname' => 'ASC',
+            'lastname' => 'ASC'
         ]);
 
         $preparedUsers = [];
@@ -432,10 +425,8 @@ class UsersTable extends AppTable
     public function setNewPassword($userUid)
     {
         $newPassword = StringComponent::createPassword();
-        $user = $this->get($userUid, [
-            'conditions' => [
-                'Users.status >= ' . APP_DELETED
-            ]
+        $user = $this->get($userUid, conditions: [
+            'Users.status >= ' . APP_DELETED
         ]);
         $user->revertPrivatizeData();
         $data = ['password' => $newPassword];
@@ -449,13 +440,12 @@ class UsersTable extends AppTable
      */
     public function isUserPassword($uid, $hashedPassword)
     {
-        $user = $this->find('all', [
-            'conditions' => [
-                'Users.uid' => $uid
-            ],
-            'fields' => [
-                'Users.password'
-            ]
+        $user = $this->find('all',
+        conditions: [
+            'Users.uid' => $uid
+        ],
+        fields: [
+            'Users.password'
         ])->first();
 
         if ($hashedPassword == $user->password) {

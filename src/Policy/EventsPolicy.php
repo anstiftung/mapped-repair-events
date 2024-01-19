@@ -6,6 +6,7 @@ namespace App\Policy;
 use Cake\Http\ServerRequest;
 use Cake\Datasource\FactoryLocator;
 use Authorization\Policy\RequestPolicyInterface;
+use Authorization\Policy\ResultInterface;
 
 class EventsPolicy implements RequestPolicyInterface
 {
@@ -13,7 +14,7 @@ class EventsPolicy implements RequestPolicyInterface
     protected $Event;
     protected $Workshop;
 
-    public function canAccess($identity, ServerRequest $request)
+    public function canAccess($identity, ServerRequest $request): bool|ResultInterface
     {
 
         if ($request->getParam('action') == 'myEvents') {
@@ -58,12 +59,12 @@ class EventsPolicy implements RequestPolicyInterface
             $eventUid = (int) $request->getParam('pass')[0];
 
             $this->Event = FactoryLocator::get('Table')->get('Events');
-            $event = $this->Event->find('all', [
-                'conditions' => [
+            $event = $this->Event->find('all',
+                conditions: [
                     'Events.uid' => $eventUid,
-                    'Events.status > ' . APP_DELETED
+                    'Events.status > ' . APP_DELETED,
                 ]
-            ])->first();
+            )->first();
             $workshopUid = $event->workshop_uid;
 
             if ($request->getParam('action') == 'edit' && $event->datumstart->isPast()) {

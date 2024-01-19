@@ -8,11 +8,11 @@ $objectForEditableCheck = $data;
 if (isset($checkOriginalStatus) && $checkOriginalStatus && $data->uid) {
 
     $objectClass = FactoryLocator::get('Table')->get($type);
-    $entity = $objectClass->get($data->uid, [
-        'conditions' => [
+    $entity = $objectClass->get($data->uid,
+        conditions:  [
             $type.'.status >= ' . APP_DELETED
         ]
-    ]);
+    );
     $objectForEditableCheck = $entity;
 }
 

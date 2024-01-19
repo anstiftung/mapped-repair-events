@@ -2,12 +2,14 @@
 
 namespace App\Controller;
 
+use App\Model\Table\WorknewsTable;
 use Cake\Event\EventInterface;
-use Cake\I18n\FrozenTime;
 use Cake\Http\Exception\NotFoundException;
 
 class WorknewsController extends AppController {
 
+    public WorknewsTable $Worknews;
+    
     public function beforeFilter(EventInterface $event) {
 
         parent::beforeFilter($event);
@@ -25,14 +27,13 @@ class WorknewsController extends AppController {
         }
 
         $this->Worknews = $this->getTableLocator()->get('Worknews');
-        $worknews = $this->Worknews->find('all', [
-            'conditions' => [
-                'Worknews.confirm' => $this->request->getParam('pass')['0'],
-                'Worknews.confirm != \'ok\''
-            ],
-            'contain' => [
-                'Workshops'
-            ]
+        $worknews = $this->Worknews->find('all',
+        conditions: [
+            'Worknews.confirm' => $this->request->getParam('pass')['0'],
+            'Worknews.confirm != \'ok\''
+        ],
+        contain: [
+            'Workshops'
         ])->first();
 
         if (empty($worknews)) {
@@ -46,7 +47,7 @@ class WorknewsController extends AppController {
                 $this->Worknews->get($worknews->id),
                 [
                     'confirm' => 'ok',
-                    'modified' => FrozenTime::now()
+                    'modified' => \Cake\I18n\DateTime::now()
                 ]
             )
         );
@@ -63,13 +64,12 @@ class WorknewsController extends AppController {
         }
 
         $this->Worknews = $this->getTableLocator()->get('Worknews');
-        $worknews = $this->Worknews->find('all', [
-            'conditions' => [
-                'Worknews.unsub' => $this->request->getParam('pass')['0'],
-            ],
-            'contain' => [
-                'Workshops',
-            ]
+        $worknews = $this->Worknews->find('all',
+        conditions: [
+            'Worknews.unsub' => $this->request->getParam('pass')['0'],
+        ],
+        contain: [
+            'Workshops',
         ])->first();
 
         if (empty($worknews)) {

@@ -72,15 +72,14 @@ class InfoSheetsControllerTest extends AppTestCase
         $this->assertResponseNotContains('error');
 
         $this->InfoSheet = $this->getTableLocator()->get('InfoSheets');
-        $infoSheets = $this->InfoSheet->find('all', [
-            'contain' => [
-                'Events.Workshops',
-                'Categories',
-                'FormFieldOptions'
-            ],
-            'order' => [
-                'InfoSheets.uid' => 'DESC',
-            ]
+        $infoSheets = $this->InfoSheet->find('all',
+        contain: [
+            'Events.Workshops',
+            'Categories',
+            'FormFieldOptions'
+        ],
+        order: [
+            'InfoSheets.uid' => 'DESC',
         ])->toArray();
         $this->assertEquals(2, count($infoSheets));
         $this->assertEquals($infoSheets[0]->device_name, $this->newInfoSheetData['device_name']);
@@ -95,10 +94,8 @@ class InfoSheetsControllerTest extends AppTestCase
         $this->assertFlashMessage('Der Laufzettel wurde erfolgreich gelöscht.');
 
         $this->InfoSheet = $this->getTableLocator()->get('InfoSheets');
-        $infoSheet = $this->InfoSheet->find('all', [
-            'conditions' => [
-                'InfoSheets.uid' => 7
-            ]
+        $infoSheet = $this->InfoSheet->find('all', conditions: [
+            'InfoSheets.uid' => 7
         ])->first();
         $this->assertEquals($infoSheet->status, APP_DELETED);
     }

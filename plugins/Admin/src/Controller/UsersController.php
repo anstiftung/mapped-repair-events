@@ -2,10 +2,19 @@
 namespace Admin\Controller;
 
 use Cake\Event\EventInterface;
+use App\Model\Table\UsersTable;
+use App\Model\Table\WorkshopsTable;
+use App\Model\Table\GroupsTable;
+use App\Model\Table\CountriesTable;
 
 class UsersController extends AdminAppController
 {
 
+    public UsersTable $User;
+    public WorkshopsTable $Workshop;
+    public CountriesTable $Country;
+    public GroupsTable $Group;
+    
     public $searchName = false;
 
     public $searchText = false;
@@ -64,22 +73,21 @@ class UsersController extends AdminAppController
         ];
         $conditions = array_merge($this->conditions, $conditions);
 
-        $query = $this->User->find('all', [
-            'conditions' => $conditions,
-            'contain' => [
-                'OwnerUsers',
-                'Groups',
-                'Workshops' => [
-                    'fields' => [
-                        'Workshops.name',
-                        'UsersWorkshops.user_uid',
-                    ],
-                    'conditions' => [
-                        'Workshops.status > ' . APP_DELETED,
-                    ]
+        $query = $this->User->find('all',
+        conditions: $conditions,
+        contain: [
+            'OwnerUsers',
+            'Groups',
+            'Workshops' => [
+                'fields' => [
+                    'Workshops.name',
+                    'UsersWorkshops.user_uid',
                 ],
-                'OwnerWorkshops',
-            ]
+                'conditions' => [
+                    'Workshops.status > ' . APP_DELETED,
+                ]
+            ],
+            'OwnerWorkshops',
         ]);
 
         $query = $this->addMatchingsToQuery($query);
@@ -92,7 +100,7 @@ class UsersController extends AdminAppController
         foreach($objects->toArray() as &$object) {
             $object->revertPrivatizeData();
         }
-        $this->set('objects', $objects->toArray());
+        $this->set('objects', $objects);
 
         $this->Workshop = $this->getTableLocator()->get('Workshops');
         $this->set('workshops', $this->Workshop->getForDropdown());

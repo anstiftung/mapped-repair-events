@@ -27,6 +27,7 @@ if (!isset($hideDeleteLink) || !$hideDeleteLink) {
         if (! isset($heading)) {
             $heading = ucfirst($this->request->getParam('controller'));
         }
+        $this->Paginator->setPaginated($objects);
         $paginatorParams = $this->Paginator->params();
         $heading .= $count = ' (' . $this->Number->precision($paginatorParams['count'], 0) . ')';
         echo $this->element('heading', [
@@ -57,6 +58,7 @@ if (!isset($hideDeleteLink) || !$hideDeleteLink) {
         ?>
 
     <?php
+    $objects = $objects->toArray();
      if (isset($objects[0]) && isset($objects[0]['email'])) {
          $rawEmails = Hash::extract($objects, '{n}.email');
          $emails = [];

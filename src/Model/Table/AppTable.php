@@ -19,6 +19,7 @@ abstract class AppTable extends Table
 
     public function initialize(array $config): void
     {
+
         $this->setPrimaryKey('uid');
 
         $this->addBehavior('Timestamp', [

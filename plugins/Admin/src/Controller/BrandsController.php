@@ -2,10 +2,13 @@
 namespace Admin\Controller;
 
 use Cake\Http\Exception\NotFoundException;
+use App\Model\Table\BrandsTable;
 
 class BrandsController extends AdminAppController
 {
 
+    public BrandsTable $Brand;
+    
     public function __construct($request = null, $response = null)
     {
         parent::__construct($request, $response);
@@ -32,11 +35,9 @@ class BrandsController extends AdminAppController
             throw new NotFoundException;
         }
 
-        $brand = $this->Brand->find('all', [
-            'conditions' => [
-                'Brands.id' => $id,
-                'Brands.status >= ' . APP_DELETED
-            ]
+        $brand = $this->Brand->find('all', conditions: [
+            'Brands.id' => $id,
+            'Brands.status >= ' . APP_DELETED
         ])->first();
 
         if (empty($brand)) {
@@ -78,11 +79,10 @@ class BrandsController extends AdminAppController
         ];
         $conditions = array_merge($this->conditions, $conditions);
 
-        $query = $this->Brand->find('all', [
-            'conditions' => $conditions,
-            'contain' => [
-                'OwnerUsers'
-            ]
+        $query = $this->Brand->find('all',
+        conditions: $conditions,
+        contain: [
+            'OwnerUsers'
         ]);
         $objects = $this->paginate($query, [
             'order' => [
@@ -96,7 +96,7 @@ class BrandsController extends AdminAppController
             }
         }
 
-        $this->set('objects', $objects->toArray());
+        $this->set('objects', $objects);
 
         $metaTags = [
             'title' => 'Marken'

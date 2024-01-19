@@ -3,10 +3,9 @@
 namespace App\Model\Table;
 
 use Cake\Core\Configure;
-use Cake\I18n\FrozenTime;
-use Cake\ORM\Query;
 use Cake\Validation\Validator;
 use App\Model\Traits\SearchExceptionsTrait;
+use Cake\ORM\Query\SelectQuery;
 
 class EventsTable extends AppTable
 {
@@ -88,13 +87,14 @@ class EventsTable extends AppTable
 
     public function getTimeRangeCondition($timeRange, $negate) {
         return function ($exp, $query) use ($timeRange, $negate) {
+            $days = 0;
             if ($timeRange == '30days') {
                 $days = 30;
             }
             if ($timeRange == '90days') {
                 $days = 90;
             }
-            $now = new FrozenTime();
+            $now = new \Cake\I18n\DateTime();
             $maxDate = $now->addDays($days);
             $result = $exp->lte('Events.datumstart', $maxDate, 'date');
             if ($negate) {
@@ -143,7 +143,7 @@ class EventsTable extends AppTable
         ];
     }
 
-    public function findAll(Query $query, array $options): Query
+    public function findAll(SelectQuery $query): SelectQuery
     {
         return $query->formatResults(function (\Cake\Collection\CollectionInterface $results) {
 

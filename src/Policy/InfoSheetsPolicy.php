@@ -7,6 +7,7 @@ use Cake\Core\Configure;
 use Cake\Http\ServerRequest;
 use Cake\Datasource\FactoryLocator;
 use Authorization\Policy\RequestPolicyInterface;
+use Authorization\Policy\ResultInterface;
 
 class InfoSheetsPolicy implements RequestPolicyInterface
 {
@@ -14,7 +15,7 @@ class InfoSheetsPolicy implements RequestPolicyInterface
     protected $InfoSheet;
     protected $Workshop;
 
-    public function canAccess($identity, ServerRequest $request)
+    public function canAccess($identity, ServerRequest $request): bool|ResultInterface
     {
 
         if (!Configure::read('AppConfig.statisticsEnabled')) {
@@ -57,15 +58,15 @@ class InfoSheetsPolicy implements RequestPolicyInterface
             // orgas are allowed to edit and delete only info sheets of associated workshops
             if ($identity->isOrga()) {
 
-                $infoSheet = $this->InfoSheet->find('all', [
-                    'conditions' => [
+                $infoSheet = $this->InfoSheet->find('all',
+                    conditions: [
                         'InfoSheets.uid' => $infoSheetUid,
-                        'InfoSheets.status > ' . APP_DELETED
+                        'InfoSheets.status > ' . APP_DELETED,
                     ],
-                    'contain' => [
-                        'Events'
-                    ]
-                ])->first();
+                    contain: [
+                        'Events',
+                    ],
+                )->first();
 
                 $workshopUid = $infoSheet->event->workshop_uid;
                 $this->Workshop = FactoryLocator::get('Table')->get('Workshops');
@@ -78,13 +79,13 @@ class InfoSheetsPolicy implements RequestPolicyInterface
 
             // repairhelpers are allowed to edit and delete only own info sheets
             if ($identity->isRepairhelper()) {
-                $infoSheet = $this->InfoSheet->find('all', [
-                    'conditions' => [
+                $infoSheet = $this->InfoSheet->find('all',
+                    conditions: [
                         'InfoSheets.uid' => $infoSheetUid,
                         'InfoSheets.owner' => $identity !== null ? $identity->uid : 0,
-                        'InfoSheets.status > ' . APP_DELETED
+                        'InfoSheets.status > ' . APP_DELETED,
                     ]
-                ])->first();
+                )->first();
                 if (!empty($infoSheet)) {
                     return true;
                 }
