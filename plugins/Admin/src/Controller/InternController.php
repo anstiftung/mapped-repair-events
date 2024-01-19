@@ -3,6 +3,7 @@
 namespace Admin\Controller;
 
 use App\Controller\Component\StringComponent;
+use App\Model\Table\InfoSheetsTable;
 use App\Model\Table\PhotosTable;
 use App\Model\Table\UsersTable;
 use Cake\Core\Configure;
@@ -10,12 +11,21 @@ use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
 use Cake\Event\EventInterface;
 use Intervention\Image\ImageManagerStatic as Image;
+use App\Model\Table\PostsTable;
+use App\Model\Table\WorkshopsTable;
+use App\Model\Table\EventsTable;
+use App\Model\Table\KnowledgesTable;
 
 class InternController extends AdminAppController
 {
 
+    public EventsTable $Event;
+    public InfoSheetsTable $InfoSheet;
+    public KnowledgesTable $Knowledge;
     public PhotosTable $Photo;
+    public PostsTable $Post;
     public UsersTable $User;
+    public WorkshopsTable $Workshop;
 
     public function beforeFilter(EventInterface $event)
     {
