@@ -10,7 +10,8 @@ use Cake\Core\Configure;
 use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
 use Cake\Event\EventInterface;
-use Intervention\Image\ImageManagerStatic as Image;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
 use App\Model\Table\PostsTable;
 use App\Model\Table\WorkshopsTable;
 use App\Model\Table\EventsTable;
@@ -93,8 +94,10 @@ class InternController extends AdminAppController
         $filename = StringComponent::createRandomString(10) . '.' . $extension;
         $filenameWithPath = Configure::read('AppConfig.tmpUploadImagesDir') . '/' . $filename;
         $upload->moveTo(WWW_ROOT . $filenameWithPath);
-        Image::make(WWW_ROOT . $filenameWithPath)
-            ->widen(Configure::read('AppConfig.tmpUploadFileSize'))
+
+        $manager = new ImageManager(new Driver());
+        $manager->read(WWW_ROOT . $filenameWithPath)
+            ->scale(Configure::read('AppConfig.tmpUploadFileSize'))
             ->save(WWW_ROOT . $filenameWithPath);
 
         die(json_encode([
@@ -141,7 +144,8 @@ class InternController extends AdminAppController
             )));
         }
 
-        Image::make($uploadedFile)
+        $manager = new ImageManager(new Driver());
+        $manager->read($uploadedFile)
             ->rotate($directionInDegrees)
             ->save($uploadedFile);
 
@@ -172,6 +176,8 @@ class InternController extends AdminAppController
             'Photos.object_type' => $objectType
         ])->toArray();
 
+        $manager = new ImageManager(new Driver());
+
         foreach ($files as $file) {
 
             $filename = $file['filename'];
@@ -198,8 +204,8 @@ class InternController extends AdminAppController
                 $thumbsFileName = Configure::read('AppConfig.htmlHelper')->$thumbMethod($fileNamePlain);
                 $targetFileAbsolute = str_replace('//', '/', $_SERVER['DOCUMENT_ROOT'] . $thumbsFileName);
 
-                Image::make($_SERVER['DOCUMENT_ROOT'] . $filename)
-                    ->widen($thumbSize)
+                $manager->read($_SERVER['DOCUMENT_ROOT'] . $filename)
+                    ->scale($thumbSize)
                     ->save($targetFileAbsolute);
 
             } // END thumbSizes
@@ -242,6 +248,7 @@ class InternController extends AdminAppController
         $fileNamePlain = $uid . '.' . $extension;
 
         /* START thumbs erstellen */
+        $manager = new ImageManager(new Driver());
         $thumbSizes = Configure::read('AppConfig.thumbSizes');
         foreach ($thumbSizes as $thumbSize => $thumbSizeOptions) {
 
@@ -249,14 +256,14 @@ class InternController extends AdminAppController
             $thumbsFileName = Configure::read('AppConfig.htmlHelper')->$thumbMethod($fileNamePlain, $objectType);
 
             $targetFileAbsolute = str_replace('//', '/', $_SERVER['DOCUMENT_ROOT'] . $thumbsFileName);
-            $image = Image::make($_SERVER['DOCUMENT_ROOT'] . $filename);
+            $image = $manager->read($_SERVER['DOCUMENT_ROOT'] . $filename);
 
             // only users have square 150 image!
             if (isset($thumbSizeOptions['square']) && $thumbSizeOptions['square'] == 1 && preg_match('/users/', $targetFileAbsolute)) {
-                $image->fit($thumbSize);
+                $image->scale($thumbSize)->crop($thumbSize, $thumbSize, 0, 0, 'center');
             } else {
                 if ($thumbSize != 'original') {
-                    $image->widen($thumbSize);
+                    $image->scale($thumbSize);
                 }
             }
 
