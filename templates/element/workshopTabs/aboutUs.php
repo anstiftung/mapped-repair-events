@@ -13,7 +13,7 @@ src="' . $this->Html->getThumbs150Image($workshop->image, 'workshops') . '" />';
 else echo '<img alt="' . $workshop->name . '" class="detail-image"
 src="' . $this->Html->getThumbs150Image('rclogo-150.jpg', 'workshops') . '" />';
 
-echo '<strong>' . $workshop->name . '</strong><br>';
+echo '<strong>' . $workshop->name . '</strong><span style="margin-left:3px;color:#fff;font-size:8px;">' . $workshop->uid . '</span><br>';
 
 if ($workshop->street != '') {
     echo StringComponent::prepareTextForHTML($workshop->street) . ', ';
