@@ -42,6 +42,7 @@ class WorkshopsController extends AppController
             'ajaxGetWorkshopDetail',
             'ajaxGetWorkshopsAndUsersForTags',
             'getWorkshopsForHyperModeWebsite',
+            'getWorkshopsWithCityFilter',
             'home',
             'cluster',
             'detail',
@@ -391,6 +392,64 @@ class WorkshopsController extends AppController
 
         $this->viewBuilder()->setOption('serialize', ['status', 'message', 'workshops', 'users']);
 
+    }
+
+    public function getWorkshopsWithCityFilter() {
+
+        $this->request = $this->request->withParam('_ext', 'json');
+
+        $city = $this->request->getParam('city');
+        if ($city === null) {
+            throw new NotFoundException('city not passed');
+        }
+
+        $workshops = $this->Workshop->find('all',
+        conditions: [
+            'Workshops.status' => APP_ON,
+            'Workshops.city LIKE' => "%{$city}%",
+        ],
+        contain: [
+            'Categories' => [
+                'sort' => [
+                    'Categories.name' => 'asc',
+                ]
+            ],
+        ],
+        order: ['Workshops.name' => 'asc']);
+
+        $preparedWorkshops = [];
+        foreach($workshops as $workshop) {
+
+            $preparedCategories = [];
+            foreach($workshop->categories as $category) {
+                $preparedCategories[] = [
+                    'id' => $category->id,
+                    'label' => $category->name,
+                    'icon' => Configure::read('AppConfig.serverName') . '/img/icon-skills/' . $category->icon . '.png',
+                ];
+            }
+
+            $preparedWorkshops[] = [
+                'id' => $workshop->uid,
+                'name' => $workshop->name,
+                'city' => $workshop->city,
+                'postalCode' => $workshop->zip,
+                'street' => $workshop->street,
+                'street2' => $workshop->adresszusatz,
+                'coordinates' => [
+                    'lat' => $workshop->lat,
+                    'lng' => $workshop->lng,
+                ],
+                'landingPage' => Configure::read('AppConfig.serverName') . Configure::read('AppConfig.htmlHelper')->urlWorkshopDetail($workshop->url),
+                'logoUrl' => $workshop->image != '' ?  Configure::read('AppConfig.serverName') . Configure::read('AppConfig.htmlHelper')->getThumbs150Image($workshop->image, 'workshops') : Configure::read('AppConfig.serverName') . Configure::read('AppConfig.htmlHelper')->getThumbs100Image('rclogo-100.jpg', 'workshops'),
+                'productCategory' => $preparedCategories,
+            ];
+        }
+
+        $this->set([
+            'data' => $preparedWorkshops,
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['data']);
     }
 
     public function getWorkshopsForHyperModeWebsite()

@@ -41,6 +41,7 @@ use Authentication\Identifier\Resolver\OrmResolver;
 use Authorization\Middleware\RequestAuthorizationMiddleware;
 use Authorization\Exception\MissingIdentityException;
 use Authorization\Exception\ForbiddenException;
+use Cake\Http\Middleware\BodyParserMiddleware;
 
 class Application extends BaseApplication
     implements AuthenticationServiceProviderInterface, AuthorizationServiceProviderInterface
@@ -97,6 +98,8 @@ class Application extends BaseApplication
         ->add(new RoutingMiddleware($this))
     
         ->add(new AuthenticationMiddleware($this))
+
+        ->add(new BodyParserMiddleware())
 
         ->add(
             new AuthorizationMiddleware($this, [

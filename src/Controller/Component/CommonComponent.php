@@ -24,8 +24,9 @@ class CommonComponent extends AppComponent {
 
         $request = $this->controller->getRequest();
 
-        if ($this->controller->getRequest()->getData()) {
+        $params = ['pass', 'id', 'uid', 'city'];
 
+        if ($this->controller->getRequest()->getData()) {
             $newData = $this->trimAndSanitizeDeep($request->getData());
             foreach ($newData as $k => $v) {
                 if ($request->getData($k) !== $v) {
@@ -39,10 +40,12 @@ class CommonComponent extends AppComponent {
                 $request = $request->withQueryParams($queryData);
             }
         }
-        if ($request->getParam('pass')) {
-            $passData = $this->trimAndSanitizeDeep($request->getParam('pass'));
-            if ($passData !== $request->getParam('pass')) {
-                $request = $request->withParam('pass', $passData);
+        foreach($params as $param) {
+            if ($request->getParam($param)) {
+                $paramData = $this->trimAndSanitizeDeep($request->getParam($param));
+                if ($paramData !== $request->getParam($param)) {
+                    $request = $request->withParam($param, $paramData);
+                }
             }
         }
 

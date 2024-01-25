@@ -114,6 +114,10 @@ return function (RouteBuilder $routes) {
 
         $routes->connect('/api/splitter', ['controller' => 'posts', 'action' => 'getSplitter']);
         $routes->connect('/api/workshops', ['controller' => 'workshops', 'action' => 'getWorkshopsForHyperModeWebsite']);
+        $routes->connect('/api/v1/rest/workshops/city/{city}', [
+            'controller' => 'workshops',
+            'action' => 'getWorkshopsWithCityFilter',
+        ])->setMethods(['GET']);
 
         // für normale cake routings (users controller)
         $routes->connect('/{controller}/{action}/*');
