@@ -442,7 +442,7 @@ class WorkshopsController extends AppController
                 ],
                 'landingPage' => Configure::read('AppConfig.serverName') . Configure::read('AppConfig.htmlHelper')->urlWorkshopDetail($workshop->url),
                 'logoUrl' => $workshop->image != '' ?  Configure::read('AppConfig.serverName') . Configure::read('AppConfig.htmlHelper')->getThumbs150Image($workshop->image, 'workshops') : Configure::read('AppConfig.serverName') . Configure::read('AppConfig.htmlHelper')->getThumbs100Image('rclogo-100.jpg', 'workshops'),
-                'productCategory' => $preparedCategories,
+                'category' => $preparedCategories,
             ];
         }
 
