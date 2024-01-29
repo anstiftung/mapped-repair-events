@@ -674,9 +674,7 @@ class EventsController extends AppController
         if (!empty($this->request->getQuery('timeRange'))) {
             $timeRange = h(strtolower(trim($this->request->getQuery('timeRange'))));
         }
-        if (in_array($timeRange, ['30days', '3months', '6months'])) {
-            $query->where($this->Event->getTimeRangeCondition($timeRange, false));
-        }
+        $query->where($this->Event->getTimeRangeCondition($timeRange, false));
         $this->set('timeRange', $timeRange);
 
         $resetCategoriesUrl = '/termine';

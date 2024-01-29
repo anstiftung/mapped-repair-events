@@ -87,21 +87,22 @@ class EventsTable extends AppTable
 
     public function getTimeRangeCondition($timeRange, $negate) {
         return function ($exp, $query) use ($timeRange, $negate) {
-            $days = 0;
+            
             $now = new \Cake\I18n\DateTime();
-            if ($timeRange == '30days') {
-                $maxDate = $now->addDays(30);
-            }
+            $maxDate = $now->addDays(30);
+
             if ($timeRange == '3months') {
                 $maxDate = $now->addDays(90);
             }
             if ($timeRange == '6months') {
                 $maxDate = $now->addDays(180);
             }
+
             $result = $exp->lte('Events.datumstart', $maxDate, 'date');
             if ($negate) {
                 $result = $exp->not($result);
             }
+            
             return $result;
         };
     }
