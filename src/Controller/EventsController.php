@@ -194,7 +194,7 @@ class EventsController extends AppController
         ]);
 
         $workshops = $this->paginate($workshops, [
-            'limit' => 300,
+            'limit' => 100,
         ]);
 
         foreach($workshops as $workshop) {
@@ -582,8 +582,8 @@ class EventsController extends AppController
         $timeRangeDefault = '30days';
         $timeRangeOptions = [
             '30days' => '30 Tage',
-            '90days' => '90 Tage',
-            'all' => 'alle'
+            '3months' => '3 Monate',
+            '6months' => '6 Monate',
         ];
         $this->set('timeRangeOptions', $timeRangeOptions);
 
@@ -674,7 +674,7 @@ class EventsController extends AppController
         if (!empty($this->request->getQuery('timeRange'))) {
             $timeRange = h(strtolower(trim($this->request->getQuery('timeRange'))));
         }
-        if (in_array($timeRange, ['30days', '90days'])) {
+        if (in_array($timeRange, ['30days', '3months', '6months'])) {
             $query->where($this->Event->getTimeRangeCondition($timeRange, false));
         }
         $this->set('timeRange', $timeRange);
