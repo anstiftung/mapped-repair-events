@@ -6,12 +6,12 @@
             "Workshop": {
                 "uid": 2,
                 "url": "test-workshop",
-                "lat": 0,
-                "lng": 0,
+                "lat": 52.532,
+                "lng": 13.384,
                 "name": "Test Workshop",
-                "street": null,
-                "zip": null,
-                "city": null,
+                "street": "Torstra\u00dfe 123",
+                "zip": "10115",
+                "city": "Berlin",
                 "owner": 1,
                 "users": [
                     {

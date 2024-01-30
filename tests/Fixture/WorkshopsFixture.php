@@ -15,6 +15,12 @@ class WorkshopsFixture extends TestFixture
             'url' => 'test-workshop',
             'email' => 'test-workshop@mailinator.com',
             'owner' => 1,
+            'city' => 'Berlin',
+            'zip' => '10115',
+            'street' => 'Torstraße 123',
+            'adresszusatz' => 'Stiege 2',
+            'lat' => 52.532,
+            'lng' => 13.384,
             'status' => APP_ON,
         ]
     ];

@@ -5,12 +5,12 @@
         {
             "uid": 2,
             "name": "Test Workshop",
-            "lat": 0,
-            "lng": 0,
+            "lat": 52.532,
+            "lng": 13.384,
             "url": "{{serverName}}\/test-workshop",
-            "street": null,
-            "zip": null,
-            "city": null,
+            "street": "Torstra\u00dfe 123",
+            "zip": "10115",
+            "city": "Berlin",
             "website": null,
             "image": "{{serverName}}\/files\/uploadify\/workshops\/thumbs-100\/rclogo-100.jpg",
             "country": {
@@ -40,8 +40,8 @@
             ],
             "geoData": [
                 {
-                    "lat": 0,
-                    "lng": 0
+                    "lat": 52.532,
+                    "lng": 13.384
                 }
             ]
         }

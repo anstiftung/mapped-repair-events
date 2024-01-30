@@ -46,7 +46,7 @@ class WorkshopsControllerTest extends AppTestCase
 
     public function testWorkshopSearchWithExceptionKeyword()
     {
-        $this->get(Configure::read('AppConfig.htmlHelper')->urlWorkshops('berlin'));
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlWorkshops('aachen'));
         $this->assertResponseOk();
         $this->assertResponseNotEmpty();
         $this->assertResponseContains('<div class="numbers">0 Initiativen gefunden</div>');
@@ -178,6 +178,20 @@ class WorkshopsControllerTest extends AppTestCase
         $expectedResult = file_get_contents(TESTS . 'comparisons' . DS . 'data-for-vow-tags-widget.json');
         $expectedResult = $this->correctServerName($expectedResult);
         $this->get('/workshops/ajaxGetWorkshopsAndUsersForTags?tags[]=3dreparieren');
+        $this->assertResponseContains($expectedResult);
+    }
+
+
+    public function testRestWorkshops()
+    {
+        $this->configRequest([
+            'headers' => [
+                'X_REQUESTED_WITH' => 'XMLHttpRequest'
+            ]
+        ]);
+        $expectedResult = file_get_contents(TESTS . 'comparisons' . DS . 'rest-workshops-berlin.json');
+        $expectedResult = $this->correctServerName($expectedResult);
+        $this->get('/api/v1/rest/workshops/city/berlin');
         $this->assertResponseContains($expectedResult);
     }
 
