@@ -101,24 +101,34 @@ class HtmlOutputTest extends AppTestCase
 
     public function testEventsWithoutFilter()
     {
-        $this->get(Configure::read('AppConfig.htmlHelper')->urlEvents() . '?timeRange=all');
+        $this->changeEventDate();
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlEvents() . '?timeRange=30days');
         $this->doAssertHtmlOutput();
         $this->assertResponseContains('<div class="numbers">1 Termin gefunden</div>');
-        $this->assertResponseContains('href="/test-workshop?event=6,2040-01-01#datum"');
+        $this->assertResponseContains('href="/test-workshop?event=6');
     }
 
     public function testEventsWithCategoryFilterFound()
     {
-        $this->get(Configure::read('AppConfig.htmlHelper')->urlEvents() . '?categories=87&timeRange=all');
+        $this->changeEventDate();
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlEvents() . '?categories=87&timeRange=30days');
         $this->doAssertHtmlOutput();
         $this->assertResponseContains('<div class="numbers">1 Termin gefunden</div>');
     }
 
     public function testEventsWithCategoryFilterNotFound()
     {
+        $this->changeEventDate();
         $this->get(Configure::read('AppConfig.htmlHelper')->urlEvents() . '?categories=88');
         $this->doAssertHtmlOutput();
         $this->assertResponseContains('<div class="numbers">0 von insgesamt 1 Termin gefunden</div>');
+    }
+
+    private function changeEventDate() {
+        $eventsTable = $this->getTableLocator()->get('Events');
+        $event = $eventsTable->get(6);
+        $event->datumstart = \Cake\I18n\Date::now()->addDays(20);
+        $eventsTable->save($event);
     }
 
 }
