@@ -182,7 +182,7 @@ class WorkshopsControllerTest extends AppTestCase
     }
 
 
-    public function testRestWorkshops()
+    public function testRestWorkshopsBerlin()
     {
         $this->configRequest([
             'headers' => [
@@ -193,6 +193,17 @@ class WorkshopsControllerTest extends AppTestCase
         $expectedResult = $this->correctServerName($expectedResult);
         $this->get('/api/v1/rest/workshops/city/berlin');
         $this->assertResponseContains($expectedResult);
+    }
+
+    public function testRestWorkshopsHamburg()
+    {
+        $this->configRequest([
+            'headers' => [
+                'X_REQUESTED_WITH' => 'XMLHttpRequest'
+            ]
+        ]);
+        $this->get('/api/v1/rest/workshops/city/hamburg');
+        $this->assertResponseContains('"data": []');
     }
 
 }
