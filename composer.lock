@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7a55dc1228b474a37a77feb8e860345c",
+    "content-hash": "13252a768644c2fbdd5952ddd52805a9",
     "packages": [
         {
             "name": "cakephp/authentication",
@@ -141,16 +141,16 @@
         },
         {
             "name": "cakephp/cakephp",
-            "version": "5.0.4",
+            "version": "5.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/cakephp.git",
-                "reference": "ac9cda35fc15b59fa1e44436de56fd8f08ca8a21"
+                "reference": "e39eedda734de1d6e182e840260dd00e7c669a89"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/cakephp/zipball/ac9cda35fc15b59fa1e44436de56fd8f08ca8a21",
-                "reference": "ac9cda35fc15b59fa1e44436de56fd8f08ca8a21",
+                "url": "https://api.github.com/repos/cakephp/cakephp/zipball/e39eedda734de1d6e182e840260dd00e7c669a89",
+                "reference": "e39eedda734de1d6e182e840260dd00e7c669a89",
                 "shasum": ""
             },
             "require": {
@@ -203,7 +203,10 @@
                 "mikey179/vfsstream": "^1.6.10",
                 "mockery/mockery": "^1.6",
                 "paragonie/csp-builder": "^2.3 || ^3.0",
-                "phpunit/phpunit": "^10.1.0"
+                "phpstan/extension-installer": "^1.3",
+                "phpstan/phpstan": "^1.10.30",
+                "phpunit/phpunit": "^10.1.0 <=10.5.3",
+                "symplify/phpstan-rules": "^12.4"
             },
             "suggest": {
                 "ext-curl": "To enable more efficient network calls in Http\\Client.",
@@ -255,7 +258,7 @@
                 "issues": "https://github.com/cakephp/cakephp/issues",
                 "source": "https://github.com/cakephp/cakephp"
             },
-            "time": "2023-12-28T00:00:09+00:00"
+            "time": "2024-01-28T03:52:06+00:00"
         },
         {
             "name": "cakephp/chronos",
@@ -499,16 +502,16 @@
         },
         {
             "name": "dereuromark/cakephp-feed",
-            "version": "3.0.0-RC",
+            "version": "3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dereuromark/cakephp-feed.git",
-                "reference": "212ddedcf5aa95f025eba00081f69114ace9ae6d"
+                "reference": "9b13685c492beaf1d4f0744596c3e5969cba15c0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dereuromark/cakephp-feed/zipball/212ddedcf5aa95f025eba00081f69114ace9ae6d",
-                "reference": "212ddedcf5aa95f025eba00081f69114ace9ae6d",
+                "url": "https://api.github.com/repos/dereuromark/cakephp-feed/zipball/9b13685c492beaf1d4f0744596c3e5969cba15c0",
+                "reference": "9b13685c492beaf1d4f0744596c3e5969cba15c0",
                 "shasum": ""
             },
             "require": {
@@ -550,7 +553,7 @@
                 "issues": "https://github.com/dereuromark/cakephp-feed/issues",
                 "source": "https://github.com/dereuromark/cakephp-feed"
             },
-            "time": "2023-09-22T01:03:10+00:00"
+            "time": "2024-01-02T15:54:26+00:00"
         },
         {
             "name": "druidfi/mysqldump-php",
@@ -800,16 +803,16 @@
         },
         {
             "name": "intervention/gif",
-            "version": "4.0.0",
+            "version": "4.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Intervention/gif.git",
-                "reference": "521010e0cf1f5cde9df54b8adcd7496ab5f1504f"
+                "reference": "3d4fa6e5eed87f344ada9c0beb410d68e9f274ae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Intervention/gif/zipball/521010e0cf1f5cde9df54b8adcd7496ab5f1504f",
-                "reference": "521010e0cf1f5cde9df54b8adcd7496ab5f1504f",
+                "url": "https://api.github.com/repos/Intervention/gif/zipball/3d4fa6e5eed87f344ada9c0beb410d68e9f274ae",
+                "reference": "3d4fa6e5eed87f344ada9c0beb410d68e9f274ae",
                 "shasum": ""
             },
             "require": {
@@ -817,7 +820,8 @@
             },
             "require-dev": {
                 "phpstan/phpstan": "^1",
-                "phpunit/phpunit": "^9"
+                "phpunit/phpunit": "^9",
+                "squizlabs/php_codesniffer": "^3.8"
             },
             "type": "library",
             "autoload": {
@@ -846,33 +850,44 @@
             ],
             "support": {
                 "issues": "https://github.com/Intervention/gif/issues",
-                "source": "https://github.com/Intervention/gif/tree/4.0.0"
+                "source": "https://github.com/Intervention/gif/tree/4.0.1"
             },
-            "time": "2024-01-06T16:35:57+00:00"
+            "funding": [
+                {
+                    "url": "https://paypal.me/interventionio",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/Intervention",
+                    "type": "github"
+                }
+            ],
+            "time": "2024-01-27T08:01:45+00:00"
         },
         {
             "name": "intervention/image",
-            "version": "3.2.4",
+            "version": "3.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Intervention/image.git",
-                "reference": "e04c51b367fad2b010758e74528041484cd8d2f7"
+                "reference": "8494cc91e3906e36ca58acc3dfe70fa331520b88"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Intervention/image/zipball/e04c51b367fad2b010758e74528041484cd8d2f7",
-                "reference": "e04c51b367fad2b010758e74528041484cd8d2f7",
+                "url": "https://api.github.com/repos/Intervention/image/zipball/8494cc91e3906e36ca58acc3dfe70fa331520b88",
+                "reference": "8494cc91e3906e36ca58acc3dfe70fa331520b88",
                 "shasum": ""
             },
             "require": {
                 "ext-mbstring": "*",
-                "intervention/gif": "^4",
+                "intervention/gif": "^4.0.1",
                 "php": "^8.1"
             },
             "require-dev": {
                 "mockery/mockery": "^1.6",
                 "phpstan/phpstan": "^1",
-                "phpunit/phpunit": "^9"
+                "phpunit/phpunit": "^9",
+                "squizlabs/php_codesniffer": "^3.8"
             },
             "suggest": {
                 "ext-exif": "Recommended to be able to read EXIF data properly."
@@ -906,7 +921,7 @@
             ],
             "support": {
                 "issues": "https://github.com/Intervention/image/issues",
-                "source": "https://github.com/Intervention/image/tree/3.2.4"
+                "source": "https://github.com/Intervention/image/tree/3.3.2"
             },
             "funding": [
                 {
@@ -918,7 +933,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-01-14T07:47:00+00:00"
+            "time": "2024-01-27T19:34:18+00:00"
         },
         {
             "name": "laminas/laminas-diactoros",
@@ -1375,16 +1390,16 @@
         },
         {
             "name": "markstory/mini-asset",
-            "version": "2.0.0",
+            "version": "2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/markstory/mini-asset.git",
-                "reference": "bbca6033fb2d14fcb2ac66ba9b13fc98c7e06032"
+                "reference": "e8dce4ae16a84f40cb66a1e5c91bdfd05877110a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/markstory/mini-asset/zipball/bbca6033fb2d14fcb2ac66ba9b13fc98c7e06032",
-                "reference": "bbca6033fb2d14fcb2ac66ba9b13fc98c7e06032",
+                "url": "https://api.github.com/repos/markstory/mini-asset/zipball/e8dce4ae16a84f40cb66a1e5c91bdfd05877110a",
+                "reference": "e8dce4ae16a84f40cb66a1e5c91bdfd05877110a",
                 "shasum": ""
             },
             "require": {
@@ -1394,7 +1409,7 @@
             "require-dev": {
                 "cakephp/cakephp-codesniffer": "^5.0",
                 "laminas/laminas-diactoros": "~2.0",
-                "phpunit/phpunit": "^8.5 | ^9.3",
+                "phpunit/phpunit": "^9.3",
                 "squizlabs/php_codesniffer": "*"
             },
             "suggest": {
@@ -1441,7 +1456,7 @@
                 "issues": "https://github.com/markstory/mini-asset/issues",
                 "source": "https://github.com/markstory/mini-asset"
             },
-            "time": "2023-09-29T22:05:27+00:00"
+            "time": "2024-01-27T18:15:09+00:00"
         },
         {
             "name": "mobiledetect/mobiledetectlib",
@@ -4035,16 +4050,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.10.56",
+            "version": "1.10.57",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "27816a01aea996191ee14d010f325434c0ee76fa"
+                "reference": "1627b1d03446904aaa77593f370c5201d2ecc34e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/27816a01aea996191ee14d010f325434c0ee76fa",
-                "reference": "27816a01aea996191ee14d010f325434c0ee76fa",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/1627b1d03446904aaa77593f370c5201d2ecc34e",
+                "reference": "1627b1d03446904aaa77593f370c5201d2ecc34e",
                 "shasum": ""
             },
             "require": {
@@ -4093,7 +4108,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-01-15T10:43:00+00:00"
+            "time": "2024-01-24T11:51:34+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -4418,16 +4433,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "10.5.8",
+            "version": "10.5.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "08f4fa74d5fbfff1ef22abffee47aaedcaea227e"
+                "reference": "0bd663704f0165c9e76fe4f06ffa6a1ca727fdbe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/08f4fa74d5fbfff1ef22abffee47aaedcaea227e",
-                "reference": "08f4fa74d5fbfff1ef22abffee47aaedcaea227e",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/0bd663704f0165c9e76fe4f06ffa6a1ca727fdbe",
+                "reference": "0bd663704f0165c9e76fe4f06ffa6a1ca727fdbe",
                 "shasum": ""
             },
             "require": {
@@ -4499,7 +4514,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.5.8"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.5.9"
             },
             "funding": [
                 {
@@ -4515,7 +4530,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-01-19T07:07:27+00:00"
+            "time": "2024-01-22T14:35:40+00:00"
         },
         {
             "name": "react/promise",
@@ -6033,9 +6048,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "dereuromark/cakephp-feed": 5
-    },
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
