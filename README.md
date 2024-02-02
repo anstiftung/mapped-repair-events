@@ -48,6 +48,7 @@
 ## Netzwerk Reparatur-Initiativen
 * [https://www.reparatur-initiativen.de/](https://www.reparatur-initiativen.de/)
 * [https://www.demokratiecafe.de/](https://www.demokratiecafe.de/)
+* [API Docs/](https://anstiftung.github.io/mapped-repair-events-api-docs/)
 
 <h1 align="center">
   <a href="https://www.anstiftung.de">
