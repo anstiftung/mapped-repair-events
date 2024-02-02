@@ -447,9 +447,9 @@ class WorkshopsController extends AppController
         }
 
         $this->set([
-            'data' => $preparedWorkshops,
+            'workshops' => $preparedWorkshops,
         ]);
-        $this->viewBuilder()->setOption('serialize', ['data']);
+        $this->viewBuilder()->setOption('serialize', ['workshops']);
     }
 
     public function getWorkshopsForHyperModeWebsite()
