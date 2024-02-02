@@ -425,7 +425,7 @@ class WorkshopsController extends AppController
                 $preparedCategories[] = [
                     'id' => $category->id,
                     'label' => $category->name,
-                    'icon' => Configure::read('AppConfig.serverName') . '/img/icon-skills/' . $category->icon . '.png',
+                    'iconUrl' => Configure::read('AppConfig.serverName') . '/img/icon-skills/' . $category->icon . '.png',
                 ];
             }
 

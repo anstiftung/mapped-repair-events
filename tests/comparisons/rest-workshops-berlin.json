@@ -17,7 +17,7 @@
                 {
                     "id": 630,
                     "label": "3D-Reparatur",
-                    "icon": "{{serverName}}\/img\/icon-skills\/drei-d-reparatur.png"
+                    "iconUrl": "{{serverName}}\/img\/icon-skills\/drei-d-reparatur.png"
                 }
             ]
         }
