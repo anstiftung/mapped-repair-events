@@ -404,8 +404,8 @@ class WorkshopsController extends AppController
         $this->request = $this->request->withParam('_ext', 'json');
 
         $city = $this->request->getParam('city');
-        if ($city === null) {
-            throw new NotFoundException('city not passed');
+        if ($city === null || strlen($city) < 3) {
+            throw new NotFoundException('city not passed or invalid (min 3 chars');
         }
 
         $workshops = $this->Workshop->find('all',
