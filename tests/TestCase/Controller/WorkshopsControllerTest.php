@@ -203,7 +203,7 @@ class WorkshopsControllerTest extends AppTestCase
             ]
         ]);
         $this->get('/api/v1/rest/workshops/city/hamburg');
-        $this->assertResponseContains('"data": []');
+        $this->assertResponseContains('"workshops": []');
     }
 
 }
