@@ -192,11 +192,11 @@ class UsersControllerTest extends AppTestCase
         $this->get(Configure::read('AppConfig.htmlHelper')->urlUserWorkshopResign('user', $userUid, $ownerAndAssociatedWorkshopId));
 
         // 3. successfully delete user
-        $user = $this->User->get($userUid, [
-            'contain' => [
+        $user = $this->User->get($userUid,
+            contain: [
                 'OwnerWorkshops',
             ]
-        ]);
+        );
         $this->User->delete($user);
 
         // 4. check changed owner of workshops

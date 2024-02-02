@@ -17,7 +17,7 @@ jobs:
     steps:
 
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Run Docker Compose
         run: CURRENT_UID=$(id -u):$(id -g) docker compose up -d
@@ -56,6 +56,8 @@ jobs:
         run: docker exec -w /app rep.php php ./vendor/bin/phpunit --coverage-clover ./coverage.xml
 
       - name: Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
           files: ./coverage.xml
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
