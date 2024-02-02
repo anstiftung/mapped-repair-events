@@ -396,6 +396,11 @@ class WorkshopsController extends AppController
 
     public function getWorkshopsWithCityFilter() {
 
+        $this->response = $this->response->cors($this->request)
+            ->allowOrigin(['*'])
+            ->allowMethods(['GET'])
+            ->build();
+
         $this->request = $this->request->withParam('_ext', 'json');
 
         $city = $this->request->getParam('city');
