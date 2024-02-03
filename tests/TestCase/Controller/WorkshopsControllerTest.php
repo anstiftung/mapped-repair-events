@@ -193,6 +193,7 @@ class WorkshopsControllerTest extends AppTestCase
         $expectedResult = $this->correctServerName($expectedResult);
         $this->get('/api/v1/rest/workshops/city/berlin');
         $this->assertResponseContains($expectedResult);
+        $this->assertResponseSuccess();
     }
 
     public function testRestWorkshopsHamburg()
@@ -204,6 +205,7 @@ class WorkshopsControllerTest extends AppTestCase
         ]);
         $this->get('/api/v1/rest/workshops/city/hamburg');
         $this->assertResponseContains('"workshops": []');
+        $this->assertResponseSuccess();
     }
 
 }
