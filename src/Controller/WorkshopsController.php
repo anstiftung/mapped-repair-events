@@ -411,7 +411,7 @@ class WorkshopsController extends AppController
         $workshops = $this->Workshop->find('all',
         conditions: [
             'Workshops.status' => APP_ON,
-            'Workshops.city LIKE' => "%{$city}%",
+            'Workshops.city LIKE' => "{$city}%",
         ],
         contain: [
             'Categories' => [
