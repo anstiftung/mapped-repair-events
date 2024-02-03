@@ -114,10 +114,14 @@ return function (RouteBuilder $routes) {
 
         $routes->connect('/api/splitter', ['controller' => 'posts', 'action' => 'getSplitter']);
         $routes->connect('/api/workshops', ['controller' => 'workshops', 'action' => 'getWorkshopsForHyperModeWebsite']);
-        $routes->connect('/api/v1/rest/workshops/city/{city}', [
-            'controller' => 'workshops',
-            'action' => 'getWorkshopsWithCityFilter',
-        ])->setMethods(['GET']);
+
+        if ((!is_null($request) && preg_match('/' . preg_quote('reparatur-initiativen.de') . '/', $request->domain())) || 
+            (PHP_SAPI == 'cli' && $_SERVER['argv'][0] && preg_match('/phpunit/', $_SERVER['argv'][0]))) {
+            $routes->connect('/api/v1/rest/workshops/city/{city}', [
+                'controller' => 'workshops',
+                'action' => 'getWorkshopsWithCityFilter',
+            ])->setMethods(['GET']);
+        }
 
         // für normale cake routings (users controller)
         $routes->connect('/{controller}/{action}/*');
