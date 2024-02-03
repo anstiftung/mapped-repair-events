@@ -112,11 +112,9 @@ return function (RouteBuilder $routes) {
         $routes->connect('/post/*', ['controller'=>'posts', 'action'=>'detail']);
         $routes->connect('/{blogUrl}/*', ['controller'=>'blogs', 'action'=>'detail'], ['blogUrl' => 'neuigkeiten|'.Configure::read('AppConfig.htmlHelper')->getAdditionalBlogCategoryUrl()]);
 
-        $routes->connect('/api/splitter', ['controller' => 'posts', 'action' => 'getSplitter']);
-        $routes->connect('/api/workshops', ['controller' => 'workshops', 'action' => 'getWorkshopsForHyperModeWebsite']);
-
-        if ((!is_null($request) && preg_match('/' . preg_quote('reparatur-initiativen.de') . '/', $request->domain())) || 
-            (PHP_SAPI == 'cli' && $_SERVER['argv'][0] && preg_match('/phpunit/', $_SERVER['argv'][0]))) {
+        if (Configure::read('isApiEnabled')) {
+            $routes->connect('/api/splitter', ['controller' => 'posts', 'action' => 'getSplitter']);
+            $routes->connect('/api/workshops', ['controller' => 'workshops', 'action' => 'getWorkshopsForHyperModeWebsite']);
             $routes->connect('/api/v1/rest/workshops/city/{city}', [
                 'controller' => 'workshops',
                 'action' => 'getWorkshopsWithCityFilter',
