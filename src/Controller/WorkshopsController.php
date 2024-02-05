@@ -405,7 +405,7 @@ class WorkshopsController extends AppController
 
         $city = $this->request->getQuery('city');
         if ($city === null || strlen($city) < 3) {
-            throw new NotFoundException('city not passed or invalid (min 3 chars)');
+            return $this->response->withStatus(400)->withType('json')->withStringBody(json_encode('city not passed or invalid (min 3 chars)'));
         }
 
         $workshops = $this->Workshop->find('all',
@@ -421,6 +421,10 @@ class WorkshopsController extends AppController
             ],
         ],
         order: ['Workshops.name' => 'asc']);
+
+        if ($workshops->count() == 0) {
+            return $this->response->withStatus(404)->withType('json')->withStringBody(json_encode('no workshops found'));
+        }
 
         $preparedWorkshops = [];
         foreach($workshops as $workshop) {
