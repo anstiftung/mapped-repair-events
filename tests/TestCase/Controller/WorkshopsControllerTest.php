@@ -184,28 +184,25 @@ class WorkshopsControllerTest extends AppTestCase
 
     public function testRestWorkshopsBerlin()
     {
-        $this->configRequest([
-            'headers' => [
-                'X_REQUESTED_WITH' => 'XMLHttpRequest'
-            ]
-        ]);
         $expectedResult = file_get_contents(TESTS . 'comparisons' . DS . 'rest-workshops-berlin.json');
         $expectedResult = $this->correctServerName($expectedResult);
         $this->get('/api/v1/rest/workshops?city=berlin');
         $this->assertResponseContains($expectedResult);
-        $this->assertResponseSuccess();
+        $this->assertResponseOk();
     }
 
     public function testRestWorkshopsHamburg()
     {
-        $this->configRequest([
-            'headers' => [
-                'X_REQUESTED_WITH' => 'XMLHttpRequest'
-            ]
-        ]);
         $this->get('/api/v1/rest/workshops?city=hamburg');
-        $this->assertResponseContains('"workshops": []');
-        $this->assertResponseSuccess();
+        $this->assertResponseContains('no workshops found');
+        $this->assertResponseCode(404);
+    }
+
+    public function testRestWorkshopsWrongParam()
+    {
+        $this->get('/api/v1/rest/workshops?city=ha');
+        $this->assertResponseContains('city not passed or invalid (min 3 chars)');
+        $this->assertResponseCode(400);
     }
 
 }
