@@ -62,7 +62,7 @@ class WorkshopsControllerTest extends AppTestCase
 
     public function testApplyToWorkshopAsRepairhelper()
     {
-        
+
         $this->executeLogFileAssertions = false;
 
         $workshopUid = 2;
@@ -191,7 +191,7 @@ class WorkshopsControllerTest extends AppTestCase
         ]);
         $expectedResult = file_get_contents(TESTS . 'comparisons' . DS . 'rest-workshops-berlin.json');
         $expectedResult = $this->correctServerName($expectedResult);
-        $this->get('/api/v1/rest/workshops/city/berlin');
+        $this->get('/api/v1/rest/workshops?city=berlin');
         $this->assertResponseContains($expectedResult);
         $this->assertResponseSuccess();
     }
@@ -203,7 +203,7 @@ class WorkshopsControllerTest extends AppTestCase
                 'X_REQUESTED_WITH' => 'XMLHttpRequest'
             ]
         ]);
-        $this->get('/api/v1/rest/workshops/city/hamburg');
+        $this->get('/api/v1/rest/workshops?city=hamburg');
         $this->assertResponseContains('"workshops": []');
         $this->assertResponseSuccess();
     }

@@ -403,9 +403,9 @@ class WorkshopsController extends AppController
 
         $this->request = $this->request->withParam('_ext', 'json');
 
-        $city = $this->request->getParam('city');
+        $city = $this->request->getQuery('city');
         if ($city === null || strlen($city) < 3) {
-            throw new NotFoundException('city not passed or invalid (min 3 chars');
+            throw new NotFoundException('city not passed or invalid (min 3 chars)');
         }
 
         $workshops = $this->Workshop->find('all',
@@ -486,7 +486,7 @@ class WorkshopsController extends AppController
                 'hasOwnLogo' => $workshop->image == '' ? false : true,
                 'categories' => Hash::extract($workshop->categories, '{n}.name'),
             ];
-        }        
+        }
 
         $this->set([
             'workshops' => $preparedWorkshops,
@@ -655,7 +655,7 @@ class WorkshopsController extends AppController
             $preparedWorkshop = [];
 
             $workshop['events'] = array_values($workshop['events']); // reindex array
-            
+
             $tmpEvents = $workshop['events'];
             unset($workshop['events']);
             $preparedWorkshop['Workshop'] = $workshop;
@@ -847,7 +847,7 @@ class WorkshopsController extends AppController
         $this->set('groups', Configure::read('AppConfig.htmlHelper')->getUserGroupsForWorkshopDetail());
 
         if ($this->request->getSession()->read('isMobile') && !empty($categories)) {
-            
+
             $i = 0;
             $hasModifyPermissions = $this->isAdmin() || $this->Workshop->isUserInOrgaTeam($this->loggedUser, $workshop);
 

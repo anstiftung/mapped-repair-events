@@ -115,7 +115,7 @@ return function (RouteBuilder $routes) {
         if (Configure::read('isApiEnabled')) {
             $routes->connect('/api/splitter', ['controller' => 'posts', 'action' => 'getSplitter']);
             $routes->connect('/api/workshops', ['controller' => 'workshops', 'action' => 'getWorkshopsForHyperModeWebsite']);
-            $routes->connect('/api/v1/rest/workshops/city/{city}', [
+            $routes->connect('/api/v1/rest/workshops', [
                 'controller' => 'workshops',
                 'action' => 'getWorkshopsWithCityFilter',
             ])->setMethods(['GET']);
