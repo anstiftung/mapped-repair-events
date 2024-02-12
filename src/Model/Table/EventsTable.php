@@ -89,16 +89,28 @@ class EventsTable extends AppTable
         return function ($exp, $query) use ($timeRange, $negate) {
             
             $now = new \Cake\I18n\DateTime();
+            $minDate = null;
             $maxDate = $now->addDays(30);
 
             if ($timeRange == '3months') {
-                $maxDate = $now->addDays(90);
+                $maxDate = $now->addMonths(3);
             }
             if ($timeRange == '6months') {
-                $maxDate = $now->addDays(180);
+                $maxDate = $now->addMonths(6);
+            }
+            if ($timeRange == 'gt6months') {
+                $minDate = $now->addDays(180);
+                $minDate = $now->addMonths(6);
+                $maxDate = null;
             }
 
-            $result = $exp->lte('Events.datumstart', $maxDate, 'date');
+            if (!is_null($minDate)) {
+                $result = $exp->gte('Events.datumstart', $minDate, 'date');
+            }
+            if (!is_null($maxDate)) {
+                $result = $exp->lte('Events.datumstart', $maxDate, 'date');
+            }
+
             if ($negate) {
                 $result = $exp->not($result);
             }

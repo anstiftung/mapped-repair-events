@@ -90,7 +90,7 @@ class InfoSheetsTable extends AppTable
             'Events'
         ]);
         $query->where([
-            'InfoSheets.status >= ' . APP_OFF,
+            'InfoSheets.status' => APP_ON,
         ]);
 
         if (!is_null($dateFrom) && !is_null($dateTo)) {
@@ -234,7 +234,7 @@ class InfoSheetsTable extends AppTable
     {
         $query = $this->prepareStatisticsDataGlobal($dateFrom, $dateTo);
         $query->select(['Events.workshop_uid']);
-        $query->group('Events.workshop_uid');
+        $query->groupBy('Events.workshop_uid');
         return $query->count();
     }
 

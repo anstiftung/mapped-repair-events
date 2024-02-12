@@ -27,7 +27,7 @@ class ThirdPartyStatisticsTable extends Table
             ['sumRepaired' => $query->func()->sum('ThirdPartyStatistics.repaired')]
         );
         $query->select('ThirdPartyStatistics.category_id');
-        $query->group('ThirdPartyStatistics.category_id');
+        $query->groupBy('ThirdPartyStatistics.category_id');
 
         return $query->toArray();
 
