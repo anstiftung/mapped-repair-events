@@ -17,7 +17,7 @@ if ($uid === null) {
 if (isset($objectType) && isset($uid)) {
     $_SESSION['ELFINDER'] = [];
     $_SESSION['ELFINDER']['uploadUrl'] = "/files/kcfinder/".$objectType."/".$uid;
-    $uploadDir = str_replace('//', '/', $_SERVER['DOCUMENT_ROOT']."files/kcfinder/".$objectType."/".$uid);
+    $uploadDir = str_replace('//', '/', $_SERVER['DOCUMENT_ROOT']."/files/kcfinder/".$objectType."/".$uid);
     $_SESSION['ELFINDER']['uploadPath'] = $uploadDir;
 }
 
