@@ -114,9 +114,9 @@ use Cake\Core\Configure;
     </div>
 
 
-    <div class="ckeditor-edit">
+    <div class="editor-edit">
       <?php
-        echo $this->element('ckeditorEdit', [
+        echo $this->element('editorEdit', [
             'value' => $workshop->text,
             'name' => 'Workshops.text',
             'uid' => $workshop->uid,
@@ -141,4 +141,4 @@ use Cake\Core\Configure;
 
 </div>
 
-<div class="sc"></div> <?php /* wegen ckeditor */ ?>
+<div class="sc"></div> <?php /* wegen editor */ ?>

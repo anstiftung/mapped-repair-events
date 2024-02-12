@@ -4,12 +4,15 @@ module.exports = {
         "jquery": true,
         "es6": true
     },
+    "parserOptions": {
+        "ecmaVersion": 2020
+    },
     "ignorePatterns": ["webroot/js/elFinder/"],
     "globals": {
         "Chart": true,
         "ChartDataLabels": true,
-        "CKEDITOR": true,
         "ClipboardJS": true,
+        "Jodit": true,
         "MappedRepairEvents": true,
         "PruneCluster": true,
         "PruneClusterForLeaflet": true,

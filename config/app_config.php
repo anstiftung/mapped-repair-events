@@ -18,8 +18,8 @@ define('CACHE_MODELS_DIR', CACHE_DIR . 'models/');
 define('CACHE_PERSISTENT_DIR', CACHE_DIR . 'persistent/');
 define('CACHE_VIEWS_DIR', CACHE_DIR . 'views/');
 
-define('ALLOWED_TAGS_CKEDITOR_USER', '<a><b><strong><i><img><p><h1><h2><ul><li><hr><em><br>');
-define('ALLOWED_TAGS_CKEDITOR_ADMIN', ALLOWED_TAGS_CKEDITOR_USER . '<iframe>');
+define('ALLOWED_TAGS_EDITOR_USER', '<a><b><strong><i><img><p><h1><h2><h3><ul><li><hr><em><br>');
+define('ALLOWED_TAGS_EDITOR_ADMIN', ALLOWED_TAGS_EDITOR_USER . '<iframe>');
 define('ALLOWED_TAGS_USER', '<a><b><strong><i><br><p><ul><li>'); // für textfelder (zb. additional_contact)
 
 define('FILES_DIR', '/files/');

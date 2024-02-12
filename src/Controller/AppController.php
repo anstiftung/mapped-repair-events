@@ -287,10 +287,10 @@ class AppController extends Controller
                     $entity->$field = strip_tags($data, ALLOWED_TAGS_USER);
                 }
             } else if ($field == 'text') {
-                // ckeditor feld heißt normalerweise 'text'
-                $allowedTags = ALLOWED_TAGS_CKEDITOR_USER;
+                // editor feld heißt normalerweise 'text'
+                $allowedTags = ALLOWED_TAGS_EDITOR_USER;
                 if ($this->isAdmin() && in_array($modelName, ['Post', 'Page', 'Knowledge'])) {
-                    $allowedTags =  ALLOWED_TAGS_CKEDITOR_ADMIN;
+                    $allowedTags =  ALLOWED_TAGS_EDITOR_ADMIN;
                 }
                 if (!is_null($data)) {
                     $entity->$field = strip_tags($data, $allowedTags);

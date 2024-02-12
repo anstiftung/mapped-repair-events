@@ -81,7 +81,7 @@ echo '<div class="image-text-wrapper">';
     }
 
 //detail
-echo '<div class="ckeditor-text">';
+echo '<div class="editor-text">';
 
 if ($showImage) {
       if ($type == 'preview') {
@@ -106,7 +106,7 @@ if ($type == 'detail') {
 
 echo '<br /><br />';
 
-echo '</div>'; // .ckeditor-text
+echo '</div>'; // .editor-text
 echo '</div>'; // .image-text-wrapper
 
 echo '</div>'; // .text-wrapper

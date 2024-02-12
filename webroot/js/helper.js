@@ -330,54 +330,6 @@ MappedRepairEvents.Helper = {
         }
     },
 
-    initCkeditor: function (name, isMobile) {
-
-        if (!CKEDITOR.env.isCompatible) {
-            return false;
-        }
-
-        this.destroyCkeditor(name);
-
-        CKEDITOR.timestamp = 'v4.22.1';
-        $('textarea#' + name + '.ckeditor').ckeditor({
-            customConfig: '/js/ckeditor/config.js',
-            height: isMobile ? 350 : 650,
-            width: isMobile ? '100%' : 627
-        });
-
-    },
-
-    destroyCkeditor: function (name) {
-
-        if (!CKEDITOR.env.isCompatible) {
-            return false;
-        }
-
-        var editor = CKEDITOR.instances[name];
-
-        if (editor) {
-            editor.destroy(true);
-        }
-
-    },
-
-    initCkeditorWithoutElfinder: function (name, isMobile) {
-
-        if (!CKEDITOR.env.isCompatible) {
-            return false;
-        }
-
-        this.destroyCkeditor(name);
-
-        CKEDITOR.timestamp = 'v4.22.1';
-        $('textarea#' + name + '.ckeditor').ckeditor({
-            customConfig: '/js/ckeditor/config-without-elfinder.js',
-            height: isMobile ? 350 : 650,
-            width: isMobile ? '100%' : 627
-        });
-
-    },
-
     doCurrentlyUpdatedActions : function(isCurrentlyUpdated) {
 
         if (!isCurrentlyUpdated) return;

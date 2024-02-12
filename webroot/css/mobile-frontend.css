@@ -175,8 +175,8 @@
         text-align: left;
         margin-top: 15px;
     }
-    .right .ckeditor-edit img,
-    .ckeditor-edit iframe {
+    .right .editor-edit img,
+    .editor-edit iframe {
         max-width: 100% ! important;
     }
     body.workshops.detail .address-wrapper a {
