@@ -44,11 +44,11 @@ MappedRepairEvents.Editor = {
         return button;
     },
 
-    init: function (name, startupFocus) {
+    init: function (name, isMobile) {
 
         const editor = Jodit.make('textarea#' + name, {
             ... this.getDefaultOptions(),
-            width: 627,
+            width: isMobile ? '100%' : 627,
             height: 650,
             buttons: [
                 'bold', 'italic', 'brush',
@@ -60,19 +60,15 @@ MappedRepairEvents.Editor = {
             ],
         });
 
-        if (startupFocus) {
-            editor.selection.focus();
-        }
-
         return editor;
 
     },
 
-    initWithUpload: function (name, startupFocus) {
+    initWithUpload: function (name, isMobile) {
 
         const editor = Jodit.make('textarea#' + name, {
             ... this.getDefaultOptions(),
-            width: 627,
+            width: isMobile ? '100%' : 627,
             height: 650,
             buttons: [
                 'bold', 'italic', 'brush',
@@ -83,10 +79,6 @@ MappedRepairEvents.Editor = {
                 '|', 'source',
             ],
         });
-
-        if (startupFocus) {
-            editor.selection.focus();
-        }
 
         return editor;
 
