@@ -28,6 +28,29 @@ MappedRepairEvents.Helper = {
         });
     },
 
+    // https://github.com/Studio-42/elFinder/issues/2905#issuecomment-487106097
+    copyToClipboard: function(string) {
+
+        var temp = document.createElement('textarea');
+
+        temp.value = string;
+        temp.selectionStart = 0;
+        temp.selectionEnd = temp.value.length;
+
+        var s = temp.style;
+        s.position = 'fixed';
+        s.left = '-100%';
+
+        document.body.appendChild(temp);
+        temp.focus();
+        var result = document.execCommand('copy');
+        
+        temp.blur();
+        document.body.removeChild(temp);
+
+        return result;
+    },
+
     bindAddDateButton : function(dateHtml) {
 
         // remove select2 which is already initialized - it causes problems when the html is copied and pasted

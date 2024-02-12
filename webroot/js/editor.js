@@ -38,7 +38,7 @@ MappedRepairEvents.Editor = {
             name: 'Upload',
             tooltip: 'Datei oder Bild hochladen',
             exec: (editor) => {
-                //MappedRepairEvents.ModalElfinder.init(editor);
+                MappedRepairEvents.ModalElfinder.init(editor);
             }
         };
         return button;

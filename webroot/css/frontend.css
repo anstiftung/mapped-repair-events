@@ -2576,6 +2576,11 @@ body.featherlight:not(.featherlight-swipe-aware) .featherlight-image {
   height: 70vh;
   width: auto;
 }
+.featherlight-content #elfinder {
+    width: 1024px ! important;
+    height: 50vh ! important;
+    max-height: 700px ! important;
+}
 .featherlight .legend {
   position: absolute;
   bottom: 0;
