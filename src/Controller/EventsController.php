@@ -584,6 +584,7 @@ class EventsController extends AppController
             '30days' => '30 Tage',
             '3months' => '3 Monate',
             '6months' => '6 Monate',
+            'gt6months' => '> 6 Monate',
         ];
         $this->set('timeRangeOptions', $timeRangeOptions);
 
