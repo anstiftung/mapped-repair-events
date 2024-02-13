@@ -23,7 +23,7 @@ class FileAndEmailLog extends FileLog
     {
 
         $ignoredExceptionsRegex = [
-           '(MissingController|MissingAction|MissingTemplate|RecordNotFound|NotFound|InvalidCsrfToken|Forbidden|Unauthenticated|MissingRoute)Exception',
+           '(MissingController|MissingAction|MissingTemplate|RecordNotFound|NotFound|InvalidCsrfToken|Forbidden|Unauthenticated|MissingRoute|MissingHelper)Exception',
             preg_quote('Workshops/rss/home.ctp', '/'),
            'RssHelper is deprecated',
            'UsersController::publicProfile()',
