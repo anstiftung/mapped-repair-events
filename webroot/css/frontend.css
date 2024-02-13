@@ -1544,6 +1544,11 @@ div.editor-text,
 #content div.text-wrapper ul,
 #framedContent div.text-wrapper ul {
     list-style: circle outside none;
+}
+#content div.text-wrapper ul,
+#framedContent div.text-wrapper ul,
+#content div.text-wrapper ol,
+#framedContent div.text-wrapper ol {
     padding-left: 10px;
     margin-left: 17px;
     margin-bottom: 10px;
@@ -3749,7 +3754,8 @@ body.users.profil .add-skill {
     margin-top: 5px;
     margin-bottom: 5px;
 }
-.jodit-container ul {
+.jodit-container ul,
+.jodit-container ol {
     padding-left: 20px ! important;
 }
 .jodit-container ul,
@@ -3769,7 +3775,7 @@ body.users.profil .add-skill {
 }
 /* fix path for packed css */
 .elfinder-button-icon {
-    background-image: url(/js/elfinder/img/toolbar.png);
+    background-image: url(/js/elfinder/img/toolbar.png) ! important;
 }
 
 @media (max-width: 767px) {

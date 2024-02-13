@@ -21,7 +21,6 @@ MappedRepairEvents.Editor = {
                     }),
                 },
             },
-            enter: 'br',
             hidePoweredByJodit: true,
             language: 'de',
             toolbarAdaptive: false,
