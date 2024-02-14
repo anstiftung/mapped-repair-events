@@ -422,8 +422,7 @@ class WorkshopsController extends AppController
             'Events' => function($q) {
                 return $q->where([
                     'DATE_FORMAT(Events.datumstart, \'%Y-%m-%d\') >= DATE_FORMAT(NOW(), \'%Y-%m-%d\')',
-                ])
-                ->limit(1);
+                ]);
             },
         ],
         order: ['Workshops.name' => 'asc']);
