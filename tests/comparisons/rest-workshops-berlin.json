@@ -19,7 +19,8 @@
                     "label": "3D-Reparatur",
                     "iconUrl": "{{serverName}}\/img\/icon-skills\/drei-d-reparatur.png"
                 }
-            ]
+            ],
+            "nextEvent": "2040-01-01"
         }
     ]
 }

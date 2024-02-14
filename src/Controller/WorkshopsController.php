@@ -419,6 +419,12 @@ class WorkshopsController extends AppController
                     'Categories.name' => 'asc',
                 ]
             ],
+            'Events' => function($q) {
+                return $q->where([
+                    'DATE_FORMAT(Events.datumstart, \'%Y-%m-%d\') >= DATE_FORMAT(NOW(), \'%Y-%m-%d\')',
+                ])
+                ->limit(1);
+            },
         ],
         order: ['Workshops.name' => 'asc']);
 
@@ -452,7 +458,9 @@ class WorkshopsController extends AppController
                 'landingPage' => Configure::read('AppConfig.serverName') . Configure::read('AppConfig.htmlHelper')->urlWorkshopDetail($workshop->url),
                 'logoUrl' => $workshop->image != '' ?  Configure::read('AppConfig.serverName') . Configure::read('AppConfig.htmlHelper')->getThumbs150Image($workshop->image, 'workshops') : Configure::read('AppConfig.serverName') . Configure::read('AppConfig.htmlHelper')->getThumbs100Image('rclogo-100.jpg', 'workshops'),
                 'category' => $preparedCategories,
+                'nextEvent' => !empty($workshop->events[0]) ? $workshop->events[0]->datumstart_formatted : null,
             ];
+
         }
 
         $this->set([
