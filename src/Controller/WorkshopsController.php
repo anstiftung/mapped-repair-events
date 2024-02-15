@@ -443,6 +443,11 @@ class WorkshopsController extends AppController
                 ];
             }
 
+            $nextEventDate = null;
+            if (!empty($workshop->events[0] && !is_null($workshop->events[0]->datumstart))) {
+                $nextEventDate = $workshop->events[0]->datumstart->i18nFormat(Configure::read('DateFormat.de.DateLong2'));
+            } 
+
             $preparedWorkshops[] = [
                 'id' => $workshop->uid,
                 'name' => $workshop->name,
@@ -457,7 +462,7 @@ class WorkshopsController extends AppController
                 'landingPage' => Configure::read('AppConfig.serverName') . Configure::read('AppConfig.htmlHelper')->urlWorkshopDetail($workshop->url),
                 'logoUrl' => $workshop->image != '' ?  Configure::read('AppConfig.serverName') . Configure::read('AppConfig.htmlHelper')->getThumbs150Image($workshop->image, 'workshops') : Configure::read('AppConfig.serverName') . Configure::read('AppConfig.htmlHelper')->getThumbs100Image('rclogo-100.jpg', 'workshops'),
                 'category' => $preparedCategories,
-                'nextEvent' => !empty($workshop->events[0]) ? $workshop->events[0]->datumstart_formatted : null,
+                'nextEvent' => $nextEventDate,
             ];
 
         }
