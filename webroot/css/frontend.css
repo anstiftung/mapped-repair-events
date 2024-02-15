@@ -111,7 +111,6 @@ h3 {
     text-transform: uppercase;
     font-weight: bold;
     font-size: 13px;
-    float: left;
     color: black;
 }
 .green {
@@ -1503,7 +1502,7 @@ body.blogs.detail h1 {
     margin: 0px 0px 0px 0px;
 }
 div.text-wrapper,
-div.ckeditor-text,
+div.editor-text,
 .blog-detail div.text-wrapper,
 #framedContent div.text-wrapper {
     line-height: 22px;
@@ -1536,8 +1535,8 @@ div.ckeditor-text,
     margin: 15px 0px 30px 0px;
     padding: 0px 0px 10px 0px;
 }
-.ckeditor-text img,
-.ckeditor-text iframe {
+.editor-text img,
+.editor-text iframe {
     max-width: 1160px;
     float: left;
     margin: 2px 10px 20px 0px;
@@ -1545,6 +1544,11 @@ div.ckeditor-text,
 #content div.text-wrapper ul,
 #framedContent div.text-wrapper ul {
     list-style: circle outside none;
+}
+#content div.text-wrapper ul,
+#framedContent div.text-wrapper ul,
+#content div.text-wrapper ol,
+#framedContent div.text-wrapper ol {
     padding-left: 10px;
     margin-left: 17px;
     margin-bottom: 10px;
@@ -2566,16 +2570,21 @@ body.posts.detail .left .image-text {
   margin-top: 5px;
   margin-bottom: 5px;
 }
-body.posts.detail .right .ckeditor-text img,
-.ckeditor-text iframe {
+body.posts.detail .right .editor-text img,
+.editor-text iframe {
   max-width: 540px;
 }
-body.posts.detail .right .ckeditor-text img {
+body.posts.detail .right .editor-text img {
   height: auto ! important;
 }
 body.featherlight:not(.featherlight-swipe-aware) .featherlight-image {
   height: 70vh;
   width: auto;
+}
+.featherlight-content #elfinder {
+    width: 1024px ! important;
+    height: 50vh ! important;
+    max-height: 700px ! important;
 }
 .featherlight .legend {
   position: absolute;
@@ -3440,7 +3449,6 @@ div.admin div.edit.categories {
     margin-left: 0px;
     width: 185px;
     min-height: 975px;
-    /* damit in ff auf windows 7 der ckeditor bei 1024 breite ganz links ist */
 }
 
 div.admin div.edit.categories fieldset {
@@ -3486,7 +3494,7 @@ div.admin div.categories-edit {
     width: 620px;
     float: left;
 }
-div.admin div.ckeditor-edit {
+div.admin div.editor-edit {
     float: left;
     margin: 5px 0;
 }
@@ -3604,7 +3612,7 @@ div.admin div.edit div.small input {
     width: 74px;
 }
 
-div.admin div.ckeditor {
+div.admin div.editor {
     clear: both;
 }
 
@@ -3638,7 +3646,7 @@ div.admin div.edit h2.metatags {
     float: left;
 }
 
-.ckeditor {
+.editor {
     clear: both;
 }
 
@@ -3734,6 +3742,42 @@ body.users.profil .add-skill {
 #mapHomeInfoBox > * {
     float: left;
 }
+
+.jodit-container {
+    margin-bottom: 10px;
+    float: right;
+    line-height: 22px;
+    font-size: 13px;
+}
+.jodit-container h2,
+.jodit-container h3 {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+.jodit-container ul,
+.jodit-container ol {
+    padding-left: 20px ! important;
+}
+.jodit-container ul,
+.jodit-container ul li {
+    list-style: disc;
+}
+.jodit-container ol,
+.jodit-container ol li {
+    list-style: decimal;
+}
+.jodit-container .jodit-add-new-line {
+    display: none ! important;
+}
+.jodit-ui-input__input {
+    width: 100% ! important;
+    padding: 0 8px ! important;
+}
+/* fix path for packed css */
+.elfinder-button-icon {
+    background-image: url(/js/elfinder/img/toolbar.png) ! important;
+}
+
 @media (max-width: 767px) {
     #wrapper {
         width: 100%;

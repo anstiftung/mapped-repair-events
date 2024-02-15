@@ -28,6 +28,29 @@ MappedRepairEvents.Helper = {
         });
     },
 
+    // https://github.com/Studio-42/elFinder/issues/2905#issuecomment-487106097
+    copyToClipboard: function(string) {
+
+        var temp = document.createElement('textarea');
+
+        temp.value = string;
+        temp.selectionStart = 0;
+        temp.selectionEnd = temp.value.length;
+
+        var s = temp.style;
+        s.position = 'fixed';
+        s.left = '-100%';
+
+        document.body.appendChild(temp);
+        temp.focus();
+        var result = document.execCommand('copy');
+        
+        temp.blur();
+        document.body.removeChild(temp);
+
+        return result;
+    },
+
     bindAddDateButton : function(dateHtml) {
 
         // remove select2 which is already initialized - it causes problems when the html is copied and pasted
@@ -328,54 +351,6 @@ MappedRepairEvents.Helper = {
         } else {
             wrapper.hide();
         }
-    },
-
-    initCkeditor: function (name, isMobile) {
-
-        if (!CKEDITOR.env.isCompatible) {
-            return false;
-        }
-
-        this.destroyCkeditor(name);
-
-        CKEDITOR.timestamp = 'v4.22.1';
-        $('textarea#' + name + '.ckeditor').ckeditor({
-            customConfig: '/js/ckeditor/config.js',
-            height: isMobile ? 350 : 650,
-            width: isMobile ? '100%' : 627
-        });
-
-    },
-
-    destroyCkeditor: function (name) {
-
-        if (!CKEDITOR.env.isCompatible) {
-            return false;
-        }
-
-        var editor = CKEDITOR.instances[name];
-
-        if (editor) {
-            editor.destroy(true);
-        }
-
-    },
-
-    initCkeditorWithoutElfinder: function (name, isMobile) {
-
-        if (!CKEDITOR.env.isCompatible) {
-            return false;
-        }
-
-        this.destroyCkeditor(name);
-
-        CKEDITOR.timestamp = 'v4.22.1';
-        $('textarea#' + name + '.ckeditor').ckeditor({
-            customConfig: '/js/ckeditor/config-without-elfinder.js',
-            height: isMobile ? 350 : 650,
-            width: isMobile ? '100%' : 627
-        });
-
     },
 
     doCurrentlyUpdatedActions : function(isCurrentlyUpdated) {

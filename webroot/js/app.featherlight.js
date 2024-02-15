@@ -74,12 +74,6 @@ MappedRepairEvents.AppFeatherlight = {
 
     },
 
-    addLightboxToCkeditorImages : function (selector) {
-        $(selector).each(function () {
-            $(this).wrap('<a class="lightbox" href="' + $(this).attr('src') + '"></a>');
-        });
-    },
-
     setMaxHeightInner : function () {
         $('.featherlight-inner').css('max-height', $('.featherlight-content').height());
     },

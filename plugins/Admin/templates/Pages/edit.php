@@ -56,9 +56,9 @@ use Cake\Core\Configure;
         echo $this->element('cancelAndSaveButton');
     ?>
 
-    <div class="ckeditor-edit">
+    <div class="editor-edit">
         <?php
-            echo $this->element('ckeditorEdit', [
+            echo $this->element('editorEdit', [
               'value' => $page->text,
               'name' => 'Pages.text',
               'uid' => $uid,
@@ -75,4 +75,4 @@ use Cake\Core\Configure;
 
 </div>
 
-<div class="sc"></div> <?php /* wegen ckeditor */ ?>
+<div class="sc"></div> <?php /* wegen editor */ ?>
