@@ -112,8 +112,14 @@ return function (RouteBuilder $routes) {
         $routes->connect('/post/*', ['controller'=>'posts', 'action'=>'detail']);
         $routes->connect('/{blogUrl}/*', ['controller'=>'blogs', 'action'=>'detail'], ['blogUrl' => 'neuigkeiten|'.Configure::read('AppConfig.htmlHelper')->getAdditionalBlogCategoryUrl()]);
 
-        $routes->connect('/api/splitter', ['controller' => 'posts', 'action' => 'getSplitter']);
-        $routes->connect('/api/workshops', ['controller' => 'workshops', 'action' => 'getWorkshopsForHyperModeWebsite']);
+        if (Configure::read('isApiEnabled')) {
+            $routes->connect('/api/splitter', ['controller' => 'posts', 'action' => 'getSplitter']);
+            $routes->connect('/api/workshops', ['controller' => 'workshops', 'action' => 'getWorkshopsForHyperModeWebsite']);
+            $routes->connect('/api/v1/workshops', [
+                'controller' => 'workshops',
+                'action' => 'getWorkshopsWithCityFilter',
+            ])->setMethods(['GET']);
+        }
 
         // für normale cake routings (users controller)
         $routes->connect('/{controller}/{action}/*');

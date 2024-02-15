@@ -42,6 +42,7 @@ class WorkshopsController extends AppController
             'ajaxGetWorkshopDetail',
             'ajaxGetWorkshopsAndUsersForTags',
             'getWorkshopsForHyperModeWebsite',
+            'getWorkshopsWithCityFilter',
             'home',
             'cluster',
             'detail',
@@ -393,6 +394,85 @@ class WorkshopsController extends AppController
 
     }
 
+    public function getWorkshopsWithCityFilter() {
+
+        $this->response = $this->response->cors($this->request)
+            ->allowOrigin(['*'])
+            ->allowMethods(['GET'])
+            ->build();
+
+        $this->request = $this->request->withParam('_ext', 'json');
+
+        $city = $this->request->getQuery('city');
+        if ($city === null || strlen($city) < 3) {
+            return $this->response->withStatus(400)->withType('json')->withStringBody(json_encode('city not passed or invalid (min 3 chars)'));
+        }
+
+        $workshops = $this->Workshop->find('all',
+        conditions: [
+            'Workshops.status' => APP_ON,
+            'Workshops.city LIKE' => "{$city}%",
+        ],
+        contain: [
+            'Categories' => [
+                'sort' => [
+                    'Categories.name' => 'asc',
+                ]
+            ],
+            'Events' => function($q) {
+                return $q->where([
+                    'DATE_FORMAT(Events.datumstart, \'%Y-%m-%d\') >= DATE_FORMAT(NOW(), \'%Y-%m-%d\')',
+                ]);
+            },
+        ],
+        order: ['Workshops.name' => 'asc']);
+
+        if ($workshops->count() == 0) {
+            return $this->response->withStatus(404)->withType('json')->withStringBody(json_encode('no workshops found'));
+        }
+
+        $preparedWorkshops = [];
+        foreach($workshops as $workshop) {
+
+            $preparedCategories = [];
+            foreach($workshop->categories as $category) {
+                $preparedCategories[] = [
+                    'id' => $category->id,
+                    'label' => $category->name,
+                    'iconUrl' => Configure::read('AppConfig.serverName') . '/img/icon-skills/' . $category->icon . '.png',
+                ];
+            }
+
+            $nextEventDate = null;
+            if (!empty($workshop->events[0] && !is_null($workshop->events[0]->datumstart))) {
+                $nextEventDate = $workshop->events[0]->datumstart->i18nFormat(Configure::read('DateFormat.de.DateLong2'));
+            } 
+
+            $preparedWorkshops[] = [
+                'id' => $workshop->uid,
+                'name' => $workshop->name,
+                'city' => $workshop->city,
+                'postalCode' => $workshop->zip,
+                'street' => $workshop->street,
+                'street2' => $workshop->adresszusatz,
+                'coordinates' => [
+                    'lat' => $workshop->lat,
+                    'lng' => $workshop->lng,
+                ],
+                'landingPage' => Configure::read('AppConfig.serverName') . Configure::read('AppConfig.htmlHelper')->urlWorkshopDetail($workshop->url),
+                'logoUrl' => $workshop->image != '' ?  Configure::read('AppConfig.serverName') . Configure::read('AppConfig.htmlHelper')->getThumbs150Image($workshop->image, 'workshops') : Configure::read('AppConfig.serverName') . Configure::read('AppConfig.htmlHelper')->getThumbs100Image('rclogo-100.jpg', 'workshops'),
+                'category' => $preparedCategories,
+                'nextEvent' => $nextEventDate,
+            ];
+
+        }
+
+        $this->set([
+            'workshops' => $preparedWorkshops,
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['workshops']);
+    }
+
     public function getWorkshopsForHyperModeWebsite()
     {
 
@@ -422,7 +502,7 @@ class WorkshopsController extends AppController
                 'hasOwnLogo' => $workshop->image == '' ? false : true,
                 'categories' => Hash::extract($workshop->categories, '{n}.name'),
             ];
-        }        
+        }
 
         $this->set([
             'workshops' => $preparedWorkshops,
@@ -591,7 +671,7 @@ class WorkshopsController extends AppController
             $preparedWorkshop = [];
 
             $workshop['events'] = array_values($workshop['events']); // reindex array
-            
+
             $tmpEvents = $workshop['events'];
             unset($workshop['events']);
             $preparedWorkshop['Workshop'] = $workshop;
@@ -783,7 +863,7 @@ class WorkshopsController extends AppController
         $this->set('groups', Configure::read('AppConfig.htmlHelper')->getUserGroupsForWorkshopDetail());
 
         if ($this->request->getSession()->read('isMobile') && !empty($categories)) {
-            
+
             $i = 0;
             $hasModifyPermissions = $this->isAdmin() || $this->Workshop->isUserInOrgaTeam($this->loggedUser, $workshop);
 

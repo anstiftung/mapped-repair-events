@@ -1,0 +1,26 @@
+{
+    "workshops": [
+        {
+            "id": 2,
+            "name": "Test Workshop",
+            "city": "Berlin",
+            "postalCode": "10115",
+            "street": "Torstra\u00dfe 123",
+            "street2": "Stiege 2",
+            "coordinates": {
+                "lat": 52.532,
+                "lng": 13.384
+            },
+            "landingPage": "{{serverName}}\/test-workshop",
+            "logoUrl": "{{serverName}}\/files\/uploadify\/workshops\/thumbs-100\/rclogo-100.jpg",
+            "category": [
+                {
+                    "id": 630,
+                    "label": "3D-Reparatur",
+                    "iconUrl": "{{serverName}}\/img\/icon-skills\/drei-d-reparatur.png"
+                }
+            ],
+            "nextEvent": "01.01.2040"
+        }
+    ]
+}
