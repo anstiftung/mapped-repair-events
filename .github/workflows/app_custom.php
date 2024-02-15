@@ -1,6 +1,7 @@
 <?php
 return [
     'debug' => true,
+    'isApiEnabled' => true,
     'emailErrorLoggingEnabled' => false,
     'googleMapApiKey' => '',
     'EmailTransport' => [

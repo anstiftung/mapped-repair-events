@@ -46,7 +46,7 @@ class WorkshopsControllerTest extends AppTestCase
 
     public function testWorkshopSearchWithExceptionKeyword()
     {
-        $this->get(Configure::read('AppConfig.htmlHelper')->urlWorkshops('berlin'));
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlWorkshops('aachen'));
         $this->assertResponseOk();
         $this->assertResponseNotEmpty();
         $this->assertResponseContains('<div class="numbers">0 Initiativen gefunden</div>');
@@ -62,7 +62,7 @@ class WorkshopsControllerTest extends AppTestCase
 
     public function testApplyToWorkshopAsRepairhelper()
     {
-        
+
         $this->executeLogFileAssertions = false;
 
         $workshopUid = 2;
@@ -179,6 +179,30 @@ class WorkshopsControllerTest extends AppTestCase
         $expectedResult = $this->correctServerName($expectedResult);
         $this->get('/workshops/ajaxGetWorkshopsAndUsersForTags?tags[]=3dreparieren');
         $this->assertResponseContains($expectedResult);
+    }
+
+
+    public function testRestWorkshopsBerlin()
+    {
+        $expectedResult = file_get_contents(TESTS . 'comparisons' . DS . 'rest-workshops-berlin.json');
+        $expectedResult = $this->correctServerName($expectedResult);
+        $this->get('/api/v1/workshops?city=berlin');
+        $this->assertResponseContains($expectedResult);
+        $this->assertResponseOk();
+    }
+
+    public function testRestWorkshopsHamburg()
+    {
+        $this->get('/api/v1/workshops?city=hamburg');
+        $this->assertResponseContains('no workshops found');
+        $this->assertResponseCode(404);
+    }
+
+    public function testRestWorkshopsWrongParam()
+    {
+        $this->get('/api/v1/workshops?city=ha');
+        $this->assertResponseContains('city not passed or invalid (min 3 chars)');
+        $this->assertResponseCode(400);
     }
 
 }

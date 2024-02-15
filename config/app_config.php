@@ -32,6 +32,7 @@ define('PASSWORD_REGEX', '/^([^\\s]){10,32}$/');
 define('ZIP_REGEX', '/^[0-9]{4,5}$/');
 
 return [
+    'isApiEnabled' => false,
     'AppConfig' => [
         'platformName' => 'Meine Plattform',
         'titleSuffix' => 'Meine Plattform',

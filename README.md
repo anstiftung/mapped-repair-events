@@ -21,6 +21,8 @@
   </a>
 </p>
 
+## [API Documentation](https://anstiftung.github.io/mapped-repair-events-api-docs/)
+
 ## Installation guide
 
 * set up vhost and start webserver and mysql-server
