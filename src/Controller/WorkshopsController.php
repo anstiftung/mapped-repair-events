@@ -444,7 +444,7 @@ class WorkshopsController extends AppController
             }
 
             $nextEventDate = null;
-            if (!empty($workshop->events[0] && !is_null($workshop->events[0]->datumstart))) {
+            if (isset($workshop->events[0]) && !is_null($workshop->events[0]->datumstart)) {
                 $nextEventDate = $workshop->events[0]->datumstart->i18nFormat(Configure::read('DateFormat.de.DateLong2'));
             } 
 
