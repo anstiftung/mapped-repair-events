@@ -159,12 +159,12 @@ class UsersController extends AppController
         $workshopsAssociation = $this->User->getAssociation('Workshops');
         $workshopsAssociation->setConditions([
             'UsersWorkshops.approved <> \'1970-01-01 00:00:00\'',
-            'Workshops.status > ' . APP_DELETED
+            'Workshops.status' => APP_ON,
         ]);
         $user = $this->User->find('all',
         conditions: [
             'Users.uid' => $userUid,
-            'Users.status > ' . APP_DELETED
+            'Users.status' => APP_ON,
         ],
         contain: [
             'Groups',
