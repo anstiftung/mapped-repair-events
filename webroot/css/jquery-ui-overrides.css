@@ -21,7 +21,7 @@
 .ui-widget-header li {
     border-radius: 0;
 }
-.ui-widget.ui-widget-content {
+.ui-tabs.ui-widget-content {
     border: none;
 }
 .ui-tabs .ui-tabs-nav,
