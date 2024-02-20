@@ -12,10 +12,16 @@ require dirname(__DIR__) . '/vendor/autoload.php';
 
 require dirname(__DIR__) . '/config/bootstrap.php';
 
+use Cake\TestSuite\Fixture\SchemaLoader;
+$schemLoader = new SchemaLoader();
+$schemLoader->loadSqlFiles(dirname(__DIR__) . '/config/sql/init/database.sql', 'test', true, true);
+$schemLoader->loadSqlFiles(dirname(__DIR__) . '/config/sql/init/phinxlog.sql', 'test', false);
+
 // 2) run new migrations (located in main folder)
 //$migrator->run([], false); // causes "Going to drop all tables in this source, and re-apply migrations."
 $migrations = new Migrations();
 $migrations->migrate(['connection' => 'test']);
+
 
 $_SERVER['PHP_SELF'] = '/';
 
