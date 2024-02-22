@@ -137,6 +137,32 @@ class WorkshopsControllerTest extends AppTestCase
 
     }
 
+    public function testAddWorkshopWithWrongGeoData()
+    {
+
+        $workshopForPost = [
+            'name' => 'test initiative',
+            'url' => 'test-initiative',
+            'use_custom_coordinates' => true,
+            'lat' => 13.404954, // wrong - data swapped: lat = lng
+            'lng' => 52.520008, // wrong - data swapped: lng = lat
+        ];
+
+        $this->loginAsOrga();
+        $this->post(
+            Configure::read('AppConfig.htmlHelper')->urlWorkshopNew(),
+            [
+                'referer' => '/',
+                'Workshops' => $workshopForPost
+            ]
+        );
+
+        $this->assertResponseContains('Die Geo-Koordinaten liegen nicht in Europa, vielleicht hast du Breite (Lat) und Länge (Long) vertauscht?');
+        $this->assertMailCount(0);
+
+    }
+
+
     public function testEditWorkshopAsOrga()
     {
         $this->loginAsOrga();

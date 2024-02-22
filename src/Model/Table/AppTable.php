@@ -90,30 +90,21 @@ abstract class AppTable extends Table
 
     public function getGeoCoordinatesValidator(Validator $validator)
     {
-        $validator->add('lat', 'geoCoordinatesInBoundingBox', [
-            'rule' => function ($value, $context) {
-                $geoService = new GeoService();
-                if ($context['data']['use_custom_coordinates']) {
-                    if (!$geoService->isPointInBoundingBox($context['data']['lat'], $context['data']['lng'])) {
-                        return false;
+        $geoFields = ['lat', 'lng'];
+        foreach($geoFields as $geoField) {
+            $validator->add($geoField, 'geoCoordinatesInBoundingBox', [
+                'rule' => function ($value, $context) {
+                    $geoService = new GeoService();
+                    if ($context['data']['use_custom_coordinates']) {
+                        if (!$geoService->isPointInBoundingBox($context['data']['lat'], $context['data']['lng'])) {
+                            return false;
+                        }
                     }
-                }
-                return true;
-            },
-            'message' => 'Nicht in Europa.'
-        ]);
-        $validator->add('lng', 'geoCoordinatesInBoundingBox', [
-            'rule' => function ($value, $context) {
-                $geoService = new GeoService();
-                if ($context['data']['use_custom_coordinates']) {
-                    if (!$geoService->isPointInBoundingBox($context['data']['lat'], $context['data']['lng'])) {
-                        return false;
-                    }
-                }
-                return true;
-            },
-            'message' => 'Nicht in Europa.'
-        ]);
+                    return true;
+                },
+                'message' => 'Die Geo-Koordinaten liegen nicht in Europa, vielleicht hast du Breite (Lat) und Länge (Long) vertauscht?',
+            ]);
+        }
         return $validator;
     }
 
