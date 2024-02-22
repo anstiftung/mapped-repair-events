@@ -13,6 +13,7 @@ use Cake\Mailer\Mailer;
 use Cake\Http\Exception\NotFoundException;
 use Cake\ORM\Query;
 use Gregwar\Captcha\CaptchaBuilder;
+use App\Traits\GeoCoordinatesTrait;
 
 class UsersController extends AppController
 {
@@ -21,6 +22,8 @@ class UsersController extends AppController
     public CountriesTable $Country;
     public SkillsTable $Skill;
     public UsersTable $User;
+
+    use GeoCoordinatesTrait;
 
     public function __construct($request = null, $response = null)
     {

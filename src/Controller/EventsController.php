@@ -17,6 +17,7 @@ use Eluceo\iCal\Domain\ValueObject\TimeSpan;
 use Eluceo\iCal\Presentation\Factory\CalendarFactory;
 use InvalidArgumentException;
 use Cake\View\JsonView;
+use App\Traits\GeoCoordinatesTrait;
 
 class EventsController extends AppController
 {
@@ -25,6 +26,8 @@ class EventsController extends AppController
     public $Event;
     public $Workshop;
     public $Worknews;
+
+    use GeoCoordinatesTrait;
 
     public function beforeFilter(EventInterface $event) {
 

@@ -20,6 +20,7 @@ use App\Model\Table\InfoSheetsTable;
 use App\Model\Table\PostsTable;
 use App\Model\Table\UsersTable;
 use App\Model\Table\WorknewsTable;
+use App\Traits\GeoCoordinatesTrait;
 
 class WorkshopsController extends AppController
 {
@@ -31,6 +32,8 @@ class WorkshopsController extends AppController
     public InfoSheetsTable $InfoSheet;
     public PostsTable $Post;
     public WorknewsTable $Worknews;
+
+    use GeoCoordinatesTrait;
 
     public function beforeFilter(EventInterface $event) {
 
