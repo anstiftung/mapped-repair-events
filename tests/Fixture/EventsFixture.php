@@ -19,8 +19,8 @@ class EventsFixture extends TestFixture
                 'uhrzeitstart' => new \Cake\I18n\DateTime('09:00'),
                 'uhrzeitend' => new \Cake\I18n\DateTime('18:00'),
                 'use_custom_coordinates' => 1,
-                'lat' => 1.1,
-                'lng' => 1.2,
+                'lat' => 52.520008,
+                'lng' => 13.404954,
                 'status' => 1,
                 'owner' => 1
             ]

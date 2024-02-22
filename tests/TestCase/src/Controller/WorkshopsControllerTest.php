@@ -110,9 +110,9 @@ class WorkshopsControllerTest extends AppTestCase
             'name' => 'test initiative',
             'url' => 'test-initiative',
             'use_custom_coordinates' => true,
-            'lat' => 0,
-            'lng' => 0,
-        ];
+            'lat' => 52.520008,
+            'lng' => 13.404954,
+];
 
         $this->loginAsOrga();
         $this->post(
@@ -150,8 +150,8 @@ class WorkshopsControllerTest extends AppTestCase
                     'url' => 'test-workshop',
                     'use_custom_coordinates' => true,
                     'text' => '<iframe></iframe>workshop info',
-                    'lat' => 0,
-                    'lng' => 0,
+                    'lat' => 52.520008,
+                    'lng' => 13.404954,
                 ]
             ]
         );

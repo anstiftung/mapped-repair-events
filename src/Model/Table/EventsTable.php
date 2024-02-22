@@ -36,8 +36,7 @@ class EventsTable extends AppTable
 
     public function validationDefault(Validator $validator): \Cake\Validation\Validator
     {
-        $validator = $this->getNumberRangeValidator($validator, 'lat', -90, 90);
-        $validator = $this->getNumberRangeValidator($validator, 'lng', -180, 180);
+        $validator = $this->getGeoCoordinatesValidator($validator);
         $validator->notEmptyString('workshop_uid', 'Bitte wähle eine Initiative aus.');
         $validator->notEmptyDate('datumstart', 'Bitte trage ein Datum ein.');
         $validator->notEmptyTime('uhrzeitstart', 'Bitte trage eine von-Uhrzeit ein.');

@@ -2,6 +2,7 @@
 namespace App\Model\Table;
 
 use App\Controller\Component\StringComponent;
+use App\Services\GeoService;
 use Cake\Datasource\FactoryLocator;
 use Cake\Event\EventInterface;
 use Cake\ORM\Table;
@@ -84,6 +85,35 @@ abstract class AppTable extends Table
         $validator->lessThanOrEqual($field, $max, $message);
         $validator->greaterThanOrEqual($field, $min, $message);
         $validator->notEmptyString($field, $message);
+        return $validator;
+    }
+
+    public function getGeoCoordinatesValidator(Validator $validator)
+    {
+        $validator->add('lat', 'geoCoordinatesInBoundingBox', [
+            'rule' => function ($value, $context) {
+                $geoService = new GeoService();
+                if ($context['data']['use_custom_coordinates']) {
+                    if (!$geoService->isPointInBoundingBox($context['data']['lat'], $context['data']['lng'])) {
+                        return false;
+                    }
+                }
+                return true;
+            },
+            'message' => 'Nicht in Europa.'
+        ]);
+        $validator->add('lng', 'geoCoordinatesInBoundingBox', [
+            'rule' => function ($value, $context) {
+                $geoService = new GeoService();
+                if ($context['data']['use_custom_coordinates']) {
+                    if (!$geoService->isPointInBoundingBox($context['data']['lat'], $context['data']['lng'])) {
+                        return false;
+                    }
+                }
+                return true;
+            },
+            'message' => 'Nicht in Europa.'
+        ]);
         return $validator;
     }
 

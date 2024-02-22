@@ -471,8 +471,8 @@ class EventsController extends AppController
             }
 
             $errors = $events[0]->getErrors();
-            if (isset($errors['lat']) && isset($errors['lat']['numeric'])) {
-                $this->AppFlash->setFlashError($errors['lat']['numeric']);
+            if (isset($errors['lat']) && isset($errors['lat']['geoCoordinatesInBoundingBox'])) {
+                $this->AppFlash->setFlashError($errors['lat']['geoCoordinatesInBoundingBox']);
             }
 
             if (!$hasErrors) {

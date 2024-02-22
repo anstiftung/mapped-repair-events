@@ -135,8 +135,9 @@ class WorkshopsController extends AppController
             $patchedEntity = $this->Workshop->getPatchedEntityForAdminEdit($workshop, $this->request->getData());
 
             $errors = $patchedEntity->getErrors();
-            if (isset($errors['lat']) && isset($errors['lat']['numeric'])) {
-                $this->AppFlash->setFlashError($errors['lat']['numeric']);
+
+            if (isset($errors['lat']) && isset($errors['lat']['geoCoordinatesInBoundingBox'])) {
+                $this->AppFlash->setFlashError($errors['lat']['geoCoordinatesInBoundingBox']);
             }
 
             if (empty($errors)) {
