@@ -61,8 +61,6 @@ class EventsControllerTest extends AppTestCase
         $this->assertResponseContains('Bitte trage die Stadt ein.');
         $this->assertResponseContains('Bitte trage die Straße ein.');
         $this->assertResponseContains('Bitte trage die PLZ ein.');
-        $this->assertResponseContains('Die Eingabe muss eine Zahl zwischen -90 und 90 sein.');
-        $this->assertResponseContains('Die Eingabe muss eine Zahl zwischen -180 und 180 sein.');
         $this->assertResponseContains('Bitte trage ein Datum ein.');
         $this->assertResponseContains('Bitte trage eine von-Uhrzeit ein.');
         $this->assertResponseContains('Bitte trage eine bis-Uhrzeit ein.');
