@@ -11,6 +11,7 @@ use Cake\TestSuite\EmailTrait;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\StringCompareTrait;
 use Cake\TestSuite\TestEmailTransport;
+use App\Services\GeoService;
 
 class WorkshopsControllerTest extends AppTestCase
 {
@@ -157,7 +158,7 @@ class WorkshopsControllerTest extends AppTestCase
             ]
         );
 
-        $this->assertResponseContains('Die Geo-Koordinaten liegen nicht in Europa, vielleicht hast du Breite (Lat) und Länge (Long) vertauscht?');
+        $this->assertResponseContains(GeoService::ERROR_OUT_OF_BOUNDING_BOX);
         $this->assertMailCount(0);
 
     }

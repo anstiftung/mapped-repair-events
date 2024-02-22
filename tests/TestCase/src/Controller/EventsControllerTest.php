@@ -2,6 +2,7 @@
 
 namespace App\Test\TestCase\Controller;
 
+use App\Services\GeoService;
 use App\Test\TestCase\AppTestCase;
 use App\Test\TestCase\Traits\LogFileAssertionsTrait;
 use App\Test\TestCase\Traits\LoginTrait;
@@ -64,7 +65,7 @@ class EventsControllerTest extends AppTestCase
         $this->assertResponseContains('Bitte trage ein Datum ein.');
         $this->assertResponseContains('Bitte trage eine von-Uhrzeit ein.');
         $this->assertResponseContains('Bitte trage eine bis-Uhrzeit ein.');
-        $this->assertResponseContains('Die Geo-Koordinaten liegen nicht in Europa, vielleicht hast du Breite (Lat) und Länge (Long) vertauscht?');
+        $this->assertResponseContains(GeoService::ERROR_OUT_OF_BOUNDING_BOX);
 
     }
 
