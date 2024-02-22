@@ -5,13 +5,14 @@ namespace App\Model\Table;
 use Cake\Core\Configure;
 use Cake\Validation\Validator;
 use App\Model\Traits\SearchExceptionsTrait;
+use App\Services\GeoService;
 use Cake\ORM\Query\SelectQuery;
 
 class EventsTable extends AppTable
 {
 
     use SearchExceptionsTrait;
-    
+
     public $name_de = 'Termin';
 
     public $allowedBasicHtmlFields = [
@@ -36,7 +37,8 @@ class EventsTable extends AppTable
 
     public function validationDefault(Validator $validator): \Cake\Validation\Validator
     {
-        $validator = $this->getGeoCoordinatesValidator($validator);
+        $geoService = new GeoService();
+        $validator = $geoService->getGeoCoordinatesValidator($validator);
         $validator->notEmptyString('workshop_uid', 'Bitte wähle eine Initiative aus.');
         $validator->notEmptyDate('datumstart', 'Bitte trage ein Datum ein.');
         $validator->notEmptyTime('uhrzeitstart', 'Bitte trage eine von-Uhrzeit ein.');
@@ -86,7 +88,7 @@ class EventsTable extends AppTable
 
     public function getTimeRangeCondition($timeRange, $negate) {
         return function ($exp, $query) use ($timeRange, $negate) {
-            
+
             $now = new \Cake\I18n\DateTime();
             $minDate = null;
             $maxDate = $now->addDays(30);
@@ -113,7 +115,7 @@ class EventsTable extends AppTable
             if ($negate) {
                 $result = $exp->not($result);
             }
-            
+
             return $result;
         };
     }

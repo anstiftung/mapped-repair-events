@@ -88,26 +88,6 @@ abstract class AppTable extends Table
         return $validator;
     }
 
-    public function getGeoCoordinatesValidator(Validator $validator)
-    {
-        $geoFields = ['lat', 'lng'];
-        foreach($geoFields as $geoField) {
-            $validator->add($geoField, 'geoCoordinatesInBoundingBox', [
-                'rule' => function ($value, $context) {
-                    $geoService = new GeoService();
-                    if ($context['data']['use_custom_coordinates']) {
-                        if (!$geoService->isPointInBoundingBox($context['data']['lat'], $context['data']['lng'])) {
-                            return false;
-                        }
-                    }
-                    return true;
-                },
-                'message' => 'Die Geo-Koordinaten liegen nicht in Europa, vielleicht hast du Breite (Lat) und Länge (Long) vertauscht?',
-            ]);
-        }
-        return $validator;
-    }
-
     public function getPatchedEntityForAdminEdit($entity, $data)
     {
         $isAdmin = Router::getRequest()?->getAttribute('identity')?->isAdmin();

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use Cake\Core\Configure;
 use Cake\Http\Exception\ServiceUnavailableException;
+use Cake\Validation\Validator;
 
 class GeoService {
 
@@ -42,6 +43,25 @@ class GeoService {
         }
 
         return ['lat' => $lat, 'lng' => $lng];
+    }
+
+    public function getGeoCoordinatesValidator(Validator $validator)
+    {
+        $geoFields = ['lat', 'lng'];
+        foreach($geoFields as $geoField) {
+            $validator->add($geoField, 'geoCoordinatesInBoundingBox', [
+                'rule' => function ($value, $context) {
+                    if ($context['data']['use_custom_coordinates']) {
+                        if (!$this->isPointInBoundingBox($context['data']['lat'], $context['data']['lng'])) {
+                            return false;
+                        }
+                    }
+                    return true;
+                },
+                'message' => 'Die Geo-Koordinaten liegen nicht in Europa, vielleicht hast du Breite (Lat) und Länge (Long) vertauscht?',
+            ]);
+        }
+        return $validator;
     }
 
 }
