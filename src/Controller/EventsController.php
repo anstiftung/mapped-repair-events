@@ -17,7 +17,7 @@ use Eluceo\iCal\Domain\ValueObject\TimeSpan;
 use Eluceo\iCal\Presentation\Factory\CalendarFactory;
 use InvalidArgumentException;
 use Cake\View\JsonView;
-use App\Traits\GeoCoordinatesTrait;
+use App\Services\GeoService;
 
 class EventsController extends AppController
 {
@@ -26,8 +26,6 @@ class EventsController extends AppController
     public $Event;
     public $Workshop;
     public $Worknews;
-
-    use GeoCoordinatesTrait;
 
     public function beforeFilter(EventInterface $event) {
 
@@ -446,8 +444,9 @@ class EventsController extends AppController
                 }
                 if (!$data['use_custom_coordinates']) {
                     $addressString = $data['strasse'] . ', ' . $data['zip'] . ' ' . $data['ort'] . ', ' . $data['land'];
-                    $coordinates = $this->getLatLngFromGeoCodingService($addressString);
-                    $data['lat'] = $coordinates['lat'];
+                    $geoService = new GeoService();
+                    $coordinates = $geoService->getLatLngFromGeoCodingService($addressString);
+                         $data['lat'] = $coordinates['lat'];
                     $data['lng'] = $coordinates['lng'];
                 }
                 if (!empty($data['use_custom_coordinates'])) {
@@ -604,7 +603,7 @@ class EventsController extends AppController
         $preparedCategories = [];
         $categoryClass = '';
         foreach ($categories as $category) {
-            
+
             // category is selected
             if (count($selectedCategories) > 0) {
                 if (in_array($category->id, $selectedCategories)) {
@@ -694,7 +693,7 @@ class EventsController extends AppController
         }
         $this->set('resetCategoriesUrl', $resetCategoriesUrl);
 
-        if (!empty($this->request->getQuery('categories'))) {  
+        if (!empty($this->request->getQuery('categories'))) {
             $categories = explode(',', h($this->request->getQuery('categories')));
             if (!empty($categories)) {
                 $query->matching('Categories', function(\Cake\ORM\Query $q) use ($categories) {
