@@ -448,11 +448,7 @@ class UsersTable extends AppTable
             'Users.password'
         ])->first();
 
-        if ($hashedPassword == $user->password) {
-            return true;
-        } else {
-            return false;
-        }
+        return $hashedPassword == $user->password;
     }
 
 }
