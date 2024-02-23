@@ -608,7 +608,9 @@ class UsersController extends AppController
             $user = $this->User->patchEntity($user, $this->request->getData(), ['validate' => 'Registration']);
 
             if (!$this->isCalledByTestSuite()) {
+                /* @phpstan-ignore-next-line */
                 $captchaBuilder->setPhrase($this->request->getSession()->read('captchaPhrase'));
+                /* @phpstan-ignore-next-line */
                 if (!$captchaBuilder->testPhrase($this->request->getData('Users.captcha'))) {
                     $user->setError('captcha', 'Das Captcha ist nicht korrekt.');
                 }
