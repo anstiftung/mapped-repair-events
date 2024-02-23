@@ -2,6 +2,7 @@
 namespace App\Model\Table;
 
 use App\Controller\Component\StringComponent;
+use App\Services\GeoService;
 use Cake\Datasource\FactoryLocator;
 use Cake\Event\EventInterface;
 use Cake\ORM\Table;

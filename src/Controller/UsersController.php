@@ -13,6 +13,7 @@ use Cake\Mailer\Mailer;
 use Cake\Http\Exception\NotFoundException;
 use Cake\ORM\Query;
 use Gregwar\Captcha\CaptchaBuilder;
+use App\Services\GeoService;
 
 class UsersController extends AppController
 {
@@ -304,8 +305,9 @@ class UsersController extends AppController
             $this->request = $this->request->withData('Users.skills._ids', $existingSkills);
 
             $addressString = trim($this->request->getData('Users.zip') . ', ' . $this->request->getData('Users.city') . ', ' . $this->request->getData('Users.country_code'));
-            $coordinates = $this->getLatLngFromGeoCodingService($addressString);
-            $this->request = $this->request->withData('Users.lat', $coordinates['lat']);
+            $geoService = new GeoService();
+            $coordinates = $geoService->getLatLngFromGeoCodingService($addressString);
+         $this->request = $this->request->withData('Users.lat', $coordinates['lat']);
             $this->request = $this->request->withData('Users.lng', $coordinates['lng']);
 
             if (!empty($this->request->getData('Users.private_as_array'))) {

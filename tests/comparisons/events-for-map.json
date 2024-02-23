@@ -5,8 +5,8 @@
         {
             "Event": {
                 "uid": 6,
-                "lat": 1.1,
-                "lng": 1.2,
+                "lat": 52.520008,
+                "lng": 13.404954,
                 "datumstart": "2040-01-01",
                 "strasse": null,
                 "zip": null,
@@ -16,7 +16,7 @@
                 "owner": 1,
                 "eventbeschreibung": "description",
                 "is_online_event": 0,
-                "uniquePlace": "3bea26eaf1eae7d19e82202a00759d8e",
+                "uniquePlace": "190641f793aea9f4fe7bc9b440d0c6be",
                 "directurl": "test-workshop?event=6,2040-01-01",
                 "categories": [
                     {
@@ -52,8 +52,8 @@
             "Events": [
                 {
                     "uid": 6,
-                    "lat": 1.1,
-                    "lng": 1.2,
+                    "lat": 52.520008,
+                    "lng": 13.404954,
                     "datumstart": "2040-01-01",
                     "strasse": null,
                     "zip": null,
@@ -63,7 +63,7 @@
                     "owner": 1,
                     "eventbeschreibung": "description",
                     "is_online_event": 0,
-                    "uniquePlace": "3bea26eaf1eae7d19e82202a00759d8e",
+                    "uniquePlace": "190641f793aea9f4fe7bc9b440d0c6be",
                     "directurl": "test-workshop?event=6,2040-01-01",
                     "categories": [
                         {

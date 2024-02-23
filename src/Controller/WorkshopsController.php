@@ -20,6 +20,7 @@ use App\Model\Table\InfoSheetsTable;
 use App\Model\Table\PostsTable;
 use App\Model\Table\UsersTable;
 use App\Model\Table\WorknewsTable;
+use App\Services\GeoService;
 
 class WorkshopsController extends AppController
 {
@@ -114,7 +115,8 @@ class WorkshopsController extends AppController
 
             if (!$this->request->getData('Workshops.use_custom_coordinates')) {
                 $addressString = $this->request->getData('Workshops.street') . ', ' . $this->request->getData('Workshops.zip') . ' ' . $this->request->getData('Workshops.city') . ', ' . $this->request->getData('Workshops.country_code');
-                $coordinates = $this->getLatLngFromGeoCodingService($addressString);
+                $geoService = new GeoService();
+                $coordinates = $geoService->getLatLngFromGeoCodingService($addressString);
                 $this->request = $this->request->withData('Workshops.lat', $coordinates['lat']);
                 $this->request = $this->request->withData('Workshops.lng', $coordinates['lng']);
 
@@ -132,8 +134,9 @@ class WorkshopsController extends AppController
             $patchedEntity = $this->Workshop->getPatchedEntityForAdminEdit($workshop, $this->request->getData());
 
             $errors = $patchedEntity->getErrors();
-            if (isset($errors['lat']) && isset($errors['lat']['numeric'])) {
-                $this->AppFlash->setFlashError($errors['lat']['numeric']);
+
+            if (isset($errors['lat']) && isset($errors['lat']['geoCoordinatesInBoundingBox'])) {
+                $this->AppFlash->setFlashError($errors['lat']['geoCoordinatesInBoundingBox']);
             }
 
             if (empty($errors)) {
@@ -446,7 +449,7 @@ class WorkshopsController extends AppController
             $nextEventDate = null;
             if (isset($workshop->events[0]) && !is_null($workshop->events[0]->datumstart)) {
                 $nextEventDate = $workshop->events[0]->datumstart->i18nFormat(Configure::read('DateFormat.de.DateLong2'));
-            } 
+            }
 
             $preparedWorkshops[] = [
                 'id' => $workshop->uid,

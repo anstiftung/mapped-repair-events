@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Test\TestCase\Lib;
+namespace App\Test\TestCase\Services;
 
 use Cake\Core\Configure;
 use App\Test\TestCase\AppTestCase;

@@ -4,6 +4,7 @@ namespace App\Model\Table;
 use App\Model\Traits\SearchExceptionsTrait;
 use Cake\Validation\Validator;
 use Cake\Datasource\FactoryLocator;
+use App\Services\GeoService;
 
 class WorkshopsTable extends AppTable
 {
@@ -87,8 +88,8 @@ class WorkshopsTable extends AppTable
 
     public function validationAdmin(Validator $validator)
     {
-        $validator = $this->getNumberRangeValidator($validator, 'lat', -90, 90);
-        $validator = $this->getNumberRangeValidator($validator, 'lng', -180, 180);
+        $geoService = new GeoService();
+        $validator = $geoService->getGeoCoordinatesValidator($validator);
         $validator = parent::addUrlValidation($validator);
         $validator->notEmptyString('name', 'Bitte trage den Namen der Initiative ein.');
         $validator->minLength('name', 2, 'Bitte gib einen gültigen Namen an.');
