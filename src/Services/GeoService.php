@@ -5,6 +5,7 @@ namespace App\Services;
 use Cake\Core\Configure;
 use Cake\Http\Exception\ServiceUnavailableException;
 use Cake\Validation\Validator;
+use Cake\Log\Log;
 
 class GeoService {
 
@@ -55,6 +56,7 @@ class GeoService {
                 'rule' => function ($value, $context) {
                     if ($context['data']['use_custom_coordinates']) {
                         if (!$this->isPointInBoundingBox($context['data']['lat'], $context['data']['lng'])) {
+                            Log::error('Geo coordinates out of bounding box: lat: ' . json_encode($context['data']['lat']) . ' / lng: ' . json_encode($context['data']['lng']));
                             return false;
                         }
                     }
