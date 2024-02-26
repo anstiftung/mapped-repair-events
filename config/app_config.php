@@ -31,6 +31,11 @@ define('GROUPS_ORGA', 	          9);
 define('PASSWORD_REGEX', '/^([^\\s]){10,32}$/');
 define('ZIP_REGEX', '/^[0-9]{4,5}$/');
 
+// strangely, the constant is undefined in the intervention image library
+if (!defined('IMG_WEBP_LOSSLESS')) {
+    define('IMG_WEBP_LOSSLESS', 101);
+}
+
 return [
     'isApiEnabled' => false,
     'AppConfig' => [
