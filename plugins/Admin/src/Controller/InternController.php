@@ -11,7 +11,7 @@ use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
 use Cake\Event\EventInterface;
 use Intervention\Image\ImageManager;
-use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\Drivers\Imagick\Driver;
 use App\Model\Table\PostsTable;
 use App\Model\Table\WorkshopsTable;
 use App\Model\Table\EventsTable;
