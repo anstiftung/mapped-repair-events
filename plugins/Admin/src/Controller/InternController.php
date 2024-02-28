@@ -260,7 +260,7 @@ class InternController extends AdminAppController
 
             // only users have square 150 image!
             if (isset($thumbSizeOptions['square']) && $thumbSizeOptions['square'] == 1 && preg_match('/users/', $targetFileAbsolute)) {
-                $image->scale($thumbSize)->crop($thumbSize, $thumbSize, 0, 0, 'center');
+                $image->scale($thumbSize)->crop($thumbSize, $thumbSize, 0, 0, 'ffffff', 'center');
             } else {
                 if ($thumbSize != 'original') {
                     $image->scale($thumbSize);
