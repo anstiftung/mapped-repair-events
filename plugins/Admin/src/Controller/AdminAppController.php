@@ -33,7 +33,7 @@ class AdminAppController extends AppController
     {
         parent::initialize();
         $this->paginate = [
-            'limit' => 500,
+            'limit' => 200,
             'maxLimit' => 100000
         ];
     }
