@@ -94,7 +94,7 @@ if (!isset($hideDeleteLink) || !$hideDeleteLink) {
 
                 if (isset($field['type']) && in_array($field['type'], [
                     'array',
-                    'habtm'
+                    'habtm',
                 ])) {
                     $caption = '<th>' . $label . '</th>';
                     $caption = preg_replace('/\./', ' ', $caption);
@@ -229,7 +229,8 @@ if (!isset($hideDeleteLink) || !$hideDeleteLink) {
                         }
                         if (in_array($field['type'], [
                             'array',
-                            'habtm'
+                            'habtm',
+                            'unchanged',
                         ])) {
                             echo $value;
                         }
@@ -243,7 +244,7 @@ if (!isset($hideDeleteLink) || !$hideDeleteLink) {
                         }
                     } else {
                         // Table.email automatisch mit mailto verlinkt
-                        if (preg_match('/email/', $field['name']) && $value != '') {
+                        if (preg_match('/email/', $field['name']) && $value != '' && $field['type'] != 'unchanged') {
                             echo $this->Html->link('<i class="far fa-envelope fa-border"></i>', 'mailto:' . $value, [
                                 'escape' => false,
                                 'title' => 'E-Mail versenden'
