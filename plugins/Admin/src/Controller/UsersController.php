@@ -30,7 +30,6 @@ class UsersController extends AdminAppController
 
     public function beforeFilter(EventInterface $event)
     {
-        parent::beforeFilter($event);
 
         $this->addSearchOptions([
             'Users.firstname' => [
@@ -62,6 +61,9 @@ class UsersController extends AdminAppController
         // für optional groups dropdown
         $this->generateSearchConditions('opt-1');
         $this->generateSearchConditions('opt-2');
+
+        parent::beforeFilter($event);
+
     }
 
     public function index()
