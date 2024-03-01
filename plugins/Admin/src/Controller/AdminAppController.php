@@ -93,8 +93,9 @@ class AdminAppController extends AppController
         $this->paginate['order'] = [
             $this->pluralizedModelName . '.updated' => 'DESC'
         ];
-        $this->conditions[] = $this->pluralizedModelName . '.status > ' . APP_DELETED;
-
+        if ($this->searchStatus) {
+            $this->conditions[] = $this->pluralizedModelName . '.status > ' . APP_DELETED;
+        }
         $this->set('objectClass', Inflector::classify($this->name));
 
         $this->set('searchStatus', $this->searchStatus);
