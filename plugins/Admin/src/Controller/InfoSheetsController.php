@@ -61,6 +61,9 @@ class InfoSheetsController extends AdminAppController
         ]);
 
         foreach($objects as $object) {
+            if (empty($object->owner_user)) {
+                continue;
+            }
             $object->owner_user->revertPrivatizeData();
         }
 
