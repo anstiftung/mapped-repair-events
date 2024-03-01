@@ -6,19 +6,12 @@ use App\Model\Table\WorknewsTable;
 class WorknewsController extends AdminAppController
 {
 
-    public WorknewsTable $Worknews;
-    
-    public function __construct($request = null, $response = null)
-    {
-        parent::__construct($request, $response);
-        $this->Worknews = $this->getTableLocator()->get('Worknews');
-    }
-
     public function index()
     {
         parent::index();
 
-        $query = $this->Worknews->find('all',
+        $worknewsTable = $this->getTableLocator()->get('Worknews');
+        $query = $worknewsTable->find('all',
         contain: [
             'Workshops',
         ]);

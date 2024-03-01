@@ -25,7 +25,8 @@ class AdminPolicy implements RequestPolicyInterface
             'ajaxMiniUploadFormSaveUploadedImage',
             'ajaxMiniUploadFormSaveUploadedImagesMultiple',
             'ajaxMiniUploadFormTmpImageUpload',
-            'ajaxChangeAppObjectStatus'
+            'ajaxChangeAppObjectStatus',
+            'ajaxDeleteObject',
         ])) {
             return $identity !== null;
         }
