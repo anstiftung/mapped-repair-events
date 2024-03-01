@@ -46,28 +46,28 @@
     width: 100%;
     padding: 0%;
     margin: 0px auto;
-    height: 45px;
+    height: 40px;
     float: left;
 }
 
 #navadmin>ul>li {
     margin-right: 2px;
-    margin-top: 2px;
+    margin-top: 5px;
     display: block;
     float: left;
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 45px;
+    height: 40px;
     background-color: #efefef;
     border-radius: 5px;
 }
 
 #navadmin>ul>li>a {
-    padding: 10px 5px;
+    padding: 10px 1px;
     display: block;
     width: 74px;
-    font-size: 14px;
+    font-size: 13px;
     text-align: center;
     font-weight: normal;
     word-break: break-all;
