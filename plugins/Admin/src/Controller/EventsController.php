@@ -20,8 +20,14 @@ class EventsController extends AdminAppController
     public function beforeFilter(EventInterface $event)
     {
 
+        $this->searchText = false;
+        
         $this->addSearchOptions([
 
+            'Events.eventbeschreibung' => [
+                'name' => 'Events.eventbeschreibung',
+                'searchType' => 'search'
+            ],
             'Events.ort' => [
                 'name' => 'Events.ort',
                 'searchType' => 'search'

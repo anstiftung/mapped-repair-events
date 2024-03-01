@@ -110,11 +110,19 @@ class AdminAppController extends AppController
             if ($filterValue == '') {
                 return;
             }
-            $searchType = $this->searchOptions[
-                $data[
-                    'key-' . $searchFieldKey
-                ]
-            ]['searchType'];
+            $key = isset($this->searchOptions[$data[
+                'key-' . $searchFieldKey
+            ]]);
+            if ($key) {
+                $searchType = $this->searchOptions[
+                    $data[
+                        'key-' . $searchFieldKey
+                    ]
+                ]['searchType'];
+            } else {
+                $this->AppFlash->setFlashError('Bitte wähle im Dropdown ein Suchfeld aus.');
+                return;
+            }
             switch ($searchType) {
                 case 'equal':
                     $this->conditions[$data['key-' . $searchFieldKey]] = $data['val-' . $searchFieldKey];
