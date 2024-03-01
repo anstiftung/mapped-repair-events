@@ -103,30 +103,30 @@ class AdminAppController extends AppController
 
     protected function generateSearchConditions($searchFieldKey)
     {
-        $queryParams = $this->request->getQueryParams();
+        $data = $this->request->getData();
 
-        if (isset($queryParams['val-' . $searchFieldKey])) {
-            $filterValue = $queryParams['val-' . $searchFieldKey];
+        if (isset($data['val-' . $searchFieldKey])) {
+            $filterValue = $data['val-' . $searchFieldKey];
             if ($filterValue == '') {
                 return;
             }
             $searchType = $this->searchOptions[
-                $queryParams[
+                $data[
                     'key-' . $searchFieldKey
                 ]
             ]['searchType'];
             switch ($searchType) {
                 case 'equal':
-                    $this->conditions[$queryParams['key-' . $searchFieldKey]] = $queryParams['val-' . $searchFieldKey];
+                    $this->conditions[$data['key-' . $searchFieldKey]] = $data['val-' . $searchFieldKey];
                     break;
                 case 'search':
-                    $this->conditions[] = $queryParams['key-' . $searchFieldKey] . " LIKE '%" . $queryParams['val-' . $searchFieldKey] . "%'";
+                    $this->conditions[] = $data['key-' . $searchFieldKey] . " LIKE '%" . $data['val-' . $searchFieldKey] . "%'";
                     break;
                 case 'matching':
                     $this->matchings[] = [
-                        'association' => $this->searchOptions[$queryParams['key-' . $searchFieldKey]]['association'],
+                        'association' => $this->searchOptions[$data['key-' . $searchFieldKey]]['association'],
                         'condition' => [
-                            $queryParams['key-' . $searchFieldKey] => $queryParams['val-' . $searchFieldKey]
+                            $data['key-' . $searchFieldKey] => $data['val-' . $searchFieldKey]
                         ]
                     ];
                     break;
