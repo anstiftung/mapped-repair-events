@@ -441,7 +441,7 @@ class WorkshopsController extends AppController
             foreach($workshop->categories as $category) {
                 $preparedCategories[] = [
                     'id' => $category->id,
-                    'label' => $category->name,
+                    'label' => html_entity_decode($category->name),
                     'iconUrl' => Configure::read('AppConfig.serverName') . '/img/icon-skills/' . $category->icon . '.png',
                 ];
             }
@@ -453,11 +453,11 @@ class WorkshopsController extends AppController
 
             $preparedWorkshops[] = [
                 'id' => $workshop->uid,
-                'name' => $workshop->name,
+                'name' => html_entity_decode($workshop->name),
                 'city' => $workshop->city,
                 'postalCode' => $workshop->zip,
-                'street' => $workshop->street,
-                'street2' => $workshop->adresszusatz,
+                'street' => html_entity_decode($workshop->street),
+                'street2' => html_entity_decode($workshop->adresszusatz),
                 'coordinates' => [
                     'lat' => $workshop->lat,
                     'lng' => $workshop->lng,
