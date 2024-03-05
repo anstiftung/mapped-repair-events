@@ -6,7 +6,7 @@
             "city": "Berlin",
             "postalCode": "10115",
             "street": "Torstra\u00dfe 123",
-            "street2": "Stiege 2",
+            "street2": "Stiege 2 \u0026 Stiege 3",
             "coordinates": {
                 "lat": 52.532,
                 "lng": 13.384

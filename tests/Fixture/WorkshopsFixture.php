@@ -18,7 +18,7 @@ class WorkshopsFixture extends TestFixture
             'city' => 'Berlin',
             'zip' => '10115',
             'street' => 'Torstraße 123',
-            'adresszusatz' => 'Stiege 2',
+            'adresszusatz' => 'Stiege 2 &amp; Stiege 3',
             'lat' => 52.532,
             'lng' => 13.384,
             'status' => APP_ON,
