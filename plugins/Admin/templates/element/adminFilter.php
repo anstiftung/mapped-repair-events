@@ -1,6 +1,6 @@
 <?php
     echo $this->Form->create(null, [
-        'method' => 'POST',
+        'method' => 'GET',
         'id' => 'admin-list-form',
     ]);
 
@@ -11,13 +11,13 @@
         'name' => 'key-standard',
         'empty' => '---',
         'options' => array_combine(array_keys($searchOptionsForDropdown), array_keys($searchOptionsForDropdown)),
-        'value' => $this->request->getData('key-standard', ''),
+        'value' => isset($this->request->getQueryParams()['key-standard']) ? $this->request->getQueryParams()['key-standard'] : '',
         'label' => ''
     ]);
     echo $this->Form->control('val-standard', [
         'label' => '',
         'name' => 'val-standard',
-        'value' => $this->request->getData('val-standard', ''),
+        'value' => isset($this->request->getQueryParams()['val-standard']) ? $this->request->getQueryParams()['val-standard'] : ''
     ]);
     ?>
 
@@ -31,7 +31,7 @@
                 'name' => 'val-opt-' . $i,
                 'empty' => $optionalSearchForm['label'],
                 'options' => $optionalSearchForm['options'],
-                'value' => $this->request->getData('val-opt-' . $i, ''),
+                'value' => isset($this->request->getQueryParams()['val-opt-' . $i]) ? $this->request->getQueryParams()['val-opt-' . $i] : '',
                 'label' => ''
             ]);
 
@@ -53,7 +53,7 @@
                 APP_ON => 'online',
                 APP_OFF => 'offline'
             ],
-            'value' => $this->request->getData('val-status', ''),
+            'value' => isset($this->request->getQueryParams()['val-status']) ? $this->request->getQueryParams()['val-status'] : '',
             'label' => 'Status'
         ]);
 
@@ -65,12 +65,12 @@
 
     echo $this->Form->hidden('sort', [
         'name' => 'sort',
-        'value' => $this->request->getData('sort', ''),
+        'value' => isset($this->request->getQueryParams()['sort']) ? $this->request->getQueryParams()['sort'] : ''
     ]);
 
     echo $this->Form->hidden('direction', [
         'name' => 'direction',
-        'value' => $this->request->getData('direction', ''),
+        'value' => isset($this->request->getQueryParams()['direction']) ? $this->request->getQueryParams()['direction'] : ''
     ]);
 
     echo $this->Form->button('Suchen', [
@@ -80,7 +80,7 @@
 
     ?>
 
-    <?php if (!empty($this->request->getData())) { ?>
+    <?php if (!empty($this->request->getQueryParams())) { ?>
         <button type="button" class="rounded gray"
             onclick="document.location.href='/<?php echo strtolower($this->request->getParam('plugin')).'/'.Inflector::dasherize($this->request->getParam('controller')).'/'.$this->request->getParam('action');?>';">
         Filter zurücksetzen<span></span>

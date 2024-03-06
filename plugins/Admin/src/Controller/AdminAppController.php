@@ -103,19 +103,19 @@ class AdminAppController extends AppController
 
     protected function generateSearchConditions($searchFieldKey)
     {
-        $data = $this->request->getData();
+        $queryParams = $this->request->getQueryParams();
 
-        if (isset($data['val-' . $searchFieldKey])) {
-            $filterValue = $data['val-' . $searchFieldKey];
+        if (isset($queryParams['val-' . $searchFieldKey])) {
+            $filterValue = $queryParams['val-' . $searchFieldKey];
             if ($filterValue == '') {
                 return;
             }
-            $key = isset($this->searchOptions[$data[
+            $key = isset($this->searchOptions[$queryParams[
                 'key-' . $searchFieldKey
             ]]);
             if ($key) {
                 $searchType = $this->searchOptions[
-                    $data[
+                    $queryParams[
                         'key-' . $searchFieldKey
                     ]
                 ]['searchType'];
@@ -125,16 +125,16 @@ class AdminAppController extends AppController
             }
             switch ($searchType) {
                 case 'equal':
-                    $this->conditions[$data['key-' . $searchFieldKey]] = $data['val-' . $searchFieldKey];
+                    $this->conditions[$queryParams['key-' . $searchFieldKey]] = $queryParams['val-' . $searchFieldKey];
                     break;
                 case 'search':
-                    $this->conditions[] = $data['key-' . $searchFieldKey] . " LIKE '%" . $data['val-' . $searchFieldKey] . "%'";
+                    $this->conditions[] = $queryParams['key-' . $searchFieldKey] . " LIKE '%" . $queryParams['val-' . $searchFieldKey] . "%'";
                     break;
                 case 'matching':
                     $this->matchings[] = [
-                        'association' => $this->searchOptions[$data['key-' . $searchFieldKey]]['association'],
+                        'association' => $this->searchOptions[$queryParams['key-' . $searchFieldKey]]['association'],
                         'condition' => [
-                            $data['key-' . $searchFieldKey] => $data['val-' . $searchFieldKey]
+                            $queryParams['key-' . $searchFieldKey] => $queryParams['val-' . $searchFieldKey]
                         ]
                     ];
                     break;
