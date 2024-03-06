@@ -21,9 +21,9 @@ class EventsController extends AdminAppController
     {
 
         $this->searchText = false;
+        $this->searchName = false;
         
         $this->addSearchOptions([
-
             'Events.eventbeschreibung' => [
                 'name' => 'Events.eventbeschreibung',
                 'searchType' => 'search'

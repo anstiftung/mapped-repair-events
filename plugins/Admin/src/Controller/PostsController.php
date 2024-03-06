@@ -114,7 +114,7 @@ class PostsController extends AdminAppController
             'Posts.blog_id' => [
                 'name' => 'Posts.blog_id',
                 'searchType' => 'equal',
-                'extraDropdown' => true
+                'extraDropdown' => true,
             ],
             'Posts.owner' => [
                 'name' => 'Posts.owner',
