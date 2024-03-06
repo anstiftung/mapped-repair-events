@@ -19,7 +19,6 @@ class InfoSheetsController extends AdminAppController
 
     public function beforeFilter(EventInterface $event)
     {
-        parent::beforeFilter($event);
 
         $this->addSearchOptions(array(
             'InfoSheets.owner' => array(
@@ -33,6 +32,7 @@ class InfoSheetsController extends AdminAppController
         $this->generateSearchConditions('opt-1');
         $this->generateSearchConditions('opt-2');
 
+        parent::beforeFilter($event);
     }
 
     public function index()

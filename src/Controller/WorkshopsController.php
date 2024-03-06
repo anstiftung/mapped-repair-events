@@ -744,8 +744,6 @@ class WorkshopsController extends AppController
             $mergedData = array_merge(
                 $this->request->getData(),
                 [
-                    'created' => DateTime::now(),
-                    'modified' => DateTime::now(),
                     'confirm' => $confirmationCode,
                     'unsub' => $unsubscribeCode
                 ]

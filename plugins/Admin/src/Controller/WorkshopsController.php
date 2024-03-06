@@ -15,7 +15,6 @@ class WorkshopsController extends AdminAppController
 
     public function beforeFilter(EventInterface $event)
     {
-        parent::beforeFilter($event);
 
         $this->addSearchOptions([
             'Workshops.owner' => [
@@ -35,6 +34,9 @@ class WorkshopsController extends AdminAppController
         $this->generateSearchConditions('opt-1');
         $this->generateSearchConditions('opt-2');
         $this->generateSearchConditions('opt-3');
+
+        parent::beforeFilter($event);
+
     }
 
     public function index()

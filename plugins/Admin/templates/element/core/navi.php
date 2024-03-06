@@ -2,6 +2,11 @@
 
 use Cake\Core\Configure;
 echo $this->Html->createMenuEntry(array(
+    'name' => 'Abos',
+    'url' => '/admin/worknews/index',
+    'level' => 'main'
+));
+echo $this->Html->createMenuEntry(array(
     'name' => 'Kategorien',
     'url' => '/admin/categories/index',
     'level' => 'main'
@@ -41,7 +46,7 @@ echo $this->Html->createMenuEntry(array(
     'level' => 'main'
 ));
 echo $this->Html->createMenuEntry(array(
-    'name' => 'Reparaturwissen',
+    'name' => 'Reparatur-wissen',
     'url' => '/admin/knowledges/index',
     'level' => 'main'
 ));

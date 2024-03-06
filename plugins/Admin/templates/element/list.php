@@ -4,10 +4,10 @@ use Cake\Utility\Hash;
 
 $this->element('addScript', array(
     'script' =>
-        JS_NAMESPACE.".Admin.bindDelete();".
         JS_NAMESPACE.".Helper.initTooltip('.tooltip');
     "
 ));
+
 echo $this->element('highlightNavi', [
     'main' => $heading
 ]);
@@ -15,6 +15,29 @@ echo $this->element('highlightNavi', [
 $showDeleteLink = false;
 if (!isset($hideDeleteLink) || !$hideDeleteLink) {
     $showDeleteLink = true;
+}
+
+$hasUid = false;
+foreach($fields as $field) {
+    if ($field['name'] == 'uid') {
+        $hasUid = true;
+    }
+}
+
+if ($showDeleteLink) {
+    
+    if ($hasUid) {
+        $this->element('addScript', array(
+            'script' =>
+                JS_NAMESPACE.".Admin.bindDelete('ajaxChangeAppObjectStatus');"
+        ));
+    } else {
+        $this->element('addScript', array(
+            'script' =>
+                JS_NAMESPACE.".Admin.bindDelete('ajaxDeleteObject');"
+        ));
+    }
+
 }
 
 ?>
@@ -94,7 +117,7 @@ if (!isset($hideDeleteLink) || !$hideDeleteLink) {
 
                 if (isset($field['type']) && in_array($field['type'], [
                     'array',
-                    'habtm'
+                    'habtm',
                 ])) {
                     $caption = '<th>' . $label . '</th>';
                     $caption = preg_replace('/\./', ' ', $caption);
@@ -229,7 +252,8 @@ if (!isset($hideDeleteLink) || !$hideDeleteLink) {
                         }
                         if (in_array($field['type'], [
                             'array',
-                            'habtm'
+                            'habtm',
+                            'unchanged',
                         ])) {
                             echo $value;
                         }
@@ -243,7 +267,7 @@ if (!isset($hideDeleteLink) || !$hideDeleteLink) {
                         }
                     } else {
                         // Table.email automatisch mit mailto verlinkt
-                        if (preg_match('/email/', $field['name']) && $value != '') {
+                        if (preg_match('/email/', $field['name']) && $value != '' && (!isset($field['type']) || $field['type'] != 'unchanged')) {
                             echo $this->Html->link('<i class="far fa-envelope fa-border"></i>', 'mailto:' . $value, [
                                 'escape' => false,
                                 'title' => 'E-Mail versenden'
@@ -292,7 +316,8 @@ if (!isset($hideDeleteLink) || !$hideDeleteLink) {
                             'javascript:void(0);',
                             [
                                 'class' => 'delete-link',
-                                'id' => 'delete-link-' . $object['uid'],
+                                'data-object-type' => lcfirst($this->request->getParam('controller')),
+                                'id' => 'delete-link-' . ($hasUid ? $object['uid'] : $object['id']),
                                 'title' => 'löschen',
                                 'escape' => false
                             ]

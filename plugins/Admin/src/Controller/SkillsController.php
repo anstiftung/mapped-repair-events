@@ -3,12 +3,20 @@ namespace Admin\Controller;
 
 use Cake\Http\Exception\NotFoundException;
 use App\Model\Table\SkillsTable;
+use Cake\Event\EventInterface;
 
 class SkillsController extends AdminAppController
 {
 
     public SkillsTable $Skill;
     
+    public function beforeFilter(EventInterface $event)
+    {
+        $this->searchUid = false;
+        $this->searchText = false;
+        parent::beforeFilter($event);
+    }
+
     public function __construct($request = null, $response = null)
     {
         parent::__construct($request, $response);

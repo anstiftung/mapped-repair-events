@@ -93,8 +93,9 @@ class AdminAppController extends AppController
         $this->paginate['order'] = [
             $this->pluralizedModelName . '.updated' => 'DESC'
         ];
-        $this->conditions[] = $this->pluralizedModelName . '.status > ' . APP_DELETED;
-
+        if ($this->searchStatus) {
+            $this->conditions[] = $this->pluralizedModelName . '.status > ' . APP_DELETED;
+        }
         $this->set('objectClass', Inflector::classify($this->name));
 
         $this->set('searchStatus', $this->searchStatus);
@@ -109,11 +110,19 @@ class AdminAppController extends AppController
             if ($filterValue == '') {
                 return;
             }
-            $searchType = $this->searchOptions[
-                $queryParams[
-                    'key-' . $searchFieldKey
-                ]
-            ]['searchType'];
+            $key = isset($this->searchOptions[$queryParams[
+                'key-' . $searchFieldKey
+            ]]);
+            if ($key) {
+                $searchType = $this->searchOptions[
+                    $queryParams[
+                        'key-' . $searchFieldKey
+                    ]
+                ]['searchType'];
+            } else {
+                $this->AppFlash->setFlashError('Bitte wähle im Dropdown ein Suchfeld aus.');
+                return;
+            }
             switch ($searchType) {
                 case 'equal':
                     $this->conditions[$queryParams['key-' . $searchFieldKey]] = $queryParams['val-' . $searchFieldKey];

@@ -16,6 +16,7 @@ use App\Model\Table\PostsTable;
 use App\Model\Table\WorkshopsTable;
 use App\Model\Table\EventsTable;
 use App\Model\Table\KnowledgesTable;
+use Cake\View\JsonView;
 
 class InternController extends AdminAppController
 {
@@ -33,6 +34,12 @@ class InternController extends AdminAppController
         parent::beforeFilter($event);
         $this->loadComponent('FormProtection');
         $this->FormProtection->setConfig('validate', false);
+    }
+
+    public function initialize(): void
+    {
+        parent::initialize();
+        $this->addViewClasses([JsonView::class]);
     }
 
     public function addCategory($name)
@@ -341,12 +348,31 @@ class InternController extends AdminAppController
         $this->redirect($this->referer());
     }
 
+    public function ajaxDeleteObject()
+    {
+        $this->request = $this->request->withParam('_ext', 'json');
+        
+        $id = $this->request->getData('id');
+        $objectType = $this->request->getData('object_type');
+        $table = $this->getTableLocator()->get($objectType);
+
+        $table->deleteAll([
+            'id' => $id,
+        ]);
+
+        $this->set([
+            'status' => 0,
+            'msg' => 'Erfolgreich gelöscht',
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['status', 'msg']);
+
+    }
+
     public function ajaxChangeAppObjectStatus()
     {
-        Configure::write('debug', 0);
-        $this->autoRender = false;
+        $this->request = $this->request->withParam('_ext', 'json');
 
-        $uid = $this->request->getData('uid');
+        $uid = $this->request->getData('id');
         $value = $this->request->getData('value');
         $statusType = $this->request->getData('status_type');
 
@@ -364,10 +390,12 @@ class InternController extends AdminAppController
             if ($entity->hasErrors()) {
                 $errorMessages = ['Löschen nicht möglich:'];
                 $errorMessages = array_merge($errorMessages, array_values(Hash::flatten($entity->getErrors())));
-                die(json_encode([
+                $this->set([
                     'status' => 1,
                     'msg' => join("\r\n", $errorMessages),
-                ]));
+                ]);
+                $this->viewBuilder()->setOption('serialize', ['status', 'msg']);
+                return;
             }
         }
         $entity = $this->{$objectClass}->patchEntity(
@@ -375,28 +403,30 @@ class InternController extends AdminAppController
                 $statusType => $value
             ],
             [
-                'validate' => false
+                'validate' => false,
             ]
         );
 
         if ($this->{$objectClass}->save($entity)) {
-            die(json_encode([
+            $this->set([
                 'status' => 0,
                 'msg' => 'ok',
                 'uid' => $uid,
-            ]));
+            ]);
+            $this->viewBuilder()->setOption('serialize', ['status', 'msg', 'uid']);
+            return;
         } else {
-            die(json_encode([
-                'status' => 1,
+            $this->set([
+                'status' => 0,
                 'msg' => 'delete did not work'
-            ]));
+            ]);
+            $this->viewBuilder()->setOption('serialize', ['status', 'msg']);
+            return;
         }
     }
 
     public function ajaxCancelAdminEditPage()
     {
-        Configure::write('debug', 0);
-        $this->autoRender = false;
 
         $uid = (int) $this->request->getData('uid');
 
@@ -425,12 +455,13 @@ class InternController extends AdminAppController
         if ($referer == '') {
             $referer = '/';
         }
-
-        die(json_encode([
+        $this->set([
             'status' => 0,
             'msg' => 'ok',
-            'referer' => $referer
-        ]));
+            'referer' => $referer,
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['status', 'msg', 'referer']);
+        return;
     }
 
 }

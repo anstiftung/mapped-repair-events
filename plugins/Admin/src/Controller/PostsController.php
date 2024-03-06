@@ -102,8 +102,6 @@ class PostsController extends AdminAppController
     public function beforeFilter(EventInterface $event)
     {
 
-        parent::beforeFilter($event);
-
         $this->addSearchOptions([
             'Posts.city' => [
                 'name' => 'Posts.city',
@@ -116,7 +114,7 @@ class PostsController extends AdminAppController
             'Posts.blog_id' => [
                 'name' => 'Posts.blog_id',
                 'searchType' => 'equal',
-                'extraDropdown' => true
+                'extraDropdown' => true,
             ],
             'Posts.owner' => [
                 'name' => 'Posts.owner',
@@ -128,6 +126,9 @@ class PostsController extends AdminAppController
         // für optional dropdown
         $this->generateSearchConditions('opt-1');
         $this->generateSearchConditions('opt-2');
+
+        parent::beforeFilter($event);
+
     }
 
     public function index()

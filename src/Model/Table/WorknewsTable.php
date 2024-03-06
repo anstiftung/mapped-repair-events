@@ -16,6 +16,7 @@ class WorknewsTable extends Table
         $this->belongsTo('Workshops', [
             'foreignKey' => 'workshop_uid'
         ]);
+        $this->addBehavior('Timestamp');
     }
 
     public function validationDefault(Validator $validator): \Cake\Validation\Validator

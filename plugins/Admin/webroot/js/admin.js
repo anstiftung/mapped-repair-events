@@ -7,17 +7,18 @@ MappedRepairEvents.Admin = {
         MappedRepairEvents.Helper.beautifyDropdowns();
     },
 
-    bindDelete: function() {
+    bindDelete: function(deleteMethod) {
         $('a.delete-link').click(function() {
-            var linkedImage = $(this);
-            var uid = $(this).attr('id').replace('delete-link-', '');
+            var linkedButton = $(this);
+            var id = $(this).attr('id').replace('delete-link-', '');
+            var objectType = $(this).attr('data-object-type');
             $.prompt(
-                'Möchtest du dieses Objekt wirklich löschen? UID: ' + uid
+                'Möchtest du dieses Objekt wirklich löschen? ID ' + id
                 ,{
                     buttons: {Loeschen: true, Abbrechen: false},
                     submit: function(v,m,f) {
-                        if(m){
-                            MappedRepairEvents.Admin.deleteAppObject(linkedImage, uid);
+                        if(m) {
+                            MappedRepairEvents.Admin.deleteAppObject(linkedButton, id, deleteMethod, objectType);
                         }
                     }
                 }
@@ -25,21 +26,22 @@ MappedRepairEvents.Admin = {
         });
     },
 
-    deleteAppObject : function(linkedImage, uid) {
+    deleteAppObject : function(linkedButton, id, deleteMethod, objectType) {
 
         var statusType = 'status';
         var value = -1;
 
         MappedRepairEvents.Helper.ajaxCall(
-            '/admin/' + 'intern/' + 'ajaxChangeAppObjectStatus/',
+            '/admin/' + 'intern/' + deleteMethod,
             {
-                uid: uid,
+                id: id,
                 status_type: statusType,
+                object_type: objectType,
                 value: value
             },
             {
                 onOk : function(data) {
-                    linkedImage.closest('tr').animate( { opacity: 'toggle'}, 'slow', function() {});
+                    linkedButton.closest('tr').animate( { opacity: 'toggle'}, 'fast', function() {});
                 },
                 onError : function(data) {
                     alert(data.msg);

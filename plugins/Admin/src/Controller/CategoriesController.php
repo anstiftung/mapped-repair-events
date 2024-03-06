@@ -4,12 +4,20 @@ namespace Admin\Controller;
 use Cake\Http\Exception\NotFoundException;
 use App\Model\Table\CategoriesTable;
 use App\Model\Table\OrdsCategoriesTable;
+use Cake\Event\EventInterface;
 
 class CategoriesController extends AdminAppController
 {
 
     public CategoriesTable $Category;
     public OrdsCategoriesTable $OrdsCategory;
+
+    public function beforeFilter(EventInterface $event)
+    {
+        $this->searchUid = false;
+        $this->searchText = false;
+        parent::beforeFilter($event);
+    }
 
     public function __construct($request = null, $response = null)
     {

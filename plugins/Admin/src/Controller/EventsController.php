@@ -19,30 +19,35 @@ class EventsController extends AdminAppController
 
     public function beforeFilter(EventInterface $event)
     {
-        parent::beforeFilter($event);
 
-        $this->addSearchOptions(array(
-
-            'Event.ort' => array(
-                'name' => 'Event.ort',
+        $this->searchText = false;
+        $this->searchName = false;
+        
+        $this->addSearchOptions([
+            'Events.eventbeschreibung' => [
+                'name' => 'Events.eventbeschreibung',
                 'searchType' => 'search'
-            ),
-            'Event.author' => array(
-                'name' => 'Event.author',
+            ],
+            'Events.ort' => [
+                'name' => 'Events.ort',
                 'searchType' => 'search'
-            ),
-
-            'Event.owner' => array(
-                'name' => 'Event.owner',
+            ],
+            'Events.author' => [
+                'name' => 'Events.author',
+                'searchType' => 'search'
+            ],
+            'Events.owner' => [
+                'name' => 'Events.owner',
                 'searchType' => 'equal',
                 'extraDropdown' => true
-            )
-        ));
+            ]
+        ]);
 
         // für optional dropdown
         $this->generateSearchConditions('opt-1');
         $this->generateSearchConditions('opt-2');
 
+        parent::beforeFilter($event);
     }
 
     public function index()
