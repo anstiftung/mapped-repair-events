@@ -10,7 +10,9 @@ use Eluceo\iCal\Domain\Entity\Calendar;
 use Eluceo\iCal\Domain\Entity\Event;
 use Eluceo\iCal\Domain\Entity\TimeZone;
 use \DateTimeZone as PhpDateTimeZone;
-use Eluceo\iCal\Domain\ValueObject\DateTime;
+use \DateTime as PhpDateTime;
+use \DateTimeImmutable as PhpDateTimeImmutable;
+use Eluceo\iCal\Domain\ValueObject\DateTime as iCalDateTime;
 use Eluceo\iCal\Domain\ValueObject\GeographicPosition;
 use Eluceo\iCal\Domain\ValueObject\Location;
 use Eluceo\iCal\Domain\ValueObject\TimeSpan;
@@ -18,6 +20,7 @@ use Eluceo\iCal\Presentation\Factory\CalendarFactory;
 use InvalidArgumentException;
 use Cake\View\JsonView;
 use App\Services\GeoService;
+use Cake\I18n\DateTime;
 
 class EventsController extends AppController
 {
@@ -99,7 +102,7 @@ class EventsController extends AppController
             $location = new Location(str_replace('"', "'", $location));
             $location = $location->withGeographicPosition(new GeographicPosition($event->lat, $event->lng));
 
-            $start = new \DateTime(
+            $start = new PhpDateTime(
                 $event->datumstart->i18nFormat(
                     Configure::read('DateFormat.Database')
                 ) . ' ' .
@@ -107,9 +110,9 @@ class EventsController extends AppController
                     Configure::read('DateFormat.de.TimeWithSeconds')
                 )
             );
-            $start = new DateTime(\DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $start->format('Y-m-d H:i:s')), false);
+            $start = new iCalDateTime(PhpDateTimeImmutable::createFromFormat('Y-m-d H:i:s', $start->format('Y-m-d H:i:s')), false);
 
-            $end = new \DateTime(
+            $end = new PhpDateTime(
                 $event->datumstart->i18nFormat(
                     Configure::read('DateFormat.Database')
                 ) . ' ' .
@@ -117,7 +120,7 @@ class EventsController extends AppController
                     Configure::read('DateFormat.de.TimeWithSeconds')
                 )
             );
-            $end = new DateTime(\DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $end->format('Y-m-d H:i:s')), false);
+            $end = new iCalDateTime(PhpDateTimeImmutable::createFromFormat('Y-m-d H:i:s', $end->format('Y-m-d H:i:s')), false);
             $occurrence = new TimeSpan($start, $end);
 
             $icalEvent
@@ -134,8 +137,8 @@ class EventsController extends AppController
         $phpDateTimeZone = new PhpDateTimeZone(Configure::read('App.defaultTimezone'));
         $timeZone = TimeZone::createFromPhpDateTimeZone(
             $phpDateTimeZone,
-            new \DateTimeImmutable('2010-01-01 00:00:00', $phpDateTimeZone),
-            new \DateTimeImmutable('2050-01-01 00:00:00', $phpDateTimeZone),
+            new PhpDateTimeImmutable('2010-01-01 00:00:00', $phpDateTimeZone),
+            new PhpDateTimeImmutable('2050-01-01 00:00:00', $phpDateTimeZone),
         );
         $icalCalendar->addTimeZone($timeZone);
 
@@ -434,13 +437,13 @@ class EventsController extends AppController
                 }
                 $data = array_merge($this->request->getData()[0], $data);
                 if ($data['datumstart']) {
-                    $data['datumstart'] = new \Cake\I18n\DateTime($data['datumstart']);
+                    $data['datumstart'] = new DateTime($data['datumstart']);
                 }
                 if ($data['uhrzeitstart']) {
-                    $data['uhrzeitstart'] = new \Cake\I18n\DateTime($data['uhrzeitstart']);
+                    $data['uhrzeitstart'] = new DateTime($data['uhrzeitstart']);
                 }
                 if ($data['uhrzeitend']) {
-                    $data['uhrzeitend'] = new \Cake\I18n\DateTime($data['uhrzeitend']);
+                    $data['uhrzeitend'] = new DateTime($data['uhrzeitend']);
                 }
                 if (!$data['use_custom_coordinates']) {
                     $addressString = $data['strasse'] . ', ' . $data['zip'] . ' ' . $data['ort'] . ', ' . $data['land'];

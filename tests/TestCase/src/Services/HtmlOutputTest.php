@@ -8,6 +8,7 @@ use App\Test\TestCase\Traits\LoginTrait;
 use Cake\TestSuite\IntegrationTestTrait;
 use App\Test\TestCase\Traits\LogFileAssertionsTrait;
 use App\Test\TestCase\Traits\HtmlOutputAssertionsTrait;
+use Cake\I18n\Date;
 
 class HtmlOutputTest extends AppTestCase
 {
@@ -127,7 +128,7 @@ class HtmlOutputTest extends AppTestCase
     private function changeEventDate() {
         $eventsTable = $this->getTableLocator()->get('Events');
         $event = $eventsTable->get(6);
-        $event->datumstart = \Cake\I18n\Date::now()->addDays(20);
+        $event->datumstart = Date::now()->addDays(20);
         $eventsTable->save($event);
     }
 

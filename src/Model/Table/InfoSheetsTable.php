@@ -3,6 +3,7 @@
 namespace App\Model\Table;
 
 use Cake\Validation\Validator;
+use Cake\I18n\DateTime;
 
 class InfoSheetsTable extends AppTable
 {
@@ -32,7 +33,7 @@ class InfoSheetsTable extends AppTable
     {
         return $this->validationDefault($validator);
     }
-    
+
     public function validationDefault(Validator $validator): \Cake\Validation\Validator
     {
         $validator->notEmptyString('category_id', 'Bitte wähle eine Kategorie aus.');
@@ -94,8 +95,8 @@ class InfoSheetsTable extends AppTable
         ]);
 
         if (!is_null($dateFrom) && !is_null($dateTo)) {
-            $dateFrom = new \Cake\I18n\DateTime($dateFrom);
-            $dateTo = new \Cake\I18n\DateTime($dateTo);
+            $dateFrom = new DateTime($dateFrom);
+            $dateTo = new DateTime($dateTo);
             $query->where(function($exp) use ($dateFrom, $dateTo) {
                 return $exp->between('Events.datumstart', $dateFrom, $dateTo, 'date');
             });

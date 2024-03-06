@@ -3,6 +3,8 @@
 namespace App\Test\Fixture;
 
 use Cake\TestSuite\Fixture\TestFixture;
+use Cake\I18n\DateTime;
+use Cake\I18n\Date;
 
 class EventsFixture extends TestFixture
 {
@@ -15,9 +17,9 @@ class EventsFixture extends TestFixture
                 'uid' => 6,
                 'workshop_uid' => 2,
                 'eventbeschreibung' => 'description',
-                'datumstart' => new \Cake\I18n\Date('2040-01-01'),
-                'uhrzeitstart' => new \Cake\I18n\DateTime('09:00'),
-                'uhrzeitend' => new \Cake\I18n\DateTime('18:00'),
+                'datumstart' => new Date('2040-01-01'),
+                'uhrzeitstart' => new DateTime('09:00'),
+                'uhrzeitend' => new DateTime('18:00'),
                 'use_custom_coordinates' => 1,
                 'lat' => 52.520008,
                 'lng' => 13.404954,

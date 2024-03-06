@@ -4,6 +4,7 @@ namespace App\Model\Table;
 use Cake\Core\Configure;
 use Cake\Datasource\FactoryLocator;
 use Cake\ORM\Table;
+use Cake\I18n\DateTime;
 
 class ThirdPartyStatisticsTable extends Table
 {
@@ -19,8 +20,8 @@ class ThirdPartyStatisticsTable extends Table
     {
 
         $query = $this->find();
-        $dateFrom = new \Cake\I18n\DateTime($dateFrom);
-        $dateTo = new \Cake\I18n\DateTime($dateTo);
+        $dateFrom = new DateTime($dateFrom);
+        $dateTo = new DateTime($dateTo);
         $query->where(['ThirdPartyStatistics.date_from >= ' => $dateFrom]);
         $query->where(['ThirdPartyStatistics.date_to <= ' => $dateTo]);
         $query->select(

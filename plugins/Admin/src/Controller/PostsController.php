@@ -8,6 +8,7 @@ use Cake\Http\Exception\NotFoundException;
 use App\Model\Table\PostsTable;
 use App\Model\Table\BlogsTable;
 use App\Model\Table\UsersTable;
+use Cake\I18n\Date;
 
 class PostsController extends AdminAppController
 {
@@ -15,7 +16,7 @@ class PostsController extends AdminAppController
     public PostsTable $Post;
     public BlogsTable $Blog;
     public UsersTable $User;
-    
+
     public function __construct($request = null, $response = null)
     {
         parent::__construct($request, $response);
@@ -82,7 +83,7 @@ class PostsController extends AdminAppController
         if (!empty($this->request->getData())) {
 
             if ($this->request->getData('Posts.publish')) {
-                $this->request = $this->request->withData('Posts.publish', new \Cake\I18n\Date($this->request->getData('Posts.publish')));
+                $this->request = $this->request->withData('Posts.publish', new Date($this->request->getData('Posts.publish')));
             }
             $patchedEntity = $this->Post->getPatchedEntityForAdminEdit($post, $this->request->getData());
 

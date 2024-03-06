@@ -7,6 +7,7 @@ use Cake\Validation\Validator;
 use App\Model\Traits\SearchExceptionsTrait;
 use App\Services\GeoService;
 use Cake\ORM\Query\SelectQuery;
+use Cake\I18n\DateTime;
 
 class EventsTable extends AppTable
 {
@@ -89,7 +90,7 @@ class EventsTable extends AppTable
     public function getTimeRangeCondition($timeRange, $negate) {
         return function ($exp, $query) use ($timeRange, $negate) {
 
-            $now = new \Cake\I18n\DateTime();
+            $now = new DateTime();
             $minDate = null;
             $maxDate = $now->addDays(30);
 

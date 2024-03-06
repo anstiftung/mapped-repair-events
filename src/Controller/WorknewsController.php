@@ -5,11 +5,12 @@ namespace App\Controller;
 use App\Model\Table\WorknewsTable;
 use Cake\Event\EventInterface;
 use Cake\Http\Exception\NotFoundException;
+use Cake\I18n\DateTime;
 
 class WorknewsController extends AppController {
 
     public WorknewsTable $Worknews;
-    
+
     public function beforeFilter(EventInterface $event) {
 
         parent::beforeFilter($event);
@@ -47,7 +48,7 @@ class WorknewsController extends AppController {
                 $this->Worknews->get($worknews->id),
                 [
                     'confirm' => 'ok',
-                    'modified' => \Cake\I18n\DateTime::now()
+                    'modified' => DateTime::now()
                 ]
             )
         );
