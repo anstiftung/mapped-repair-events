@@ -1,23 +1,31 @@
 <?php
+
+    use Cake\Utility\Inflector;
+
     echo $this->Form->create(null, [
         'method' => 'GET',
         'id' => 'admin-list-form',
     ]);
 
-    use Cake\Utility\Inflector;
+    $options = [];
+    foreach($searchOptionsForDropdown as $key => $value) {
+        $negate = $value['negate'] ?? false;
+        $options[$key] = $value['name'] . ($negate ? ' NOT' : '');
+    }
 
     echo $this->Form->control('key-standard', [
         'type' => 'select',
         'name' => 'key-standard',
-        'empty' => '---',
-        'options' => array_combine(array_keys($searchOptionsForDropdown), array_keys($searchOptionsForDropdown)),
-        'value' => isset($this->request->getQueryParams()['key-standard']) ? $this->request->getQueryParams()['key-standard'] : '',
-        'label' => ''
+        'options' => $options,
+        'value' => $this->request->getQueryParams()['key-standard'] ??  '',
+        'label' => '',
+        'style' => 'width:200px;',
     ]);
     echo $this->Form->control('val-standard', [
         'label' => '',
         'name' => 'val-standard',
-        'value' => isset($this->request->getQueryParams()['val-standard']) ? $this->request->getQueryParams()['val-standard'] : ''
+        'value' =>$this->request->getQueryParams()['val-standard'] ??  '',
+        'style' => 'width:200px;',
     ]);
     ?>
 
@@ -31,13 +39,13 @@
                 'name' => 'val-opt-' . $i,
                 'empty' => $optionalSearchForm['label'],
                 'options' => $optionalSearchForm['options'],
-                'value' => isset($this->request->getQueryParams()['val-opt-' . $i]) ? $this->request->getQueryParams()['val-opt-' . $i] : '',
-                'label' => ''
+                'value' => $this->request->getQueryParams()['val-opt-' . $i] ?? '',
+                'label' => '',
             ]);
 
             echo $this->Form->hidden('key-opt-' . $i, [
                 'name' => 'key-opt-' . $i,
-                'value' => $optionalSearchForm['value']
+                'value' => $optionalSearchForm['value'],
             ]);
         }
     }
@@ -51,10 +59,10 @@
             'empty' => '---',
             'options' => [
                 APP_ON => 'online',
-                APP_OFF => 'offline'
+                APP_OFF => 'offline',
             ],
-            'value' => isset($this->request->getQueryParams()['val-status']) ? $this->request->getQueryParams()['val-status'] : '',
-            'label' => 'Status'
+            'value' => $this->request->getQueryParams()['val-status'] ?? '',
+            'label' => 'Status',
         ]);
 
         echo $this->Form->hidden('key-status', [
@@ -65,12 +73,12 @@
 
     echo $this->Form->hidden('sort', [
         'name' => 'sort',
-        'value' => isset($this->request->getQueryParams()['sort']) ? $this->request->getQueryParams()['sort'] : ''
+        'value' => $this->request->getQueryParams()['sort'] ?? '',
     ]);
 
     echo $this->Form->hidden('direction', [
         'name' => 'direction',
-        'value' => isset($this->request->getQueryParams()['direction']) ? $this->request->getQueryParams()['direction'] : ''
+        'value' => $this->request->getQueryParams()['direction'] ?? '',
     ]);
 
     echo $this->Form->button('Suchen', [

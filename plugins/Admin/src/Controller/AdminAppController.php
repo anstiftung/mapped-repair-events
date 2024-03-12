@@ -114,11 +114,13 @@ class AdminAppController extends AppController
                 'key-' . $searchFieldKey
             ]]);
             if ($key) {
-                $searchType = $this->searchOptions[
+                $searchOption = $this->searchOptions[
                     $queryParams[
                         'key-' . $searchFieldKey
                     ]
-                ]['searchType'];
+                ];
+                $searchType = $searchOption['searchType'];
+                $negate = $searchOption['negate'] ?? false;
             } else {
                 $this->AppFlash->setFlashError('Bitte wähle im Dropdown ein Suchfeld aus.');
                 return;
@@ -128,7 +130,11 @@ class AdminAppController extends AppController
                     $this->conditions[$queryParams['key-' . $searchFieldKey]] = $queryParams['val-' . $searchFieldKey];
                     break;
                 case 'search':
-                    $this->conditions[] = $queryParams['key-' . $searchFieldKey] . " LIKE '%" . $queryParams['val-' . $searchFieldKey] . "%'";
+                    $condition = $queryParams['key-' . $searchFieldKey] . " LIKE '%" . $queryParams['val-' . $searchFieldKey] . "%'";
+                    if ($negate) {
+                        $condition = 'NOT (' . $condition . ')';
+                    }
+                    $this->conditions[] = $condition;
                     break;
                 case 'matching':
                     $this->matchings[] = [

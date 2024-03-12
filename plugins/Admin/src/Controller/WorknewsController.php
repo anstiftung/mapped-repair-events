@@ -18,6 +18,11 @@ class WorknewsController extends AdminAppController
                 'name' => 'Worknews.email',
                 'searchType' => 'search'
             ],
+            'Worknews.confirm' => [
+                'name' => 'Worknews.confirm',
+                'searchType' => 'search',
+                'negate' => true,
+            ],
         ]);
 
         parent::beforeFilter($event);
