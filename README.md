@@ -31,7 +31,6 @@
 * rename config/app\_custom.default.php to app\_custom.php and configure the database
 * run `$ composer install --optimize-autoloader`
 * run `$ npm --prefix ./webroot install ./webroot`
-* Enable cronjob (once a day): `bin/cake SendWorknewsNotification`
 * **If you have questions, please [create a new issue](https://github.com/anstiftung/mapped-repair-events/issues/new) on github**
 
 ## Requirements
@@ -45,6 +44,7 @@
 ## Cronjobs
 * daily, 3:00 `bash ./bin/cake BackupDatabase`
 * daily, 8:00 `bash ./bin/cake SendWorknewsNotification`
+* daily, 7:00 `bash ./bin/cake CleanWorknews`
 * every 11th of a month, 3:30 `bash ./bin/cake BackupUserUploads`
 
 ## Netzwerk Reparatur-Initiativen
