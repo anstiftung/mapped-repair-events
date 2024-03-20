@@ -13,10 +13,7 @@ $showImage = !empty($post->image) &&
     ($type == 'preview') || ($type == 'detail' && !in_array($blog->url, $this->Html->getPostTypesWithPreview())
 );
 
-$postLink = $this->Html->link( '%s',
-    ['controller' => 'posts', 'action' => 'detail', $post->url]);
 ?>
-
 
 <div class="post-wrapper">
 
@@ -26,7 +23,8 @@ $postLink = $this->Html->link( '%s',
 if ($type != 'detail') {
     $heading = $this->Html->link(
              $post->name,
-             $this->Html->urlPostDetail($post->url)
+             $this->Html->urlPostDetail($post->url),
+             ['escape' => false],
     );
     echo '<div class="postteaser"><h2>'.$heading.'</h2>';
 }
