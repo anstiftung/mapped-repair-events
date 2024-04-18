@@ -1166,13 +1166,14 @@ a.toggle-link-for-subtable.collapsed i:before {
     content: "\f056" /* fa-icon-minus-sign */
 }
 a.toggle-link.heading {
-    font-size: 18px;
+    font-size: 16px;
     display: block;
 }
 body.events.myEvents h2 {
+    font-size: 16px;
     margin-left: 20px;
-    margin-top: 10px ! important;
-    margin-bottom: 10px ! important;
+    margin-top: 5px ! important;
+    margin-bottom: 5px ! important;
 }
 body.events.myEvents a.download-info-sheets {
     float: right;
@@ -1197,7 +1198,7 @@ body.events.myEvents a.toggle-link.offline {
 }
 body.events.myEvents .add-event {
   float: right;
-  margin-top: -33px;
+  margin-top: -30px;
 }
 body.events.myEvents tr.subtable-container {
     display: none;

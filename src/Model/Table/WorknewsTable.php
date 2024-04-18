@@ -36,10 +36,10 @@ class WorknewsTable extends Table
         $subscribers = $this->find('all',
         conditions: [
             'Worknews.workshop_uid' => $workshopUid,
-            'Worknews.confirm' => 'ok'
+            'Worknews.confirm' => 'ok',
         ],
         contain: [
-            'Workshops'
+            'Workshops',
         ]);
         return $subscribers;
     }

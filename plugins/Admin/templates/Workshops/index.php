@@ -22,6 +22,7 @@ echo $this->element('list', [
         ['name' => 'users.name', 'type' => 'habtm', 'label' => 'Mitarbeiter'],
         ['name' => 'owner_user.name', 'label' => 'Owner', 'sortable' => false],
         ['name' => 'workshop_info_sheets_count', 'label' => 'LZ'],
+        ['name' => 'worknews_count', 'label' => 'TA'],
         ['name' => 'created', 'type' => 'datetime', 'label' => 'erstellt'],
         ['name' => 'updated', 'type' => 'datetime', 'label' => 'geändert'],
         ['name' => 'email'],

@@ -201,8 +201,10 @@ class EventsController extends AppController
             'limit' => 100,
         ]);
 
+        $worknewsTable = FactoryLocator::get('Table')->get('Worknews');
         foreach($workshops as $workshop) {
             $workshop->infoSheetCount = 0;
+            $workshop->worknewsCount = $worknewsTable->getSubscribers($workshop->uid)->count();
             if (!empty($workshop->events)) {
                 foreach($workshop->events as $event) {
                     $workshop->infoSheetCount += count($event->info_sheets);

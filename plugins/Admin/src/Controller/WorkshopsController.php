@@ -67,9 +67,11 @@ class WorkshopsController extends AdminAppController
             ],
         ]);
 
-        $this->InfoSheet = $this->getTableLocator()->get('InfoSheets');
+        $infoSheetsTable = $this->getTableLocator()->get('InfoSheets');
+        $worknewsTable = $this->getTableLocator()->get('Worknews');
         foreach($objects as $object) {
-            $object->workshop_info_sheets_count = $this->InfoSheet->workshopInfoSheetsCount($object->uid);
+            $object->workshop_info_sheets_count = $infoSheetsTable->workshopInfoSheetsCount($object->uid);
+            $object->worknews_count = $worknewsTable->getSubscribers($object->uid)->count();
             foreach($object->users as $user) {
                 $user->revertPrivatizeData();
             }
