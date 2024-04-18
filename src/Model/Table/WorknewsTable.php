@@ -5,6 +5,7 @@ use Cake\Core\Configure;
 use Cake\Mailer\Mailer;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use App\Model\Entity\Worknews;
 
 class WorknewsTable extends Table
 {
@@ -36,7 +37,7 @@ class WorknewsTable extends Table
         $subscribers = $this->find('all',
         conditions: [
             'Worknews.workshop_uid' => $workshopUid,
-            'Worknews.confirm' => 'ok',
+            'Worknews.confirm' => Worknews::STATUS_OK,
         ],
         contain: [
             'Workshops',

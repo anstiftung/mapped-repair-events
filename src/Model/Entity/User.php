@@ -11,6 +11,8 @@ use ArrayAccess;
 class User extends Entity implements IdentityInterface
 {
     
+    const STATUS_OK = 'ok';
+    
     protected array $_virtual = ['name'];
 
     public function __construct(array $properties = [], array $options = [])

@@ -12,6 +12,7 @@ use App\Test\TestCase\Traits\LoginTrait;
 use AssetCompress\Factory;
 use Cake\Datasource\FactoryLocator;
 use Cake\ORM\Locator\TableLocator;
+use App\Model\Entity\User;
 
 class UsersControllerTest extends AppTestCase
 {
@@ -107,7 +108,7 @@ class UsersControllerTest extends AppTestCase
         $this->get('/users/activate/' . $user->confirm);
         $user = $this->getRegisteredUser();
 
-        $this->assertEquals($user->confirm, 'ok');
+        $this->assertEquals($user->confirm, User::STATUS_OK);
         $this->assertRedirectContains(Configure::read('AppConfig.htmlHelper')->urlUserHome());
 
     }

@@ -3,6 +3,7 @@
 namespace App\Test\Fixture;
 
 use Cake\TestSuite\Fixture\TestFixture;
+use App\Model\Entity\Worknews;
 
 class WorknewsFixture extends TestFixture
 {
@@ -12,7 +13,7 @@ class WorknewsFixture extends TestFixture
         [
             'workshop_uid' => 2,
             'email' => 'worknews-test@mailinator.com',
-            'confirm' => 'ok'
+            'confirm' => Worknews::STATUS_OK,
         ]
     ];
 

@@ -6,6 +6,7 @@ use App\Model\Table\WorknewsTable;
 use Cake\Event\EventInterface;
 use Cake\Http\Exception\NotFoundException;
 use Cake\I18n\DateTime;
+use App\Model\Entity\Worknews;
 
 class WorknewsController extends AppController {
 
@@ -47,7 +48,7 @@ class WorknewsController extends AppController {
             $this->Worknews->patchEntity(
                 $this->Worknews->get($worknews->id),
                 [
-                    'confirm' => 'ok',
+                    'confirm' => Worknews::STATUS_OK,
                     'modified' => DateTime::now()
                 ]
             )

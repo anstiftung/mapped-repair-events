@@ -21,6 +21,7 @@ use App\Model\Table\PostsTable;
 use App\Model\Table\UsersTable;
 use App\Model\Table\WorknewsTable;
 use App\Services\GeoService;
+use App\Model\Entity\Worknews;
 
 class WorkshopsController extends AppController
 {
@@ -719,7 +720,7 @@ class WorkshopsController extends AppController
         $this->Worknews = $this->getTableLocator()->get('Worknews');
         $conditions = [
             'Worknews.workshop_uid' => $workshop->uid,
-            'Worknews.confirm' => 'ok',
+            'Worknews.confirm' => Worknews::STATUS_OK,
             'Worknews.email' => $this->isLoggedIn() ? $this->loggedUser->email : '',
         ];
         $worknews = $this->Worknews->find('all', conditions: $conditions)->first();
@@ -780,7 +781,7 @@ class WorkshopsController extends AppController
                 }
             }
         }
-        $subscribed = $worknews->confirm == 'ok' && $this->isLoggedIn() && $worknews->email == $this->loggedUser->email;
+        $subscribed = $worknews->confirm == Worknews::STATUS_OK && $this->isLoggedIn() && $worknews->email == $this->loggedUser->email;
         $this->set('subscribed', $subscribed);
         $this->set('worknews', $worknews);
 

@@ -21,6 +21,7 @@ use InvalidArgumentException;
 use Cake\View\JsonView;
 use App\Services\GeoService;
 use Cake\I18n\DateTime;
+use App\Model\Entity\Worknews;
 
 class EventsController extends AppController
 {
@@ -284,7 +285,7 @@ class EventsController extends AppController
                 $this->Worknews = $this->getTableLocator()->get('Worknews');
                 $subscribers = $this->Worknews->find('all', conditions: [
                     'Worknews.workshop_uid' => $event->workshop_uid,
-                    'Worknews.confirm' => 'ok'
+                    'Worknews.confirm' => Worknews::STATUS_OK,
                 ]);
 
                 if (!empty($subscribers)) {
