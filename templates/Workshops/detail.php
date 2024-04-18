@@ -95,13 +95,13 @@ if (!$this->request->getSession()->read('isMobile')) {
                 </ul>
 
         <?php
-            echo $this->element('workshopTabs/aboutUs', [
+            echo $this->element('workshop/aboutUs', [
                 'workshop' => $workshop
             ]);
-            echo $this->element('workshopTabs/team', [
+            echo $this->element('workshop/team', [
                 'team' => $team
             ]);
-            echo $this->element('workshopTabs/statistics', [
+            echo $this->element('workshop/statistics', [
                 'workshop' => $workshop
             ]);
 
