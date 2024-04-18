@@ -15,8 +15,8 @@ use Cake\Core\Configure;
         <tbody>
             <tr>
                 <td align="center" valign="middle" style="padding-bottom: 20px;">
-                    <a href="<?php echo Configure::read('App.fullBaseUrl'); ?>">
-                        <img src="<?php echo Configure::read('App.fullBaseUrl'); ?>/img/core/logo.jpg" width="150" />
+                    <a href="<?php echo Configure::read('App.serverName'); ?>">
+                        <img src="<?php echo Configure::read('App.serverName'); ?>/img/core/logo.jpg" width="150" />
                     </a>
                 </td>
             </tr>
@@ -37,7 +37,7 @@ use Cake\Core\Configure;
                     <p>
                       PS: Diese E-Mail wurde automatisch erstellt.
                     </p>
-                    <?php echo $this->element('emailSignature'); ?>
+                    <?php echo $this->element('emailSignatureHtml'); ?>
                 </td>
             </tr>
         </tbody>
