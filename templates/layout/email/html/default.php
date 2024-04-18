@@ -15,8 +15,8 @@ use Cake\Core\Configure;
         <tbody>
             <tr>
                 <td align="center" valign="middle" style="padding-bottom: 20px;">
-                    <a href="<?php echo Configure::read('App.serverName'); ?>">
-                        <img src="<?php echo Configure::read('App.serverName'); ?>/img/core/logo.jpg" width="150" />
+                    <a href="<?php echo Configure::read('AppConfig.serverName'); ?>">
+                        <img src="<?php echo Configure::read('AppConfig.serverName'); ?>/img/core/logo.jpg" width="200" />
                     </a>
                 </td>
             </tr>
