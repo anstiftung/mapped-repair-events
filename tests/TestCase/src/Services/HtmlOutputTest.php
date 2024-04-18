@@ -37,6 +37,12 @@ class HtmlOutputTest extends AppTestCase
         $this->doAssertHtmlOutput();
     }
 
+    public function testBlogDetail()
+    {
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlBlogDetail('neuigkeiten'));
+        $this->doAssertHtmlOutput();
+    }
+
     public function testPageDetail()
     {
         $this->get(Configure::read('AppConfig.htmlHelper')->urlPageDetail('test-page'));
