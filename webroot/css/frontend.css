@@ -9,6 +9,7 @@ body {
     background-color: #f2f2f2;
     margin: 0px auto;
     text-rendering: optimizeSpeed;
+    overflow-y: scroll;
 }
 .sc {
     clear: both;
