@@ -154,9 +154,12 @@ class EventsControllerTest extends AppTestCase
                 'X_REQUESTED_WITH' => 'XMLHttpRequest'
             ]
         ]);
-        $this->_compareBasePath = ROOT . DS . 'tests' . DS . 'comparisons' . DS;
+        $expectedResult = file_get_contents(TESTS . 'comparisons' . DS . 'events-for-map.json');
+        $expectedNextEventDate = Date::now()->addDays(7)->format('Y-m-d');
+        $expectedResult = $this->correctExpectedDate($expectedResult, $expectedNextEventDate);
         $this->get('/events/ajaxGetAllEventsForMap');
-        $this->assertSameAsFile('events-for-map.json', $this->_response->getBody()->__toString());
+        $this->assertResponseContains($expectedResult);
+        $this->assertResponseOk();
     }
 
     public function testDeleteEvent()

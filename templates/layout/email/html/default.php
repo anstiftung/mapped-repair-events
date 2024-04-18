@@ -1,24 +1,42 @@
 <?php
-/**
- * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
- *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
- *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
- * @link          https://cakephp.org CakePHP(tm) Project
- * @since         0.10.0
- * @license       https://opensource.org/licenses/mit-license.php MIT License
- */
+use Cake\Core\Configure;
+
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
-<html>
-<head>
-    <title><?= $this->fetch('title') ?></title>
-</head>
-<body>
-    <?= $this->fetch('content') ?>
-</body>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="initial-scale=1.0">
+        <meta name="format-detection" content="telephone=no">
+        <title><?php echo Configure::read('AppConfig.platformName'); ?></title>
+    </head>
+
+    <table width="742" cellpadding="0" border="0" cellspacing="0" style="color:#000;font-family:Arial;">
+        <tbody>
+            <tr>
+                <td align="center" valign="middle" style="padding-bottom: 20px;">
+                    <a href="<?php echo Configure::read('App.fullBaseUrl'); ?>">
+                        <img src="<?php echo Configure::read('App.fullBaseUrl'); ?>/img/core/logo.jpg" width="150" />
+                    </a>
+                </td>
+            </tr>
+            <tr>
+                <td style="border-bottom: 1px solid #d6d4d4;"></td>
+            </tr>
+            <tr>
+                <td style="padding-bottom: 20px;"></td>
+            </tr>
+            <tr>
+                <td><?php echo $this->fetch('content'); ?></td>
+            </tr>
+            <tr>
+                <td style="padding-top:20px;font-size:12px;">
+                    PS: Diese E-Mail wurde automatisch erstellt.
+                    <?php echo $this->element('emailSignature'); ?>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
 </html>
