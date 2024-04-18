@@ -1092,7 +1092,7 @@ div.cke div {
     text-align: right
 }
 #ViewsWrapper .input label {
-    width: 150px;
+    width: 155px;
     text-align: left;
 }
 div.input.checkbox.long .checkbox {
@@ -1264,6 +1264,13 @@ input[type="radio"] {
 }
 div.checkbox label {
   line-height: 20px;
+}
+.remember-me-wrapper div.checkbox label {
+  line-height: 30px;
+}
+#remember-me {
+    float: left;
+    margin-right: 5px ! important;
 }
 .input.time select {
     width: 55px ! important;
