@@ -15,4 +15,3 @@ use Cake\Core\Configure;
         </tr>
     </tbody>
 <?php echo $this->element('email/tableFoot'); ?>
-
