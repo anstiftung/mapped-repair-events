@@ -38,8 +38,14 @@
             }
 
             echo $this->Form->create(@$loggedUser, ['url' => $action]);
-            echo $this->Form->control('email', ['label' =>  __('Loginbox:Email'), 'value' => '', 'id' => 'rep-email']);
-            echo $this->Form->control('password', ['label' => __('Loginbox:Pass'), 'value' => '', 'id' => 'rep-password']);
+            echo $this->Form->control('email', ['label' =>  '', 'value' => '', 'id' => 'rep-email', 'placeholder' => __('Loginbox:Email')]);
+            echo $this->Form->control('password', ['label' => '', 'value' => '', 'id' => 'rep-password', 'placeholder' => __('Loginbox:Pass')]);
+            echo '<div class="remember-me-wrapper">';
+              echo $this->Form->control('remember_me', [
+                  'type' => 'checkbox',
+                  'label' => 'Angemeldet bleiben',
+              ]);
+            echo '</div>';
         ?>
 
 <div class="sc"></div>

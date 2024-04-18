@@ -26,6 +26,7 @@ return [
     ],
     'Security' => [
         'salt' => '1352742f9cf63228087273ae55bdf6bb2d1a75b82c7e3c6c7023c3014c703a85',
+        'cookieKey' => 'e30a8116208c9558fec892ffa23e7ec95e0dd63a72833627352deee4ffdb897b',
     ],
 
     'AppConfig' => [
