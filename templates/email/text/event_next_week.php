@@ -3,10 +3,6 @@ use Cake\Core\Configure;
 echo 'Die von dir abonnierte Initiative "' . $workshop->name . '" hat nächste Woche einen Termin:'; ?>
 
 
-<?php echo 'Bitte informiere dich bei der Initiative, unter welchen Bedingungen derzeit das Reparaturcafé angeboten wird. Kontaktdaten und weitere Informationen findest du hier:'; ?>
-
-<?php echo Configure::read('AppConfig.serverName').$url; ?>
-
 <?php
 if ($event->is_online_event) {
     echo 'Der Termin findet online statt.';
