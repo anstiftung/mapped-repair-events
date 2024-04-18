@@ -141,21 +141,6 @@ class StringComponent extends Component
         return self::slugify($string, '-', false);
     }
 
-    /**
-     * @param string $string
-     * @return string
-     */
-    public static function encryptSensitiveData($string, $hideAllCharacters=false)
-    {
-        $len = strlen($string);
-        if ($hideAllCharacters) {
-            return str_repeat('*', $len);
-        }
-        if ($len < 2) return $string;
-        return substr($string, 0, 1).str_repeat('*', $len - 2).substr($string, $len - 1, 1);
-
-    }
-
     public static function cutHtmlString($text, $length = 100, $ending = '...', $exact = false, $considerHtml = true)
     {
 
@@ -253,14 +238,6 @@ class StringComponent extends Component
 
         $truncate = Configure::read('AppConfig.htmlHelper')->trimAndRemoveEmptyTags($truncate);
         return $truncate;
-    }
-
-    public static function isUrlRelative($url)
-    {
-        if (preg_match('/https?\:\/\//', $url)) {
-            return false;
-        }
-        return true;
     }
 
     /**

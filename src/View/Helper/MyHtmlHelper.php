@@ -171,15 +171,6 @@ class MyHtmlHelper extends HtmlHelper {
         return '<div class="'.$class.' input {{type}}{{required}} error">{{content}}{{error}}</div>';
     }
 
-    function generateFakeMaskedInputField($label, $value, $hideAllCharacters=false)
-    {
-        $result = '<div class="input text">';
-        $result .= '<label>'.$label.':</label>';
-        $result .= '<span class="fake-input">'.StringComponent::encryptSensitiveData($value, $hideAllCharacters).'</span>';
-        $result .= '</div>';
-        return $result;
-    }
-
     function getFacebookHint()
     {
         $html = '<strong>Facebook</strong>
