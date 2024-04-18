@@ -29,6 +29,7 @@
     border-bottom: 2px dotted black;
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
+    padding: .2em 0 0;
 }
 
 .ui-tabs .ui-tabs-nav li.ui-tabs-active,

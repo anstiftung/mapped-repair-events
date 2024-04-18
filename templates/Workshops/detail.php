@@ -39,6 +39,16 @@ if (!$this->request->getSession()->read('isMobile')) {
 
     <div class="left">
 
+    <?php
+        if (!$this->request->getSession()->read('isMobile')) {
+            echo $this->element('workshop/worknewsToggle', [
+                'subscribed' => $subscribed,
+                'workshop' => $workshop,
+                'worknews' => $worknews,
+            ]);
+        }
+    ?>
+
         <div id="datum"></div>
         <div class="widget-link events">
             <a title="<?php echo __('Events on your website'); ?>" href="/widgets/integration/#1"><?php echo __('Events on your website'); ?></a>
@@ -67,39 +77,6 @@ if (!$this->request->getSession()->read('isMobile')) {
             echo 'Ich möchte die anstehenden Termine mit meinem digitalen Kalender synchronisieren: <a href="/events/'.$workshop->uid.'.ics">Hier klicken</a>.';
         }
 
-        if (!$subscribed) {
-            $this->element('addScript', ['script' =>
-                JS_NAMESPACE.".Helper.updateAntiSpamField('#WorknewsForm', $('#WorkNewsForm" . $workshop->uid . "'), ".$workshop->uid.");
-            "]);
-            echo $this->Form->create($worknews, [
-                'novalidate' => 'novalidate',
-                'id' => 'WorknewsForm' . $workshop->uid,
-            ]);
-
-                $this->Form->unlockField('botEwX482');
-
-                echo $this->Form->hidden('Worknews.workshop_uid', [
-                    'value' => $workshop->uid
-                ]);
-
-                echo '<span style="float:left;margin:10px 0px;width:100%;">Ich möchte über anstehende Termine dieser Initiative per E-Mail informiert werden.</span>';
-                echo $this->Form->control('Worknews.email', [
-                    'type' => 'email',
-                    'label' => false,
-                    'style' => 'float:left; margin:0px 10px 0px 0px;'
-                ]);
-
-                echo '<div class="submit">';
-                    echo $this->Form->input(__('Submit'), ['type' => 'submit']);
-                echo '</div>';
-
-            echo $this->Form->end();
-        }
-
-        echo '<div class="sc"></div><br>';
-        if ($subscribed) {
-            echo '<div>Deine E-Mail-Adresse <strong>(', $loggedUser->email, ')</strong> ', __('is already subscribed to news from this workshop.'), ' <a href="/initiativen/newsunsub/', $worknews->unsub, '">', __('Click here to unsubscribe'), '.</a></div>';
-        }
         ?>
 
         </div>
@@ -128,6 +105,14 @@ if (!$this->request->getSession()->read('isMobile')) {
                 'workshop' => $workshop
             ]);
 
+            if ($this->request->getSession()->read('isMobile')) {
+                echo $this->element('workshop/worknewsToggle', [
+                    'subscribed' => $subscribed,
+                    'workshop' => $workshop,
+                    'worknews' => $worknews,
+                ]);
+            }
+    
             if ($this->request->getSession()->read('isMobile') && count($workshop->events) > 0) {
                 echo '<h2>'.__('Next Events').'</h2>';
                 echo '<div id="calEvents"></div>';
