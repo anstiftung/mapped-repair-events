@@ -41,6 +41,11 @@ class AppTestCase extends TestCase
         return preg_replace('/\{\{serverName\}\}/', str_replace('/', '\\\/', Configure::read('AppConfig.serverName')), $html);
     }
 
+    protected function correctExpectedDate($html, $expectedDate)
+    {
+        return preg_replace('/\{\{expectedDate\}\}/', str_replace('/', '\\\/', $expectedDate), $html);
+    }
+
     public function setUp(): void
     {
         parent::setUp();

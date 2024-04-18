@@ -12,6 +12,7 @@ use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\StringCompareTrait;
 use Cake\TestSuite\TestEmailTransport;
 use App\Services\GeoService;
+use Cake\I18n\Date;
 
 class WorkshopsControllerTest extends AppTestCase
 {
@@ -27,14 +28,26 @@ class WorkshopsControllerTest extends AppTestCase
 
     public function testAjaxGetAllWorkshopsForMap()
     {
+
+        $expectedResult = file_get_contents(TESTS . 'comparisons' . DS . 'rest-workshops-berlin.json');
+        $expectedResult = $this->correctServerName($expectedResult);
+        $expectedNextEventDate = Date::now()->addDays(7)->format('d.m.Y');
+        $expectedResult = $this->correctExpectedDate($expectedResult, $expectedNextEventDate);
+        $this->get('/api/v1/workshops?city=berlin');
+        $this->assertResponseContains($expectedResult);
+        $this->assertResponseOk();
+
         $this->configRequest([
             'headers' => [
                 'X_REQUESTED_WITH' => 'XMLHttpRequest'
             ]
         ]);
-        $this->_compareBasePath = ROOT . DS . 'tests' . DS . 'comparisons' . DS;
+        $expectedResult = file_get_contents(TESTS . 'comparisons' . DS . 'workshops-for-map.json');
+        $expectedNextEventDate = Date::now()->addDays(7)->format('Y-m-d');
+        $expectedResult = $this->correctExpectedDate($expectedResult, $expectedNextEventDate);
         $this->get('/workshops/ajaxGetAllWorkshopsForMap');
-        $this->assertSameAsFile('workshops-for-map.json', $this->_response->getBody()->__toString());
+        $this->assertResponseContains($expectedResult);
+        $this->assertResponseOk();
     }
 
     public function testWorkshopDetail()
@@ -213,6 +226,8 @@ class WorkshopsControllerTest extends AppTestCase
     {
         $expectedResult = file_get_contents(TESTS . 'comparisons' . DS . 'rest-workshops-berlin.json');
         $expectedResult = $this->correctServerName($expectedResult);
+        $expectedNextEventDate = Date::now()->addDays(7)->format('d.m.Y');
+        $expectedResult = $this->correctExpectedDate($expectedResult, $expectedNextEventDate);
         $this->get('/api/v1/workshops?city=berlin');
         $this->assertResponseContains($expectedResult);
         $this->assertResponseOk();

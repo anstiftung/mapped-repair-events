@@ -28,6 +28,23 @@
                 "Events": [
                     {
                         "workshop_uid": 2,
+                        "uid": 9,
+                        "status": 1,
+                        "strasse": null,
+                        "zip": null,
+                        "ort": null,
+                        "is_online_event": 0,
+                        "categories": [],
+                        "datumstart_formatted": "{{expectedDate}}",
+                        "uhrzeitstart_formatted": "09:00",
+                        "uhrzeitend_formatted": "18:00",
+                        "wurl": "test-workshop",
+                        "eventname": "Test Workshop",
+                        "hasModifyPermissions": false,
+                        "directurl": "\/test-workshop?event=9,{{expectedDate}}#datum"
+                    },
+                    {
+                        "workshop_uid": 2,
                         "uid": 6,
                         "status": 1,
                         "strasse": null,

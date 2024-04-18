@@ -25,7 +25,20 @@ class EventsFixture extends TestFixture
                 'lng' => 13.404954,
                 'status' => 1,
                 'owner' => 1
-            ]
+            ],
+            [
+                'uid' => 9,
+                'workshop_uid' => 2,
+                'eventbeschreibung' => 'description',
+                'datumstart' => Date::now()->addDays(7),
+                'uhrzeitstart' => new DateTime('09:00'),
+                'uhrzeitend' => new DateTime('18:00'),
+                'use_custom_coordinates' => 1,
+                'lat' => 52.520008,
+                'lng' => 13.404954,
+                'status' => 1,
+                'owner' => 1
+            ],
         ];
         parent::init();
     }

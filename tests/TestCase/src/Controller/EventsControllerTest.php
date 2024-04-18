@@ -108,19 +108,21 @@ class EventsControllerTest extends AppTestCase
             'Categories',
         ])->toArray();
 
-        $this->assertEquals(3, count($events));
-        $this->assertEquals($events[1]->eventbeschreibung, 'description<img src="n" alt="n" />');
-        $this->assertEquals($events[1]->strasse, $this->newEventData['strasse']);
-        $this->assertEquals($events[1]->datumstart, new Date($this->newEventData['datumstart']));
-        $this->assertEquals($events[1]->uhrzeitstart, new Time($this->newEventData['uhrzeitstart']));
-        $this->assertEquals($events[1]->uhrzeitend, new Time($this->newEventData['uhrzeitend']));
-        $this->assertEquals($events[1]->categories[0]->id, $this->newEventData['categories']['_ids'][0]);
-        $this->assertEquals($events[1]->owner, 1);
-        $this->assertEquals($events[1]->workshop_uid, 2);
+        $eventIndexA = 2;
+        $this->assertEquals(4, count($events));
+        $this->assertEquals($events[$eventIndexA]->eventbeschreibung, 'description<img src="n" alt="n" />');
+        $this->assertEquals($events[$eventIndexA]->strasse, $this->newEventData['strasse']);
+        $this->assertEquals($events[$eventIndexA]->datumstart, new Date($this->newEventData['datumstart']));
+        $this->assertEquals($events[$eventIndexA]->uhrzeitstart, new Time($this->newEventData['uhrzeitstart']));
+        $this->assertEquals($events[$eventIndexA]->uhrzeitend, new Time($this->newEventData['uhrzeitend']));
+        $this->assertEquals($events[$eventIndexA]->categories[0]->id, $this->newEventData['categories']['_ids'][0]);
+        $this->assertEquals($events[$eventIndexA]->owner, 1);
+        $this->assertEquals($events[$eventIndexA]->workshop_uid, 2);
 
-        $this->assertEquals($events[2]->datumstart, new Date($newEventData2['datumstart']));
-        $this->assertEquals($events[2]->uhrzeitstart, new Time($newEventData2['uhrzeitstart']));
-        $this->assertEquals($events[2]->uhrzeitend, new Time($newEventData2['uhrzeitend']));
+        $eventIndexB = 3;
+        $this->assertEquals($events[$eventIndexB]->datumstart, new Date($newEventData2['datumstart']));
+        $this->assertEquals($events[$eventIndexB]->uhrzeitstart, new Time($newEventData2['uhrzeitstart']));
+        $this->assertEquals($events[$eventIndexB]->uhrzeitend, new Time($newEventData2['uhrzeitend']));
 
         $this->assertMailCount(0);
 
