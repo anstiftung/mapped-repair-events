@@ -754,6 +754,7 @@ class WorkshopsController extends AppController
                 $this->Worknews->save($worknews);
 
                 $email = new Mailer('default');
+                $email->setEmailFormat('html');
                 $email->viewBuilder()->setTemplate('activate_worknews');
                 $email->setSubject(__('Please activate your worknews subscription'))
                     ->setViewVars([
