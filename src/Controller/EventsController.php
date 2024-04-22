@@ -398,25 +398,20 @@ class EventsController extends AppController
         $this->set('editFormUrl', Configure::read('AppConfig.htmlHelper')->urlEventEdit($event->uid));
         $this->set('isDuplicateMode', false);
         $patchedEntities = $this->_edit([$event], true);
+        $patchedEntity = $patchedEntities['events'][0];
 
-        $patchedEntity = $patchedEntities[0];
-
-        // only send notfications if status was changed from off to on
-        $sendNotificationMails = $event->status == APP_OFF && $patchedEntity->status == APP_ON;
-
-        // never send notification mail on add! this is done in cronjob SendWorknewsNotificationShell
+        // never send notification mail on add
         // if event is edited and renotify is active, send mail to subscriber
         if (!empty($event->workshop)) {
             $workshop = $event->workshop;
-            $sendNotificationMails |= $patchedEntity->renotify;
         }
 
         // notify subscribers
-        if (isset($workshop) && $sendNotificationMails) {
+        if (isset($workshop) && $patchedEntity->renotify) {
             $this->Worknews = $this->getTableLocator()->get('Worknews');
             $subscribers = $this->Worknews->getSubscribers($patchedEntity->workshop_uid);
             if (!empty($subscribers)) {
-                $this->Worknews->sendNotifications($subscribers, 'Termin geändert: ' . $workshop->name, 'event_changed', $workshop, $patchedEntity);
+                $this->Worknews->sendNotifications($subscribers, 'Termin geändert: ' . $workshop->name, 'event_changed', $workshop, $patchedEntity, $patchedEntities['dirtyFields'], $patchedEntities['originalValues']);
             }
         }
     }
@@ -470,8 +465,8 @@ class EventsController extends AppController
             $events = $patchedEvents;
 
             $hasErrors = false;
-            foreach($events as $event) {
-                if ($event->hasErrors()) {
+            foreach($events as $e) {
+                if ($e->hasErrors()) {
                     $hasErrors |= true;
                 }
             }
@@ -482,12 +477,15 @@ class EventsController extends AppController
             }
 
             if (!$hasErrors) {
-                $eventModel = $this->Event;
-                $this->Event->getConnection()->transactional(function () use ($eventModel, $events) {
-                    foreach ($events as $event) {
-                        $eventModel->save($event, ['atomic' => false]);
+                $eventsTable = FactoryLocator::get('Table')->get('Events');
+                $dirtyFields = $event->getDirty();
+                $originalValues = $event->getOriginalValues();
+                $eventsTable->getConnection()->transactional(function () use ($eventsTable, $events) {
+                    foreach ($events as $e) {
+                        $eventsTable->save($e, ['atomic' => true]);
                     }
                 });
+
                 $message = 'Termine';
                 if (count($events) == 1) {
                     $message = 'Termin';
@@ -495,7 +493,11 @@ class EventsController extends AppController
                 $message = count($events) . ' ' . $message . ' erfolgreich gespeichert.';
                 $this->AppFlash->setFlashMessage($message);
                 $this->redirect($this->getPreparedReferer());
-                return $events;
+                return [
+                    'events' => $events,
+                    'dirtyFields' => $dirtyFields,
+                    'originalValues' => $originalValues,
+                ];
             }
 
         }
@@ -503,7 +505,10 @@ class EventsController extends AppController
         $this->set('events', $events);
         $this->set('isEditMode', $isEditMode);
         $this->render('edit');
-        return $events;
+        return [
+            'events' => $events,
+        ];
+
 
     }
 

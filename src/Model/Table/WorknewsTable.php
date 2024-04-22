@@ -45,12 +45,10 @@ class WorknewsTable extends Table
         return $subscribers;
     }
 
-    public function sendNotifications($subscribers, $subject, $template, $workshop, $event)
+    public function sendNotifications($subscribers, $subject, $template, $workshop, $event, $dirtyFields = [], $originalValues = [])
     {
         $email = new Mailer('default');
-        if ($template === 'event_next_week') {
-            $email->setEmailFormat('html');
-        }
+        $email->setEmailFormat('html');
         $email->viewBuilder()->setTemplate($template);
         foreach ($subscribers as $subscriber) {
             $email->setTo($subscriber->email)
@@ -61,6 +59,8 @@ class WorknewsTable extends Table
                 'unsub' => $subscriber->unsub,
                 'workshop' => $workshop,
                 'event' => $event,
+                'dirtyFields' => $dirtyFields,
+                'originalValues' => $originalValues,
             ]);
             $email->send();
         }
