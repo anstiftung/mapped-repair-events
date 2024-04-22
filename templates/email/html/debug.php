@@ -16,7 +16,7 @@ echo '<br /><br />';
 
 echo '<b>User</b><br />';
 echo '<pre>';
-    print_r($loggedUser);
+    print_r($identity);
 echo '</pre>';
 echo '<br /><br />';
 
