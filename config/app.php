@@ -333,7 +333,6 @@ return [
      */
     'Session' => [
         'defaults' => 'php',
-        // if timeout changes, change value CleanSessionsShell too)
         'timeout' => 60*60*24,
     ],
 ];
