@@ -112,7 +112,7 @@ class Application extends BaseApplication
             new AuthorizationMiddleware($this, [
                 'unauthorizedHandler' => [
                     'className' => 'CustomRedirect',
-                    'url' => '/users/login',
+                    'url' => Configure::read('AppConfig.htmlHelper')->urlLogin(),
                     'exceptions' => [
                         MissingIdentityException::class,
                         ForbiddenException::class,
@@ -172,8 +172,11 @@ class Application extends BaseApplication
         ]);
         
         // Load the authenticators
-        $service->loadAuthenticator('Authentication.Session');
+        $service->loadAuthenticator('Authentication.Session', [
+            'identify' => false,
+        ]);
         $service->loadAuthenticator('Authentication.Form', [
+            'url' => Configure::read('AppConfig.htmlHelper')->urlLogin(),
             'fields' => [
                 'username' => 'email',
             ],
@@ -181,7 +184,7 @@ class Application extends BaseApplication
         
         $service->loadAuthenticator('Authentication.Cookie', [
             'fields' => $fields,
-            'loginUrl' => '/users/login',
+            'loginUrl' => Configure::read('AppConfig.htmlHelper')->urlLogin(),
             'cookie' => [
                 'expires' => new DateTime('+30 day'),
             ],
