@@ -1349,6 +1349,8 @@ iframe.eiwsd {
     border-radius: 5px;
 }
 body.workshops.detail .box-toggle {
+    width: 100%;
+    float: left;
     margin-top: -6px;
 }
 body.workshops.detail .collapse {
@@ -1381,6 +1383,10 @@ body.workshops.detail #calendar {
     border-radius: 5px;
     border-top-right-radius: 0;
     border-top-left-radius: 0;
+}
+body.workshops.detail .collapse {
+    float: left;
+    width: calc(100% - 18px);
 }
 .inlinecode {
     margin: 10px 0px;

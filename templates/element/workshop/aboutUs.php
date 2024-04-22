@@ -1,19 +1,19 @@
+<?php
+use App\Controller\Component\StringComponent;
+use Cake\Core\Configure;
 
+?>
 <div id="tabs-1">
     <div class="address-wrapper">
 
 <?php
-
-use App\Controller\Component\StringComponent;
-use Cake\Core\Configure;
-
 if ($workshop->image != '') echo '<img title="' . h($workshop->name). '" alt="' . h($workshop->name) . '" class="detail-image"
 src="' . $this->Html->getThumbs150Image($workshop->image, 'workshops') . '" />';
 
 else echo '<img alt="' . $workshop->name . '" class="detail-image"
 src="' . $this->Html->getThumbs150Image('rclogo-150.jpg', 'workshops') . '" />';
 
-echo '<strong>' . $workshop->name . '</strong><span style="margin-left:3px;color:#fff;font-size:8px;">' . $workshop->uid . '</span><br>';
+echo '<strong>' . $workshop->name . '</strong><span style="margin-left:3px;color:#fff;font-size:8px;">' . $workshop->uid . '</span><br />';
 
 if ($workshop->street != '') {
     echo StringComponent::prepareTextForHTML($workshop->street) . ', ';
@@ -23,11 +23,11 @@ if ($workshop->city != '') {
     echo $workshop->zip . ' ' . $workshop->city;
 }
 if ($workshop->adresszusatz != '') {
-    echo '<br>' . $workshop->adresszusatz;
+    echo '<br />' . $workshop->adresszusatz;
 }
 
 if (isset($workshop->country->name_de)) {
-    echo '<br>' . $workshop->country->name_de;
+    echo '<br />' . $workshop->country->name_de;
 }
 
 echo '<br /><br />';
@@ -75,7 +75,7 @@ if ($workshop->rechtl_vertret != '') {
 }
 
 if ($workshop->additional_contact != '') {
-    echo '<br /><br /><strong>' . __('Additional Contact possibilities: ') . '</strong>&nbsp;' . StringComponent::prepareTextForHTML($workshop->additional_contact) . '<br><br>';
+    echo '<br /><br /><strong>' . __('Additional Contact possibilities: ') . '</strong>&nbsp;' . StringComponent::prepareTextForHTML($workshop->additional_contact) . '<br /><br />';
 }
 
 echo '<div class="sc"></div>';
@@ -108,11 +108,11 @@ if(!empty($workshop->categories)) { ?>
     <div class="skill-icon-wrapper">
         <h2>Unsere <?php echo Configure::read('AppConfig.categoriesNameWorkshops'); ?></h2>
         <div class="skill-icons">
-        <?php
-            foreach($workshop->categories as $category) {
-                echo '<div title="'.$category->name.'" class="skill_icon '.$category->icon.'"></div>';
-            }
-        ?>
+            <?php
+                foreach($workshop->categories as $category) {
+                    echo '<div title="'.$category->name.'" class="skill_icon '.$category->icon.'"></div>';
+                }
+            ?>
         </div>
     </div>
 <?php }

@@ -116,6 +116,9 @@
         margin: 0;
         margin-top: 5px;
     }
+    body.workshops.detail .collapse {
+        width: calc(100% - 20px);
+    }    
     body.workshops.detail img.detail-image {
         max-width: 20%;
         height: auto;
@@ -125,6 +128,9 @@
     }
     body.workshops.detail .right {
         text-align: left;
+    }
+    body.workshops.detail .box-toggle { 
+        margin-top: 0;
     }
     body.workshops.detail .widget-link.events {
        float: left;
