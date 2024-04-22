@@ -478,8 +478,10 @@ class EventsController extends AppController
 
             if (!$hasErrors) {
                 $eventsTable = FactoryLocator::get('Table')->get('Events');
-                $dirtyFields = $event->getDirty();
-                $originalValues = $event->getOriginalValues();
+                if (isset($event)) {
+                    $dirtyFields = $event->getDirty();
+                    $originalValues = $event->getOriginalValues();
+                }
                 $eventsTable->getConnection()->transactional(function () use ($eventsTable, $events) {
                     foreach ($events as $e) {
                         $eventsTable->save($e, ['atomic' => true]);
@@ -495,8 +497,8 @@ class EventsController extends AppController
                 $this->redirect($this->getPreparedReferer());
                 return [
                     'events' => $events,
-                    'dirtyFields' => $dirtyFields,
-                    'originalValues' => $originalValues,
+                    'dirtyFields' => $dirtyFields ?? [],
+                    'originalValues' => $originalValues ?? [],
                 ];
             }
 
