@@ -393,11 +393,11 @@ class UsersTable extends AppTable
     public function findAuth(\Cake\ORM\Query $query, array $options)
     {
         $query->where([
-            'Users.status' => APP_ON
+            'Users.status' => APP_ON,
         ]);
         $query->contain([
             'Categories',
-            'Groups'
+            'Groups',
         ]);
         return $query;
     }
