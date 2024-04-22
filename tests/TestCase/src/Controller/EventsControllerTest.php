@@ -172,7 +172,8 @@ class EventsControllerTest extends AppTestCase
         ])->first();
         $this->assertEquals($event->status, APP_DELETED);
         $this->assertMailCount(1);
-        $this->assertMailSentTo('worknews-test@mailinator.com');
+        $this->assertMailSentToAt(0, 'worknews-test@mailinator.com');
+        $this->assertMailContainsAt(0, 'Die von dir abonnierte Initiative <b>Test Workshop</b> hat folgenden Termin gelöscht: <b>Sonntag, 01.01.2040</b>.');
     }
 
     private function doTestEditForm($renotify)
