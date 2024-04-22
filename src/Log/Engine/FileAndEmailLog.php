@@ -36,14 +36,12 @@ class FileAndEmailLog extends FileLog
             return false;
         }
 
+        $identity = null;
         $request = Router::getRequest();
-        $loggedUser = [];
-        if ($request) {
-            $session = $request->getSession();
-            if ($session->read('Auth.User.uid') !== null) {
-                $loggedUser = $session->read('Auth');
-            }
+        if ($request !== null) {
+            $identity = $request->getAttribute('identity');
         }
+
         $preparedHostWithoutProtocol = Configure::read('AppConfig.htmlHelper')->getHostWithoutProtocol(Configure::read('AppConfig.serverName'));
         $preparedHostWithoutProtocol = str_replace('www.', '', $preparedHostWithoutProtocol);
         $subject = 'ErrorLog ' . $preparedHostWithoutProtocol . ': ' . Text::truncate($message, 150) . ' ' . date('Y-m-d H:i:s');
@@ -55,7 +53,7 @@ class FileAndEmailLog extends FileLog
             ->setSubject($subject)
             ->setViewVars(array(
                 'message' => $message,
-                'loggedUser' => $loggedUser
+                'identity' => $identity,
             ))
             ->send();
         } catch (SocketException $e) {
