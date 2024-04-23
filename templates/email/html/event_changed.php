@@ -21,6 +21,9 @@ use Cake\Core\Configure;
                     <?php if (in_array('lat', $dirtyFields) || in_array('lng', $dirtyFields)) { ?>
                         - Neuer Veranstaltungsort: <b><?php echo $event->ort . ', ' . $event->strasse; ?><?php echo (!empty($event->veranstaltungsort)) ? ' (' . $event->veranstaltungsort . ')' : ''; ?></b><br />
                     <?php } ?>
+                    <?php if (in_array('is_online_event', $dirtyFields)) { ?>
+                        - <?php echo $event->is_online_event ? 'Der Termin findet jetzt als <b>Online-Termin</b> statt.' : 'Der Termin findet <b>nicht mehr als Online-Termin</b> statt.'; ?><br />
+                    <?php } ?>
                 <p>
                     Klicke <a href="<?php echo Configure::read('AppConfig.serverName') . $this->MyHtml->urlWorkshopDetail($workshop->url);?>">hier für weitere Termine von <?php echo $workshop->name; ?></a>.
                 </p>

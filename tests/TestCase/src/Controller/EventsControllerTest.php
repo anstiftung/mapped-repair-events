@@ -14,6 +14,7 @@ use Cake\TestSuite\StringCompareTrait;
 use Cake\I18n\Date;
 use Cake\I18n\Time;
 use Cake\TestSuite\TestEmailTransport;
+use PHPUnit\Event\Code\Test;
 
 class EventsControllerTest extends AppTestCase
 {
@@ -166,6 +167,7 @@ class EventsControllerTest extends AppTestCase
             'use_custom_coordinates' => true,
             'lat' => '48.1291558',
             'lng' => '11.3626812',
+            'is_online_event' => true,
         ];
 
         $this->doTestEditForm($data);
@@ -175,6 +177,7 @@ class EventsControllerTest extends AppTestCase
         $this->assertMailContainsAt(0, '- Das Datum des Termins wurde von Sonntag, 01.01.2040 auf <b>Mittwoch, 02.01.2030</b> geändert.');
         $this->assertMailContainsAt(0, '- Neue Uhrzeit: <b>10:00 - 11:00 Uhr</b>');
         $this->assertMailContainsAt(0, '- Neuer Veranstaltungsort: <b>testort, new street</b>');
+        $this->assertMailContainsAt(0, '- Der Termin findet jetzt als <b>Online-Termin</b> statt.');
     }
 
     public function testAjaxGetAllEventsForMap()
