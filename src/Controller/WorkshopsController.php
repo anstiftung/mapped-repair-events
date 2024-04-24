@@ -712,7 +712,7 @@ class WorkshopsController extends AppController
     private function processWorknewsAddForm($workshop)
     {
 
-        if (!empty($this->getRequest()->getData()) && ($this->getRequest()->getData('botEwX482') == '' || $this->getRequest()->getData('botEwX482') < 3)) {
+        if (!empty($this->getRequest()->getData()) && ($this->getRequest()->getData('botEwX482') == '' || $this->getRequest()->getData('botEwX482') < 1)) {
             $this->redirect('/');
             return;
         }
