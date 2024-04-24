@@ -178,7 +178,6 @@ class EventsControllerTest extends AppTestCase
         $this->assertMailContainsAt(0, '- Neue Uhrzeit: <b>10:00 - 11:00 Uhr</b>');
         $this->assertMailContainsAt(0, '- Neuer Veranstaltungsort: <b>testort, new street</b>');
         $this->assertMailContainsAt(0, '- Der Termin findet jetzt als <b>Online-Termin</b> statt.');
-        pr(TestEmailTransport::getMessages());
     }
 
     public function testAjaxGetAllEventsForMap()
