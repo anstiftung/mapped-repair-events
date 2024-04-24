@@ -49,7 +49,7 @@
 
     echo '<div class="sc"></div>';
     if ($subscribed) {
-        echo '<div>Deine E-Mail-Adresse <strong>(', $loggedUser->email, ')</strong> ', __('is already subscribed to news from this workshop.'), ' <a href="/initiativen/newsunsub/', $worknews->unsub, '">', __('Click here to unsubscribe'), '.</a></div>';
+        echo '<div>Deine E-Mail-Adresse <strong>(', $loggedUser->email, ')</strong> ', 'erhält bereits die Termine dieser Initiative.', ' <a href="/initiativen/newsunsub/', $worknews->unsub, '">', __('Click here to unsubscribe'), '.</a></div>';
     }
 
 ?>

@@ -21,13 +21,7 @@ use Cake\Core\Configure;
                 ?>
 
                 <p>
-                    Klicke
-                    <?php
-                        echo $this->MyHtml->link(
-                            'hier',
-                            Configure::read('AppConfig.serverName').'/initiativen/newsunsub/' . $unsub,
-                        );
-                    ?>, um das Abonnement zu beenden und deine E-Mail-Adresse zu entfernen.
+                    Um deine E-Mail-Adresse aus der Abonnementliste für diese Initiative zu entfernen, klicke <?php echo $this->MyHtml->link('hier', Configure::read('AppConfig.serverName').'/initiativen/newsunsub/' . $unsub);?>.
                 </p>
             </td>
         </tr>

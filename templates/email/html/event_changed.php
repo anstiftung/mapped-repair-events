@@ -25,16 +25,10 @@ use Cake\Core\Configure;
                         - <?php echo $event->is_online_event ? 'Der Termin findet jetzt als <b>Online-Termin</b> statt.' : 'Der Termin findet <b>nicht mehr als Online-Termin</b> statt.'; ?><br />
                     <?php } ?>
                 <p>
-                    Klicke <a href="<?php echo Configure::read('AppConfig.serverName') . $this->MyHtml->urlWorkshopDetail($workshop->url);?>">hier für weitere Termine von <?php echo $workshop->name; ?></a>.
+                    Hier kommst du <a href="<?php echo Configure::read('AppConfig.serverName') . $this->MyHtml->urlWorkshopDetail($workshop->url);?>">zum Profil von <?php echo $workshop->name; ?></a>.
                 </p>
                 <p>
-                    Klicke
-                    <?php
-                        echo $this->MyHtml->link(
-                            'hier',
-                            Configure::read('AppConfig.serverName').'/initiativen/newsunsub/' . $unsub,
-                        );
-                    ?>, um das Abonnement zu beenden und deine E-Mail-Adresse zu entfernen.
+                    Um deine E-Mail-Adresse aus der Abonnementliste für diese Initiative zu entfernen, klicke <?php echo $this->MyHtml->link('hier', Configure::read('AppConfig.serverName').'/initiativen/newsunsub/' . $unsub);?>.
                 </p>
             </td>
         </tr>
