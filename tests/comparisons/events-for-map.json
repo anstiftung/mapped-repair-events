@@ -51,6 +51,26 @@
             },
             "Events": [
                 {
+                    "uid": 9,
+                    "lat": 52.520008,
+                    "lng": 13.404954,
+                    "datumstart": "{{expectedDate}}",
+                    "strasse": "M\u00fcllerstra\u00dfe 123",
+                    "zip": null,
+                    "ort": "Berlin",
+                    "image": null,
+                    "image_alt_text": null,
+                    "owner": 1,
+                    "eventbeschreibung": "description",
+                    "is_online_event": 0,
+                    "uniquePlace": "190641f793aea9f4fe7bc9b440d0c6be",
+                    "directurl": "test-workshop?event=9,{{expectedDate}}",
+                    "categories": [],
+                    "datumstart_formatted": "{{expectedDate}}",
+                    "uhrzeitstart_formatted": "09:00",
+                    "uhrzeitend_formatted": "18:00"
+                },
+                {
                     "uid": 6,
                     "lat": 52.520008,
                     "lng": 13.404954,

@@ -12,6 +12,7 @@ use App\Test\TestCase\Traits\LoginTrait;
 use AssetCompress\Factory;
 use Cake\Datasource\FactoryLocator;
 use Cake\ORM\Locator\TableLocator;
+use App\Model\Entity\User;
 
 class UsersControllerTest extends AppTestCase
 {
@@ -83,8 +84,9 @@ class UsersControllerTest extends AppTestCase
 
         $this->assertRedirectContains('/');
 
+        $expectedNewUserUid = 10;
         $user = $this->getRegisteredUser();
-        $this->assertEquals($user->uid, 9);
+        $this->assertEquals($user->uid, $expectedNewUserUid);
         $this->assertEquals($user->nick, 'JohnDoeA');
         $this->assertEquals($user->email, $this->validUserData['email']);
         $this->assertEquals($user->firstname, 'John');
@@ -98,7 +100,7 @@ class UsersControllerTest extends AppTestCase
         $skillsTable = $this->getTableLocator()->get('Skills');
         $skills = $skillsTable->find('all')->toArray();
         $this->assertCount(2, $skills);
-        $this->assertEquals(9, $skills[1]->owner);
+        $this->assertEquals($expectedNewUserUid, $skills[1]->owner);
 
         $this->assertMailCount(1);
         $this->assertMailSentTo($this->validUserData['email']);
@@ -107,7 +109,7 @@ class UsersControllerTest extends AppTestCase
         $this->get('/users/activate/' . $user->confirm);
         $user = $this->getRegisteredUser();
 
-        $this->assertEquals($user->confirm, 'ok');
+        $this->assertEquals($user->confirm, User::STATUS_OK);
         $this->assertRedirectContains(Configure::read('AppConfig.htmlHelper')->urlUserHome());
 
     }

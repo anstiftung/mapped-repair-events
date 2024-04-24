@@ -5,6 +5,7 @@ namespace App\Command;
 use Cake\Command\Command;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
+use App\Model\Entity\Worknews;
 
 class CleanWorknewsCommand extends Command
 {
@@ -16,7 +17,7 @@ class CleanWorknewsCommand extends Command
 
         $worknews = $worknewsTable->find('all',
         conditions: [
-            $worknewsTable->aliasField('confirm !=') => 'ok',
+            $worknewsTable->aliasField('confirm !=') => Worknews::STATUS_OK,
             'DATEDIFF(NOW(), Worknews.created) >= 30',
         ],
         order: ['Worknews.created' => 'ASC']

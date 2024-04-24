@@ -5,6 +5,7 @@ use Cake\Core\Configure;
 use Cake\Mailer\Mailer;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use App\Model\Entity\Worknews;
 
 class WorknewsTable extends Table
 {
@@ -36,17 +37,18 @@ class WorknewsTable extends Table
         $subscribers = $this->find('all',
         conditions: [
             'Worknews.workshop_uid' => $workshopUid,
-            'Worknews.confirm' => 'ok'
+            'Worknews.confirm' => Worknews::STATUS_OK,
         ],
         contain: [
-            'Workshops'
+            'Workshops',
         ]);
         return $subscribers;
     }
 
-    public function sendNotifications($subscribers, $subject, $template, $workshop, $event)
+    public function sendNotifications($subscribers, $subject, $template, $workshop, $event, $dirtyFields = [], $originalValues = [])
     {
         $email = new Mailer('default');
+        $email->setEmailFormat('html');
         $email->viewBuilder()->setTemplate($template);
         foreach ($subscribers as $subscriber) {
             $email->setTo($subscriber->email)
@@ -57,6 +59,8 @@ class WorknewsTable extends Table
                 'unsub' => $subscriber->unsub,
                 'workshop' => $workshop,
                 'event' => $event,
+                'dirtyFields' => $dirtyFields,
+                'originalValues' => $originalValues,
             ]);
             $email->send();
         }

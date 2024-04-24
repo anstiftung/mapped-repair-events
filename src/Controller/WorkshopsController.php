@@ -21,6 +21,7 @@ use App\Model\Table\PostsTable;
 use App\Model\Table\UsersTable;
 use App\Model\Table\WorknewsTable;
 use App\Services\GeoService;
+use App\Model\Entity\Worknews;
 
 class WorkshopsController extends AppController
 {
@@ -711,7 +712,7 @@ class WorkshopsController extends AppController
     private function processWorknewsAddForm($workshop)
     {
 
-        if (!empty($this->getRequest()->getData()) && ($this->getRequest()->getData('botEwX482') == '' || $this->getRequest()->getData('botEwX482') < 3)) {
+        if (!empty($this->getRequest()->getData()) && ($this->getRequest()->getData('botEwX482') == '' || $this->getRequest()->getData('botEwX482') < 1)) {
             $this->redirect('/');
             return;
         }
@@ -719,7 +720,7 @@ class WorkshopsController extends AppController
         $this->Worknews = $this->getTableLocator()->get('Worknews');
         $conditions = [
             'Worknews.workshop_uid' => $workshop->uid,
-            'Worknews.confirm' => 'ok',
+            'Worknews.confirm' => Worknews::STATUS_OK,
             'Worknews.email' => $this->isLoggedIn() ? $this->loggedUser->email : '',
         ];
         $worknews = $this->Worknews->find('all', conditions: $conditions)->first();
@@ -753,6 +754,7 @@ class WorkshopsController extends AppController
                 $this->Worknews->save($worknews);
 
                 $email = new Mailer('default');
+                $email->setEmailFormat('html');
                 $email->viewBuilder()->setTemplate('activate_worknews');
                 $email->setSubject(__('Please activate your worknews subscription'))
                     ->setViewVars([
@@ -780,7 +782,7 @@ class WorkshopsController extends AppController
                 }
             }
         }
-        $subscribed = $worknews->confirm == 'ok' && $this->isLoggedIn() && $worknews->email == $this->loggedUser->email;
+        $subscribed = $worknews->confirm == Worknews::STATUS_OK && $this->isLoggedIn() && $worknews->email == $this->loggedUser->email;
         $this->set('subscribed', $subscribed);
         $this->set('worknews', $worknews);
 

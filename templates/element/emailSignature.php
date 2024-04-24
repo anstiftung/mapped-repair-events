@@ -1,7 +1,7 @@
 --
 
 Netzwerk Reparatur-Initiativen
-Tom Hansing | Ina Hemmelmann
+Tom Hansing | Ina Hemmelmann | Linn Quante
 
 Tel: +49 089 74 74 60 -18
 

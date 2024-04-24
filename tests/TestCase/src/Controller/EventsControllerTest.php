@@ -13,6 +13,8 @@ use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\StringCompareTrait;
 use Cake\I18n\Date;
 use Cake\I18n\Time;
+use Cake\TestSuite\TestEmailTransport;
+use PHPUnit\Event\Code\Test;
 
 class EventsControllerTest extends AppTestCase
 {
@@ -108,19 +110,21 @@ class EventsControllerTest extends AppTestCase
             'Categories',
         ])->toArray();
 
-        $this->assertEquals(3, count($events));
-        $this->assertEquals($events[1]->eventbeschreibung, 'description<img src="n" alt="n" />');
-        $this->assertEquals($events[1]->strasse, $this->newEventData['strasse']);
-        $this->assertEquals($events[1]->datumstart, new Date($this->newEventData['datumstart']));
-        $this->assertEquals($events[1]->uhrzeitstart, new Time($this->newEventData['uhrzeitstart']));
-        $this->assertEquals($events[1]->uhrzeitend, new Time($this->newEventData['uhrzeitend']));
-        $this->assertEquals($events[1]->categories[0]->id, $this->newEventData['categories']['_ids'][0]);
-        $this->assertEquals($events[1]->owner, 1);
-        $this->assertEquals($events[1]->workshop_uid, 2);
+        $eventIndexA = 2;
+        $this->assertEquals(4, count($events));
+        $this->assertEquals($events[$eventIndexA]->eventbeschreibung, 'description<img src="n" alt="n" />');
+        $this->assertEquals($events[$eventIndexA]->strasse, $this->newEventData['strasse']);
+        $this->assertEquals($events[$eventIndexA]->datumstart, new Date($this->newEventData['datumstart']));
+        $this->assertEquals($events[$eventIndexA]->uhrzeitstart, new Time($this->newEventData['uhrzeitstart']));
+        $this->assertEquals($events[$eventIndexA]->uhrzeitend, new Time($this->newEventData['uhrzeitend']));
+        $this->assertEquals($events[$eventIndexA]->categories[0]->id, $this->newEventData['categories']['_ids'][0]);
+        $this->assertEquals($events[$eventIndexA]->owner, 1);
+        $this->assertEquals($events[$eventIndexA]->workshop_uid, 2);
 
-        $this->assertEquals($events[2]->datumstart, new Date($newEventData2['datumstart']));
-        $this->assertEquals($events[2]->uhrzeitstart, new Time($newEventData2['uhrzeitstart']));
-        $this->assertEquals($events[2]->uhrzeitend, new Time($newEventData2['uhrzeitend']));
+        $eventIndexB = 3;
+        $this->assertEquals($events[$eventIndexB]->datumstart, new Date($newEventData2['datumstart']));
+        $this->assertEquals($events[$eventIndexB]->uhrzeitstart, new Time($newEventData2['uhrzeitstart']));
+        $this->assertEquals($events[$eventIndexB]->uhrzeitend, new Time($newEventData2['uhrzeitend']));
 
         $this->assertMailCount(0);
 
@@ -128,21 +132,53 @@ class EventsControllerTest extends AppTestCase
 
     public function testEditEventWithoutNotifications()
     {
-        $this->doTestEditForm(false);
+        $data = [
+            'renotify' => false,
+            'eventbeschreibung' => 'new description',
+            'strasse' => 'new street',
+            'zip' => '46464',
+            'ort' => 'testort',
+            'land' => 'de',
+            'datumstart' => '02.01.2030',
+            'uhrzeitstart' => '10:00',
+            'uhrzeitend' => '11:00',
+            'use_custom_coordinates' => true,
+            'lat' => '48.1291558',
+            'lng' => '11.3626812',
+            'status' => APP_ON,
+        ];
+        $this->doTestEditForm($data);
         $this->assertMailCount(0);
     }
 
     public function testEditEventWithNotifications()
     {
-        $this->Event = $this->getTableLocator()->get('Events');
-        $patchedEntity = $this->Event->patchEntity(
-            $this->Event->get(6),
-            ['status' => APP_OFF]
-        );
-        $this->Event->save($patchedEntity);
-        $this->doTestEditForm(true);
+        $data = [
+            'renotify' => true,
+            'status' => APP_OFF,
+            'datumstart' => new Date('02.01.2040'),
+            'eventbeschreibung' => 'new description',
+            'strasse' => 'new street',
+            'zip' => '46464',
+            'ort' => 'testort',
+            'datumstart' => '02.01.2030',
+            'uhrzeitstart' => '10:00',
+            'uhrzeitend' => '11:00',
+            'use_custom_coordinates' => true,
+            'lat' => '48.1291558',
+            'lng' => '11.3626812',
+            'is_online_event' => true,
+        ];
+
+        $this->doTestEditForm($data);
         $this->assertMailCount(1);
-        $this->assertMailSentTo('worknews-test@mailinator.com');
+        $this->assertMailSentToAt(0, 'worknews-test@mailinator.com');
+        $this->assertMailContainsAt(0, '- Der Termin wurde deaktiviert.');
+        $this->assertMailContainsAt(0, '- Das Datum des Termins wurde von Sonntag, 01.01.2040 auf <b>Mittwoch, 02.01.2030</b> geändert.');
+        $this->assertMailContainsAt(0, '- Neue Uhrzeit: <b>10:00 - 11:00 Uhr</b>');
+        $this->assertMailContainsAt(0, '- Neuer Veranstaltungsort: <b>testort, new street</b>');
+        $this->assertMailContainsAt(0, '- Der Termin findet jetzt als <b>Online-Termin</b> statt.');
+        pr(TestEmailTransport::getMessages());
     }
 
     public function testAjaxGetAllEventsForMap()
@@ -152,9 +188,12 @@ class EventsControllerTest extends AppTestCase
                 'X_REQUESTED_WITH' => 'XMLHttpRequest'
             ]
         ]);
-        $this->_compareBasePath = ROOT . DS . 'tests' . DS . 'comparisons' . DS;
+        $expectedResult = file_get_contents(TESTS . 'comparisons' . DS . 'events-for-map.json');
+        $expectedNextEventDate = Date::now()->addDays(7)->format('Y-m-d');
+        $expectedResult = $this->correctExpectedDate($expectedResult, $expectedNextEventDate);
         $this->get('/events/ajaxGetAllEventsForMap');
-        $this->assertSameAsFile('events-for-map.json', $this->_response->getBody()->__toString());
+        $this->assertResponseContains($expectedResult);
+        $this->assertResponseOk();
     }
 
     public function testDeleteEvent()
@@ -167,35 +206,23 @@ class EventsControllerTest extends AppTestCase
         ])->first();
         $this->assertEquals($event->status, APP_DELETED);
         $this->assertMailCount(1);
-        $this->assertMailSentTo('worknews-test@mailinator.com');
+        $this->assertMailSentToAt(0, 'worknews-test@mailinator.com');
+        $this->assertMailContainsAt(0, 'Die von dir abonnierte Initiative <b>Test Workshop</b> hat folgenden Termin gelöscht: <b>Sonntag, 01.01.2040</b>.');
     }
 
-    private function doTestEditForm($renotify)
+    private function doTestEditForm($data)
     {
         $this->Event = $this->getTableLocator()->get('Events');
         $event = $this->Event->find('all', conditions: [
-            'Events.uid' => 6
+            'Events.uid' => 6,
         ])->first();
-
-        $eventForPost = [
-            'eventbeschreibung' => 'new description',
-            'strasse' => 'new street',
-            'datumstart' => '02.01.2030',
-            'uhrzeitstart' => '10:00',
-            'uhrzeitend' => '11:00',
-            'use_custom_coordinates' => $event->use_custom_coordinates,
-            'lat' => $event->lat,
-            'lng' => $event->lng,
-            'status' => APP_ON,
-            'renotify' => $renotify
-        ];
 
         $this->loginAsOrga();
         $this->post(
             Configure::read('AppConfig.htmlHelper')->urlEventEdit($event->uid),
             [
                 'referer' => '/',
-                $eventForPost
+                $data,
             ]
         );
 
@@ -205,11 +232,11 @@ class EventsControllerTest extends AppTestCase
             ]
         )->first();
 
-        $this->assertEquals($event->eventbeschreibung, $eventForPost['eventbeschreibung']);
-        $this->assertEquals($event->strasse, $eventForPost['strasse']);
-        $this->assertEquals($event->datumstart, new Date($eventForPost['datumstart']));
-        $this->assertEquals($event->uhrzeitstart, new Time($eventForPost['uhrzeitstart']));
-        $this->assertEquals($event->uhrzeitend, new Time($eventForPost['uhrzeitend']));
+        $this->assertEquals($event->eventbeschreibung, $data['eventbeschreibung']);
+        $this->assertEquals($event->strasse, $data['strasse']);
+        $this->assertEquals($event->datumstart, new Date($data['datumstart']));
+        $this->assertEquals($event->uhrzeitstart, new Time($data['uhrzeitstart']));
+        $this->assertEquals($event->uhrzeitend, new Time($data['uhrzeitend']));
 
     }
 

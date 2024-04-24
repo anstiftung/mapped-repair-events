@@ -131,9 +131,13 @@ MappedRepairEvents.Helper = {
             a.value = parseInt(a.value) + 1;
         }
 
-        setTimeout(function () {
+        let timeout = setTimeout(function () {
             MappedRepairEvents.Helper.updateAntiSpamField(prependIdPart, form, id);
         }, 1000);
+
+        if (a.value > 0) {
+            clearTimeout(timeout);
+        }
     },
 
     initLoginBoxLayoutListener : function() {

@@ -14,6 +14,7 @@ use Cake\Http\Exception\NotFoundException;
 use Cake\ORM\Query;
 use Gregwar\Captcha\CaptchaBuilder;
 use App\Services\GeoService;
+use App\Model\Entity\User;
 
 class UsersController extends AppController
 {
@@ -527,7 +528,7 @@ class UsersController extends AppController
         ]);
         $user->revertPrivatizeData();
         $user2save = [
-            'confirm' => 'ok',
+            'confirm' => User::STATUS_OK,
             'status' => APP_ON
         ];
         $entity = $this->User->patchEntity($user, $user2save, ['validate' => false]);

@@ -9,6 +9,7 @@ body {
     background-color: #f2f2f2;
     margin: 0px auto;
     text-rendering: optimizeSpeed;
+    overflow-y: scroll;
 }
 .sc {
     clear: both;
@@ -509,7 +510,7 @@ body.workshops.detail .add-event-link {
 }
 body.workshops.detail a.btn.edit {
     float:left;
-    margin:8px 0px 0px 15px;
+    margin: 4px 0px 0px 15px;
 }
 
 div.calEvent {
@@ -575,15 +576,11 @@ body.workshops.detail .calEvent {
 .force-show div {
     display: none;
 }
-
-#workshop-detail div {
-    line-height: 14px;
-}
 #workshop-detail .input.email .error-message {
     clear: both;
-    margin-left: 10px;
+    margin-left: 0px;
     float: left;
-    margin-top: 10px;
+    margin-top: 5px;
     margin-bottom: 10px;
 }
 #workshop-detail div#selectedDate {
@@ -1170,13 +1167,14 @@ a.toggle-link-for-subtable.collapsed i:before {
     content: "\f056" /* fa-icon-minus-sign */
 }
 a.toggle-link.heading {
-    font-size: 18px;
+    font-size: 16px;
     display: block;
 }
 body.events.myEvents h2 {
+    font-size: 16px;
     margin-left: 20px;
-    margin-top: 10px ! important;
-    margin-bottom: 10px ! important;
+    margin-top: 5px ! important;
+    margin-bottom: 5px ! important;
 }
 body.events.myEvents a.download-info-sheets {
     float: right;
@@ -1201,7 +1199,7 @@ body.events.myEvents a.toggle-link.offline {
 }
 body.events.myEvents .add-event {
   float: right;
-  margin-top: -33px;
+  margin-top: -30px;
 }
 body.events.myEvents tr.subtable-container {
     display: none;
@@ -1350,6 +1348,17 @@ iframe.eiwsd {
     text-indent: 5px;
     border-radius: 5px;
 }
+body.workshops.detail .box-toggle {
+    width: 100%;
+    float: left;
+    margin-top: -6px;
+}
+body.workshops.detail .collapse {
+    margin-bottom: 0;
+}
+body.workshops.detail #calendar {
+    margin-top: 10px;
+}
 .box-toggle.active {
     background-color: var(--theme-color-a) !important;
     color: #fff;
@@ -1374,6 +1383,10 @@ iframe.eiwsd {
     border-radius: 5px;
     border-top-right-radius: 0;
     border-top-left-radius: 0;
+}
+body.workshops.detail .collapse {
+    float: left;
+    width: calc(100% - 18px);
 }
 .inlinecode {
     margin: 10px 0px;

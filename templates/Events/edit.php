@@ -172,7 +172,7 @@ $this->element('addScript', ['script' =>
             echo $this->element('hint', [
                 'content' => 'Achtung! Wenn der Status des Termins auf „online“ gesetzt ist und du auf speichern klickst, dann ist der Termin sofort sichtbar und alle Interessenten, die deiner Initiative folgen ("Ich möchte über anstehende Veranstaltungen dieser Initiative per E-Mail informiert werden") werden informiert.'
             ]);
-            echo $this->Form->control($i.'.status', ['type' => 'select', 'options' => Configure::read('AppConfig.status')]).'<br />';
+            echo $this->Form->control($i.'.status', ['type' => 'select', 'options' => $loggedUser?->isAdmin() ? Configure::read('AppConfig.status') : Configure::read('AppConfig.status2')]).'<br />';
 
             if ($loggedUser?->isAdmin()) {
                 echo $this->element('metatagsFormfields', ['entity' => $i]);

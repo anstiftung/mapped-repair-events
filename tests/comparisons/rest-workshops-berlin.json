@@ -20,7 +20,7 @@
                     "iconUrl": "{{serverName}}\/img\/icon-skills\/drei-d-reparatur.png"
                 }
             ],
-            "nextEvent": "01.01.2040"
+            "nextEvent": "{{expectedDate}}"
         }
     ]
 }

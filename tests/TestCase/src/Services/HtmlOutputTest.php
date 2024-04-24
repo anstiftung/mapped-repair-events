@@ -111,7 +111,7 @@ class HtmlOutputTest extends AppTestCase
         $this->changeEventDate();
         $this->get(Configure::read('AppConfig.htmlHelper')->urlEvents() . '?timeRange=30days');
         $this->doAssertHtmlOutput();
-        $this->assertResponseContains('<div class="numbers">1 Termin gefunden</div>');
+        $this->assertResponseContains('<div class="numbers">2 Termine gefunden</div>');
         $this->assertResponseContains('href="/test-workshop?event=6');
     }
 
@@ -120,7 +120,7 @@ class HtmlOutputTest extends AppTestCase
         $this->changeEventDate();
         $this->get(Configure::read('AppConfig.htmlHelper')->urlEvents() . '?categories=87&timeRange=30days');
         $this->doAssertHtmlOutput();
-        $this->assertResponseContains('<div class="numbers">1 Termin gefunden</div>');
+        $this->assertResponseContains('<div class="numbers">1 von insgesamt 2 Terminen gefunden</div>');
     }
 
     public function testEventsWithCategoryFilterNotFound()
@@ -128,7 +128,7 @@ class HtmlOutputTest extends AppTestCase
         $this->changeEventDate();
         $this->get(Configure::read('AppConfig.htmlHelper')->urlEvents() . '?categories=88');
         $this->doAssertHtmlOutput();
-        $this->assertResponseContains('<div class="numbers">0 von insgesamt 1 Termin gefunden</div>');
+        $this->assertResponseContains('<div class="numbers">0 von insgesamt 2 Terminen gefunden</div>');
     }
 
     private function changeEventDate() {
