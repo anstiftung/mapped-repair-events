@@ -1339,7 +1339,7 @@ iframe.eiwsd {
 }
 .box-toggle {
     cursor: pointer;
-    padding: .5%;
+    padding: 3px;
     color: black;
     font-weight: bold;
     line-height: 33px;
@@ -1349,12 +1349,16 @@ iframe.eiwsd {
     border-radius: 5px;
 }
 body.workshops.detail .box-toggle {
-    width: 100%;
+    width: calc(100% - 5px);
     float: left;
     margin-top: -6px;
 }
 body.workshops.detail .collapse {
     margin-bottom: 0;
+}
+body.workshops.detail .collapse {
+    float: left;
+    width: calc(100% - 23px);
 }
 body.workshops.detail #calendar {
     margin-top: 10px;
@@ -1383,10 +1387,6 @@ body.workshops.detail #calendar {
     border-radius: 5px;
     border-top-right-radius: 0;
     border-top-left-radius: 0;
-}
-body.workshops.detail .collapse {
-    float: left;
-    width: calc(100% - 18px);
 }
 .inlinecode {
     margin: 10px 0px;
