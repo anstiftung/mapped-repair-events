@@ -83,7 +83,8 @@ class BlogsController extends AppController
             ],
             'items' => $this->preparePostsForFeed($posts),
         ];
-        $this->set(['data' => $data, '_serialize' => 'data']);
+        $this->set(['data' => $data]);
+        $this->viewBuilder()->setOption('serialize', 'data');
 
     }
 

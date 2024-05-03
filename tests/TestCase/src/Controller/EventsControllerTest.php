@@ -13,8 +13,6 @@ use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\StringCompareTrait;
 use Cake\I18n\Date;
 use Cake\I18n\Time;
-use Cake\TestSuite\TestEmailTransport;
-use PHPUnit\Event\Code\Test;
 
 class EventsControllerTest extends AppTestCase
 {
