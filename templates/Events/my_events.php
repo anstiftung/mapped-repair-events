@@ -48,7 +48,9 @@ if (Configure::read('AppConfig.statisticsEnabled')) {
                         if (Configure::read('AppConfig.statisticsEnabled')) {
                             $workshopToggleLinkLabelAdditionalInfos[] = $this->Number->precision($workshop->infoSheetCount, 0) . ' Laufzettel';
                         }
-                        $workshopToggleLinkLabelAdditionalInfos[] = $this->Number->precision($workshop->worknewsCount, 0) . ' Termin-Abonnement' . ($workshop->worknewsCount == 1 ? '' : 's');
+                        if ($workshop->worknewsCount > 0) {
+                            $workshopToggleLinkLabelAdditionalInfos[] = $this->Number->precision($workshop->worknewsCount, 0) . ' Termin-Abonnement' . ($workshop->worknewsCount == 1 ? '' : 's');
+                        }
                         $workshopToggleLinkLabel .= ' (' . join(', ', $workshopToggleLinkLabelAdditionalInfos) . ') ' . $workshopTitleSuffix;
                     ?>
                     <i class="fa fa-plus"></i> <?php echo $workshopToggleLinkLabel; ?>
