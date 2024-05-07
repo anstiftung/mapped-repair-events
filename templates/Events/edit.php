@@ -165,17 +165,14 @@ $this->element('addScript', ['script' =>
             echo '</div>';
             echo '<div class="sc"></div>';
 
-            if ($isEditMode) {
-                echo $this->Form->control($i.'.renotify', ['type' => 'checkbox', 'label' => 'Ich habe diesen Termin überarbeitet und möchte, dass alle Interessenten darüber nochmals informiert werden.']).'<br />';
-            }
-
-            echo $this->element('hint', [
-                'content' => 'Achtung! Wenn der Status des Termins auf „online“ gesetzt ist und du auf speichern klickst, dann ist der Termin sofort sichtbar und alle Interessenten, die deiner Initiative folgen ("Ich möchte über anstehende Veranstaltungen dieser Initiative per E-Mail informiert werden") werden informiert.'
-            ]);
             echo $this->Form->control($i.'.status', ['type' => 'select', 'options' => $loggedUser?->isAdmin() ? Configure::read('AppConfig.status') : Configure::read('AppConfig.status2')]).'<br />';
 
-            if ($loggedUser?->isAdmin()) {
-                echo $this->element('metatagsFormfields', ['entity' => $i]);
+            if ($isEditMode && $worknewsCount > 0) {
+                $worknewsString = 'Ich habe diesen Termin überarbeitet und möchte, dass ' . $worknewsCount . ' Termin-Abonnenten darüber nochmals informiert werden.';
+                if ($worknewsCount == 1) {
+                    $worknewsString = 'Ich habe diesen Termin überarbeitet und möchte, dass ' . $worknewsCount . ' Termin-Abonnent darüber nochmals informiert wird.';
+                }
+                echo $this->Form->control($i.'.renotify', ['type' => 'checkbox', 'label' => $worknewsString]).'<br />';
             }
 
             $i++;
@@ -183,7 +180,14 @@ $this->element('addScript', ['script' =>
 
     ?>
 
-      <?php echo $this->element('cancelAndSaveButton', ['saveLabel' => 'Speichern']); ?>
+    <?php echo $this->element('cancelAndSaveButton', ['saveLabel' => 'Speichern']); ?>
+
+    <?php
+        if ($loggedUser?->isAdmin()) {
+            echo $this->element('metatagsFormfields', ['entity' => $i]);
+        }
+    ?>
+
     <div class="sc"></div>
 
     <?php echo $this->Form->end(); ?>

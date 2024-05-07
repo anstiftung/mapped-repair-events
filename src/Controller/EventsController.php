@@ -397,6 +397,10 @@ class EventsController extends AppController
         $this->set('metaTags', ['title' => 'Termin bearbeiten']);
         $this->set('editFormUrl', Configure::read('AppConfig.htmlHelper')->urlEventEdit($event->uid));
         $this->set('isDuplicateMode', false);
+
+        $worknewsTable = FactoryLocator::get('Table')->get('Worknews');
+        $this->set('worknewsCount', $worknewsTable->getSubscribers($event->workshop_uid)->count());
+        
         $patchedEntities = $this->_edit([$event], true);
         $patchedEntity = $patchedEntities['events'][0];
 
