@@ -5,6 +5,10 @@ use Cake\Database\Connection;
 use Cake\Database\Driver\Mysql;
 use Cake\Cache\Engine\FileEngine;
 use App\Log\Engine\FileAndEmailLog;
+use Cake\Controller\Exception\MissingActionException;
+use Cake\Http\Exception\MissingControllerException;
+use Cake\Http\Exception\NotFoundException;
+use Cake\View\Exception\MissingTemplateException;
 
 return [
     /*
@@ -176,7 +180,12 @@ return [
      */
     'Error' => [
         'errorLevel' => E_ALL,
-        'skipLog' => [],
+        'skipLog' => [
+            MissingControllerException::class, // /img/apple-touch-icon pollutes error logs
+            MissingActionException::class,
+            MissingTemplateException::class,
+            NotFoundException::class,
+        ],
         'log' => true,
         'trace' => true,
     ],
