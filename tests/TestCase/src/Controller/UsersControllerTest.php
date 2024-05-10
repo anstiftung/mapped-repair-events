@@ -9,9 +9,6 @@ use Cake\Core\Configure;
 use Cake\TestSuite\EmailTrait;
 use Cake\TestSuite\IntegrationTestTrait;
 use App\Test\TestCase\Traits\LoginTrait;
-use AssetCompress\Factory;
-use Cake\Datasource\FactoryLocator;
-use Cake\ORM\Locator\TableLocator;
 use App\Model\Entity\User;
 
 class UsersControllerTest extends AppTestCase
