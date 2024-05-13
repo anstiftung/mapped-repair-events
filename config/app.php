@@ -9,6 +9,7 @@ use Cake\Controller\Exception\MissingActionException;
 use Cake\Http\Exception\MissingControllerException;
 use Cake\Http\Exception\NotFoundException;
 use Cake\View\Exception\MissingTemplateException;
+use Cake\View\Exception\MissingHelperException;
 
 return [
     /*
@@ -185,6 +186,7 @@ return [
             MissingActionException::class,
             MissingTemplateException::class,
             NotFoundException::class,
+            MissingHelperException::class,
         ],
         'log' => true,
         'trace' => true,
