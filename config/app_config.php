@@ -32,6 +32,12 @@ define('PASSWORD_REGEX', '/^([^\\s]){10,32}$/');
 define('ZIP_REGEX', '/^[0-9]{4,5}$/');
 
 return [
+    'Email' => [
+        'default' => [
+            'emailFormat' => 'html',
+            'charset' => 'utf-8',
+        ],
+    ],
     'isApiEnabled' => false,
     'AppConfig' => [
         'platformName' => 'Meine Plattform',

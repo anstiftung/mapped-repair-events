@@ -34,7 +34,6 @@ class ResendWorknewsActivationCommand extends Command
             $worknews->activation_email_resent = DateTime::now();
             $worknewsTable->save($worknews);
 
-            $email->setEmailFormat('html');
             $email->viewBuilder()->setTemplate('activate_worknews');
             $email->setSubject(__('Please activate your worknews subscription'))
                 ->setViewVars([

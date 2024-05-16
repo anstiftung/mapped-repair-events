@@ -49,7 +49,6 @@ class FileAndEmailLog extends FileLog
             $email = new Mailer('default');
             $email->viewBuilder()->setTemplate('debug');
             $email->setTo(Configure::read('AppConfig.debugMailAddress'))
-            ->setEmailFormat('html')
             ->setSubject($subject)
             ->setViewVars(array(
                 'message' => $message,

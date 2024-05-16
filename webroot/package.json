@@ -23,7 +23,7 @@
     "detect_swipe": "^2.1.4",
     "featherlight": "^1.7.14",
     "fullcalendar": "^6.1.11",
-    "jodit": "^4.2.10",
+    "jodit": "^4.2.21",
     "jquery": "^3.7.1",
     "jQuery-Impromptu": "https://github.com/trentrichardson/jQuery-Impromptu/tarball/master",
     "jquery-knob": "https://github.com/aterrien/jQuery-Knob/tarball/master",
@@ -35,6 +35,6 @@
     "select2": "^4.0.13",
     "slidebars": "^2.0.2",
     "speakingurl": "^14.0.1",
-    "swiper": "^11.1.1"
+    "swiper": "^11.1.3"
   }
 }

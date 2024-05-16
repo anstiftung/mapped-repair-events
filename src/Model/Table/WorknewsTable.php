@@ -48,7 +48,6 @@ class WorknewsTable extends Table
     public function sendNotifications($subscribers, $subject, $template, $workshop, $event, $dirtyFields = [], $originalValues = [])
     {
         $email = new Mailer('default');
-        $email->setEmailFormat('html');
         $email->viewBuilder()->setTemplate($template);
         foreach ($subscribers as $subscriber) {
             $email->setTo($subscriber->email)
