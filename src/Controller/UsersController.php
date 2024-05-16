@@ -238,7 +238,7 @@ class UsersController extends AppController
                 $email->setSubject('Neues Passwort für '. Configure::read('AppConfig.htmlHelper')->getHostName())
                 ->setViewVars([
                     'password' => $newPassword,
-                    'user' => $user
+                    'user' => $user,
                 ]);
 
                 if (Configure::read('debug')) {

@@ -17,8 +17,6 @@ return [
         'default' => [
             'transport' => 'default',
             'from' => [],
-            'emailFormat' => 'text',
-            'charset' => 'utf-8'
         ]
     ],
     'Datasources' => [

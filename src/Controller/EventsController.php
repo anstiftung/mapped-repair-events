@@ -291,7 +291,6 @@ class EventsController extends AppController
                 if (!empty($subscribers)) {
                     $email = new Mailer('default');
                     $email->viewBuilder()->setTemplate('event_deleted');
-                    $email->setEmailFormat('html');
                     foreach ($subscribers as $subscriber) {
                         $email->setTo($subscriber->email)
                         ->setSubject('Termin gelöscht')
