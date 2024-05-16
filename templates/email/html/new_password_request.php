@@ -7,11 +7,11 @@ use Cake\Core\Configure;
         <tr>
             <td>
                 <p>
-                    du oder jemand anders hat um ein neues Passwort angefragt, hier ist es:<br />
+                    du hast um ein neues Passwort angefragt, hier ist es:<br />
                     <b><?php echo $password; ?></b>
                 </p>
                 <p>
-                    Du kannst dich hier einloggen:
+                    Du kannst dich hier einloggen:<br />
                     <?php echo Configure::read('AppConfig.serverName') . Configure::read('AppConfig.htmlHelper')->urlLogin('/users/passwortAendern'); ?>
                 </p>
             </td>

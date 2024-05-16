@@ -10,7 +10,8 @@ use Cake\Core\Configure;
                     vielen Dank für deine Anmeldung bei <?php echo $this->MyHtml->getHostName(); ?>.
                 </p>
                 <p>
-                    Dein vorläufiges Passwort lautet: <?php echo $password; ?>
+                    Dein vorläufiges Passwort lautet:<br />
+                    <b><?php echo $password; ?></b>
                 </p>
                 <p>
                     Bitte melde dich über den folgenden Link auf der Plattform an, um deine E-Mail-Adresse zu bestätigen:
