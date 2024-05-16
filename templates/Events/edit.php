@@ -168,7 +168,7 @@ $this->element('addScript', ['script' =>
             echo $this->Form->control($i.'.status', ['type' => 'select', 'options' => $loggedUser?->isAdmin() ? Configure::read('AppConfig.status') : Configure::read('AppConfig.status2')]).'<br />';
 
             if ($isEditMode && $worknewsCount > 0) {
-                $worknewsString = 'Ich habe diesen Termin überarbeitet und möchte, dass ' . $worknewsCount . ' Termin-Abonnenten darüber nochmals informiert werden.';
+                $worknewsString = 'Ich habe diesen Termin überarbeitet und möchte, dass alle ' . $worknewsCount . ' Termin-Abonnenten darüber nochmals informiert werden.';
                 if ($worknewsCount == 1) {
                     $worknewsString = 'Ich habe diesen Termin überarbeitet und möchte, dass ' . $worknewsCount . ' Termin-Abonnent darüber nochmals informiert wird.';
                 }
