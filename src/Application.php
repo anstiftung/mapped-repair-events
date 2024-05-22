@@ -44,6 +44,7 @@ use Authorization\Exception\ForbiddenException;
 use Cake\Http\Middleware\BodyParserMiddleware;
 use Cake\Http\Middleware\EncryptedCookieMiddleware;
 use Cake\I18n\DateTime;
+use Authentication\Identifier\AbstractIdentifier;
 
 class Application extends BaseApplication
     implements AuthenticationServiceProviderInterface, AuthorizationServiceProviderInterface
@@ -155,15 +156,15 @@ class Application extends BaseApplication
     {
 
         $fields = [
-            'username' => 'email',
-            'password' => 'password',
+            AbstractIdentifier::CREDENTIAL_USERNAME => 'email',
+            AbstractIdentifier::CREDENTIAL_PASSWORD => 'password',
         ];
         $service = new AuthenticationService();
         $service->setConfig([
             'queryParam' => 'redirect',
         ]);
 
-        $service->loadIdentifier('Authentication.Password', [
+        $service->loadIdentifier('App.NonPrivatizedPassword', [
             'resolver' => [
                 'className' => OrmResolver::class,
                 'finder' => 'auth', // UsersTable::findAuth
@@ -173,23 +174,21 @@ class Application extends BaseApplication
         
         // Load the authenticators
         $service->loadAuthenticator('Authentication.Session', [
+            'fields' => [AbstractIdentifier::CREDENTIAL_USERNAME => 'email'],
             'identify' => false,
         ]);
         $service->loadAuthenticator('Authentication.Form', [
             'url' => Configure::read('AppConfig.htmlHelper')->urlLogin(),
-            'fields' => [
-                'username' => 'email',
-            ],
+            'fields' => [AbstractIdentifier::CREDENTIAL_USERNAME => 'email'],
         ]);
         
         $service->loadAuthenticator('Authentication.Cookie', [
             'fields' => $fields,
             'loginUrl' => Configure::read('AppConfig.htmlHelper')->urlLogin(),
             'cookie' => [
-                'expires' => new DateTime('+30 day'),
+                'expires' => new DateTime('+90 day'),
             ],
         ]);
-
 
         return $service;
     }
