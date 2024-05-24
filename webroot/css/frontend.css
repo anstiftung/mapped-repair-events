@@ -2228,7 +2228,6 @@ body.users .profile input.buttonSubmit {
 .sort a {
     margin: 0px 0px 0px 22px;
     color: black;
-    line-height: 22px;
 }
 div.sortable-list table {
     line-height: 16px;
