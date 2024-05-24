@@ -18,6 +18,10 @@ class WorknewsController extends AdminAppController
                 'name' => 'Worknews.email',
                 'searchType' => 'search'
             ],
+            'Worknews.workshop_uid' => [
+                'name' => 'Worknews.workshop_uid',
+                'searchType' => 'search'
+            ],
             'Worknews.confirm' => [
                 'name' => 'Worknews.confirm',
                 'searchType' => 'search',

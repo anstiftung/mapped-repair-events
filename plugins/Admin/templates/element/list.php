@@ -302,7 +302,16 @@ if ($showDeleteLink) {
                                 'target' => '_blank'
                             ]);
                         } else {
-                            echo $value;
+                            if (isset($field['filterParam'])) {
+                                $splittedFilterParam = preg_split('/\./', $field['filterParam']);
+                                echo $this->Html->link($value, $this->request->getPath() . '?' . http_build_query([
+                                        'key-standard' => $field['filterParam'],
+                                        'val-standard' => $object[$splittedFilterParam[1]]
+                                    ]),
+                                );
+                            } else {
+                                echo $value;
+                            }
                         }
                     }
 

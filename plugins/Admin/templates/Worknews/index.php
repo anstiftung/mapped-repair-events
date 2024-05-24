@@ -6,7 +6,7 @@ echo $this->element('list',
         'fields' => [
             ['name' => 'id', 'label' => 'ID'],
             ['name' => 'email', 'type' => 'unchanged', 'label' => 'E-Mail'],
-            ['name' => 'workshop.name', 'label' => 'Initiative'],
+            ['name' => 'workshop.name', 'label' => 'Initiative', 'filterParam' => 'Worknews.workshop_uid'],
             ['name' => 'worknews_count', 'label' => 'Termin-Abos'],
             ['name' => 'confirm', 'label' => 'Bestätigung'],
             ['name' => 'activation_email_resent', 'type' => 'datetime', 'label' => 'Link erneut gesendet'],

@@ -77,6 +77,13 @@ div.admin #admin-list-form div.left {
 div.admin div.list {
     margin-top: -10px;
 }
+div.admin div.list td a {
+    font-weight: normal;
+    text-decoration: underline;
+}
+div.admin div.list td a:hover {
+    text-decoration: none;
+}
 div.admin div.list a.active {
     color: #4C4C4C;
 }
