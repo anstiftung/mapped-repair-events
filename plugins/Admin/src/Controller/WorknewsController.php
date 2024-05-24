@@ -47,6 +47,9 @@ class WorknewsController extends AdminAppController
                 'Worknews.created' => 'DESC',
             ]
         ]);
+        foreach($objects as $object) {
+            $object->worknews_count = $worknewsTable->getSubscribers($object->workshop_uid)->count();
+        }
         $this->set('objects', $objects);
     }
 }
