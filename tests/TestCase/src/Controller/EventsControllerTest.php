@@ -6,6 +6,7 @@ use App\Services\GeoService;
 use App\Test\TestCase\AppTestCase;
 use App\Test\TestCase\Traits\LogFileAssertionsTrait;
 use App\Test\TestCase\Traits\LoginTrait;
+use App\Test\TestCase\Traits\QueueTrait;
 use App\Test\TestCase\Traits\UserAssertionsTrait;
 use Cake\Core\Configure;
 use Cake\TestSuite\EmailTrait;
@@ -22,6 +23,7 @@ class EventsControllerTest extends AppTestCase
     use EmailTrait;
     use StringCompareTrait;
     use LogFileAssertionsTrait;
+    use QueueTrait;
 
     private $newEventData;
     private $Event;
@@ -169,6 +171,8 @@ class EventsControllerTest extends AppTestCase
         ];
 
         $this->doTestEditForm($data);
+        $this->runAndAssertQueue();
+
         $this->assertMailCount(1);
         $this->assertMailSentToAt(0, 'worknews-test@mailinator.com');
         $this->assertMailContainsAt(0, '- Der Termin wurde deaktiviert.');

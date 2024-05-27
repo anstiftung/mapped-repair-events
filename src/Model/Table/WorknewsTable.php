@@ -6,6 +6,7 @@ use Cake\Mailer\Mailer;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use App\Model\Entity\Worknews;
+use App\Mailer\AppMailer;
 
 class WorknewsTable extends Table
 {
@@ -47,7 +48,7 @@ class WorknewsTable extends Table
 
     public function sendNotifications($subscribers, $subject, $template, $workshop, $event, $dirtyFields = [], $originalValues = [])
     {
-        $email = new Mailer('default');
+        $email = new AppMailer();
         $email->viewBuilder()->setTemplate($template);
         foreach ($subscribers as $subscriber) {
             $email->setTo($subscriber->email)
@@ -61,7 +62,7 @@ class WorknewsTable extends Table
                 'dirtyFields' => $dirtyFields,
                 'originalValues' => $originalValues,
             ]);
-            $email->send();
+            $email->addToQueue();
         }
     }
 
