@@ -12,7 +12,6 @@ use Cake\Http\Exception\NotFoundException;
 use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
 use Cake\ORM\Query;
-use Cake\I18n\DateTime;
 use Cake\View\JsonView;
 use App\Model\Table\CategoriesTable;
 use App\Model\Table\CountriesTable;
@@ -22,6 +21,7 @@ use App\Model\Table\UsersTable;
 use App\Model\Table\WorknewsTable;
 use App\Services\GeoService;
 use App\Model\Entity\Worknews;
+use App\Mailer\AppMailer;
 
 class WorkshopsController extends AppController
 {
@@ -753,7 +753,7 @@ class WorkshopsController extends AppController
             if (!($worknews->hasErrors())) {
                 $this->Worknews->save($worknews);
 
-                $email = new Mailer('default');
+                $email = new AppMailer();
                 $email->viewBuilder()->setTemplate('activate_worknews');
                 $email->setSubject(__('Please activate your worknews subscription'))
                     ->setViewVars([
@@ -762,7 +762,7 @@ class WorkshopsController extends AppController
                         'unsubscribeCode' => $unsubscribeCode
                 ])->setTo($this->request->getData('Worknews.email'));
 
-                $email->send();
+                $email->addToQueue();
                 $this->AppFlash->setFlashMessage(__('Please activate your subscription using the activation link sent to') . ' ' . $this->request->getData('Worknews.email'));
 
             } else {
