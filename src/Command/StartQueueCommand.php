@@ -14,9 +14,9 @@ class StartQueueCommand extends Command
     public function execute(Arguments $args, ConsoleIo $io)
     {
 
-        $runner = new CommandRunner(new Application('config'), 'cake');
-        $runner->run(['cake', 'queue', 'worker', '-q']);
-        
+        $runner = new CommandRunner(new Application(ROOT . DS . 'config'), 'cake');
+        $runner->run(['cake', 'queue', 'run', '-q']);
+
         return static::CODE_SUCCESS;
 
     }
