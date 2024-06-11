@@ -45,6 +45,9 @@ class BackupDatabaseCommand extends Command
             'default-character-set' => 'utf8mb4',
             'compress' => 'Bzip2',
             'add-drop-table' => true,
+            'exclude-tables' => [
+                'queued_jobs',
+            ],
         ];
         $dump = new \Druidfi\Mysqldump\Mysqldump($dsnString, $dbConfig['username'], $dbConfig['password'], $settings);
         $dump->start($filename);
