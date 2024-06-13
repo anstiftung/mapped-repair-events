@@ -62,7 +62,7 @@ class BackupUserUploadsCommand extends Command
             $to = array_merge($to, array_values(Configure::read('AppConfig.additionalBackupNotificationReceivers')));
         }
      
-        $mailer = new Mailer('default');
+        $mailer = new Mailer();
         $mailer->setTo($to);
         $mailer->setSubject($message);
         $mailer->send();

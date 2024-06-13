@@ -17,11 +17,10 @@ $schemLoader = new SchemaLoader();
 $schemLoader->loadSqlFiles(dirname(__DIR__) . '/config/sql/init/database.sql', 'test', true, true);
 $schemLoader->loadSqlFiles(dirname(__DIR__) . '/config/sql/init/phinxlog.sql', 'test', false);
 
-// 2) run new migrations (located in main folder)
-//$migrator->run([], false); // causes "Going to drop all tables in this source, and re-apply migrations."
+// 1) run migrations
 $migrations = new Migrations();
 $migrations->migrate(['connection' => 'test']);
-
+$migrations->migrate(['connection' => 'test', 'plugin' => 'Queue']);
 
 $_SERVER['PHP_SELF'] = '/';
 

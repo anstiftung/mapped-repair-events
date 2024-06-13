@@ -22,6 +22,7 @@ use Cake\View\JsonView;
 use App\Services\GeoService;
 use Cake\I18n\DateTime;
 use App\Model\Entity\Worknews;
+use App\Mailer\AppMailer;
 
 class EventsController extends AppController
 {
@@ -289,7 +290,7 @@ class EventsController extends AppController
                 ]);
 
                 if (!empty($subscribers)) {
-                    $email = new Mailer('default');
+                    $email = new AppMailer();
                     $email->viewBuilder()->setTemplate('event_deleted');
                     foreach ($subscribers as $subscriber) {
                         $email->setTo($subscriber->email)
@@ -298,7 +299,7 @@ class EventsController extends AppController
                             'unsub' => $subscriber->unsub,
                             'event' => $event,
                         ]);
-                        $email->send();
+                        $email->addToQueue();
                     }
                 }
                 // END notify subscribers

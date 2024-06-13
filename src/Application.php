@@ -70,6 +70,7 @@ class Application extends BaseApplication
 
         $this->addPlugin('Migrations');
         $this->addPlugin('AssetCompress', ['bootstrap' => true]);
+        $this->addPlugin('Queue');
 
         $this->addPlugin('Admin', [
             'bootstrap' => false,

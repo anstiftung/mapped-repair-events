@@ -45,14 +45,17 @@ class BackupDatabaseCommand extends Command
             'default-character-set' => 'utf8mb4',
             'compress' => 'Bzip2',
             'add-drop-table' => true,
+            'exclude-tables' => [
+                'queued_jobs',
+            ],
         ];
         $dump = new \Druidfi\Mysqldump\Mysqldump($dsnString, $dbConfig['username'], $dbConfig['password'], $settings);
         $dump->start($filename);
 
         $message = 'Datenbank-Backup erfolgreich ('.Number::toReadableSize(filesize($filename)).').';
 
-        // email zipped file
-        $mailer = new Mailer('default');
+        // email zipped file, do not use queue
+        $mailer = new Mailer();
         $mailer->setTo(Configure::read('AppConfig.debugMailAddress'))
             ->setSubject($message . ': ' . Configure::read('AppConfig.serverName'))
             ->setAttachments([

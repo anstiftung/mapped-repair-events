@@ -67,6 +67,7 @@ try {
  * Notice: For security reasons app_local.php will not be included in your git repo.
  */
 Configure::load('app_custom', 'default');
+Configure::load('app_queue');
 
 /*
  * When debug = true the metadata cache should only last

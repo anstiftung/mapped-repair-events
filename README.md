@@ -27,7 +27,7 @@
 
 * set up vhost and start webserver and mysql-server
 * clone repository from github
-* import [config/sql/database.sql](https://raw.githubusercontent.com/anstiftung/mapped-repair-events/main/config/sql/database.sql) in your mysql database
+* import [config/sql/database.sql](https://raw.githubusercontent.com/anstiftung/mapped-repair-events/main/config/sql/init/database.sql) in your mysql database
 * rename config/app\_custom.default.php to app\_custom.php and configure the database
 * run `$ composer install --optimize-autoloader`
 * run `$ npm --prefix ./webroot install ./webroot`
@@ -46,6 +46,7 @@
 * daily, 8:00 `bash ./bin/cake SendWorknewsNotification`
 * daily, 7:00 `bash ./bin/cake CleanWorknews`
 * every 11th of a month, 3:30 `bash ./bin/cake BackupUserUploads`
+* every 5 min `bash ./bin/cake StartQueue`
 
 ## Netzwerk Reparatur-Initiativen
 * [https://www.reparatur-initiativen.de/](https://www.reparatur-initiativen.de/)
