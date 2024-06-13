@@ -201,6 +201,8 @@ class EventsControllerTest extends AppTestCase
     {
         $this->loginAsOrga();
         $this->get(Configure::read('AppConfig.htmlHelper')->urlEventDelete(6));
+        $this->runAndAssertQueue();
+        
         $this->Event = $this->getTableLocator()->get('Events');
         $event = $this->Event->find('all', conditions: [
             'Events.uid' => 6

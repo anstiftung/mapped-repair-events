@@ -5,6 +5,7 @@ namespace App\Test\TestCase\Command;
 
 use Cake\TestSuite\EmailTrait;
 use App\Test\TestCase\AppTestCase;
+use App\Test\TestCase\Traits\QueueTrait;
 use Cake\Console\TestSuite\ConsoleIntegrationTestTrait;
 use Cake\TestSuite\TestEmailTransport;
 
@@ -13,10 +14,13 @@ class ResendWorknewsActivationCommandTest extends AppTestCase
 
     use ConsoleIntegrationTestTrait;
     use EmailTrait;
+    use QueueTrait;
 
     public function testRun()
     {
         $this->exec('resend_worknews_activation');
+        $this->runAndAssertQueue();
+
         $this->assertMailCount(1);
         $this->assertMailSentToAt(0, 'worknews-test-1@mailinator.com');
         $this->assertMailContainsAt(0, 'Um dein Abonnement der Termine der Initiative <b>Test Workshop</b> zu aktivieren');

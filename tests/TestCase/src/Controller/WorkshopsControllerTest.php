@@ -12,6 +12,7 @@ use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\StringCompareTrait;
 use Cake\TestSuite\TestEmailTransport;
 use App\Services\GeoService;
+use App\Test\TestCase\Traits\QueueTrait;
 use Cake\I18n\Date;
 
 class WorkshopsControllerTest extends AppTestCase
@@ -22,6 +23,7 @@ class WorkshopsControllerTest extends AppTestCase
     use StringCompareTrait;
     use EmailTrait;
     use LogFileAssertionsTrait;
+    use QueueTrait;
 
     private $Workshop;
     private $User;
@@ -93,6 +95,7 @@ class WorkshopsControllerTest extends AppTestCase
                 ]
             ]
         );
+        $this->runAndAssertQueue();
 
         $this->Workshop = $this->getTableLocator()->get('Workshops');
         $workshop = $this->Workshop->find('all',
@@ -136,6 +139,7 @@ class WorkshopsControllerTest extends AppTestCase
                 'Workshops' => $workshopForPost
             ]
         );
+        $this->runAndAssertQueue();
 
         $this->Workshop = $this->getTableLocator()->get('Workshops');
         $workshop = $this->Workshop->find('all', conditions: [
@@ -195,6 +199,7 @@ class WorkshopsControllerTest extends AppTestCase
                 ]
             ]
         );
+        $this->runAndAssertQueue();
 
         $this->assertMailCount(1);
         $this->assertMailSentTo(Configure::read('AppConfig.debugMailAddress'));

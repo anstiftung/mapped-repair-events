@@ -165,7 +165,7 @@ class WorkshopsController extends AppController
                     if ($isEditMode) {
                         $userAction = 'geändert';
                     }
-                    $email = new Mailer('default');
+                    $email = new AppMailer();
                     $email->viewBuilder()->setTemplate('workshop_added_or_changed');
                     $email->setSubject('Initiative "'.$entity->name.'" erfolgreich ' . $userAction)
                     ->setViewVars([
@@ -174,7 +174,7 @@ class WorkshopsController extends AppController
                         'userAction' => $userAction,
                     ]);
                     $email->setTo(Configure::read('AppConfig.notificationMailAddress'));
-                    $email->send();
+                    $email->addToQueue();
 
                     $this->redirect($this->getPreparedReferer());
 
@@ -1029,7 +1029,7 @@ class WorkshopsController extends AppController
         $this->connection->execute($query, $params);
 
         /* START email-versand an anfrage-steller */
-        $email = new Mailer('default');
+        $email = new AppMailer();
         $email->viewBuilder()->setTemplate('workshop_application_approved');
         $email->setSubject('Deine Anfrage zur Mitarbeit wurde bestätigt.')
             ->setViewVars([
@@ -1037,7 +1037,7 @@ class WorkshopsController extends AppController
             'userEntity' => $userEntity
         ])
             ->setTo($userEntity->email)
-            ->send();
+            ->addToQueue();
         /* END email-versand an anfrage-steller */
 
         $this->AppFlash->setFlashMessage(str_replace('%name%', $userEntity->name, $preparedType['approveMessage']));
@@ -1127,7 +1127,7 @@ class WorkshopsController extends AppController
                     'Users.Groups'
                 ])->first();
 
-                $email = new Mailer('default');
+                $email = new AppMailer();
                 $email->viewBuilder()->setTemplate('workshop_application');
                 $email->setSubject($subject)
                     ->setViewVars([
@@ -1145,7 +1145,7 @@ class WorkshopsController extends AppController
                 } else {
                     $email->addTo(Configure::read('AppConfig.notificationMailAddress'));
                 }
-                $email->send();
+                $email->addToQueue();
             }
             /* END email-versand an alle orgas */
 

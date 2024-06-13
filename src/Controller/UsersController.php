@@ -15,6 +15,7 @@ use Cake\ORM\Query;
 use Gregwar\Captcha\CaptchaBuilder;
 use App\Services\GeoService;
 use App\Model\Entity\User;
+use App\Mailer\AppMailer;
 
 class UsersController extends AppController
 {
@@ -233,7 +234,7 @@ class UsersController extends AppController
                 $newPassword = $this->User->setNewPassword($user->uid);
 
                 // send email
-                $email = new Mailer('default');
+                $email = new AppMailer();
                 $email->viewBuilder()->setTemplate('new_password_request');
                 $email->setSubject('Neues Passwort für '. Configure::read('AppConfig.htmlHelper')->getHostName())
                 ->setViewVars([
@@ -246,7 +247,7 @@ class UsersController extends AppController
                 } else {
                     $email->setTo($this->request->getData('Users.email'));
                 }
-                $email->send();
+                $email->addToQueue();
                 $this->AppFlash->setFlashMessage('Dir wurde ein neues Passwort zugeschickt.');
 
                 $this->set('password', $newPassword);
@@ -485,7 +486,7 @@ class UsersController extends AppController
         $this->setReferer();
 
         if (!empty($this->request->getData())) {
-            $email = new Mailer('default');
+            $email = new AppMailer();
             $email->viewBuilder()->setTemplate('user_delete_request');
             $email->setTo(Configure::read('AppConfig.notificationMailAddress'))
             ->setSubject('User "'.$this->loggedUser->nick.'" möchte gelöscht werden')
@@ -493,7 +494,7 @@ class UsersController extends AppController
                 'loggedUser' => $this->loggedUser,
                 'deleteMessage' => $this->request->getData('deleteMessage')
             ]);
-            $email->send();
+            $email->addToQueue();
             $this->AppFlash->setFlashMessage('Deine Lösch-Anfrage wurde erfolgreich übermittelt. Wir werden dein Profil in den nächsten Tagen löschen.');
             $this->redirect('/');
         }
@@ -632,7 +633,7 @@ class UsersController extends AppController
                 $result = $this->User->save($userEntity);
                 $password = $this->User->setNewPassword($result->uid);
 
-                $email = new Mailer('default');
+                $email = new AppMailer();
                 $email->viewBuilder()->setTemplate('registration_successful');
                 $email->setSubject('Deine Registrierung bei '. Configure::read('AppConfig.htmlHelper')->getHostName())
                 ->setViewVars([
@@ -653,7 +654,7 @@ class UsersController extends AppController
 
                 $email->setTo($user['Users']['email']);
 
-                if ($email->send()) {
+                if ($email->addToQueue()) {
                     $this->AppFlash->setFlashMessage('Deine Registrierung war erfolgreich. Bitte überprüfe dein E-Mail-Konto um deine E-Mail-Adresse zu bestätigen.');
                 }
 

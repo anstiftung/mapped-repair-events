@@ -10,6 +10,7 @@ use Cake\TestSuite\EmailTrait;
 use Cake\TestSuite\IntegrationTestTrait;
 use App\Test\TestCase\Traits\LoginTrait;
 use App\Model\Entity\User;
+use App\Test\TestCase\Traits\QueueTrait;
 
 class UsersControllerTest extends AppTestCase
 {
@@ -18,6 +19,7 @@ class UsersControllerTest extends AppTestCase
     use EmailTrait;
     use LogFileAssertionsTrait;
     use LoginTrait;
+    use QueueTrait;
 
     private $Group;
     private $User;
@@ -78,6 +80,7 @@ class UsersControllerTest extends AppTestCase
                 'Users' => $this->validUserData,
             ]
         );
+        $this->runAndAssertQueue();
 
         $this->assertRedirectContains('/');
 
