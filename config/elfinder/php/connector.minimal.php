@@ -1,8 +1,6 @@
 <?php
 ini_set('upload_max_filesize', '100M');
 ini_set('post_max_size', '100M');
-$sessionSavePath = '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR . 'sessions';
-ini_set('session.save_path', $sessionSavePath);
 @session_start();
 if (empty($_SESSION['Auth'])) {
     exit(0);
