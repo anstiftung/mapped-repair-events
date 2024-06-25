@@ -281,7 +281,7 @@ class EventsController extends AppController
         if ($this->Event->save($patchedEntity)) {
             $this->AppFlash->setFlashMessage('Der Termin wurde erfolgreich gelöscht.');
 
-            if ($originalEventStatus) {
+            if ($originalEventStatus && !$event->datumstart->isPast()) {
                 // START notify subscribers
                 $this->Worknews = $this->getTableLocator()->get('Worknews');
                 $subscribers = $this->Worknews->find('all', conditions: [
