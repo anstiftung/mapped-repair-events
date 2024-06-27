@@ -400,6 +400,9 @@ class EventsController extends AppController
 
         $worknewsTable = FactoryLocator::get('Table')->get('Worknews');
         $this->set('worknewsCount', $worknewsTable->getSubscribers($event->workshop_uid)->count());
+
+        $eventStartInLessThan7Days = $event->datumstart->isWithinNext('7 days');
+        $this->set('eventStartInLessThan7Days', $eventStartInLessThan7Days);
         
         $patchedEntities = $this->_edit([$event], true);
         $patchedEntity = $patchedEntities['events'][0];
@@ -452,7 +455,7 @@ class EventsController extends AppController
                     $addressString = $data['strasse'] . ', ' . $data['zip'] . ' ' . $data['ort'] . ', ' . $data['land'];
                     $geoService = new GeoService();
                     $coordinates = $geoService->getLatLngFromGeoCodingService($addressString);
-                         $data['lat'] = $coordinates['lat'];
+                    $data['lat'] = $coordinates['lat'];
                     $data['lng'] = $coordinates['lng'];
                 }
                 if (!empty($data['use_custom_coordinates'])) {

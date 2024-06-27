@@ -168,11 +168,15 @@ $this->element('addScript', ['script' =>
             echo $this->Form->control($i.'.status', ['type' => 'select', 'options' => $loggedUser?->isAdmin() ? Configure::read('AppConfig.status') : Configure::read('AppConfig.status2')]).'<br />';
 
             if ($isEditMode && $worknewsCount > 0) {
-                $worknewsString = 'Ich habe diesen Termin überarbeitet und möchte, dass alle ' . $worknewsCount . ' Termin-Abonnenten darüber nochmals informiert werden.';
-                if ($worknewsCount == 1) {
-                    $worknewsString = 'Ich habe diesen Termin überarbeitet und möchte, dass ' . $worknewsCount . ' Termin-Abonnent darüber nochmals informiert wird.';
+                if (!$eventStartInLessThan7Days) {
+                    $worknewsString =  'Das Informieren der Termin-Abonennten (' . $worknewsCount . ') ist nicht möglich, da der Termin in mehr als 7 Tagen stattfindet.';
+                } else {
+                    $worknewsString = 'Ich habe diesen Termin überarbeitet und möchte, dass alle ' . $worknewsCount . ' Termin-Abonnenten darüber nochmals informiert werden.';
+                    if ($worknewsCount == 1) {
+                        $worknewsString = 'Ich habe diesen Termin überarbeitet und möchte, dass ' . $worknewsCount . ' Termin-Abonnent darüber nochmals informiert wird.';
+                    }
                 }
-                echo $this->Form->control($i.'.renotify', ['type' => 'checkbox', 'label' => $worknewsString]).'<br />';
+                echo $this->Form->control($i.'.renotify', ['type' => 'checkbox', 'label' => $worknewsString, 'disabled' => !$eventStartInLessThan7Days]).'<br />';
             }
 
             $i++;
