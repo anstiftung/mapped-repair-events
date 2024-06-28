@@ -52,7 +52,7 @@ class GeoService {
                         ],
                 ])->first();
                 if (empty($province)) {
-                    Log::error('Province not found: ' . $addressComponent->long_name);
+                    Log::error('Province not found: ' . print_r($addressComponent, true));
                 }
                 continue;
             }
