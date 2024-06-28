@@ -6,7 +6,6 @@ use App\Model\Table\WorkshopsTable;
 use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
 use Cake\Event\EventInterface;
-use Cake\Mailer\Mailer;
 use Cake\Http\Exception\ForbiddenException;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Utility\Hash;
@@ -152,7 +151,7 @@ class WorkshopsController extends AppController
                     $this->AppFlash->setFlashMessage($this->Workshop->name_de . ' erfolgreich gespeichert.');
 
                     // add orga user to workshop if workshop was created - id is kinda hard to retrieve...
-                    if (!$isEditMode && $this->isOrga() &&!$this->isAdmin()) {
+                    if (!$isEditMode && $this->isOrga() && !$this->isAdmin()) {
                         $usersWorkshop = $this->getTableLocator()->get('UsersWorkshops');
                         $savedWorkshop = $this->Workshop->find('all', conditions: [
                             'Workshops.url' => $patchedEntity->url,
@@ -167,16 +166,19 @@ class WorkshopsController extends AppController
                     if ($isEditMode) {
                         $userAction = 'geändert';
                     }
-                    $email = new AppMailer();
-                    $email->viewBuilder()->setTemplate('workshop_added_or_changed');
-                    $email->setSubject('Initiative "'.$entity->name.'" erfolgreich ' . $userAction)
-                    ->setViewVars([
-                        'workshop' => $entity,
-                        'username' => $this->loggedUser->name,
-                        'userAction' => $userAction,
-                    ]);
-                    $email->setTo(Configure::read('AppConfig.notificationMailAddress'));
-                    $email->addToQueue();
+
+                    if (!$this->isAdmin()) {
+                        $email = new AppMailer();
+                        $email->viewBuilder()->setTemplate('workshop_added_or_changed');
+                        $email->setSubject('Initiative "'.$entity->name.'" erfolgreich ' . $userAction)
+                        ->setViewVars([
+                            'workshop' => $entity,
+                            'username' => $this->loggedUser->name,
+                            'userAction' => $userAction,
+                        ]);
+                        $email->setTo(Configure::read('AppConfig.notificationMailAddress'));
+                        $email->addToQueue();
+                    }
 
                     $this->redirect($this->getPreparedReferer());
 
