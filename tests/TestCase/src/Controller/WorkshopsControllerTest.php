@@ -129,14 +129,15 @@ class WorkshopsControllerTest extends AppTestCase
             'use_custom_coordinates' => true,
             'lat' => 52.520008,
             'lng' => 13.404954,
-];
+            'province_id' => 1,
+        ];
 
         $this->loginAsOrga();
         $this->post(
             Configure::read('AppConfig.htmlHelper')->urlWorkshopNew(),
             [
                 'referer' => '/',
-                'Workshops' => $workshopForPost
+                'Workshops' => $workshopForPost,
             ]
         );
         $this->runAndAssertQueue();
@@ -148,6 +149,7 @@ class WorkshopsControllerTest extends AppTestCase
 
         $this->assertEquals($workshop->name, $workshopForPost['name']);
         $this->assertEquals($workshop->url, $workshopForPost['url']);
+        $this->assertEquals($workshop->province_id, $workshopForPost['province_id']);
 
         $this->assertMailCount(1);
         $this->assertMailSentTo(Configure::read('AppConfig.debugMailAddress'));
@@ -196,6 +198,7 @@ class WorkshopsControllerTest extends AppTestCase
                     'text' => '<iframe></iframe>workshop info',
                     'lat' => 52.520008,
                     'lng' => 13.404954,
+                    'province_id' => 1,
                 ]
             ]
         );

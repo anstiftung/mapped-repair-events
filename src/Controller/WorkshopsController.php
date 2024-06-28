@@ -117,11 +117,13 @@ class WorkshopsController extends AppController
             if (!$this->request->getData('Workshops.use_custom_coordinates')) {
                 $addressString = $this->request->getData('Workshops.street') . ', ' . $this->request->getData('Workshops.zip') . ' ' . $this->request->getData('Workshops.city') . ', ' . $this->request->getData('Workshops.country_code');
                 $geoService = new GeoService();
-                $coordinates = $geoService->getLatLngFromGeoCodingService($addressString);
-                $this->request = $this->request->withData('Workshops.lat', $coordinates['lat']);
-                $this->request = $this->request->withData('Workshops.lng', $coordinates['lng']);
+                $geoData = $geoService->getGeoData($addressString);
 
-                if ($coordinates['lat'] == 'ungültig' || $coordinates['lng'] == 'ungültig') {
+                $this->request = $this->request->withData('Workshops.lat', $geoData['lat']);
+                $this->request = $this->request->withData('Workshops.lng', $geoData['lng']);
+                $this->request = $this->request->withData('Workshops.province_id', $geoData['provinceId']);
+
+                if ($geoData['lat'] == 'ungültig' || $geoData['lng'] == 'ungültig') {
                     $this->AppFlash->setFlashError('Zur eingegebenen Adresse wurden keine Koordinaten gefunden. Bitte klicke auf "Koordinaten selber festlegen" und trage die Koordinaten selbst ein.');
                 }
 

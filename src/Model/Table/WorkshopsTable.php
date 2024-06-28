@@ -33,6 +33,9 @@ class WorkshopsTable extends AppTable
         $this->belongsTo('Countries', [
             'foreignKey' => 'country_code'
         ]);
+        $this->belongsTo('Provinces', [
+            'foreignKey' => 'province_id',
+        ]);
         $this->hasMany('Events', [
             'foreignKey' => 'workshop_uid',
             'conditions' => [

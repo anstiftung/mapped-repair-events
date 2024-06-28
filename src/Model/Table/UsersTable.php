@@ -30,6 +30,9 @@ class UsersTable extends AppTable
         $this->belongsTo('Countries', [
             'foreignKey' => 'country_code'
         ]);
+        $this->belongsTo('Provinces', [
+            'foreignKey' => 'province_id',
+        ]);
         $this->belongsToMany('Groups', [
             'joinTable' => 'users_groups',
             'foreignKey' => 'user_uid',

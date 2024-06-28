@@ -27,8 +27,6 @@ class BlogsTable extends Table
             $preparedBlogs[$blog->id] = $blog->name;
         }
         return $preparedBlogs;
-
-        return $blogs;
     }
 }
 

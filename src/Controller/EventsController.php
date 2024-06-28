@@ -454,9 +454,10 @@ class EventsController extends AppController
                 if (!$data['use_custom_coordinates']) {
                     $addressString = $data['strasse'] . ', ' . $data['zip'] . ' ' . $data['ort'] . ', ' . $data['land'];
                     $geoService = new GeoService();
-                    $coordinates = $geoService->getLatLngFromGeoCodingService($addressString);
-                    $data['lat'] = $coordinates['lat'];
-                    $data['lng'] = $coordinates['lng'];
+                    $geoData = $geoService->getGeoData($addressString);
+                    $data['lat'] = $geoData['lat'];
+                    $data['lng'] = $geoData['lng'];
+                    $data['province_id'] = $geoData['provinceId'];
                 }
                 if (!empty($data['use_custom_coordinates'])) {
                     $data['lat'] = str_replace(',', '.', $data['lat']);

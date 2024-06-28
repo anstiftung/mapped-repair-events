@@ -23,6 +23,7 @@ class AppTestCase extends TestCase
         'app.Pages',
         'app.Posts',
         'app.Photos',
+        'app.Provinces',
         'app.Roots',
         'app.Skills',
         'app.ThirdPartyStatistics',

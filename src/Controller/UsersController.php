@@ -308,9 +308,10 @@ class UsersController extends AppController
 
             $addressString = trim($this->request->getData('Users.zip') . ', ' . $this->request->getData('Users.city') . ', ' . $this->request->getData('Users.country_code'));
             $geoService = new GeoService();
-            $coordinates = $geoService->getLatLngFromGeoCodingService($addressString);
-         $this->request = $this->request->withData('Users.lat', $coordinates['lat']);
-            $this->request = $this->request->withData('Users.lng', $coordinates['lng']);
+            $geoData = $geoService->getGeoData($addressString);
+            $this->request = $this->request->withData('Users.lat', $geoData['lat']);
+            $this->request = $this->request->withData('Users.lng', $geoData['lng']);
+            $this->request = $this->request->withData('Users.province_id', $geoData['provinceId']);
 
             if (!empty($this->request->getData('Users.private_as_array'))) {
                 $private = implode(',', $this->request->getData('Users.private_as_array'));

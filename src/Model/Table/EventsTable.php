@@ -26,6 +26,9 @@ class EventsTable extends AppTable
         $this->belongsTo('Workshops', [
             'foreignKey' => 'workshop_uid'
         ]);
+        $this->belongsTo('Provinces', [
+            'foreignKey' => 'province_id',
+        ]);
         $this->hasMany('InfoSheets', [
             'foreignKey' => 'event_uid',
         ]);

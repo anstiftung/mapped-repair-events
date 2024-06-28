@@ -80,6 +80,7 @@ class UsersController extends AdminAppController
         contain: [
             'OwnerUsers',
             'Groups',
+            'Provinces',
             'Workshops' => [
                 'fields' => [
                     'Workshops.name',
