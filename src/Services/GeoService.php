@@ -41,20 +41,24 @@ class GeoService {
         $geocode = file_get_contents('https://maps.googleapis.com/maps/api/geocode/json?key='.Configure::read('googleMapApiKey').'&address=' . urlencode($addressString));
         $output = json_decode($geocode);
 
-        $provincesTable = FactoryLocator::get('Table')->get('Provinces');
-        foreach($output->results[0]->address_components as $addressComponent) {
-            if ($addressComponent->types[0] == 'administrative_area_level_1') {
-                $province = $provincesTable->find()->where([
-                    'OR' => 
-                        [
-                            $provincesTable->aliasField('name') => $addressComponent->long_name,
-                            $provincesTable->aliasField('alternative_names LIKE') => '%' . $addressComponent->long_name . '%',
-                        ],
-                ])->first();
-                if (empty($province)) {
-                    Log::error('Province not found: ' . print_r($addressComponent, true));
+        if (!empty($output->results) && isset($output->results[0]->address_components)) {
+            $provincesTable = FactoryLocator::get('Table')->get('Provinces');
+            foreach($output->results[0]->address_components as $addressComponent) {
+                if ($addressComponent->types[0] == 'administrative_area_level_1') {
+                    $province = $provincesTable->find()->where([
+                        'OR' =>
+                            [
+                                $provincesTable->aliasField('name') => $addressComponent->long_name,
+                                $provincesTable->aliasField('alternative_names LIKE') => '%' . $addressComponent->long_name . '%',
+                            ],
+                    ])->first();
+                    if (empty($province)) {
+                        Log::error('Province not found: ' . print_r($addressComponent, true));
+                    } else {
+                        Log::error('Province found: ' . print_r($province, true));
+                    }
+                    continue;
                 }
-                continue;
             }
         }
 
