@@ -54,8 +54,6 @@ class GeoService {
                     ])->first();
                     if (empty($province)) {
                         Log::error('Province not found: ' . print_r($addressComponent, true));
-                    } else {
-                        Log::error('Province found: ' . print_r($province, true));
                     }
                     continue;
                 }
