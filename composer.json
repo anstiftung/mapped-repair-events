@@ -35,7 +35,8 @@
     "require-dev": {
         "cakephp/debug_kit": "5.*",
         "phpstan/phpstan": "1.*",
-        "phpunit/phpunit": "^10.0"
+        "phpunit/phpunit": "^10.0",
+        "friendsofcake/fixturize": "^3.0"
     },
     "autoload": {
         "psr-4": {

@@ -2,9 +2,7 @@
 
 namespace App\Test\Fixture;
 
-use Cake\TestSuite\Fixture\TestFixture;
-
-class UsersGroupsFixture extends TestFixture
+class UsersGroupsFixture extends AppFixture
 {
     public $import = ['table' => 'users_groups'];
 

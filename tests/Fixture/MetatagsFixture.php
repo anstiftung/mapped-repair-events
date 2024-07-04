@@ -2,9 +2,7 @@
 
 namespace App\Test\Fixture;
 
-use Cake\TestSuite\Fixture\TestFixture;
-
-class MetatagsFixture extends TestFixture
+class MetatagsFixture extends AppFixture
 {
     public $import = ['table' => 'metatags'];
 }

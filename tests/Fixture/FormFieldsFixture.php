@@ -2,9 +2,7 @@
 
 namespace App\Test\Fixture;
 
-use Cake\TestSuite\Fixture\TestFixture;
-
-class FormFieldsFixture extends TestFixture
+class FormFieldsFixture extends AppFixture
 {
     public $import = ['table' => 'form_fields'];
 

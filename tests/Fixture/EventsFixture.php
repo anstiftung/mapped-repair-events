@@ -2,11 +2,10 @@
 
 namespace App\Test\Fixture;
 
-use Cake\TestSuite\Fixture\TestFixture;
 use Cake\I18n\DateTime;
 use Cake\I18n\Date;
 
-class EventsFixture extends TestFixture
+class EventsFixture extends AppFixture
 {
     public $import = ['table' => 'events'];
 

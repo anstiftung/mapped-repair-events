@@ -2,9 +2,7 @@
 
 namespace App\Test\Fixture;
 
-use Cake\TestSuite\Fixture\TestFixture;
-
-class RootsFixture extends TestFixture
+class RootsFixture extends AppFixture
 {
     public $import = ['table' => 'roots'];
 

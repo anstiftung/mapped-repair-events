@@ -2,9 +2,7 @@
 
 namespace App\Test\Fixture;
 
-use Cake\TestSuite\Fixture\TestFixture;
-
-class BlockedWorkshopSlugsFixture extends TestFixture
+class BlockedWorkshopSlugsFixture extends AppFixture
 {
     public $import = ['table' => 'blocked_workshop_slugs'];
 }
