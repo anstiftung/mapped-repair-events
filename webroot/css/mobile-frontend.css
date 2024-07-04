@@ -378,6 +378,10 @@
     body.workshops.all input[type="text"] {
         width: 70%;
     }
+    body.workshops.all .select2 {
+        width: 73% ! important;
+        margin-bottom: 20px;
+    }
     body.events.all button.button,
     body.workshops.all button.button {
         float: right;
