@@ -16,10 +16,10 @@ class UpdateProvicesFromGeoDataCommand extends Command
 
         $geoService = new GeoService();
         
-        $workshopsTable = FactoryLocator::get('Table')->get('Workshops');
         $provincesTable = FactoryLocator::get('Table')->get('Provinces');
         $provincesMap = $provincesTable->find('list', keyField: 'id', valueField: 'name')->toArray();
 
+        $workshopsTable = FactoryLocator::get('Table')->get('Workshops');
         $workshops = $workshopsTable->find('all')->where(
             [
                 $workshopsTable->aliasField('province_id') => 0,
@@ -32,6 +32,23 @@ class UpdateProvicesFromGeoDataCommand extends Command
             $workshopsTable->save($workshop);
             $provinceName = $provincesMap[$workshop->province_id] ?? 'no province found';
             $io->out('Updating workshop: UID: ' . $workshop->uid . ' / Name: '. $workshop->name . ' / Province: ' . $provinceName . ' / Lat: '. $workshop->lat . ' / Lng: ' . $workshop->lng);
+            usleep(300000);
+        }
+
+        $eventsTable = FactoryLocator::get('Table')->get('Events');
+        $events = $eventsTable->find('all')->where(
+            [
+                $eventsTable->aliasField('province_id') => 0,
+                'DATE(Events.datumstart) >= DATE(NOW())',
+            ]
+        )->orderAsc($eventsTable->aliasField('uid'));
+
+        foreach($events as $event) {
+            $geoData = $geoService->getGeoDataByCoordinates($event->lat, $event->lng);
+            $event->province_id = $geoData['provinceId'];
+            $eventsTable->save($event);
+            $provinceName = $provincesMap[$event->province_id] ?? 'no province found';
+            $io->out('Updating event: UID: ' . $event->uid . ' / Province: ' . $provinceName . ' / Lat: '. $event->lat . ' / Lng: ' . $event->lng);
             usleep(300000);
         }
 
