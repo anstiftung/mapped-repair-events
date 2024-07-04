@@ -2,9 +2,7 @@
 
 namespace App\Test\Fixture;
 
-use Cake\TestSuite\Fixture\TestFixture;
-
-class SkillsFixture extends TestFixture
+class SkillsFixture extends AppFixture
 {
     public $import = ['table' => 'skills'];
 

@@ -2,10 +2,9 @@
 
 namespace App\Test\Fixture;
 
-use Cake\TestSuite\Fixture\TestFixture;
 use App\Model\Entity\Worknews;
 
-class WorknewsFixture extends TestFixture
+class WorknewsFixture extends AppFixture
 {
     public $import = ['table' => 'worknews'];
 

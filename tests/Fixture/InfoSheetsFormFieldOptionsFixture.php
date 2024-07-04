@@ -2,9 +2,7 @@
 
 namespace App\Test\Fixture;
 
-use Cake\TestSuite\Fixture\TestFixture;
-
-class InfoSheetsFormFieldOptionsFixture extends TestFixture
+class InfoSheetsFormFieldOptionsFixture extends AppFixture
 {
     public $import = ['table' => 'info_sheets_form_field_options'];
 }

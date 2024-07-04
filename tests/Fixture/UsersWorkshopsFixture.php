@@ -2,10 +2,9 @@
 
 namespace App\Test\Fixture;
 
-use Cake\TestSuite\Fixture\TestFixture;
 use Cake\I18n\Date;
 
-class UsersWorkshopsFixture extends TestFixture
+class UsersWorkshopsFixture extends AppFixture
 {
     public $import = ['table' => 'users_workshops'];
 
