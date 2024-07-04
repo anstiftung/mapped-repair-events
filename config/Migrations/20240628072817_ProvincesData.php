@@ -67,7 +67,7 @@ class ProvincesData extends AbstractMigration
             ['name' => 'Schaffhausen', 'country_code' => 'CH'],
             ['name' => 'Schwyz', 'country_code' => 'CH'],
             ['name' => 'Solothurn', 'country_code' => 'CH'],
-            ['name' => 'St. Gallen', 'country_code' => 'CH', 'alternative_names' => 'St. Gall'],
+            ['name' => 'St. Gallen', 'country_code' => 'CH', 'alternative_names' => 'St. Gall,Sankt Gallen'],
             ['name' => 'Tessin', 'country_code' => 'CH', 'alternative_names' => 'Ticino'],
             ['name' => 'Thurgau', 'country_code' => 'CH', 'alternative_names' => 'Thurgovia'],
             ['name' => 'Uri', 'country_code' => 'CH'],
