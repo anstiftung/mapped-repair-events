@@ -311,11 +311,7 @@ MappedRepairEvents.Map.prototype = {
 
         //Zoom to right position and zoomlevel
         if (this.customZoomLevel == 0) {
-            if (this.objects.length == 1) {
-                this.map.fitBounds(this.boundsForZooming, {'maxZoom': this.singleMarkerZoom});
-            } else {
-                this.FitFoundBounds();
-            }
+            this.FitFoundBounds();
         } else {
             MappedRepairEvents.MapObject.map.setZoom(this.customZoomLevel);
         }
