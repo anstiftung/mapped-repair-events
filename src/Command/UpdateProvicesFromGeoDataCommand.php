@@ -18,14 +18,14 @@ class UpdateProvicesFromGeoDataCommand extends Command
         
         $workshopsTable = FactoryLocator::get('Table')->get('Workshops');
         $provincesTable = FactoryLocator::get('Table')->get('Provinces');
-        $provincesMap = $provincesTable->find('list', ['keyField' => 'id', 'valueField' => 'name'])->toArray();
+        $provincesMap = $provincesTable->find('list', keyField: 'id', valueField: 'name')->toArray();
 
         $workshops = $workshopsTable->find('all')->where(
             [
                 $workshopsTable->aliasField('province_id') => 0,
             ]
         )->orderAsc($workshopsTable->aliasField('uid'));
-        
+
         foreach($workshops as $workshop) {
             $geoData = $geoService->getGeoDataByCoordinates($workshop->lat, $workshop->lng);
             $workshop->province_id = $geoData['provinceId'];
