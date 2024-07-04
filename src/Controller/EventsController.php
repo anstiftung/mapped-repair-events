@@ -460,7 +460,7 @@ class EventsController extends AppController
                     $data['lat'] = str_replace(',', '.', $data['lat']);
                     $data['lng'] = str_replace(',', '.', $data['lng']);
                 }
-                $data['province_id'] = $geoData['provinceId'];
+                $data['province_id'] = $geoData['provinceId'] ?? 0;
                 if ($isEditMode) {
                     $data['uid'] = $events[0]->uid;
                 }

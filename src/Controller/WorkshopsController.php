@@ -130,7 +130,7 @@ class WorkshopsController extends AppController
                 $this->request = $this->request->withData('Workshops.lat', str_replace(',', '.', $this->request->getData('Workshops.lat')));
                 $this->request = $this->request->withData('Workshops.lng', str_replace(',', '.', $this->request->getData('Workshops.lng')));
             }
-            $this->request = $this->request->withData('Workshops.province_id', $geoData['provinceId']);
+            $this->request = $this->request->withData('Workshops.province_id', $geoData['provinceId'] ?? 0);
 
             $patchedEntity = $this->Workshop->getPatchedEntityForAdminEdit($workshop, $this->request->getData());
 
