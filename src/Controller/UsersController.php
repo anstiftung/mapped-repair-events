@@ -16,9 +16,12 @@ use Gregwar\Captcha\CaptchaBuilder;
 use App\Services\GeoService;
 use App\Model\Entity\User;
 use App\Mailer\AppMailer;
+use App\Controller\Traits\GeoServiceTrait;
 
 class UsersController extends AppController
 {
+
+    use GeoServiceTrait;
 
     public CategoriesTable $Category;
     public CountriesTable $Country;
@@ -307,8 +310,7 @@ class UsersController extends AppController
             $this->request = $this->request->withData('Users.skills._ids', $existingSkills);
 
             $addressString = trim($this->request->getData('Users.zip') . ', ' . $this->request->getData('Users.city') . ', ' . $this->request->getData('Users.country_code'));
-            $geoService = new GeoService();
-            $geoData = $geoService->getGeoData($addressString);
+            $geoData = $this->geoService->getGeoDataByAddress($addressString);
             $this->request = $this->request->withData('Users.lat', $geoData['lat']);
             $this->request = $this->request->withData('Users.lng', $geoData['lng']);
             $this->request = $this->request->withData('Users.province_id', $geoData['provinceId']);

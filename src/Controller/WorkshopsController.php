@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\Component\StringComponent;
+use App\Controller\Traits\GeoServiceTrait;
 use App\Model\Table\WorkshopsTable;
 use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
@@ -18,12 +19,13 @@ use App\Model\Table\InfoSheetsTable;
 use App\Model\Table\PostsTable;
 use App\Model\Table\UsersTable;
 use App\Model\Table\WorknewsTable;
-use App\Services\GeoService;
 use App\Model\Entity\Worknews;
 use App\Mailer\AppMailer;
 
 class WorkshopsController extends AppController
 {
+
+    use GeoServiceTrait;
 
     public WorkshopsTable $Workshop;
     public CategoriesTable $Category;
@@ -115,12 +117,10 @@ class WorkshopsController extends AppController
 
             if (!$this->request->getData('Workshops.use_custom_coordinates')) {
                 $addressString = $this->request->getData('Workshops.street') . ', ' . $this->request->getData('Workshops.zip') . ' ' . $this->request->getData('Workshops.city') . ', ' . $this->request->getData('Workshops.country_code');
-                $geoService = new GeoService();
-                $geoData = $geoService->getGeoData($addressString);
+                $geoData = $this->geoService->getGeoDataByAddress($addressString);
 
                 $this->request = $this->request->withData('Workshops.lat', $geoData['lat']);
                 $this->request = $this->request->withData('Workshops.lng', $geoData['lng']);
-                $this->request = $this->request->withData('Workshops.province_id', $geoData['provinceId']);
 
                 if ($geoData['lat'] == 'ungültig' || $geoData['lng'] == 'ungültig') {
                     $this->AppFlash->setFlashError('Zur eingegebenen Adresse wurden keine Koordinaten gefunden. Bitte klicke auf "Koordinaten selber festlegen" und trage die Koordinaten selbst ein.');
@@ -129,9 +129,11 @@ class WorkshopsController extends AppController
             }
 
             if ($this->request->getData('Workshops.use_custom_coordinates')) {
+                $geoData = $this->geoService->getGeoDataByCoordinates($this->request->getData('Workshops.lat'), $this->request->getData('Workshops.lng'));
                 $this->request = $this->request->withData('Workshops.lat', str_replace(',', '.', $this->request->getData('Workshops.lat')));
                 $this->request = $this->request->withData('Workshops.lng', str_replace(',', '.', $this->request->getData('Workshops.lng')));
             }
+            $this->request = $this->request->withData('Workshops.province_id', $geoData['provinceId']);
 
             $patchedEntity = $this->Workshop->getPatchedEntityForAdminEdit($workshop, $this->request->getData());
 

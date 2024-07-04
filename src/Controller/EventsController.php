@@ -4,7 +4,6 @@ namespace App\Controller;
 use Cake\Core\Configure;
 use Cake\Datasource\FactoryLocator;
 use Cake\Event\EventInterface;
-use Cake\Mailer\Mailer;
 use Cake\Http\Exception\NotFoundException;
 use Eluceo\iCal\Domain\Entity\Calendar;
 use Eluceo\iCal\Domain\Entity\Event;
@@ -23,9 +22,12 @@ use App\Services\GeoService;
 use Cake\I18n\DateTime;
 use App\Model\Entity\Worknews;
 use App\Mailer\AppMailer;
+use App\Controller\Traits\GeoServiceTrait;
 
 class EventsController extends AppController
 {
+
+    use GeoServiceTrait;
 
     public $Category;
     public $Event;
@@ -453,16 +455,16 @@ class EventsController extends AppController
                 }
                 if (!$data['use_custom_coordinates']) {
                     $addressString = $data['strasse'] . ', ' . $data['zip'] . ' ' . $data['ort'] . ', ' . $data['land'];
-                    $geoService = new GeoService();
-                    $geoData = $geoService->getGeoData($addressString);
+                    $geoData = $this->geoService->getGeoDataByAddress($addressString);
                     $data['lat'] = $geoData['lat'];
                     $data['lng'] = $geoData['lng'];
-                    $data['province_id'] = $geoData['provinceId'];
                 }
                 if (!empty($data['use_custom_coordinates'])) {
+                    $geoData = $this->geoService->getGeoDataByCoordinates($data['lat'], $data['lng']);
                     $data['lat'] = str_replace(',', '.', $data['lat']);
                     $data['lng'] = str_replace(',', '.', $data['lng']);
                 }
+                $data['province_id'] = $geoData['provinceId'];
                 if ($isEditMode) {
                     $data['uid'] = $events[0]->uid;
                 }

@@ -8,17 +8,17 @@ use App\Test\TestCase\Traits\LoginTrait;
 use App\Test\TestCase\Traits\UserAssertionsTrait;
 use Cake\Core\Configure;
 use Cake\TestSuite\EmailTrait;
-use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\StringCompareTrait;
-use Cake\TestSuite\TestEmailTransport;
 use App\Services\GeoService;
 use App\Test\TestCase\Traits\QueueTrait;
 use Cake\I18n\Date;
+use Cake\Event\EventInterface;
+use Cake\Controller\Controller;
+use App\Test\Mock\GeoServiceMock;
 
 class WorkshopsControllerTest extends AppTestCase
 {
     use LoginTrait;
-    use IntegrationTestTrait;
     use UserAssertionsTrait;
     use StringCompareTrait;
     use EmailTrait;
@@ -27,6 +27,12 @@ class WorkshopsControllerTest extends AppTestCase
 
     private $Workshop;
     private $User;
+
+	public function controllerSpy(EventInterface $event, ?Controller $controller = null): void
+    {
+		parent::controllerSpy($event, $controller);
+		$this->_controller->geoService = new GeoServiceMock();
+	}
 
     public function testAjaxGetAllWorkshopsForMap()
     {
@@ -120,7 +126,7 @@ class WorkshopsControllerTest extends AppTestCase
 
     }
 
-    public function testAddWorkshop()
+    public function testAddWorkshopWithCustomCoordinates()
     {
 
         $workshopForPost = [

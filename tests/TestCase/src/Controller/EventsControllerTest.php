@@ -14,6 +14,9 @@ use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\StringCompareTrait;
 use Cake\I18n\Date;
 use Cake\I18n\Time;
+use Cake\Event\EventInterface;
+use Cake\Controller\Controller;
+use App\Test\Mock\GeoServiceMock;
 
 class EventsControllerTest extends AppTestCase
 {
@@ -28,6 +31,12 @@ class EventsControllerTest extends AppTestCase
     private $newEventData;
     private $Event;
     private $User;
+
+	public function controllerSpy(EventInterface $event, ?Controller $controller = null): void
+    {
+		parent::controllerSpy($event, $controller);
+		$this->_controller->geoService = new GeoServiceMock();
+	}
 
     public function loadNewEventData()
     {

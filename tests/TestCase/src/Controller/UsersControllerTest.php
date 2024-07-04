@@ -11,6 +11,9 @@ use Cake\TestSuite\IntegrationTestTrait;
 use App\Test\TestCase\Traits\LoginTrait;
 use App\Model\Entity\User;
 use App\Test\TestCase\Traits\QueueTrait;
+use Cake\Event\EventInterface;
+use Cake\Controller\Controller;
+use App\Test\Mock\GeoServiceMock;
 
 class UsersControllerTest extends AppTestCase
 {
@@ -43,6 +46,12 @@ class UsersControllerTest extends AppTestCase
             ],
         ],
     ];
+
+	public function controllerSpy(EventInterface $event, ?Controller $controller = null): void
+    {
+		parent::controllerSpy($event, $controller);
+		$this->_controller->geoService = new GeoServiceMock();
+	}
 
     public function testAll()
     {
