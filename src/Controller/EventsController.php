@@ -18,16 +18,12 @@ use Eluceo\iCal\Domain\ValueObject\TimeSpan;
 use Eluceo\iCal\Presentation\Factory\CalendarFactory;
 use InvalidArgumentException;
 use Cake\View\JsonView;
-use App\Services\GeoService;
 use Cake\I18n\DateTime;
 use App\Model\Entity\Worknews;
 use App\Mailer\AppMailer;
-use App\Controller\Traits\GeoServiceTrait;
 
 class EventsController extends AppController
 {
-
-    use GeoServiceTrait;
 
     public $Category;
     public $Event;

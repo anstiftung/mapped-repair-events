@@ -2,7 +2,6 @@
 namespace App\Controller;
 
 use App\Controller\Component\StringComponent;
-use App\Controller\Traits\GeoServiceTrait;
 use App\Model\Table\WorkshopsTable;
 use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
@@ -24,8 +23,6 @@ use App\Mailer\AppMailer;
 
 class WorkshopsController extends AppController
 {
-
-    use GeoServiceTrait;
 
     public WorkshopsTable $Workshop;
     public CategoriesTable $Category;

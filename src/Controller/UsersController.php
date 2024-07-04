@@ -9,19 +9,14 @@ use App\Model\Table\SkillsTable;
 use App\Model\Table\UsersTable;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
-use Cake\Mailer\Mailer;
 use Cake\Http\Exception\NotFoundException;
 use Cake\ORM\Query;
 use Gregwar\Captcha\CaptchaBuilder;
-use App\Services\GeoService;
 use App\Model\Entity\User;
 use App\Mailer\AppMailer;
-use App\Controller\Traits\GeoServiceTrait;
 
 class UsersController extends AppController
 {
-
-    use GeoServiceTrait;
 
     public CategoriesTable $Category;
     public CountriesTable $Country;

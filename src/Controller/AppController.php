@@ -24,20 +24,16 @@ class AppController extends Controller
     public $Common;
     public $String;
     public PagesTable $Page;
+    public $geoService;
 
     public function __construct($request = null, $response = null)
     {
-
         parent::__construct($request, $response);
         $this->connection = ConnectionManager::get('default');
         $this->Root = $this->getTableLocator()->get('Roots');
         $this->modelName = Inflector::classify($this->name);
         $this->pluralizedModelName = Inflector::pluralize($this->modelName);
-    
-        if (isset($this->geoService)) {
-            $this->geoService = new GeoService();
-        }
-
+        $this->geoService = new GeoService();
     }
 
     /**
