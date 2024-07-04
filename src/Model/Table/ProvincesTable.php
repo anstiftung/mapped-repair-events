@@ -16,10 +16,11 @@ class ProvincesTable extends Table
         ]);
     }
 
-    public function getForDropdown()
+    public function getForDropdown($provinceCountsMap)
     {
         $provinces = $this->find('all',
             order: [
+                'Countries.name_de' => 'ASC',
                 'Provinces.name' => 'ASC'
             ],
             contain: [
@@ -29,7 +30,10 @@ class ProvincesTable extends Table
 
         $preparedProvinces = [];
         foreach($provinces as $province) {
-            $preparedProvinces[$province->id] = $province->name;
+            if (!isset($provinceCountsMap[$province->id])) {
+                continue;
+            }
+            $preparedProvinces[$province->country->name_de][$province->id] = $province->name . ' (' . $provinceCountsMap[$province->id] . ')';
         }
         return $preparedProvinces;
     }

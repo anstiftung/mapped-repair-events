@@ -1283,7 +1283,8 @@ class WorkshopsController extends AppController
             'Workshops.status' => APP_ON
         ];
 
-        $query = $this->Workshop->find('all',
+        $workshopsTable = $this->getTableLocator()->get('Workshops');
+        $query = $workshopsTable->find('all',
         conditions: $conditions,
         contain: [
             'Countries',
@@ -1293,9 +1294,21 @@ class WorkshopsController extends AppController
         $keyword = '';
         if (!empty($this->request->getQuery('keyword'))) {
             $keyword = h(strtolower(trim($this->request->getQuery('keyword'))));
-            $query->where($this->Workshop->getKeywordSearchConditions($keyword, false));
+            $query->where($workshopsTable->getKeywordSearchConditions($keyword, false));
         }
         $this->set('keyword', $keyword);
+
+        $provincesTable = $this->getTableLocator()->get('Provinces');
+        $provinceCounts = $workshopsTable->getProvinceCounts();
+        $provinces = $provincesTable->getForDropdown($provinceCounts);
+        $this->set('provinces', $provinces);
+
+        $provinceId = $this->request->getQuery('provinceId', 0);
+        $this->set('provinceId', $provinceId);
+
+        if ($provinceId > 0) {
+            $query->where([$workshopsTable->aliasField('province_id') => $provinceId]);
+        }
 
         $workshops = $this->paginate($query, [
             'sortableFields' => [

@@ -113,6 +113,26 @@ class WorkshopsTable extends AppTable
         return $validator;
     }
 
+    public function getProvinceCounts() {
+        
+        $query = $this->find('all')
+        ->select([
+            'province_id',
+            'count' => $this->find()->func()->count('*')
+        ])
+        ->where([
+            $this->aliasField('status') => APP_ON,
+        ])
+        ->groupBy($this->aliasField('province_id'));
+        $provinces = $query->toArray();
+
+        $provincesMap = [];
+        foreach($provinces as $province) {
+            $provincesMap[$province->province_id] = $province->count;
+        }
+        return $provincesMap;
+    }
+
     /**
      *
      * @param int $userUid

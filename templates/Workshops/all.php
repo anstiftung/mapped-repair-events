@@ -17,7 +17,8 @@ $this->element('addScript', ['script' =>
             echo $this->element('listSearchForm', [
                 'baseUrl' => '/orte',
                 'keyword' => $keyword,
-                'resetButton' => ($keyword != '' ? true : false),
+                'provinces' => $provinces,
+                'resetButton' => $keyword != '' || $provinceId > 0 ? true : false,
                 'label' => 'Suche nach Initiativen, PLZ und Orten',
                 'useTimeRange' => false,
                 'showIsOnlineEventCheckbox' => false,

@@ -1055,6 +1055,7 @@ MappedRepairEvents.Helper = {
 
     initWorkshopAllForm: function(form) {
         MappedRepairEvents.Helper.initSelfSubmittingForm(form);
+        MappedRepairEvents.Helper.triggerSubmitAfterChange(form);
         MappedRepairEvents.Helper.triggerSubmitAfterTextInputKeyup(form);
     },
 
