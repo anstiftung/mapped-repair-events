@@ -23,13 +23,6 @@ class GeoService {
 
     const ERROR_OUT_OF_BOUNDING_BOX = 'Die Geo-Koordinaten liegen nicht in Europa, vielleicht hast du Breite (Lat) und Länge (Long) vertauscht?';
 
-    public function __construct()
-    {
-        if (Configure::read('googleMapApiKey') == '') {
-            throw new ServiceUnavailableException('googleMapApiKey not defined');
-        }
-    }
-
     public function isPointInBoundingBox($lat, $lng) {
         return $lat >= self::VALID_BOUNDING_BOX['lat']['min'] && $lat <= self::VALID_BOUNDING_BOX['lat']['max'] && $lng >= self::VALID_BOUNDING_BOX['lng']['min'] && $lng <= self::VALID_BOUNDING_BOX['lng']['max'];
     }
