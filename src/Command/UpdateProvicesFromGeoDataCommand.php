@@ -52,6 +52,23 @@ class UpdateProvicesFromGeoDataCommand extends Command
             usleep(300000);
         }
 
+        $usersTable = FactoryLocator::get('Table')->get('Users');
+        $users = $usersTable->find('all')->where(
+            [
+                $usersTable->aliasField('province_id') => 0,
+            ]
+        )->orderAsc($usersTable->aliasField('uid'));
+
+        foreach($users as $user) {
+            $geoData = $geoService->getGeoDataByCoordinates($user->lat, $user->lng);
+            $user->province_id = $geoData['provinceId'];
+            $usersTable->save($user);
+            $provinceName = $provincesMap[$user->province_id] ?? 'no province found';
+            $io->out('Updating user: UID: ' . $user->uid . ' / Name: '. $user->firstname . ' ' . $user->lastname . ' / Province: ' . $provinceName . ' / Lat: '. $user->lat . ' / Lng: ' . $user->lng);
+            usleep(300000);
+        }
+
+
         return static::CODE_SUCCESS;
 
     }
