@@ -57,6 +57,7 @@ class UpdateProvicesFromGeoDataCommand extends Command
             [
                 $usersTable->aliasField('province_id') => 0,
                 $usersTable->aliasField('lat IS NOT NULL'),
+                $usersTable->aliasField('country_code IN') => ['DE', 'AT', 'CH'],
                 
             ]
         )->orderAsc($usersTable->aliasField('uid'));
