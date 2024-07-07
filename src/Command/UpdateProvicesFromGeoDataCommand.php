@@ -56,10 +56,13 @@ class UpdateProvicesFromGeoDataCommand extends Command
         $users = $usersTable->find('all')->where(
             [
                 $usersTable->aliasField('province_id') => 0,
+                $usersTable->aliasField('lat IS NOT NULL'),
+                
             ]
         )->orderAsc($usersTable->aliasField('uid'));
 
         foreach($users as $user) {
+            $user->revertPrivatizeData();
             $geoData = $geoService->getGeoDataByCoordinates($user->lat, $user->lng);
             $user->province_id = $geoData['provinceId'];
             $usersTable->save($user);
