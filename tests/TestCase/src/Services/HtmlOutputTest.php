@@ -106,19 +106,10 @@ class HtmlOutputTest extends AppTestCase
         $this->assertResponseCode(200);
     }
 
-    public function testEventsWithoutFilter()
-    {
-        $this->changeEventDate();
-        $this->get(Configure::read('AppConfig.htmlHelper')->urlEvents() . '?timeRange=30days');
-        $this->doAssertHtmlOutput();
-        $this->assertResponseContains('<div class="numbers">2 Termine gefunden</div>');
-        $this->assertResponseContains('href="/test-workshop?event=6');
-    }
-
     public function testEventsWithCategoryFilterFound()
     {
         $this->changeEventDate();
-        $this->get(Configure::read('AppConfig.htmlHelper')->urlEvents() . '?categories=87&timeRange=30days');
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlEvents() . '?categories=87');
         $this->doAssertHtmlOutput();
         $this->assertResponseContains('<div class="numbers">1 von insgesamt 2 Terminen gefunden</div>');
     }

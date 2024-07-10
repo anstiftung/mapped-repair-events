@@ -21,6 +21,7 @@ use Cake\View\JsonView;
 use Cake\I18n\DateTime;
 use App\Model\Entity\Worknews;
 use App\Mailer\AppMailer;
+use Cake\Database\Query;
 
 class EventsController extends AppController
 {
@@ -48,6 +49,12 @@ class EventsController extends AppController
     {
         parent::initialize();
         $this->addViewClasses([JsonView::class]);
+
+        $this->paginate = [
+            'limit' => 1000,
+            'maxLimit' => 1000,
+        ];
+    
     }
 
     public function ical()
@@ -592,23 +599,14 @@ class EventsController extends AppController
         $conditions = $this->Event->getListConditions();
 
         // get count without any filters
-        $eventTable = FactoryLocator::get('Table')->get('Events');
-        $allEventsCount = $eventTable->find('all',
+        $eventsTable = FactoryLocator::get('Table')->get('Events');
+        $allEventsCount = $eventsTable->find('all',
             conditions: $conditions,
             contain:  [
                 'Workshops'
             ]
         )->count();
         $this->set('allEventsCount', $allEventsCount);
-
-        $timeRangeDefault = '30days';
-        $timeRangeOptions = [
-            '30days' => '30 Tage',
-            '3months' => '3 Monate',
-            '6months' => '6 Monate',
-            'gt6months' => '> 6 Monate',
-        ];
-        $this->set('timeRangeOptions', $timeRangeOptions);
 
         $selectedCategories = !empty($this->request->getQuery('categories')) ? explode(',', h($this->request->getQuery('categories'))) : [];
         $this->set('selectedCategories', $selectedCategories);
@@ -661,8 +659,8 @@ class EventsController extends AppController
                 $newUrl = '?keyword=' . h($this->request->getQuery('keyword')) . '&' . $newUrl;
             }
 
-            if (!empty($this->request->getQuery('timeRange')) && $this->request->getQuery('timeRange') != $timeRangeDefault) {
-                $newUrl = $newUrl . '&timeRange=' . h($this->request->getQuery('timeRange'));
+            if (!empty($this->request->getQuery('provinceId'))) {
+                $newUrl = $newUrl . '&provinceId=' . h($this->request->getQuery('provinceId'));
             }
             if (!empty($this->request->getQuery('isOnlineEvent'))) {
                 $newUrl = $newUrl . '&isOnlineEvent=' . h($this->request->getQuery('isOnlineEvent'));
@@ -682,10 +680,10 @@ class EventsController extends AppController
         }
         $this->set('preparedCategories', $preparedCategories);
 
-        $query = $eventTable->find('all',
+        $query = $eventsTable->find('all',
             conditions: $conditions,
         );
-
+        
         $keyword = '';
         if (!empty($this->request->getQuery('keyword'))) {
             $keyword = h(strtolower(trim($this->request->getQuery('keyword'))));
@@ -693,30 +691,36 @@ class EventsController extends AppController
         }
         $this->set('keyword', $keyword);
 
-        $timeRange = $timeRangeDefault;
-        if (!empty($this->request->getQuery('timeRange'))) {
-            $timeRange = h(strtolower(trim($this->request->getQuery('timeRange'))));
-        }
-        $query->where($this->Event->getTimeRangeCondition($timeRange, false));
-        $this->set('timeRange', $timeRange);
-
         $resetCategoriesUrl = '/termine';
         if ($keyword != '') {
             $resetCategoriesUrl = '/termine?keyword=' . $keyword;
         }
-        if (!empty($this->request->getQuery('timeRange')) && $this->request->getQuery('timeRange') != $timeRangeDefault) {
+        if (!empty($this->request->getQuery('provinceId'))) {
             $queryStringStartsWith = '?';
             if ($keyword != '') {
                 $queryStringStartsWith = '&';
             }
-            $resetCategoriesUrl .= $queryStringStartsWith . 'timeRange='.$this->request->getQuery('timeRange');
+            $resetCategoriesUrl .= $queryStringStartsWith . 'provinceId='.$this->request->getQuery('provinceId');
         }
         $this->set('resetCategoriesUrl', $resetCategoriesUrl);
+
+        $provincesTable = $this->getTableLocator()->get('Provinces');
+        $provinceCounts = $eventsTable->getProvinceCounts();
+        $provinces = $provincesTable->getForDropdown($provinceCounts);
+        $this->set('provinces', $provinces);
+
+        $provinceId = $this->request->getQuery('provinceId', 0);
+        $this->set('provinceId', $provinceId);
+
+        if ($provinceId > 0) {
+            $query->where([$eventsTable->aliasField('province_id') => $provinceId]);
+        }
+
 
         if (!empty($this->request->getQuery('categories'))) {
             $categories = explode(',', h($this->request->getQuery('categories')));
             if (!empty($categories)) {
-                $query->matching('Categories', function(\Cake\ORM\Query $q) use ($categories) {
+                $query->matching('Categories', function(Query $q) use ($categories) {
                     return $q->where([
                         'Categories.id IN' => $categories
                     ]);
@@ -728,9 +732,9 @@ class EventsController extends AppController
             $query->where(['Events.is_online_event' => 1]);
         }
 
-        $query->distinct($eventTable->getListFields());
-        $query->select($eventTable->getListFields());
-        $query->order($eventTable->getListOrder());
+        $query->distinct($eventsTable->getListFields());
+        $query->select($eventsTable->getListFields());
+        $query->orderBy($eventsTable->getListOrder());
         $query->contain([
             'Workshops',
             'Categories'
@@ -748,9 +752,13 @@ class EventsController extends AppController
 
         $urlOptions = [
             'url' => [
-                'controller' => 'termine',
-                'keyword' => $keyword
-            ]
+                '?' => [
+                    'keyword' => $this->request->getQuery('keyword'),
+                    'provinceId' => $this->request->getQuery('provinceId'),
+                    'categories' => $this->request->getQuery('categories'),
+                    'isOnlineEvent' => $this->request->getQuery('isOnlineEvent'),
+                ],
+            ],
         ];
         $this->set('urlOptions', $urlOptions);
 

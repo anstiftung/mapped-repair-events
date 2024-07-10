@@ -3038,13 +3038,9 @@ body.events.all .input.checkbox label {
 body.events.all input[name="isOnlineEvent"] {
     float: left;
 }
-body.events.all .select2,
-body.events.all .input select { /* avoid jumping effect */
-    width: 100px ! important;
-    float: left;
-    margin-right: 5px;
-}
+body.events.all .input select,
 body.workshops.all .input select,
+body.events.all .select2,
 body.workshops.all .select2 {  /* avoid jumping effect */
     width: 30% ! important;
     float: left;

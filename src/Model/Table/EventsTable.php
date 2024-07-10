@@ -90,39 +90,24 @@ class EventsTable extends AppTable
         };
     }
 
-    public function getTimeRangeCondition($timeRange, $negate) {
-        return function ($exp, $query) use ($timeRange, $negate) {
+    public function getProvinceCounts() {
+        
+        $query = $this->find('all')
+        ->select([
+            'province_id',
+            'count' => $this->find()->func()->count('*')
+        ])
+        ->leftJoinWith('Workshops')
+        ->where($this->getListConditions())
+        ->groupBy($this->aliasField('province_id'));
+        $provinces = $query->toArray();
 
-            $now = new DateTime();
-            $minDate = null;
-            $maxDate = $now->addDays(30);
-
-            if ($timeRange == '3months') {
-                $maxDate = $now->addMonths(3);
-            }
-            if ($timeRange == '6months') {
-                $maxDate = $now->addMonths(6);
-            }
-            if ($timeRange == 'gt6months') {
-                $minDate = $now->addDays(180);
-                $minDate = $now->addMonths(6);
-                $maxDate = null;
-            }
-
-            if (!is_null($minDate)) {
-                $result = $exp->gte('Events.datumstart', $minDate, 'date');
-            }
-            if (!is_null($maxDate)) {
-                $result = $exp->lte('Events.datumstart', $maxDate, 'date');
-            }
-
-            if ($negate) {
-                $result = $exp->not($result);
-            }
-
-            return $result;
-        };
-    }
+        $provincesMap = [];
+        foreach($provinces as $province) {
+            $provincesMap[$province->province_id] = $province->count;
+        }
+        return $provincesMap;
+    }    
 
     public function getListConditions() {
         return [
