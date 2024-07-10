@@ -1,5 +1,6 @@
 <?php
 
+$options = [];
 if (isset($this->request->getQueryParams()['key-standard']) && isset($this->request->getQueryParams()['val-standard'])) {
     $options['url']['?']['key-standard'] = $this->request->getQueryParams()['key-standard'];
     $options['url']['?']['val-standard'] = $this->request->getQueryParams()['val-standard'];
@@ -17,9 +18,9 @@ if (isset($this->request->getQueryParams()['key-opt-2']) && isset($this->request
     $options['url']['?']['val-opt-2'] = $this->request->getQueryParams()['val-opt-2'];
 }
 
-$options = [];
+
 if (isset($urlOptions)) {
-    $options = array_merge($options ?? [], $urlOptions);
+    $options = array_merge($options, $urlOptions);
 }
 
 if ($this->Paginator->hasNext() || $this->Paginator->hasPrev()) {
