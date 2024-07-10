@@ -56,7 +56,8 @@ class WorkshopsController extends AdminAppController
         contain: [
             'Countries',
             'OwnerUsers',
-            'Users'
+            'Users',
+            'Provinces',
         ]);
 
         $query = $this->addMatchingsToQuery($query);

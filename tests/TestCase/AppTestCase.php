@@ -2,9 +2,12 @@
 namespace App\Test\TestCase;
 use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
+use Cake\TestSuite\IntegrationTestTrait;
 
 class AppTestCase extends TestCase
 {
+
+    use IntegrationTestTrait;
 
     protected array $fixtures = [
         'app.BlockedWorkshopSlugs',
@@ -23,6 +26,7 @@ class AppTestCase extends TestCase
         'app.Pages',
         'app.Posts',
         'app.Photos',
+        'app.Provinces',
         'app.Roots',
         'app.Skills',
         'app.ThirdPartyStatistics',

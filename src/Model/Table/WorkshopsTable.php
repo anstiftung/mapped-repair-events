@@ -33,6 +33,9 @@ class WorkshopsTable extends AppTable
         $this->belongsTo('Countries', [
             'foreignKey' => 'country_code'
         ]);
+        $this->belongsTo('Provinces', [
+            'foreignKey' => 'province_id',
+        ]);
         $this->hasMany('Events', [
             'foreignKey' => 'workshop_uid',
             'conditions' => [
@@ -108,6 +111,26 @@ class WorkshopsTable extends AppTable
             'Dieser Wert ist nicht gültig.',
         );
         return $validator;
+    }
+
+    public function getProvinceCounts() {
+        
+        $query = $this->find('all')
+        ->select([
+            'province_id',
+            'count' => $this->find()->func()->count('*')
+        ])
+        ->where([
+            $this->aliasField('status') => APP_ON,
+        ])
+        ->groupBy($this->aliasField('province_id'));
+        $provinces = $query->toArray();
+
+        $provincesMap = [];
+        foreach($provinces as $province) {
+            $provincesMap[$province->province_id] = $province->count;
+        }
+        return $provincesMap;
     }
 
     /**

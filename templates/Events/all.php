@@ -18,7 +18,7 @@ $this->element('addScript', ['script' =>
                 'baseUrl' => '/termine',
                 'keyword' => $keyword,
                 'categories' => $this->request->getQuery('categories'),
-                'resetButton' => (($keyword != '' || count($selectedCategories) > 0 || $timeRange != '30days' || $isOnlineEvent) ? true : false),
+                'resetButton' => (($keyword != '' || count($selectedCategories) > 0 || $provinceId > 0 || $isOnlineEvent) ? true : false),
                 'label' => 'Suche nach Initiativen, PLZ und Orten',
                 'useTimeRange' => true,
                 'showIsOnlineEventCheckbox' => true,
@@ -51,6 +51,7 @@ $this->element('addScript', ['script' =>
         'objectNamePluralDativ' => 'Terminen',
         'allCount' => $allEventsCount
     ];
+    
     echo $this->element('paginationSearch', $paginationParams);
 
     echo '</div>'; // div.top
@@ -106,8 +107,9 @@ $this->element('addScript', ['script' =>
 
     }
     if (count($events) > 0) {
-        echo $this->element('paginationSearch', $paginationParams);
+        echo $this->element('pagination', ['urlOptions' => $urlOptions]);
     }
+
 ?>
 
 </div> <?php // left column ends here ?>

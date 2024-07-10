@@ -14,8 +14,8 @@ echo $this->Form->control('keyword', ['label' => '', 'value' => $keyword, 'disab
 if (!empty($categories)) {
     echo $this->Form->hidden('categories', ['label' => '', 'value' => $categories]);
 }
-if ($useTimeRange) {
-    echo $this->Form->control('timeRange', ['type' => 'select', 'label' => '', 'options' => $timeRangeOptions, 'value' => $timeRange, 'disabled' => true]);
+if (isset($provinces)) {
+    echo $this->Form->control('provinceId', ['type' => 'select', 'label' => '', 'options' => $provinces, 'value' => $provinceId, 'empty' => 'Bundesland / Kanton', 'disabled' => true]);
 }
 if (Configure::read('AppConfig.onlineEventsEnabled') && $showIsOnlineEventCheckbox) {
     echo $this->Form->control('isOnlineEvent', ['hiddenField' => false, 'type' => 'checkbox', 'label' => 'Online-Event?', 'checked' => $isOnlineEvent, 'disabled' => true]);

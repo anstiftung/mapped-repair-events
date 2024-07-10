@@ -64,7 +64,8 @@ class EventsController extends AdminAppController
         conditions: $conditions,
         contain: [
             'OwnerUsers',
-            'Workshops'
+            'Workshops',
+            'Provinces',
         ]);
 
         $query = $this->addMatchingsToQuery($query);

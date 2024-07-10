@@ -6,7 +6,6 @@ use App\Model\Table\WorkshopsTable;
 use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
 use Cake\Event\EventInterface;
-use Cake\Mailer\Mailer;
 use Cake\Http\Exception\ForbiddenException;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Utility\Hash;
@@ -19,7 +18,6 @@ use App\Model\Table\InfoSheetsTable;
 use App\Model\Table\PostsTable;
 use App\Model\Table\UsersTable;
 use App\Model\Table\WorknewsTable;
-use App\Services\GeoService;
 use App\Model\Entity\Worknews;
 use App\Mailer\AppMailer;
 
@@ -116,21 +114,23 @@ class WorkshopsController extends AppController
 
             if (!$this->request->getData('Workshops.use_custom_coordinates')) {
                 $addressString = $this->request->getData('Workshops.street') . ', ' . $this->request->getData('Workshops.zip') . ' ' . $this->request->getData('Workshops.city') . ', ' . $this->request->getData('Workshops.country_code');
-                $geoService = new GeoService();
-                $coordinates = $geoService->getLatLngFromGeoCodingService($addressString);
-                $this->request = $this->request->withData('Workshops.lat', $coordinates['lat']);
-                $this->request = $this->request->withData('Workshops.lng', $coordinates['lng']);
+                $geoData = $this->geoService->getGeoDataByAddress($addressString);
 
-                if ($coordinates['lat'] == 'ungültig' || $coordinates['lng'] == 'ungültig') {
+                $this->request = $this->request->withData('Workshops.lat', $geoData['lat']);
+                $this->request = $this->request->withData('Workshops.lng', $geoData['lng']);
+
+                if ($geoData['lat'] == 'ungültig' || $geoData['lng'] == 'ungültig') {
                     $this->AppFlash->setFlashError('Zur eingegebenen Adresse wurden keine Koordinaten gefunden. Bitte klicke auf "Koordinaten selber festlegen" und trage die Koordinaten selbst ein.');
                 }
 
             }
 
             if ($this->request->getData('Workshops.use_custom_coordinates')) {
+                $geoData = $this->geoService->getGeoDataByCoordinates($this->request->getData('Workshops.lat'), $this->request->getData('Workshops.lng'));
                 $this->request = $this->request->withData('Workshops.lat', str_replace(',', '.', $this->request->getData('Workshops.lat')));
                 $this->request = $this->request->withData('Workshops.lng', str_replace(',', '.', $this->request->getData('Workshops.lng')));
             }
+            $this->request = $this->request->withData('Workshops.province_id', $geoData['provinceId'] ?? 0);
 
             $patchedEntity = $this->Workshop->getPatchedEntityForAdminEdit($workshop, $this->request->getData());
 
@@ -150,7 +150,7 @@ class WorkshopsController extends AppController
                     $this->AppFlash->setFlashMessage($this->Workshop->name_de . ' erfolgreich gespeichert.');
 
                     // add orga user to workshop if workshop was created - id is kinda hard to retrieve...
-                    if (!$isEditMode && $this->isOrga() &&!$this->isAdmin()) {
+                    if (!$isEditMode && $this->isOrga() && !$this->isAdmin()) {
                         $usersWorkshop = $this->getTableLocator()->get('UsersWorkshops');
                         $savedWorkshop = $this->Workshop->find('all', conditions: [
                             'Workshops.url' => $patchedEntity->url,
@@ -165,16 +165,19 @@ class WorkshopsController extends AppController
                     if ($isEditMode) {
                         $userAction = 'geändert';
                     }
-                    $email = new AppMailer();
-                    $email->viewBuilder()->setTemplate('workshop_added_or_changed');
-                    $email->setSubject('Initiative "'.$entity->name.'" erfolgreich ' . $userAction)
-                    ->setViewVars([
-                        'workshop' => $entity,
-                        'username' => $this->loggedUser->name,
-                        'userAction' => $userAction,
-                    ]);
-                    $email->setTo(Configure::read('AppConfig.notificationMailAddress'));
-                    $email->addToQueue();
+
+                    if (!$this->isAdmin()) {
+                        $email = new AppMailer();
+                        $email->viewBuilder()->setTemplate('workshop_added_or_changed');
+                        $email->setSubject('Initiative "'.$entity->name.'" erfolgreich ' . $userAction)
+                        ->setViewVars([
+                            'workshop' => $entity,
+                            'username' => $this->loggedUser->name,
+                            'userAction' => $userAction,
+                        ]);
+                        $email->setTo(Configure::read('AppConfig.notificationMailAddress'));
+                        $email->addToQueue();
+                    }
 
                     $this->redirect($this->getPreparedReferer());
 
@@ -1280,7 +1283,8 @@ class WorkshopsController extends AppController
             'Workshops.status' => APP_ON
         ];
 
-        $query = $this->Workshop->find('all',
+        $workshopsTable = $this->getTableLocator()->get('Workshops');
+        $query = $workshopsTable->find('all',
         conditions: $conditions,
         contain: [
             'Countries',
@@ -1290,9 +1294,21 @@ class WorkshopsController extends AppController
         $keyword = '';
         if (!empty($this->request->getQuery('keyword'))) {
             $keyword = h(strtolower(trim($this->request->getQuery('keyword'))));
-            $query->where($this->Workshop->getKeywordSearchConditions($keyword, false));
+            $query->where($workshopsTable->getKeywordSearchConditions($keyword, false));
         }
         $this->set('keyword', $keyword);
+
+        $provincesTable = $this->getTableLocator()->get('Provinces');
+        $provinceCounts = $workshopsTable->getProvinceCounts();
+        $provinces = $provincesTable->getForDropdown($provinceCounts);
+        $this->set('provinces', $provinces);
+
+        $provinceId = $this->request->getQuery('provinceId', 0);
+        $this->set('provinceId', $provinceId);
+
+        if ($provinceId > 0) {
+            $query->where([$workshopsTable->aliasField('province_id') => $provinceId]);
+        }
 
         $workshops = $this->paginate($query, [
             'sortableFields' => [

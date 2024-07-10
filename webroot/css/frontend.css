@@ -3025,7 +3025,7 @@ body.statistics.detail #content  #search {
 body.events.all input[type="text"],
 body.workshops.all input[type="text"] {
     float: left;
-    margin-right: 10px;
+    margin-right: 5px;
     margin-bottom: 10px;
     width: 30%;
 }
@@ -3038,11 +3038,13 @@ body.events.all .input.checkbox label {
 body.events.all input[name="isOnlineEvent"] {
     float: left;
 }
+body.events.all .input select,
+body.workshops.all .input select,
 body.events.all .select2,
-body.events.all .input select { /* avoid jumping effect */
-    width: 100px ! important;
+body.workshops.all .select2 {  /* avoid jumping effect */
+    width: 30% ! important;
     float: left;
-    margin-right: 10px;
+    margin-right: 5px;
 }
 body.workshops.all .item-wrapper,
 body.events.all .item-wrapper {
@@ -3089,7 +3091,7 @@ body.events.all .left .top {
 body.workshops.all button.button,
 body.events.all button.button {
     float: left;
-    margin-right: 10px;
+    margin-right: 5px;
     margin-bottom: 10px;
 }
 body.workshops.all a.button,

@@ -11,12 +11,12 @@ use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
 use Cake\I18n\DateTime;
 use App\Model\Table\PagesTable;
+use App\Services\GeoService;
 
 class AppController extends Controller
 {
 
     public $modelName;
-
     public $loggedUser = null;
     public $connection;
     public RootsTable $Root;
@@ -24,6 +24,7 @@ class AppController extends Controller
     public $Common;
     public $String;
     public PagesTable $Page;
+    public $geoService;
 
     public function __construct($request = null, $response = null)
     {
@@ -32,6 +33,7 @@ class AppController extends Controller
         $this->Root = $this->getTableLocator()->get('Roots');
         $this->modelName = Inflector::classify($this->name);
         $this->pluralizedModelName = Inflector::pluralize($this->modelName);
+        $this->geoService = new GeoService();
     }
 
     /**

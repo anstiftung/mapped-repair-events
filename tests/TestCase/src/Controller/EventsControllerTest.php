@@ -14,6 +14,9 @@ use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\StringCompareTrait;
 use Cake\I18n\Date;
 use Cake\I18n\Time;
+use Cake\Event\EventInterface;
+use Cake\Controller\Controller;
+use App\Test\Mock\GeoServiceMock;
 
 class EventsControllerTest extends AppTestCase
 {
@@ -28,6 +31,12 @@ class EventsControllerTest extends AppTestCase
     private $newEventData;
     private $Event;
     private $User;
+
+	public function controllerSpy(EventInterface $event, ?Controller $controller = null): void
+    {
+		parent::controllerSpy($event, $controller);
+		$this->_controller->geoService = new GeoServiceMock();
+	}
 
     public function loadNewEventData()
     {
@@ -48,7 +57,8 @@ class EventsControllerTest extends AppTestCase
             ],
             'use_custom_coordinates' => true,
             'lat' => '',
-            'lng' => ''
+            'lng' => '',
+            'province_id' => '1',
         ];
     }
 
@@ -120,11 +130,13 @@ class EventsControllerTest extends AppTestCase
         $this->assertEquals($events[$eventIndexA]->categories[0]->id, $this->newEventData['categories']['_ids'][0]);
         $this->assertEquals($events[$eventIndexA]->owner, 1);
         $this->assertEquals($events[$eventIndexA]->workshop_uid, 2);
+        $this->assertEquals($events[$eventIndexA]->province_id, 1);
 
         $eventIndexB = 3;
         $this->assertEquals($events[$eventIndexB]->datumstart, new Date($newEventData2['datumstart']));
         $this->assertEquals($events[$eventIndexB]->uhrzeitstart, new Time($newEventData2['uhrzeitstart']));
         $this->assertEquals($events[$eventIndexB]->uhrzeitend, new Time($newEventData2['uhrzeitend']));
+        $this->assertEquals($events[$eventIndexB]->province_id, 1);
 
         $this->assertMailCount(0);
 
