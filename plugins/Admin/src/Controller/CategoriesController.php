@@ -114,8 +114,8 @@ class CategoriesController extends AdminAppController
             if ($object->owner_user) {
                 $object->owner_user->revertPrivatizeData();
             }
+            $object->info_sheet_count = $this->Category->getInfoSheetCount($object->id);
         }
-
         $this->set('objects', $objects);
 
         $metaTags = [

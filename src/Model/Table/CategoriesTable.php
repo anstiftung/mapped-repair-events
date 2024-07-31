@@ -2,6 +2,7 @@
 namespace App\Model\Table;
 
 use Cake\Core\Configure;
+use Cake\Datasource\FactoryLocator;
 use Cake\ORM\Table;
 use Cake\Utility\Hash;
 use Cake\Validation\Validator;
@@ -50,6 +51,18 @@ class CategoriesTable extends Table
     {
         $validator->notEmptyString('name', 'Bitte trage den Namen ein.');
         return $validator;
+    }
+
+    public function getInfoSheetCount($categoryId)
+    {
+        $infoSheetTable = FactoryLocator::get('Table')->get('InfoSheets');
+        $result = $infoSheetTable->find('all',
+            conditions: [
+                $infoSheetTable->aliasField('category_id') => $categoryId,
+                $infoSheetTable->aliasField('status') => APP_ON,
+            ])->count();
+
+        return $result;
     }
 
     public function getMaterialFootprintByParentCategoryId($parentCategoryId)

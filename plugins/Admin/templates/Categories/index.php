@@ -15,6 +15,7 @@ echo $this->element('list',
             ,['name' => 'carbon_footprint', 'label' => 'CF']
             ,['name' => 'material_footprint', 'label' => 'MF']
             ,['name' => 'owner_user.name', 'label' => 'Owner']
+            ,['name' => 'info_sheet_count', 'label' => 'LZ']
             ,['name' => 'status', 'label' => 'Status']
             ,['name' => 'created', 'type' => 'datetime', 'label' => 'erstellt']
             ,['name' => 'modified', 'type' => 'datetime', 'label' => 'geändert']
