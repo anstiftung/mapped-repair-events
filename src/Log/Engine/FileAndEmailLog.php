@@ -7,7 +7,6 @@ use Cake\Log\Engine\FileLog;
 use Cake\Network\Exception\SocketException;
 use Cake\Routing\Router;
 use Cake\Utility\Text;
-use App\Mailer\AppMailer;
 
 class FileAndEmailLog extends FileLog
 {
@@ -47,7 +46,7 @@ class FileAndEmailLog extends FileLog
         $preparedHostWithoutProtocol = str_replace('www.', '', $preparedHostWithoutProtocol);
         $subject = 'ErrorLog ' . $preparedHostWithoutProtocol . ': ' . Text::truncate($message, 150) . ' ' . date('Y-m-d H:i:s');
         try {
-            $email = new AppMailer();
+            $email = new Mailer();
             $email->viewBuilder()->setTemplate('debug');
             $email->setTo(Configure::read('AppConfig.debugMailAddress'))
             ->setSubject($subject)
@@ -55,7 +54,7 @@ class FileAndEmailLog extends FileLog
                 'message' => $message,
                 'identity' => $identity,
             ))
-            ->addToQueue();
+            ->send();
         } catch (SocketException $e) {
             return false;
         }

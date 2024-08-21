@@ -4,9 +4,7 @@ declare(strict_types=1);
 namespace App\Mailer;
 
 use Cake\Mailer\Mailer;
-use Cake\Core\Configure;
 use Cake\Datasource\FactoryLocator;
-use App\Services\OutputFilter\OutputFilterService;
 use Cake\Mailer\Message;
 
 class AppMailer extends Mailer
