@@ -12,6 +12,11 @@ use Cake\View\Exception\MissingTemplateException;
 use Cake\View\Exception\MissingHelperException;
 
 return [
+
+    'Migrations' => [
+        'backend' => 'phinx',
+    ],
+
     /*
      * Debug Level:
      *
@@ -346,4 +351,5 @@ return [
         'defaults' => 'php',
         'timeout' => 60*60*24,
     ],
+
 ];
