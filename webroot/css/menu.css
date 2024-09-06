@@ -3,10 +3,24 @@
     width: 100%;
     font-family: var(--theme-font), sans-serif;
     font-weight: 400;
-    margin-top: 80px;
+    margin-top: 95px;
     border-top: 2px dotted #000;
     border-bottom: 2px dotted #000;
     overflow: auto;
+}
+#anstiftung-logo {
+    position: absolute;
+    right: 0px;
+    top: -6px;
+}
+#anstiftung-logo img {
+    width: 75px;
+}
+#header.mobile #anstiftung-logo {
+    top: -5px;
+}
+#header.mobile #anstiftung-logo img {
+    width: 70px;
 }
 #nav.mobile {
     width: 50%;

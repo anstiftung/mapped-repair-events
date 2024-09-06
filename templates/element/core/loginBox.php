@@ -27,6 +27,11 @@
 
     ?>
 
+    <a id="anstiftung-logo" href="https://anstiftung.de/praxis/reparieren" title="anstiftung - Offene Werkstätten, Interkulturelle und Urbane Gemeinschaftsgärten" target="_blank">
+      <img alt="Logo anstiftung" src="/img/anstiftungslogo-farbig-72dpi.jpg" />
+    </a>
+    <br />
+
     <button class="rounded" id="anmelden-link"><?php echo __('Loginbox:Login');?></button>
     <div id="login-box-form">
         <?php
