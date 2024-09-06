@@ -11,6 +11,17 @@ class Funding extends Entity
     const STATUS_APPROVED = 30;
     const STATUS_MONEY_TRANSFERRED = 40;
 
+
+    /*
+    in Bearbeitung
+    eingereicht
+    beanstandet und wieder in bearbeitung
+    eingereicht
+    von admin bestätigt
+    Fördersumme überwiesen
+    tom möchte wissen, ob bereits beanstandet wurde
+    */
+
     const STATUS_MAPPING = [
         self::STATUS_DATA_MISSING => 'Daten fehlen',
         self::STATUS_PENDING => 'Antrag erfolgreich eingereicht und in Bearbeitung',
