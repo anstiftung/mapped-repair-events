@@ -9,9 +9,9 @@
     overflow: auto;
 }
 #anstiftung-logo {
-    float: left;
+    float: right;
     margin-top: 32px;
-    margin-left: 390px;
+    margin-right: 151px;
 }
 #anstiftung-logo img {
     width: 90px;
