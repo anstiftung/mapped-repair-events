@@ -74,7 +74,7 @@ use Cake\Utility\Inflector;
 
         <div id="wrapper">
 
-            <?php $headerHeight = "135px"; ?>
+            <?php $headerHeight = "120px"; ?>
 
             <?php if( $this->request->getSession()->read('isMobile') ) { ?>
                 <div id="header" class="mobile" canvas="" style="height:75px;">
