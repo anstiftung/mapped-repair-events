@@ -11,7 +11,7 @@
 #anstiftung-logo {
     float: right;
     margin-top: 32px;
-    margin-right: 151px;
+    margin-right: 154px;
 }
 #anstiftung-logo img {
     width: 90px;
@@ -19,7 +19,8 @@
 #header.mobile #anstiftung-logo {
     position: absolute;
     right: 98px;
-    top: -13px;
+    top: 17px;
+    margin: 0;
 }
 #nav.mobile {
     width: 50%;
