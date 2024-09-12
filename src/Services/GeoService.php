@@ -76,9 +76,6 @@ class GeoService {
                                 $provincesTable->aliasField('alternative_names LIKE') => '%' . $addressComponent->long_name . '%',
                             ],
                     ])->first();
-                    if (empty($province)) {
-                        Log::error('Province not found: ' . print_r($addressComponent, true));
-                    }
                     continue;
                 }
             }
