@@ -1982,7 +1982,7 @@ iframe .rc,
 }
 .socialicons {
     float: right;
-    margin: -29px 13px 0px 10px;
+    margin: -29px 20px 0px 10px;
     display: block;
 }
 .rsslink-wrapper i,
@@ -2465,6 +2465,14 @@ div.pagination-search {
 div.pagination-search div.numbers {
     text-align: left;
     margin: 0 0 10px 7px;
+}
+#aslog {
+    background-image: url(/img/anstiftungslogo-farbig-72dpi.jpg);
+    background-repeat: no-repeat;
+    margin: -2px 2% 0px 0px;
+    width: 122px;
+    height: 58px;
+    float: right
 }
 .sort {
   clear: both;
