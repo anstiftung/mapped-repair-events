@@ -10,12 +10,10 @@ use Cake\Core\Configure;
                     vielen Dank für deine Anmeldung bei <?php echo $this->MyHtml->getHostName(); ?>.
                 </p>
                 <p>
-                    Dein vorläufiges Passwort lautet:<br />
-                    <b><?php echo $password; ?></b>
-                </p>
-                <p>
                     Bitte melde dich über den folgenden Link auf der Plattform an, um deine E-Mail-Adresse zu bestätigen:
-                    <?php echo Configure::read('AppConfig.serverName'); ?>/users/activate/<?php echo $data['Users']['confirm']; ?>
+                    <a href="<?php echo Configure::read('AppConfig.serverName') . '/users/activate/' . $data['Users']['confirm'];?>">
+                        <?php echo Configure::read('AppConfig.serverName') . '/users/activate/' . $data['Users']['confirm']; ?>
+                    </a>.
                 </p>
                 <p>
                     Vielen Dank für Dein Engagement!
