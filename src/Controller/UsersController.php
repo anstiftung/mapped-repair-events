@@ -652,6 +652,8 @@ class UsersController extends AppController
                 ->setViewVars([
                     'data' => $user,
                 ]);
+                $email->setTo($user['Users']['email']);
+                $email->addToQueue();
 
                 $newSkills = $this->request->getSession()->read('newSkillsRegistration');
                 if (!empty($newSkills)) {
@@ -664,11 +666,7 @@ class UsersController extends AppController
                     $this->request->getSession()->delete('newSkillsRegistration');
                 }
 
-                $email->setTo($user['Users']['email']);
-
-                if ($email->addToQueue()) {
-                    $this->AppFlash->setFlashMessage('Deine Registrierung war erfolgreich. Bitte überprüfe dein E-Mail-Konto um deine E-Mail-Adresse zu bestätigen.');
-                }
+                $this->AppFlash->setFlashMessage('Deine Registrierung war erfolgreich. Bitte überprüfe dein E-Mail-Konto um deine E-Mail-Adresse zu bestätigen.');
 
                 $this->redirect(Configure::read('AppConfig.htmlHelper')->urlLogin());
             } else {
