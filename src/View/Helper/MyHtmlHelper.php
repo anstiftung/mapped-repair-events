@@ -54,7 +54,7 @@ class MyHtmlHelper extends HtmlHelper {
     function getCarbonFootprintAsString($carbonFootprintSum)
     {
 
-        $co2AeqPerFlightKilometer = 0.214;
+        $co2AeqPerFlightKilometer = 0.238;
         $carbonFootprintSumInFlightKilometers = $carbonFootprintSum / $co2AeqPerFlightKilometer;
 
         $unit = 'kg';
@@ -106,7 +106,7 @@ class MyHtmlHelper extends HtmlHelper {
 
     public function getMaterialFootprintAsString($materialFootprintSum)
     {
-        $annualConsumptionPerCapitaInKg = 26000;
+        $annualConsumptionPerCapitaInKg = 25800;
         $amountPersonsPerYear = round($materialFootprintSum / $annualConsumptionPerCapitaInKg, 1);
 
         $unit = 'kg';
