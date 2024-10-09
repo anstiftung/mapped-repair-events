@@ -10,10 +10,10 @@ use Cake\Core\Configure;
                     vielen Dank für deine Anmeldung bei <?php echo $this->MyHtml->getHostName(); ?>.
                 </p>
                 <p>
-                    Bitte melde dich über den folgenden Link auf der Plattform an, um deine E-Mail-Adresse zu bestätigen:
+                    Bitte klicke auf folgenden Link, um deine E-Mail-Adresse zu bestätigen:
                     <a href="<?php echo Configure::read('AppConfig.serverName') . '/users/activate/' . $data['Users']['confirm'];?>">
                         <?php echo Configure::read('AppConfig.serverName') . '/users/activate/' . $data['Users']['confirm']; ?>
-                    </a>.
+                    </a>
                 </p>
                 <p>
                     Vielen Dank für Dein Engagement!

@@ -7,7 +7,7 @@ use Cake\Core\Configure;
         <tr>
             <td>
                 <p>
-                    vielen Dank, deine Aktivierung war erfolgreich! für deine Anmeldung bei <?php echo $this->MyHtml->getHostName(); ?>.
+                    vielen Dank, deine Aktivierung bei <?php echo $this->MyHtml->getHostName(); ?> war erfolgreich!
                 </p>
                 <p>
                     Dein vorläufiges Passwort lautet:<br />
