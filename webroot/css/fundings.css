@@ -1,13 +1,12 @@
 body.fundings.index .workshop-wrapper {
-    padding: 5px 0;
-    clear: both;
+    display: flex;
+    padding: 5px;
+    gap: 5px;
+    align-items: center;
+}
+body.fundings.index .workshop-wrapper a.button {
+    flex: 0 0 180px;
 }
 body.fundings.index .workshop-wrapper span {
-    padding: 5px;
-    float: left;
-}
-body.fundings.index .workshop-wrapper a.button,
-body.fundings.index .workshop-wrapper span.left {
-    float: left;
-    margin-right: 10px;
+    flex: 1;
 }
