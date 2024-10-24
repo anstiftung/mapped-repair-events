@@ -43,7 +43,7 @@ echo $this->element('jqueryTabsWithoutAjax', [
                     echo '<span>';
                         echo '<a href="' . $this->Html->urlWorkshopDetail($workshop->url) . '">' . $workshop->name . '</a>';
                         if (!$workshop->funding_is_allowed) {
-                            echo ' <i>' . implode(' / ', $workshop->funding_errors) . '</i>';
+                            echo ' <i>' . implode('', $workshop->funding_errors) . '</i>';
                         }
                     echo '</span>';
             echo '</div>';
