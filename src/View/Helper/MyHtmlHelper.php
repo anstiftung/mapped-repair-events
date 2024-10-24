@@ -241,7 +241,7 @@ class MyHtmlHelper extends HtmlHelper {
         }
         $result[] = ['url' => $this->urlMyEvents(), 'name' => 'MEINE TERMINE'];
         $result[] = ['url' => '/initiativen/mitmachen', 'name' => 'MITMACHEN'];
-        if (Configure::read('AppConfig.fundingEnabled') && $isOrga) {
+        if (Configure::read('AppConfig.fundingsEnabled') && $isOrga) {
             $result[] = ['url' => $this->urlFunding(), 'name' => 'FÖRDERANTRAG'];
         }
         return $result;

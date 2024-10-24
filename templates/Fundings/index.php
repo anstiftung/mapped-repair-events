@@ -1,7 +1,17 @@
 <?php
+
+use Cake\Core\Configure;
 echo $this->element('jqueryTabsWithoutAjax', [
     'links' => $this->Html->getUserBackendNaviLinks($loggedUser->uid, true, $loggedUser->isOrga())
 ]);
+$fundingsCriteria = [
+    'Initiative muss aus Deutschland sein',
+    'UND',
+    'Initiative muss vor dem ' . date('d.m.Y', strtotime(Configure::read('AppConfig.fundingsStartDate'))) . ' registriert worden sein UND mindestens einen vergangenen Termin haben',
+    'ODER',
+    'Einen bestätigten Aktivitätsnachweis UND mindestens 4 zukünftige Termine haben',
+];
+$fundingsCriteria = implode("\\n", $fundingsCriteria);
 ?>
 
 <div class="profile ui-tabs custom-ui-tabs ui-widget-content">
@@ -22,19 +32,18 @@ echo $this->element('jqueryTabsWithoutAjax', [
                                 'class' => 'button',
                             ]
                         );
-                        echo '<span>' . $workshop->name . '</span>';
                     } else {
                         echo $this->Html->link(
                             'Förderantrag nicht möglich',
-                            'javascript:void(0);',
+                            'javascript:alert("' . $fundingsCriteria . '");',
                             [
                                 'title' => 'Förderantrag nicht möglich',
                                 'disabled' => 'disabled',
                                 'class' => 'button disabled'
-                            ]
+                                ]
                         );
-                        echo '<span>' . $workshop->name . ' ' . '(Förderanträge sind nur für Initiativen aus Deutschland möglich.)</span>';
                     }
+                    echo '<span>' . $workshop->name . '</span>';
                 echo '</div>';
             }
         ?>

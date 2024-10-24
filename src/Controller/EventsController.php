@@ -166,11 +166,10 @@ class EventsController extends AppController
         $hasEditEventPermissions = $this->isAdmin() || $this->isOrga();
 
         $this->Workshop = $this->getTableLocator()->get('Workshops');
-        // complicated is-user-orga-check no needed again because this page is only accessible for orga users
         if ($this->isAdmin()) {
-            $workshops = $this->Workshop->getWorkshopsForAdmin(APP_DELETED);
+            $workshops = $this->Workshop->getWorkshopsWithUsers(APP_DELETED);
         } else {
-            $workshops = $this->Workshop->getWorkshopsForAssociatedUser($this->isLoggedIn() ? $this->loggedUser->uid : 0, APP_DELETED);
+            $workshops = $this->Workshop->getWorkshopsForAssociatedUser($this->loggedUser->uid, APP_DELETED);
         }
 
         $workshops->contain([
@@ -334,7 +333,7 @@ class EventsController extends AppController
         $this->Workshop = $this->getTableLocator()->get('Workshops');
         // complicated is-user-orga-check no needed again because this page is only accessible for orga users
         if ($this->isAdmin()) {
-            $workshops = $this->Workshop->getWorkshopsForAdmin(APP_DELETED);
+            $workshops = $this->Workshop->getWorkshopsWithUsers(APP_DELETED);
         } else {
             $workshops = $this->Workshop->getWorkshopsForAssociatedUser($this->isLoggedIn() ? $this->loggedUser->uid : 0, APP_DELETED);
         }

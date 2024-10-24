@@ -36,6 +36,10 @@ class WorkshopsTable extends AppTable
         $this->belongsTo('Provinces', [
             'foreignKey' => 'province_id',
         ]);
+        $this->hasMany('AllEvents', [
+            'className' => 'Events',
+            'foreignKey' => 'workshop_uid',
+        ]);
         $this->hasMany('Events', [
             'foreignKey' => 'workshop_uid',
             'conditions' => [
@@ -138,9 +142,9 @@ class WorkshopsTable extends AppTable
      * @param int $userUid
      * @return array
      */
-    public function getWorkshopsForAssociatedUser($userUid, $workshopStatus)
+    public function getWorkshopsForAssociatedUser($userUid, $workshopStatus, $additionalContains = [])
     {
-        $workshops = $this->getWorkshopsWithUsers($workshopStatus);
+        $workshops = $this->getWorkshopsWithUsers($workshopStatus, $additionalContains);
         $workshops->matching('Users', function ($q) use ($userUid) {
             return $q->where([
                 'UsersWorkshops.user_uid' => $userUid,
@@ -156,11 +160,6 @@ class WorkshopsTable extends AppTable
         return $workshops;
     }
 
-    public function getWorkshopsForAdmin($workshopStatus)
-    {
-        return $this->getWorkshopsWithUsers($workshopStatus);
-    }
-
     public function transformForDropdown($workshops)
     {
         $result = [];
@@ -170,7 +169,7 @@ class WorkshopsTable extends AppTable
         return $result;
     }
 
-    public function getWorkshopsWithUsers($workshopStatus)
+    public function getWorkshopsWithUsers($workshopStatus, $additionalContains = [])
     {
         $workshops = $this->find('all',
         conditions: [
@@ -178,7 +177,8 @@ class WorkshopsTable extends AppTable
         ],
         contain: [
             'Users',
-            'Users.Groups'
+            'Users.Groups',
+            ...$additionalContains,
         ],
         order: [
             'Workshops.name' => 'ASC'

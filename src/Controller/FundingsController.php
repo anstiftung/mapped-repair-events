@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use Cake\Core\Configure;
+use Cake\ORM\Query\SelectQuery;
 
 class FundingsController extends AppController
 {
@@ -14,11 +15,10 @@ class FundingsController extends AppController
         ]);
 
         $workshopsTable = $this->getTableLocator()->get('Workshops');
-        // complicated is-user-orga-check no needed again because this page is only accessible for orga users
         if ($this->isAdmin()) {
-            $workshops = $workshopsTable->getWorkshopsForAdmin(APP_DELETED);
+            $workshops = $workshopsTable->getWorkshopsWithUsers(APP_DELETED, ['AllEvents']);
         } else {
-            $workshops = $workshopsTable->getWorkshopsForAssociatedUser($this->isLoggedIn() ? $this->loggedUser->uid : 0, APP_DELETED);
+            $workshops = $workshopsTable->getWorkshopsForAssociatedUser($this->loggedUser->uid, APP_DELETED, ['AllEvents']);
         }
         $this->set('workshops', $workshops);
 
@@ -28,7 +28,14 @@ class FundingsController extends AppController
 
         $workshopUid = (int) $this->getRequest()->getParam('workshopUid');
         $workshopsTable = $this->getTableLocator()->get('Workshops');
-        $workshop = $workshopsTable->get($workshopUid);
+
+        $workshop = $workshopsTable->find()->where([
+            $workshopsTable->aliasField('uid') => $workshopUid,
+            $workshopsTable->aliasField('status >=') => APP_DELETED
+        ])
+        ->contain(['AllEvents'])
+        ->first();
+
         $this->set('workshop', $workshop);
 
         if (!$workshop->is_funding_allowed) {

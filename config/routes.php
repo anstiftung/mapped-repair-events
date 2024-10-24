@@ -122,7 +122,7 @@ return function (RouteBuilder $routes) {
             ])->setMethods(['GET']);
         }
 
-        if (Configure::read('AppConfig.fundingEnabled')) {
+        if (Configure::read('AppConfig.fundingsEnabled')) {
             $routes->connect('/foerderantrag', ['controller'=>'fundings', 'action'=>'index']);
             $routes->connect('/foerderantrag/detail/{workshopUid}', [
                 'controller'=>'fundings',

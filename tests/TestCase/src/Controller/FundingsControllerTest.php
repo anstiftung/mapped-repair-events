@@ -16,6 +16,11 @@ class FundingsControllerTest extends AppTestCase
     use LogFileAssertionsTrait;
     use LoginTrait;
 
+    public function setUp(): void {
+        parent::setUp();
+        Configure::write('AppConfig.fundingsEnabled', true);
+    }
+
     public function testRoutesLoggedOut() {
         $this->get(Configure::read('AppConfig.htmlHelper')->urlFunding());
         $this->assertResponseCode(302);
@@ -38,11 +43,17 @@ class FundingsControllerTest extends AppTestCase
     }
 
     public function testDetailNotOk() {
-        $this->loginAsOrga();
+        
         $workshopsTable = $this->getTableLocator()->get('Workshops');
         $workshop = $workshopsTable->get(2);
         $workshop->country_code = 'AT';
         $workshopsTable->save($workshop);
+        $eventsTable = $this->getTableLocator()->get('Events');
+        $event = $eventsTable->get(6);
+        $event->datumstart = '2020-01-01';
+        $eventsTable->save($event);
+
+        $this->loginAsOrga();
         $this->get(Configure::read('AppConfig.htmlHelper')->urlFundingDetail(2));
         $this->assertResponseCode(302);
         $this->assertRedirectContains(Configure::read('AppConfig.htmlHelper')->urlFunding());

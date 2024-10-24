@@ -1222,7 +1222,7 @@ class WorkshopsController extends AppController
     {
         $workshopsTable = $this->getTableLocator()->get('Workshops');
         if ($this->isAdmin()) {
-            $workshops = $workshopsTable->getWorkshopsForAdmin(APP_DELETED);
+            $workshops = $workshopsTable->getWorkshopsWithUsers(APP_DELETED);
         } else {
             $workshops = $workshopsTable->getWorkshopsForAssociatedUser($this->loggedUser->uid, APP_DELETED);
         }

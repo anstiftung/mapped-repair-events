@@ -18,6 +18,7 @@ class WorkshopsFixture extends AppFixture
             'country_code' => 'DE',
             'street' => 'Torstraße 123',
             'adresszusatz' => 'Stiege 2 &amp; Stiege 3',
+            'created' => '2021-01-01 00:00:00',
             'lat' => 52.532,
             'lng' => 13.384,
             'status' => APP_ON,
