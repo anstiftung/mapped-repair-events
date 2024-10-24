@@ -8,41 +8,93 @@ class Workshop extends Entity
 {
 
     protected array $_hidden = [
-        'is_funding_allowed',
+        'funding_is_allowed',
+        'funding_is_country_code_ok',
+        'funding_was_registered_before_fundings_start_date',
+        'funding_is_past_events_count_ok',
+        'funding_is_future_events_count_ok',
+        'funding_is_activity_proof_ok',
+        'funding_errors',
     ];
 
-    protected array $_virtual = ['is_funding_allowed'];
+    protected array $_virtual = [
+        'funding_is_allowed',
+        'funding_is_country_code_ok',
+        'funding_was_registered_before_fundings_start_date',
+        'funding_is_past_events_count_ok',
+        'funding_is_future_events_count_ok',
+        'funding_is_activity_proof_ok',
+        'funding_errors',
+    ];
 
-    public function _getIsFundingAllowed(): bool {
+    protected function _getFundingErrors(): array {
+        $formattedFundingStartDate = date('d.m.Y', strtotime(Configure::read('AppConfig.fundingsStartDate')));
+        $errors = [];
+        if (!$this->funding_is_country_code_ok) {
+            $errors[] = 'Die Förderung ist nur für Deutschland möglich.';
+        }
+        if (!$this->funding_was_registered_before_fundings_start_date) {
+            $errors[] = 'Die Initiative wurde nach dem Start der Förderungen (' . $formattedFundingStartDate . ') registriert.';
+        }
+        if (!$this->funding_is_past_events_count_ok) {
+            $errors[] = 'Keine Veranstaltungen vor dem  ' . $formattedFundingStartDate . ' vorhanden.';
+        }
+        if (!$this->funding_is_future_events_count_ok) {
+            $errors[] = 'Weniger als 4 Veranstaltungen nach dem ' . $formattedFundingStartDate . ' vorhanden.';
+        }
+        if (!$this->funding_is_activity_proof_ok) {
+            $errors[] = 'Kein geprüfter Aktivitätsnachweis vorhanden.';
+        }
+        return $errors;
+    }
 
-        $criteriumA = $this->country_code == 'DE';
-        
+    public function _getFundingIsCountryCodeOk(): bool {
+        return $this->country_code == 'DE';
+    }
+
+    public function _getFundingWasRegisteredBeforeFundingsStartDate(): bool {
+        return $this->created->i18nFormat(Configure::read('DateFormat.Database')) 
+            <= Configure::read('AppConfig.fundingsStartDate');
+    }
+
+    public function _getFundingIsPastEventsCountOk(): bool {
         $pastEventsCount = 0;
         foreach ($this->all_events as $event) {
-            if ($event->datumstart->i18nFormat(Configure::read('DateFormat.Database')) <= Configure::read('AppConfig.fundingsStartDate')) {
+            if ($event->datumstart->i18nFormat(Configure::read('DateFormat.Database')) 
+                <= Configure::read('AppConfig.fundingsStartDate')) {
                 $pastEventsCount++;
             }
         }
-        $workshopWasRegisteredBeforeFundingsStartDate = $this->created->i18nFormat(Configure::read('DateFormat.Database')) 
-            <= Configure::read('AppConfig.fundingsStartDate');
-        $criteriumB = $workshopWasRegisteredBeforeFundingsStartDate && $pastEventsCount > 0;
+        return $pastEventsCount > 0;
+    }
 
-        if ($criteriumA && $criteriumB) {
-            return true;
-        }
-
+    public function _getFundingIsFutureEventsCountOk(): bool {
         $futureEventsCount = 0;
         foreach ($this->all_events as $event) {
-            if ($event->datumstart->i18nFormat(Configure::read('DateFormat.Database')) >= Configure::read('AppConfig.fundingsStartDate')) {
+            if ($event->datumstart->i18nFormat(Configure::read('DateFormat.Database')) 
+                >= Configure::read('AppConfig.fundingsStartDate')) {
                 $futureEventsCount++;
             }
         }
+        return $futureEventsCount > 3;
+    }
 
-        // TODO implement activity proof confirmed
-        $activityProofConfirmed = true;
-        $criteriumC = $activityProofConfirmed && $futureEventsCount > 3;
+    public function _getFundingIsActivityProofOk(): bool {
+        // TODO implement
+        return true;
+    }
 
-        return $criteriumA && $criteriumC; 
+    public function _getFundingIsAllowed(): bool {
+        
+        if (!$this->funding_is_country_code_ok) {
+            return false;
+        }
+
+        if ($this->funding_was_registered_before_fundings_start_date && $this->funding_is_past_events_count_ok) {
+            return true;
+        }
+
+        return $this->funding_is_activity_proof_ok && $this->funding_is_future_events_count_ok; 
     }
 
 }

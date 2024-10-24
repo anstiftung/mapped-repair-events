@@ -24,7 +24,7 @@ class FundingsController extends AppController
         $workshopsWithFundingNotAllowed = 0;
         if ($this->isAdmin()) {
             foreach ($workshops as $workshop) {
-                if ($workshop->is_funding_allowed) {
+                if ($workshop->funding_is_allowed) {
                     $workshopsWithFundingAllowed++;
                 } else {
                     $workshopsWithFundingNotAllowed++;
@@ -54,7 +54,7 @@ class FundingsController extends AppController
 
         $this->set('workshop', $workshop);
 
-        if (!$workshop->is_funding_allowed) {
+        if (!$workshop->funding_is_allowed) {
             $this->AppFlash->setFlashError('Förderantrag für diese Initiative nicht möglich.');
             return $this->redirect(Configure::read('AppConfig.htmlHelper')->urlFunding());
         }

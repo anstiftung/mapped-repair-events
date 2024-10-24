@@ -4,14 +4,6 @@ use Cake\Core\Configure;
 echo $this->element('jqueryTabsWithoutAjax', [
     'links' => $this->Html->getUserBackendNaviLinks($loggedUser->uid, true, $loggedUser->isOrga())
 ]);
-$fundingsCriteria = [
-    'Initiative muss aus Deutschland sein',
-    'UND',
-    'Initiative muss vor dem ' . date('d.m.Y', strtotime(Configure::read('AppConfig.fundingsStartDate'))) . ' registriert worden sein UND mindestens einen vergangenen Termin haben',
-    'ODER',
-    'Einen bestätigten Aktivitätsnachweis UND mindestens 4 zukünftige Termine haben',
-];
-$fundingsCriteria = implode("\\n", $fundingsCriteria);
 ?>
 
 <div class="profile ui-tabs custom-ui-tabs ui-widget-content">
@@ -28,7 +20,7 @@ $fundingsCriteria = implode("\\n", $fundingsCriteria);
         <?php
             foreach($workshops as $workshop) {
                 echo '<div class="workshop-wrapper">';
-                    if ($workshop->is_funding_allowed) {
+                    if ($workshop->funding_is_allowed) {
                         echo $this->Html->link(
                             'Förderantrag bearbeiten',
                             $this->Html->urlFundingDetail($workshop->uid),
@@ -40,7 +32,7 @@ $fundingsCriteria = implode("\\n", $fundingsCriteria);
                     } else {
                         echo $this->Html->link(
                             'Förderantrag nicht möglich',
-                            'javascript:alert("' . $fundingsCriteria . '");',
+                            'javascript:void(0);',
                             [
                                 'title' => 'Förderantrag nicht möglich',
                                 'disabled' => 'disabled',
@@ -48,8 +40,13 @@ $fundingsCriteria = implode("\\n", $fundingsCriteria);
                                 ]
                         );
                     }
-                    echo '<span>' . $workshop->name . '</span>';
-                echo '</div>';
+                    echo '<span>';
+                        echo '<a href="' . $this->Html->urlWorkshopDetail($workshop->url) . '">' . $workshop->name . '</a>';
+                        if (!$workshop->funding_is_allowed) {
+                            echo ' <i>' . implode(' / ', $workshop->funding_errors) . '</i>';
+                        }
+                    echo '</span>';
+            echo '</div>';
             }
         ?>
 
