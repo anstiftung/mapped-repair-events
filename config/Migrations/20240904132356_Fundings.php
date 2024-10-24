@@ -14,7 +14,7 @@ class Fundings extends AbstractMigration
             `status` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
             `created` datetime DEFAULT CURRENT_TIMESTAMP,
             `modified` datetime DEFAULT CURRENT_TIMESTAMP
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;";
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
         $this->execute($query);
 
     }
