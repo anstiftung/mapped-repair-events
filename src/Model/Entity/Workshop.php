@@ -7,7 +7,7 @@ use Cake\Core\Configure;
 class Workshop extends Entity
 {
 
-    protected array $_hidden = [
+    const FUNDING_FIELDS = [
         'funding_is_allowed',
         'funding_is_country_code_ok',
         'funding_was_registered_before_fundings_start_date',
@@ -17,15 +17,9 @@ class Workshop extends Entity
         'funding_errors',
     ];
 
-    protected array $_virtual = [
-        'funding_is_allowed',
-        'funding_is_country_code_ok',
-        'funding_was_registered_before_fundings_start_date',
-        'funding_is_past_events_count_ok',
-        'funding_is_future_events_count_ok',
-        'funding_is_activity_proof_ok',
-        'funding_errors',
-    ];
+    protected array $_hidden = self::FUNDING_FIELDS;
+    
+    protected array $_virtual = self::FUNDING_FIELDS;
 
     protected function _getFundingErrors(): array {
         $formattedFundingStartDate = date('d.m.Y', strtotime(Configure::read('AppConfig.fundingsStartDate')));
