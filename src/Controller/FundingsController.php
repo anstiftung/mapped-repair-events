@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use Cake\Core\Configure;
-use Cake\ORM\Query\SelectQuery;
 
 class FundingsController extends AppController
 {
@@ -20,7 +19,24 @@ class FundingsController extends AppController
         } else {
             $workshops = $workshopsTable->getWorkshopsForAssociatedUser($this->loggedUser->uid, APP_DELETED, ['AllEvents']);
         }
-        $this->set('workshops', $workshops);
+
+        $workshopsWithFundingAllowed = 0;
+        $workshopsWithFundingNotAllowed = 0;
+        if ($this->isAdmin()) {
+            foreach ($workshops as $workshop) {
+                if ($workshop->is_funding_allowed) {
+                    $workshopsWithFundingAllowed++;
+                } else {
+                    $workshopsWithFundingNotAllowed++;
+                }
+            }
+        }
+
+        $this->set([
+            'workshops' => $workshops,
+            'workshopsWithFundingAllowed' => $workshopsWithFundingAllowed,
+            'workshopsWithFundingNotAllowed' => $workshopsWithFundingNotAllowed,
+        ]);
 
     }
 

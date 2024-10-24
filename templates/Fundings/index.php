@@ -16,10 +16,15 @@ $fundingsCriteria = implode("\\n", $fundingsCriteria);
 
 <div class="profile ui-tabs custom-ui-tabs ui-widget-content">
     <div class="ui-tabs-panel">
-        <?php echo $this->element('heading', ['first' => $metaTags['title']]); ?>
-    </div>
 
-    <div>
+        <?php echo $this->element('heading', ['first' => $metaTags['title']]); ?>
+
+        <?php if ($loggedUser->isAdmin()) { ?>
+            <p>Möglich: <?php echo $workshopsWithFundingAllowed; ?>x</p>
+            <p>Nicht möglich: <?php echo $workshopsWithFundingNotAllowed; ?>x</p>
+            <br />
+        <?php } ?>
+
         <?php
             foreach($workshops as $workshop) {
                 echo '<div class="workshop-wrapper">';
@@ -47,6 +52,7 @@ $fundingsCriteria = implode("\\n", $fundingsCriteria);
                 echo '</div>';
             }
         ?>
+
     </div>
 
 </div>
