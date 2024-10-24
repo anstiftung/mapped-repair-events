@@ -31,7 +31,7 @@ class Workshop extends Entity
         $formattedFundingStartDate = date('d.m.Y', strtotime(Configure::read('AppConfig.fundingsStartDate')));
         $errors = [];
         if (!$this->funding_is_country_code_ok) {
-            $errors[] = 'Die Förderung ist nur für Deutschland möglich.';
+            $errors[] = 'Die Förderung ist nur für Initiativen aus Deutschland möglich.';
         }
         if (!$this->funding_was_registered_before_fundings_start_date) {
             $errors[] = 'Die Initiative wurde nach dem Start der Förderungen (' . $formattedFundingStartDate . ') registriert.';
@@ -58,6 +58,11 @@ class Workshop extends Entity
     }
 
     public function _getFundingIsPastEventsCountOk(): bool {
+
+        if (!isset($this->all_events)) {
+            return false;
+        }
+
         $pastEventsCount = 0;
         foreach ($this->all_events as $event) {
             if ($event->datumstart->i18nFormat(Configure::read('DateFormat.Database')) 
@@ -69,7 +74,13 @@ class Workshop extends Entity
     }
 
     public function _getFundingIsFutureEventsCountOk(): bool {
+
+        if (!isset($this->all_events)) {
+            return false;
+        }
+
         $futureEventsCount = 0;
+
         foreach ($this->all_events as $event) {
             if ($event->datumstart->i18nFormat(Configure::read('DateFormat.Database')) 
                 >= Configure::read('AppConfig.fundingsStartDate')) {
