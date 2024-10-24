@@ -15,9 +15,9 @@ class FundingsController extends AppController
 
         $workshopsTable = $this->getTableLocator()->get('Workshops');
         if ($this->isAdmin()) {
-            $workshops = $workshopsTable->getWorkshopsWithUsers(APP_DELETED, ['AllEvents']);
+            $workshops = $workshopsTable->getWorkshopsWithUsers(APP_OFF, ['AllEvents']);
         } else {
-            $workshops = $workshopsTable->getWorkshopsForAssociatedUser($this->loggedUser->uid, APP_DELETED, ['AllEvents']);
+            $workshops = $workshopsTable->getWorkshopsForAssociatedUser($this->loggedUser->uid, APP_OFF, ['AllEvents']);
         }
 
         $workshopsWithFundingAllowed = 0;
@@ -47,7 +47,7 @@ class FundingsController extends AppController
 
         $workshop = $workshopsTable->find()->where([
             $workshopsTable->aliasField('uid') => $workshopUid,
-            $workshopsTable->aliasField('status >=') => APP_DELETED
+            $workshopsTable->aliasField('status') => APP_ON,
         ])
         ->contain(['AllEvents'])
         ->first();
