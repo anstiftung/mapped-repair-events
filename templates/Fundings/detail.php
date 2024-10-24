@@ -8,19 +8,20 @@ echo $this->element('jqueryTabsWithoutAjax', [
 <div class="profile ui-tabs custom-ui-tabs ui-widget-content">
     <div class="ui-tabs-panel">
         <?php echo $this->element('heading', ['first' => $metaTags['title']]); ?>
+
+        <?php echo $workshop->name; ?>
+
+        <?php
+            echo '<br /><br />';
+            echo $this->Html->link(
+                'Zurück zur Übersicht',
+                $this->Html->urlFunding(),
+                [
+                    'title' => 'Zurück zur Übersicht',
+                    'class' => 'button',
+                ]
+            );
+        ?>
+
     </div>
-
-    <?php echo $workshop->name; ?>
-
-    <?php
-        echo '<br /><br />';
-        echo $this->Html->link(
-            'Zurück zur Übersicht',
-            $this->Html->urlFunding(),
-            [
-                'title' => 'Zurück zur Übersicht',
-                'class' => 'button',
-            ]
-        );
-    ?>
 </div>

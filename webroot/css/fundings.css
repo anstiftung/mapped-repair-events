@@ -1,7 +1,7 @@
 body.fundings.index .workshop-wrapper {
     display: flex;
-    padding: 5px;
-    gap: 5px;
+    padding: 5px 0;
+    gap: 10px;
     align-items: center;
 }
 body.fundings.index .workshop-wrapper a.button {
