@@ -37,7 +37,7 @@ class FundingsController extends AppController
         }
 
         $this->set('metaTags', [
-            'title' => 'Förderantrag für "' . $workshop->name . '"',
+            'title' => 'Förderantrag für "' . h($workshop->name) . '"',
         ]);
 
     }
