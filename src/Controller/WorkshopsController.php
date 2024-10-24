@@ -541,6 +541,7 @@ class WorkshopsController extends AppController
             'Workshops.zip',
             'Workshops.city',
             'Workshops.owner',
+            'Workshops.created',
             'Countries.name_de'
         ];
 
