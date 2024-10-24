@@ -89,8 +89,6 @@ class UsersControllerTest extends AppTestCase
                 'Users' => $this->validUserData,
             ]
         );
-        $this->runAndAssertQueue();
-
         $this->assertRedirectContains('/');
 
         $expectedNewUserUid = 10;
@@ -100,7 +98,7 @@ class UsersControllerTest extends AppTestCase
         $this->assertEquals($user->email, $this->validUserData['email']);
         $this->assertEquals($user->firstname, 'John');
         $this->assertEquals(count($user->groups), 1);
-        $this->assertNotEquals($user->password, null);
+        $this->assertEquals($user->password, null);
         $this->assertEquals($user->groups[0]->id, GROUPS_ORGA);
         $this->assertNotEquals($user->groups[0]->id, GROUPS_REPAIRHELPER);
         $this->assertEquals($user->categories[0]->id, 87);
@@ -111,14 +109,16 @@ class UsersControllerTest extends AppTestCase
         $this->assertCount(2, $skills);
         $this->assertEquals($expectedNewUserUid, $skills[1]->owner);
 
-        $this->assertMailCount(1);
-        $this->assertMailSentTo($this->validUserData['email']);
-        $this->assertMailContains('Passwort');
-
         $this->get('/users/activate/' . $user->confirm);
+
         $user = $this->getRegisteredUser();
+        $this->runAndAssertQueue();
+
+        $this->assertMailCount(2);
+        $this->assertMailContainsHtmlAt(1, 'Passwort');
 
         $this->assertEquals($user->confirm, User::STATUS_OK);
+        $this->assertNotEquals($user->password, null);
         $this->assertRedirectContains(Configure::read('AppConfig.htmlHelper')->urlUserHome());
 
     }

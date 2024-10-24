@@ -12,6 +12,12 @@ use Cake\Core\Configure;
 
 <div id="claim"><?php echo Configure::read('AppConfig.claim'); ?></div>
 
+<?php if (!$this->request->getSession()->read('isMobile') && empty($loggedUser)) { ?>
+    <a id="anstiftung-logo" href="https://anstiftung.de/praxis/reparieren" title="anstiftung - Offene Werkstätten, Interkulturelle und Urbane Gemeinschaftsgärten" target="_blank">
+    <img alt="Logo anstiftung" src="/img/anstiftungslogo-farbig-72dpi.jpg" />
+    </a>
+<?php } ?>
+
 <?php
     echo $this->element('core/loginBox');
 ?>

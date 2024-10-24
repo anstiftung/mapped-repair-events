@@ -74,10 +74,12 @@ use Cake\Utility\Inflector;
 
         <div id="wrapper">
 
+            <?php $headerHeight = "120px"; ?>
+
             <?php if( $this->request->getSession()->read('isMobile') ) { ?>
                 <div id="header" class="mobile" canvas="" style="height:75px;">
             <?php } else {?>
-                <div id="header" class="no-mobile" style="height:120px;">
+                <div id="header" class="no-mobile" style="height:<?php echo $headerHeight; ?>;">
             <?php } ?>
 
             <?php
@@ -93,7 +95,7 @@ use Cake\Utility\Inflector;
             <?php if( $this->request->getSession()->read('isMobile') ) { ?>
                 <div canvas="container" id="content" style="margin-top:75px;">
             <?php } else {?>
-                <div id="content" style="margin-top:120px;">
+                <div id="content" style="margin-top:<?php echo $headerHeight;?>;">
             <?php } ?>
 
             <?php

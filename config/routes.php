@@ -31,6 +31,7 @@ return function (RouteBuilder $routes) {
             $routes->redirect('/splitter', '/seite/splitter');
             $routes->redirect('/online-reparaturcafe', '/seite/online-reparaturcafe');
             $routes->redirect('/versicherung', '/seite/sicherheit-haftung#Haftpflichtversicherung');
+            $routes->redirect('/klimaherbst', '/seite/klimaherbst');
             $routes->redirect('/repair-cafe-ulm', '/reparatur-cafe-ulm');
         }
         $routes->redirect('/initiativen', '/orte');

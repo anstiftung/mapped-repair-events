@@ -8,6 +8,14 @@
     border-bottom: 2px dotted #000;
     overflow: auto;
 }
+#anstiftung-logo {
+    float: right;
+    margin-top: 32px;
+    margin-right: 154px;
+}
+#anstiftung-logo img {
+    width: 90px;
+}
 #nav.mobile {
     width: 50%;
     background: rgba(119,177,197, 0.5);

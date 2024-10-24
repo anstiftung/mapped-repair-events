@@ -24,7 +24,6 @@
       echo '</div>';
 
  } else {
-
     ?>
 
     <button class="rounded" id="anmelden-link"><?php echo __('Loginbox:Login');?></button>

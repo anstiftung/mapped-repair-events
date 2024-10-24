@@ -528,13 +528,29 @@ class UsersController extends AppController
         $user->revertPrivatizeData();
         $user2save = [
             'confirm' => User::STATUS_OK,
-            'status' => APP_ON
+            'status' => APP_ON,
         ];
         $entity = $this->User->patchEntity($user, $user2save, ['validate' => false]);
         $this->User->save($entity);
 
         $this->Authentication->setIdentity($user);
-        $this->AppFlash->setFlashMessage('Dein Account ist nun aktiviert, du bist eingeloggt und kannst deine Profildaten ergänzen bzw. dein Passwort ändern.');
+        $this->AppFlash->setFlashMessage('Dein Account ist nun aktiviert, du bist eingeloggt und kannst deine Profildaten ergänzen bzw. dein Passwort ändern.<br />Dein akuelles Passwort wurde dir soeben zugesendet.');
+        
+        $newPassword = $this->User->setNewPassword($user->uid);
+        
+        $email = new AppMailer();
+        $email->viewBuilder()->setTemplate('activation_successful');
+        $email->setSubject('Deine Aktivierung bei '. Configure::read('AppConfig.htmlHelper')->getHostName() . ' war erfolgreich')
+        ->setViewVars([
+            'password' => $newPassword,
+            'user' => $user,
+        ]);
+        if (Configure::read('debug')) {
+            $email->setTo(Configure::read('AppConfig.debugMailAddress'));
+        } else {
+            $email->setTo($user->email);
+        }
+        $email->addToQueue();
 
         $this->redirect(Configure::read('AppConfig.htmlHelper')->urlUserHome());
 
@@ -629,15 +645,15 @@ class UsersController extends AppController
                 $userEntity = $this->User->newEntity($user, ['validate' => 'Registration']);
                 $userEntity = $this->stripTagsFromFields($userEntity, 'User');
                 $result = $this->User->save($userEntity);
-                $password = $this->User->setNewPassword($result->uid);
 
                 $email = new AppMailer();
                 $email->viewBuilder()->setTemplate('registration_successful');
                 $email->setSubject('Deine Registrierung bei '. Configure::read('AppConfig.htmlHelper')->getHostName())
                 ->setViewVars([
-                    'password' => $password,
-                    'data' => $user
+                    'data' => $user,
                 ]);
+                $email->setTo($user['Users']['email']);
+                $email->addToQueue();
 
                 $newSkills = $this->request->getSession()->read('newSkillsRegistration');
                 if (!empty($newSkills)) {
@@ -650,11 +666,7 @@ class UsersController extends AppController
                     $this->request->getSession()->delete('newSkillsRegistration');
                 }
 
-                $email->setTo($user['Users']['email']);
-
-                if ($email->addToQueue()) {
-                    $this->AppFlash->setFlashMessage('Deine Registrierung war erfolgreich. Bitte überprüfe dein E-Mail-Konto um deine E-Mail-Adresse zu bestätigen.');
-                }
+                $this->AppFlash->setFlashMessage('Deine Registrierung war erfolgreich. Bitte überprüfe dein E-Mail-Konto um deine E-Mail-Adresse zu bestätigen.');
 
                 $this->redirect(Configure::read('AppConfig.htmlHelper')->urlLogin());
             } else {
