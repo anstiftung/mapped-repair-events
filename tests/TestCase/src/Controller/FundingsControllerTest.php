@@ -2,7 +2,6 @@
 
 namespace App\Test\TestCase\Controller;
 
-use App\Test\Fixture\WorkshopsFixture;
 use App\Test\TestCase\AppTestCase;
 use App\Test\TestCase\Traits\LogFileAssertionsTrait;
 use App\Test\TestCase\Traits\LoginTrait;
@@ -18,6 +17,7 @@ class FundingsControllerTest extends AppTestCase
 
     public function setUp(): void {
         parent::setUp();
+        $this->resetLogs();
         Configure::write('AppConfig.fundingsEnabled', true);
     }
 
