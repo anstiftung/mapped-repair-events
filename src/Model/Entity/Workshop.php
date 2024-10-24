@@ -13,7 +13,6 @@ class Workshop extends Entity
     protected array $_virtual = ['is_funding_allowed'];
 
     public function _getIsFundingAllowed(): bool {
-        /* @phpstan-ignore-next-line */
         return $this->country_code == 'DE';
     }
 

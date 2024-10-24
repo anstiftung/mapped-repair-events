@@ -19,5 +19,7 @@ parameters:
           path: src
         - message: '#Access to an undefined property#'
           path: src/View/Helper
+        - message: '#Access to an undefined property#'
+          path: src/Model/Entity
         - message: '#Access to an undefined property.*\$(AppFlash|Authentication)#'
           path: .
