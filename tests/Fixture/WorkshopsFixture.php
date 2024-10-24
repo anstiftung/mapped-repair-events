@@ -15,6 +15,7 @@ class WorkshopsFixture extends AppFixture
             'owner' => 1,
             'city' => 'Berlin',
             'zip' => '10115',
+            'country_code' => 'DE',
             'street' => 'Torstraße 123',
             'adresszusatz' => 'Stiege 2 &amp; Stiege 3',
             'lat' => 52.532,

@@ -24,7 +24,9 @@
                         "name": ""
                     }
                 ],
-                "country": null,
+                "country": {
+                    "name_de": "Deutschland"
+                },
                 "Events": [
                     {
                         "workshop_uid": 2,

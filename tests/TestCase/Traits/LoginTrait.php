@@ -10,8 +10,8 @@ trait LoginTrait
     protected function loginAsOrga()
     {
         $userEmail = 'johndoe@mailinator.com';
-        $this->User = FactoryLocator::get('Table')->get('Users');
-        $user = $this->User->find('all',
+        $usersTable = FactoryLocator::get('Table')->get('Users');
+        $user = $usersTable->find('all',
             conditions: [
                 'Users.email' => $userEmail,
             ],
@@ -26,8 +26,8 @@ trait LoginTrait
     protected function loginAsAdmin()
     {
         $userEmail = 'admin@mailinator.com';
-        $this->User = FactoryLocator::get('Table')->get('Users');
-        $user = $this->User->find('all',
+        $usersTable = FactoryLocator::get('Table')->get('Users');
+        $user = $usersTable->find('all',
             conditions: [
                 'Users.email' => $userEmail,
             ],
@@ -42,8 +42,8 @@ trait LoginTrait
     protected function loginAsRepairhelper()
     {
         $userEmail = 'maxmuster@mailinator.com';
-        $this->User = FactoryLocator::get('Table')->get('Users');
-        $user = $this->User->find('all',
+        $usersTable = FactoryLocator::get('Table')->get('Users');
+        $user = $usersTable->find('all',
             conditions: [
                 'Users.email' => $userEmail,
             ],

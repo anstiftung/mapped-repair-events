@@ -122,6 +122,14 @@ return function (RouteBuilder $routes) {
             ])->setMethods(['GET']);
         }
 
+        if (Configure::read('AppConfig.fundingEnabled')) {
+            $routes->connect('/foerderantrag', ['controller'=>'fundings', 'action'=>'index']);
+            $routes->connect('/foerderantrag/detail/{workshopUid}', [
+                'controller'=>'fundings',
+                'action'=>'detail'
+            ])->setPatterns(['workshopUid' => '[0-9]+']);;
+        }
+
         // für normale cake routings (users controller)
         $routes->connect('/{controller}/{action}/*');
 

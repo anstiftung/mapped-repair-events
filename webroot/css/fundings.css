@@ -1,0 +1,13 @@
+body.fundings.index .workshop-wrapper {
+    padding: 5px;
+    clear: both;
+}
+body.fundings.index .workshop-wrapper span {
+    padding: 5px;
+    float: left;
+}
+body.fundings.index .workshop-wrapper a.button,
+body.fundings.index .workshop-wrapper span.left {
+    float: left;
+    margin-right: 10px;
+}

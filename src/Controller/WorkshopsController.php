@@ -1220,12 +1220,11 @@ class WorkshopsController extends AppController
 
     public function verwalten()
     {
-        $this->Workshop = $this->getTableLocator()->get('Workshops');
-        // complicated is-user-orga-check no needed again because this page is only accessible for orga users
+        $workshopsTable = $this->getTableLocator()->get('Workshops');
         if ($this->isAdmin()) {
-            $workshops = $this->Workshop->getWorkshopsForAdmin(APP_DELETED);
+            $workshops = $workshopsTable->getWorkshopsForAdmin(APP_DELETED);
         } else {
-            $workshops = $this->Workshop->getWorkshopsForAssociatedUser($this->isLoggedIn() ? $this->loggedUser->uid : 0, APP_DELETED);
+            $workshops = $workshopsTable->getWorkshopsForAssociatedUser($this->loggedUser->uid, APP_DELETED);
         }
 
         $this->User = $this->getTableLocator()->get('Users');
