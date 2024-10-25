@@ -40,7 +40,7 @@ class FundingsController extends AppController
 
     }
 
-    public function detail() {
+    public function edit() {
 
         $workshopUid = (int) $this->getRequest()->getParam('workshopUid');
         $workshopsTable = $this->getTableLocator()->get('Workshops');

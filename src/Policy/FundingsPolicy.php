@@ -7,6 +7,7 @@ use Cake\Http\ServerRequest;
 use Authorization\Policy\RequestPolicyInterface;
 use Authorization\Policy\ResultInterface;
 use Cake\Core\Configure;
+use Cake\Datasource\FactoryLocator;
 
 class FundingsPolicy implements RequestPolicyInterface
 {
@@ -20,9 +21,27 @@ class FundingsPolicy implements RequestPolicyInterface
 
         if (is_null($identity)) {
             return false;
-        }
+        }        
 
         if (!($identity->isAdmin() || $identity->isOrga())) {
+            return false;
+        }
+
+        if ($request->getParam('action') == 'edit') {
+
+            if ($identity->isAdmin()) {
+                return true;
+            }
+
+            $workshopUid = (int) $request->getParam('workshopUid');
+
+            // all approved orgas are allowed to edit fundings
+            $workshopsTable = FactoryLocator::get('Table')->get('Workshops');
+            $workshop = $workshopsTable->getWorkshopForIsUserInOrgaTeamCheck($workshopUid);
+            if ($workshopsTable->isUserInOrgaTeam($identity, $workshop)) {
+                return true;
+            }
+
             return false;
         }
 

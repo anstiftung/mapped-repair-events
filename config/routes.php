@@ -124,9 +124,9 @@ return function (RouteBuilder $routes) {
 
         if (Configure::read('AppConfig.fundingsEnabled')) {
             $routes->connect('/foerderantrag', ['controller'=>'fundings', 'action'=>'index']);
-            $routes->connect('/foerderantrag/detail/{workshopUid}', [
+            $routes->connect('/foerderantrag/edit/{workshopUid}', [
                 'controller'=>'fundings',
-                'action'=>'detail'
+                'action'=>'edit'
             ])->setPatterns(['workshopUid' => '[0-9]+']);;
         }
 

@@ -23,7 +23,7 @@ echo $this->element('jqueryTabsWithoutAjax', [
                     if ($workshop->funding_is_allowed) {
                         echo $this->Html->link(
                             'Förderantrag bearbeiten',
-                            $this->Html->urlFundingDetail($workshop->uid),
+                            $this->Html->urlFundingEdit($workshop->uid),
                             [
                                 'title' => 'Förderantrag bearbeiten',
                                 'class' => 'button',

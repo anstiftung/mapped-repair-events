@@ -228,8 +228,8 @@ class MyHtmlHelper extends HtmlHelper {
         return '/foerderantrag';
     }
 
-    function urlFundingDetail($workshopUid) {
-        return $this->urlFunding() . '/detail/' . $workshopUid;
+    function urlFundingEdit($workshopUid) {
+        return $this->urlFunding() . '/edit/' . $workshopUid;
     }
 
     function getUserBackendNaviLinks($userUid, $isMyProfile, $isOrga) {

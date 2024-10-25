@@ -24,7 +24,7 @@ class FundingsControllerTest extends AppTestCase
     public function testRoutesLoggedOut() {
         $this->get(Configure::read('AppConfig.htmlHelper')->urlFunding());
         $this->assertResponseCode(302);
-        $this->get(Configure::read('AppConfig.htmlHelper')->urlFundingDetail(2));
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlFundingEdit(2));
         $this->assertResponseCode(302);
     }
 
@@ -32,17 +32,17 @@ class FundingsControllerTest extends AppTestCase
         $this->loginAsRepairhelper();
         $this->get(Configure::read('AppConfig.htmlHelper')->urlFunding());
         $this->assertResponseCode(302);
-        $this->get(Configure::read('AppConfig.htmlHelper')->urlFundingDetail(2));
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlFundingEdit(2));
         $this->assertResponseCode(302);
     }
 
-    public function testDetailOk() {
+    public function testEditOk() {
         $this->loginAsOrga();
-        $this->get(Configure::read('AppConfig.htmlHelper')->urlFundingDetail(2));
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlFundingEdit(2));
         $this->assertResponseOk();
     }
 
-    public function testDetailNotOk() {
+    public function testEditNotOk() {
         
         $workshopsTable = $this->getTableLocator()->get('Workshops');
         $workshop = $workshopsTable->get(2);
@@ -54,9 +54,25 @@ class FundingsControllerTest extends AppTestCase
         $eventsTable->save($event);
 
         $this->loginAsOrga();
-        $this->get(Configure::read('AppConfig.htmlHelper')->urlFundingDetail(2));
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlFundingEdit(2));
         $this->assertResponseCode(302);
         $this->assertRedirectContains(Configure::read('AppConfig.htmlHelper')->urlFunding());
+    }
+
+    public function testEditNotInOrgaTeam() {
+        $userWorkshopsTable = $this->getTableLocator()->get('UsersWorkshops');
+        $userWorkshop = $userWorkshopsTable->find()->where(['workshop_uid' => 2])->first();
+        $userWorkshopsTable->delete($userWorkshop);
+        $this->loginAsOrga();
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlFundingEdit(2));
+        $this->assertResponseCode(302);
+        $this->assertRedirectContains('/users/login?redirect=%2Ffoerderantrag%2Fedit%2F2');
+    }
+
+    public function testEditAsOrgaOk() {
+        $this->loginAsOrga();
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlFundingEdit(2));
+        $this->assertResponseOk();
     }
 
 }
