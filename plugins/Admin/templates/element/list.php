@@ -284,12 +284,6 @@ if ($showDeleteLink) {
                                 'title' => 'Feed ansehen',
                                 'target' => '_blank'
                             ]);
-                        } else if (preg_match('/twitter_username/', $field['name']) && $value != '') {
-                            echo $this->Html->link('<i class="fab fa-twitter fa-border"></i>', 'http://www.twitter.com/' . $value, [
-                                'escape' => false,
-                                'title' => 'Twitter-Seite ansehen',
-                                'target' => '_blank'
-                            ]);
                         } else if (preg_match('/facebook_username/', $field['name']) && $value != '') {
                             echo $this->Html->link('<i class="fab fa-facebook fa-border"></i>', 'http://www.facebook.com/' . $value, [
                                 'escape' => false,

@@ -35,7 +35,7 @@ use Cake\Core\Configure;
         </a>
     <?php } ?>
     <?php if (Configure::read('AppConfig.twitterUsername') != '') { ?>
-        <a href="https://twitter.com/<?php echo Configure::read('AppConfig.twitterUsername'); ?>" target="_blank" title="<?php echo Configure::read('AppConfig.platformName'); ?> auf Twitter">
+        <a href="https://x.com/<?php echo Configure::read('AppConfig.twitterUsername'); ?>" target="_blank" title="<?php echo Configure::read('AppConfig.platformName'); ?> auf X">
             <i class="fab fa-square-x-twitter"></i>
         </a>
     <?php } ?>

@@ -70,7 +70,7 @@ echo $this->element('highlightNavi', ['main' => 'Aktive']);
         if ($user->twitter_username) {
             $additionalSocial[] = $this->Html->link(
                 '<i class="fab fa-square-x-twitter"></i>',
-                'https://twitter.com/' . $user->twitter_username,
+                'https://x.com/' . $user->twitter_username,
                 [
                     'rel' =>'no-follow',
                     'target' => '_blank',
