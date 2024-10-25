@@ -7,6 +7,11 @@ use Cake\Core\Configure;
 class FundingsController extends AppController
 {
 
+    private $contain = [
+        'FundingAllPastEvents',
+        'FundingAllFutureEvents',
+    ];
+
     public function index() {
 
         $this->set('metaTags', [
@@ -15,9 +20,9 @@ class FundingsController extends AppController
 
         $workshopsTable = $this->getTableLocator()->get('Workshops');
         if ($this->isAdmin()) {
-            $workshops = $workshopsTable->getWorkshopsWithUsers(APP_OFF, ['AllEvents']);
+            $workshops = $workshopsTable->getWorkshopsWithUsers(APP_OFF, $this->contain);
         } else {
-            $workshops = $workshopsTable->getWorkshopsForAssociatedUser($this->loggedUser->uid, APP_OFF, ['AllEvents']);
+            $workshops = $workshopsTable->getWorkshopsForAssociatedUser($this->loggedUser->uid, APP_OFF, $this->contain);
         }
 
         $workshopsWithFundingAllowed = 0;
@@ -49,7 +54,7 @@ class FundingsController extends AppController
             $workshopsTable->aliasField('uid') => $workshopUid,
             $workshopsTable->aliasField('status') => APP_ON,
         ])
-        ->contain(['AllEvents'])
+        ->contain($this->contain)
         ->first();
 
         $this->set('workshop', $workshop);

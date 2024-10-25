@@ -54,36 +54,11 @@ class Workshop extends Entity
     }
 
     public function _getFundingIsPastEventsCountOk(): bool {
-
-        if (!isset($this->all_events)) {
-            return false;
-        }
-
-        $pastEventsCount = 0;
-        foreach ($this->all_events as $event) {
-            if ($event->datumstart->i18nFormat(Configure::read('DateFormat.Database')) 
-                <= Configure::read('AppConfig.fundingsStartDate')) {
-                $pastEventsCount++;
-            }
-        }
-        return $pastEventsCount > 0;
+        return count($this->funding_all_past_events) > 0;
     }
 
     public function _getFundingIsFutureEventsCountOk(): bool {
-
-        if (!isset($this->all_events)) {
-            return false;
-        }
-
-        $futureEventsCount = 0;
-
-        foreach ($this->all_events as $event) {
-            if ($event->datumstart->i18nFormat(Configure::read('DateFormat.Database')) 
-                >= Configure::read('AppConfig.fundingsStartDate')) {
-                $futureEventsCount++;
-            }
-        }
-        return $futureEventsCount > 3;
+        return count($this->funding_all_future_events) > 3;
     }
 
     public function _getFundingIsActivityProofOk(): bool {

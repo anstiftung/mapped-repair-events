@@ -5,6 +5,7 @@ use App\Model\Traits\SearchExceptionsTrait;
 use Cake\Validation\Validator;
 use Cake\Datasource\FactoryLocator;
 use App\Services\GeoService;
+use Cake\Core\Configure;
 
 class WorkshopsTable extends AppTable
 {
@@ -36,9 +37,21 @@ class WorkshopsTable extends AppTable
         $this->belongsTo('Provinces', [
             'foreignKey' => 'province_id',
         ]);
-        $this->hasMany('AllEvents', [
+        $this->hasMany('FundingAllPastEvents', [
             'className' => 'Events',
             'foreignKey' => 'workshop_uid',
+            'conditions' => [
+                'FundingAllPastEvents.datumstart <=' => Configure::read('AppConfig.fundingsStartDate'),
+                'FundingAllPastEvents.status' => APP_ON,
+            ],
+        ]);
+        $this->hasMany('FundingAllFutureEvents', [
+            'className' => 'Events',
+            'foreignKey' => 'workshop_uid',
+            'conditions' => [
+                'FundingAllFutureEvents.datumstart >=' => Configure::read('AppConfig.fundingsStartDate'),
+                'FundingAllFutureEvents.status' => APP_ON,
+            ],
         ]);
         $this->hasMany('Events', [
             'foreignKey' => 'workshop_uid',
