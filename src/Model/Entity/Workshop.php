@@ -54,11 +54,17 @@ class Workshop extends Entity
     }
 
     public function _getFundingIsPastEventsCountOk(): bool {
-        return count($this->funding_all_past_events) > 0;
+        if (empty($this->funding_all_past_events)) {
+            return false;
+        }
+        return $this->funding_all_past_events[0]['count'] > 0;
     }
 
     public function _getFundingIsFutureEventsCountOk(): bool {
-        return count($this->funding_all_future_events) > 3;
+        if (empty($this->funding_all_future_events)) {
+            return false;
+        }
+        return $this->funding_all_future_events[0]['count'] > 3;
     }
 
     public function _getFundingIsActivityProofOk(): bool {

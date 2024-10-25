@@ -12,41 +12,44 @@ echo $this->element('jqueryTabsWithoutAjax', [
         <?php echo $this->element('heading', ['first' => $metaTags['title']]); ?>
 
         <?php if ($loggedUser->isAdmin()) { ?>
-            <p>Möglich: <?php echo $this->Number->precision($workshopsWithFundingAllowed, 0); ?>x</p>
-            <p>Nicht möglich: <?php echo $this->Number->precision($workshopsWithFundingNotAllowed, 0); ?>x</p>
+            <p>Möglich: <?php echo $this->Number->precision(count($workshopsWithFundingAllowed), 0); ?>x</p>
+            <p>Nicht möglich: <?php echo $this->Number->precision(count($workshopsWithFundingNotAllowed), 0); ?>x</p>
             <br />
         <?php } ?>
 
         <?php
-            foreach($workshops as $workshop) {
+            foreach($workshopsWithFundingAllowed as $workshop) {
                 echo '<div class="workshop-wrapper">';
-                    if ($workshop->funding_is_allowed) {
-                        echo $this->Html->link(
-                            'Förderantrag bearbeiten',
-                            $this->Html->urlFundingEdit($workshop->uid),
-                            [
-                                'title' => 'Förderantrag bearbeiten',
-                                'class' => 'button',
-                            ]
-                        );
-                    } else {
-                        echo $this->Html->link(
-                            'Förderantrag nicht möglich',
-                            'javascript:void(0);',
-                            [
-                                'title' => 'Förderantrag nicht möglich',
-                                'disabled' => 'disabled',
-                                'class' => 'button disabled'
-                                ]
-                        );
-                    }
+                    echo $this->Html->link(
+                        'Förderantrag bearbeiten',
+                        $this->Html->urlFundingEdit($workshop->uid),
+                        [
+                            'title' => 'Förderantrag bearbeiten',
+                            'class' => 'button',
+                        ]
+                    );
                     echo '<span>';
                         echo '<a href="' . $this->Html->urlWorkshopDetail($workshop->url) . '">' . $workshop->name . '</a>';
-                        if (!$workshop->funding_is_allowed) {
-                            echo ' <i>' . implode('', $workshop->funding_errors) . '</i>';
-                        }
                     echo '</span>';
-            echo '</div>';
+                echo '</div>';
+            }
+
+            foreach($workshopsWithFundingNotAllowed as $workshop) {
+                echo '<div class="workshop-wrapper">';
+                    echo $this->Html->link(
+                        'Förderantrag nicht möglich',
+                        'javascript:void(0);',
+                        [
+                            'title' => 'Förderantrag nicht möglich',
+                            'disabled' => 'disabled',
+                            'class' => 'button disabled'
+                            ]
+                    );
+                    echo '<span>';
+                        echo '<a href="' . $this->Html->urlWorkshopDetail($workshop->url) . '">' . $workshop->name . '</a>';
+                        echo ' <i>' . implode('', $workshop->funding_errors) . '</i>';
+                    echo '</span>';
+                echo '</div>';
             }
         ?>
 

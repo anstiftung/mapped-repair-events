@@ -4,14 +4,21 @@ namespace App\Controller;
 
 use Cake\Core\Configure;
 use App\Model\Table\WorkshopsTable;
+use Cake\Database\Query;
 
 class FundingsController extends AppController
 {
 
-    private $contain = [
-        'FundingAllPastEvents',
-        'FundingAllFutureEvents',
-    ];
+    private function getContain() {
+        return [
+            'FundingAllPastEvents' => function (Query $q) {
+                return $q->select(['workshop_uid', 'count' => $q->func()->count('*')])->groupBy('workshop_uid');
+            },
+            'FundingAllFutureEvents' => function (Query $q) {
+                return $q->select(['workshop_uid', 'count' => $q->func()->count('*')])->groupBy('workshop_uid');
+            }
+        ];
+    }
 
     public function index() {
 
@@ -21,25 +28,26 @@ class FundingsController extends AppController
 
         $workshopsTable = $this->getTableLocator()->get('Workshops');
         if ($this->isAdmin()) {
-            $workshops = $workshopsTable->getWorkshopsWithUsers(APP_OFF, $this->contain);
+            $workshops = $workshopsTable->getWorkshopsWithUsers(APP_OFF, $this->getContain());
         } else {
-            $workshops = $workshopsTable->getWorkshopsForAssociatedUser($this->loggedUser->uid, APP_OFF, $this->contain);
+            $workshops = $workshopsTable->getWorkshopsForAssociatedUser($this->loggedUser->uid, APP_OFF, $this->getContain());
         }
 
-        $workshopsWithFundingAllowed = 0;
-        $workshopsWithFundingNotAllowed = 0;
+        $workshopsWithFundingAllowed = [];
+        $workshopsWithFundingNotAllowed = [];
         if ($this->isAdmin()) {
             foreach ($workshops as $workshop) {
                 if ($workshop->funding_is_allowed) {
-                    $workshopsWithFundingAllowed++;
+                    $workshopsWithFundingAllowed[] = $workshop;
                 } else {
-                    $workshopsWithFundingNotAllowed++;
+                    $workshopsWithFundingNotAllowed[] = $workshop;
                 }
             }
         }
 
+        unset($workshops);
+
         $this->set([
-            'workshops' => $workshops,
             'workshopsWithFundingAllowed' => $workshopsWithFundingAllowed,
             'workshopsWithFundingNotAllowed' => $workshopsWithFundingNotAllowed,
         ]);
@@ -55,7 +63,7 @@ class FundingsController extends AppController
             $workshopsTable->aliasField('uid') => $workshopUid,
             $workshopsTable->aliasField('status') => APP_ON,
         ])
-        ->contain($this->contain)
+        ->contain($this->getContain())
         ->first();
 
         $this->setReferer();
