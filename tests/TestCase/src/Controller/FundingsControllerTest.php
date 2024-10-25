@@ -70,9 +70,40 @@ class FundingsControllerTest extends AppTestCase
     }
 
     public function testEditAsOrgaOk() {
+
+        $testWorkshopUid = 2;
+
         $this->loginAsOrga();
-        $this->get(Configure::read('AppConfig.htmlHelper')->urlFundingEdit(2));
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlFundingEdit($testWorkshopUid));
         $this->assertResponseOk();
+
+        $newName = 'Testname';
+        $newStreet = 'Teststraße 1';
+        $newZip = '12345';
+        $newCity = 'Teststadt';
+        $newAdresszusatz = 'Adresszusatz';
+
+        $this->post(Configure::read('AppConfig.htmlHelper')->urlFundingEdit($testWorkshopUid), [
+            'referer' => '/',
+            'Workshops' => [
+                'name' => $newName,
+                'street' => $newStreet,
+                'zip' => $newZip,
+                'city' => $newCity,
+                'adresszusatz' => $newAdresszusatz
+            ]
+        ]);
+        $this->assertResponseNotContains('error');
+        $this->assertResponseContains('Förderantrag erfolgreich gespeichert.');
+
+        $workshopsTable = $this->getTableLocator()->get('Workshops');
+        $workshop = $workshopsTable->get($testWorkshopUid);
+        $this->assertEquals($newName, $workshop->name);
+        $this->assertEquals($newStreet, $workshop->street);
+        $this->assertEquals($newZip, $workshop->zip);
+        $this->assertEquals($newCity, $workshop->city);
+        $this->assertEquals($newAdresszusatz, $workshop->adresszusatz);
+
     }
 
 }

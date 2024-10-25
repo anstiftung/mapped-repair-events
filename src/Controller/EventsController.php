@@ -28,7 +28,6 @@ class EventsController extends AppController
 
     public $Category;
     public $Event;
-    public $Workshop;
     public $Worknews;
 
     public function beforeFilter(EventInterface $event) {
