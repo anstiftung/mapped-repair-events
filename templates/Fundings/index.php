@@ -12,8 +12,8 @@ echo $this->element('jqueryTabsWithoutAjax', [
         <?php echo $this->element('heading', ['first' => $metaTags['title']]); ?>
 
         <?php if ($loggedUser->isAdmin()) { ?>
-            <p>Möglich: <?php echo $workshopsWithFundingAllowed; ?>x</p>
-            <p>Nicht möglich: <?php echo $workshopsWithFundingNotAllowed; ?>x</p>
+            <p>Möglich: <?php echo $this->Number->precision($workshopsWithFundingAllowed, 0); ?>x</p>
+            <p>Nicht möglich: <?php echo $this->Number->precision($workshopsWithFundingNotAllowed, 0); ?>x</p>
             <br />
         <?php } ?>
 
