@@ -250,6 +250,18 @@ if ($showDeleteLink) {
                                 echo $formattedTime;
                             }
                         }
+                        if ($field['type'] == 'linkedUrl') {
+                            if ($value) {
+                                $linkedUrl = $field['linkedUrl'];
+                                echo $this->Html->link(
+                                    $value,
+                                    $this->Html->$linkedUrl($object['id']),
+                                    [
+                                        'target' => '_blank'
+                                    ],
+                                );
+                            }
+                        }
                         if (in_array($field['type'], [
                             'array',
                             'habtm',

@@ -3,8 +3,8 @@
 namespace App\Controller;
 
 use Cake\Core\Configure;
-use App\Model\Table\WorkshopsTable;
 use Cake\Database\Query;
+use App\Model\Entity\Funding;
 
 class FundingsController extends AppController
 {
@@ -140,7 +140,7 @@ class FundingsController extends AppController
 
             if ($fundingsTable->save($funding)) {
 
-                $filePath = ROOT . DS . 'files_private' . DS . 'fundings' . DS . $workshopUid . DS . $fileName;
+                $filePath = Funding::UPLOAD_PATH . $funding->id . DS . $fileName;
                 if (!is_dir(dirname($filePath))) {
                     mkdir(dirname($filePath), 0777, true);
                 }

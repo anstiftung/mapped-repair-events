@@ -6,6 +6,8 @@ use Cake\ORM\Entity;
 class Funding extends Entity
 {
 
+    const UPLOAD_PATH = ROOT . DS . 'files_private' . DS . 'fundings' . DS;
+
     const STATUS_DATA_MISSING = 10;
     const STATUS_PENDING = 20;
     const STATUS_APPROVED = 30;

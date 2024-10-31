@@ -43,7 +43,7 @@ echo $this->element('jqueryTabsWithoutAjax', [
                     ],
                 );
                 if (!$workshop->funding_was_registered_before_fundings_start_date) {
-                    if (empty($workshop->funding)) {
+                    if (empty($workshop->funding) || $workshop->funding->activity_proof_filename == '') {
                         $button = $this->Html->link(
                             'Aktivitätsnachweis hochladen',
                             $this->Html->urlFundingsUploadActivityProof($workshop->uid),
@@ -52,7 +52,7 @@ echo $this->element('jqueryTabsWithoutAjax', [
                             ],
                         );
                     }
-                    if (!empty($workshop->funding) && !$workshop->funding->activity_proof_ok) {
+                    if (!empty($workshop->funding) && $workshop->funding->activity_proof_filename != '' && !$workshop->funding->activity_proof_ok) {
                         $button = $this->Html->link(
                             'Aktivitätsnachweis ungeprüft',
                             'javascript:void(0);',
