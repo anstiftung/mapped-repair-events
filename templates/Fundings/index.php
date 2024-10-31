@@ -22,7 +22,7 @@ echo $this->element('jqueryTabsWithoutAjax', [
                 echo '<div class="workshop-wrapper">';
                     echo $this->Html->link(
                         'Förderantrag bearbeiten',
-                        $this->Html->urlFundingEdit($workshop->uid),
+                        $this->Html->urlFundingsEdit($workshop->uid),
                         [
                             'class' => 'button',
                         ],
@@ -46,7 +46,7 @@ echo $this->element('jqueryTabsWithoutAjax', [
                     if (empty($workshop->funding)) {
                         $button = $this->Html->link(
                             'Aktivitätsnachweis hochladen',
-                            $this->Html->urlFundingUploadActivityProof($workshop->uid),
+                            $this->Html->urlFundingsUploadActivityProof($workshop->uid),
                             [
                                 'class' => 'button',
                             ],

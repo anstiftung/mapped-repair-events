@@ -9,7 +9,7 @@ class Fundings extends AbstractMigration
     {
         $query = "CREATE TABLE `fundings` (
             `id` int UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-            `user_uid` int UNSIGNED DEFAULT NULL,
+            `owner` int UNSIGNED DEFAULT NULL,
             `workshop_uid` int UNSIGNED DEFAULT NULL,
             `status` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
             `activity_proof_filename` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,

@@ -2,7 +2,6 @@
 namespace App\Model\Table;
 
 use Cake\ORM\Table;
-use Cake\Validation\Validator;
 
 class FundingsTable extends Table
 {
@@ -11,6 +10,10 @@ class FundingsTable extends Table
         parent::initialize($config);
         $this->belongsTo('Workshops', [
             'foreignKey' => 'workshop_uid'
+        ]);
+        $this->belongsTo('OwnerUsers', [
+            'className' => 'Users',
+            'foreignKey' => 'owner'
         ]);
     }
 

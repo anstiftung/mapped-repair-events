@@ -77,7 +77,7 @@ class FundingsController extends AppController
 
         if (!$workshop->funding_is_allowed) {
             $this->AppFlash->setFlashError('Förderantrag für diese Initiative nicht möglich.');
-            return $this->redirect(Configure::read('AppConfig.htmlHelper')->urlFunding());
+            return $this->redirect(Configure::read('AppConfig.htmlHelper')->urlFundings());
         }
 
         if (!empty($this->request->getData())) {
@@ -111,7 +111,8 @@ class FundingsController extends AppController
             $fundingsTable->aliasField('workshop_uid') => $workshopUid,
         ], function ($entity) use ($workshopUid) {
             $entity->workshop_uid = $workshopUid;
-            $entity->user_uid = $this->loggedUser->uid;
+            $entity->status = APP_ON;
+            $entity->owner = $this->loggedUser->uid;
         });
 
         $funding = $fundingsTable->find()->where([
@@ -119,7 +120,6 @@ class FundingsController extends AppController
         ])->contain([
             'Workshops',
         ])->first();
-
 
         $this->setReferer();
 

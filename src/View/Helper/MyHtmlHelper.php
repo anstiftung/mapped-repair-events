@@ -224,16 +224,20 @@ class MyHtmlHelper extends HtmlHelper {
         return '/users/welcome';
     }
 
-    function urlFunding() {
+    function urlFundings() {
         return '/foerderantrag';
     }
 
-    function urlFundingEdit($workshopUid) {
-        return $this->urlFunding() . '/edit/' . $workshopUid;
+    function urlFundingsEdit($workshopUid) {
+        return $this->urlFundings() . '/edit/' . $workshopUid;
     }
 
-    function urlFundingUploadActivityProof($workshopUid) {
-        return $this->urlFunding() . '/uploadActivityProof/' . $workshopUid;
+    function urlFundingsUploadActivityProof($workshopUid) {
+        return $this->urlFundings() . '/uploadActivityProof/' . $workshopUid;
+    }
+
+    function urlFundingsAdminEdit($fundingId) {
+        return '/admin/fundings/edit/' . $fundingId;
     }
 
     function getUserBackendNaviLinks($userUid, $isMyProfile, $isOrga) {
@@ -246,7 +250,7 @@ class MyHtmlHelper extends HtmlHelper {
         $result[] = ['url' => $this->urlMyEvents(), 'name' => 'MEINE TERMINE'];
         $result[] = ['url' => '/initiativen/mitmachen', 'name' => 'MITMACHEN'];
         if (Configure::read('AppConfig.fundingsEnabled') && $isOrga) {
-            $result[] = ['url' => $this->urlFunding(), 'name' => 'FÖRDERANTRAG'];
+            $result[] = ['url' => $this->urlFundings(), 'name' => 'FÖRDERANTRAG'];
         }
         return $result;
     }

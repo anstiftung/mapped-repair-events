@@ -4,7 +4,7 @@ $this->element('addScript', array('script' =>
 ));
 echo $this->element('jqueryTabsWithoutAjax', [
     'links' => $this->Html->getUserBackendNaviLinks($loggedUser->uid, true, $loggedUser->isOrga()),
-    'selected' => $this->Html->urlFunding(),
+    'selected' => $this->Html->urlFundings(),
 ]);
 ?>
 
@@ -15,7 +15,7 @@ echo $this->element('jqueryTabsWithoutAjax', [
 
             echo $this->Form->create($funding, [
                 'novalidate' => 'novalidate',
-                'url' => $this->Html->urlFundingUploadActivityProof($funding->workshop_uid),
+                'url' => $this->Html->urlFundingsUploadActivityProof($funding->workshop_uid),
                 'enctype' => 'multipart/form-data',
                 'id' => 'fundingForm'
             ]);

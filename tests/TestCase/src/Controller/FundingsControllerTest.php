@@ -22,23 +22,23 @@ class FundingsControllerTest extends AppTestCase
     }
 
     public function testRoutesLoggedOut() {
-        $this->get(Configure::read('AppConfig.htmlHelper')->urlFunding());
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlFundings());
         $this->assertResponseCode(302);
-        $this->get(Configure::read('AppConfig.htmlHelper')->urlFundingEdit(2));
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlFundingsEdit(2));
         $this->assertResponseCode(302);
     }
 
     public function testRoutesAsRepairhelper() {
         $this->loginAsRepairhelper();
-        $this->get(Configure::read('AppConfig.htmlHelper')->urlFunding());
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlFundings());
         $this->assertResponseCode(302);
-        $this->get(Configure::read('AppConfig.htmlHelper')->urlFundingEdit(2));
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlFundingsEdit(2));
         $this->assertResponseCode(302);
     }
 
     public function testEditOk() {
         $this->loginAsOrga();
-        $this->get(Configure::read('AppConfig.htmlHelper')->urlFundingEdit(2));
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlFundingsEdit(2));
         $this->assertResponseOk();
     }
 
@@ -54,9 +54,9 @@ class FundingsControllerTest extends AppTestCase
         $eventsTable->save($event);
 
         $this->loginAsOrga();
-        $this->get(Configure::read('AppConfig.htmlHelper')->urlFundingEdit(2));
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlFundingsEdit(2));
         $this->assertResponseCode(302);
-        $this->assertRedirectContains(Configure::read('AppConfig.htmlHelper')->urlFunding());
+        $this->assertRedirectContains(Configure::read('AppConfig.htmlHelper')->urlFundings());
     }
 
     public function testEditNotInOrgaTeam() {
@@ -64,7 +64,7 @@ class FundingsControllerTest extends AppTestCase
         $userWorkshop = $userWorkshopsTable->find()->where(['workshop_uid' => 2])->first();
         $userWorkshopsTable->delete($userWorkshop);
         $this->loginAsOrga();
-        $this->get(Configure::read('AppConfig.htmlHelper')->urlFundingEdit(2));
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlFundingsEdit(2));
         $this->assertResponseCode(302);
         $this->assertRedirectContains('/users/login?redirect=%2Ffoerderantrag%2Fedit%2F2');
     }
@@ -74,7 +74,7 @@ class FundingsControllerTest extends AppTestCase
         $testWorkshopUid = 2;
 
         $this->loginAsOrga();
-        $this->get(Configure::read('AppConfig.htmlHelper')->urlFundingEdit($testWorkshopUid));
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlFundingsEdit($testWorkshopUid));
         $this->assertResponseOk();
 
         $newName = 'Testname';
@@ -83,7 +83,7 @@ class FundingsControllerTest extends AppTestCase
         $newCity = 'Teststadt';
         $newAdresszusatz = 'Adresszusatz';
 
-        $this->post(Configure::read('AppConfig.htmlHelper')->urlFundingEdit($testWorkshopUid), [
+        $this->post(Configure::read('AppConfig.htmlHelper')->urlFundingsEdit($testWorkshopUid), [
             'referer' => '/',
             'Workshops' => [
                 'name' => $newName,
