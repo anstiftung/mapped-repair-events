@@ -83,6 +83,7 @@ class FundingsController extends AdminAppController
             if ($object->owner_user) {
                 $object->owner_user->revertPrivatizeData();
             }
+            $object->verified_fields_count = count($object->verified_fields);
         }
 
         $this->set('objects', $objects);

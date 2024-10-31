@@ -16,14 +16,33 @@ body.fundings.edit h1 {
 }
 #fundingForm div.input {
     display: grid;
-    grid-template-columns: 200px auto;
+    grid-template-columns: 200px auto 90px;
     grid-template-rows: auto auto;
     gap: 5px;
     align-items: baseline;
+    padding: 10px 5px 5px 5px;
+    margin: 5px 0;
+    background-color: #FCC981;
+}
+#fundingForm div.input.is-verified {
+    background-color: #90ee90;
+}
+#fundingForm div.input.is-verified input {
+    color: grey;
 }
 #fundingForm div.input label {
     grid-column: 1;
     grid-row: 1 / span 2; /* Spannt über beide Zeilen */
+}
+#fundingForm div.input label.verified {
+    grid-column: 3;
+    line-height: 24px;
+}
+#fundingForm div.input label.verified input[type="checkbox"] {
+    float: left;
+}
+#fundingForm div.input label.verified::after {
+    content: "";
 }
 #fundingForm div.input input {
     grid-column: 2;

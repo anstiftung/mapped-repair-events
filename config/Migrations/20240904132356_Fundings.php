@@ -14,10 +14,10 @@ class Fundings extends AbstractMigration
             `status` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
             `activity_proof_filename` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
             `activity_proof_ok` tinyint(1) DEFAULT 0,
+            `verified_fields` JSON DEFAULT NULL,
             `created` datetime DEFAULT CURRENT_TIMESTAMP,
             `modified` datetime DEFAULT CURRENT_TIMESTAMP
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
         $this->execute($query);
-
     }
 }

@@ -64,30 +64,29 @@ class FundingsController extends AppController
     public function edit() {
 
         $workshopUid = (int) $this->getRequest()->getParam('workshopUid');
-        $workshopsTable = $this->getTableLocator()->get('Workshops');
 
-        $workshop = $workshopsTable->find()->where([
-            $workshopsTable->aliasField('uid') => $workshopUid,
-            $workshopsTable->aliasField('status') => APP_ON,
-        ])
-        ->contain($this->getContain())
-        ->first();
+        $fundingsTable = $this->getTableLocator()->get('Fundings');
+        $funding = $fundingsTable->findOrCreateCustom($workshopUid);
 
         $this->setReferer();
-
-        if (!$workshop->funding_is_allowed) {
+        
+        $workshopsTable = $this->getTableLocator()->get('Workshops');
+        $workshop = $workshopsTable->find()->where(['uid' => $workshopUid])->contain($this->getContain())->first();
+        if ($funding->workshop->status == APP_DELETED || !$workshop->funding_is_allowed) {
             $this->AppFlash->setFlashError('Förderantrag für diese Initiative nicht möglich.');
             return $this->redirect(Configure::read('AppConfig.htmlHelper')->urlFundings());
         }
 
         if (!empty($this->request->getData())) {
 
-            $patchedEntity = $workshopsTable->getPatchedEntityForAdminEdit($workshop, $this->request->getData());
+            $patchedEntity = $fundingsTable->patchEntity($funding, $this->request->getData(), [
+                'associated' => ['Workshops'],
+            ]);
             $errors = $patchedEntity->getErrors();
 
             if (empty($errors)) {
                 $entity = $this->stripTagsFromFields($patchedEntity, 'Workshop');
-                if ($workshopsTable->save($entity)) {
+                if ($fundingsTable->save($entity, ['associated' => ['Workshops']])) {
                     $this->AppFlash->setFlashMessage('Förderantrag erfolgreich gespeichert.');
                 }
             }
@@ -95,31 +94,17 @@ class FundingsController extends AppController
         }
 
         $this->set('metaTags', [
-            'title' => 'Förderantrag für "' . h($workshop->name) . '"',
+            'title' => 'Förderantrag für "' . h($funding->workshop->name) . '"',
         ]);
-        $this->set('workshop', $workshop);
+        $this->set('funding', $funding);
 
     }
 
     public function uploadActivityProof() {
 
         $workshopUid = (int) $this->getRequest()->getParam('workshopUid');
-
         $fundingsTable = $this->getTableLocator()->get('Fundings');
-        
-        $funding = $fundingsTable->findOrCreate([
-            $fundingsTable->aliasField('workshop_uid') => $workshopUid,
-        ], function ($entity) use ($workshopUid) {
-            $entity->workshop_uid = $workshopUid;
-            $entity->status = APP_ON;
-            $entity->owner = $this->loggedUser->uid;
-        });
-
-        $funding = $fundingsTable->find()->where([
-            $fundingsTable->aliasField('workshop_uid') => $workshopUid,
-        ])->contain([
-            'Workshops',
-        ])->first();
+        $funding = $fundingsTable->findOrCreateCustom($workshopUid);
 
         $this->setReferer();
 

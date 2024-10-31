@@ -85,12 +85,14 @@ class FundingsControllerTest extends AppTestCase
 
         $this->post(Configure::read('AppConfig.htmlHelper')->urlFundingsEdit($testWorkshopUid), [
             'referer' => '/',
-            'Workshops' => [
-                'name' => $newName,
-                'street' => $newStreet,
-                'zip' => $newZip,
-                'city' => $newCity,
-                'adresszusatz' => $newAdresszusatz
+            'Fundings' => [
+                'workshop' => [
+                    'name' => $newName,
+                    'street' => $newStreet,
+                    'zip' => $newZip,
+                    'city' => $newCity,
+                    'adresszusatz' => $newAdresszusatz,
+                ]
             ]
         ]);
         $this->assertResponseNotContains('error');

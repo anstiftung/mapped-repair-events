@@ -1,6 +1,7 @@
 <?php
 $this->element('addScript', array('script' =>
-    JS_NAMESPACE.".Helper.bindCancelButton();"
+    JS_NAMESPACE.".Helper.bindCancelButton();".
+    JS_NAMESPACE.".Funding.addIsVerifiedCheckboxToFundingEdit('".json_encode($funding->verified_fields)."');"
 ));
 echo $this->element('jqueryTabsWithoutAjax', [
     'links' => $this->Html->getUserBackendNaviLinks($loggedUser->uid, true, $loggedUser->isOrga()),
@@ -13,20 +14,21 @@ echo $this->element('jqueryTabsWithoutAjax', [
         <?php
             echo $this->element('heading', ['first' => $metaTags['title']]);
 
-            echo $this->Form->create($workshop, [
+            echo $this->Form->create($funding, [
                 'novalidate' => 'novalidate',
-                'url' => $this->Html->urlFundingsEdit($workshop->uid),
+                'url' => $this->Html->urlFundingsEdit($funding->workshop->uid),
                 'id' => 'fundingForm'
             ]);
             echo $this->Form->hidden('referer', ['value' => $referer]);
             $this->Form->unlockField('referer');
+            $this->Form->unlockField('verified_fields');
 
             echo $this->Form->fieldset(
-                $this->Form->control('Workshops.name', ['label' => 'Name der Initiative']).
-                $this->Form->control('Workshops.street', ['label' => 'Straße + Hausnummer']).
-                $this->Form->control('Workshops.zip', ['label' => 'PLZ']).
-                $this->Form->control('Workshops.city', ['label' => 'Stadt']).
-                $this->Form->control('Workshops.adresszusatz', ['label' => 'Adresszusatz']),
+                $this->Form->control('Fundings.workshop.name', ['label' => 'Name der Initiative']).
+                $this->Form->control('Fundings.workshop.street', ['label' => 'Straße + Hausnummer']).
+                $this->Form->control('Fundings.workshop.zip', ['label' => 'PLZ']).
+                $this->Form->control('Fundings.workshop.city', ['label' => 'Stadt']).
+                $this->Form->control('Fundings.workshop.adresszusatz', ['label' => 'Adresszusatz']),
                 [
                     'legend' => 'Initiative',
                 ]

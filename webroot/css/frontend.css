@@ -3536,6 +3536,10 @@ div.admin div.edit label {
     margin-top: 4px;
     word-break: break-word;
 }
+input[type="radio"],
+input[type="checkbox"] {
+    accent-color: grey;
+}
 
 div.admin div.edit div.input {
     float: left;
