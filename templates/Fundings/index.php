@@ -24,7 +24,6 @@ echo $this->element('jqueryTabsWithoutAjax', [
                         'Förderantrag bearbeiten',
                         $this->Html->urlFundingEdit($workshop->uid),
                         [
-                            'title' => 'Förderantrag bearbeiten',
                             'class' => 'button',
                         ]
                     );
@@ -35,16 +34,25 @@ echo $this->element('jqueryTabsWithoutAjax', [
             }
 
             foreach($workshopsWithFundingNotAllowed as $workshop) {
-                echo '<div class="workshop-wrapper">';
-                    echo $this->Html->link(
-                        'Förderantrag nicht möglich',
-                        'javascript:void(0);',
+                $button = $this->Html->link(
+                    'Förderantrag nicht möglich',
+                    'javascript:void(0);',
+                    [
+                        'disabled' => 'disabled',
+                        'class' => 'button disabled'
+                        ]
+                );
+                if ($workshop->funding_was_registered_before_fundings_start_date) {
+                    $button = $this->Html->link(
+                        'Aktivitätsnachweis hochladen',
+                        $this->Html->urlFundingUploadActivityProof($workshop->uid),
                         [
-                            'title' => 'Förderantrag nicht möglich',
-                            'disabled' => 'disabled',
-                            'class' => 'button disabled'
-                            ]
+                            'class' => 'button'
+                        ]
                     );
+                }
+                echo '<div class="workshop-wrapper">';
+                    echo $button;
                     echo '<span>';
                         echo '<a href="' . $this->Html->urlWorkshopDetail($workshop->url) . '">' . $workshop->name . '</a>';
                         echo ' <i>' . implode('', $workshop->funding_errors) . '</i>';

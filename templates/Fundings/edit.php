@@ -16,7 +16,7 @@ echo $this->element('jqueryTabsWithoutAjax', [
             echo $this->Form->create($workshop, [
                 'novalidate' => 'novalidate',
                 'url' => $this->Html->urlFundingEdit($workshop->uid),
-                'id' => 'fundingEditForm'
+                'id' => 'fundingForm'
             ]);
             echo $this->Form->hidden('referer', ['value' => $referer]);
             $this->Form->unlockField('referer');

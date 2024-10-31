@@ -232,6 +232,10 @@ class MyHtmlHelper extends HtmlHelper {
         return $this->urlFunding() . '/edit/' . $workshopUid;
     }
 
+    function urlFundingUploadActivityProof($workshopUid) {
+        return $this->urlFunding() . '/uploadActivityProof/' . $workshopUid;
+    }
+
     function getUserBackendNaviLinks($userUid, $isMyProfile, $isOrga) {
         $result = [];
         $result[] = ['url' => $this->urlUserHome(), 'name' => 'INFO'];

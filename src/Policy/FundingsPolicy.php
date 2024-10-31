@@ -27,7 +27,7 @@ class FundingsPolicy implements RequestPolicyInterface
             return false;
         }
 
-        if ($request->getParam('action') == 'edit') {
+        if (in_array($request->getParam('action'), ['edit', 'uploadActivityProof'])) {
 
             if ($identity->isAdmin()) {
                 return true;

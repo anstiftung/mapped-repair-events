@@ -94,4 +94,63 @@ class FundingsController extends AppController
 
     }
 
+    public function uploadActivityProof() {
+
+        $workshopUid = (int) $this->getRequest()->getParam('workshopUid');
+
+        $fundingsTable = $this->getTableLocator()->get('Fundings');
+        
+        $funding = $fundingsTable->findOrCreate([
+            $fundingsTable->aliasField('workshop_uid') => $workshopUid,
+        ], function ($entity) use ($workshopUid) {
+            $entity->workshop_uid = $workshopUid;
+        });
+
+        $funding = $fundingsTable->find()->where([
+            $fundingsTable->aliasField('workshop_uid') => $workshopUid,
+        ])->contain([
+            'Workshops',
+        ])->first();
+
+
+        $this->setReferer();
+
+        if (!empty($this->request->getData())) {
+
+            $activityProof = $this->request->getData('Fundings.activity_proof');
+
+            if (!in_array($activityProof->getClientMediaType(), ['application/pdf', 'image/jpeg', 'image/png'])) {
+                $funding->setError('activity_proof', ['type' => 'Erlaubte Dateiformate: PDF, JPG oder PNG.']);
+            }
+
+            if ($activityProof->getSize() > 5 * 1024 * 1024) {
+                $funding->setError('activity_proof', ['size' => 'Max. Dateigröße: 5 MB.']);
+            }
+
+            $fileName = $activityProof->getClientFilename();
+            $funding->activity_proof_filename = $fileName;
+
+            if ($fundingsTable->save($funding)) {
+
+                $filePath = ROOT . DS . 'files_private' . DS . 'fundings' . DS . $workshopUid . DS . $fileName;
+                if (!is_dir(dirname($filePath))) {
+                    mkdir(dirname($filePath), 0777, true);
+                }
+                $activityProof->moveTo($filePath);
+
+                $this->AppFlash->setFlashMessage(__('Der Aktivitätsnachweis wurde erfolgreich hochgeladen.'));
+                $this->redirect($this->getPreparedReferer());
+            } else {
+                $this->AppFlash->setFlashError('Der Aktivitätsnachweis konnte nicht hochgeladen werden.');
+            }
+
+        }
+
+        $this->set('metaTags', [
+            'title' => 'Aktivitätsnachweis für "' . h($funding->workshop->name) . '" hochladen',
+        ]);
+        $this->set('funding', $funding);
+
+    }
+
 }

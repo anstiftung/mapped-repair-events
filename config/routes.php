@@ -124,10 +124,13 @@ return function (RouteBuilder $routes) {
 
         if (Configure::read('AppConfig.fundingsEnabled')) {
             $routes->connect('/foerderantrag', ['controller'=>'fundings', 'action'=>'index']);
-            $routes->connect('/foerderantrag/edit/{workshopUid}', [
+            $routes->connect('/foerderantrag/{action}/{workshopUid}', [
                 'controller'=>'fundings',
-                'action'=>'edit'
-            ])->setPatterns(['workshopUid' => '[0-9]+']);;
+                'action'=>'{action}'
+            ],
+            [
+                'action' => 'edit|uploadActivityProof',
+            ])->setPatterns(['workshopUid' => '[0-9]+']);
         }
 
         // für normale cake routings (users controller)
