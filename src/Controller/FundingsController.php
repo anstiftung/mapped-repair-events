@@ -11,6 +11,7 @@ class FundingsController extends AppController
 
     private function getContain() {
         return [
+            'Fundings',
             'FundingAllPastEvents' => function (Query $q) {
                 return $q->select(['workshop_uid', 'count' => $q->func()->count('*')])->groupBy('workshop_uid');
             },
@@ -32,6 +33,12 @@ class FundingsController extends AppController
         } else {
             $workshops = $workshopsTable->getWorkshopsForAssociatedUser($this->loggedUser->uid, APP_OFF, $this->getContain());
         }
+
+        /*
+        $workshops->where([
+            'Workshops.url' => 'umweltzentrum-stockach-e-v',
+        ]);
+        */
 
         $workshopsWithFundingAllowed = [];
         $workshopsWithFundingNotAllowed = [];

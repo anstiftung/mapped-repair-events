@@ -17,26 +17,21 @@ class Workshop extends Entity
             return $errors;
         }
 
-        if (!($this->funding_was_registered_before_fundings_start_date && $this->funding_is_past_events_count_ok)) {
-            if (!$this->funding_was_registered_before_fundings_start_date) {
-                $errors[] = 'Die Initiative wurde erst nach dem Förderstart (' . $formattedFundingStartDate . ') registriert';
-            } else {
-                $errors[] = 'Die Initiative wurde zwar vor dem Förderstart (' . $formattedFundingStartDate . ') registriert';
-            }
-            if (!$this->funding_is_past_events_count_ok) {
-                $errors[] = ', es muss aber zumindest eine Veranstaltung vor dem  ' . $formattedFundingStartDate . ' vorhanden sein.';
+        if (!$this->funding_is_activity_proof_ok) {
+            if (!($this->funding_was_registered_before_fundings_start_date && $this->funding_is_past_events_count_ok)) {
+                if (!$this->funding_is_past_events_count_ok) {
+                    $errors[] = 'Es muss zumindest eine Veranstaltung vor dem  ' . $formattedFundingStartDate . ' vorhanden sein.';
+                }
             }
         }
 
-        $errors[] = ' - ODER - ';
-
-        if (!($this->funding_is_activity_proof_ok && $this->funding_is_future_events_count_ok)) {
-            if (!$this->funding_is_activity_proof_ok) {
-                $errors[] = 'Aktivitätsnachweis: nicht geprüft';
-            } else {
-                $errors[] = 'Aktivitätsnachweis: geprüft';
-            }
+        if ($this->funding_is_activity_proof_ok) {
             if (!$this->funding_is_future_events_count_ok) {
+                if (!$this->funding_is_activity_proof_ok) {
+                    $errors[] = 'Aktivitätsnachweis: nicht geprüft';
+                } else {
+                    $errors[] = 'Aktivitätsnachweis: geprüft';
+                }
                 $errors[] = ' und mindestens 4 Veranstaltungen nach dem ' . $formattedFundingStartDate . ' vorhanden.';
             }
         }
@@ -68,8 +63,10 @@ class Workshop extends Entity
     }
 
     public function _getFundingIsActivityProofOk(): bool {
-        // TODO implement
-        return true;
+        if (empty($this->funding)) {
+            return false;
+        }
+        return $this->funding->activity_proof_ok == 1;
     }
 
     public function _getFundingIsAllowed(): bool {

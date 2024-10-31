@@ -25,7 +25,7 @@ echo $this->element('jqueryTabsWithoutAjax', [
                         $this->Html->urlFundingEdit($workshop->uid),
                         [
                             'class' => 'button',
-                        ]
+                        ],
                     );
                     echo '<span>';
                         echo '<a href="' . $this->Html->urlWorkshopDetail($workshop->url) . '">' . $workshop->name . '</a>';
@@ -39,17 +39,29 @@ echo $this->element('jqueryTabsWithoutAjax', [
                     'javascript:void(0);',
                     [
                         'disabled' => 'disabled',
-                        'class' => 'button disabled'
-                        ]
+                        'class' => 'button disabled',
+                    ],
                 );
-                if ($workshop->funding_was_registered_before_fundings_start_date) {
-                    $button = $this->Html->link(
-                        'Aktivitätsnachweis hochladen',
-                        $this->Html->urlFundingUploadActivityProof($workshop->uid),
-                        [
-                            'class' => 'button'
-                        ]
-                    );
+                if (!$workshop->funding_was_registered_before_fundings_start_date) {
+                    if (empty($workshop->funding)) {
+                        $button = $this->Html->link(
+                            'Aktivitätsnachweis hochladen',
+                            $this->Html->urlFundingUploadActivityProof($workshop->uid),
+                            [
+                                'class' => 'button',
+                            ],
+                        );
+                    }
+                    if (!empty($workshop->funding) && !$workshop->funding->activity_proof_ok) {
+                        $button = $this->Html->link(
+                            'Aktivitätsnachweis ungeprüft',
+                            'javascript:void(0);',
+                            [
+                                'disabled' => 'disabled',
+                                'class' => 'button disabled',
+                            ],
+                        );
+                    }
                 }
                 echo '<div class="workshop-wrapper">';
                     echo $button;
