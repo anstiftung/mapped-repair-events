@@ -1,5 +1,4 @@
 <?php
-use Cake\Core\Configure;
 
 $this->element('addScript', array('script' =>
     JS_NAMESPACE.".Helper.bindCancelButton();".
@@ -11,12 +10,14 @@ $this->element('addScript', array('script' =>
 
     <?php
     echo $this->Form->create($funding, [
-        'novalidate' => 'novalidate'
+        'novalidate' => 'novalidate',
     ]);
+    echo '<div style="padding: 0 20px;">';
+        echo $this->element('heading', ['first' => 'Förderantrag bearbeiten: ' . $funding->workshop->name]);
+    echo '</div>';
     ?>
     <div class="edit">
         <?php
-            echo $this->element('heading', ['first' => $metaTags['title']]);
             echo $this->Form->hidden('referer', ['value' => $referer]);
             $this->Form->unlockField('referer');
             echo $this->Form->control('Fundings.activity_proof_ok', ['label' => 'Aktivitätsnachweis OK?']).'<br />';

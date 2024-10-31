@@ -1260,8 +1260,8 @@ input[type="radio"] {
     height: 20px ! important;
     padding: 5px;
 }
-div.checkbox label {
-  line-height: 20px;
+div.checkbox input {
+    float: left;
 }
 .remember-me-wrapper div.checkbox label {
   line-height: 30px;
@@ -3532,7 +3532,7 @@ div.admin div.edit label {
     margin-right: 6px;
     width: 130px;
     float: left;
-    line-height: 18px;
+    line-height: 26px;
     margin-top: 4px;
     word-break: break-word;
 }
