@@ -106,12 +106,8 @@ class FundingsController extends AdminAppController
         }
 
         $filePath = Funding::UPLOAD_PATH . $funding->id . DS . $funding->activity_proof_filename;
-        $extension = strtolower(pathinfo($funding->activity_proof_filename, PATHINFO_EXTENSION));
-
-        $this->request = $this->request->withParam('_ext', $extension);
-
-        $response = $this->response->withType($extension);
-        $response = $response->withStringBody(file_get_contents($filePath));
+        $response = $this->response->withFile($filePath);
+        $response = $response->withHeader('Content-Disposition', 'inline; filename="' . $funding->activity_proof_filename . '"');
         return $response;
 
     }
