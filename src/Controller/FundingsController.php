@@ -111,6 +111,7 @@ class FundingsController extends AppController
             $fundingsTable->aliasField('workshop_uid') => $workshopUid,
         ], function ($entity) use ($workshopUid) {
             $entity->workshop_uid = $workshopUid;
+            $entity->user_uid = $this->loggedUser->uid;
         });
 
         $funding = $fundingsTable->find()->where([
