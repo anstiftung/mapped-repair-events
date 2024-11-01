@@ -43,6 +43,8 @@ use Cake\Error\ExceptionTrap;
 use Cake\Mailer\TransportFactory;
 use Cake\Datasource\ConnectionManager;
 use Cake\Core\Configure\Engine\PhpConfig;
+use App\Database\Type\JsonType;
+use Cake\Database\TypeFactory;
 
 require CAKE . 'functions.php';
 
@@ -162,3 +164,5 @@ I18n::setLocale('de_DE');
 setlocale(LC_CTYPE, 'de_DE'.'.UTF-8');
 setlocale(LC_COLLATE, 'de_DE'.'.UTF-8');
 mb_internal_encoding('UTF-8');
+
+TypeFactory::map('json', JsonType::class);

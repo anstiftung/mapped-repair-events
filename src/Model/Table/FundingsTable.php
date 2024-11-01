@@ -3,6 +3,7 @@ namespace App\Model\Table;
 
 use Cake\ORM\Table;
 use Cake\Routing\Router;
+use Cake\Database\Schema\TableSchemaInterface;
 
 class FundingsTable extends Table
 {
@@ -18,6 +19,10 @@ class FundingsTable extends Table
         ]);
     }
 
+    public function getSchema(): TableSchemaInterface
+    {
+        return parent::getSchema()->setColumnType('verified_fields', 'json');
+    }    
 
     public function findOrCreateCustom($workshopUid) {
         $funding = $this->findOrCreate([
