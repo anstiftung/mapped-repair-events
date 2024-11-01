@@ -4,15 +4,15 @@ MappedRepairEvents.Funding = {
         const fieldNameInputField = $(`#${fieldName}`);
         const wrapper = fieldNameInputField.closest('.input');
         wrapper.toggleClass('is-verified', checked);
-        fieldNameInputField.prop('disabled', checked ? 'disabled' : false);
+        fieldNameInputField.prop('readonly', checked);
     },
 
     addIsVerifiedCheckboxToFundingEdit: (isVerifiedData) => {
         const parsedIsVerifiedData = JSON.parse(isVerifiedData);
-        
+
         $('#fundingForm').find('.input input:text, .input input:checkbox').each(function() {
             const fieldName = $(this).attr('id');
-            const checked = parsedIsVerifiedData.includes(fieldName);
+            const checked = parsedIsVerifiedData === null ? false : parsedIsVerifiedData.includes(fieldName);
 
             const checkbox = $('<input>', {
                 type: 'checkbox',

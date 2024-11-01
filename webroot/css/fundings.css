@@ -22,11 +22,22 @@ body.fundings.edit h1 {
     align-items: baseline;
     padding: 10px 5px 5px 5px;
     margin: 5px 0;
-    background-color: #FCC981;
     border-radius: 3px;
+}
+@keyframes lockAnimation {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.02);
+    }
+    100% {
+      transform: scale(1);
+    }
 }
 #fundingForm div.input.is-verified {
     background-color: #90ee90;
+    animation: lockAnimation .3s;
 }
 #fundingForm div.input.is-verified input {
     color: grey;

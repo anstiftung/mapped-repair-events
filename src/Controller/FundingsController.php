@@ -78,7 +78,9 @@ class FundingsController extends AppController
         }
 
         if (!empty($this->request->getData())) {
-
+            if (!array_key_exists('verified_fields', $this->request->getData('Fundings'))) {
+                $this->request = $this->request->withData('Fundings.verified_fields', []);
+            }
             $patchedEntity = $fundingsTable->patchEntity($funding, $this->request->getData(), [
                 'associated' => ['Workshops'],
             ]);
