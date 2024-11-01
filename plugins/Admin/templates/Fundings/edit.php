@@ -14,7 +14,7 @@ $this->element('addScript', array('script' =>
         'id' => 'fundingForm',
     ]);
     echo '<div style="padding: 0 20px;">';
-        echo $this->element('heading', ['first' => 'Förderantrag bearbeiten: ' . $funding->workshop->name]);
+        echo $this->element('heading', ['first' => 'Förderantrag bearbeiten: ' . $funding->workshop->name . ' (UID: ' . $funding->workshop->uid . ')']); 
     echo '</div>';
     ?>
     <div class="edit">

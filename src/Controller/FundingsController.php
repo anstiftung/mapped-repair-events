@@ -61,6 +61,18 @@ class FundingsController extends AppController
 
     }
 
+    private function getBasicErrorMessages($funding): array {
+        $errors = ['Zugriff auf diese Seite nicht möglich.'];
+        if (empty($funding)) {
+            $errors[] = 'Der Förderantrag wurde bereits von einem anderen Organisator erstellt.';
+        }
+        if (!empty($funding) && $funding->workshop->status == APP_DELETED) {
+            $errors[] = 'Die Initiative ist gelöscht.';
+        }
+        return $errors;
+        
+    }
+
     public function edit() {
 
         $workshopUid = (int) $this->getRequest()->getParam('workshopUid');
@@ -72,8 +84,13 @@ class FundingsController extends AppController
         
         $workshopsTable = $this->getTableLocator()->get('Workshops');
         $workshop = $workshopsTable->find()->where(['uid' => $workshopUid])->contain($this->getContain())->first();
-        if ($funding->workshop->status == APP_DELETED || !$workshop->funding_is_allowed) {
-            $this->AppFlash->setFlashError('Förderantrag für diese Initiative nicht möglich.');
+        $errors = $this->getBasicErrorMessages($funding);
+        if (!$workshop->funding_is_allowed) {
+            $errors[] = 'Die Initiative erfüllt die Voraussetzungen für eine Förderung nicht.';
+        }
+
+        if (count($errors) > 1) {
+            $this->AppFlash->setFlashError(implode(' ', $errors));
             return $this->redirect(Configure::read('AppConfig.htmlHelper')->urlFundings());
         }
 
@@ -110,6 +127,20 @@ class FundingsController extends AppController
         $funding = $fundingsTable->findOrCreateCustom($workshopUid);
 
         $this->setReferer();
+        $workshopsTable = $this->getTableLocator()->get('Workshops');
+        $workshop = $workshopsTable->find()->where(['uid' => $workshopUid])->contain($this->getContain())->first();
+
+        $errors = $this->getBasicErrorMessages($funding);
+        if ($workshop->funding_is_allowed) {
+            $errors[] = 'Die Initiative hat bereits alle Voraussetzungen für den Förderantrag erfüllt.';
+        }
+        if ($funding->activity_proof_filename != '') {
+            $errors[] = 'Es wurde bereits ein Aktivitätsbericht hochgeladen.';
+        }
+        if (count($errors) > 1) {
+            $this->AppFlash->setFlashError(implode(' ', $errors));
+            return $this->redirect(Configure::read('AppConfig.htmlHelper')->urlFundings());
+        }
 
         if (!empty($this->request->getData())) {
 

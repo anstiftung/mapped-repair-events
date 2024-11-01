@@ -28,7 +28,6 @@ class FundingsTable extends Table
         $funding = $this->findOrCreate([
             $this->aliasField('workshop_uid') => $workshopUid,
         ], function ($entity) use ($workshopUid) {
-
             $entity->workshop_uid = $workshopUid;
             $entity->status = APP_ON;
             $entity->owner = Router::getRequest()?->getAttribute('identity')?->uid;
@@ -36,15 +35,16 @@ class FundingsTable extends Table
 
         $funding = $this->find()->where([
             $this->aliasField('workshop_uid') => $workshopUid,
+            $this->aliasField('owner') => Router::getRequest()?->getAttribute('identity')?->uid,
         ])->contain([
             'Workshops.Countries',
             'OwnerUsers.Countries',
         ])->first();
 
-        $funding->owner_user->revertPrivatizeData();
-
+        if (!empty($funding)) {
+            $funding->owner_user->revertPrivatizeData();
+        }
         return $funding;
-
     }
 
 }
