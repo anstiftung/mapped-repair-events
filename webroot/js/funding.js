@@ -26,7 +26,7 @@ MappedRepairEvents.Funding = {
             }).trigger('change');
 
             const label = $('<label>', {
-                class: 'verified no-required',
+                class: 'verified checkbox no-required',
                 text: 'bestätigt?'
             }).append(checkbox);
 
