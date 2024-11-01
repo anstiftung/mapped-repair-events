@@ -3,6 +3,7 @@ MappedRepairEvents.Funding = {
     onClickHandler: (fieldName, checked) => {
         const fieldNameInputField = $(`#${fieldName}`);
         const wrapper = fieldNameInputField.closest('.input');
+        wrapper.toggleClass('is-pending', !checked);
         wrapper.toggleClass('is-verified', checked);
         fieldNameInputField.prop('readonly', checked);
     },
@@ -26,7 +27,7 @@ MappedRepairEvents.Funding = {
 
             const label = $('<label>', {
                 class: 'verified no-required',
-                text: 'verifiziert'
+                text: 'verifiziert?'
             }).append(checkbox);
 
             label.appendTo($(this).closest('.input'));

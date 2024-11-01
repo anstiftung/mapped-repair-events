@@ -1,3 +1,10 @@
+:root {
+    --is-verified: green;
+    --is-pending: yellow;
+    --is-missing: red;
+    --is-rejected: blue;
+}
+
 body.fundings.index .workshop-wrapper {
     display: flex;
     padding: 5px 0;
@@ -16,12 +23,12 @@ body.fundings.edit h1 {
 }
 #fundingForm div.input {
     display: grid;
-    grid-template-columns: 200px auto 90px;
+    grid-template-columns: 200px auto 92px;
     grid-template-rows: auto auto;
     gap: 5px;
     align-items: baseline;
     padding: 10px 5px 5px 5px;
-    margin: 5px 0;
+    margin: 2px 0;
     border-radius: 3px;
 }
 @keyframes lockAnimation {
@@ -36,8 +43,20 @@ body.fundings.edit h1 {
     }
 }
 #fundingForm div.input.is-verified {
-    background-color: #90ee90;
+    background-color: var(--is-verified);
     animation: lockAnimation .3s;
+    color: #fff;
+}
+#fundingForm div.input.is-pending {
+    background-color: var(--is-pending);
+}
+#fundingForm div.input.is-missing {
+    background-color: var(--is-missing);
+    color: #fff;
+}
+#fundingForm div.input.is-rejected {
+    background-color: var(--is-rejected);
+    color: #fff;
 }
 #fundingForm div.input.is-verified input {
     color: grey;
@@ -88,4 +107,28 @@ body.fundings.edit h1 {
 }
 #fundingForm textarea {
     width: auto;
+}
+#fundingForm .color-codes-wrapper {
+    margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
+}
+#fundingForm .color-codes-wrapper > div {
+    flex: 1;
+    padding: 10px;
+}
+#fundingForm .color-codes-wrapper .is-verified {
+    background-color: var(--is-verified);
+    color: #fff;
+}
+#fundingForm .color-codes-wrapper .is-pending {
+    background-color: var(--is-pending);
+}
+#fundingForm .color-codes-wrapper .is-missing {
+    background-color: var(--is-missing);
+    color: #fff;
+}
+#fundingForm .color-codes-wrapper .is-rejected {
+    background-color: var(--is-rejected);
+    color: #fff;
 }
