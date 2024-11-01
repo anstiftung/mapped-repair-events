@@ -1,27 +1,20 @@
 MappedRepairEvents.Funding = {
 
-    onClickHandler : function(fieldName, checked) {
-        let fieldNameInputField = $('#' + fieldName);
-        let wrapper = fieldNameInputField.closest('.input');
-        if (checked) {
-            wrapper.addClass('is-verified');
-            fieldNameInputField.prop('readonly', true);
-        } else {
-            wrapper.removeClass('is-verified');
-            fieldNameInputField.prop('readonly', false);
-        }
+    onClickHandler: (fieldName, checked) => {
+        const fieldNameInputField = $(`#${fieldName}`);
+        const wrapper = fieldNameInputField.closest('.input');
+        wrapper.toggleClass('is-verified', checked);
+        fieldNameInputField.prop('readonly', checked);
     },
 
-    addIsVerifiedCheckboxToFundingEdit : function(isVerifiedData) {
-
-        let parsedIsVerifiedData = $.parseJSON(isVerifiedData);
+    addIsVerifiedCheckboxToFundingEdit: (isVerifiedData) => {
+        const parsedIsVerifiedData = JSON.parse(isVerifiedData);
 
         $('#fundingForm').find('.input input:text').each(function() {
-            
-            let fieldName = $(this).attr('id');
-            let checked = $.inArray(fieldName, parsedIsVerifiedData) !== -1;
+            const fieldName = $(this).attr('id');
+            const checked = parsedIsVerifiedData.includes(fieldName);
 
-            let checkbox = $('<input>', {
+            const checkbox = $('<input>', {
                 type: 'checkbox',
                 value: fieldName,
                 name: 'Fundings[verified_fields][]',
@@ -31,15 +24,12 @@ MappedRepairEvents.Funding = {
                 }
             }).trigger('change');
 
-            checkbox = $('<label>', {
+            const label = $('<label>', {
                 class: 'verified no-required',
                 text: 'verifiziert'
             }).append(checkbox);
 
-            checkbox.insertAfter($(this));
-
+            label.insertAfter($(this));
         });
-
     }
-
 };
