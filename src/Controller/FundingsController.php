@@ -78,17 +78,18 @@ class FundingsController extends AppController
         }
 
         if (!empty($this->request->getData())) {
+            $assocations = ['Workshops', 'OwnerUsers'];
             if (!array_key_exists('verified_fields', $this->request->getData('Fundings'))) {
                 $this->request = $this->request->withData('Fundings.verified_fields', []);
             }
             $patchedEntity = $fundingsTable->patchEntity($funding, $this->request->getData(), [
-                'associated' => ['Workshops'],
+                'associated' => $assocations,
             ]);
             $errors = $patchedEntity->getErrors();
 
             if (empty($errors)) {
                 $entity = $this->stripTagsFromFields($patchedEntity, 'Workshop');
-                if ($fundingsTable->save($entity, ['associated' => ['Workshops']])) {
+                if ($fundingsTable->save($entity, ['associated' => $assocations])) {
                     $this->AppFlash->setFlashMessage('Förderantrag erfolgreich gespeichert.');
                 }
             }

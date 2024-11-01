@@ -35,7 +35,23 @@ echo $this->element('jqueryTabsWithoutAjax', [
                 $this->Form->control('Fundings.workshop.email', ['label' => 'E-Mail']).
                 $this->Form->control('Fundings.workshop.website', ['label' => 'Website']),
                 [
-                    'legend' => 'Initiative',
+                    'legend' => 'Stammdaten der Reparatur-Initiative (UID: ' . $funding->workshop->uid . ')'
+                ]
+            );
+
+            echo $this->Form->fieldset(
+                $this->Form->control('Fundings.owner_user.nick', ['label' => 'Nickname']).
+                $this->Form->control('Fundings.owner_user.firstname', ['label' => 'Vorname']).
+                $this->Form->control('Fundings.owner_user.lastname', ['label' => 'Nachname']).
+                $this->Form->control('Fundings.owner_user.email', ['label' => 'E-Mail']).
+                $this->Form->control('Fundings.owner_user.street', ['type' => 'textarea', 'label' => 'Anschrift']).
+                $this->Form->control('Fundings.owner_user.zip', ['label' => 'PLZ']).
+                $this->Form->control('Fundings.owner_user.city', ['label' => 'Stadt']).
+                $this->Form->control('Fundings.owner_user.country.name_de', ['disabled' => true, 'label' => 'Land']).
+                $this->Form->control('Fundings.owner_user.phone', ['label' => 'Telefon']).
+                $this->Form->control('Fundings.owner_user.website', ['label' => 'Website']),
+                [
+                    'legend' => 'Personenbezogene Daten Ansprechpartner*in (UID: ' . $funding->owner_user->uid . ')',
                 ]
             );
 

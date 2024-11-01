@@ -10,7 +10,7 @@ MappedRepairEvents.Funding = {
     addIsVerifiedCheckboxToFundingEdit: (isVerifiedData) => {
         const parsedIsVerifiedData = JSON.parse(isVerifiedData);
 
-        $('#fundingForm').find('.input input:text, .input input:checkbox, .input input[type="email"]').each(function() {
+        $('#fundingForm').find('.input input:text, .input input:checkbox, .input input[type="email"], .input input[type="tel"], .input textarea').each(function() {
             const fieldName = $(this).attr('id');
             const checked = parsedIsVerifiedData === null ? false : parsedIsVerifiedData.includes(fieldName);
 

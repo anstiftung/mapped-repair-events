@@ -38,7 +38,10 @@ class FundingsTable extends Table
             $this->aliasField('workshop_uid') => $workshopUid,
         ])->contain([
             'Workshops.Countries',
+            'OwnerUsers.Countries',
         ])->first();
+
+        $funding->owner_user->revertPrivatizeData();
 
         return $funding;
 

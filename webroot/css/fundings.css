@@ -68,7 +68,7 @@ body.fundings.edit h1 {
 #fundingForm fieldset {
     border: 1px solid #ccc;
     border-radius: 5px;
-    margin-bottom: 10px;
+    margin-bottom: 40px;
     padding: 10px;
 }
 #fundingForm fieldset legend {
@@ -85,4 +85,7 @@ body.fundings.edit h1 {
 }
 #fundingForm .checkbox {
     float: none;
+}
+#fundingForm textarea {
+    width: auto;
 }
