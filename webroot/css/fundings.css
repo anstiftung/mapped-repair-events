@@ -23,6 +23,7 @@ body.fundings.edit h1 {
     padding: 10px 5px 5px 5px;
     margin: 5px 0;
     background-color: #FCC981;
+    border-radius: 3px;
 }
 #fundingForm div.input.is-verified {
     background-color: #90ee90;
@@ -40,9 +41,6 @@ body.fundings.edit h1 {
 }
 #fundingForm div.input label.verified input[type="checkbox"] {
     float: left;
-}
-#fundingForm div.input label.verified::after {
-    content: "";
 }
 #fundingForm div.input input {
     grid-column: 2;

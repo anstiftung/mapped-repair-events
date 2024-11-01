@@ -4,3 +4,6 @@ form .required label:not(.no-required):after {
     display:inline;
     margin-left:2px;
 }
+:focus-visible {
+    outline: none;
+}

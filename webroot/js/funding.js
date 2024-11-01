@@ -32,7 +32,7 @@ MappedRepairEvents.Funding = {
             }).trigger('change');
 
             checkbox = $('<label>', {
-                class: 'verified',
+                class: 'verified no-required',
                 text: 'verifiziert'
             }).append(checkbox);
 
