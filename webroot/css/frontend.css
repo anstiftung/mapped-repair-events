@@ -1274,6 +1274,7 @@ div.checkbox input {
     width: 55px ! important;
 }
 .input textarea {
+    font-family: Arial;
     height: 50px;
     padding: 5px;
 }
