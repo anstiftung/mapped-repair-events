@@ -4,13 +4,13 @@ MappedRepairEvents.Funding = {
         const fieldNameInputField = $(`#${fieldName}`);
         const wrapper = fieldNameInputField.closest('.input');
         wrapper.toggleClass('is-verified', checked);
-        fieldNameInputField.prop('readonly', checked);
+        fieldNameInputField.prop('disabled', checked ? 'disabled' : false);
     },
 
     addIsVerifiedCheckboxToFundingEdit: (isVerifiedData) => {
         const parsedIsVerifiedData = JSON.parse(isVerifiedData);
-
-        $('#fundingForm').find('.input input:text').each(function() {
+        
+        $('#fundingForm').find('.input input:text, .input input:checkbox').each(function() {
             const fieldName = $(this).attr('id');
             const checked = parsedIsVerifiedData.includes(fieldName);
 
@@ -29,7 +29,7 @@ MappedRepairEvents.Funding = {
                 text: 'verifiziert'
             }).append(checkbox);
 
-            label.insertAfter($(this));
+            label.appendTo($(this).closest('.input'));
         });
     }
 };

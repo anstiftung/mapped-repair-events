@@ -72,3 +72,6 @@ body.fundings.edit h1 {
     width: 100%;
     margin-bottom: 20px;
 }
+#fundingForm .checkbox {
+    float: none;
+}

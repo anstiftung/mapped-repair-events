@@ -28,7 +28,8 @@ echo $this->element('jqueryTabsWithoutAjax', [
                 $this->Form->control('Fundings.workshop.street', ['label' => 'Straße + Hausnummer']).
                 $this->Form->control('Fundings.workshop.zip', ['label' => 'PLZ']).
                 $this->Form->control('Fundings.workshop.city', ['label' => 'Stadt']).
-                $this->Form->control('Fundings.workshop.adresszusatz', ['label' => 'Adresszusatz']),
+                $this->Form->control('Fundings.workshop.adresszusatz', ['label' => 'Adresszusatz']).
+                $this->Form->control('Fundings.workshop.use_custom_coordinates', ['type' => 'checkbox', 'label' => 'Koordinaten selbst festlegen?']),
                 [
                     'legend' => 'Initiative',
                 ]
