@@ -27,7 +27,7 @@ MappedRepairEvents.Funding = {
 
             const label = $('<label>', {
                 class: 'verified no-required',
-                text: 'verifiziert?'
+                text: 'bestätigt?'
             }).append(checkbox);
 
             label.appendTo($(this).closest('.input'));
