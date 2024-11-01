@@ -37,7 +37,7 @@ class FundingsTable extends Table
         $funding = $this->find()->where([
             $this->aliasField('workshop_uid') => $workshopUid,
         ])->contain([
-            'Workshops',
+            'Workshops.Countries',
         ])->first();
 
         return $funding;
