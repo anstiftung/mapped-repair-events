@@ -93,12 +93,20 @@ body.fundings.edit div.admin.edit {
 #fundingForm fieldset {
     border: 1px solid #ccc;
     border-radius: 5px;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
     padding: 10px;
 }
 #fundingForm fieldset legend {
     font-weight: bold;
     font-size: 16px;
+}
+#fundingForm .flexbox {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;    
+}
+#fundingForm .flexbox > fieldset {
+    flex: 1;
 }
 #fundingForm .upload-form-field-wrapper {
     padding: 10px;
