@@ -51,6 +51,38 @@ echo $this->element('jqueryTabsWithoutAjax', [
                 ]
             );
 
+            echo $this->Form->fieldset(
+                $this->Form->control('Fundings.supporter.name', ['label' => 'Name']).
+                $this->Form->control('Fundings.supporter.legal_form', ['label' => 'Rechtsform']).
+                $this->Form->control('Fundings.supporter.website', ['label' => 'Website']).
+                $this->Form->control('Fundings.supporter.street', ['type' => 'textarea', 'label' => 'Anschrift']).
+                $this->Form->control('Fundings.supporter.zip', ['label' => 'PLZ']).
+                $this->Form->control('Fundings.supporter.city', ['label' => 'Stadt']),
+                [
+                    'legend' => 'Stammdaten der Trägerorganisation',
+                ]
+            );
+
+            echo $this->Form->fieldset(
+                $this->Form->control('Fundings.supporter.contact_firstname', ['label' => 'Vorname']).
+                $this->Form->control('Fundings.supporter.contact_lastname', ['label' => 'Nachname']).
+                $this->Form->control('Fundings.supporter.contact_function', ['label' => 'Funktion']).
+                $this->Form->control('Fundings.supporter.contact_phone', ['label' => 'Telefon']).
+                $this->Form->control('Fundings.supporter.contact_email', ['label' => 'E-Mail']),
+                [
+                    'legend' => 'Ansprechpartner*in der Trägerorganisation',
+                ]
+            );
+
+            echo $this->Form->fieldset(
+                $this->Form->control('Fundings.supporter.bank_account_owner', ['label' => 'Kontoinhaber']).
+                $this->Form->control('Fundings.supporter.bank_institute', ['label' => 'Kreditinstitut']).
+                $this->Form->control('Fundings.supporter.iban', ['label' => 'IBAN']),
+                [
+                    'legend' => 'Bankverbindung der Trägerorganisation',
+                ]
+            );
+
             ?>
 
             <div class="color-codes-wrapper">

@@ -95,7 +95,7 @@ class FundingsController extends AppController
         }
 
         if (!empty($this->request->getData())) {
-            $assocations = ['Workshops', 'OwnerUsers'];
+            $assocations = ['Workshops', 'OwnerUsers', 'Supporters'];
             if (!array_key_exists('verified_fields', $this->request->getData('Fundings'))) {
                 $this->request = $this->request->withData('Fundings.verified_fields', []);
             }

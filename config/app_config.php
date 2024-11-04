@@ -30,6 +30,7 @@ define('GROUPS_ORGA', 	          9);
 
 define('PASSWORD_REGEX', '/^([^\\s]){10,32}$/');
 define('ZIP_REGEX', '/^[0-9]{4,5}$/');
+define('ZIP_REGEX_DE', '/^[0-9]{5}$/');
 
 return [
     'Email' => [
