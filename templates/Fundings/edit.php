@@ -25,13 +25,10 @@ echo $this->element('jqueryTabsWithoutAjax', [
 
             echo $this->Form->fieldset(
                 $this->Form->control('Fundings.workshop.name', ['label' => 'Name der Initiative']).
-                $this->Form->control('Fundings.workshop.url', ['disabled' => true, 'label' => 'Slug']).
                 $this->Form->control('Fundings.workshop.street', ['label' => 'Straße + Hausnummer']).
                 $this->Form->control('Fundings.workshop.zip', ['label' => 'PLZ']).
                 $this->Form->control('Fundings.workshop.city', ['label' => 'Stadt']).
                 $this->Form->control('Fundings.workshop.adresszusatz', ['label' => 'Adresszusatz']).
-                $this->Form->control('Fundings.workshop.country.name_de', ['disabled' => true, 'label' => 'Land']).
-                $this->Form->control('Fundings.workshop.use_custom_coordinates', ['type' => 'checkbox', 'label' => 'Koordinaten selbst festlegen?']).
                 $this->Form->control('Fundings.workshop.email', ['label' => 'E-Mail']).
                 $this->Form->control('Fundings.workshop.website', ['label' => 'Website']),
                 [
@@ -47,7 +44,6 @@ echo $this->element('jqueryTabsWithoutAjax', [
                 $this->Form->control('Fundings.owner_user.street', ['type' => 'textarea', 'label' => 'Anschrift']).
                 $this->Form->control('Fundings.owner_user.zip', ['label' => 'PLZ']).
                 $this->Form->control('Fundings.owner_user.city', ['label' => 'Stadt']).
-                $this->Form->control('Fundings.owner_user.country.name_de', ['disabled' => true, 'label' => 'Land']).
                 $this->Form->control('Fundings.owner_user.phone', ['label' => 'Telefon']).
                 $this->Form->control('Fundings.owner_user.website', ['label' => 'Website']),
                 [
