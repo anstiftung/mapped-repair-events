@@ -5,6 +5,7 @@ namespace App\Controller;
 use Cake\Core\Configure;
 use Cake\Database\Query;
 use App\Model\Entity\Funding;
+use Cake\Utility\Inflector;
 
 class FundingsController extends AppController
 {
@@ -108,16 +109,21 @@ class FundingsController extends AppController
                 if ($fundingsTable->save($patchedEntity, ['associated' => $associations])) {
                     $this->AppFlash->setFlashMessage('Förderantrag erfolgreich gespeichert.');
                 }
-            } else {
-           
+            } else {           
                 $data = $this->request->getData();
+                $verifiedFieldsWithErrors = [];
                 foreach ($errors as $entity => $fieldErrors) {
                     $fieldNames = array_keys($fieldErrors);
                     foreach($fieldNames as $fieldName) {
+                        $verifiedFieldsWithErrors[] = 'fundings-' . $entity . '-' . Inflector::dasherize($fieldName);
                         unset($data['Fundings'][$entity][$fieldName]);
                     }
                 }
 
+                // never save "verified" if field has error
+                $verifiedFields = $data['Fundings']['verified_fields'];
+                $verifiedFields = array_diff($verifiedFields, $verifiedFieldsWithErrors);
+                $this->request = $this->request->withData('Fundings.verified_fields', $verifiedFields);
                 $associationsWithoutValidation = array_map(function($association) {
                     return ['validate' => false];
                 }, array_flip($associations));
@@ -127,7 +133,7 @@ class FundingsController extends AppController
                     'associated' => $associationsWithoutValidation,
                 ]);
                 if ($fundingsTable->save($patchedEntity, ['associated' => $associationsWithoutValidation])) {
-                    $this->AppFlash->setFlashMessage('Alle validen Felder wurden erfolgreich gespeichert.');
+                    $this->AppFlash->setFlashMessage('Alle validen Daten wurden erfolgreich gespeichert.');
                 }
             }
 

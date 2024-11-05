@@ -1,5 +1,13 @@
 MappedRepairEvents.Funding = {
 
+    init: () => {
+        $('#fundingForm .input.required').find('input, textarea').each(function() {
+            if ($(this).val() === '') {
+                $(this).closest('.input').addClass('is-missing');
+            }
+        });
+    },
+
     onClickHandler: (fieldName, checked) => {
         const fieldNameInputField = $(`#${fieldName}`);
         const wrapper = fieldNameInputField.closest('.input');
@@ -11,7 +19,7 @@ MappedRepairEvents.Funding = {
     addIsVerifiedCheckboxToFundingEdit: (isVerifiedData) => {
         const parsedIsVerifiedData = JSON.parse(isVerifiedData);
 
-        $('#fundingForm').find('.input input:text, .input input:checkbox, .input input[type="email"], .input input[type="tel"], .input textarea').each(function() {
+        $('#fundingForm .input:not(.is-missing)').find('input:text, input:checkbox, input[type="email"],  input[type="tel"], textarea').each(function() {
             const fieldName = $(this).attr('id');
             const checked = parsedIsVerifiedData === null ? false : parsedIsVerifiedData.includes(fieldName);
 

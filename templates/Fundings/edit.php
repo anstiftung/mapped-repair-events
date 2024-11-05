@@ -1,6 +1,7 @@
 <?php
 $this->element('addScript', array('script' =>
     JS_NAMESPACE.".Helper.bindCancelButton();".
+    JS_NAMESPACE.".Funding.init();".
     JS_NAMESPACE.".Funding.addIsVerifiedCheckboxToFundingEdit('".json_encode($funding->verified_fields)."');"
 ));
 echo $this->element('jqueryTabsWithoutAjax', [

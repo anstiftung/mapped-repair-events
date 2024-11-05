@@ -45,16 +45,17 @@ body.fundings.edit div.admin.edit {
       transform: scale(1);
     }
 }
-#fundingForm div.input.is-verified {
-    background-color: var(--is-verified);
-    animation: lockAnimation .3s;
-    color: #fff;
-}
 #fundingForm div.input.is-pending {
     background-color: var(--is-pending);
+    color: #333;
 }
 #fundingForm div.input.is-missing {
     background-color: var(--is-missing);
+    color: #fff;
+}
+#fundingForm div.input.is-verified {
+    background-color: var(--is-verified);
+    animation: lockAnimation .3s;
     color: #fff;
 }
 #fundingForm div.input.is-rejected {
@@ -71,6 +72,9 @@ body.fundings.edit div.admin.edit {
 #fundingForm div.input label.verified {
     grid-column: 3;
 }
+#fundingForm div.input.is-missing.required label::after {
+    color: #fff;
+} 
 #fundingForm div.input.checkbox label,
 #fundingForm div.input label.checkbox {
     line-height: 24px;
@@ -90,6 +94,9 @@ body.fundings.edit div.admin.edit {
     margin-top: 0;
     margin-bottom: 5px;
 }
+#fundingForm div.input.is-missing .error-message {
+    color: #fff;
+}
 #fundingForm fieldset {
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -103,7 +110,7 @@ body.fundings.edit div.admin.edit {
 #fundingForm .flexbox {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;    
+    gap: 20px;
 }
 #fundingForm .flexbox > fieldset {
     flex: 1;
@@ -126,6 +133,7 @@ body.fundings.edit div.admin.edit {
     margin-bottom: 20px;
     display: flex;
     gap: 10px;
+    width: 70%;
 }
 #fundingForm .color-codes-wrapper > div {
     flex: 1;
