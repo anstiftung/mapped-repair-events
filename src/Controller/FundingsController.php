@@ -84,30 +84,50 @@ class FundingsController extends AppController
         
         $workshopsTable = $this->getTableLocator()->get('Workshops');
         $workshop = $workshopsTable->find()->where(['uid' => $workshopUid])->contain($this->getContain())->first();
-        $errors = $this->getBasicErrorMessages($funding);
+        $basicErrors = $this->getBasicErrorMessages($funding);
         if (!$workshop->funding_is_allowed) {
-            $errors[] = 'Die Initiative erfüllt die Voraussetzungen für eine Förderung nicht.';
+            $basicErrors[] = 'Die Initiative erfüllt die Voraussetzungen für eine Förderung nicht.';
         }
 
-        if (count($errors) > 1) {
-            $this->AppFlash->setFlashError(implode(' ', $errors));
+        if (count($basicErrors) > 1) {
+            $this->AppFlash->setFlashError(implode(' ', $basicErrors));
             return $this->redirect(Configure::read('AppConfig.htmlHelper')->urlFundings());
         }
 
         if (!empty($this->request->getData())) {
-            $assocations = ['Workshops', 'OwnerUsers', 'Supporters'];
+            $associations = ['Workshops', 'OwnerUsers', 'Supporters'];
             if (!array_key_exists('verified_fields', $this->request->getData('Fundings'))) {
                 $this->request = $this->request->withData('Fundings.verified_fields', []);
             }
             $patchedEntity = $fundingsTable->patchEntity($funding, $this->request->getData(), [
-                'associated' => $assocations,
+                'associated' => $associations,
             ]);
             $errors = $patchedEntity->getErrors();
 
             if (empty($errors)) {
-                $entity = $this->stripTagsFromFields($patchedEntity, 'Workshop');
-                if ($fundingsTable->save($entity, ['associated' => $assocations])) {
+                if ($fundingsTable->save($patchedEntity, ['associated' => $associations])) {
                     $this->AppFlash->setFlashMessage('Förderantrag erfolgreich gespeichert.');
+                }
+            } else {
+           
+                $data = $this->request->getData();
+                foreach ($errors as $entity => $fieldErrors) {
+                    $fieldNames = array_keys($fieldErrors);
+                    foreach($fieldNames as $fieldName) {
+                        unset($data['Fundings'][$entity][$fieldName]);
+                    }
+                }
+
+                $associationsWithoutValidation = array_map(function($association) {
+                    return ['validate' => false];
+                }, array_flip($associations));
+            
+                $fundingForSaving = $fundingsTable->findOrCreateCustom($workshopUid);
+                $patchedEntity = $fundingsTable->patchEntity($fundingForSaving, $data, [
+                    'associated' => $associationsWithoutValidation,
+                ]);
+                if ($fundingsTable->save($patchedEntity, ['associated' => $associationsWithoutValidation])) {
+                    $this->AppFlash->setFlashMessage('Alle validen Felder wurden erfolgreich gespeichert.');
                 }
             }
 
