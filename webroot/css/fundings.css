@@ -26,12 +26,12 @@ body.fundings.edit div.admin.edit {
 }
 #fundingForm div.input {
     display: grid;
-    grid-template-columns: 200px auto 100px;
+    grid-template-columns: 155px auto 100px;
     grid-template-rows: auto auto;
     gap: 5px;
     align-items: baseline;
     padding: 10px 5px 5px 5px;
-    margin: 2px 0;
+    margin-top: 1px;
     border-radius: 3px;
 }
 @keyframes lockAnimation {
@@ -107,6 +107,7 @@ body.fundings.edit div.admin.edit {
 #fundingForm fieldset legend {
     font-weight: bold;
     font-size: 16px;
+    color: #333;
 }
 #fundingForm .flexbox {
     display: flex;
