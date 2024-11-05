@@ -1,8 +1,8 @@
 :root {
-    --is-verified: green;
-    --is-pending: yellow;
-    --is-missing: red;
-    --is-rejected: blue;
+    --is-verified: rgba(0, 128, 0, 0.7);
+    --is-pending: rgba(255, 255, 0, 0.8);
+    --is-missing: rgba(255, 0, 0, 0.8);
+    --is-rejected: rgba(0, 0, 255, 0.7);
 }
 
 body.fundings.index .workshop-wrapper {
