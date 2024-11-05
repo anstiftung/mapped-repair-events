@@ -62,7 +62,8 @@ body.fundings.edit div.admin.edit {
     background-color: var(--is-rejected);
     color: #fff;
 }
-#fundingForm div.input.is-verified input {
+#fundingForm div.input.is-verified input,
+#fundingForm div.input.is-verified textarea {
     color: grey;
 }
 #fundingForm div.input label {
