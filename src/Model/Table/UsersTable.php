@@ -23,6 +23,13 @@ class UsersTable extends AppTable
         'street'
     ];
 
+    public function beforeMarshal(EventInterface $event, ArrayObject $data, ArrayObject $options)
+    {
+        if (isset($data['website'])) {
+            $data['website'] = StringComponent::addProtocolToUrl($data['website']);
+        }
+    }
+
     public function initialize(array $config): void
     {
         parent::initialize($config);

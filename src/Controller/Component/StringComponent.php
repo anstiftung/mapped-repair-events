@@ -3,7 +3,6 @@ namespace App\Controller\Component;
 
 use Cake\Controller\Component; // for unit tests
 use Cake\Core\Configure;
-use Cake\Utility\Text;
 
 class StringComponent extends Component
 {
@@ -22,6 +21,19 @@ class StringComponent extends Component
     public static function removeWhitespace($string)
     {
         return preg_replace('/\s+/', '', $string);
+    }
+
+    public static function addProtocolToUrl($url)
+    {
+        if ($url == '') {
+            return $url;
+        }
+
+        if (!preg_match('/^https?:\/\//', $url)) {
+            $url = 'https://' . $url;
+        }
+        
+        return $url;
     }
 
 

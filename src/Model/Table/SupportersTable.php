@@ -15,6 +15,9 @@ class SupportersTable extends Table
         if (isset($data['iban'])) {
             $data['iban'] = StringComponent::removeWhitespace($data['iban']);
         }
+        if (isset($data['website'])) {
+            $data['website'] = StringComponent::addProtocolToUrl($data['website']);
+        }
     }
 
     public function validationDefault(Validator $validator): Validator
@@ -26,6 +29,7 @@ class SupportersTable extends Table
         $validator->notEmptyString('zip', 'Bitte trage die PLZ ein.');
         $validator->notEmptyString('street', 'Bitte trage die Straße ein.');
         $validator->minLength('street', 2, 'Bitte trage die Straße ein.');
+        $validator->url('website', 'Bitte trage eine gültige Url ein.');
         $validator->add('zip', 'validFormat', [
             'rule' => ['custom', ZIP_REGEX_DE],
             'message' => 'Die PLZ ist nicht gültig.'

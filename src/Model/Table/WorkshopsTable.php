@@ -6,6 +6,9 @@ use Cake\Validation\Validator;
 use Cake\Datasource\FactoryLocator;
 use App\Services\GeoService;
 use Cake\Core\Configure;
+use Cake\Event\EventInterface;
+use ArrayObject;
+use App\Controller\Component\StringComponent;
 
 class WorkshopsTable extends AppTable
 {
@@ -84,6 +87,13 @@ class WorkshopsTable extends AppTable
             'foreignKey' => 'workshop_uid',
             'targetForeignKey' => 'category_id'
         ]);
+    }
+
+    public function beforeMarshal(EventInterface $event, ArrayObject $data, ArrayObject $options)
+    {
+        if (isset($data['website'])) {
+            $data['website'] = StringComponent::addProtocolToUrl($data['website']);
+        }
     }
 
     public function validationDefault(Validator $validator): \Cake\Validation\Validator
