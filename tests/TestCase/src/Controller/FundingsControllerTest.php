@@ -83,28 +83,58 @@ class FundingsControllerTest extends AppTestCase
         $newCity = 'Teststadt';
         $newAdresszusatz = 'Adresszusatz';
 
+        $newSupporterName = 'Supporter Name';
+
+        $newOwnerFirstname = 'Owner Firstname';
+        $newOwnerLastname = 'Owner Lastname';
+        $newOwnerEmail = 'test@test.at';
+
+        $verifiedFields = [
+            'fundings-workshop-name',
+        ];
+
         $this->post(Configure::read('AppConfig.htmlHelper')->urlFundingsEdit($testWorkshopUid), [
             'referer' => '/',
             'Fundings' => [
                 'workshop' => [
                     'name' => $newName,
-                    'street' => $newStreet,
+                    'street' => $newStreet . '<script>alert("XSS");</script>',
                     'zip' => $newZip,
                     'city' => $newCity,
                     'adresszusatz' => $newAdresszusatz,
-                ]
+                    'website' => 'non valid string',
+                ],
+                'supporter' => [
+                    'name' => $newSupporterName,
+                ],
+                'owner_user' => [
+                    'firstname' => $newOwnerFirstname,
+                    'lastname' => $newOwnerLastname,
+                    'email' => $newOwnerEmail,
+                ],
+                'verified_fields' => array_merge($verifiedFields, ['fundings-workshops-website']),
             ]
         ]);
-        $this->assertResponseNotContains('error');
-        $this->assertResponseContains('Förderantrag erfolgreich gespeichert.');
+        $this->assertResponseContains('Alle validen Daten wurden erfolgreich gespeichert.');
 
-        $workshopsTable = $this->getTableLocator()->get('Workshops');
-        $workshop = $workshopsTable->get($testWorkshopUid);
-        $this->assertEquals($newName, $workshop->name);
-        $this->assertEquals($newStreet, $workshop->street);
-        $this->assertEquals($newZip, $workshop->zip);
-        $this->assertEquals($newCity, $workshop->city);
-        $this->assertEquals($newAdresszusatz, $workshop->adresszusatz);
+        $fundingsTable = $this->getTableLocator()->get('Fundings');
+        $funding = $fundingsTable->get(1, contain: ['Workshops', 'OwnerUsers', 'Supporters']);
+        $funding->owner_user->revertPrivatizeData();
+
+        //$this->assertEquals($verifiedFields, $funding->verified_fields); // must not contain invalid workshops-website
+
+        $this->assertEquals($newName, $funding->workshop->name);
+        $this->assertEquals($newStreet, $funding->workshop->street);
+        $this->assertEquals('', $funding->workshop->website);
+        $this->assertEquals($newZip, $funding->workshop->zip);
+        $this->assertEquals($newCity, $funding->workshop->city);
+        $this->assertEquals($newAdresszusatz, $funding->workshop->adresszusatz);
+
+        $this->assertEquals($newSupporterName, $funding->supporter->name);
+
+        $this->assertEquals($newOwnerFirstname, $funding->owner_user->firstname);
+        $this->assertEquals($newOwnerLastname, $funding->owner_user->lastname);
+        $this->assertEquals($newOwnerEmail, $funding->owner_user->email);
 
     }
 
