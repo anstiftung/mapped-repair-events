@@ -43,7 +43,7 @@ class FundingsControllerTest extends AppTestCase
     }
 
     public function testEditNotOk() {
-        
+
         $workshopsTable = $this->getTableLocator()->get('Workshops');
         $workshop = $workshopsTable->get(2);
         $workshop->country_code = 'AT';
@@ -106,13 +106,14 @@ class FundingsControllerTest extends AppTestCase
                 ],
                 'supporter' => [
                     'name' => $newSupporterName,
+                    'website' => 'orf.at',
                 ],
                 'owner_user' => [
                     'firstname' => $newOwnerFirstname,
                     'lastname' => $newOwnerLastname,
                     'email' => $newOwnerEmail,
                 ],
-                'verified_fields' => array_merge($verifiedFields, ['fundings-workshops-website']),
+                'verified_fields' => array_merge($verifiedFields, ['fundings-workshop-website']),
             ]
         ]);
         $this->assertResponseContains('Alle validen Daten wurden erfolgreich gespeichert.');
@@ -121,7 +122,7 @@ class FundingsControllerTest extends AppTestCase
         $funding = $fundingsTable->get(1, contain: ['Workshops', 'OwnerUsers', 'Supporters']);
         $funding->owner_user->revertPrivatizeData();
 
-        //$this->assertEquals($verifiedFields, $funding->verified_fields); // must not contain invalid workshops-website
+        $this->assertEquals($verifiedFields, $funding->verified_fields); // must not contain invalid workshops-website
 
         $this->assertEquals($newName, $funding->workshop->name);
         $this->assertEquals($newStreet, $funding->workshop->street);
@@ -131,6 +132,7 @@ class FundingsControllerTest extends AppTestCase
         $this->assertEquals($newAdresszusatz, $funding->workshop->adresszusatz);
 
         $this->assertEquals($newSupporterName, $funding->supporter->name);
+        $this->assertEquals('https://orf.at', $funding->supporter->website);
 
         $this->assertEquals($newOwnerFirstname, $funding->owner_user->firstname);
         $this->assertEquals($newOwnerLastname, $funding->owner_user->lastname);

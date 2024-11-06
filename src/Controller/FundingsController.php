@@ -59,7 +59,7 @@ class FundingsController extends AppController
             $errors[] = 'Die Initiative ist gelöscht.';
         }
         return $errors;
-        
+
     }
 
     public function edit() {
@@ -70,7 +70,7 @@ class FundingsController extends AppController
         $funding = $fundingsTable->findOrCreateCustom($workshopUid);
 
         $this->setReferer();
-        
+
         $workshopsTable = $this->getTableLocator()->get('Workshops');
         $workshop = $workshopsTable->find()->where(['uid' => $workshopUid])->contain($this->getContain())->first();
         $basicErrors = $this->getBasicErrorMessages($funding);
@@ -110,7 +110,7 @@ class FundingsController extends AppController
                 if ($fundingsTable->save($patchedEntity, ['associated' => $associations])) {
                     $this->AppFlash->setFlashMessage('Förderantrag erfolgreich gespeichert.');
                 }
-            } else {           
+            } else {
                 $data = $this->request->getData();
                 $verifiedFieldsWithErrors = [];
                 foreach ($errors as $entity => $fieldErrors) {
@@ -120,15 +120,14 @@ class FundingsController extends AppController
                         unset($data['Fundings'][$entity][$fieldName]);
                     }
                 }
-
                 // never save "verified" if field has error
                 $verifiedFields = $data['Fundings']['verified_fields'];
-                $verifiedFields = array_diff($verifiedFields, $verifiedFieldsWithErrors);
-                $this->request = $this->request->withData('Fundings.verified_fields', $verifiedFields);
+                $patchedVerifiedFieldsWithoutErrorFields = array_diff($verifiedFields, $verifiedFieldsWithErrors);
+                $data['Fundings']['verified_fields'] = $patchedVerifiedFieldsWithoutErrorFields;
                 $associationsWithoutValidation = array_map(function($association) {
                     return ['validate' => false];
                 }, array_flip($associations));
-            
+
                 $fundingForSaving = $fundingsTable->findOrCreateCustom($workshopUid);
                 $patchedEntity = $fundingsTable->patchEntity($fundingForSaving, $data, [
                     'associated' => $associationsWithoutValidation,
