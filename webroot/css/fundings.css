@@ -87,9 +87,6 @@ body.fundings.edit div.admin.edit {
 #fundingForm div.input label.verified {
     grid-column: 3;
 }
-#fundingForm div.input.is-missing.required label::after {
-    color: #fff;
-} 
 #fundingForm div.input.checkbox label,
 #fundingForm div.input label.checkbox {
     line-height: 24px;
@@ -102,7 +99,10 @@ body.fundings.edit div.admin.edit {
     margin-top: 0;
     margin-bottom: 5px;
 }
-#fundingForm div.input.is-missing .error-message {
+#fundingForm div.input.is-missing.required label::after,
+#fundingForm div.input.is-verified.required label::after,
+#fundingForm div.input.is-missing .error-message,
+#fundingForm div.input.is-verified .error-message {
     color: #fff;
 }
 #fundingForm fieldset {
