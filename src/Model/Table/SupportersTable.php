@@ -1,11 +1,21 @@
 <?php
 namespace App\Model\Table;
 
+use App\Controller\Component\StringComponent;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\Event\EventInterface;
+use ArrayObject;
 
 class SupportersTable extends Table
 {
+
+    public function beforeMarshal(EventInterface $event, ArrayObject $data, ArrayObject $options)
+    {
+        if (isset($data['iban'])) {
+            $data['iban'] = StringComponent::removeWhitespace($data['iban']);
+        }
+    }
 
     public function validationDefault(Validator $validator): Validator
     {

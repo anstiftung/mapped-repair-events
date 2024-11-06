@@ -19,6 +19,12 @@ class StringComponent extends Component
         return preg_replace('/^([\d]+)-(.*)$/', '$2', $string);
     }
 
+    public static function removeWhitespace($string)
+    {
+        return preg_replace('/\s+/', '', $string);
+    }
+
+
     /**
      * Prepares text for output on the website
      * - replaces html entities
