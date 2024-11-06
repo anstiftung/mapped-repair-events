@@ -21,7 +21,7 @@ class FundingsPolicy implements RequestPolicyInterface
 
         if (is_null($identity)) {
             return false;
-        }        
+        }
 
         if (!($identity->isAdmin() || $identity->isOrga())) {
             return false;

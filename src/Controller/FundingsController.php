@@ -35,12 +35,6 @@ class FundingsController extends AppController
             $workshops = $workshopsTable->getWorkshopsForAssociatedUser($this->loggedUser->uid, APP_OFF, $this->getContain());
         }
 
-        /*
-        $workshops->where([
-            'Workshops.url' => 'umweltzentrum-stockach-e-v',
-        ]);
-        */
-
         $workshopsWithFundingAllowed = [];
         $workshopsWithFundingNotAllowed = [];
         foreach ($workshops as $workshop) {
@@ -61,9 +55,6 @@ class FundingsController extends AppController
 
     private function getBasicErrorMessages($funding): array {
         $errors = ['Zugriff auf diese Seite nicht möglich.'];
-        if (empty($funding)) {
-            $errors[] = 'Der Förderantrag wurde bereits von einem anderen Organisator erstellt.';
-        }
         if (!empty($funding) && $funding->workshop->status == APP_DELETED) {
             $errors[] = 'Die Initiative ist gelöscht.';
         }
