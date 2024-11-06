@@ -297,6 +297,9 @@ class UsersTable extends AppTable
         $validator->allowEmptyString('city');
         $validator->minLength('city', 2, 'Mindestens 2 Zeichen bitte (Ort).');
 
+        $validator->url('website', 'Bitte trage eine gültige Url ein.');
+        $validator->allowEmptyString('website');
+
         $validator->notEmptyString('email', 'Bitte trage deine E-Mail-Adresse ein.');
         $validator->requirePresence('email', true, 'Bitte trage deine E-Mail-Adresse ein.');
         $validator->email('email', true, 'Bitte trage eine gültige E-Mail-Adresse ein.');
