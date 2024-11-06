@@ -14,7 +14,7 @@ class AdminPolicy implements RequestPolicyInterface
     public function canAccess($identity, ServerRequest $request): bool|ResultInterface
     {
 
-        if ($request->getParam('controller') != 'Fundings') {
+        if ($request->getParam('controller') == 'Fundings') {
             if (Configure::read('AppConfig.fundingsEnabled') === false) {
                 return false;
             }
