@@ -43,16 +43,13 @@ class FundingsController extends AppController
 
         $workshopsWithFundingAllowed = [];
         $workshopsWithFundingNotAllowed = [];
-        if ($this->isAdmin()) {
-            foreach ($workshops as $workshop) {
-                if ($workshop->funding_is_allowed) {
-                    $workshopsWithFundingAllowed[] = $workshop;
-                } else {
-                    $workshopsWithFundingNotAllowed[] = $workshop;
-                }
+        foreach ($workshops as $workshop) {
+            if ($workshop->funding_is_allowed) {
+                $workshopsWithFundingAllowed[] = $workshop;
+            } else {
+                $workshopsWithFundingNotAllowed[] = $workshop;
             }
         }
-
         unset($workshops);
 
         $this->set([
