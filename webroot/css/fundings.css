@@ -76,6 +76,10 @@ body.fundings.edit div.admin.edit {
     grid-row: 1;
     width: auto;
 }
+#fundingForm .input.error input,
+#fundingForm .input.error textarea {
+    border-color: #fff;
+}
 #fundingForm div.input .error-message {
     grid-column: 2;
     grid-row: 2;
