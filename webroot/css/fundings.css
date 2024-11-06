@@ -70,6 +70,16 @@ body.fundings.edit div.admin.edit {
     grid-column: 1;
     grid-row: 1 / span 2; /* Spannt über beide Zeilen */
 }
+#fundingForm div.input input,
+#fundingForm div.input textarea {
+    grid-column: 2;
+    grid-row: 1;
+    width: auto;
+}
+#fundingForm div.input .error-message {
+    grid-column: 2;
+    grid-row: 2;
+}
 #fundingForm div.input label.verified {
     grid-column: 3;
 }
@@ -83,14 +93,7 @@ body.fundings.edit div.admin.edit {
 #fundingForm div.input input[type="checkbox"] {
     float: left;
 }
-#fundingForm div.input input {
-    grid-column: 2;
-    grid-row: 1;
-    width: auto;
-}
 #fundingForm div.input .error-message {
-    grid-column: 2;
-    grid-row: 2;
     margin-left: 0;
     margin-top: 0;
     margin-bottom: 5px;
@@ -156,4 +159,29 @@ body.fundings.edit div.admin.edit {
 #fundingForm .color-codes-wrapper .is-rejected {
     background-color: var(--is-rejected);
     color: #fff;
+}
+@media (max-width: 767px) {
+    #fundingForm div.input {
+        grid-template-columns: 2fr 3fr;
+        grid-template-rows: auto auto auto;
+        padding-bottom: 0;
+    }
+    #fundingForm div.input label {
+        grid-column: 1;
+        grid-row: 1;
+    }
+    #fundingForm div.input input,
+    #fundingForm div.input textarea {
+        grid-column: 2;
+        grid-row: 1;
+    }
+    #fundingForm div.input label.verified {
+        grid-column: 1 / span 2;
+        grid-row: 2;
+        justify-self: end;
+    }
+    #fundingForm div.input .error-message {
+        grid-column: 2;
+        grid-row: 2;
+    }
 }
