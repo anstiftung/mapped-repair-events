@@ -62,9 +62,31 @@ class FundingsController extends AppController
 
     }
 
+    private function createdByOtherOwnerCheck($workshopUid) {
+        $fundingsTable = $this->getTableLocator()->get('Fundings');
+        $funding = $fundingsTable->find()->where([
+            $fundingsTable->aliasField('workshop_uid') => $workshopUid,
+            'NOT' => [
+                $fundingsTable->aliasField('owner') => $this->loggedUser->uid,
+            ],
+        ])->contain(['OwnerUsers']);
+        if ($funding->count() > 0) {
+            $owner = $funding->first()->owner_user;
+            $owner->revertPrivatizeData();
+            return 'Der Förderantrag wurde bereits von einem anderen Nutzer (' . $owner->name . ') erstellt.';
+        }
+        return '';
+    }
+
     public function edit() {
 
         $workshopUid = (int) $this->getRequest()->getParam('workshopUid');
+
+        $createdByOtherOwnerCheckMessage = $this->createdByOtherOwnerCheck($workshopUid);
+        if ($createdByOtherOwnerCheckMessage != '') {
+            $this->AppFlash->setFlashError($createdByOtherOwnerCheckMessage);
+            return $this->redirect(Configure::read('AppConfig.htmlHelper')->urlFundings());
+        }
 
         $fundingsTable = $this->getTableLocator()->get('Fundings');
         $funding = $fundingsTable->findOrCreateCustom($workshopUid);
@@ -149,6 +171,13 @@ class FundingsController extends AppController
     public function uploadActivityProof() {
 
         $workshopUid = (int) $this->getRequest()->getParam('workshopUid');
+
+        $createdByOtherOwnerCheckMessage = $this->createdByOtherOwnerCheck($workshopUid);
+        if ($createdByOtherOwnerCheckMessage != '') {
+            $this->AppFlash->setFlashError($createdByOtherOwnerCheckMessage);
+            return $this->redirect(Configure::read('AppConfig.htmlHelper')->urlFundings());
+        }
+
         $fundingsTable = $this->getTableLocator()->get('Fundings');
         $funding = $fundingsTable->findOrCreateCustom($workshopUid);
 

@@ -19,6 +19,7 @@ class AppTestCase extends TestCase
         'app.EventsCategories',
         'app.FormFields',
         'app.FormFieldOptions',
+        'app.Fundings',
         'app.Groups',
         'app.InfoSheets',
         'app.InfoSheetsFormFieldOptions',
@@ -29,6 +30,7 @@ class AppTestCase extends TestCase
         'app.Provinces',
         'app.Roots',
         'app.Skills',
+        'app.Supporters',
         'app.ThirdPartyStatistics',
         'app.Users',
         'app.UsersCategories',
@@ -56,7 +58,7 @@ class AppTestCase extends TestCase
         if (method_exists($this, 'enableSecurityToken')) {
 
                 $this->enableCsrfToken();
-                
+
                 if (!in_array($this->toString(), [
                     'testAddEventsOk',
                 ])) {

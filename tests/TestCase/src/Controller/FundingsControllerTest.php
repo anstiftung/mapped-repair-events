@@ -36,13 +36,7 @@ class FundingsControllerTest extends AppTestCase
         $this->assertResponseCode(302);
     }
 
-    public function testEditOk() {
-        $this->loginAsOrga();
-        $this->get(Configure::read('AppConfig.htmlHelper')->urlFundingsEdit(2));
-        $this->assertResponseOk();
-    }
-
-    public function testEditNotOk() {
+    public function testEditWorkshopFundingNotAllowed() {
 
         $workshopsTable = $this->getTableLocator()->get('Workshops');
         $workshop = $workshopsTable->get(2);
@@ -67,6 +61,21 @@ class FundingsControllerTest extends AppTestCase
         $this->get(Configure::read('AppConfig.htmlHelper')->urlFundingsEdit(2));
         $this->assertResponseCode(302);
         $this->assertRedirectContains('/users/login?redirect=%2Ffoerderantrag%2Fedit%2F2');
+    }
+
+    public function testEditAlreadyCreatedByOtherOwner() {
+        $fundingsTable = $this->getTableLocator()->get('Fundings');
+        $workshopUid = 2;
+        $fundingsTable->save($fundingsTable->newEntity([
+            'workshop_uid' => $workshopUid,
+            'owner' => 3,
+        ]));
+
+        $this->loginAsOrga();
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlFundingsEdit($workshopUid));
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('Der Förderantrag wurde bereits von einem anderen Nutzer (Max Muster) erstellt.');
+        $this->assertRedirectContains(Configure::read('AppConfig.htmlHelper')->urlFundings());
     }
 
     public function testEditAsOrgaOk() {
