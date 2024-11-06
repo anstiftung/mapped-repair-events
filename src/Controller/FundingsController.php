@@ -116,7 +116,7 @@ class FundingsController extends AppController
                 foreach ($errors as $entity => $fieldErrors) {
                     $fieldNames = array_keys($fieldErrors);
                     foreach($fieldNames as $fieldName) {
-                        $verifiedFieldsWithErrors[] = 'fundings-' . $entity . '-' . Inflector::dasherize($fieldName);
+                        $verifiedFieldsWithErrors[] = Inflector::dasherize('fundings-' . $entity . '-' . $fieldName);
                         unset($data['Fundings'][$entity][$fieldName]);
                     }
                 }
