@@ -127,6 +127,7 @@ body.fundings.edit div.admin.edit {
 }
 #fundingForm .checkbox {
     float: none;
+    padding: 0;
 }
 #fundingForm textarea {
     width: auto;
