@@ -93,7 +93,20 @@ class FundingsController extends AppController
         }
 
         if (!empty($this->request->getData())) {
+
             $associations = ['Workshops', 'OwnerUsers', 'Supporters'];
+            $singularizedAssociations = array_map(function($association) {
+                return Inflector::singularize(Inflector::tableize($association));
+            }, $associations);
+
+            foreach($singularizedAssociations as $association) {
+                $dataKey = 'Fundings.'.$association;
+                foreach ($this->request->getData($dataKey) as $field => $value) {
+                    $cleanedValue = strip_tags($value);
+                    $this->request = $this->request->withData($dataKey . '.' . $field, $cleanedValue);
+                }
+            }
+
             if (!array_key_exists('verified_fields', $this->request->getData('Fundings'))) {
                 $this->request = $this->request->withData('Fundings.verified_fields', []);
             }
