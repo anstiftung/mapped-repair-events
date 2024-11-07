@@ -120,27 +120,8 @@ class FundingsController extends AppController
                     $this->AppFlash->setFlashMessage('Förderantrag erfolgreich gespeichert.');
                 }
             } else {
-                $data = $this->request->getData();
-                $verifiedFieldsWithErrors = [];
-                foreach ($errors as $entity => $fieldErrors) {
-                    $fieldNames = array_keys($fieldErrors);
-                    foreach($fieldNames as $fieldName) {
-                        $verifiedFieldsWithErrors[] = Inflector::dasherize('fundings-' . $entity . '-' . $fieldName);
-                        unset($data['Fundings'][$entity][$fieldName]);
-                    }
-                }
-                // never save "verified" if field has error
-                $verifiedFields = $data['Fundings']['verified_fields'];
-                $patchedVerifiedFieldsWithoutErrorFields = array_diff($verifiedFields, $verifiedFieldsWithErrors);
-                $data['Fundings']['verified_fields'] = $patchedVerifiedFieldsWithoutErrorFields;
-                $associationsWithoutValidation = array_map(function($association) {
-                    return ['validate' => false];
-                }, array_flip($associations));
-
-                $fundingForSaving = $fundingsTable->findOrCreateCustom($workshopUid);
-                $patchedEntity = $fundingsTable->patchEntity($fundingForSaving, $data, [
-                    'associated' => $associationsWithoutValidation,
-                ]);
+                $associationsWithoutValidation = $this->removeValidationFromAssociations($associations);
+                $patchedEntity = $this->getPatchedFundingForValidFields($errors, $workshopUid, $associationsWithoutValidation);
                 if ($fundingsTable->save($patchedEntity, ['associated' => $associationsWithoutValidation])) {
                     $this->AppFlash->setFlashMessage('Alle validen Daten wurden erfolgreich gespeichert.');
                 }
@@ -153,6 +134,35 @@ class FundingsController extends AppController
         ]);
         $this->set('funding', $funding);
 
+    }
+
+    private function getPatchedFundingForValidFields($errors, $workshopUid, $associationsWithoutValidation) {
+        $data = $this->request->getData();
+        $verifiedFieldsWithErrors = [];
+        foreach ($errors as $entity => $fieldErrors) {
+            $fieldNames = array_keys($fieldErrors);
+            foreach($fieldNames as $fieldName) {
+                $verifiedFieldsWithErrors[] = Inflector::dasherize('fundings-' . $entity . '-' . $fieldName);
+                unset($data['Fundings'][$entity][$fieldName]);
+            }
+        }
+        // never save "verified" if field has error
+        $verifiedFields = $data['Fundings']['verified_fields'];
+        $patchedVerifiedFieldsWithoutErrorFields = array_diff($verifiedFields, $verifiedFieldsWithErrors);
+        $data['Fundings']['verified_fields'] = $patchedVerifiedFieldsWithoutErrorFields;
+
+        $fundingsTable = $this->getTableLocator()->get('Fundings');
+        $fundingForSaving = $fundingsTable->findOrCreateCustom($workshopUid);
+        $patchedEntity = $fundingsTable->patchEntity($fundingForSaving, $data, [
+            'associated' => $associationsWithoutValidation,
+        ]);
+        return $patchedEntity;
+    }
+
+    private function removeValidationFromAssociations($associations) {
+        return array_map(function($association) {
+            return ['validate' => false];
+        }, array_flip($associations));
     }
 
     public function uploadActivityProof() {
@@ -170,7 +180,7 @@ class FundingsController extends AppController
 
         $this->setReferer();
         $workshopsTable = $this->getTableLocator()->get('Workshops');
-        $workshop = $workshopsTable->find()->where(['uid' => $workshopUid])->contain($this->getContain())->first();
+        $workshop = $workshopsTable->find()->where(['uid' => $workshopUid])->contain($workshopsTable->getFundingContain())->first();
 
         $errors = $this->getBasicErrorMessages($funding);
         if ($workshop->funding_is_allowed) {
