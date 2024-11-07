@@ -3,24 +3,11 @@
 namespace App\Controller;
 
 use Cake\Core\Configure;
-use Cake\Database\Query;
 use App\Model\Entity\Funding;
 use Cake\Utility\Inflector;
 
 class FundingsController extends AppController
 {
-
-    private function getContain() {
-        return [
-            'Fundings',
-            'FundingAllPastEvents' => function (Query $q) {
-                return $q->select(['workshop_uid', 'count' => $q->func()->count('*')])->groupBy('workshop_uid');
-            },
-            'FundingAllFutureEvents' => function (Query $q) {
-                return $q->select(['workshop_uid', 'count' => $q->func()->count('*')])->groupBy('workshop_uid');
-            }
-        ];
-    }
 
     public function index() {
 
@@ -30,9 +17,9 @@ class FundingsController extends AppController
 
         $workshopsTable = $this->getTableLocator()->get('Workshops');
         if ($this->isAdmin()) {
-            $workshops = $workshopsTable->getWorkshopsWithUsers(APP_OFF, $this->getContain());
+            $workshops = $workshopsTable->getWorkshopsWithUsers(APP_OFF, $workshopsTable->getFundingContain());
         } else {
-            $workshops = $workshopsTable->getWorkshopsForAssociatedUser($this->loggedUser->uid, APP_OFF, $this->getContain());
+            $workshops = $workshopsTable->getWorkshopsForAssociatedUser($this->loggedUser->uid, APP_OFF, $workshopsTable->getFundingContain());
         }
 
         $workshopsWithFundingAllowed = [];
@@ -94,7 +81,7 @@ class FundingsController extends AppController
         $this->setReferer();
 
         $workshopsTable = $this->getTableLocator()->get('Workshops');
-        $workshop = $workshopsTable->find()->where(['uid' => $workshopUid])->contain($this->getContain())->first();
+        $workshop = $workshopsTable->find()->where(['uid' => $workshopUid])->contain($workshopsTable->getFundingContain())->first();
         $basicErrors = $this->getBasicErrorMessages($funding);
         if (!$workshop->funding_is_allowed) {
             $basicErrors[] = 'Die Initiative erfüllt die Voraussetzungen für eine Förderung nicht.';

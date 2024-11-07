@@ -26,7 +26,7 @@ class FundingsTable extends Table
     public function getSchema(): TableSchemaInterface
     {
         return parent::getSchema()->setColumnType('verified_fields', 'json');
-    }    
+    }
 
     public function findOrCreateCustom($workshopUid) {
 

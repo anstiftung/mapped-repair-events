@@ -9,6 +9,7 @@ use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use ArrayObject;
 use App\Controller\Component\StringComponent;
+use Cake\Database\Query;
 
 class WorkshopsTable extends AppTable
 {
@@ -193,6 +194,18 @@ class WorkshopsTable extends AppTable
             $result[$workshop->uid] = $workshop->name;
         }
         return $result;
+    }
+
+    public function getFundingContain() {
+        return [
+            'Fundings',
+            'FundingAllPastEvents' => function (Query $q) {
+                return $q->select(['workshop_uid', 'count' => $q->func()->count('*')])->groupBy('workshop_uid');
+            },
+            'FundingAllFutureEvents' => function (Query $q) {
+                return $q->select(['workshop_uid', 'count' => $q->func()->count('*')])->groupBy('workshop_uid');
+            }
+        ];
     }
 
     public function getWorkshopsWithUsers($workshopStatus, $additionalContains = [])
