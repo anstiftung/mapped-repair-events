@@ -119,7 +119,8 @@ class UsersController extends AppController
 
         $users = $this->paginate($users, [
             'sortableFields' => [
-                'Users.created', 'Users.nick'
+                'Users.created',
+                'Users.nick',
             ],
             'order' => [
                 'Users.created' => 'DESC'

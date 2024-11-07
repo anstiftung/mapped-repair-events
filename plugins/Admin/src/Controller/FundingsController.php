@@ -74,6 +74,9 @@ class FundingsController extends AdminAppController
         ]);
 
         $objects = $this->paginate($query, [
+            'sortableFields' => [
+                'Workshops.name',
+            ],
             'order' => [
                 'Workshops.name' => 'ASC'
             ],
