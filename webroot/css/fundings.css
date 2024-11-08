@@ -5,19 +5,37 @@
     --is-rejected: rgba(0, 0, 255, 0.7);
 }
 
+body.fundings .info-box-counts {
+    margin-bottom: 10px;
+}
 body.fundings.index .workshop-wrapper {
     display: flex;
     padding: 5px 0;
     gap: 10px;
     align-items: center;
+    margin: 5px 0;
 }
 body.fundings.index .workshop-wrapper a.button {
     flex: 0 0 180px;
 }
-body.fundings.index .workshop-wrapper span {
+body.fundings.index .workshop-wrapper > div {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+body.fundings.index .workshop-wrapper > div > * {
     flex: 1;
 }
-
+body.fundings.index .workshop-wrapper a:not(.button) {
+    padding: 0;
+    margin: 0;
+}
+body.fundings.index .workshop-wrapper .orga-user {
+    margin-right: 3px;
+}
+body.fundings.index .workshop-wrapper .orga-user:not(:last-child)::after {
+    content: ",";
+}
 body.fundings.edit h1 {
     margin-bottom: 20px;
 }

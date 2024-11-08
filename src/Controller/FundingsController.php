@@ -24,6 +24,15 @@ class FundingsController extends AppController
 
         foreach ($workshops as $workshop) {
             $workshop->funding_exists = !empty($workshop->funding);
+            $orgaTeam = $workshopsTable->getOrgaTeam($workshop);
+            $orgaTeamReverted = [];
+            if (!empty($orgaTeam)) {
+                foreach($orgaTeam as $orgaUser) {
+                    $orgaUser->revertPrivatizeData();
+                    $orgaTeamReverted[] = $orgaUser;
+                }
+            }
+            $workshop->orga_team = $orgaTeamReverted;
         }
 
         $workshopsWithFundingAllowed = [];

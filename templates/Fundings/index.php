@@ -12,9 +12,10 @@ echo $this->element('jqueryTabsWithoutAjax', [
         <?php echo $this->element('heading', ['first' => $metaTags['title']]); ?>
 
         <?php if ($loggedUser->isAdmin()) { ?>
-            <p>Möglich: <?php echo $this->Number->precision(count($workshopsWithFundingAllowed), 0); ?>x</p>
-            <p>Nicht möglich: <?php echo $this->Number->precision(count($workshopsWithFundingNotAllowed), 0); ?>x</p>
-            <br />
+            <div class="info-box-counts">
+                <p>Möglich: <?php echo $this->Number->precision(count($workshopsWithFundingAllowed), 0); ?>x</p>
+                <p>Nicht möglich: <?php echo $this->Number->precision(count($workshopsWithFundingNotAllowed), 0); ?>x</p>
+            </div>
         <?php } ?>
 
         <?php
@@ -27,10 +28,15 @@ echo $this->element('jqueryTabsWithoutAjax', [
                             'class' => 'button',
                         ],
                     );
-                    echo '<span>';
-                        echo '<a href="' . $this->Html->urlWorkshopDetail($workshop->url) . '">' . $workshop->name . '</a>';
-                    echo '</span>';
+                    echo '<div>';
+                        echo $this->Html->link(
+                            $workshop->name,
+                            $this->Html->urlWorkshopDetail($workshop->url),
+                        );
+                        echo $this->element('funding/orgaTeam', ['orgaTeam' => $workshop->orga_team]);
+                    echo '</div>';
                 echo '</div>';
+                echo '<div class="dotted-line"></div>';
             }
 
             foreach($workshopsWithFundingNotAllowed as $workshop) {
@@ -65,11 +71,16 @@ echo $this->element('jqueryTabsWithoutAjax', [
                 }
                 echo '<div class="workshop-wrapper">';
                     echo $button;
-                    echo '<span>';
-                        echo '<a href="' . $this->Html->urlWorkshopDetail($workshop->url) . '">' . $workshop->name . '</a>';
-                        echo ' <i>' . implode('', $workshop->funding_errors) . '</i>';
-                    echo '</span>';
+                    echo '<div>';
+                        echo $this->Html->link(
+                            $workshop->name,
+                            $this->Html->urlWorkshopDetail($workshop->url),
+                        );
+                        echo $this->element('funding/orgaTeam', ['orgaTeam' => $workshop->orga_team]);
+                    echo ' <i>' . implode('', $workshop->funding_errors) . '</i>';
+                    echo '</div>';
                 echo '</div>';
+                echo '<div class="dotted-line"></div>';
             }
         ?>
 
