@@ -22,6 +22,10 @@ class FundingsController extends AppController
             $workshops = $workshopsTable->getWorkshopsForAssociatedUser($this->loggedUser->uid, APP_OFF, $workshopsTable->getFundingContain());
         }
 
+        foreach ($workshops as $workshop) {
+            $workshop->funding_exists = !empty($workshop->funding);
+        }
+
         $workshopsWithFundingAllowed = [];
         $workshopsWithFundingNotAllowed = [];
         foreach ($workshops as $workshop) {

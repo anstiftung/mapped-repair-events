@@ -21,7 +21,7 @@ echo $this->element('jqueryTabsWithoutAjax', [
             foreach($workshopsWithFundingAllowed as $workshop) {
                 echo '<div class="workshop-wrapper">';
                     echo $this->Html->link(
-                        'Förderantrag bearbeiten',
+                        $workshop->funding_exists ? 'Förderantrag bearbeiten' : 'Förderantrag erstellen',
                         $this->Html->urlFundingsEdit($workshop->uid),
                         [
                             'class' => 'button',
