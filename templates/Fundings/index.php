@@ -41,6 +41,9 @@ echo $this->element('jqueryTabsWithoutAjax', [
                             ],
                         );
                         echo '<div>';
+                            if ($workshop->funding_exists) {
+                                echo '<div>UID: ' . $workshop->funding->uid. '</div>';
+                            }
                             echo $this->element('funding/owner', ['funding' => $workshop->funding]);
                             echo $this->element('funding/orgaTeam', ['orgaTeam' => $workshop->orga_team]);
                         echo '</div>';

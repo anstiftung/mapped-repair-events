@@ -23,17 +23,17 @@ class FundingsController extends AdminAppController
         parent::beforeFilter($event);
     }
 
-    public function edit($id)
+    public function edit($uid)
     {
 
-        if (empty($id)) {
+        if (empty($uid)) {
             throw new NotFoundException;
         }
 
         $fundingsTable = $this->getTableLocator()->get('Fundings');
         $funding = $fundingsTable->find('all',
         conditions: [
-            $fundingsTable->aliasField('id') => $id,
+            $fundingsTable->aliasField('uid') => $uid,
         ],
         contain: [
             'Workshops',
@@ -43,7 +43,7 @@ class FundingsController extends AdminAppController
             throw new NotFoundException;
         }
 
-        $this->set('id', $funding->id);
+        $this->set('uid', $funding->uid);
 
         $this->setReferer();
 
@@ -93,12 +93,12 @@ class FundingsController extends AdminAppController
 
     }
 
-    public function activityProofDetail($fundingId) {
+    public function activityProofDetail($uid) {
 
         $fundingsTable = $this->getTableLocator()->get('Fundings');
         $funding = $fundingsTable->find('all',
         conditions: [
-            $fundingsTable->aliasField('id') => $fundingId,
+            $fundingsTable->aliasField('id') => $uid,
             $fundingsTable->aliasField('activity_proof_filename IS NOT NULL'),
         ],
         contain: [
@@ -109,7 +109,7 @@ class FundingsController extends AdminAppController
             throw new NotFoundException;
         }
 
-        $filePath = Funding::UPLOAD_PATH . $funding->id . DS . $funding->activity_proof_filename;
+        $filePath = Funding::UPLOAD_PATH . $funding->uid . DS . $funding->activity_proof_filename;
         $response = $this->response->withFile($filePath);
         $response = $response->withHeader('Content-Disposition', 'inline; filename="' . $funding->activity_proof_filename . '"');
         return $response;

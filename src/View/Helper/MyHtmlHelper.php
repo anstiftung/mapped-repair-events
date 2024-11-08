@@ -236,12 +236,12 @@ class MyHtmlHelper extends HtmlHelper {
         return $this->urlFundings() . '/uploadActivityProof/' . $workshopUid;
     }
 
-    function urlFundingsAdminEdit($fundingId) {
-        return '/admin/fundings/edit/' . $fundingId;
+    function urlFundingsAdminEdit($fundingUid) {
+        return '/admin/fundings/edit/' . $fundingUid;
     }
 
-    function urlFundingsActivityProofDetail($fundingId) {
-        return '/admin/fundings/activityProofDetail/' . $fundingId;
+    function urlFundingsActivityProofDetail($fundingUid) {
+        return '/admin/fundings/activityProofDetail/' . $fundingUid;
     }
 
     function getUserBackendNaviLinks($userUid, $isMyProfile, $isOrga) {

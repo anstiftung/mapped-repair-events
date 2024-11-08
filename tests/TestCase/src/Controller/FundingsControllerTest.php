@@ -128,7 +128,7 @@ class FundingsControllerTest extends AppTestCase
         $this->assertResponseContains('Alle validen Daten wurden erfolgreich gespeichert.');
 
         $fundingsTable = $this->getTableLocator()->get('Fundings');
-        $funding = $fundingsTable->get(1, contain: ['Workshops', 'OwnerUsers', 'Supporters']);
+        $funding = $fundingsTable->find(contain: ['Workshops', 'OwnerUsers', 'Supporters'])->first();
         $funding->owner_user->revertPrivatizeData();
 
         $this->assertEquals($verifiedFields, $funding->verified_fields); // must not contain invalid workshops-website

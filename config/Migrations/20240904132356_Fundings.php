@@ -8,7 +8,8 @@ class Fundings extends AbstractMigration
     public function change(): void
     {
         $query = "CREATE TABLE `fundings` (
-            `id` int UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `_id` int UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `uid` int UNSIGNED DEFAULT NULL,
             `owner` int UNSIGNED DEFAULT NULL,
             `workshop_uid` int UNSIGNED DEFAULT NULL,
             `supporter_id` int UNSIGNED DEFAULT NULL,
@@ -43,6 +44,13 @@ class Fundings extends AbstractMigration
             `modified` datetime DEFAULT CURRENT_TIMESTAMP
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
         $this->execute($query);
+
+        $sql = "DELETE from roots where object_type = 'votings';
+            DELETE from roots where object_type = 'coaches';";
+        $this->execute($sql);
+
+        $sql = "ALTER TABLE `roots` CHANGE `object_type` `object_type` ENUM('pages','users','posts','workshops','events','fundings','photos','info_sheets','knowledges') CHARACTER SET ascii COLLATE ascii_bin NULL DEFAULT NULL;";
+        $this->execute($sql);
 
     }
 }

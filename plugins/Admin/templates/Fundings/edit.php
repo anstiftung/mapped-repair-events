@@ -19,7 +19,7 @@ $this->element('addScript', array('script' =>
     $this->Form->unlockField('referer');
 
     if ($funding->activity_proof_filename != '') {
-        $activityProofFilenameLabel = 'Datei (' . $this->Html->link('anzeigen', $this->Html->urlFundingsActivityProofDetail($funding->id), ['target' => '_blank']) . ')';
+        $activityProofFilenameLabel = 'Datei (' . $this->Html->link('anzeigen', $this->Html->urlFundingsActivityProofDetail($funding->uid), ['target' => '_blank']) . ')';
         echo $this->Form->fieldset(
             $this->Form->control('Fundings.activity_proof_filename', ['label' => $activityProofFilenameLabel, 'escape' => false]).
             $this->Form->control('Fundings.activity_proof_ok', ['label' => 'bestätigt?']),

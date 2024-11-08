@@ -6,17 +6,13 @@ use Cake\Routing\Router;
 use Cake\Database\Schema\TableSchemaInterface;
 use Cake\Datasource\FactoryLocator;
 
-class FundingsTable extends Table
+class FundingsTable extends AppTable
 {
 
     public function initialize(array $config): void {
         parent::initialize($config);
         $this->belongsTo('Workshops', [
             'foreignKey' => 'workshop_uid'
-        ]);
-        $this->belongsTo('OwnerUsers', [
-            'className' => 'Users',
-            'foreignKey' => 'owner'
         ]);
         $this->belongsTo('Supporters', [
             'foreignKey' => 'supporter_id'
@@ -51,7 +47,7 @@ class FundingsTable extends Table
         }
 
         $funding = $this->find()->where([
-            $this->aliasField('id') => $funding->id,
+            $this->aliasField('uid') => $funding->uid,
             $this->aliasField('owner') => Router::getRequest()?->getAttribute('identity')?->uid,
         ])->contain([
             'Workshops.Countries',

@@ -231,7 +231,7 @@ class FundingsController extends AppController
 
             if ($fundingsTable->save($funding)) {
 
-                $filePath = Funding::UPLOAD_PATH . $funding->id . DS . $fileName;
+                $filePath = Funding::UPLOAD_PATH . $funding->uid . DS . $fileName;
                 if (!is_dir(dirname($filePath))) {
                     mkdir(dirname($filePath), 0777, true);
                 }
