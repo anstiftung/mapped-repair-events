@@ -24,6 +24,10 @@ class FundingsController extends AppController
 
         foreach ($workshops as $workshop) {
             $workshop->funding_exists = !empty($workshop->funding);
+            $workshop->funding_created_by_different_owner = $workshop->funding_exists && $workshop->funding->owner != $this->loggedUser->uid;
+            if (!empty($workshop->owner_user)) {
+                $workshop->owner_user = $workshop->ower_user->revertPrivatizeData();
+            }
             $orgaTeam = $workshopsTable->getOrgaTeam($workshop);
             $orgaTeamReverted = [];
             if (!empty($orgaTeam)) {
@@ -94,7 +98,10 @@ class FundingsController extends AppController
         $this->setReferer();
 
         $workshopsTable = $this->getTableLocator()->get('Workshops');
-        $workshop = $workshopsTable->find()->where(['uid' => $workshopUid])->contain($workshopsTable->getFundingContain())->first();
+        $workshop = $workshopsTable->find()->where([
+            $workshopsTable->aliasField('uid') => $workshopUid,
+        ])->contain($workshopsTable->getFundingContain())->first();
+
         $basicErrors = $this->getBasicErrorMessages($funding);
         if (!$workshop->funding_is_allowed) {
             $basicErrors[] = 'Die Initiative erfüllt die Voraussetzungen für eine Förderung nicht.';

@@ -29,14 +29,19 @@ echo $this->element('jqueryTabsWithoutAjax', [
                         ],
                     );
                     echo '<div class="table">';
+                        $classes = ['button'];
+                        if ($workshop->funding_created_by_different_owner) {
+                            $classes[] = 'disabled';
+                        }
                         echo $this->Html->link(
                             $workshop->funding_exists ? 'Förderantrag bearbeiten' : 'Förderantrag erstellen',
-                            $this->Html->urlFundingsEdit($workshop->uid),
+                            $workshop->funding_created_by_different_owner ? 'javascript:void(0);' : $this->Html->urlFundingsEdit($workshop->uid),
                             [
-                                'class' => 'button',
+                                'class' => implode(' ', $classes),
                             ],
                         );
                         echo '<div>';
+                            echo $this->element('funding/owner', ['funding' => $workshop->funding]);
                             echo $this->element('funding/orgaTeam', ['orgaTeam' => $workshop->orga_team]);
                         echo '</div>';
                     echo '</div>';
@@ -85,7 +90,7 @@ echo $this->element('jqueryTabsWithoutAjax', [
                     echo '<div class="table">';
                         echo $button;
                         echo '<div>';
-                            echo $this->element('funding/orgaTeam', ['orgaTeam' => $workshop->orga_team]);
+                        echo $this->element('funding/orgaTeam', ['orgaTeam' => $workshop->orga_team]);
                         echo ' <i>' . implode('', $workshop->funding_errors) . '</i>';
                         echo '</div>';
                     echo '</div>';
