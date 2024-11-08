@@ -5,25 +5,31 @@
     --is-rejected: rgba(0, 0, 255, 0.7);
 }
 
-body.fundings .info-box-counts {
+body.fundings.index .info-box-counts {
     margin-bottom: 10px;
 }
 body.fundings.index .workshop-wrapper {
+    padding: 15px 0;
+}
+body.fundings.index .workshop-wrapper > div.table {
     display: flex;
-    padding: 5px 0;
     gap: 10px;
     align-items: center;
-    margin: 5px 0;
+    margin-top: 10px;
+}
+body.fundings.index .workshop-wrapper a.heading {
+    font-size: 1.5em;
+    font-weight: bold;
 }
 body.fundings.index .workshop-wrapper a.button {
     flex: 0 0 180px;
 }
-body.fundings.index .workshop-wrapper > div {
+body.fundings.index .workshop-wrapper > div.table > div {
     flex: 1;
     display: flex;
     flex-direction: column;
 }
-body.fundings.index .workshop-wrapper > div > * {
+body.fundings.index .workshop-wrapper > div.table > div * {
     flex: 1;
 }
 body.fundings.index .workshop-wrapper a:not(.button) {
@@ -206,5 +212,14 @@ body.fundings.edit div.admin.edit {
     #fundingForm div.input .error-message {
         grid-column: 2;
         grid-row: 2;
+    }
+    body.fundings.index .workshop-wrapper > div.table {
+        flex-direction: column;
+    }
+    body.fundings.index .workshop-wrapper a.button {
+        flex: 0 0 0;
+    }
+    body.fundings.index .workshop-wrapper > div.table {
+        align-items: start;
     }
 }

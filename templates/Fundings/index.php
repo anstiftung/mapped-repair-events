@@ -22,18 +22,23 @@ echo $this->element('jqueryTabsWithoutAjax', [
             foreach($workshopsWithFundingAllowed as $workshop) {
                 echo '<div class="workshop-wrapper">';
                     echo $this->Html->link(
-                        $workshop->funding_exists ? 'Förderantrag bearbeiten' : 'Förderantrag erstellen',
-                        $this->Html->urlFundingsEdit($workshop->uid),
+                        $workshop->name,
+                        $this->Html->urlWorkshopDetail($workshop->url),
                         [
-                            'class' => 'button',
+                            'class' => 'heading',
                         ],
                     );
-                    echo '<div>';
+                    echo '<div class="table">';
                         echo $this->Html->link(
-                            $workshop->name,
-                            $this->Html->urlWorkshopDetail($workshop->url),
+                            $workshop->funding_exists ? 'Förderantrag bearbeiten' : 'Förderantrag erstellen',
+                            $this->Html->urlFundingsEdit($workshop->uid),
+                            [
+                                'class' => 'button',
+                            ],
                         );
-                        echo $this->element('funding/orgaTeam', ['orgaTeam' => $workshop->orga_team]);
+                        echo '<div>';
+                            echo $this->element('funding/orgaTeam', ['orgaTeam' => $workshop->orga_team]);
+                        echo '</div>';
                     echo '</div>';
                 echo '</div>';
                 echo '<div class="dotted-line"></div>';
@@ -70,14 +75,19 @@ echo $this->element('jqueryTabsWithoutAjax', [
                     }
                 }
                 echo '<div class="workshop-wrapper">';
-                    echo $button;
-                    echo '<div>';
-                        echo $this->Html->link(
-                            $workshop->name,
-                            $this->Html->urlWorkshopDetail($workshop->url),
-                        );
-                        echo $this->element('funding/orgaTeam', ['orgaTeam' => $workshop->orga_team]);
-                    echo ' <i>' . implode('', $workshop->funding_errors) . '</i>';
+                    echo $this->Html->link(
+                        $workshop->name,
+                        $this->Html->urlWorkshopDetail($workshop->url),
+                        [
+                            'class' => 'heading',
+                        ],
+                    );
+                    echo '<div class="table">';
+                        echo $button;
+                        echo '<div>';
+                            echo $this->element('funding/orgaTeam', ['orgaTeam' => $workshop->orga_team]);
+                        echo ' <i>' . implode('', $workshop->funding_errors) . '</i>';
+                        echo '</div>';
                     echo '</div>';
                 echo '</div>';
                 echo '<div class="dotted-line"></div>';
