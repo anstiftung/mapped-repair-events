@@ -3,9 +3,10 @@
 if (!empty($orgaTeam)) {
     echo '<div>' . (count($orgaTeam) == 1 ? 'OrganisatorIn' : 'OrganisatorInnen') . ': ';
     foreach ($orgaTeam as $orgaUser) {
+        $name = $orgaUser->name . ' (' . $orgaUser->nick . ')';
         if ($orgaUser->status == APP_ON) {
             echo $this->Html->link(
-                $orgaUser->name,
+                $name,
                 $this->Html->urlUserProfile($orgaUser->uid),
                 [
                     'target' => '_blank',
@@ -13,7 +14,7 @@ if (!empty($orgaTeam)) {
                 ],
             );
         } else {
-            echo '<span class="orga-user">' . $orgaUser->name . '</span>';
+            echo '<span class="orga-user">' . $name . '</span>';
         }
     }
     echo '</div>';
