@@ -173,6 +173,7 @@ body.fundings.edit div.admin.edit {
 #fundingForm .color-codes-wrapper > div {
     flex: 1;
     padding: 10px;
+    border-radius: 3px;
 }
 #fundingForm .color-codes-wrapper .is-verified {
     background-color: var(--is-verified);
