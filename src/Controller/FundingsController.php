@@ -200,7 +200,9 @@ class FundingsController extends AppController
 
         $this->setReferer();
         $workshopsTable = $this->getTableLocator()->get('Workshops');
-        $workshop = $workshopsTable->find()->where(['uid' => $workshopUid])->contain($workshopsTable->getFundingContain())->first();
+        $workshop = $workshopsTable->find()->where([
+            $workshopsTable->aliasField('uid') => $workshopUid,
+        ])->contain($workshopsTable->getFundingContain())->first();
 
         $errors = $this->getBasicErrorMessages($funding);
         if ($workshop->funding_is_allowed) {
