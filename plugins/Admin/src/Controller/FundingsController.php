@@ -98,7 +98,7 @@ class FundingsController extends AdminAppController
         $fundingsTable = $this->getTableLocator()->get('Fundings');
         $funding = $fundingsTable->find('all',
         conditions: [
-            $fundingsTable->aliasField('id') => $uid,
+            $fundingsTable->aliasField('uid') => $uid,
             $fundingsTable->aliasField('activity_proof_filename IS NOT NULL'),
         ],
         contain: [
