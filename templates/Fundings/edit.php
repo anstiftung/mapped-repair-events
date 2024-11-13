@@ -1,6 +1,7 @@
 <?php
 $this->element('addScript', array('script' =>
     JS_NAMESPACE.".Helper.bindCancelButton();".
+    JS_NAMESPACE.".Funding.bindDeleteButton(".$funding->uid.");".
     JS_NAMESPACE.".Funding.init();".
     JS_NAMESPACE.".Funding.addIsVerifiedCheckboxToFundingEdit('".json_encode($funding->verified_fields)."');"
 ));
@@ -105,7 +106,16 @@ echo $this->element('jqueryTabsWithoutAjax', [
 
                 echo '</div>';
 
-            echo $this->element('cancelAndSaveButton', ['saveLabel' => 'Förderantrag speichern']);
+                $deleteButton = $this->Form->button('Förderantrag löschen', [
+                    'type' => 'button',
+                    'id' => 'delete-button',
+                    'class' => 'rounded red',
+                ]);
+    
+            echo $this->element('cancelAndSaveButton', [
+                'saveLabel' => 'Förderantrag speichern',
+                'additionalButton' => $deleteButton,
+            ]);
 
             echo $this->Form->end();
 

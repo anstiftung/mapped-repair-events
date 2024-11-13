@@ -27,9 +27,9 @@ foreach($fields as $field) {
 if ($showDeleteLink) {
     if (!isset($deleteMethod)) {
         if ($hasUid) {
-            $deleteMethod = 'ajaxChangeAppObjectStatus';
+            $deleteMethod = '/admin/intern/ajaxChangeAppObjectStatus';
         } else {
-            $deleteMethod = 'ajaxDeleteObject';
+            $deleteMethod = '/admin/intern/ajaxDeleteObject';
         }
     }
     $this->element('addScript', [

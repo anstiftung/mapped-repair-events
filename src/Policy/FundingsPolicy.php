@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Policy;
 
+use AssetCompress\Factory;
 use Cake\Http\ServerRequest;
 use Authorization\Policy\RequestPolicyInterface;
 use Authorization\Policy\ResultInterface;
@@ -25,6 +26,21 @@ class FundingsPolicy implements RequestPolicyInterface
 
         if (!($identity->isAdmin() || $identity->isOrga())) {
             return false;
+        }
+
+        
+        if (in_array($request->getParam('action'), ['delete'])) {
+            $fundingUid = (int) $request->getParam('fundingUid');
+            $fundingsTable = FactoryLocator::get('Table')->get('Fundings');
+            $entity = $fundingsTable->find()->where([
+                $fundingsTable->aliasField('uid') => $fundingUid,
+                $fundingsTable->aliasField('owner') => $identity->uid,
+            ])->first();
+    
+            if (empty($entity)) {
+                return false;
+            }
+            return true;
         }
 
         if (in_array($request->getParam('action'), ['edit', 'uploadActivityProof'])) {

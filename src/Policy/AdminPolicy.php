@@ -35,7 +35,6 @@ class AdminPolicy implements RequestPolicyInterface
             'ajaxMiniUploadFormTmpImageUpload',
             'ajaxChangeAppObjectStatus',
             'ajaxDeleteObject',
-            'ajaxDeleteFunding',
         ])) {
             return $identity !== null;
         }

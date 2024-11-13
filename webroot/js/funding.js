@@ -16,6 +16,21 @@ MappedRepairEvents.Funding = {
         fieldNameInputField.prop('readonly', checked);
     },
 
+    bindDeleteButton: function(uid) {
+        $('#delete-button').on('click', function() {
+            $.prompt('Möchtest du diesen Förderantrag wirklich löschen?',
+                {
+                    buttons: {L\u00f6schen: true, Abbrechen: false},
+                    submit: function(v,m,f) {
+                        if(m) {
+                            document.location.href = '/foerderantrag/delete/' + uid;
+                        }
+                    }
+                }
+            );
+        });
+    },
+
     addIsVerifiedCheckboxToFundingEdit: (isVerifiedData) => {
         const parsedIsVerifiedData = JSON.parse(isVerifiedData);
 

@@ -30,6 +30,11 @@
                 'class' => 'rounded gray',
             ]);
         }
+
+        if (isset($additionalButton)) {
+            echo $additionalButton;
+        }
+
     ?>
 
 </div>

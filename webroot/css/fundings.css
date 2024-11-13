@@ -164,6 +164,9 @@ body.fundings.edit div.admin.edit {
 #fundingForm textarea {
     width: auto;
 }
+#fundingForm #delete-button {
+    margin-left: 10px;
+}
 #fundingForm .color-codes-wrapper {
     margin-bottom: 20px;
     display: flex;

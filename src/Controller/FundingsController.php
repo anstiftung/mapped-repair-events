@@ -156,6 +156,15 @@ class FundingsController extends AppController
 
     }
 
+    public function delete()
+    {
+        $fundingUid = (int) $this->request->getParam('fundingUid');
+        $fundingsTable = $this->getTableLocator()->get('Fundings');
+        $fundingsTable->deleteCustom($fundingUid);
+        $this->AppFlash->setFlashMessage('Der Förderantrag wurde erfolgreich gelöscht');
+        $this->redirect(Configure::read('AppConfig.htmlHelper')->urlFundings());
+    }
+
     private function getPatchedFundingForValidFields($errors, $workshopUid, $associationsWithoutValidation) {
         $data = $this->request->getData();
         $verifiedFieldsWithErrors = [];

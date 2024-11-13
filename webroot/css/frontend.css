@@ -2069,6 +2069,11 @@ a.button.violet {
     background-color: #74b3c5;
     color: #fff;
 }
+button.red,
+a.button.red {
+    background-color: red;
+    color: #fff;
+}
 /* END rounded buttons */
 
 

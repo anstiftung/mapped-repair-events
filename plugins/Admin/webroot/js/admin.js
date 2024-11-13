@@ -15,7 +15,7 @@ MappedRepairEvents.Admin = {
             $.prompt(
                 'Möchtest du dieses Objekt wirklich löschen? ID ' + id
                 ,{
-                    buttons: {Loeschen: true, Abbrechen: false},
+                    buttons: {L\u00f6schen: true, Abbrechen: false},
                     submit: function(v,m,f) {
                         if(m) {
                             MappedRepairEvents.Admin.deleteAppObject(linkedButton, id, deleteMethod, objectType);
@@ -27,9 +27,8 @@ MappedRepairEvents.Admin = {
     },
 
     deleteAppObject : function(linkedButton, id, deleteMethod, objectType) {
-
         MappedRepairEvents.Helper.ajaxCall(
-            '/admin/' + 'intern/' + deleteMethod,
+            deleteMethod,
             {
                 id: id,
                 status_type: 'status',
