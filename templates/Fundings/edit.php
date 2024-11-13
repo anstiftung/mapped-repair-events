@@ -1,4 +1,6 @@
 <?php
+
+use App\Model\Entity\Funding;
 $this->element('addScript', array('script' =>
     JS_NAMESPACE.".Helper.bindCancelButton();".
     JS_NAMESPACE.".Funding.bindDeleteButton(".$funding->uid.");".
@@ -46,50 +48,36 @@ echo $this->element('jqueryTabsWithoutAjax', [
             $this->Form->unlockField('verified_fields');
 
             echo '<div class="flexbox">';
-
                 echo $this->Form->fieldset(
-                    $this->Form->control('Fundings.workshop.name', ['label' => 'Name der Initiative']).
-                    $this->Form->control('Fundings.workshop.street', ['label' => 'Straße + Hausnummer']).
-                    $this->Form->control('Fundings.workshop.zip', ['label' => 'PLZ']).
-                    $this->Form->control('Fundings.workshop.city', ['label' => 'Stadt']).
-                    $this->Form->control('Fundings.workshop.adresszusatz', ['label' => 'Adresszusatz']).
-                    $this->Form->control('Fundings.workshop.email', ['label' => 'E-Mail']),
+                    Funding::getRenderedFields(Funding::FIELDS_WORKSHOP, 'workshop', $this->Form),
                     [
                         'legend' => 'Stammdaten der Reparatur-Initiative (UID: ' . $funding->workshop->uid . ')'
                     ]
                 );
 
                 echo $this->Form->fieldset(
-                    $this->Form->control('Fundings.owner_user.firstname', ['label' => 'Vorname']).
-                    $this->Form->control('Fundings.owner_user.lastname', ['label' => 'Nachname']).
-                    $this->Form->control('Fundings.owner_user.email', ['label' => 'E-Mail']).
-                    $this->Form->control('Fundings.owner_user.street', ['label' => 'Straße + Hausnummer']).
-                    $this->Form->control('Fundings.owner_user.zip', ['label' => 'PLZ']).
-                    $this->Form->control('Fundings.owner_user.city', ['label' => 'Stadt']).
-                    $this->Form->control('Fundings.owner_user.phone', ['label' => 'Telefon']),
+                    Funding::getRenderedFields(Funding::FIELDS_OWNER_USER, 'owner_user', $this->Form),
                     [
                         'legend' => 'Personenbezogene Daten Ansprechpartner*in (UID: ' . $funding->owner_user->uid . ')',
                     ]
                 );
 
                 echo $this->Form->fieldset(
-                    $this->Form->control('Fundings.supporter.name', ['label' => 'Name']).
-                    $this->Form->control('Fundings.supporter.legal_form', ['label' => 'Rechtsform']).
-                    $this->Form->control('Fundings.supporter.street', ['label' => 'Straße + Hausnummer']).
-                    $this->Form->control('Fundings.supporter.zip', ['label' => 'PLZ']).
-                    $this->Form->control('Fundings.supporter.city', ['label' => 'Stadt']).
-                    $this->Form->control('Fundings.supporter.website', ['label' => 'Website']),
+                    Funding::getRenderedFields(Funding::FIELDS_SUPPORTER_ORGANIZATION, 'owner_user', $this->Form),
+                    [
+                        'legend' => 'Personenbezogene Daten Ansprechpartner*in (UID: ' . $funding->owner_user->uid . ')',
+                    ]
+                );
+
+                echo $this->Form->fieldset(
+                    Funding::getRenderedFields(Funding::FIELDS_SUPPORTER_ORGANIZATION, 'supporter', $this->Form),
                     [
                         'legend' => 'Stammdaten der Trägerorganisation',
                     ]
                 );
 
                 echo $this->Form->fieldset(
-                    $this->Form->control('Fundings.supporter.contact_firstname', ['label' => 'Vorname']).
-                    $this->Form->control('Fundings.supporter.contact_lastname', ['label' => 'Nachname']).
-                    $this->Form->control('Fundings.supporter.contact_function', ['label' => 'Funktion']).
-                    $this->Form->control('Fundings.supporter.contact_phone', ['label' => 'Telefon']).
-                    $this->Form->control('Fundings.supporter.contact_email', ['label' => 'E-Mail']),
+                    Funding::getRenderedFields(Funding::FIELDS_SUPPORTER_USER, 'supporter', $this->Form),
                     [
                         'legend' => 'Ansprechpartner*in der Trägerorganisation',
                     ]
