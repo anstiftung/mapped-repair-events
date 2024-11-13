@@ -25,19 +25,15 @@ foreach($fields as $field) {
 }
 
 if ($showDeleteLink) {
-    
     if ($hasUid) {
-        $this->element('addScript', array(
-            'script' =>
-                JS_NAMESPACE.".Admin.bindDelete('ajaxChangeAppObjectStatus');"
-        ));
+        $deleteMethod = 'ajaxChangeAppObjectStatus';
     } else {
-        $this->element('addScript', array(
-            'script' =>
-                JS_NAMESPACE.".Admin.bindDelete('ajaxDeleteObject');"
-        ));
+        $deleteMethod = 'ajaxDeleteObject';
     }
-
+    $this->element('addScript', [
+        'script' =>
+            JS_NAMESPACE.".Admin.bindDelete('".$deleteMethod."');"
+    ]);
 }
 
 ?>
