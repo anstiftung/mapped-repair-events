@@ -5,6 +5,9 @@ use AssetCompress\Factory;
 use Cake\Routing\Router;
 use Cake\Database\Schema\TableSchemaInterface;
 use Cake\Datasource\FactoryLocator;
+use App\Model\Entity\Funding;
+use App\Services\FolderService;
+use Cake\Http\Exception\NotFoundException;
 
 class FundingsTable extends AppTable
 {
@@ -25,13 +28,20 @@ class FundingsTable extends AppTable
     }
 
     public function deleteCustom($fundingUid) {
-        $deleteCondition = [
+
+        $funding = $this->find()->where([
             $this->aliasField('uid') => $fundingUid,
-        ];
-        $entity = $this->find()->where($deleteCondition)->contain(['Supporters'])->first();
-        $this->delete($entity);
+        ])->contain(['Supporters'])->first();
+        if (empty($funding)) {
+            throw new NotFoundException('funding (UID: '.$fundingUid.') was not found');
+        }
+        $this->delete($funding);
         $supportersTable = FactoryLocator::get('Table')->get('Supporters');
-        $supportersTable->delete($entity->supporter);
+        $supportersTable->delete($funding->supporter);
+
+        $filePath = Funding::UPLOAD_PATH . $funding->uid;
+        FolderService::deleteFolder($filePath);
+
     }
 
     public function findOrCreateCustom($workshopUid) {
