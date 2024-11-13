@@ -25,10 +25,12 @@ foreach($fields as $field) {
 }
 
 if ($showDeleteLink) {
-    if ($hasUid) {
-        $deleteMethod = 'ajaxChangeAppObjectStatus';
-    } else {
-        $deleteMethod = 'ajaxDeleteObject';
+    if (!isset($deleteMethod)) {
+        if ($hasUid) {
+            $deleteMethod = 'ajaxChangeAppObjectStatus';
+        } else {
+            $deleteMethod = 'ajaxDeleteObject';
+        }
     }
     $this->element('addScript', [
         'script' =>
@@ -44,7 +46,7 @@ if ($showDeleteLink) {
 
         <?php
         if (! isset($heading)) {
-            $heading = ucfirst($this->request->getParam('controller'));
+            $heading = $this->request->getParam('controller');
         }
         $this->Paginator->setPaginated($objects);
         $paginatorParams = $this->Paginator->params();

@@ -1,7 +1,7 @@
 <?php
 namespace App\Model\Table;
 
-use Cake\ORM\Table;
+use AssetCompress\Factory;
 use Cake\Routing\Router;
 use Cake\Database\Schema\TableSchemaInterface;
 use Cake\Datasource\FactoryLocator;
@@ -16,13 +16,22 @@ class FundingsTable extends AppTable
         ]);
         $this->belongsTo('Supporters', [
             'foreignKey' => 'supporter_id',
-            'dependent' => true,
         ]);
     }
 
     public function getSchema(): TableSchemaInterface
     {
         return parent::getSchema()->setColumnType('verified_fields', 'json');
+    }
+
+    public function deleteCustom($fundingUid) {
+        $deleteCondition = [
+            $this->aliasField('uid') => $fundingUid,
+        ];
+        $entity = $this->find()->where($deleteCondition)->contain(['Supporters'])->first();
+        $this->delete($entity);
+        $supportersTable = FactoryLocator::get('Table')->get('Supporters');
+        $supportersTable->delete($entity->supporter);
     }
 
     public function findOrCreateCustom($workshopUid) {

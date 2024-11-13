@@ -28,16 +28,13 @@ MappedRepairEvents.Admin = {
 
     deleteAppObject : function(linkedButton, id, deleteMethod, objectType) {
 
-        var statusType = 'status';
-        var value = -1;
-
         MappedRepairEvents.Helper.ajaxCall(
             '/admin/' + 'intern/' + deleteMethod,
             {
                 id: id,
-                status_type: statusType,
+                status_type: 'status',
                 object_type: objectType,
-                value: value
+                value: -1,
             },
             {
                 onOk : function(data) {
