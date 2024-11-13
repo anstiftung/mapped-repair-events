@@ -167,6 +167,18 @@ body.fundings.edit div.admin.edit {
 #fundingForm #delete-button {
     margin-left: 10px;
 }
+#fundingForm .progress-wrapper {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;;
+}
+#fundingForm .progress-wrapper #progress-bar {
+    margin-top: 10px;
+}
+#fundingForm .ui-progressbar-value {
+    background-color: var(--is-verified);
+    margin: 0;
+}
 #fundingForm .color-codes-wrapper {
     margin-bottom: 20px;
     display: flex;

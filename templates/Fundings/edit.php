@@ -5,7 +5,7 @@ $this->element('addScript', array('script' =>
     JS_NAMESPACE.".Helper.bindCancelButton();".
     JS_NAMESPACE.".Funding.bindDeleteButton(".$funding->uid.");".
     JS_NAMESPACE.".Funding.init();".
-    JS_NAMESPACE.".Funding.addIsVerifiedCheckboxToFundingEdit('".json_encode($funding->verified_fields)."');"
+    JS_NAMESPACE.".Funding.initIsVerified('".json_encode($funding->verified_fields)."', ".Funding::getFieldsCount().");"
 ));
 echo $this->element('jqueryTabsWithoutAjax', [
     'links' => $this->Html->getUserBackendNaviLinks($loggedUser->uid, true, $loggedUser->isOrga()),
@@ -40,7 +40,7 @@ echo $this->element('jqueryTabsWithoutAjax', [
                     durch Admin beanstandet
                 </div>
             </div>
-    
+
         <?php
 
             echo $this->Form->hidden('referer', ['value' => $referer]);
@@ -48,6 +48,7 @@ echo $this->element('jqueryTabsWithoutAjax', [
             $this->Form->unlockField('verified_fields');
 
             echo '<div class="flexbox">';
+
                 echo $this->Form->fieldset(
                     Funding::getRenderedFields(Funding::FIELDS_WORKSHOP, 'workshop', $this->Form),
                     [
@@ -57,13 +58,6 @@ echo $this->element('jqueryTabsWithoutAjax', [
 
                 echo $this->Form->fieldset(
                     Funding::getRenderedFields(Funding::FIELDS_OWNER_USER, 'owner_user', $this->Form),
-                    [
-                        'legend' => 'Personenbezogene Daten Ansprechpartner*in (UID: ' . $funding->owner_user->uid . ')',
-                    ]
-                );
-
-                echo $this->Form->fieldset(
-                    Funding::getRenderedFields(Funding::FIELDS_SUPPORTER_ORGANIZATION, 'owner_user', $this->Form),
                     [
                         'legend' => 'Personenbezogene Daten Ansprechpartner*in (UID: ' . $funding->owner_user->uid . ')',
                     ]
@@ -84,9 +78,7 @@ echo $this->element('jqueryTabsWithoutAjax', [
                 );
 
                 echo $this->Form->fieldset(
-                    $this->Form->control('Fundings.supporter.bank_account_owner', ['label' => 'Kontoinhaber']).
-                    $this->Form->control('Fundings.supporter.bank_institute', ['label' => 'Kreditinstitut']).
-                    $this->Form->control('Fundings.supporter.iban', ['label' => 'IBAN']),
+                    Funding::getRenderedFields(Funding::FIELDS_SUPPORTER_BANK, 'supporter', $this->Form),
                     [
                         'legend' => 'Bankverbindung der Trägerorganisation',
                     ]
@@ -94,11 +86,19 @@ echo $this->element('jqueryTabsWithoutAjax', [
 
                 echo '</div>';
 
-                $deleteButton = $this->Form->button('Förderantrag löschen', [
-                    'type' => 'button',
-                    'id' => 'delete-button',
-                    'class' => 'rounded red',
-                ]);
+            ?>
+
+            <div class="progress-wrapper">
+                <p>Fortschritt: <span class="verified-count"></span> von <?php echo Funding::getFieldsCount(); ?> Feldern bestätigt</p>
+                <div id="progress-bar"></div>
+            </div>
+
+            <?php
+            $deleteButton = $this->Form->button('Förderantrag löschen', [
+                'type' => 'button',
+                'id' => 'delete-button',
+                'class' => 'rounded red',
+            ]);
     
             echo $this->element('cancelAndSaveButton', [
                 'saveLabel' => 'Förderantrag speichern',

@@ -42,7 +42,6 @@ class SupportersTable extends Table
         $validator->notEmptyString('contact_email', 'Bitte trage die E-Mail-Adresse ein.');
         $validator->email('contact_email', true, 'Bitte trage eine gültige E-Mail-Adresse ein.');
 
-
         $validator->notEmptyString('bank_account_owner', 'Bitte trage den Kontoinhaber ein.');
         $validator->notEmptyString('bank_institute', 'Bitte trage das Kreditinstitut ein.');
         $validator->add('iban', 'iban', [

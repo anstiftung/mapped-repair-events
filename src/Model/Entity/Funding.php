@@ -44,6 +44,12 @@ class Funding extends Entity
         ['name' => 'contact_email', 'options' => ['label' => 'E-Mail']],
     ];
 
+    const FIELDS_SUPPORTER_BANK = [
+        ['name' => 'bank_account_owner', 'options' => ['label' => 'Kontoinhaber']],
+        ['name' => 'bank_institute', 'options' => ['label' => 'Kreditinstitut']],
+        ['name' => 'iban', 'options' => ['label' => 'IBAN']],
+    ];
+
     const STATUS_DATA_MISSING = 10;
     const STATUS_PENDING = 20;
     const STATUS_APPROVED = 30;
@@ -67,17 +73,16 @@ class Funding extends Entity
         self::STATUS_MONEY_TRANSFERRED => 'Fördersumme überwiesen'
     ];
 
-
     public static function getRenderedFields($fields, $entity, $form) {
         $renderedFields = '';
         foreach($fields as $field) {
             $renderedFields .= $form->control('Fundings.' . $entity . '.' . $field['name'], $field['options']);
         }
         return $renderedFields;
-}
+    }
 
     public static function getFieldsCount() {
-        return count(self::FIELDS_WORKSHOP);
+        return count(self::FIELDS_WORKSHOP) + count(self::FIELDS_OWNER_USER) + count(self::FIELDS_SUPPORTER_ORGANIZATION) + count(self::FIELDS_SUPPORTER_USER) + count(self::FIELDS_SUPPORTER_BANK);
     }
 
 }

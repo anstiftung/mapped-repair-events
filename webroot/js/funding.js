@@ -31,8 +31,15 @@ MappedRepairEvents.Funding = {
         });
     },
 
-    addIsVerifiedCheckboxToFundingEdit: (isVerifiedData) => {
+    initIsVerified: (isVerifiedData, totalFieldsCount) => {
         const parsedIsVerifiedData = JSON.parse(isVerifiedData);
+        const verifiedDataLength = parsedIsVerifiedData === null ? 0 : parsedIsVerifiedData.length;
+
+        $('#fundingForm .progress-wrapper .verified-count').text(verifiedDataLength);
+
+        $( "#progress-bar" ).progressbar({
+            value: verifiedDataLength / totalFieldsCount * 100
+        });
 
         $('#fundingForm .input:not(.is-missing)').find('input:text, input:checkbox, input[type="email"],  input[type="tel"], textarea').each(function() {
             const fieldName = $(this).attr('id');
