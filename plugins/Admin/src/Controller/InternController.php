@@ -17,6 +17,7 @@ use App\Model\Table\WorkshopsTable;
 use App\Model\Table\EventsTable;
 use App\Model\Table\KnowledgesTable;
 use Cake\View\JsonView;
+use App\Model\Table\FundingsTable;
 
 class InternController extends AdminAppController
 {
@@ -28,6 +29,7 @@ class InternController extends AdminAppController
     public PostsTable $Post;
     public UsersTable $User;
     public WorkshopsTable $Workshop;
+    public FundingsTable $Funding;
 
     public function beforeFilter(EventInterface $event)
     {

@@ -12,10 +12,11 @@ class FundingsTable extends AppTable
     public function initialize(array $config): void {
         parent::initialize($config);
         $this->belongsTo('Workshops', [
-            'foreignKey' => 'workshop_uid'
+            'foreignKey' => 'workshop_uid',
         ]);
         $this->belongsTo('Supporters', [
-            'foreignKey' => 'supporter_id'
+            'foreignKey' => 'supporter_id',
+            'dependent' => true,
         ]);
     }
 
