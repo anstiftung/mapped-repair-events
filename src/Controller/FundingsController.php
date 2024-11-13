@@ -150,7 +150,7 @@ class FundingsController extends AppController
         }
 
         $this->set('metaTags', [
-            'title' => 'Förderantrag für "' . h($funding->workshop->name) . '"',
+            'title' => 'Förderantrag (UID: ' . $funding->uid . ')',
         ]);
         $this->set('funding', $funding);
 
