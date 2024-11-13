@@ -238,4 +238,8 @@ body.fundings.edit div.admin.edit {
     body.fundings.index .workshop-wrapper > div.table {
         align-items: start;
     }
+    #fundingForm #delete-button {
+        margin-left: 0;
+        margin-top: 10px;
+    }
 }
