@@ -63,7 +63,7 @@ echo $this->element('jqueryTabsWithoutAjax', [
                     $this->Form->control('Fundings.owner_user.firstname', ['label' => 'Vorname']).
                     $this->Form->control('Fundings.owner_user.lastname', ['label' => 'Nachname']).
                     $this->Form->control('Fundings.owner_user.email', ['label' => 'E-Mail']).
-                    $this->Form->control('Fundings.owner_user.street', ['type' => 'textarea', 'label' => 'Anschrift']).
+                    $this->Form->control('Fundings.owner_user.street', ['label' => 'Straße + Hausnummer']).
                     $this->Form->control('Fundings.owner_user.zip', ['label' => 'PLZ']).
                     $this->Form->control('Fundings.owner_user.city', ['label' => 'Stadt']).
                     $this->Form->control('Fundings.owner_user.phone', ['label' => 'Telefon']),
@@ -75,7 +75,7 @@ echo $this->element('jqueryTabsWithoutAjax', [
                 echo $this->Form->fieldset(
                     $this->Form->control('Fundings.supporter.name', ['label' => 'Name']).
                     $this->Form->control('Fundings.supporter.legal_form', ['label' => 'Rechtsform']).
-                    $this->Form->control('Fundings.supporter.street', ['type' => 'textarea', 'label' => 'Anschrift']).
+                    $this->Form->control('Fundings.supporter.street', ['label' => 'Straße + Hausnummer']).
                     $this->Form->control('Fundings.supporter.zip', ['label' => 'PLZ']).
                     $this->Form->control('Fundings.supporter.city', ['label' => 'Stadt']).
                     $this->Form->control('Fundings.supporter.website', ['label' => 'Website']),
