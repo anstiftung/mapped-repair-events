@@ -241,12 +241,13 @@ class FundingsController extends AppController
     }
 
 
-    public function uploadDetail($id) {
+    public function uploadDetail() {
 
+        $fundinguploadUid = (int) $this->getRequest()->getParam('fundinguploadId');
         $fundinguploadsTable = $this->getTableLocator()->get('Fundinguploads');
         $fundingupload = $fundinguploadsTable->find('all',
         conditions: [
-            $fundinguploadsTable->aliasField('id') => $id,
+            $fundinguploadsTable->aliasField('id') => $fundinguploadUid,
         ])->first();
 
         if (empty($fundingupload)) {
