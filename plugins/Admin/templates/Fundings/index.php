@@ -4,7 +4,7 @@ echo $this->element('list',
         'objects' => $objects,
         'heading' => 'Förderanträge',
         'editMethod' => ['url' => 'urlFundingsAdminEdit'],
-        'deleteMethod' => '/fundings/ajaxDeleteFunding',
+        'deleteMethod' => '/admin/intern/ajaxDeleteFunding',
         'fields' => [
             ['name' => 'uid', 'label' => 'UID'],
             ['name' => 'workshop.name', 'label' => 'Initiative'],

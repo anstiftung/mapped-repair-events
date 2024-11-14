@@ -370,6 +370,21 @@ class InternController extends AdminAppController
 
     }
 
+    public function ajaxDeleteFunding()
+    {
+        $this->request = $this->request->withParam('_ext', 'json');
+        
+        $uid = $this->request->getData('id');
+        $fundingsTable = $this->getTableLocator()->get('Fundings');
+        $fundingsTable->deleteCustom($uid);
+
+        $this->set([
+            'status' => 0,
+            'msg' => 'Erfolgreich gelöscht',
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['status', 'msg']);
+
+    }    
     public function ajaxChangeAppObjectStatus()
     {
         $this->request = $this->request->withParam('_ext', 'json');
