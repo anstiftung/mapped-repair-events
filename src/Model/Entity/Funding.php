@@ -113,7 +113,7 @@ class Funding extends Entity
             return [];
         }
         return array_filter($this->fundinguploads, function($upload) {
-            return $upload->type == FundingUpload::TYPE_ACTIVITY_PROOF;
+            return $upload->type == Fundingupload::TYPE_ACTIVITY_PROOF;
         });
     }
 
