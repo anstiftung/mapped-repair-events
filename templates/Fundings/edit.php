@@ -61,6 +61,7 @@ echo $this->element('jqueryTabsWithoutAjax', [
                         $formattedFundingStartDate = date('d.m.Y', strtotime(Configure::read('AppConfig.fundingsStartDate')));
                         echo '<div style="margin-bottom:20px;">';
                             echo '<p>Da für die Initiative "' . h($funding->workshop->name) . '" keine Termine vor dem '.$formattedFundingStartDate.' vorhanden sind, bitten wir dich, einen Aktivitätsnachweis hochzuladen. Dieser wird dann zeitnah von uns bestätigt.</p>';
+                            echo '<br /><p>Nur PDF, JPG und PNG-Dateien sind erlaubt, und jede Datei muss unter 5 MB sein.</p>';
                         echo '</div>';
 
                         if (!empty($funding->fundinguploads_activity_proofs)) {
@@ -72,7 +73,7 @@ echo $this->element('jqueryTabsWithoutAjax', [
 
                         echo '<div style="padding:10px;margin-top:10px;border-radius:3px;" class="'.$funding->activity_proof_status_css_class.'">Status: ' . $funding->activity_proof_status_human_readable . '</div>';
                         if ($funding->activity_proof_status != Funding::STATUS_VERIFIED) {
-                            echo $this->Form->control('Fundings.fundinguploads[]', [
+                            echo $this->Form->control('Fundings.files_fundinguploads[]', [
                                 'type' => 'file',
                                 'multiple' => 'multiple',
                                 'label' => '',

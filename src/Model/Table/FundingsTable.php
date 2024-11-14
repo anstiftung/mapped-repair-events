@@ -35,28 +35,36 @@ class FundingsTable extends AppTable
 
     public function validationDefault(Validator $validator): Validator
     {
-
-        $validator->add('fileuploads', 'fileTypeAndSize', [
+        $validator->add('files_fundinguploads', 'fileTypeAndSize', [
             'rule' => function ($value, $context) {
                 $allowedMimeTypes = ['application/pdf', 'image/jpeg', 'image/png'];
                 $maxSize = 5 * 1024 * 1024; // 5 MB in bytes
 
-                foreach ($context['data']['files'] as $file) {
+                $errorMessages = [];
+                foreach ($context['data']['files_fundinguploads'] as $file) {
                     if (!$file instanceof UploadedFile) {
-                        return false;
+                        continue;
                     }
+                    if ($file->getError() !== UPLOAD_ERR_OK) {
+                        continue;
+                    }
+
                     if ($file->getSize() > $maxSize) {
-                        return 'Jede Datei muss weniger als 5 MB groß sein.';
+                        $errorMessages[] = $file->getClientFilename() . ': Datei muss weniger als 5 MB groß sein.';
                     }
+
                     if (!in_array($file->getClientMediaType(), $allowedMimeTypes)) {
-                        return 'Nur PDF, JPG und PNG-Dateien sind erlaubt.';
+                        $errorMessages[] = $file->getClientFilename() . ': Nur PDF, JPG und PNG-Dateien sind erlaubt.';
                     }
+
+                }
+
+                if (!empty($errorMessages)) {
+                    return implode(' / ', $errorMessages);
                 }
                 return true;
             },
-            'message' => 'Nur PDF, JPG und PNG-Dateien sind erlaubt, und jede Datei muss unter 5 MB sein.'
         ]);
-
         return $validator;
     }
 
