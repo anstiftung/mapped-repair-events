@@ -78,13 +78,15 @@ echo $this->element('jqueryTabsWithoutAjax', [
                             foreach($workshop->funding_errors as $error) {
                                 echo '<div><i>' . $error . '</i></div>';
                             }
-                            echo '<div>' . $this->Html->link(
-                                'Termin erstellen',
-                                $this->Html->urlEventNew($workshop->uid),
-                                [
-                                    'target' => '_blank',
-                                ],
-                            ) . '</div>';
+                            if ($workshop->funding_is_country_code_ok) {
+                                echo '<div>' . $this->Html->link(
+                                    'Termin erstellen',
+                                    $this->Html->urlEventNew($workshop->uid),
+                                    [
+                                        'target' => '_blank',
+                                    ],
+                                ) . '</div>';
+                            }
                         echo '</div>';
                     echo '</div>';
                 echo '</div>';
