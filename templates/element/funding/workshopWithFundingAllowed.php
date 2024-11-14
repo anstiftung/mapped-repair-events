@@ -30,6 +30,9 @@ echo '<div class="workshop-wrapper">';
             }
             echo $this->element('funding/owner', ['funding' => $workshop->funding]);
             echo $this->element('funding/orgaTeam', ['orgaTeam' => $workshop->orga_team]);
+            if (!($workshop->funding_is_past_events_count_ok || (!empty($workshop->funding) && $workshop->funding->activity_proof_status_is_verified))) {
+                echo '<div>Aktivitätsnachweis fehlt</div>';
+            }
         echo '</div>';
 
     echo '</div>';
