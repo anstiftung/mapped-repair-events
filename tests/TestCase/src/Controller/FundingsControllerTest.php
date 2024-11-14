@@ -101,6 +101,7 @@ class FundingsControllerTest extends AppTestCase
                 'workshop_uid' => $testWorkshopUid,
                 'datumstart' => '2025-01-01',
                 'status' => APP_ON,
+                'created' => '2020-01-01 00:00:00',
             ]);
             $eventsTable->save($event);
             $i++;
