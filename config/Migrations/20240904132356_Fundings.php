@@ -14,8 +14,7 @@ class Fundings extends AbstractMigration
             `workshop_uid` int UNSIGNED DEFAULT NULL,
             `supporter_id` int UNSIGNED DEFAULT NULL,
             `status` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
-            `activity_proof_filename` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
-            `activity_proof_ok` tinyint(1) DEFAULT 0,
+            `activity_proof_status` int(10) DEFAULT 10,
             `verified_fields` JSON DEFAULT NULL,
             `created` datetime DEFAULT CURRENT_TIMESTAMP,
             `modified` datetime DEFAULT CURRENT_TIMESTAMP
@@ -44,6 +43,18 @@ class Fundings extends AbstractMigration
             `modified` datetime DEFAULT CURRENT_TIMESTAMP
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
         $this->execute($query);
+
+        $query = "CREATE TABLE `fundinguploads` (
+            `id` int UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `funding_uid` int UNSIGNED DEFAULT NULL,
+            `type` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+            `owner` int UNSIGNED DEFAULT NULL,
+            `filename` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+            `created` datetime DEFAULT CURRENT_TIMESTAMP,
+            `modified` datetime DEFAULT CURRENT_TIMESTAMP
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
+        $this->execute($query);
+
 
         $sql = "DELETE from roots where object_type = 'votings';
             DELETE from roots where object_type = 'coaches';";

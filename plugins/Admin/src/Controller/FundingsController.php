@@ -3,7 +3,6 @@ namespace Admin\Controller;
 
 use Cake\Http\Exception\NotFoundException;
 use Cake\Event\EventInterface;
-use App\Model\Entity\Funding;
 
 class FundingsController extends AdminAppController
 {
@@ -37,6 +36,7 @@ class FundingsController extends AdminAppController
         ],
         contain: [
             'Workshops',
+            'Fundinguploads',
         ])->first();
 
         if (empty($funding)) {
@@ -48,10 +48,10 @@ class FundingsController extends AdminAppController
         $this->setReferer();
 
         if (!empty($this->request->getData())) {
-
-            $patchedEntity = $fundingsTable->patchEntity($funding, $this->request->getData());
+            $associtions =  ['associated' => ['Fundinguploads']];
+            $patchedEntity = $fundingsTable->patchEntity($funding, $this->request->getData(), $associtions);
             if (!($patchedEntity->hasErrors())) {
-                $fundingsTable->save($patchedEntity);
+                $fundingsTable->save($patchedEntity, $associtions);
                 $this->redirect($this->getReferer());
             } else {
                 $funding = $patchedEntity;
@@ -71,6 +71,7 @@ class FundingsController extends AdminAppController
         contain: [
             'Workshops',
             'OwnerUsers',
+            'Fundinguploads',
         ]);
 
         $objects = $this->paginate($query, [
@@ -89,29 +90,6 @@ class FundingsController extends AdminAppController
         }
 
         $this->set('objects', $objects);
-
-    }
-
-    public function activityProofDetail($uid) {
-
-        $fundingsTable = $this->getTableLocator()->get('Fundings');
-        $funding = $fundingsTable->find('all',
-        conditions: [
-            $fundingsTable->aliasField('uid') => $uid,
-            $fundingsTable->aliasField('activity_proof_filename IS NOT NULL'),
-        ],
-        contain: [
-            'Workshops',
-        ])->first();
-
-        if (empty($funding)) {
-            throw new NotFoundException;
-        }
-
-        $filePath = Funding::UPLOAD_PATH . $funding->uid . DS . $funding->activity_proof_filename;
-        $response = $this->response->withFile($filePath);
-        $response = $response->withHeader('Content-Disposition', 'inline; filename="' . $funding->activity_proof_filename . '"');
-        return $response;
 
     }
 

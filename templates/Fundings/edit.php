@@ -36,20 +36,12 @@ echo $this->element('jqueryTabsWithoutAjax', [
                 </div>
             </div>
 
-            <?php
-
-            if (!$funding->workshop->is_past_events_count_ok) {
-                $formattedFundingStartDate = date('d.m.Y', strtotime(Configure::read('AppConfig.fundingsStartDate')));
-                echo '<div style="margin-bottom:20px;">';
-                    echo '<p>Da keine Termine vor dem '.$formattedFundingStartDate.' vorhanden sind, lade bitte einen Aktivitätsbericht hoch. Dieser wird dann zeitnah von uns bestätigt.</p>';
-                echo '</div>';
-            }
-
+        <?php
 
         echo $this->Form->create($funding, [
             'novalidate' => 'novalidate',
             'url' => $this->Html->urlFundingsEdit($funding->workshop->uid),
-            'enctype' => 'multipart/form-data',
+            'type' => 'file',
             'id' => 'fundingForm',
         ]);
 
@@ -61,6 +53,35 @@ echo $this->element('jqueryTabsWithoutAjax', [
 
             echo '<div class="flexbox">';
 
+                if (!$workshopWithFundingContains->funding_is_past_events_count_ok) {
+                    echo '<fieldset>';
+
+                        echo '<legend>Aktivitätsnachweis</legend>';
+
+                        $formattedFundingStartDate = date('d.m.Y', strtotime(Configure::read('AppConfig.fundingsStartDate')));
+                        echo '<div style="margin-bottom:20px;">';
+                            echo '<p>Da für die Initiative "' . h($funding->workshop->name) . '" keine Termine vor dem '.$formattedFundingStartDate.' vorhanden sind, bitten wir dich, einen Aktivitätsnachweis hochzuladen. Dieser wird dann zeitnah von uns bestätigt.</p>';
+                        echo '</div>';
+
+                        if (!empty($funding->fundinguploads_activity_proofs)) {
+                            echo 'Bereits hochgeladen<br />';
+                            foreach($funding->fundinguploads_activity_proofs as $fundingupload) {
+                                echo '• ' . $this->Html->link($fundingupload->filename, $this->Html->urlFundinguploadDetail($fundingupload->id), ['target' => '_blank']) . '<br />';
+                            }
+                        }
+
+                        echo '<div style="padding:10px;margin-top:10px;border-radius:3px;" class="'.$funding->activity_proof_status_css_class.'">Status: ' . $funding->activity_proof_status_human_readable . '</div>';
+                        if ($funding->activity_proof_status != Funding::STATUS_VERIFIED) {
+                            echo $this->Form->control('Fundings.fundinguploads[]', [
+                                'type' => 'file',
+                                'multiple' => 'multiple',
+                                'label' => 'Aktivitätsnachweis',
+                                'onchange' => 'document.getElementById("fundingForm").submit();',
+                            ]);
+                        }
+                    echo '</fieldset>';
+
+                }
 
                 echo $this->Form->fieldset(
                     Funding::getRenderedFields(Funding::FIELDS_WORKSHOP, 'workshop', $this->Form),
@@ -112,7 +133,7 @@ echo $this->element('jqueryTabsWithoutAjax', [
                 'id' => 'delete-button',
                 'class' => 'rounded red',
             ]);
-    
+
             echo $this->element('cancelAndSaveButton', [
                 'saveLabel' => 'Förderantrag speichern',
                 'additionalButton' => $deleteButton,

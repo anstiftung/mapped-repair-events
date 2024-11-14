@@ -8,6 +8,8 @@ use Cake\Datasource\FactoryLocator;
 use App\Model\Entity\Funding;
 use App\Services\FolderService;
 use Cake\Http\Exception\NotFoundException;
+use Cake\Validation\Validator;
+use Laminas\Diactoros\UploadedFile;
 
 class FundingsTable extends AppTable
 {
@@ -20,11 +22,42 @@ class FundingsTable extends AppTable
         $this->belongsTo('Supporters', [
             'foreignKey' => 'supporter_id',
         ]);
+        $this->hasMany('Fundinguploads', [
+            'foreignKey' => 'funding_uid',
+            'dependent' => true,
+        ]);
     }
 
     public function getSchema(): TableSchemaInterface
     {
         return parent::getSchema()->setColumnType('verified_fields', 'json');
+    }
+
+    public function validationDefault(Validator $validator): Validator
+    {
+
+        $validator->add('fileuploads', 'fileTypeAndSize', [
+            'rule' => function ($value, $context) {
+                $allowedMimeTypes = ['application/pdf', 'image/jpeg', 'image/png'];
+                $maxSize = 5 * 1024 * 1024; // 5 MB in bytes
+
+                foreach ($context['data']['files'] as $file) {
+                    if (!$file instanceof UploadedFile) {
+                        return false;
+                    }
+                    if ($file->getSize() > $maxSize) {
+                        return 'Jede Datei muss weniger als 5 MB groß sein.';
+                    }
+                    if (!in_array($file->getClientMediaType(), $allowedMimeTypes)) {
+                        return 'Nur PDF, JPG und PNG-Dateien sind erlaubt.';
+                    }
+                }
+                return true;
+            },
+            'message' => 'Nur PDF, JPG und PNG-Dateien sind erlaubt, und jede Datei muss unter 5 MB sein.'
+        ]);
+
+        return $validator;
     }
 
     public function deleteCustom($fundingUid) {
@@ -38,6 +71,8 @@ class FundingsTable extends AppTable
         $this->delete($funding);
         $supportersTable = FactoryLocator::get('Table')->get('Supporters');
         $supportersTable->delete($funding->supporter);
+
+        // fundinguploads are deleted automatically by dependent option
 
         $filePath = Funding::UPLOAD_PATH . $funding->uid;
         FolderService::deleteFolder($filePath);
@@ -73,6 +108,7 @@ class FundingsTable extends AppTable
             'Workshops.Countries',
             'OwnerUsers.Countries',
             'Supporters',
+            'Fundinguploads',
         ])->first();
 
         if (!empty($funding)) {

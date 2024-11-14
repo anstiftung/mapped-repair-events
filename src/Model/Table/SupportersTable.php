@@ -10,6 +10,12 @@ use ArrayObject;
 class SupportersTable extends Table
 {
 
+    public function initialize(array $config): void
+    {
+        parent::initialize($config);
+        $this->addBehavior('Timestamp');
+    }
+
     public function beforeMarshal(EventInterface $event, ArrayObject $data, ArrayObject $options)
     {
         if (isset($data['iban'])) {

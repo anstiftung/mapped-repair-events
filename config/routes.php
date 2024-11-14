@@ -129,7 +129,7 @@ return function (RouteBuilder $routes) {
                 'action'=>'{action}'
             ],
             )->setPatterns([
-                'action' => 'edit|uploadActivityProof',
+                'action' => 'edit',
                 'workshopUid' => '[0-9]+'
             ]);
 
@@ -137,6 +137,11 @@ return function (RouteBuilder $routes) {
                 'controller'=>'fundings',
                 'action'=>'delete'
             ])->setPatterns(['fundingUid' => '[0-9]+']);
+
+            $routes->connect('/foerderantrag/uploadDetail/{fundinguploadId}', [
+                'controller'=>'fundings',
+                'action'=>'uploadDetail'
+            ])->setPatterns(['fundinguploadId' => '[0-9]+']);
         }
 
         // für normale cake routings (users controller)

@@ -8,6 +8,16 @@ class Funding extends Entity
 
     const UPLOAD_PATH = ROOT . DS . 'files_private' . DS . 'fundings' . DS;
 
+    const STATUS_PENDING = 10;
+    const STATUS_VERIFIED = 20;
+    const STATUS_REJECTED = 30;
+
+    const STATUS_MAPPING = [
+        self::STATUS_PENDING => 'Bestätigung ausstehend',
+        self::STATUS_VERIFIED => 'bestätigt',
+        self::STATUS_REJECTED => 'beanstandet',
+    ];
+
     const FIELDS_WORKSHOP = [
         ['name' => 'name', 'options' => ['label' => 'Name der Initiative']],
         ['name' => 'street', 'options' => ['label' => 'Straße + Hausnummer']],
@@ -50,20 +60,6 @@ class Funding extends Entity
         ['name' => 'iban', 'options' => ['label' => 'IBAN']],
     ];
 
-    /*
-    const STATUS_DATA_MISSING = 10;
-    const STATUS_PENDING = 20;
-    const STATUS_APPROVED = 30;
-    const STATUS_MONEY_TRANSFERRED = 40;
-
-    const STATUS_MAPPING = [
-        self::STATUS_DATA_MISSING => 'Daten fehlen',
-        self::STATUS_PENDING => 'Antrag erfolgreich eingereicht und in Bearbeitung',
-        self::STATUS_APPROVED => 'Antrag bestätigt',
-        self::STATUS_MONEY_TRANSFERRED => 'Fördersumme überwiesen'
-    ];
-    */
-
     public static function getRenderedFields($fields, $entity, $form) {
         $renderedFields = '';
         foreach($fields as $field) {
@@ -74,6 +70,27 @@ class Funding extends Entity
 
     public static function getFieldsCount() {
         return count(self::FIELDS_WORKSHOP) + count(self::FIELDS_OWNER_USER) + count(self::FIELDS_SUPPORTER_ORGANIZATION) + count(self::FIELDS_SUPPORTER_USER) + count(self::FIELDS_SUPPORTER_BANK);
+    }
+
+    public function _getActivityProofStatusIsVerified() {
+        return $this->activity_proof_status == self::STATUS_VERIFIED;
+    }
+
+    public function _getActivityProofStatusCssClass() {
+        if ($this->activity_proof_status == self::STATUS_PENDING) {
+            return 'is-pending';
+        }
+        if ($this->activity_proof_status == self::STATUS_VERIFIED) {
+            return 'is-verified';
+        }
+        if ($this->activity_proof_status == self::STATUS_REJECTED) {
+            return 'is-rejected';
+        }
+        return '';
+    }
+
+    public function _getActivityProofStatusHumanReadable() {
+        return self::STATUS_MAPPING[$this->activity_proof_status];
     }
 
     public function _getAdminRowStatusClasses(): array {
@@ -89,6 +106,19 @@ class Funding extends Entity
 
     public function _getAllFieldsVerified(): bool {
         return $this->verified_fields_count == self::getFieldsCount();
+    }
+
+    public function _getFundinguploadsActivityProofs(): array {
+        if ($this->fundinguploads === null) {
+            return [];
+        }
+        return array_filter($this->fundinguploads, function($upload) {
+            return $upload->type == FundingUpload::TYPE_ACTIVITY_PROOF;
+        });
+    }
+
+    public function _getActivityProofsCount(): int {
+        return count($this->fundinguploads_activity_proofs);
     }
 
 }

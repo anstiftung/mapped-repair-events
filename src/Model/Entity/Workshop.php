@@ -8,9 +8,9 @@ class Workshop extends Entity
 {
 
     protected function _getFundingErrors(): array {
-        
+
         $errors = [];
-        
+
         if (!$this->funding_is_country_code_ok) {
             $errors[] = 'Die Förderung ist nur für Initiativen aus Deutschland möglich.';
             return $errors;
@@ -55,7 +55,7 @@ class Workshop extends Entity
     }
 
     public function _getFundingIsAllowed(): bool {
-        
+
         if (!$this->funding_is_country_code_ok) {
             return false;
         }

@@ -5,6 +5,8 @@ namespace App\Controller;
 use Cake\Core\Configure;
 use App\Model\Entity\Funding;
 use Cake\Utility\Inflector;
+use App\Model\Entity\Fundingupload;
+use Cake\Http\Exception\NotFoundException;
 
 class FundingsController extends AppController
 {
@@ -106,6 +108,7 @@ class FundingsController extends AppController
         if (!$workshop->funding_is_allowed) {
             $basicErrors[] = 'Die Initiative erfüllt die Voraussetzungen für eine Förderung nicht.';
         }
+        $this->set('workshopWithFundingContains', $workshop);
 
         if (count($basicErrors) > 1) {
             $this->AppFlash->setFlashError(implode(' ', $basicErrors));
@@ -114,13 +117,17 @@ class FundingsController extends AppController
 
         if (!empty($this->request->getData())) {
 
-            $associations = ['Workshops', 'OwnerUsers', 'Supporters'];
+            $associations = ['Workshops', 'OwnerUsers', 'Supporters', 'Fundinguploads'];
             $singularizedAssociations = array_map(function($association) {
                 return Inflector::singularize(Inflector::tableize($association));
             }, $associations);
 
             foreach($singularizedAssociations as $association) {
                 $dataKey = 'Fundings.'.$association;
+                // ignore for uploads
+                if (!is_array($this->request->getData($dataKey))) {
+                    continue;
+                }
                 foreach ($this->request->getData($dataKey) as $field => $value) {
                     $cleanedValue = strip_tags($value);
                     $this->request = $this->request->withData($dataKey . '.' . $field, $cleanedValue);
@@ -133,10 +140,32 @@ class FundingsController extends AppController
 
             $addressStringOwnerUser = $this->request->getData('Fundings.owner_user.zip') . ' ' . $this->request->getData('Fundings.owner_user.city') . ', ' . $this->request->getData('Fundings.owner_user.country_code');
             $this->updateCoordinates($funding->owner_user, 'owner_user', $addressStringOwnerUser);
-        
+
             $addressStringWorkshop = $this->request->getData('Fundings.workshop.street') . ', ' . $this->request->getData('Fundings.workshop.zip') . ' ' . $this->request->getData('Fundings.workshop.city') . ', ' . $this->request->getData('Fundings.workshop.country_code');
             $this->updateCoordinates($funding->workshop, 'workshop', $addressStringWorkshop);
-        
+
+            $fileuploadEntities = [];
+            $fileuploads = $this->request->getData('Fundings.fundinguploads');
+            if (!empty($fileuploads)) {
+                foreach ($fileuploads as $fileupload) {
+                    $filename = $fileupload->getClientFilename();
+                    $filename = pathinfo($filename, PATHINFO_FILENAME) . '_' . bin2hex(random_bytes(5)) . '.' . pathinfo($filename, PATHINFO_EXTENSION);
+                    $fileuploadEntities[] = [
+                        'filename' => $filename,
+                        'funding_uid' => $funding->uid,
+                        'type' => Fundingupload::TYPE_ACTIVITY_PROOF,
+                        'owner' => $this->loggedUser->uid,
+                        'status' => Funding::STATUS_PENDING,
+                    ];
+                    $filePath = Funding::UPLOAD_PATH . $funding->uid . DS . $filename;
+                    if (!is_dir(dirname($filePath))) {
+                        mkdir(dirname($filePath), 0777, true);
+                    }
+                    $fileupload->moveTo($filePath);
+                }
+            }
+            $this->request = $this->request->withData('Fundings.fundinguploads', $fileuploadEntities);
+
             $patchedEntity = $fundingsTable->patchEntity($funding, $this->request->getData(), [
                 'associated' => $associations,
             ]);
@@ -211,72 +240,23 @@ class FundingsController extends AppController
         }, array_flip($associations));
     }
 
-    public function uploadActivityProof() {
 
-        $workshopUid = (int) $this->getRequest()->getParam('workshopUid');
+    public function uploadDetail($id) {
 
-        $createdByOtherOwnerCheckMessage = $this->createdByOtherOwnerCheck($workshopUid);
-        if ($createdByOtherOwnerCheckMessage != '') {
-            $this->AppFlash->setFlashError($createdByOtherOwnerCheckMessage);
-            return $this->redirect(Configure::read('AppConfig.htmlHelper')->urlFundings());
+        $fundinguploadsTable = $this->getTableLocator()->get('Fundinguploads');
+        $fundingupload = $fundinguploadsTable->find('all',
+        conditions: [
+            $fundinguploadsTable->aliasField('id') => $id,
+        ])->first();
+
+        if (empty($fundingupload)) {
+            throw new NotFoundException;
         }
 
-        $fundingsTable = $this->getTableLocator()->get('Fundings');
-        $funding = $fundingsTable->findOrCreateCustom($workshopUid);
-
-        $this->setReferer();
-        $workshopsTable = $this->getTableLocator()->get('Workshops');
-        $workshop = $workshopsTable->find()->where([
-            $workshopsTable->aliasField('uid') => $workshopUid,
-        ])->contain($workshopsTable->getFundingContain())->first();
-
-        $errors = $this->getBasicErrorMessages($funding);
-        if ($workshop->funding_is_allowed) {
-            $errors[] = 'Die Initiative hat bereits alle Voraussetzungen für den Förderantrag erfüllt.';
-        }
-        if ($funding->activity_proof_filename != '') {
-            $errors[] = 'Es wurde bereits ein Aktivitätsbericht hochgeladen.';
-        }
-        if (count($errors) > 1) {
-            $this->AppFlash->setFlashError(implode(' ', $errors));
-            return $this->redirect(Configure::read('AppConfig.htmlHelper')->urlFundings());
-        }
-
-        if (!empty($this->request->getData())) {
-
-            $activityProof = $this->request->getData('Fundings.activity_proof');
-
-            if (!in_array($activityProof->getClientMediaType(), ['application/pdf', 'image/jpeg', 'image/png'])) {
-                $funding->setError('activity_proof', ['type' => 'Erlaubte Dateiformate: PDF, JPG oder PNG.']);
-            }
-
-            if ($activityProof->getSize() > 5 * 1024 * 1024) {
-                $funding->setError('activity_proof', ['size' => 'Max. Dateigröße: 5 MB.']);
-            }
-
-            $fileName = $activityProof->getClientFilename();
-            $funding->activity_proof_filename = $fileName;
-
-            if ($fundingsTable->save($funding)) {
-
-                $filePath = Funding::UPLOAD_PATH . $funding->uid . DS . $fileName;
-                if (!is_dir(dirname($filePath))) {
-                    mkdir(dirname($filePath), 0777, true);
-                }
-                $activityProof->moveTo($filePath);
-
-                $this->AppFlash->setFlashMessage(__('Der Aktivitätsnachweis wurde erfolgreich hochgeladen.'));
-                $this->redirect($this->getPreparedReferer());
-            } else {
-                $this->AppFlash->setFlashError('Der Aktivitätsnachweis konnte nicht hochgeladen werden.');
-            }
-
-        }
-
-        $this->set('metaTags', [
-            'title' => 'Aktivitätsnachweis für "' . h($funding->workshop->name) . '" hochladen',
-        ]);
-        $this->set('funding', $funding);
+        $filePath = Funding::UPLOAD_PATH . $fundingupload->funding_uid . DS . $fundingupload->filename;
+        $response = $this->response->withFile($filePath);
+        $response = $response->withHeader('Content-Disposition', 'inline; filename="' . $fundingupload->filename . '"');
+        return $response;
 
     }
 
