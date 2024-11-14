@@ -48,6 +48,7 @@ class WorkshopsTable extends AppTable
             'className' => 'Events',
             'foreignKey' => 'workshop_uid',
             'conditions' => [
+                'FundingAllPastEvents.created <' => Configure::read('AppConfig.fundingsStartDate'),
                 'FundingAllPastEvents.datumstart <=' => Configure::read('AppConfig.fundingsStartDate'),
                 'FundingAllPastEvents.status' => APP_ON,
             ],
@@ -56,7 +57,7 @@ class WorkshopsTable extends AppTable
             'className' => 'Events',
             'foreignKey' => 'workshop_uid',
             'conditions' => [
-                'FundingAllFutureEvents.datumstart >=' => Configure::read('AppConfig.fundingsStartDate'),
+                'FundingAllFutureEvents.datumstart BETWEEN "2025-01-01" AND "2025-12-31"',
                 'FundingAllFutureEvents.status' => APP_ON,
             ],
         ]);

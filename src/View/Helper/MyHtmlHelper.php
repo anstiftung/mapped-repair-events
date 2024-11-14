@@ -403,8 +403,8 @@ class MyHtmlHelper extends HtmlHelper {
     function urlEventDuplicate($uid) {
         return '/termine/duplicate/' . $uid;
     }
-    function urlEventNew($preselectedWorkshopUid = null) {
-        return '/termine/add' . (!is_null($preselectedWorkshopUid) ? '/'.$preselectedWorkshopUid : '');
+    function urlEventNew($workshopUid = null) {
+        return '/termine/add' . (!is_null($workshopUid) ? '/'.$workshopUid : '');
     }
     function urlInfoSheetNew($eventUid) {
         return '/laufzettel/add/' . $eventUid;

@@ -1,6 +1,7 @@
 <?php
-
 use App\Model\Entity\Funding;
+use Cake\Core\Configure;
+
 $this->element('addScript', array('script' =>
     JS_NAMESPACE.".Helper.bindCancelButton();".
     JS_NAMESPACE.".Funding.bindDeleteButton(".$funding->uid.");".
@@ -17,12 +18,6 @@ echo $this->element('jqueryTabsWithoutAjax', [
     <div class="ui-tabs-panel">
         <?php
             echo $this->element('heading', ['first' => $metaTags['title']]);
-
-            echo $this->Form->create($funding, [
-                'novalidate' => 'novalidate',
-                'url' => $this->Html->urlFundingsEdit($funding->workshop->uid),
-                'id' => 'fundingForm'
-            ]);
 
             ?>
 
@@ -41,7 +36,22 @@ echo $this->element('jqueryTabsWithoutAjax', [
                 </div>
             </div>
 
-        <?php
+            <?php
+
+            if (!$funding->workshop->is_past_events_count_ok) {
+                $formattedFundingStartDate = date('d.m.Y', strtotime(Configure::read('AppConfig.fundingsStartDate')));
+                echo '<div style="margin-bottom:20px;">';
+                    echo '<p>Da keine Termine vor dem '.$formattedFundingStartDate.' vorhanden sind, lade bitte einen Aktivitätsbericht hoch. Dieser wird dann zeitnah von uns bestätigt.</p>';
+                echo '</div>';
+            }
+
+
+        echo $this->Form->create($funding, [
+            'novalidate' => 'novalidate',
+            'url' => $this->Html->urlFundingsEdit($funding->workshop->uid),
+            'enctype' => 'multipart/form-data',
+            'id' => 'fundingForm',
+        ]);
 
             echo $this->Form->hidden('referer', ['value' => $referer]);
             $this->Form->unlockField('referer');
@@ -49,8 +59,8 @@ echo $this->element('jqueryTabsWithoutAjax', [
             echo $this->Form->hidden('Fundings.workshop.use_custom_coordinates');
             echo $this->Form->hidden('Fundings.owner_user.use_custom_coordinates');
 
-
             echo '<div class="flexbox">';
+
 
                 echo $this->Form->fieldset(
                     Funding::getRenderedFields(Funding::FIELDS_WORKSHOP, 'workshop', $this->Form),

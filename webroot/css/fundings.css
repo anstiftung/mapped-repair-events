@@ -171,41 +171,41 @@ body.fundings.edit div.admin.edit {
 #fundingForm #delete-button {
     margin-left: 10px;
 }
-#fundingForm .progress-wrapper {
+body.fundings.edit .progress-wrapper {
     margin-bottom: 20px;
     display: flex;
     flex-direction: column;;
 }
-#fundingForm .progress-wrapper #progress-bar {
+body.fundings.edit .progress-wrapper #progress-bar {
     margin-top: 10px;
 }
-#fundingForm .ui-progressbar-value {
+body.fundings.edit .ui-progressbar-value {
     background-color: var(--is-verified);
     margin: 0;
 }
-#fundingForm .color-codes-wrapper {
+body.fundings.edit .color-codes-wrapper {
     margin-bottom: 20px;
     display: flex;
     gap: 10px;
     width: 70%;
 }
-#fundingForm .color-codes-wrapper > div {
+body.fundings.edit .color-codes-wrapper > div {
     flex: 1;
     padding: 10px;
     border-radius: 3px;
 }
-#fundingForm .color-codes-wrapper .is-verified {
+body.fundings.edit .color-codes-wrapper .is-verified {
     background-color: var(--is-verified);
     color: #fff;
 }
-#fundingForm .color-codes-wrapper .is-pending {
+body.fundings.edit .color-codes-wrapper .is-pending {
     background-color: var(--is-pending);
 }
-#fundingForm .color-codes-wrapper .is-missing {
+body.fundings.edit .color-codes-wrapper .is-missing {
     background-color: var(--is-missing);
     color: #fff;
 }
-#fundingForm .color-codes-wrapper .is-rejected {
+body.fundings.edit .color-codes-wrapper .is-rejected {
     background-color: var(--is-rejected);
     color: #fff;
 }

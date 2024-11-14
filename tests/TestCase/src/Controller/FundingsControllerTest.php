@@ -92,6 +92,20 @@ class FundingsControllerTest extends AppTestCase
         $testWorkshopUid = 2;
 
         $this->loginAsOrga();
+
+        // add 4 events for 2025 (required for funding)
+        $eventsTable = $this->getTableLocator()->get('Events');
+        $i = 0;
+        while($i<4) {
+            $event = $eventsTable->newEntity([
+                'workshop_uid' => $testWorkshopUid,
+                'datumstart' => '2025-01-01',
+                'status' => APP_ON,
+            ]);
+            $eventsTable->save($event);
+            $i++;
+        }
+
         $this->get(Configure::read('AppConfig.htmlHelper')->urlFundingsEdit($testWorkshopUid));
         $this->assertResponseOk();
 
