@@ -1,6 +1,7 @@
 <?php
 
 use Cake\Core\Configure;
+use App\Model\Entity\Funding;
 echo $this->element('jqueryTabsWithoutAjax', [
     'links' => $this->Html->getUserBackendNaviLinks($loggedUser->uid, true, $loggedUser->isOrga())
 ]);
@@ -42,7 +43,7 @@ echo $this->element('jqueryTabsWithoutAjax', [
                         );
                         echo '<div>';
                             if ($workshop->funding_exists) {
-                                echo '<div>UID: ' . $workshop->funding->uid. '</div>';
+                                echo '<div>UID: ' . $workshop->funding->uid. ' / ' . $workshop->funding->verified_fields_count . ' von ' . Funding::getFieldsCount() . ' Feldern bestätigt</div>';
                             }
                             echo $this->element('funding/owner', ['funding' => $workshop->funding]);
                             echo $this->element('funding/orgaTeam', ['orgaTeam' => $workshop->orga_team]);
