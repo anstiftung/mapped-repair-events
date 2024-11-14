@@ -50,21 +50,11 @@ class Funding extends Entity
         ['name' => 'iban', 'options' => ['label' => 'IBAN']],
     ];
 
+    /*
     const STATUS_DATA_MISSING = 10;
     const STATUS_PENDING = 20;
     const STATUS_APPROVED = 30;
     const STATUS_MONEY_TRANSFERRED = 40;
-
-
-    /*
-    in Bearbeitung
-    eingereicht
-    beanstandet und wieder in bearbeitung
-    eingereicht
-    von admin bestätigt
-    Fördersumme überwiesen
-    tom möchte wissen, ob bereits beanstandet wurde
-    */
 
     const STATUS_MAPPING = [
         self::STATUS_DATA_MISSING => 'Daten fehlen',
@@ -72,6 +62,7 @@ class Funding extends Entity
         self::STATUS_APPROVED => 'Antrag bestätigt',
         self::STATUS_MONEY_TRANSFERRED => 'Fördersumme überwiesen'
     ];
+    */
 
     public static function getRenderedFields($fields, $entity, $form) {
         $renderedFields = '';
@@ -83,6 +74,21 @@ class Funding extends Entity
 
     public static function getFieldsCount() {
         return count(self::FIELDS_WORKSHOP) + count(self::FIELDS_OWNER_USER) + count(self::FIELDS_SUPPORTER_ORGANIZATION) + count(self::FIELDS_SUPPORTER_USER) + count(self::FIELDS_SUPPORTER_BANK);
+    }
+
+    public function _getAdminRowStatusClasses(): array {
+        if ($this->all_fields_verified) {
+            return ['is-verified'];
+        }
+        return [];
+    }
+
+    public function _getVerifiedFieldsCount(): int {
+        return $this->verified_fields !== null ? count($this->verified_fields) : 0;
+    }
+
+    public function _getAllFieldsVerified(): bool {
+        return $this->verified_fields_count == self::getFieldsCount();
     }
 
 }

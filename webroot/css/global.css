@@ -1,3 +1,6 @@
+:root {
+    --default-font-color: #333;
+}
 form .required label:not(.no-required):after {
     color: red;
     content: '*';

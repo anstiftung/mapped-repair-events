@@ -9,7 +9,7 @@ button, .button, input[type=submit] {
     text-align: center;
     cursor: pointer;
     border: 0 none;
-    color: #333;
+    color: var(--default-font-color);
     font-weight: 700;
 }
 

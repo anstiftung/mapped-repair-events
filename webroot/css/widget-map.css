@@ -188,7 +188,7 @@ input[readonly="readonly"] {
 }
 
 #flashMessage.error a {
-    color: #333;
+    color: var(--default-font-color);
 }
 
 #flashMessage .closer {

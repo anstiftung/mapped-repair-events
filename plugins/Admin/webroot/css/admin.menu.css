@@ -24,7 +24,7 @@
 }
 
 #navadmin li a {
-    color: #333;
+    color: var(--default-font-color);
     display: block;
 }
 

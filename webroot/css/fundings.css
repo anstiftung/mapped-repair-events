@@ -5,6 +5,10 @@
     --is-rejected: rgba(0, 0, 255, 0.7);
 }
 
+body.fundings.index .admin tr.is-verified {
+    background-color: var(--is-verified);
+    color: #fff;
+}
 body.fundings.index .info-box-counts {
     margin-bottom: 10px;
 }
@@ -72,7 +76,7 @@ body.fundings.edit div.admin.edit {
 }
 #fundingForm div.input.is-pending {
     background-color: var(--is-pending);
-    color: #333;
+    color: var(--default-font-color);
 }
 #fundingForm div.input.is-missing {
     background-color: var(--is-missing);
@@ -139,7 +143,7 @@ body.fundings.edit div.admin.edit {
 #fundingForm fieldset legend {
     font-weight: bold;
     font-size: 16px;
-    color: #333;
+    color: var(--default-font-color);
 }
 #fundingForm .flexbox {
     display: flex;

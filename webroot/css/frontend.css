@@ -74,7 +74,7 @@ div.jqi .jqimessage{
 }
 div.jqi .jqibuttons button,
 div.jqi .jqibuttons button:hover {
-    color: #333 ! important;
+    color: var(--default-font-color) ! important;
 }
 div.jqi{
     width: 400px;
@@ -1913,7 +1913,7 @@ iframe .rc,
     padding: 10px 12px;
 }
 #login-box a {
-    color: #333;
+    color: var(--default-font-color);
 }
 #login-box .top,
 #login-box .bottom {
@@ -2008,7 +2008,7 @@ input[type=submit] {
     text-align: center;
     cursor: pointer;
     border: 0 none;
-    color: #333;
+    color: var(--default-font-color);
     font-weight: 700;
 }
 .half .button {
@@ -2152,7 +2152,7 @@ body.users .profile .groups-checkbox-wrapper .error-message {
   padding: 5px;
 }
 body.users .profile .groups-checkbox-wrapper .error-message a {
-  color: #333;
+    color: var(--default-font-color);
 }
 body.users .profile .groups-checkbox-wrapper .input.select.error {
   background-color: #FFCFCF;
@@ -2366,7 +2366,7 @@ div.addthis_toolbox a {
     opacity: 0.7;
 }
 #flashMessage.error a {
-    color: #333;
+    color: var(--default-font-color);
 }
 #flashMessage .closer {
     position: absolute;
@@ -2779,7 +2779,7 @@ body.knowledges.all .knowledge-edit-icon i {
 }
 .lstPage:hover {
     background-color: var(--theme-color-f) !important;
-    color: #333;
+    color: var(--default-font-color);
 }
 .lstPage.thisPage {
     cursor: text;

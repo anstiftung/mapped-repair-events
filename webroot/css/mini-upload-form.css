@@ -261,7 +261,7 @@ form.mini-upload-form {
 }
 .featherlight-content .form-buttons button:hover {
 	background: yellow ! important;
-	color: #333 ! important;
+	color: var(--default-font-color) ! important;
 }
 .ui-front {
 	z-index: 11000 !important;

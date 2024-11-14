@@ -158,11 +158,14 @@ if ($showDeleteLink) {
 
             foreach ($objects as $object) {
 
-                $rowStatusClass = 'status-online';
+                $rowStatusClasses = ['status-online'];
                 if (isset($object['status']) && $object['status'] == APP_OFF) {
-                    $rowStatusClass = ' status-offline';
+                    $rowStatusClasses = ['status-offline'];
                 }
-                echo '<tr class="' . $rowStatusClass . '">';
+                if (isset($object->admin_row_status_classes) && !empty($object->admin_row_status_classes)) {
+                    $rowStatusClasses = array_merge($rowStatusClasses, $object->admin_row_status_classes);
+                }
+                echo '<tr class="' . implode(' ', $rowStatusClasses) . '">';
 
                 foreach ($fields as $field) {
 
