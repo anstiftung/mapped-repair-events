@@ -75,7 +75,7 @@ echo $this->element('jqueryTabsWithoutAjax', [
                             echo $this->Form->control('Fundings.fundinguploads[]', [
                                 'type' => 'file',
                                 'multiple' => 'multiple',
-                                'label' => 'Aktivitätsnachweis',
+                                'label' => '',
                                 'onchange' => 'document.getElementById("fundingForm").submit();',
                             ]);
                         }
