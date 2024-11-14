@@ -16,7 +16,7 @@ MappedRepairEvents.Funding = {
         fieldNameInputField.prop('readonly', checked);
     },
 
-    bindDeleteButton: function(uid) {
+    bindDeleteButton: (uid) => {
         $('#delete-button').on('click', function() {
             $.prompt('Möchtest du diesen Förderantrag wirklich löschen?',
                 {
@@ -31,15 +31,22 @@ MappedRepairEvents.Funding = {
         });
     },
 
-    initIsVerified: (isVerifiedData, totalFieldsCount) => {
-        const parsedIsVerifiedData = JSON.parse(isVerifiedData);
+    updateProgressBar: (parsedIsVerifiedData, totalFieldsCount) => {
         const verifiedDataLength = parsedIsVerifiedData === null ? 0 : parsedIsVerifiedData.length;
+        const progressInPercent = verifiedDataLength / totalFieldsCount * 100;
+        const progressWrapper = $('#fundingForm .progress-wrapper');
+        $( "#progress-bar" ).progressbar({value: progressInPercent});
+        if (progressInPercent === 100) {
+            progressWrapper.find('p').text('Fortschritt: Alle Felder sind bestätigt, du kannst den Förderantrag jetzt einreichen.');
+        } else {
+            progressWrapper.find('.verified-count').text(verifiedDataLength);
+        }
+    },
 
-        $('#fundingForm .progress-wrapper .verified-count').text(verifiedDataLength);
+    initIsVerified: (isVerifiedData, totalFieldsCount) => {
 
-        $( "#progress-bar" ).progressbar({
-            value: verifiedDataLength / totalFieldsCount * 100
-        });
+        const parsedIsVerifiedData = JSON.parse(isVerifiedData);
+        MappedRepairEvents.Funding.updateProgressBar(parsedIsVerifiedData, totalFieldsCount);
 
         $('#fundingForm .input:not(.is-missing)').find('input:text, input:checkbox, input[type="email"],  input[type="tel"], textarea').each(function() {
             const fieldName = $(this).attr('id');
