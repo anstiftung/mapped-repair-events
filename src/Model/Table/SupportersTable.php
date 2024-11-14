@@ -42,6 +42,17 @@ class SupportersTable extends Table
         $validator->notEmptyString('contact_email', 'Bitte trage die E-Mail-Adresse ein.');
         $validator->email('contact_email', true, 'Bitte trage eine gültige E-Mail-Adresse ein.');
 
+        $validator->add('name', 'unique', [
+            'rule' => 'validateUnique',
+            'provider' => 'table',
+            'message' => 'Dieser Träger wird bereits in einem anderen Förderantrag verwendet.'
+        ]);
+        $validator->add('contact_email', 'unique', [
+            'rule' => 'validateUnique',
+            'provider' => 'table',
+            'message' => 'Diese E-Mail-Adresse wird bereits in einem anderen Förderantrag verwendet.'
+        ]);
+
         $validator->notEmptyString('bank_account_owner', 'Bitte trage den Kontoinhaber ein.');
         $validator->notEmptyString('bank_institute', 'Bitte trage das Kreditinstitut ein.');
         $validator->add('iban', 'iban', [
