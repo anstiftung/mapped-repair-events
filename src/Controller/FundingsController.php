@@ -130,6 +130,13 @@ class FundingsController extends AppController
             if (!array_key_exists('verified_fields', $this->request->getData('Fundings'))) {
                 $this->request = $this->request->withData('Fundings.verified_fields', []);
             }
+
+            $addressStringOwnerUser = $this->request->getData('Fundings.owner_user.zip') . ' ' . $this->request->getData('Fundings.owner_user.city') . ', ' . $this->request->getData('Fundings.owner_user.country_code');
+            $this->updateCoordinates($funding->owner_user, 'owner_user', $addressStringOwnerUser);
+        
+            $addressStringWorkshop = $this->request->getData('Fundings.workshop.street') . ', ' . $this->request->getData('Fundings.workshop.zip') . ' ' . $this->request->getData('Fundings.workshop.city') . ', ' . $this->request->getData('Fundings.workshop.country_code');
+            $this->updateCoordinates($funding->workshop, 'workshop', $addressStringWorkshop);
+        
             $patchedEntity = $fundingsTable->patchEntity($funding, $this->request->getData(), [
                 'associated' => $associations,
             ]);
@@ -154,6 +161,16 @@ class FundingsController extends AppController
         ]);
         $this->set('funding', $funding);
 
+    }
+
+    private function updateCoordinates($entity, $index, $addressString) {
+        if ($entity->use_custom_coordinates) {
+            return false;
+        }
+        $geoData = $this->geoService->getGeoDataByAddress($addressString);
+        $this->request = $this->request->withData('Fundings.'.$index.'.lat', $geoData['lat']);
+        $this->request = $this->request->withData('Fundings.'.$index.'.lng', $geoData['lng']);
+        $this->request = $this->request->withData('Fundings.'.$index.'.province_id', $geoData['provinceId'] ?? 0);
     }
 
     public function delete()

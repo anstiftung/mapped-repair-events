@@ -7,6 +7,9 @@ use App\Test\TestCase\Traits\LogFileAssertionsTrait;
 use App\Test\TestCase\Traits\LoginTrait;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\Core\Configure;
+use Cake\Event\EventInterface;
+use App\Test\Mock\GeoServiceMock;
+use Cake\Controller\Controller;
 
 class FundingsControllerTest extends AppTestCase
 {
@@ -14,6 +17,12 @@ class FundingsControllerTest extends AppTestCase
     use IntegrationTestTrait;
     use LogFileAssertionsTrait;
     use LoginTrait;
+
+	public function controllerSpy(EventInterface $event, ?Controller $controller = null): void
+    {
+		parent::controllerSpy($event, $controller);
+		$this->_controller->geoService = new GeoServiceMock();
+	}
 
     public function setUp(): void {
         parent::setUp();
@@ -112,6 +121,7 @@ class FundingsControllerTest extends AppTestCase
                     'city' => $newCity,
                     'adresszusatz' => $newAdresszusatz,
                     'website' => 'non valid string',
+                    'use_custom_coordinates' => 0,
                 ],
                 'supporter' => [
                     'name' => $newSupporterName,
@@ -121,6 +131,7 @@ class FundingsControllerTest extends AppTestCase
                     'firstname' => $newOwnerFirstname,
                     'lastname' => $newOwnerLastname,
                     'email' => $newOwnerEmail,
+                    'use_custom_coordinates' => 0,
                 ],
                 'verified_fields' => array_merge($verifiedFields, ['fundings-workshop-website']),
             ]

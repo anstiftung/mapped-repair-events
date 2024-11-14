@@ -46,6 +46,9 @@ echo $this->element('jqueryTabsWithoutAjax', [
             echo $this->Form->hidden('referer', ['value' => $referer]);
             $this->Form->unlockField('referer');
             $this->Form->unlockField('verified_fields');
+            echo $this->Form->hidden('Fundings.workshop.use_custom_coordinates');
+            echo $this->Form->hidden('Fundings.owner_user.use_custom_coordinates');
+
 
             echo '<div class="flexbox">';
 
