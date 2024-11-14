@@ -151,7 +151,7 @@ class FundingsControllerTest extends AppTestCase
                 'verified_fields' => array_merge($verifiedFields, ['fundings-workshop-website']),
             ]
         ]);
-        $this->assertResponseContains('Alle validen Daten wurden erfolgreich gespeichert.');
+        $this->assertResponseContains('Der Förderantrag wurde erfolgreich gespeichert.');
 
         $fundingsTable = $this->getTableLocator()->get('Fundings');
         $funding = $fundingsTable->find(contain: ['Workshops', 'OwnerUsers', 'Supporters'])->first();

@@ -179,7 +179,7 @@ class FundingsController extends AppController
                 $associationsWithoutValidation = $this->removeValidationFromAssociations($associations);
                 $patchedEntity = $this->getPatchedFundingForValidFields($errors, $workshopUid, $associationsWithoutValidation);
                 if ($fundingsTable->save($patchedEntity, ['associated' => $associationsWithoutValidation])) {
-                    $this->AppFlash->setFlashMessage('Alle validen Daten wurden erfolgreich gespeichert.');
+                    $this->AppFlash->setFlashMessage('Der Förderantrag wurde erfolgreich gespeichert.');
                 }
             }
 
