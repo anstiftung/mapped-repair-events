@@ -1,7 +1,5 @@
 <?php
 
-use App\Model\Entity\Funding;
-
 echo '<div class="workshop-wrapper">';
     echo $this->Html->link(
         $workshop->name,
