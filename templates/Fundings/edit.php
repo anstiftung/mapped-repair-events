@@ -60,7 +60,7 @@ echo $this->element('jqueryTabsWithoutAjax', [
                         echo '<legend>Aktivitätsnachweis</legend>';
 
                         $formattedFundingStartDate = date('d.m.Y', strtotime(Configure::read('AppConfig.fundingsStartDate')));
-                        echo '<div style="margin-bottom:20px;">';
+                        echo '<div style="margin-bottom:10px;">';
                             echo '<p>Da für die Initiative "' . h($funding->workshop->name) . '" keine Termine vor dem '.$formattedFundingStartDate.' vorhanden sind, bitten wir dich, einen oder mehrere Aktivitätsnachweise hochzuladen. Dieser wird dann zeitnah von uns bestätigt.</p>';
                         echo '</div>';
 
@@ -75,11 +75,13 @@ echo $this->element('jqueryTabsWithoutAjax', [
                                 echo $this->Form->control('Fundings.fundinguploads.'.$i.'.filename', ['label' => $activityProofFilenameLabel, 'readonly' => true, 'class' => 'is-upload', 'escape' => false]);
                                 $i++;
                             }
+
+                            echo '<div style="padding:10px;margin-top:10px;border-radius:3px;" class="' . $funding->activity_proof_status_css_class . '">';
+                                echo 'Status: ' . $funding->activity_proof_status_human_readable;
+                            echo '</div>';
+
                         }
 
-                        echo '<div style="padding:10px;margin-top:10px;border-radius:3px;" class="' . $funding->activity_proof_status_css_class . '">';
-                            echo 'Status: ' . $funding->activity_proof_status_human_readable;
-                        echo '</div>';
 
                         if ($funding->activity_proof_status != Funding::STATUS_VERIFIED) {
 
