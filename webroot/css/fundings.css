@@ -63,6 +63,10 @@ body.fundings.edit div.admin.edit {
     margin-top: 1px;
     border-radius: 3px;
 }
+#fundingForm div.input.file {
+    grid-template-columns: auto;
+    gap: 0;
+}
 @keyframes lockAnimation {
     0% {
       transform: scale(1);
