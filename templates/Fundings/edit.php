@@ -49,6 +49,7 @@ echo $this->element('jqueryTabsWithoutAjax', [
             $this->Form->unlockField('referer');
             $this->Form->unlockField('verified_fields');
             $this->Form->unlockField('delete_fundinguploads');
+            $this->Form->unlockField('files_fundinguploads');
             echo $this->Form->hidden('Fundings.workshop.use_custom_coordinates');
             echo $this->Form->hidden('Fundings.owner_user.use_custom_coordinates');
 
@@ -92,7 +93,7 @@ echo $this->element('jqueryTabsWithoutAjax', [
                             ]);
 
                             echo '<div style="margin-top:10px;">';
-                                echo '<p>Nur PDF, JPG und PNG-Dateien sind erlaubt, und jede Datei muss unter 5 MB sein.</p>';
+                                echo '<p>Nur PDF, JPG und PNG-Dateien sind erlaubt, und jede Datei muss unter 5 MB sein. Maximal können 5 Dateien hochgeladen werden.</p>';
                             echo '</div>';
 
                             echo $this->Form->control('Fundings.files_fundinguploads[]', [
@@ -100,7 +101,9 @@ echo $this->element('jqueryTabsWithoutAjax', [
                                 'multiple' => 'multiple',
                                 'label' => '',
                                 'onchange' => 'document.getElementById("fundingForm").submit();',
+                                'accept' => '.jpg, .png, .pdf, .jpeg', 
                             ]);
+
                         }
                     echo '</fieldset>';
 

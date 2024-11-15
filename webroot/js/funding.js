@@ -16,6 +16,13 @@ MappedRepairEvents.Funding = {
         fieldNameInputField.prop('readonly', checked);
     },
 
+    onClickHandlerDeleteCheckbox: () => {
+        const deleteUploadCheckboxes = $('input[name="Fundings[delete_fundinguploads][]"]');
+        const deleteUploadCheckboxesChecked = deleteUploadCheckboxes.is(':checked');
+        const uploadInput = $('#fundings-files-fundinguploads');
+        uploadInput.prop('disabled', deleteUploadCheckboxesChecked);
+    },
+
     bindDeleteButton: (uid) => {
         $('#delete-button').on('click', function() {
             $.prompt('Möchtest du diesen Förderantrag wirklich löschen?',
@@ -55,6 +62,9 @@ MappedRepairEvents.Funding = {
                 class: 'is-upload',
                 name: 'Fundings[delete_fundinguploads][]',
                 checked: false,
+                on: {
+                    change: (e) => MappedRepairEvents.Funding.onClickHandlerDeleteCheckbox(fieldName, e.target.checked),
+                }
             });
 
             const label = $('<label>', {

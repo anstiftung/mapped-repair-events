@@ -35,6 +35,15 @@ class FundingsTable extends AppTable
 
     public function validationDefault(Validator $validator): Validator
     {
+        $validator->add('fundinguploads', 'fileCount', [
+            'rule' => function ($value, $context) {
+                if (count($value) > 5) {
+                    return 'Insgesamt sind maximal 5 Dateien erlaubt.';
+                }
+                return true;
+            },
+        ]);
+
         $validator->add('files_fundinguploads', 'fileTypeAndSize', [
             'rule' => function ($value, $context) {
                 $allowedMimeTypes = ['application/pdf', 'image/jpeg', 'image/png'];

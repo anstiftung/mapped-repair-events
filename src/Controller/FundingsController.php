@@ -209,6 +209,11 @@ class FundingsController extends AppController
                 }
             }
 
+            $fundinguploadsErrors = $patchedEntity->getError('fundinguploads');
+            if (!empty($fundinguploadsErrors)) {
+                $patchedEntity->setError('files_fundinguploads[]', $fundinguploadsErrors);
+            }
+
             if (empty($errors)) {
                 if ($fundingsTable->save($patchedEntity, ['associated' => $associations])) {
                     $this->AppFlash->setFlashMessage('Der Förderantrag wurde erfolgreich gespeichert.');
