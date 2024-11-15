@@ -199,18 +199,18 @@ body.fundings.edit .color-codes-wrapper > div {
     padding: 10px;
     border-radius: 3px;
 }
-body.fundings.edit div.is-verified {
+body.fundings div.is-verified {
     background-color: var(--is-verified);
     color: #fff;
 }
-body.fundings.edit div.is-pending {
+body.fundings div.is-pending {
     background-color: var(--is-pending);
 }
-body.fundings.edit div.is-missing {
+body.fundings div.is-missing {
     background-color: var(--is-missing);
     color: #fff;
 }
-body.fundings.edit div.is-rejected {
+body.fundings div.is-rejected {
     background-color: var(--is-rejected);
     color: #fff;
 }

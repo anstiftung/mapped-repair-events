@@ -55,7 +55,7 @@ echo $this->element('jqueryTabsWithoutAjax', [
 
             echo '<div class="flexbox">';
 
-                if (!$workshopWithFundingContains->funding_is_past_events_count_ok) {
+                if ($workshopWithFundingContains->funding_activity_proof_necessary) {
                     echo '<fieldset>';
 
                         echo '<legend>Aktivitätsnachweis</legend>';
