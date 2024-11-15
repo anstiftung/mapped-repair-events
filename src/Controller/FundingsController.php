@@ -221,6 +221,24 @@ class FundingsController extends AppController
                 }
             }
 
+            // patch id for new fundinguploads
+            $fundinguploadsFromDatabase = $this->getTableLocator()->get('Fundinguploads')->find()->where([
+                'Fundinguploads.funding_uid' => $funding->uid,
+            ])->toArray();
+            $updatedFundinguploads = [];
+            foreach($this->request->getData('Fundings.fundinguploads') as $fundingupload) {
+                foreach($fundinguploadsFromDatabase as $fundinguploadFromDatabaseEntity) {
+                    if ($fundingupload['filename'] == $fundinguploadFromDatabaseEntity->filename) {
+                        $fundingupload['id'] = $fundinguploadFromDatabaseEntity->id;
+                        $updatedFundinguploads[] = $fundingupload;
+                    }
+                }
+            }
+            $this->request = $this->request->withData('Fundings.fundinguploads' ?? [], $updatedFundinguploads);
+            $patchedEntity = $fundingsTable->patchEntity($funding, $this->request->getData(), [
+                'associated' => $associations,
+            ]);
+
         }
 
         $this->set('metaTags', [
@@ -284,7 +302,7 @@ class FundingsController extends AppController
 
     public function uploadDetail() {
 
-        $fundinguploadUid = (int) $this->getRequest()->getParam('fundinguploadId');
+        $fundinguploadUid = $this->getRequest()->getParam('fundinguploadId');
         $fundinguploadsTable = $this->getTableLocator()->get('Fundinguploads');
         $fundingupload = $fundinguploadsTable->find('all',
         conditions: [

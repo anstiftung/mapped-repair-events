@@ -48,9 +48,6 @@ MappedRepairEvents.Funding = {
             const fieldName = $(this).attr('id');
             const fileuploadIdField = fieldName.replace('filename', 'id');
             const fileuploadId = $(`#${fileuploadIdField}`).val();
-            if (fileuploadId === '') {
-                return;
-            }
 
             const checkbox = $('<input>', {
                 type: 'checkbox',

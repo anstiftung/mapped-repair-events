@@ -68,10 +68,11 @@ echo $this->element('jqueryTabsWithoutAjax', [
                             echo 'Bereits hochgeladen<br />';
                             $i = 0;
                             foreach($funding->fundinguploads_activity_proofs as $fundingupload) {
+                                $activityProofFilenameLabel = 'Datei (' . $this->Html->link('anzeigen', $this->Html->urlFundinguploadDetail($fundingupload->id), ['target' => '_blank']) . ')';
                                 echo $this->Form->control('Fundings.fundinguploads.'.$i.'.id', ['type' => 'hidden']);
                                 echo $this->Form->control('Fundings.fundinguploads.'.$i.'.owner', ['type' => 'hidden']);
                                 echo $this->Form->control('Fundings.fundinguploads.'.$i.'.type', ['type' => 'hidden']);
-                                echo $this->Form->control('Fundings.fundinguploads.'.$i.'.filename', ['label' => 'Datei', 'readonly' => true, 'class' => 'is-upload']);
+                                echo $this->Form->control('Fundings.fundinguploads.'.$i.'.filename', ['label' => $activityProofFilenameLabel, 'readonly' => true, 'class' => 'is-upload', 'escape' => false]);
                                 $i++;
                             }
                         }

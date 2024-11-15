@@ -141,7 +141,7 @@ return function (RouteBuilder $routes) {
             $routes->connect('/foerderantrag/uploadDetail/{fundinguploadId}', [
                 'controller'=>'fundings',
                 'action'=>'uploadDetail'
-            ])->setPatterns(['fundinguploadId' => '[0-9]+']);
+            ]);
         }
 
         // für normale cake routings (users controller)

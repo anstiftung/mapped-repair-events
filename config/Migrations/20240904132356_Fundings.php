@@ -45,7 +45,7 @@ class Fundings extends AbstractMigration
         $this->execute($query);
 
         $query = "CREATE TABLE `fundinguploads` (
-            `id` int UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `id` CHAR(36) PRIMARY KEY,
             `funding_uid` int UNSIGNED DEFAULT NULL,
             `type` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
             `owner` int UNSIGNED DEFAULT NULL,
