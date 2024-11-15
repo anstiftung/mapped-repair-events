@@ -68,7 +68,7 @@ echo $this->element('jqueryTabsWithoutAjax', [
                             echo 'Bereits hochgeladen<br />';
                             $i = 0;
                             foreach($funding->fundinguploads_activity_proofs as $fundingupload) {
-                                $activityProofFilenameLabel = 'Datei (' . $this->Html->link('anzeigen', $this->Html->urlFundinguploadDetail($fundingupload->id), ['target' => '_blank']) . ')';
+                                $activityProofFilenameLabel = $this->Html->link('Vorschau', $this->Html->urlFundinguploadDetail($fundingupload->id), ['target' => '_blank']);
                                 echo $this->Form->control('Fundings.fundinguploads.'.$i.'.id', ['type' => 'hidden']);
                                 echo $this->Form->control('Fundings.fundinguploads.'.$i.'.owner', ['type' => 'hidden']);
                                 echo $this->Form->control('Fundings.fundinguploads.'.$i.'.type', ['type' => 'hidden']);
@@ -77,11 +77,13 @@ echo $this->element('jqueryTabsWithoutAjax', [
                             }
 
                             echo '<div style="padding:10px;margin-top:10px;border-radius:3px;" class="' . $funding->activity_proof_status_css_class . '">';
-                                echo 'Status: ' . $funding->activity_proof_status_human_readable;
+                                echo '<p>Status: ' . $funding->activity_proof_status_human_readable . '</p>';
+                                if ($funding->activity_proof_comment != '') {
+                                    echo '<p style="padding:10px;margin-top:10px;border:1px solid #fff;border-radius:3px;">' . h($funding->activity_proof_comment) . '</p>';
+                                }
                             echo '</div>';
 
                         }
-
 
                         if ($funding->activity_proof_status != Funding::STATUS_VERIFIED) {
 

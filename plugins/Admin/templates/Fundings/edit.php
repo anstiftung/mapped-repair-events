@@ -20,21 +20,26 @@ $this->element('addScript', array('script' =>
     echo $this->Form->hidden('referer', ['value' => $referer]);
     $this->Form->unlockField('referer');
 
-    $i = 0;
-    foreach($funding->fundinguploads_activity_proofs as $fundingupload) {
-        $activityProofFilenameLabel = 'Datei (' . $this->Html->link('anzeigen', $this->Html->urlFundinguploadDetail($fundingupload->id), ['target' => '_blank']) . ')';
+    if (!empty($funding->fundinguploads_activity_proofs)) {
+        $i = 0;
+        $activityProofsFormFields = '';
+        foreach($funding->fundinguploads_activity_proofs as $fundingupload) {
+            $activityProofFilenameLabel = $this->Html->link('Vorschau', $this->Html->urlFundinguploadDetail($fundingupload->id), ['target' => '_blank']);
+            $activityProofsFormFields .= $this->Form->control('Fundings.fundinguploads.'.$i.'.id', ['type' => 'hidden']);
+            $activityProofsFormFields .= $this->Form->control('Fundings.fundinguploads.'.$i.'.filename', ['label' => $activityProofFilenameLabel, 'escape' => false, 'readonly' => true]);
+            $activityProofsFormFields .= $this->Form->control('Fundings.fundinguploads.'.$i.'.created', ['label' => 'Datum', 'readonly' => true]);
+            $i++;
+        }
+
         echo $this->Form->fieldset(
-            $this->Form->control('Fundings.fundinguploads.'.$i.'.id', ['type' => 'hidden']).
-            $this->Form->control('Fundings.fundinguploads.'.$i.'.filename', ['label' => $activityProofFilenameLabel, 'escape' => false, 'readonly' => true]),
+            $activityProofsFormFields.
+            $this->Form->control('Fundings.activity_proof_status', ['label' => 'Status', 'options' => Funding::STATUS_MAPPING]).
+            $this->Form->control('Fundings.activity_proof_comment', ['label' => 'Kommentar']),
             [
-                'legend' => 'Aktivitätsnachweis',
+                'legend' => 'Aktivitätsnachweise',
             ]
         );
-        $i++;
-    }
 
-    if (!empty($funding->fundinguploads_activity_proofs)) {
-        echo $this->Form->control('Fundings.activity_proof_status', ['label' => 'Status', 'options' => Funding::STATUS_MAPPING]);
     }
 
     echo $this->element('cancelAndSaveButton', ['saveLabel' => 'Speichern']);

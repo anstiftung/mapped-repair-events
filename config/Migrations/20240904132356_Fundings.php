@@ -15,6 +15,7 @@ class Fundings extends AbstractMigration
             `supporter_id` int UNSIGNED DEFAULT NULL,
             `status` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
             `activity_proof_status` int(10) DEFAULT 10,
+            `activity_proof_comment` text,
             `verified_fields` JSON DEFAULT NULL,
             `created` datetime DEFAULT CURRENT_TIMESTAMP,
             `modified` datetime DEFAULT CURRENT_TIMESTAMP

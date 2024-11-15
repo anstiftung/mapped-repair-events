@@ -36,7 +36,9 @@ class FundingsController extends AdminAppController
         ],
         contain: [
             'Workshops',
-            'Fundinguploads',
+            'Fundinguploads' => function($q) {
+                return $q->order(['Fundinguploads.created' => 'DESC']);
+            },
         ])->first();
 
         if (empty($funding)) {
