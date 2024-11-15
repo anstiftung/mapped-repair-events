@@ -2,12 +2,12 @@
 use App\Model\Entity\Funding;
 use Cake\Core\Configure;
 
-$this->element('addScript', array('script' =>
+$this->element('addScript', ['script' =>
     JS_NAMESPACE.".Helper.bindCancelButton();".
     JS_NAMESPACE.".Funding.bindDeleteButton(".$funding->uid.");".
     JS_NAMESPACE.".Funding.init();".
     JS_NAMESPACE.".Funding.initIsVerified('".json_encode($funding->verified_fields)."', ".Funding::getFieldsCount().");"
-));
+]);
 echo $this->element('jqueryTabsWithoutAjax', [
     'links' => $this->Html->getUserBackendNaviLinks($loggedUser->uid, true, $loggedUser->isOrga()),
     'selected' => $this->Html->urlFundings(),
@@ -48,6 +48,7 @@ echo $this->element('jqueryTabsWithoutAjax', [
             echo $this->Form->hidden('referer', ['value' => $referer]);
             $this->Form->unlockField('referer');
             $this->Form->unlockField('verified_fields');
+            $this->Form->unlockField('delete_fundinguploads');
             echo $this->Form->hidden('Fundings.workshop.use_custom_coordinates');
             echo $this->Form->hidden('Fundings.owner_user.use_custom_coordinates');
 
@@ -60,19 +61,35 @@ echo $this->element('jqueryTabsWithoutAjax', [
 
                         $formattedFundingStartDate = date('d.m.Y', strtotime(Configure::read('AppConfig.fundingsStartDate')));
                         echo '<div style="margin-bottom:20px;">';
-                            echo '<p>Da für die Initiative "' . h($funding->workshop->name) . '" keine Termine vor dem '.$formattedFundingStartDate.' vorhanden sind, bitten wir dich, einen Aktivitätsnachweis hochzuladen. Dieser wird dann zeitnah von uns bestätigt.</p>';
-                            echo '<br /><p>Nur PDF, JPG und PNG-Dateien sind erlaubt, und jede Datei muss unter 5 MB sein.</p>';
+                            echo '<p>Da für die Initiative "' . h($funding->workshop->name) . '" keine Termine vor dem '.$formattedFundingStartDate.' vorhanden sind, bitten wir dich, einen oder mehrere Aktivitätsnachweise hochzuladen. Dieser wird dann zeitnah von uns bestätigt.</p>';
                         echo '</div>';
 
                         if (!empty($funding->fundinguploads_activity_proofs)) {
                             echo 'Bereits hochgeladen<br />';
+                            $i = 0;
                             foreach($funding->fundinguploads_activity_proofs as $fundingupload) {
-                                echo '• ' . $this->Html->link($fundingupload->filename, $this->Html->urlFundinguploadDetail($fundingupload->id), ['target' => '_blank']) . '<br />';
+                                echo $this->Form->control('Fundings.fundinguploads.'.$i.'.id', ['type' => 'hidden']);
+                                echo $this->Form->control('Fundings.fundinguploads.'.$i.'.owner', ['type' => 'hidden']);
+                                echo $this->Form->control('Fundings.fundinguploads.'.$i.'.type', ['type' => 'hidden']);
+                                echo $this->Form->control('Fundings.fundinguploads.'.$i.'.filename', ['label' => 'Datei', 'readonly' => true, 'class' => 'is-upload']);
+                                $i++;
                             }
                         }
 
-                        echo '<div style="padding:10px;margin-top:10px;border-radius:3px;" class="'.$funding->activity_proof_status_css_class.'">Status: ' . $funding->activity_proof_status_human_readable . '</div>';
+                        echo '<div style="padding:10px;margin-top:10px;border-radius:3px;" class="' . $funding->activity_proof_status_css_class . '">';
+                            echo 'Status: ' . $funding->activity_proof_status_human_readable;
+                        echo '</div>';
+
                         if ($funding->activity_proof_status != Funding::STATUS_VERIFIED) {
+
+                            $this->element('addScript', ['script' =>
+                                JS_NAMESPACE.".Funding.initBindDeleteFundinguploads();"
+                            ]);
+
+                            echo '<div style="margin-top:10px;">';
+                                echo '<p>Nur PDF, JPG und PNG-Dateien sind erlaubt, und jede Datei muss unter 5 MB sein.</p>';
+                            echo '</div>';
+
                             echo $this->Form->control('Fundings.files_fundinguploads[]', [
                                 'type' => 'file',
                                 'multiple' => 'multiple',

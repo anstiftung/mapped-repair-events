@@ -113,8 +113,9 @@ body.fundings.edit div.admin.edit {
     grid-column: 2;
     grid-row: 2;
 }
-#fundingForm div.input label.verified {
-    grid-column: 3;
+#fundingForm div.input label.verified,
+#fundingForm div.input label.delete-upload {
+        grid-column: 3;
 }
 #fundingForm div.input.checkbox label,
 #fundingForm div.input label.checkbox {
@@ -224,7 +225,8 @@ body.fundings.edit div.is-rejected {
         grid-column: 2;
         grid-row: 1;
     }
-    #fundingForm div.input label.verified {
+    #fundingForm div.input label.verified
+    #fundingForm div.input label.delete-upload {
         grid-column: 1 / span 2;
         grid-row: 2;
         justify-self: end;

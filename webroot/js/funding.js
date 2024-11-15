@@ -8,7 +8,7 @@ MappedRepairEvents.Funding = {
         });
     },
 
-    onClickHandler: (fieldName, checked) => {
+    onClickHandlerVerifiedCheckbox: (fieldName, checked) => {
         const fieldNameInputField = $(`#${fieldName}`);
         const wrapper = fieldNameInputField.closest('.input');
         wrapper.toggleClass('is-pending', !checked);
@@ -43,12 +43,39 @@ MappedRepairEvents.Funding = {
         }
     },
 
+    initBindDeleteFundinguploads: () => {
+        $('#fundingForm .input').find('input.is-upload').each(function() {
+            const fieldName = $(this).attr('id');
+            const fileuploadIdField = fieldName.replace('filename', 'id');
+            const fileuploadId = $(`#${fileuploadIdField}`).val();
+            if (fileuploadId === '') {
+                return;
+            }
+
+            const checkbox = $('<input>', {
+                type: 'checkbox',
+                value: fileuploadId,
+                class: 'is-upload',
+                name: 'Fundings[delete_fundinguploads][]',
+                checked: false,
+            });
+
+            const label = $('<label>', {
+                class: 'checkbox delete-upload no-required',
+                text: 'löschen?'
+            }).append(checkbox);
+
+            label.appendTo($(this).closest('.input'));
+        });
+    },
+
     initIsVerified: (isVerifiedData, totalFieldsCount) => {
 
         const parsedIsVerifiedData = JSON.parse(isVerifiedData);
         MappedRepairEvents.Funding.updateProgressBar(parsedIsVerifiedData, totalFieldsCount);
 
-        $('#fundingForm .input:not(.is-missing)').find('input:text, input:checkbox, input[type="email"],  input[type="tel"], textarea').each(function() {
+        $('#fundingForm .input:not(.is-missing)').find('input[type="text"]:not(.is-upload), input[type="checkbox"]:not(.is-upload), input[type="email"],  input[type="tel"], textarea').each(function() {
+
             const fieldName = $(this).attr('id');
             const checked = parsedIsVerifiedData === null ? false : parsedIsVerifiedData.includes(fieldName);
 
@@ -58,7 +85,7 @@ MappedRepairEvents.Funding = {
                 name: 'Fundings[verified_fields][]',
                 checked: checked,
                 on: {
-                    change: (e) => MappedRepairEvents.Funding.onClickHandler(fieldName, e.target.checked),
+                    change: (e) => MappedRepairEvents.Funding.onClickHandlerVerifiedCheckbox(fieldName, e.target.checked),
                 }
             }).trigger('change');
 
