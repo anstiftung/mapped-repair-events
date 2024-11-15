@@ -216,7 +216,7 @@ body.fundings.edit div.is-rejected {
 }
 @media (max-width: 767px) {
     #fundingForm div.input {
-        grid-template-columns: 2fr 3fr;
+        grid-template-columns: 3fr 3fr 2fr;
         grid-template-rows: auto auto auto;
         padding-bottom: 0;
     }
