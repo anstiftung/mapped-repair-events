@@ -150,12 +150,12 @@ class FundingsController extends AppController
             ]);
             $errors = $patchedEntity->getErrors();
             $filesFundinguploadsErrors = $patchedEntity->getError('files_fundinguploads');
+            $newFundinguploads = [];
             if (!empty($filesFundinguploadsErrors)) {
                 $patchedEntity->setError('files_fundinguploads[]', $filesFundinguploadsErrors);
             } else {
                 $filesFileuploads = $this->request->getData('Fundings.files_fundinguploads');
                 if (!empty($filesFileuploads)) {
-                    $newFundinguploads = [];
                     foreach ($filesFileuploads as $fileupload) {
                         if ($fileupload->getError() !== UPLOAD_ERR_OK) {
                             continue;
@@ -175,6 +175,7 @@ class FundingsController extends AppController
                         }
                         $fileupload->moveTo($filePath);
                     }
+                    
                     $this->request = $this->request->withData('Fundings.fundinguploads', array_merge($this->request->getData('Fundings.fundinguploads') ?? [], $newFundinguploads));
                     $patchedEntity = $fundingsTable->patchEntity($funding, $this->request->getData(), [
                         'associated' => $associations,
@@ -214,16 +215,13 @@ class FundingsController extends AppController
                 $patchedEntity->setError('files_fundinguploads[]', $fundinguploadsErrors);
             }
 
-            if (empty($errors)) {
-                if ($fundingsTable->save($patchedEntity, ['associated' => $associations])) {
-                    $this->AppFlash->setFlashMessage('Der Förderantrag wurde erfolgreich gespeichert.');
-                }
-            } else {
-                $associationsWithoutValidation = $this->removeValidationFromAssociations($associations);
+            $associationsWithoutValidation = $this->removeValidationFromAssociations($associations);
+            if (!empty($errors)) {
                 $patchedEntity = $this->getPatchedFundingForValidFields($errors, $workshopUid, $associationsWithoutValidation);
-                if ($fundingsTable->save($patchedEntity, ['associated' => $associationsWithoutValidation])) {
-                    $this->AppFlash->setFlashMessage('Der Förderantrag wurde erfolgreich gespeichert.');
-                }
+            }
+            $patchedEntity = $this->patchFundingStatusIfActivityProofWasUploaded($newFundinguploads, $patchedEntity);
+            if ($fundingsTable->save($patchedEntity, ['associated' => $associationsWithoutValidation])) {
+                $this->AppFlash->setFlashMessage('Der Förderantrag wurde erfolgreich gespeichert.');
             }
 
             if (!empty($this->request->getData('Fundings.fundinguploads'))) {
@@ -253,6 +251,16 @@ class FundingsController extends AppController
         ]);
         $this->set('funding', $funding);
 
+    }
+
+    private function patchFundingStatusIfActivityProofWasUploaded($newFundinguploads, $patchedEntity) {
+        $errors = $patchedEntity->getErrors('files_fundinguploads') + $patchedEntity->getErrors('fundinguploads');
+        if (empty($errors) && !empty($newFundinguploads)) {
+            $newStatus = Funding::STATUS_PENDING;
+            $this->request = $this->request->withData('Fundings.activity_proof_status', $newStatus);
+            $patchedEntity->activity_proof_status = $newStatus;
+        }
+        return $patchedEntity;
     }
 
     private function updateCoordinates($entity, $index, $addressString) {

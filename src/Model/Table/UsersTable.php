@@ -278,7 +278,6 @@ class UsersTable extends AppTable
     {
 
         $validator->notEmptyString('nick', 'Bitte trage deinen Nickname ein.');
-        $validator->requirePresence('nick', true, 'Bitte trage deinen Nickname ein.');
         $validator->minLength('nick', 2, 'Mindestens 2 Zeichen bitte (Nickname).');
         $validator->add('nick', 'unique', [
             'rule' => 'validateUnique',

@@ -13,9 +13,9 @@ class Funding extends Entity
     const STATUS_REJECTED = 30;
 
     const STATUS_MAPPING = [
-        self::STATUS_PENDING => 'Bestätigung ausstehend',
-        self::STATUS_VERIFIED => 'bestätigt',
-        self::STATUS_REJECTED => 'durch Admin beanstandet',
+        self::STATUS_PENDING => 'Bestätigung von Admin ausstehend',
+        self::STATUS_VERIFIED => 'von Admin bestätigt',
+        self::STATUS_REJECTED => 'von Admin beanstandet',
     ];
 
     const FIELDS_WORKSHOP = [
