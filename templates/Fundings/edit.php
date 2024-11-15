@@ -77,7 +77,7 @@ echo $this->element('jqueryTabsWithoutAjax', [
                             }
 
                             echo '<div style="padding:10px;margin-top:10px;border-radius:3px;" class="' . $funding->activity_proof_status_css_class . '">';
-                                echo '<p>Status: ' . $funding->activity_proof_status_human_readable . '</p>';
+                                echo '<p>' . $funding->activity_proof_status_human_readable . '</p>';
                                 if ($funding->activity_proof_comment != '') {
                                     echo '<p style="padding:10px;margin-top:10px;border:1px solid #fff;border-radius:3px;">' . h($funding->activity_proof_comment) . '</p>';
                                 }
