@@ -19,6 +19,9 @@ if (!isset($hideDeleteLink) || !$hideDeleteLink) {
 
 $hasUid = false;
 foreach($fields as $field) {
+    if (!isset($field['name'])) {
+        continue;
+    }
     if ($field['name'] == 'uid') {
         $hasUid = true;
     }
@@ -101,6 +104,11 @@ if ($showDeleteLink) {
             <?php
             foreach ($fields as $field) {
 
+                if (isset($field['template'])) {
+                    echo '<th>' . $field['label'] . '</th>';
+                    continue;
+                }
+
                 // wenn das feld "label" gesetzt ist, label anzeigen und zum nächsten feld
                 $label = $field['name'];
                 if (isset($field['label'])) {
@@ -162,12 +170,16 @@ if ($showDeleteLink) {
                 if (isset($object['status']) && $object['status'] == APP_OFF) {
                     $rowStatusClasses = ['status-offline'];
                 }
-                if (isset($object->admin_row_status_classes) && !empty($object->admin_row_status_classes)) {
-                    $rowStatusClasses = array_merge($rowStatusClasses, $object->admin_row_status_classes);
-                }
                 echo '<tr class="' . implode(' ', $rowStatusClasses) . '">';
 
                 foreach ($fields as $field) {
+
+                    if (isset($field['template'])) {
+                        echo '<td>';
+                        echo $this->element($field['template'], ['object' => $object]);
+                        echo '</td>';
+                        continue;
+                    }
 
                     $value = '';
                     if (isset($field['type']) && $field['type'] == 'array') {
@@ -199,13 +211,13 @@ if ($showDeleteLink) {
                                     }
                                 }
                             } else {
-                                    if (isset($splittedField[1])) {
-                                        if (!is_null($object->{$splittedField[0]})) {
-                                            $value = $object->{$splittedField[0]}[$splittedField[1]];
-                                        }
-                                    } else {
-                                        $value = $object[$splittedField[0]];
+                                if (isset($splittedField[1])) {
+                                    if (!is_null($object->{$splittedField[0]})) {
+                                        $value = $object->{$splittedField[0]}[$splittedField[1]];
                                     }
+                                } else {
+                                    $value = $object[$splittedField[0]];
+                                }
                             }
                         } else {
                             // example: entity.association.name

@@ -73,6 +73,11 @@ class Funding extends Entity
     }
 
     public function _getActivityProofStatusCssClass() {
+
+        if (!empty($this->workshop) && !$this->workshop->funding_activity_proof_required) {
+            return '';
+        }
+
         if ($this->activity_proof_status == self::STATUS_PENDING) {
             return 'is-pending';
         }
@@ -87,13 +92,6 @@ class Funding extends Entity
 
     public function _getActivityProofStatusHumanReadable() {
         return self::STATUS_MAPPING[$this->activity_proof_status];
-    }
-
-    public function _getAdminRowStatusClasses(): array {
-        if ($this->all_fields_verified) {
-            return ['is-verified'];
-        }
-        return [];
     }
 
     public static function getFieldsCount() {
