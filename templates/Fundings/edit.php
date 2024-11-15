@@ -63,7 +63,7 @@ echo $this->element('jqueryTabsWithoutAjax', [
 
                         $formattedFundingStartDate = date('d.m.Y', strtotime(Configure::read('AppConfig.fundingsStartDate')));
                         echo '<div style="margin-bottom:10px;">';
-                            echo '<p>Da für die Initiative "' . h($funding->workshop->name) . '" keine Termine vor dem '.$formattedFundingStartDate.' vorhanden sind, bitten wir dich, einen oder mehrere Aktivitätsnachweise hochzuladen. Dieser wird dann zeitnah von uns bestätigt.</p>';
+                            echo '<p>Da für die Initiative "' . h($funding->workshop->name) . '" keine Termine vor dem '.$formattedFundingStartDate.' vorhanden sind, bitten wir dich, maximal 5 Aktivitätsnachweise hochzuladen. Dieser wird dann zeitnah von uns bestätigt.</p>';
                         echo '</div>';
 
                         if (!empty($funding->fundinguploads_activity_proofs)) {
@@ -94,7 +94,7 @@ echo $this->element('jqueryTabsWithoutAjax', [
                             ]);
 
                             echo '<div style="margin-top:10px;">';
-                                echo '<p>Nur PDF, JPG und PNG-Dateien sind erlaubt, und jede Datei muss unter 5 MB sein. Maximal können 5 Dateien hochgeladen werden.</p>';
+                                echo '<p>Nur PDF, JPG und PNG-Dateien sind erlaubt, und jede Datei muss unter 5 MB sein.</p>';
                             echo '</div>';
 
                             echo $this->Form->control('Fundings.files_fundinguploads[]', [

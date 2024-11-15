@@ -108,7 +108,7 @@ return [
         'statisticsEnabled' => true,
         'mapWidgetEnabled' => true,
         'fundingsEnabled' => true,
-        'fundingsStartDate' => '2025-01-01',
+        'fundingsStartDate' => '2024-12-01',
         'activeUsersFrontendEnabled' => true,
         'tagsFrontendEnabled' => true,
         'onlineEventsEnabled' => true,
