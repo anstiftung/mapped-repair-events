@@ -1,10 +1,10 @@
 <?php
 use Cake\Core\Configure;
 
-$this->element('addScript', array('script' => "
+$this->element('addScript', ['script' => "
     var mapObject = new ".JS_NAMESPACE.".Map([], 'search', true, ".json_encode($customCenterCoordinates).", ".$customZoomLevel.", '".$markerSrc."', '".$foundMarkerSrc."');
     mapObject.setMapAsFixed($('#content .right').height());"
-));
+]);
 
 $customCss = '';
 

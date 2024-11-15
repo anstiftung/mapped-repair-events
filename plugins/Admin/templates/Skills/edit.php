@@ -1,10 +1,10 @@
 <?php
 use Cake\Core\Configure;
 
-$this->element('addScript', array('script' =>
+$this->element('addScript', ['script' =>
     JS_NAMESPACE.".Helper.bindCancelButton();".
     JS_NAMESPACE.".Helper.layoutEditButtons();
-"));
+"]);
 ?>
 
 <div class="admin edit">

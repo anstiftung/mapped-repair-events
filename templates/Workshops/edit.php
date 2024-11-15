@@ -2,20 +2,20 @@
 use Cake\Core\Configure;
 
     if ($isEditMode) {
-        $this->element('addScript', array('script' =>
+        $this->element('addScript', ['script' =>
             JS_NAMESPACE.".Helper.doCurrentlyUpdatedActions(".$isCurrentlyUpdated.");"
-        ));
+        ]);
     }
     if ($this->request->getSession()->read('isMobile')) {
         $this->element('addScript', ['script' =>
-            JS_NAMESPACE.".MobileFrontend.putSaveAndCancelButtonToEndOfForm();
-        "]);
+            JS_NAMESPACE.".MobileFrontend.putSaveAndCancelButtonToEndOfForm();"
+        ]);
     }
-    $this->element('addScript', array('script' =>
+    $this->element('addScript', ['script' =>
         JS_NAMESPACE.".Helper.bindCancelButton(".$workshop->uid.");".
         JS_NAMESPACE.".Helper.layoutEditButtons();".
-        JS_NAMESPACE.".Helper.initCustomCoordinatesCheckbox('#workshops-use-custom-coordinates');
-    "));
+        JS_NAMESPACE.".Helper.initCustomCoordinatesCheckbox('#workshops-use-custom-coordinates');"
+    ]);
     echo $this->element('highlightNavi', ['main' => 'INITIATIVEN']);
 ?>
 
