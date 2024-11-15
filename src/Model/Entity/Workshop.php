@@ -48,10 +48,10 @@ class Workshop extends Entity
     }
 
     public function _getFundingIsActivityProofOk(): bool {
-        if (empty($this->funding)) {
+        if (empty($this->workshop_funding)) {
             return false;
         }
-        return $this->funding->activity_proof_ok == 1;
+        return $this->workshop_funding->activity_proof_ok == 1;
     }
 
     public function _getFundingIsAllowed(): bool {
@@ -63,7 +63,7 @@ class Workshop extends Entity
         return $this->funding_is_future_events_count_ok;
     }
 
-    public function _getFundingActivityProofNecessary(): bool {
+    public function _getFundingActivityProofRequired(): bool {
         return !$this->funding_is_past_events_count_ok;
     }
 

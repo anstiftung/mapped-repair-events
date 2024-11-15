@@ -38,15 +38,14 @@ MappedRepairEvents.Funding = {
         });
     },
 
-    updateProgressBar: (parsedIsVerifiedData, totalFieldsCount) => {
-        const verifiedDataLength = parsedIsVerifiedData === null ? 0 : parsedIsVerifiedData.length;
-        const progressInPercent = verifiedDataLength / totalFieldsCount * 100;
+    updateProgressBar: (verifiedDataCount, totalFieldsCount) => {
+        const progressInPercent = verifiedDataCount / totalFieldsCount * 100;
         const progressWrapper = $('#fundingForm .progress-wrapper');
         $( "#progress-bar" ).progressbar({value: progressInPercent});
         if (progressInPercent === 100) {
             progressWrapper.find('p').text('Fortschritt: Alle Felder sind bestätigt, du kannst den Förderantrag jetzt einreichen.');
         } else {
-            progressWrapper.find('.verified-count').text(verifiedDataLength);
+            progressWrapper.find('.verified-count').text(verifiedDataCount);
         }
     },
 
@@ -76,10 +75,9 @@ MappedRepairEvents.Funding = {
         });
     },
 
-    initIsVerified: (isVerifiedData, totalFieldsCount) => {
+    initIsVerified: (isVerifiedData) => {
 
         const parsedIsVerifiedData = JSON.parse(isVerifiedData);
-        MappedRepairEvents.Funding.updateProgressBar(parsedIsVerifiedData, totalFieldsCount);
 
         $('#fundingForm .input:not(.is-missing)').find('input[type="text"]:not(.is-upload), input[type="checkbox"]:not(.is-upload), input[type="email"],  input[type="tel"], textarea').each(function() {
 

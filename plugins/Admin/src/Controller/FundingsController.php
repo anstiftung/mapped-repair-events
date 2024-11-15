@@ -67,11 +67,12 @@ class FundingsController extends AdminAppController
     {
         parent::index();
         $fundingsTable = $this->getTableLocator()->get('Fundings');
+        $workshopsTable = $this->getTableLocator()->get('Workshops');
 
         $query = $fundingsTable->find('all',
         conditions: $this->conditions,
         contain: [
-            'Workshops',
+            'Workshops' => $workshopsTable->getFundingContain(),
             'OwnerUsers',
             'Fundinguploads',
         ]);

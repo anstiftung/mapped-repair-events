@@ -118,12 +118,13 @@ class FundingsTable extends AppTable
             $funding = $this->save($newEntity, ['associated' => $associations]);
         }
 
+        $workshopsTable = FactoryLocator::get('Table')->get('Workshops');
         $funding = $this->find()->where([
             $this->aliasField('uid') => $funding->uid,
             $this->aliasField('owner') => Router::getRequest()?->getAttribute('identity')?->uid,
         ])->contain([
-            'Workshops.Countries',
-            'OwnerUsers.Countries',
+            'Workshops' => $workshopsTable->getFundingContain(),
+            'OwnerUsers',
             'Supporters',
             'Fundinguploads',
         ])->first();

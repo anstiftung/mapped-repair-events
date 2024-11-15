@@ -26,9 +26,9 @@ echo '<div class="workshop-wrapper">';
 
         echo '<div>';
             if ($workshop->funding_exists) {
-                echo '<div>UID: ' . $workshop->funding->uid. ' / ' . $workshop->funding->verified_fields_count . ' von ' . Funding::getFieldsCount() . ' Feldern bestätigt</div>';
+                echo '<div>UID: ' . $workshop->workshop_funding->uid. ' / ' . $workshop->workshop_funding->verified_fields_count . ' von ' . Funding::getFieldsCount() . ' Feldern bestätigt</div>';
             }
-            echo $this->element('funding/owner', ['funding' => $workshop->funding]);
+            echo $this->element('funding/owner', ['funding' => $workshop->workshop_funding]);
             echo $this->element('funding/orgaTeam', ['orgaTeam' => $workshop->orga_team]);
             echo $this->element('funding/activityProof', ['workshop' => $workshop]);
         echo '</div>';

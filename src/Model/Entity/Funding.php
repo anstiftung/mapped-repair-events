@@ -68,10 +68,6 @@ class Funding extends Entity
         return $renderedFields;
     }
 
-    public static function getFieldsCount() {
-        return count(self::FIELDS_WORKSHOP) + count(self::FIELDS_OWNER_USER) + count(self::FIELDS_SUPPORTER_ORGANIZATION) + count(self::FIELDS_SUPPORTER_USER) + count(self::FIELDS_SUPPORTER_BANK);
-    }
-
     public function _getActivityProofStatusIsVerified() {
         return $this->activity_proof_status == self::STATUS_VERIFIED;
     }
@@ -100,12 +96,26 @@ class Funding extends Entity
         return [];
     }
 
+    public static function getFieldsCount() {
+        return count(self::FIELDS_WORKSHOP) + count(self::FIELDS_OWNER_USER) + count(self::FIELDS_SUPPORTER_ORGANIZATION) + count(self::FIELDS_SUPPORTER_USER) + count(self::FIELDS_SUPPORTER_BANK);
+    }
+
     public function _getVerifiedFieldsCount(): int {
-        return $this->verified_fields !== null ? count($this->verified_fields) : 0;
+        $result = 0;
+
+        if ($this->verified_fields !== null) {
+            $result = count($this->verified_fields);
+        }
+
+        if ($this->workshop->funding_activity_proof_required && $this->activity_proof_status == self::STATUS_VERIFIED) {
+            $result++;
+        }
+
+        return $result;
     }
 
     public function _getAllFieldsVerified(): bool {
-        return $this->verified_fields_count == self::getFieldsCount();
+        return $this->verified_fields_count == $this->required_fields_count;
     }
 
     public function _getFundinguploadsActivityProofs(): array {
@@ -119,6 +129,14 @@ class Funding extends Entity
 
     public function _getActivityProofsCount(): int {
         return count($this->fundinguploads_activity_proofs);
+    }
+
+    public function _getRequiredFieldsCount(): int {
+        $result = self::getFieldsCount();
+        if ($this->workshop->funding_activity_proof_required) {
+            $result++;
+        };
+        return $result;
     }
 
 }

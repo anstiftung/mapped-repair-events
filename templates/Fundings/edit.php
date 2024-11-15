@@ -6,7 +6,8 @@ $this->element('addScript', ['script' =>
     JS_NAMESPACE.".Helper.bindCancelButton();".
     JS_NAMESPACE.".Funding.bindDeleteButton(".$funding->uid.");".
     JS_NAMESPACE.".Funding.init();".
-    JS_NAMESPACE.".Funding.initIsVerified('".json_encode($funding->verified_fields)."', ".Funding::getFieldsCount().");"
+    JS_NAMESPACE.".Funding.initIsVerified('".json_encode($funding->verified_fields)."');".
+    JS_NAMESPACE.".Funding.updateProgressBar(" . $funding->verified_fields_count . ",  ".$funding->required_fields_count.");"
 ]);
 echo $this->element('jqueryTabsWithoutAjax', [
     'links' => $this->Html->getUserBackendNaviLinks($loggedUser->uid, true, $loggedUser->isOrga()),
@@ -55,7 +56,7 @@ echo $this->element('jqueryTabsWithoutAjax', [
 
             echo '<div class="flexbox">';
 
-                if ($workshopWithFundingContains->funding_activity_proof_necessary) {
+                if ($funding->workshop->funding_activity_proof_required) {
                     echo '<fieldset>';
 
                         echo '<legend>Aktivitätsnachweis</legend>';
@@ -149,7 +150,7 @@ echo $this->element('jqueryTabsWithoutAjax', [
             ?>
 
             <div class="progress-wrapper">
-                <p>Fortschritt: <span class="verified-count"></span> von <?php echo Funding::getFieldsCount(); ?> Feldern bestätigt</p>
+                <p>Fortschritt: <span class="verified-count"></span> von <?php echo $funding->required_fields_count; ?> Feldern bestätigt</p>
                 <div id="progress-bar"></div>
             </div>
 

@@ -41,7 +41,8 @@ class WorkshopsTable extends AppTable
         $this->belongsTo('Provinces', [
             'foreignKey' => 'province_id',
         ]);
-        $this->hasOne('Fundings', [
+        $this->hasOne('WorkshopFundings', [
+            'className' => 'Fundings',
             'foreignKey' => 'workshop_uid',
         ]);
         $this->hasMany('FundingAllPastEvents', [
@@ -199,7 +200,7 @@ class WorkshopsTable extends AppTable
 
     public function getFundingContain() {
         return [
-            'Fundings.OwnerUsers',
+            'WorkshopFundings.OwnerUsers',
             'FundingAllPastEvents' => function (Query $q) {
                 return $q->select(['workshop_uid', 'count' => $q->func()->count('*')])->groupBy('workshop_uid');
             },
