@@ -74,7 +74,7 @@ echo $this->element('jqueryTabsWithoutAjax', [
                                 echo $this->Form->control('Fundings.fundinguploads.'.$i.'.id', ['type' => 'hidden']);
                                 echo $this->Form->control('Fundings.fundinguploads.'.$i.'.owner', ['type' => 'hidden']);
                                 echo $this->Form->control('Fundings.fundinguploads.'.$i.'.type', ['type' => 'hidden']);
-                                echo $this->Form->control('Fundings.fundinguploads.'.$i.'.filename', ['label' => $activityProofFilenameLabel, 'readonly' => true, 'class' => 'is-upload', 'escape' => false]);
+                                echo $this->Form->control('Fundings.fundinguploads.'.$i.'.filename', ['label' => $activityProofFilenameLabel, 'readonly' => true, 'class' => 'is-upload no-verify', 'escape' => false]);
                                 $i++;
                             }
 
@@ -148,18 +148,15 @@ echo $this->element('jqueryTabsWithoutAjax', [
                         'legend' => 'Bankverbindung der Trägerorganisation',
                     ]
                 );
-
-                $fundingbudgetplanfields = '';
-                foreach($funding->fundingbudgetplans as $fundingbudgetplanIndex => $fundingbudgetplan) {
-                    $fundingbudgetplanfields .= Funding::getRenderedFields(Funding::FIELDS_FUNDINGBUDGETPLAN, 'fundingbudgetplans.'.$fundingbudgetplanIndex, $this->Form);
-                }
  
-                echo $this->Form->fieldset(
-                    $fundingbudgetplanfields,
-                    [
-                        'legend' => 'Kostenplan',
-                    ]
-                );
+                echo '<fieldset class="fundingbudgetplan">';
+                    echo '<legend>Kostenplan</legend>';
+                    foreach($funding->fundingbudgetplans as $fundingbudgetplanIndex => $fundingbudgetplan) {
+                        echo '<div class="row">';
+                            echo Funding::getRenderedFields(Funding::FIELDS_FUNDINGBUDGETPLAN, 'fundingbudgetplans.'.$fundingbudgetplanIndex, $this->Form);
+                        echo '</div>';
+                    }
+                echo '</fieldset>';
 
                 echo '</div>';
 

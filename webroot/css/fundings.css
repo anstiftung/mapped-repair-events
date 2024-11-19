@@ -57,7 +57,7 @@ body.fundings button.upload-button {
 body.fundings.edit div.admin.edit {
     padding: 20px;
 }
-#fundingForm div.input {
+#fundingForm fieldset:not(.fundingbudgetplan) div.input {
     display: grid;
     grid-template-columns: 155px auto 100px;
     grid-template-rows: auto auto;
@@ -66,6 +66,20 @@ body.fundings.edit div.admin.edit {
     padding: 10px 5px 5px 5px;
     margin-top: 1px;
     border-radius: 3px;
+}
+#fundingForm fieldset.fundingbudgetplan div.row {
+    display: grid;
+    grid-template-columns: 120px auto 70px;
+    gap: 5px;
+    align-items: baseline;
+    padding: 5px 0px 5px 0px;
+    border-radius: 3px;
+}
+#fundingForm fieldset.fundingbudgetplan input {
+    width: 95% ! important;
+}
+#fundingForm fieldset.fundingbudgetplan select {
+    width: 100% ! important;
 }
 #fundingForm div.input.file {
     grid-template-columns: auto;

@@ -32,24 +32,18 @@ class FundingbudgetplansTable extends Table
                 'rule' => function ($value) {
                     return array_key_exists($value, Fundingbudgetplan::TYPE_MAP);
                 },
-                'message' => 'Bitte Förderbereich auswählen',
+                'message' => 'Förderbereich auswählen',
             ]);
 
-        $validator->minLength('description', 5, 'Beschreibung zu kurz (zwischen 5 und 100 Zeichen)');
-        $validator->maxLength('description', 100, 'Beschreibung zu lang (zwischen 5 und 100 Zeichen)');
-
-        $validator
-            ->add('amount', 'valid', [
-                'rule' => 'numeric',
-                'message' => 'Ungültiger Betrag'
-            ]);
+        $validator->minLength('description', 5, 'Zwischen 5 und 100 Zeichen bitte');
+        $validator->maxLength('description', 100, 'Zwischen 5 und 100 Zeichen bitte');
 
         $validator
             ->add('amount', 'valid', [
                 'rule' => function ($value) {
                     return $value > 0;
                 },
-                'message' => 'Bitte Betrag eingeben',
+                'message' => 'Betrag eingeben',
             ]);
     
 

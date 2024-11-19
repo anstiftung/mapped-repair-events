@@ -1,7 +1,7 @@
 MappedRepairEvents.Funding = {
 
     init: () => {
-        $('#fundingForm .input.required').find('input, textarea').each(function() {
+        $('#fundingForm fieldset:not(.fundingbudgetplan) .input.required').find('input, textarea').each(function() {
             if ($(this).val() === '') {
                 $(this).closest('.input').addClass('is-missing');
             }
@@ -87,7 +87,7 @@ MappedRepairEvents.Funding = {
 
         const parsedIsVerifiedData = JSON.parse(isVerifiedData);
 
-        $('#fundingForm .input:not(.is-missing)').find('input[type="text"]:not(.is-upload), input[type="checkbox"]:not(.is-upload), input[type="email"],  input[type="tel"], textarea').each(function() {
+        $('#fundingForm .input:not(.is-missing)').find('input[type="text"]:not(.no-verify), input[type="checkbox"]:not(.is-upload), input[type="email"],  input[type="tel"], textarea').each(function() {
 
             const fieldName = $(this).attr('id');
             const checked = parsedIsVerifiedData === null ? false : parsedIsVerifiedData.includes(fieldName);

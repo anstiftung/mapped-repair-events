@@ -62,9 +62,9 @@ class Funding extends Entity
 
     const FIELDS_FUNDINGBUDGETPLAN = [
         ['name' => 'id', 'options' => ['type' => 'hidden']],
-        ['name' => 'type', 'options' => ['type' => 'select', 'options' => Fundingbudgetplan::TYPE_MAP, 'empty' => 'Förderbereich auswählen...', 'label' => '']],
-        ['name' => 'description', 'options' => ['label' => 'Maßnahme/Gegenstand']],
-        ['name' => 'amount', 'options' => ['label' => 'Kosten', 'type' => 'number', 'step' => '0.01',]],
+        ['name' => 'type', 'options' => ['type' => 'select', 'options' => Fundingbudgetplan::TYPE_MAP, 'empty' => 'Förderbereich wählen...', 'label' => false, 'class' => 'no-select2']],
+        ['name' => 'description', 'options' => ['label' => false, 'placeholder' => 'Maßnahme/Gegenstand', 'class' => 'no-verify']],
+        ['name' => 'amount', 'options' => ['label' => false, 'placeholder' => 'Kosten', 'type' => 'number', 'step' => '0.01',]],
     ];
 
     public static function getRenderedFields($fields, $entity, $form) {
