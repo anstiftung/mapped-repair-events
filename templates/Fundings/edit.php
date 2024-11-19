@@ -101,8 +101,12 @@ echo $this->element('jqueryTabsWithoutAjax', [
                                 'type' => 'file',
                                 'multiple' => 'multiple',
                                 'label' => '',
-                                'onchange' => 'document.getElementById("fundingForm").submit();',
                                 'accept' => '.jpg, .png, .pdf, .jpeg', 
+                            ]);
+
+                            echo $this->Form->button('Hochladen', [
+                                'type' => 'submit',
+                                'class' => 'upload-button rounded',
                             ]);
 
                         }
@@ -162,7 +166,7 @@ echo $this->element('jqueryTabsWithoutAjax', [
             ]);
 
             echo $this->element('cancelAndSaveButton', [
-                'saveLabel' => 'Förderantrag speichern',
+                'saveLabel' => 'Förderantrag zwischenspeichern',
                 'additionalButton' => $deleteButton,
             ]);
 

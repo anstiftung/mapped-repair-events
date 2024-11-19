@@ -215,7 +215,7 @@ class FundingsController extends AppController
             }
             $patchedEntity = $this->patchFundingStatusIfActivityProofWasUploaded($newFundinguploads, $patchedEntity);
             if ($fundingsTable->save($patchedEntity, ['associated' => $associationsWithoutValidation])) {
-                $this->AppFlash->setFlashMessage('Der Förderantrag wurde erfolgreich gespeichert.');
+                $this->AppFlash->setFlashMessage('Der Förderantrag wurde erfolgreich zwischengespeichert.');
             }
 
             if (!empty($this->request->getData('Fundings.fundinguploads'))) {

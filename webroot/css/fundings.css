@@ -50,6 +50,10 @@ body.fundings.index .workshop-wrapper .orga-user:not(:last-child)::after {
 body.fundings.edit h1 {
     margin-bottom: 20px;
 }
+body.fundings button.upload-button {
+    float: right;
+    margin-top: 10px;
+}
 body.fundings.edit div.admin.edit {
     padding: 20px;
 }
