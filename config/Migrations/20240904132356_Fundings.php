@@ -12,7 +12,7 @@ class Fundings extends AbstractMigration
             `uid` int UNSIGNED DEFAULT NULL,
             `owner` int UNSIGNED DEFAULT NULL,
             `workshop_uid` int UNSIGNED DEFAULT NULL,
-            `supporter_id` int UNSIGNED DEFAULT NULL,
+            `fundingsupporter_id` int UNSIGNED DEFAULT NULL,
             `status` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
             `activity_proof_status` int(10) DEFAULT 10,
             `activity_proof_comment` text,
@@ -22,7 +22,7 @@ class Fundings extends AbstractMigration
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
         $this->execute($query);
 
-        $query = "CREATE TABLE `supporters` (
+        $query = "CREATE TABLE `fundingsupporters` (
             `id` int UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
             `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
             `legal_form` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,

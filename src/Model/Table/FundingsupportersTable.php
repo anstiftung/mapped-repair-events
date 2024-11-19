@@ -7,7 +7,7 @@ use Cake\Validation\Validator;
 use Cake\Event\EventInterface;
 use ArrayObject;
 
-class SupportersTable extends Table
+class FundingsupportersTable extends Table
 {
 
     public function initialize(array $config): void

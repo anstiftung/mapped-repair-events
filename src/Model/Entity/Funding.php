@@ -37,7 +37,7 @@ class Funding extends Entity
         ['name' => 'phone', 'options' => ['label' => 'Telefon']],
     ];
 
-    const FIELDS_SUPPORTER_ORGANIZATION = [
+    const FIELDS_FUNDINGSUPPORTER_ORGANIZATION = [
         ['name' => 'name', 'options' => ['label' => 'Name']],
         ['name' => 'legal_form', 'options' => ['label' => 'Rechtsform']],
         ['name' => 'street', 'options' => ['label' => 'Straße + Hausnummer']],
@@ -46,7 +46,7 @@ class Funding extends Entity
         ['name' => 'website', 'options' => ['label' => 'Website']],
     ];
 
-    const FIELDS_SUPPORTER_USER = [
+    const FIELDS_FUNDINGSUPPORTER_USER = [
         ['name' => 'contact_firstname', 'options' => ['label' => 'Vorname']],
         ['name' => 'contact_lastname', 'options' => ['label' => 'Nachname']],
         ['name' => 'contact_function', 'options' => ['label' => 'Funktion']],
@@ -54,7 +54,7 @@ class Funding extends Entity
         ['name' => 'contact_email', 'options' => ['label' => 'E-Mail']],
     ];
 
-    const FIELDS_SUPPORTER_BANK = [
+    const FIELDS_FUNDINGSUPPORTER_BANK = [
         ['name' => 'bank_account_owner', 'options' => ['label' => 'Kontoinhaber']],
         ['name' => 'bank_institute', 'options' => ['label' => 'Kreditinstitut']],
         ['name' => 'iban', 'options' => ['label' => 'IBAN']],
@@ -95,7 +95,7 @@ class Funding extends Entity
     }
 
     public static function getFieldsCount() {
-        return count(self::FIELDS_WORKSHOP) + count(self::FIELDS_OWNER_USER) + count(self::FIELDS_SUPPORTER_ORGANIZATION) + count(self::FIELDS_SUPPORTER_USER) + count(self::FIELDS_SUPPORTER_BANK);
+        return count(self::FIELDS_WORKSHOP) + count(self::FIELDS_OWNER_USER) + count(self::FIELDS_FUNDINGSUPPORTER_ORGANIZATION) + count(self::FIELDS_FUNDINGSUPPORTER_USER) + count(self::FIELDS_FUNDINGSUPPORTER_BANK);
     }
 
     public function _getVerifiedFieldsCount(): int {

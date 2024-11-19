@@ -129,21 +129,21 @@ echo $this->element('jqueryTabsWithoutAjax', [
                 );
 
                 echo $this->Form->fieldset(
-                    Funding::getRenderedFields(Funding::FIELDS_SUPPORTER_ORGANIZATION, 'supporter', $this->Form),
+                    Funding::getRenderedFields(Funding::FIELDS_FUNDINGSUPPORTER_ORGANIZATION, 'fundingsupporter', $this->Form),
                     [
                         'legend' => 'Stammdaten der Trägerorganisation',
                     ]
                 );
 
                 echo $this->Form->fieldset(
-                    Funding::getRenderedFields(Funding::FIELDS_SUPPORTER_USER, 'supporter', $this->Form),
+                    Funding::getRenderedFields(Funding::FIELDS_FUNDINGSUPPORTER_USER, 'fundingsupporter', $this->Form),
                     [
                         'legend' => 'Ansprechpartner*in der Trägerorganisation',
                     ]
                 );
 
                 echo $this->Form->fieldset(
-                    Funding::getRenderedFields(Funding::FIELDS_SUPPORTER_BANK, 'supporter', $this->Form),
+                    Funding::getRenderedFields(Funding::FIELDS_FUNDINGSUPPORTER_BANK, 'fundingsupporter', $this->Form),
                     [
                         'legend' => 'Bankverbindung der Trägerorganisation',
                     ]

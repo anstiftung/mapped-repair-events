@@ -116,7 +116,7 @@ class FundingsControllerTest extends AppTestCase
         $newCity = 'Teststadt';
         $newAdresszusatz = 'Adresszusatz';
 
-        $newSupporterName = 'Supporter Name';
+        $newFundingsupporterName = 'Fundingsupporter Name';
 
         $newOwnerFirstname = 'Owner Firstname';
         $newOwnerLastname = 'Owner Lastname';
@@ -138,8 +138,8 @@ class FundingsControllerTest extends AppTestCase
                     'website' => 'non valid string',
                     'use_custom_coordinates' => 0,
                 ],
-                'supporter' => [
-                    'name' => $newSupporterName,
+                'fundingsupporter' => [
+                    'name' => $newFundingsupporterName,
                     'website' => 'orf.at',
                 ],
                 'owner_user' => [
@@ -151,10 +151,10 @@ class FundingsControllerTest extends AppTestCase
                 'verified_fields' => array_merge($verifiedFields, ['fundings-workshop-website']),
             ]
         ]);
-        $this->assertResponseContains('Der Förderantrag wurde erfolgreich gespeichert.');
+        $this->assertResponseContains('Der Förderantrag wurde erfolgreich zwischengespeichert.');
 
         $fundingsTable = $this->getTableLocator()->get('Fundings');
-        $funding = $fundingsTable->find(contain: ['Workshops', 'OwnerUsers', 'Supporters'])->first();
+        $funding = $fundingsTable->find(contain: ['Workshops', 'OwnerUsers', 'Fundingsupporters'])->first();
         $funding->owner_user->revertPrivatizeData();
 
         $this->assertEquals($verifiedFields, $funding->verified_fields); // must not contain invalid workshops-website
@@ -166,8 +166,8 @@ class FundingsControllerTest extends AppTestCase
         $this->assertEquals($newCity, $funding->workshop->city);
         $this->assertEquals($newAdresszusatz, $funding->workshop->adresszusatz);
 
-        $this->assertEquals($newSupporterName, $funding->supporter->name);
-        $this->assertEquals('https://orf.at', $funding->supporter->website);
+        $this->assertEquals($newFundingsupporterName, $funding->fundingsupporter->name);
+        $this->assertEquals('https://orf.at', $funding->fundingsupporter->website);
 
         $this->assertEquals($newOwnerFirstname, $funding->owner_user->firstname);
         $this->assertEquals($newOwnerLastname, $funding->owner_user->lastname);

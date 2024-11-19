@@ -19,8 +19,8 @@ class FundingsTable extends AppTable
         $this->belongsTo('Workshops', [
             'foreignKey' => 'workshop_uid',
         ]);
-        $this->belongsTo('Supporters', [
-            'foreignKey' => 'supporter_id',
+        $this->belongsTo('Fundingsupporters', [
+            'foreignKey' => 'fundingsupporter_id',
         ]);
         $this->hasMany('Fundinguploads', [
             'foreignKey' => 'funding_uid',
@@ -81,13 +81,13 @@ class FundingsTable extends AppTable
 
         $funding = $this->find()->where([
             $this->aliasField('uid') => $fundingUid,
-        ])->contain(['Supporters'])->first();
+        ])->contain(['Fundingsupporters'])->first();
         if (empty($funding)) {
             throw new NotFoundException('funding (UID: '.$fundingUid.') was not found');
         }
         $this->delete($funding);
-        $supportersTable = FactoryLocator::get('Table')->get('Supporters');
-        $supportersTable->delete($funding->supporter);
+        $fundingsupportersTable = FactoryLocator::get('Table')->get('Fundingsupporters');
+        $fundingsupportersTable->delete($funding->fundingsupporter);
 
         // fundinguploads are deleted automatically by dependent option
 
@@ -104,16 +104,16 @@ class FundingsTable extends AppTable
         ])->first();
 
         if (empty($funding)) {
-            $supportersTable = FactoryLocator::get('Table')->get('Supporters');
-            $supporterEntity = $supportersTable->newEmptyEntity();
-            $supporterEntity->name = '';
-            $supporter = $supportersTable->save($supporterEntity);
-            $associations = ['Supporters'];
+            $fundingsupportersTable = FactoryLocator::get('Table')->get('Fundingsupporters');
+            $fundingsupporterEntity = $fundingsupportersTable->newEmptyEntity();
+            $fundingsupporterEntity->name = '';
+            $fundingsupporter = $fundingsupportersTable->save($fundingsupporterEntity);
+            $associations = ['Fundingsupporters'];
             $newEntity = $this->newEntity([
                 'workshop_uid' => $workshopUid,
                 'status' => APP_ON,
                 'owner' => Router::getRequest()?->getAttribute('identity')?->uid,
-                'supporter_id' => $supporter->id,
+                'supporter_id' => $fundingsupporter->id,
             ]);
             $funding = $this->save($newEntity, ['associated' => $associations]);
         }
@@ -125,7 +125,7 @@ class FundingsTable extends AppTable
         ])->contain([
             'Workshops' => $workshopsTable->getFundingContain(),
             'OwnerUsers',
-            'Supporters',
+            'Fundingsupporters',
             'Fundinguploads',
         ])->first();
 

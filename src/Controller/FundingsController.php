@@ -112,7 +112,7 @@ class FundingsController extends AppController
 
         if (!empty($this->request->getData())) {
 
-            $associations = ['Workshops', 'OwnerUsers', 'Supporters', 'Fundinguploads'];
+            $associations = ['Workshops', 'OwnerUsers', 'Fundingsupporters', 'Fundinguploads'];
             $singularizedAssociations = array_map(function($association) {
                 return Inflector::singularize(Inflector::tableize($association));
             }, $associations);
@@ -280,7 +280,7 @@ class FundingsController extends AppController
         $data = $this->request->getData();
         $verifiedFieldsWithErrors = [];
         foreach ($errors as $entity => $fieldErrors) {
-            if (!in_array($entity, ['workshop', 'owner_user', 'supporter'])) {
+            if (!in_array($entity, ['workshop', 'owner_user', 'fundingsupporter'])) {
                 continue;
             }
             $fieldNames = array_keys($fieldErrors);
