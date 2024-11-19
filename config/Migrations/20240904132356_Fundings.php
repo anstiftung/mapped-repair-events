@@ -56,6 +56,16 @@ class Fundings extends AbstractMigration
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
         $this->execute($query);
 
+        $query = "CREATE TABLE `fundingbudgetplans` (
+            `id` int UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `funding_uid` int UNSIGNED DEFAULT NULL,
+            `type` int(10) DEFAULT 0,
+            `description` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+            `amount` decimal(10,2) DEFAULT 0.00,
+            `created` datetime DEFAULT CURRENT_TIMESTAMP,
+            `modified` datetime DEFAULT CURRENT_TIMESTAMP
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
+        $this->execute($query);
 
         $sql = "DELETE from roots where object_type = 'votings';
             DELETE from roots where object_type = 'coaches';";

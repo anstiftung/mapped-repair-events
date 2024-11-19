@@ -18,6 +18,16 @@ class StringComponent extends Component
         return preg_replace('/^([\d]+)-(.*)$/', '$2', $string);
     }
 
+    public static function cleanAllStringsInData($data)
+    {
+        foreach ($data as $key => $value) {
+            if (is_string($value)) {
+                $data[$key] = strip_tags($value);
+            }
+        }
+        return $data;
+    }
+
     public static function removeWhitespace($string)
     {
         return preg_replace('/\s+/', '', $string);

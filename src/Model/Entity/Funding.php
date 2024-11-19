@@ -60,6 +60,13 @@ class Funding extends Entity
         ['name' => 'iban', 'options' => ['label' => 'IBAN']],
     ];
 
+    const FIELDS_FUNDINGBUDGETPLAN = [
+        ['name' => 'id', 'options' => ['type' => 'hidden']],
+        ['name' => 'type', 'options' => ['type' => 'select', 'options' => Fundingbudgetplan::TYPE_MAP, 'empty' => 'Förderbereich auswählen...', 'label' => '']],
+        ['name' => 'description', 'options' => ['label' => 'Maßnahme/Gegenstand']],
+        ['name' => 'amount', 'options' => ['label' => 'Kosten', 'type' => 'number', 'step' => '0.01',]],
+    ];
+
     public static function getRenderedFields($fields, $entity, $form) {
         $renderedFields = '';
         foreach($fields as $field) {
@@ -95,7 +102,13 @@ class Funding extends Entity
     }
 
     public static function getFieldsCount() {
-        return count(self::FIELDS_WORKSHOP) + count(self::FIELDS_OWNER_USER) + count(self::FIELDS_FUNDINGSUPPORTER_ORGANIZATION) + count(self::FIELDS_FUNDINGSUPPORTER_USER) + count(self::FIELDS_FUNDINGSUPPORTER_BANK);
+        return count(self::FIELDS_WORKSHOP)
+              + count(self::FIELDS_OWNER_USER)
+              + count(self::FIELDS_FUNDINGSUPPORTER_ORGANIZATION)
+              + count(self::FIELDS_FUNDINGSUPPORTER_USER)
+              + count(self::FIELDS_FUNDINGSUPPORTER_BANK)
+              + 1 // fundingbudgetplan
+              ;
     }
 
     public function _getVerifiedFieldsCount(): int {

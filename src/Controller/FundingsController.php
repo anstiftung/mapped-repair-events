@@ -112,20 +112,19 @@ class FundingsController extends AppController
 
         if (!empty($this->request->getData())) {
 
-            $associations = ['Workshops', 'OwnerUsers', 'Fundingsupporters', 'Fundinguploads'];
+            $associations = ['Workshops', 'OwnerUsers', 'Fundingsupporters', 'Fundinguploads', 'Fundingbudgetplans'];
             $singularizedAssociations = array_map(function($association) {
                 return Inflector::singularize(Inflector::tableize($association));
             }, $associations);
 
             foreach($singularizedAssociations as $association) {
                 $dataKey = 'Fundings.'.$association;
-                // ignore for uploads
-                if (!is_array($this->request->getData($dataKey))) {
-                    continue;
-                }
-                foreach ($this->request->getData($dataKey) as $field => $value) {
-                    $cleanedValue = strip_tags($value);
-                    $this->request = $this->request->withData($dataKey . '.' . $field, $cleanedValue);
+                if (in_array($dataKey, ['Fundings.workshop', 'Fundings.owner_user'])) {
+                    // cleaning cannot be done in entity because of allowedBasicHtmlFields
+                    foreach ($this->request->getData($dataKey) as $field => $value) {
+                        $cleanedValue = strip_tags($value);
+                        $this->request = $this->request->withData($dataKey . '.' . $field, $cleanedValue);
+                    }
                 }
             }
 
@@ -237,7 +236,6 @@ class FundingsController extends AppController
                     'associated' => $associations,
                 ]);
             }
-
         }
 
         $this->set('metaTags', [

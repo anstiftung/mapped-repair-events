@@ -149,6 +149,18 @@ echo $this->element('jqueryTabsWithoutAjax', [
                     ]
                 );
 
+                $fundingbudgetplanfields = '';
+                foreach($funding->fundingbudgetplans as $fundingbudgetplanIndex => $fundingbudgetplan) {
+                    $fundingbudgetplanfields .= Funding::getRenderedFields(Funding::FIELDS_FUNDINGBUDGETPLAN, 'fundingbudgetplans.'.$fundingbudgetplanIndex, $this->Form);
+                }
+ 
+                echo $this->Form->fieldset(
+                    $fundingbudgetplanfields,
+                    [
+                        'legend' => 'Kostenplan',
+                    ]
+                );
+
                 echo '</div>';
 
             ?>

@@ -14,6 +14,8 @@ use Laminas\Diactoros\UploadedFile;
 class FundingsTable extends AppTable
 {
 
+    const FUNDINGBUDGETPLANS_COUNT = 15;
+
     public function initialize(array $config): void {
         parent::initialize($config);
         $this->belongsTo('Workshops', [
@@ -21,6 +23,10 @@ class FundingsTable extends AppTable
         ]);
         $this->belongsTo('Fundingsupporters', [
             'foreignKey' => 'fundingsupporter_id',
+        ]);
+        $this->hasMany('Fundingbudgetplans', [
+            'foreignKey' => 'funding_uid',
+            'dependent' => true,
         ]);
         $this->hasMany('Fundinguploads', [
             'foreignKey' => 'funding_uid',
@@ -89,7 +95,7 @@ class FundingsTable extends AppTable
         $fundingsupportersTable = FactoryLocator::get('Table')->get('Fundingsupporters');
         $fundingsupportersTable->delete($funding->fundingsupporter);
 
-        // fundinguploads are deleted automatically by dependent option
+        // fundinguploads and fundingbudgetplans are deleted automatically by dependent option
 
         $filePath = Funding::UPLOAD_PATH . $funding->uid;
         FolderService::deleteFolder($filePath);
@@ -125,9 +131,22 @@ class FundingsTable extends AppTable
         ])->contain([
             'Workshops' => $workshopsTable->getFundingContain(),
             'OwnerUsers',
+            'Fundingbudgetplans',
             'Fundingsupporters',
             'Fundinguploads',
         ])->first();
+
+        if (empty($funding->fundingbudgetplans)) {
+            $fundingbudgetplansTable = FactoryLocator::get('Table')->get('Fundingbudgetplans');
+            $fundingbudgetplanEntities = [];
+            for ($i = 0; $i < self::FUNDINGBUDGETPLANS_COUNT; $i++) {
+                $fundingbudgetplanEntity = $fundingbudgetplansTable->newEmptyEntity();
+                $fundingbudgetplanEntity->funding_uid = $funding->uid;
+                $fundingbudgetplanEntity = $fundingbudgetplansTable->save($fundingbudgetplanEntity, ['validate' => false]);
+                $fundingbudgetplanEntities[] = $fundingbudgetplanEntity;
+            }
+            $funding->fundingbudgetplans = $fundingbudgetplanEntities;
+        }
 
         if (!empty($funding)) {
             $funding->owner_user->revertPrivatizeData();

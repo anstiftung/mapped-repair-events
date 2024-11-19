@@ -18,6 +18,7 @@ class FundingsupportersTable extends Table
 
     public function beforeMarshal(EventInterface $event, ArrayObject $data, ArrayObject $options)
     {
+        $data = StringComponent::cleanAllStringsInData($data);
         if (isset($data['iban'])) {
             $data['iban'] = StringComponent::removeWhitespace($data['iban']);
         }
