@@ -21,6 +21,12 @@ MappedRepairEvents.Funding = {
         const deleteUploadCheckboxesChecked = deleteUploadCheckboxes.is(':checked');
         const uploadInput = $('#fundings-files-fundinguploads');
         uploadInput.prop('disabled', deleteUploadCheckboxesChecked);
+        const uploadButton = $('button.upload-button');
+        if (deleteUploadCheckboxesChecked) {
+            uploadButton.text('Löschen');
+        } else {
+            uploadButton.text('Hochladen');
+        }
     },
 
     bindDeleteButton: (uid) => {
