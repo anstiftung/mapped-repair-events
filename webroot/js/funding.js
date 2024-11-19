@@ -23,9 +23,11 @@ MappedRepairEvents.Funding = {
         uploadInput.prop('disabled', deleteUploadCheckboxesChecked);
         const uploadButton = $('button.upload-button');
         if (deleteUploadCheckboxesChecked) {
-            uploadButton.text('Löschen');
+            uploadButton.text('Dateien löschen');
+            uploadButton.addClass('red');
         } else {
-            uploadButton.text('Hochladen');
+            uploadButton.text('Dateien hochladen');
+            uploadButton.removeClass('red');
         }
     },
 

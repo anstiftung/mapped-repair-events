@@ -104,7 +104,7 @@ echo $this->element('jqueryTabsWithoutAjax', [
                                 'accept' => '.jpg, .png, .pdf, .jpeg', 
                             ]);
 
-                            echo $this->Form->button('Hochladen', [
+                            echo $this->Form->button('Dateien hochladen', [
                                 'type' => 'submit',
                                 'class' => 'upload-button rounded',
                             ]);
