@@ -119,7 +119,7 @@ class FundingsTable extends AppTable
                 'workshop_uid' => $workshopUid,
                 'status' => APP_ON,
                 'owner' => Router::getRequest()?->getAttribute('identity')?->uid,
-                'supporter_id' => $fundingsupporter->id,
+                'fundingsupporter_id' => $fundingsupporter->id,
             ]);
             $funding = $this->save($newEntity, ['associated' => $associations]);
         }
