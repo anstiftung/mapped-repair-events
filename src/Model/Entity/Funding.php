@@ -32,6 +32,7 @@ class Funding extends Entity
         ['name' => 'city', 'options' => ['label' => 'Stadt']],
         ['name' => 'adresszusatz', 'options' => ['label' => 'Adresszusatz']],
         ['name' => 'email', 'options' => ['label' => 'E-Mail']],
+        ['name' => 'website', 'options' => ['label' => 'Website']],
     ];
 
     const FIELDS_OWNER_USER = [
