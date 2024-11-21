@@ -59,7 +59,7 @@ body.fundings.edit div.admin.edit {
 }
 #fundingForm fieldset:not(.fundingbudgetplan) div.input {
     display: grid;
-    grid-template-columns: 155px auto 100px;
+    grid-template-columns: 165px auto 100px;
     grid-template-rows: auto auto;
     gap: 5px;
     align-items: baseline;
@@ -75,11 +75,10 @@ body.fundings.edit div.admin.edit {
     padding: 5px 0px 5px 0px;
     border-radius: 3px;
 }
+#fundingForm fieldset.fundingbudgetplan select,
 #fundingForm fieldset.fundingbudgetplan input {
-    width: 95% ! important;
-}
-#fundingForm fieldset.fundingbudgetplan select {
-    width: 100% ! important;
+    width: 100% ! important; /* fallback */
+    width: -webkit-fill-available ! important;
 }
 #fundingForm div.input.file {
     grid-template-columns: auto;
