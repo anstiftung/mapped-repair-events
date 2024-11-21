@@ -12,8 +12,8 @@ class Fundingbudgetplan extends Entity
 
     const TYPE_MAP = [
         self::TYPE_A => 'Investive Maßnahme',
-        self::TYPE_B => 'Type B',
-        self::TYPE_C => 'Type C',
+        self::TYPE_B => 'Raum/Veranstaltung',
+        self::TYPE_C => 'Fortbildung',
     ];
 
 }
