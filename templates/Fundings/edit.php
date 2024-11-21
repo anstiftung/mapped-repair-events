@@ -61,6 +61,13 @@ echo $this->element('jqueryTabsWithoutAjax', [
 
                         echo '<legend>Aktivitätsnachweis</legend>';
 
+                        echo '<div class="verification-wrapper ' . $funding->activity_proof_status_css_class . '">';
+                            echo '<p>' . $funding->activity_proof_status_human_readable . '</p>';
+                                if ($funding->activity_proof_comment != '' && $funding->activity_proof_status == Funding::STATUS_REJECTED) {
+                                    echo '<p class="comment">' . h($funding->activity_proof_comment) . '</p>';
+                                }
+                        echo '</div>';
+
                         $formattedFundingStartDate = date('d.m.Y', strtotime(Configure::read('AppConfig.fundingsStartDate')));
                         echo '<div style="margin-bottom:10px;">';
                             echo '<p>Da für die Initiative "' . h($funding->workshop->name) . '" keine Termine vor dem '.$formattedFundingStartDate.' vorhanden sind, bitten wir dich, maximal 5 Aktivitätsnachweise hochzuladen. Dieser wird dann zeitnah von uns bestätigt.</p>';
@@ -77,14 +84,6 @@ echo $this->element('jqueryTabsWithoutAjax', [
                                 echo $this->Form->control('Fundings.fundinguploads.'.$i.'.filename', ['label' => $activityProofFilenameLabel, 'readonly' => true, 'class' => 'is-upload no-verify', 'escape' => false]);
                                 $i++;
                             }
-
-                            echo '<div style="padding:10px;margin-top:10px;border-radius:3px;" class="' . $funding->activity_proof_status_css_class . '">';
-                                echo '<p>' . $funding->activity_proof_status_human_readable . '</p>';
-                                if ($funding->activity_proof_comment != '' && $funding->activity_proof_status == Funding::STATUS_REJECTED) {
-                                    echo '<p style="padding:10px;margin-top:10px;border:1px solid #fff;border-radius:3px;">' . h($funding->activity_proof_comment) . '</p>';
-                                }
-                            echo '</div>';
-
                         }
 
                         if ($funding->activity_proof_status != Funding::STATUS_VERIFIED) {
@@ -104,12 +103,15 @@ echo $this->element('jqueryTabsWithoutAjax', [
                                 'accept' => '.jpg, .png, .pdf, .jpeg', 
                             ]);
 
-                            echo $this->Form->button('Dateien hochladen', [
-                                'type' => 'submit',
-                                'class' => 'upload-button rounded',
-                            ]);
+                            echo '<div class="upload-button-wrapper">';
+                                echo $this->Form->button('Dateien hochladen', [
+                                    'type' => 'submit',
+                                    'class' => 'upload-button rounded',
+                                ]);
+                            echo '</div>';
 
                         }
+
                     echo '</fieldset>';
 
                 }
@@ -151,6 +153,11 @@ echo $this->element('jqueryTabsWithoutAjax', [
  
                 echo '<fieldset class="fundingbudgetplan">';
                     echo '<legend>Kostenplan</legend>';
+    
+                    echo '<div class="verification-wrapper ' . $funding->budgetplan_status_css_class . '">';
+                        echo '<p>' . $funding->budgetplan_status_human_readable . '</p>';
+                    echo '</div>';
+
                     foreach($funding->fundingbudgetplans as $fundingbudgetplanIndex => $fundingbudgetplan) {
                         echo '<div class="row">';
                             echo Funding::getRenderedFields(Funding::FIELDS_FUNDINGBUDGETPLAN, 'fundingbudgetplans.'.$fundingbudgetplanIndex, $this->Form);

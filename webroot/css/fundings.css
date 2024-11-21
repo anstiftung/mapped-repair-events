@@ -50,8 +50,22 @@ body.fundings.index .workshop-wrapper .orga-user:not(:last-child)::after {
 body.fundings.edit h1 {
     margin-bottom: 20px;
 }
+body.fundings .verification-wrapper {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 3px;
+}
+body.fundings .verification-wrapper p.comment {
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #fff;
+    border-radius: 3px;
+}
+body.fundings .upload-button-wrapper {
+    display: flex;
+    justify-content: flex-end;
+}
 body.fundings button.upload-button {
-    float: right;
     margin-top: 10px;
 }
 body.fundings.edit div.admin.edit {
@@ -161,6 +175,7 @@ body.fundings.edit div.admin.edit {
     border-radius: 5px;
     margin-bottom: 20px;
     padding: 10px;
+    max-width: calc(50% - 30px);
 }
 #fundingForm fieldset legend {
     font-weight: bold;
@@ -232,6 +247,9 @@ body.fundings div.is-rejected {
     color: #fff;
 }
 @media (max-width: 767px) {
+    #fundingForm fieldset {
+        max-width: auto;
+    }
     #fundingForm fieldset:not(.fundingbudgetplan) div.input {
         grid-template-columns: 3fr 3fr 2fr;
         grid-template-rows: auto auto auto;

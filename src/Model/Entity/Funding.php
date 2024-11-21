@@ -11,11 +11,15 @@ class Funding extends Entity
     const STATUS_PENDING = 10;
     const STATUS_VERIFIED = 20;
     const STATUS_REJECTED = 30;
+    const STATUS_BUDGETPLAN_DATA_MISSING = 40;
+    const STATUS_DATA_OK = 50;
 
     const STATUS_MAPPING = [
         self::STATUS_PENDING => 'Bestätigung von Admin ausstehend',
         self::STATUS_VERIFIED => 'von Admin bestätigt',
         self::STATUS_REJECTED => 'von Admin beanstandet',
+        self::STATUS_BUDGETPLAN_DATA_MISSING => 'Du musst mindestens einen Eintrag hinzufügen',
+        self::STATUS_DATA_OK => 'Daten sind vollständig und ok',
     ];
 
     const FIELDS_WORKSHOP = [
@@ -77,6 +81,30 @@ class Funding extends Entity
 
     public function _getActivityProofStatusIsVerified() {
         return $this->activity_proof_status == self::STATUS_VERIFIED;
+    }
+
+    public function _getBudgetplanStatus() {
+        $hasValidRecord = false;
+        foreach($this->fundingbudgetplans as $fundingbudgetplan) {
+            if (!empty($fundingbudgetplan->description) || !empty($fundingbudgetplan->amount)) {
+                $hasValidRecord = true;
+            }
+        }
+        return $hasValidRecord ? self::STATUS_DATA_OK : self::STATUS_BUDGETPLAN_DATA_MISSING;
+    }
+
+    public function _getBudgetplanStatusCssClass() {
+        if ($this->budgetplan_status == self::STATUS_BUDGETPLAN_DATA_MISSING) {
+            return 'is-pending';
+        }
+        if ($this->budgetplan_status == self::STATUS_DATA_OK) {
+            return 'is-verified';
+        }
+        return '';
+    }
+
+    public function _getBudgetplanStatusHumanReadable() {
+        return self::STATUS_MAPPING[$this->budgetplan_status];
     }
 
     public function _getActivityProofStatusCssClass() {
