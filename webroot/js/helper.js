@@ -1133,13 +1133,19 @@ MappedRepairEvents.Helper = {
 
     },
 
-    bindShowMoreLink: function() {
+    bindShowMoreLink: function(autoOpen) {
+
+        autoOpen = autoOpen || false;
 
         $('.show-more-link').on('click', function () {
             $('article.preview').hide();
             $(this).hide();
             MappedRepairEvents.Helper.doToggle($(this), $(this).next());
         });
+
+        if (autoOpen) {
+            $('.show-more-link').trigger('click');
+        }
 
     },
 

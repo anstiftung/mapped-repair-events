@@ -16,4 +16,12 @@ class Fundingbudgetplan extends Entity
         self::TYPE_C => 'Fortbildung',
     ];
 
+    protected function _getIsValid() {
+        return $this->type > 0 && $this->description != '' && $this->amount > 0;
+    }
+
+    protected function _getIsNotEmpty() {
+        return $this->type > 0 || $this->description != '' || $this->amount > 0;
+    }
+
 }

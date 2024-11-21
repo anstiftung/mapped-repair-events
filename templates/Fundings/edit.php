@@ -158,24 +158,27 @@ echo $this->element('jqueryTabsWithoutAjax', [
                         echo '<p>' . $funding->budgetplan_status_human_readable . '</p>';
                     echo '</div>';
                     
-                    $firstFundingbudgetplans = array_slice($funding->fundingbudgetplans, 0, 5, true);
-                    $availableFundingbudgetplans = array_slice($funding->fundingbudgetplans, 5, 15, true);
+                    $shownFundingbudgetplans = array_slice($funding->fundingbudgetplans, 0, 5, true);
+                    $hiddenFundingbudgetplans = array_slice($funding->fundingbudgetplans, 5, 15, true);
 
                     echo '<div class="row-wrapper">';
-                        foreach($firstFundingbudgetplans as $fundingbudgetplanIndex => $fundingbudgetplan) {
+                        foreach($shownFundingbudgetplans as $fundingbudgetplanIndex => $fundingbudgetplan) {
                             echo '<div class="row">';
                                 echo Funding::getRenderedFields(Funding::FIELDS_FUNDINGBUDGETPLAN, 'fundingbudgetplans.'.$fundingbudgetplanIndex, $this->Form, $fundingbudgetplan);
                             echo '</div>';
                         }
                     echo '</div>';
 
+                    $nonEmptyHiddenRecordsExist = count(array_filter($hiddenFundingbudgetplans, function($fundingbudgetplan) {
+                        return $fundingbudgetplan->is_not_empty;
+                    })) > 0;
                     $this->element('addScript', ['script' =>
-                        JS_NAMESPACE . ".Helper.bindShowMoreLink();
+                        JS_NAMESPACE . ".Helper.bindShowMoreLink(" . ($nonEmptyHiddenRecordsExist ? 'true'  : 'false') . ");
                     "]);
                     echo '<a href="javascript:void(0);" class="show-more-link" style="margin-left:5px;line-height:30px;"><i class="fa fa-plus-circle"></i> Mehr Felder anzeigen</a>';
 
                     echo '<div class="row-wrapper" style="display:none;">';
-                        foreach($availableFundingbudgetplans as $fundingbudgetplanIndex => $fundingbudgetplan) {
+                        foreach($hiddenFundingbudgetplans as $fundingbudgetplanIndex => $fundingbudgetplan) {
                             echo '<div class="row">';
                                 echo Funding::getRenderedFields(Funding::FIELDS_FUNDINGBUDGETPLAN, 'fundingbudgetplans.'.$fundingbudgetplanIndex, $this->Form, $fundingbudgetplan);
                             echo '</div>';
