@@ -11,6 +11,9 @@ use ArrayObject;
 class FundingbudgetplansTable extends Table
 {
 
+    const DESCRIPTION_MIN_LENGTH = 5;
+    const DESCRIPTION_MAX_LENGTH = 100;
+
     public function initialize(array $config): void
     {
         parent::initialize($config);
@@ -27,28 +30,57 @@ class FundingbudgetplansTable extends Table
 
     public function validationDefault(Validator $validator): Validator
     {
+
         $validator
             ->add('type', 'valid', [
-                'rule' => function ($value) {
-                    return array_key_exists($value, Fundingbudgetplan::TYPE_MAP);
+                'rule' => function ($value, $context) {
+                    if (!empty($context['data']['description']) || !empty($context['data']['amount'])) {
+                        return array_key_exists($value, Fundingbudgetplan::TYPE_MAP);
+                    }
+                    return true;
                 },
                 'message' => 'Förderbereich auswählen',
             ]);
 
-        $validator->minLength('description', 5, 'Zwischen 5 und 100 Zeichen bitte');
-        $validator->maxLength('description', 100, 'Zwischen 5 und 100 Zeichen bitte');
+        $validator
+            ->add('description', 'valid', [
+                'rule' => function ($value, $context) {
+                    $descriptionLength = strlen($value);
+                    $mainCheck = $descriptionLength >= self::DESCRIPTION_MIN_LENGTH && $descriptionLength <= self::DESCRIPTION_MAX_LENGTH;
+
+                    $typeIsEmpty = empty($context['data']['type']);
+                    if ($typeIsEmpty) {
+                        if ($value == '') {
+                            return true;
+                        }
+                        return $mainCheck;
+                    }
+
+                    return $mainCheck;
+                },
+                'message' => 'Zwischen ' . self::DESCRIPTION_MIN_LENGTH . ' und ' . self::DESCRIPTION_MAX_LENGTH . ' Zeichen bitte',
+            ]);
 
         $validator
             ->add('amount', 'valid', [
-                'rule' => function ($value) {
-                    return $value > 0;
+                'rule' => function ($value, $context) {
+                    $mainCheck = $value > 0;
+                    
+                    $typeIsEmpty = empty($context['data']['type']);
+                    if ($typeIsEmpty) {
+                        if ($value == '') {
+                            return true;
+                        }
+                        return $mainCheck;
+                    }
+
+                    return $mainCheck;
                 },
-                'message' => 'Betrag eingeben',
+                'message' => 'Betrag muss größer als 0 sein',
             ]);
-    
 
         return $validator;
-    }
+    }    
 
 }
 

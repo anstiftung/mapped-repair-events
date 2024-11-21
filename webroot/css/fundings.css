@@ -69,7 +69,7 @@ body.fundings.edit div.admin.edit {
 }
 #fundingForm fieldset.fundingbudgetplan div.row {
     display: grid;
-    grid-template-columns: 120px auto 70px;
+    grid-template-columns: 160px auto 70px;
     gap: 5px;
     align-items: baseline;
     padding: 5px 0px 5px 0px;
