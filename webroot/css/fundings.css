@@ -175,7 +175,6 @@ body.fundings.edit div.admin.edit {
     border-radius: 5px;
     margin-bottom: 20px;
     padding: 10px;
-    max-width: calc(50% - 30px);
 }
 #fundingForm fieldset legend {
     font-weight: bold;
@@ -189,6 +188,9 @@ body.fundings.edit div.admin.edit {
 }
 #fundingForm .flexbox > fieldset {
     flex: 1;
+}
+#fundingForm .flexbox fieldset.fundingbudgetplan {
+    flex-basis: 100%; /* full width */
 }
 #fundingForm .upload-form-field-wrapper {
     padding: 10px;
@@ -247,9 +249,6 @@ body.fundings div.is-rejected {
     color: #fff;
 }
 @media (max-width: 767px) {
-    #fundingForm fieldset {
-        max-width: auto;
-    }
     #fundingForm fieldset:not(.fundingbudgetplan) div.input {
         grid-template-columns: 3fr 3fr 2fr;
         grid-template-rows: auto auto auto;
