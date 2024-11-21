@@ -232,27 +232,23 @@ body.fundings div.is-rejected {
     color: #fff;
 }
 @media (max-width: 767px) {
-    #fundingForm div.input {
+    #fundingForm fieldset:not(.fundingbudgetplan) div.input {
         grid-template-columns: 3fr 3fr 2fr;
         grid-template-rows: auto auto auto;
         padding-bottom: 0;
     }
-    #fundingForm div.input label {
-        grid-column: 1;
-        grid-row: 1;
-    }
-    #fundingForm div.input input,
-    #fundingForm div.input textarea {
+    #fundingForm fieldset:not(.fundingbudgetplan) div.input input,
+    #fundingForm fieldset:not(.fundingbudgetplan) div.input textarea {
         grid-column: 2;
         grid-row: 1;
     }
-    #fundingForm div.input label.verified
-    #fundingForm div.input label.delete-upload {
+    #fundingForm fieldset:not(.fundingbudgetplan) div.input label.verified
+    #fundingForm fieldset:not(.fundingbudgetplan) div.input label.delete-upload {
         grid-column: 1 / span 2;
         grid-row: 2;
         justify-self: end;
     }
-    #fundingForm div.input .error-message {
+    #fundingForm fieldset:not(.fundingbudgetplan) div.input .error-message {
         grid-column: 2;
         grid-row: 2;
     }
@@ -269,4 +265,11 @@ body.fundings div.is-rejected {
         margin-left: 0;
         margin-top: 10px;
     }
+    #fundingForm fieldset.fundingbudgetplan div.row {
+        grid-template-columns: auto;
+    }
+    #fundingForm fieldset.fundingbudgetplan div.row select {
+        max-width: 100%;
+    }
+
 }
