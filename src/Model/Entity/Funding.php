@@ -159,7 +159,7 @@ class Funding extends Entity
     }
 
     public function _getDescriptionStatus() {
-        $isValid = strlen($this->description) >= FundingsTable::DESCRIPTION_MIN_LENGTH && strlen($this->description) <= FundingsTable::DESCRIPTION_MAX_LENGTH;
+        $isValid = isset($this->description) && strlen($this->description) >= FundingsTable::DESCRIPTION_MIN_LENGTH && strlen($this->description) <= FundingsTable::DESCRIPTION_MAX_LENGTH;
         if ($isValid) {
             return self::STATUS_DATA_OK;
         };
