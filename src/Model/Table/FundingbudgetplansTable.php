@@ -13,7 +13,7 @@ class FundingbudgetplansTable extends Table
 
     const DESCRIPTION_MIN_LENGTH = 5;
     const DESCRIPTION_MAX_LENGTH = 100;
-    const DESCRIPTION_ERROR_MESSAGE = 'Zwischen ' . self::DESCRIPTION_MIN_LENGTH . ' und ' . self::DESCRIPTION_MAX_LENGTH . ' Zeichen';
+    const DESCRIPTION_ERROR_MESSAGE = self::DESCRIPTION_MIN_LENGTH . ' bis ' . self::DESCRIPTION_MAX_LENGTH . ' Zeichen';
 
     public function initialize(array $config): void
     {
