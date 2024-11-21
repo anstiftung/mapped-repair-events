@@ -301,9 +301,23 @@ class FundingsController extends AppController
     }
 
     private function removeValidationFromAssociations($associations) {
-        return array_map(function($association) {
+
+        $result = array_map(function($association) {
+            if (in_array($association, ['Fundingbudgetplans'])) {
+                return $association;
+            }
             return ['validate' => false];
         }, array_flip($associations));
+
+        // some association's data should not be saved if invalid
+        foreach($result as $entity => $value) {
+            if (in_array($entity, ['Fundingbudgetplans'])) {
+                $result[$entity] = ['validate' => 'default'];
+            }
+        }
+
+        return $result;
+
     }
 
 
