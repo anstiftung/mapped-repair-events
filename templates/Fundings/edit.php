@@ -157,12 +157,31 @@ echo $this->element('jqueryTabsWithoutAjax', [
                     echo '<div class="verification-wrapper ' . $funding->budgetplan_status_css_class . '">';
                         echo '<p>' . $funding->budgetplan_status_human_readable . '</p>';
                     echo '</div>';
+                    
+                    $firstFundingbudgetplans = array_slice($funding->fundingbudgetplans, 0, 5, true);
+                    $availableFundingbudgetplans = array_slice($funding->fundingbudgetplans, 5, 15, true);
 
-                    foreach($funding->fundingbudgetplans as $fundingbudgetplanIndex => $fundingbudgetplan) {
-                        echo '<div class="row">';
-                            echo Funding::getRenderedFields(Funding::FIELDS_FUNDINGBUDGETPLAN, 'fundingbudgetplans.'.$fundingbudgetplanIndex, $this->Form);
-                        echo '</div>';
-                    }
+                    echo '<div class="row-wrapper">';
+                        foreach($firstFundingbudgetplans as $fundingbudgetplanIndex => $fundingbudgetplan) {
+                            echo '<div class="row">';
+                                echo Funding::getRenderedFields(Funding::FIELDS_FUNDINGBUDGETPLAN, 'fundingbudgetplans.'.$fundingbudgetplanIndex, $this->Form);
+                            echo '</div>';
+                        }
+                    echo '</div>';
+
+                    $this->element('addScript', ['script' =>
+                        JS_NAMESPACE . ".Helper.bindShowMoreLink();
+                    "]);
+                    echo '<a href="javascript:void(0);" class="show-more-link" style="margin-left:5px;line-height:30px;"><i class="fa fa-plus-circle"></i> Mehr Felder anzeigen</a>';
+
+                    echo '<div class="row-wrapper" style="display:none;">';
+                        foreach($availableFundingbudgetplans as $fundingbudgetplanIndex => $fundingbudgetplan) {
+                            echo '<div class="row">';
+                                echo Funding::getRenderedFields(Funding::FIELDS_FUNDINGBUDGETPLAN, 'fundingbudgetplans.'.$fundingbudgetplanIndex, $this->Form);
+                            echo '</div>';
+                        }
+                    echo '</div>';
+
                 echo '</fieldset>';
 
                 echo '</div>';
