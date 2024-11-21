@@ -2,6 +2,7 @@
 namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
+use App\Model\Table\FundingbudgetplansTable;
 
 class Funding extends Entity
 {
@@ -67,14 +68,21 @@ class Funding extends Entity
     const FIELDS_FUNDINGBUDGETPLAN = [
         ['name' => 'id', 'options' => ['type' => 'hidden']],
         ['name' => 'type', 'options' => ['type' => 'select', 'options' => Fundingbudgetplan::TYPE_MAP, 'empty' => 'Förderbereich wählen...', 'label' => false, 'class' => 'no-select2']],
-        ['name' => 'description', 'options' => ['label' => false, 'placeholder' => 'Maßnahme/Gegenstand', 'class' => 'no-verify']],
-        ['name' => 'amount', 'options' => ['label' => false, 'placeholder' => 'Kosten', 'type' => 'number', 'step' => '0.01',]],
+        ['name' => 'description', 'options' => ['label' => false, 'placeholder' => 'Maßnahme/Gegenstand (' . FundingbudgetplansTable::DESCRIPTION_ERROR_MESSAGE . ')', 'class' => 'no-verify', 'maxlength' => FundingbudgetplansTable::DESCRIPTION_MAX_LENGTH, 'minlength' => FundingbudgetplansTable::DESCRIPTION_MIN_LENGTH]],
+        ['name' => 'amount', 'options' => ['label' => false, 'placeholder' => 'Kosten in €', 'type' => 'number', 'step' => '0.01']],
     ];
 
-    public static function getRenderedFields($fields, $entity, $form) {
+    public static function getRenderedFields($fields, $entityString, $form, $entity = null) {
         $renderedFields = '';
+        $fieldsToBeFormattedWithToDigits = ['amount'];
         foreach($fields as $field) {
-            $renderedFields .= $form->control('Fundings.' . $entity . '.' . $field['name'], $field['options']);
+            if ($entity !== null && in_array($field['name'], $fieldsToBeFormattedWithToDigits)) {
+                $value = $entity[$field['name']];
+                if ($value !== null) {
+                    $field['options']['value'] = number_format($value, 2);
+                }
+            }
+            $renderedFields .= $form->control('Fundings.' . $entityString . '.' . $field['name'], $field['options']);
         }
         return $renderedFields;
     }

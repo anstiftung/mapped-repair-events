@@ -164,7 +164,7 @@ echo $this->element('jqueryTabsWithoutAjax', [
                     echo '<div class="row-wrapper">';
                         foreach($firstFundingbudgetplans as $fundingbudgetplanIndex => $fundingbudgetplan) {
                             echo '<div class="row">';
-                                echo Funding::getRenderedFields(Funding::FIELDS_FUNDINGBUDGETPLAN, 'fundingbudgetplans.'.$fundingbudgetplanIndex, $this->Form);
+                                echo Funding::getRenderedFields(Funding::FIELDS_FUNDINGBUDGETPLAN, 'fundingbudgetplans.'.$fundingbudgetplanIndex, $this->Form, $fundingbudgetplan);
                             echo '</div>';
                         }
                     echo '</div>';
@@ -177,7 +177,7 @@ echo $this->element('jqueryTabsWithoutAjax', [
                     echo '<div class="row-wrapper" style="display:none;">';
                         foreach($availableFundingbudgetplans as $fundingbudgetplanIndex => $fundingbudgetplan) {
                             echo '<div class="row">';
-                                echo Funding::getRenderedFields(Funding::FIELDS_FUNDINGBUDGETPLAN, 'fundingbudgetplans.'.$fundingbudgetplanIndex, $this->Form);
+                                echo Funding::getRenderedFields(Funding::FIELDS_FUNDINGBUDGETPLAN, 'fundingbudgetplans.'.$fundingbudgetplanIndex, $this->Form, $fundingbudgetplan);
                             echo '</div>';
                         }
                     echo '</div>';

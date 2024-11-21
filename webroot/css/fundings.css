@@ -83,7 +83,7 @@ body.fundings.edit div.admin.edit {
 }
 #fundingForm fieldset.fundingbudgetplan div.row {
     display: grid;
-    grid-template-columns: 160px auto 70px;
+    grid-template-columns: 180px auto 100px;
     gap: 5px;
     align-items: baseline;
     padding: 5px 0px 5px 0px;
@@ -97,6 +97,9 @@ body.fundings.edit div.admin.edit {
 #fundingForm div.input.file {
     grid-template-columns: auto;
     gap: 0;
+}
+#fundingForm div.input.number input {
+    text-align: right;
 }
 @keyframes lockAnimation {
     0% {

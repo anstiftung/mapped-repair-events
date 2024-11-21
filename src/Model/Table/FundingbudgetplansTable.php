@@ -13,6 +13,7 @@ class FundingbudgetplansTable extends Table
 
     const DESCRIPTION_MIN_LENGTH = 5;
     const DESCRIPTION_MAX_LENGTH = 100;
+    const DESCRIPTION_ERROR_MESSAGE = 'Zwischen ' . self::DESCRIPTION_MIN_LENGTH . ' und ' . self::DESCRIPTION_MAX_LENGTH . ' Zeichen';
 
     public function initialize(array $config): void
     {
@@ -58,7 +59,7 @@ class FundingbudgetplansTable extends Table
 
                     return $mainCheck;
                 },
-                'message' => 'Zwischen ' . self::DESCRIPTION_MIN_LENGTH . ' und ' . self::DESCRIPTION_MAX_LENGTH . ' Zeichen bitte',
+                'message' => self::DESCRIPTION_ERROR_MESSAGE,
             ]);
 
         $validator
