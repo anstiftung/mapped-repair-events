@@ -1,5 +1,7 @@
 <?php
 
+use Cake\View\Helper\MyNumberHelper;
+
 define('LF', "\n");
 define('TAB', "\t");
 
@@ -145,7 +147,7 @@ return [
             '800' => [] //800 is maximum! (tmpUploadFileSize)
         ],
         'textHelper' => new Cake\View\Helper\TextHelper(new Cake\View\View()),
-        'numberHelper' => new Cake\View\Helper\NumberHelper(new Cake\View\View()),
+        'numberHelper' => new App\View\Helper\MyNumberHelper(new Cake\View\View()),
         'htmlHelper' => new App\View\Helper\MyHtmlHelper(new Cake\View\View()),
         'timeHelper' => new App\View\Helper\MyTimeHelper(new Cake\View\View()),
         'widgetHelper' => new App\View\Helper\WidgetHelper(new Cake\View\View())

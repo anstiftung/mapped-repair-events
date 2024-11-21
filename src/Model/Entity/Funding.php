@@ -15,6 +15,8 @@ class Funding extends Entity
     const STATUS_BUDGETPLAN_DATA_MISSING = 40;
     const STATUS_DATA_OK = 50;
 
+    const MAX_FUNDING_SUM = 3000;
+
     const STATUS_MAPPING = [
         self::STATUS_PENDING => 'Bestätigung von Admin ausstehend',
         self::STATUS_VERIFIED => 'von Admin bestätigt',
@@ -89,6 +91,16 @@ class Funding extends Entity
 
     public function _getActivityProofStatusIsVerified() {
         return $this->activity_proof_status == self::STATUS_VERIFIED;
+    }
+
+    public function _getBudgetplanTotal() {
+        $total = 0;
+        foreach($this->fundingbudgetplans as $fundingbudgetplan) {
+            if ($fundingbudgetplan->is_valid) {
+                $total += $fundingbudgetplan->amount;
+            }
+        }
+        return $total;
     }
 
     public function _getBudgetplanStatus() {
