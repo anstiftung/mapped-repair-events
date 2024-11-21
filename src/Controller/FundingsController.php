@@ -303,9 +303,6 @@ class FundingsController extends AppController
     private function removeValidationFromAssociations($associations) {
 
         $result = array_map(function($association) {
-            if (in_array($association, ['Fundingbudgetplans'])) {
-                return $association;
-            }
             return ['validate' => false];
         }, array_flip($associations));
 
