@@ -150,6 +150,10 @@ class Funding extends Entity
             $result++;
         }
 
+        if ($this->budgetplan_status == self::STATUS_DATA_OK) {
+            $result++;
+        }
+
         return $result;
     }
 
