@@ -14,7 +14,13 @@ use Laminas\Diactoros\UploadedFile;
 class FundingsTable extends AppTable
 {
 
-    const FUNDINGBUDGETPLANS_COUNT = 15;
+    const FUNDINGBUDGETPLANS_COUNT_VISIBLE = 5;
+    const FUNDINGBUDGETPLANS_COUNT_HIDDEN = 10;
+    const FUNDINGBUDGETPLANS_COUNT = self::FUNDINGBUDGETPLANS_COUNT_VISIBLE + self::FUNDINGBUDGETPLANS_COUNT_HIDDEN;
+    
+    const DESCRIPTION_MIN_LENGTH = 250;
+    const DESCRIPTION_MAX_LENGTH = 1500;
+    const DESCRIPTION_ERROR_MESSAGE = self::DESCRIPTION_MIN_LENGTH . ' bis ' . self::DESCRIPTION_MAX_LENGTH . ' Zeichen';
 
     public function initialize(array $config): void {
         parent::initialize($config);
@@ -41,6 +47,10 @@ class FundingsTable extends AppTable
 
     public function validationDefault(Validator $validator): Validator
     {
+
+        $validator->minLength('description', self::DESCRIPTION_MIN_LENGTH, self::DESCRIPTION_ERROR_MESSAGE);
+        $validator->maxLength('description', self::DESCRIPTION_MAX_LENGTH, self::DESCRIPTION_ERROR_MESSAGE);
+
         $validator->add('fundinguploads', 'fileCount', [
             'rule' => function ($value, $context) {
                 if (count($value) > 5) {

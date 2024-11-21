@@ -213,7 +213,7 @@ class FundingsController extends AppController
                 $patchedEntity = $this->getPatchedFundingForValidFields($errors, $workshopUid, $associationsWithoutValidation);
             }
             $patchedEntity = $this->patchFundingStatusIfActivityProofWasUploaded($newFundinguploads, $patchedEntity);
-            if ($fundingsTable->save($patchedEntity, ['associated' => $associationsWithoutValidation])) {
+            if ($fundingsTable->save($patchedEntity, ['associated' => $associationsWithoutValidation, 'validate' => false])) {
                 $this->AppFlash->setFlashMessage('Der Förderantrag wurde erfolgreich zwischengespeichert.');
             }
 

@@ -101,6 +101,9 @@ body.fundings.edit div.admin.edit {
 #fundingForm div.input.number input {
     text-align: right;
 }
+#fundingForm div.input textarea {
+    height: auto;
+}
 @keyframes lockAnimation {
     0% {
       transform: scale(1);
@@ -144,8 +147,8 @@ body.fundings.edit div.admin.edit {
     grid-row: 1;
     width: auto;
 }
-#fundingForm fieldset:not(.fundingbudgetplan) .input.error input,
-#fundingForm fieldset:not(.fundingbudgetplan) .input.error textarea {
+#fundingForm .input.is-missing.error input,
+#fundingForm .input.is-missing.error textarea {
     border-color: #fff;
 }
 #fundingForm div.input .error-message {

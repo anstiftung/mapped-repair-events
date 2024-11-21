@@ -3,6 +3,7 @@ namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
 use App\Model\Table\FundingbudgetplansTable;
+use App\Model\Table\FundingsTable;
 
 class Funding extends Entity
 {
@@ -14,6 +15,7 @@ class Funding extends Entity
     const STATUS_REJECTED = 30;
     const STATUS_BUDGETPLAN_DATA_MISSING = 40;
     const STATUS_DATA_OK = 50;
+    const STATUS_DESCRIPTION_MISSING = 60;
 
     const MAX_FUNDING_SUM = 3000;
 
@@ -22,7 +24,8 @@ class Funding extends Entity
         self::STATUS_VERIFIED => 'von Admin bestätigt',
         self::STATUS_REJECTED => 'von Admin beanstandet',
         self::STATUS_BUDGETPLAN_DATA_MISSING => 'Du musst mindestens einen Eintrag hinzufügen',
-        self::STATUS_DATA_OK => 'Daten sind vollständig und ok',
+        self::STATUS_DATA_OK => 'Die eingegebenen Daten sind ok',
+        self::STATUS_DESCRIPTION_MISSING => 'Die Beschreibung ist nicht vollständig',
     ];
 
     const FIELDS_WORKSHOP = [
@@ -68,6 +71,10 @@ class Funding extends Entity
         ['name' => 'iban', 'options' => ['label' => 'IBAN']],
     ];
 
+    const FIELDS_FUNDING_DESCRIPTION = [
+        ['name' => 'description', 'options' => ['label' =>  FundingsTable::DESCRIPTION_ERROR_MESSAGE, 'type' => 'textarea', 'rows' => 15, 'maxlength' => FundingsTable::DESCRIPTION_MAX_LENGTH, 'minlength' => FundingsTable::DESCRIPTION_MIN_LENGTH, 'class' => 'no-verify']],
+    ];
+
     const FIELDS_FUNDINGBUDGETPLAN = [
         ['name' => 'id', 'options' => ['type' => 'hidden']],
         ['name' => 'type', 'options' => ['type' => 'select', 'options' => Fundingbudgetplan::TYPE_MAP, 'empty' => 'Förderbereich wählen...', 'label' => false, 'class' => 'no-select2']],
@@ -85,7 +92,12 @@ class Funding extends Entity
                     $field['options']['value'] = number_format($value, 2);
                 }
             }
-            $renderedFields .= $form->control('Fundings.' . $entityString . '.' . $field['name'], $field['options']);
+            $preparedEntityStringMiddlePart = '';
+            if ($entityString != 'funding') {
+                $preparedEntityStringMiddlePart = $entityString . '.';
+            }
+            $preparedEntityString = 'Fundings.' . $preparedEntityStringMiddlePart . $field['name'];
+            $renderedFields .= $form->control($preparedEntityString, $field['options']);
         }
         return $renderedFields;
     }
@@ -146,6 +158,25 @@ class Funding extends Entity
         return '';
     }
 
+    public function _getDescriptionStatus() {
+        $isValid = strlen($this->description) >= FundingsTable::DESCRIPTION_MIN_LENGTH && strlen($this->description) <= FundingsTable::DESCRIPTION_MAX_LENGTH;
+        if ($isValid) {
+            return self::STATUS_DATA_OK;
+        };
+        return self::STATUS_DESCRIPTION_MISSING;
+    }
+
+    public function _getDescriptionStatusCssClass() {
+        if ($this->description_status == self::STATUS_DATA_OK) {
+            return 'is-verified';
+        }
+        return 'is-pending';
+    }
+
+    public function _getDescriptionStatusHumanReadable() {
+        return self::STATUS_MAPPING[$this->description_status];
+    }
+
     public function _getActivityProofStatusHumanReadable() {
         return self::STATUS_MAPPING[$this->activity_proof_status];
     }
@@ -156,6 +187,7 @@ class Funding extends Entity
               + count(self::FIELDS_FUNDINGSUPPORTER_ORGANIZATION)
               + count(self::FIELDS_FUNDINGSUPPORTER_USER)
               + count(self::FIELDS_FUNDINGSUPPORTER_BANK)
+              + count(self::FIELDS_FUNDING_DESCRIPTION)
               + 1 // fundingbudgetplan
               ;
     }

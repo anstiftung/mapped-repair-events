@@ -1,5 +1,6 @@
 <?php
 use App\Model\Entity\Funding;
+use App\Model\Table\FundingsTable;
 use Cake\Core\Configure;
 
 $this->element('addScript', ['script' =>
@@ -158,8 +159,8 @@ echo $this->element('jqueryTabsWithoutAjax', [
                         echo '<p>' . $funding->budgetplan_status_human_readable . '</p>';
                     echo '</div>';
                     
-                    $shownFundingbudgetplans = array_slice($funding->fundingbudgetplans, 0, 5, true);
-                    $hiddenFundingbudgetplans = array_slice($funding->fundingbudgetplans, 5, 15, true);
+                    $shownFundingbudgetplans = array_slice($funding->fundingbudgetplans, 0, FundingsTable::FUNDINGBUDGETPLANS_COUNT_VISIBLE, true);
+                    $hiddenFundingbudgetplans = array_slice($funding->fundingbudgetplans, FundingsTable::FUNDINGBUDGETPLANS_COUNT_VISIBLE, FundingsTable::FUNDINGBUDGETPLANS_COUNT, true);
 
                     echo '<div class="row-wrapper">';
                         foreach($shownFundingbudgetplans as $fundingbudgetplanIndex => $fundingbudgetplan) {
@@ -194,6 +195,12 @@ echo $this->element('jqueryTabsWithoutAjax', [
 
                 echo '</fieldset>';
 
+                echo '<fieldset>';
+                    echo '<legend>Geplantes Vorhaben</legend>';
+                    echo '<div class="verification-wrapper ' . $funding->description_status_css_class . '">';
+                        echo '<p>' . $funding->description_status_human_readable . '</p>';
+                    echo '</div>';
+                    echo Funding::getRenderedFields(Funding::FIELDS_FUNDING_DESCRIPTION, 'funding', $this->Form);
                 echo '</div>';
 
             ?>
