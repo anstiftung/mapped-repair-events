@@ -75,6 +75,7 @@ class FundingsController extends AdminAppController
             'Workshops' => $workshopsTable->getFundingContain(),
             'OwnerUsers',
             'Fundinguploads',
+            'Fundingbudgetplans',
         ]);
 
         $objects = $this->paginate($query, [
