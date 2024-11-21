@@ -61,7 +61,7 @@ class Fundings extends AbstractMigration
             `funding_uid` int UNSIGNED DEFAULT NULL,
             `type` int(10) DEFAULT 0,
             `description` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
-            `amount` decimal(10,2) NULL DEFAULT NULL,
+            `amount` decimal(10,2) UNSIGNED NULL DEFAULT NULL,
             `created` datetime DEFAULT CURRENT_TIMESTAMP,
             `modified` datetime DEFAULT CURRENT_TIMESTAMP
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";

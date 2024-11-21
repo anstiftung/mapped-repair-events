@@ -86,7 +86,7 @@ class Funding extends Entity
     public function _getBudgetplanStatus() {
         $hasValidRecord = false;
         foreach($this->fundingbudgetplans as $fundingbudgetplan) {
-            if (!empty($fundingbudgetplan->description) || !empty($fundingbudgetplan->amount)) {
+            if ($fundingbudgetplan->type > 0 && $fundingbudgetplan->description != '' && $fundingbudgetplan->amount > 0) {
                 $hasValidRecord = true;
             }
         }
