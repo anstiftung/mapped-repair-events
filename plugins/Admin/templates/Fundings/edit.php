@@ -30,16 +30,23 @@ $this->element('addScript', ['script' =>
             $activityProofsFormFields .= $this->Form->control('Fundings.fundinguploads.'.$i.'.created', ['label' => 'Datum', 'readonly' => true]);
             $i++;
         }
-
         echo $this->Form->fieldset(
             $activityProofsFormFields.
-            $this->Form->control('Fundings.activity_proof_status', ['label' => 'Status', 'options' => Funding::STATUS_MAPPING]).
-            $this->Form->control('Fundings.activity_proof_comment', ['label' => 'Kommentar']),
             [
                 'legend' => 'Aktivitätsnachweise',
             ]
         );
 
+    }
+
+    if ($funding->workshop->funding_activity_proof_required) {
+        echo $this->Form->fieldset(
+            $this->Form->control('Fundings.activity_proof_status', ['label' => 'Status', 'options' => Funding::STATUS_MAPPING_ACTIVITY_PROOF]).
+            $this->Form->control('Fundings.activity_proof_comment', ['label' => 'Kommentar']),
+            [
+                'legend' => 'Aktivitätsnachweis Status',
+            ]
+        );
     }
 
     echo $this->element('cancelAndSaveButton', ['saveLabel' => 'Speichern']);

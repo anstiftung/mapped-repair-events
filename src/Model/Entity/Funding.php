@@ -19,10 +19,13 @@ class Funding extends Entity
 
     const MAX_FUNDING_SUM = 3000;
 
-    const STATUS_MAPPING = [
+    const STATUS_MAPPING_ACTIVITY_PROOF = [
         self::STATUS_PENDING => 'Bestätigung von Admin ausstehend',
         self::STATUS_VERIFIED => 'von Admin bestätigt',
         self::STATUS_REJECTED => 'von Admin beanstandet',
+    ];
+
+    const STATUS_MAPPING = [
         self::STATUS_BUDGETPLAN_DATA_MISSING => 'Du musst mindestens eine investive Maßnahme hinzufügen',
         self::STATUS_DATA_OK => 'Die eingegebenen Daten sind ok',
         self::STATUS_DESCRIPTION_MISSING => 'Die Beschreibung ist nicht vollständig',
@@ -174,7 +177,7 @@ class Funding extends Entity
     }
 
     public function _getActivityProofStatusHumanReadable() {
-        return self::STATUS_MAPPING[$this->activity_proof_status];
+        return self::STATUS_MAPPING_ACTIVITY_PROOF[$this->activity_proof_status];
     }
 
     public static function getFieldsCount() {
