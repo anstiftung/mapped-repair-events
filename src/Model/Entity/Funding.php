@@ -116,13 +116,12 @@ class Funding extends Entity
     }
 
     public function _getBudgetplanStatus() {
-        $hasValidRecord = false;
         foreach($this->fundingbudgetplans as $fundingbudgetplan) {
-            if ($fundingbudgetplan->is_valid) {
-                $hasValidRecord = true;
+            if ($fundingbudgetplan->is_valid && $fundingbudgetplan->type == Fundingbudgetplan::TYPE_A) {
+                return self::STATUS_DATA_OK;
             }
         }
-        return $hasValidRecord ? self::STATUS_DATA_OK : self::STATUS_BUDGETPLAN_DATA_MISSING;
+        return self::STATUS_BUDGETPLAN_DATA_MISSING;
     }
 
     public function _getBudgetplanStatusCssClass() {
