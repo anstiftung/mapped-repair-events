@@ -225,7 +225,7 @@ class MyHtmlHelper extends HtmlHelper {
     }
 
     function urlFundings() {
-        return '/foerderantrag';
+        return '/mein-foerderantrag';
     }
 
     function urlFundingsEdit($workshopUid) {
@@ -237,7 +237,7 @@ class MyHtmlHelper extends HtmlHelper {
     }
 
     function urlFundinguploadDetail($fundinguploadId) {
-        return '/foerderantrag/uploadDetail/' . $fundinguploadId;
+        return $this->urlFundings() . '/uploadDetail/' . $fundinguploadId;
     }
 
     function getUserBackendNaviLinks($userUid, $isMyProfile, $isOrga) {

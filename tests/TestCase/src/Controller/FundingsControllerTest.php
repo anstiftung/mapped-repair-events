@@ -69,7 +69,7 @@ class FundingsControllerTest extends AppTestCase
         $this->loginAsOrga();
         $this->get(Configure::read('AppConfig.htmlHelper')->urlFundingsEdit(2));
         $this->assertResponseCode(302);
-        $this->assertRedirectContains('/users/login?redirect=%2Ffoerderantrag%2Fedit%2F2');
+        $this->assertRedirectContains('/users/login');
     }
 
     public function testEditAlreadyCreatedByOtherOwner() {

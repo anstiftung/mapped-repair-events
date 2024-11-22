@@ -124,8 +124,8 @@ return function (RouteBuilder $routes) {
         }
 
         if (Configure::read('AppConfig.fundingsEnabled')) {
-            $routes->connect('/foerderantrag', ['controller'=>'fundings', 'action'=>'index']);
-            $routes->connect('/foerderantrag/{action}/{workshopUid}', [
+            $routes->connect('/mein-foerderantrag', ['controller'=>'fundings', 'action'=>'index']);
+            $routes->connect('/mein-foerderantrag/{action}/{workshopUid}', [
                 'controller'=>'fundings',
                 'action'=>'{action}'
             ],
@@ -134,12 +134,12 @@ return function (RouteBuilder $routes) {
                 'workshopUid' => '[0-9]+'
             ]);
 
-            $routes->connect('/foerderantrag/delete/{fundingUid}', [
+            $routes->connect('/mein-foerderantrag/delete/{fundingUid}', [
                 'controller'=>'fundings',
                 'action'=>'delete'
             ])->setPatterns(['fundingUid' => '[0-9]+']);
 
-            $routes->connect('/foerderantrag/uploadDetail/{fundinguploadId}', [
+            $routes->connect('/mein-foerderantrag/uploadDetail/{fundinguploadId}', [
                 'controller'=>'fundings',
                 'action'=>'uploadDetail'
             ]);
