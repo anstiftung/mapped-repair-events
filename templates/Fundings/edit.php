@@ -55,6 +55,8 @@ echo $this->element('jqueryTabsWithoutAjax', [
             echo $this->Form->hidden('Fundings.workshop.use_custom_coordinates');
             echo $this->Form->hidden('Fundings.owner_user.use_custom_coordinates');
 
+            echo $this->element('funding/blocks/blockProgressBar', ['funding' => $funding]);
+
             echo '<div class="flexbox">';
 
                 echo $this->element('funding/blocks/blockActivityProof', ['funding' => $funding]);
@@ -98,14 +100,10 @@ echo $this->element('jqueryTabsWithoutAjax', [
 
                 echo $this->element('funding/blocks/blockBudgetplan', ['funding' => $funding]);
 
-            ?>
+            echo '</div>';
 
-            <div class="progress-wrapper">
-                <p>Fortschritt: <span class="verified-count"></span> von <?php echo $funding->required_fields_count; ?> Feldern bestätigt</p>
-                <div id="progress-bar"></div>
-            </div>
+            echo $this->element('funding/blocks/blockProgressBar', ['funding' => $funding]);
 
-            <?php
             $deleteButton = $this->Form->button('Förderantrag löschen', [
                 'type' => 'button',
                 'id' => 'delete-button',

@@ -49,7 +49,7 @@ MappedRepairEvents.Funding = {
     updateProgressBar: (verifiedDataCount, totalFieldsCount) => {
         const progressInPercent = verifiedDataCount / totalFieldsCount * 100;
         const progressWrapper = $('#fundingForm .progress-wrapper');
-        $( "#progress-bar" ).progressbar({value: progressInPercent});
+        $('.progress-bar').progressbar({value: progressInPercent});
         if (progressInPercent === 100) {
             progressWrapper.find('p').text('Fortschritt: Alle Felder sind bestätigt, du kannst den Förderantrag jetzt einreichen.');
         } else {

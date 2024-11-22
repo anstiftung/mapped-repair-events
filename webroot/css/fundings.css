@@ -235,7 +235,7 @@ body.fundings.edit .progress-wrapper {
     display: flex;
     flex-direction: column;;
 }
-body.fundings.edit .progress-wrapper #progress-bar {
+body.fundings.edit .progress-wrapper .progress-bar {
     margin-top: 10px;
 }
 body.fundings.edit .ui-progressbar-value {
