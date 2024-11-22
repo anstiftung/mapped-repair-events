@@ -159,17 +159,16 @@ class FundingsControllerTest extends AppTestCase
                         'description' => $newFundingdataDescriptionOk,
                         'amount' => $newFundingdataAmountOk,
                     ],
-                    /*
                     [
                         'id' => 2,
-                        'type' => 'invalid',
+                        'type' => '', // invalid
                         'description' => $newFundingdataDescriptionOk,
                         'amount' => $newFundingdataAmountOk,
                     ],
                     [
                         'id' => 3,
                         'type' => Fundingbudgetplan::TYPE_B,
-                        'description' => 'too short',
+                        'description' => 'abc', // invalid
                         'amount' => $newFundingdataAmountOk,
                     ],
                     [
@@ -178,7 +177,6 @@ class FundingsControllerTest extends AppTestCase
                         'description' => $newFundingdataDescriptionOk,
                         'amount' => -1, // invalid
                     ],
-                    */
                 ],
                 'owner_user' => [
                     'firstname' => $newOwnerFirstname,
