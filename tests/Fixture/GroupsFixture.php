@@ -4,7 +4,6 @@ namespace App\Test\Fixture;
 
 class GroupsFixture extends AppFixture
 {
-    public $import = ['table' => 'groups'];
 
     public array $records = [
         [

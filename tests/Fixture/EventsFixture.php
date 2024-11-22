@@ -7,7 +7,6 @@ use Cake\I18n\Date;
 
 class EventsFixture extends AppFixture
 {
-    public $import = ['table' => 'events'];
 
     public function init(): void
     {

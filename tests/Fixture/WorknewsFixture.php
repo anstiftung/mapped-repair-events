@@ -6,7 +6,6 @@ use App\Model\Entity\Worknews;
 
 class WorknewsFixture extends AppFixture
 {
-    public $import = ['table' => 'worknews'];
 
     public array $records = [
         [

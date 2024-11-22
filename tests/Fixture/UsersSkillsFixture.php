@@ -4,7 +4,6 @@ namespace App\Test\Fixture;
 
 class UsersSkillsFixture extends AppFixture
 {
-    public $import = ['table' => 'users_skills'];
 
       public array $records = [
           [

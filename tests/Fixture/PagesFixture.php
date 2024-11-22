@@ -4,7 +4,6 @@ namespace App\Test\Fixture;
 
 class PagesFixture extends AppFixture
 {
-    public $import = ['table' => 'pages'];
 
     public array $records = [
         [

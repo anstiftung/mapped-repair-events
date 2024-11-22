@@ -4,7 +4,6 @@ namespace App\Test\Fixture;
 
 class RootsFixture extends AppFixture
 {
-    public $import = ['table' => 'roots'];
 
     public array $records = [
         [
