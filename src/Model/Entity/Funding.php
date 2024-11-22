@@ -79,7 +79,7 @@ class Funding extends Entity
         ['name' => 'id', 'options' => ['type' => 'hidden']],
         ['name' => 'type', 'options' => ['type' => 'select', 'options' => Fundingbudgetplan::TYPE_MAP, 'empty' => 'Förderbereich wählen...', 'label' => false, 'class' => 'no-select2']],
         ['name' => 'description', 'options' => ['label' => false, 'placeholder' => 'Maßnahme/Gegenstand (' . FundingbudgetplansTable::DESCRIPTION_ERROR_MESSAGE . ')', 'class' => 'no-verify', 'maxlength' => FundingbudgetplansTable::DESCRIPTION_MAX_LENGTH, 'minlength' => FundingbudgetplansTable::DESCRIPTION_MIN_LENGTH]],
-        ['name' => 'amount', 'options' => ['label' => false, 'placeholder' => 'Kosten in €', 'type' => 'number', 'step' => '0.01']],
+        ['name' => 'amount', 'options' => ['label' => false, 'placeholder' => 'Kosten in € ', 'type' => 'number', 'step' => '0.01']],
     ];
 
     public static function getRenderedFields($fields, $entityString, $form, $entity = null) {
