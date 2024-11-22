@@ -196,8 +196,8 @@ body.fundings.edit div.admin.edit {
 #fundingForm .flexbox > fieldset {
     flex: 1;
 }
-#fundingForm .flexbox fieldset.fundingbudgetplan {
-    flex-basis: 100%; /* full width */
+#fundingForm .flexbox fieldset.full-width {
+    flex-basis: 100%;
 }
 #fundingForm .flexbox fieldset.fundingbudgetplan .fundingbudgets-total-wrapper {
     display: flex;
