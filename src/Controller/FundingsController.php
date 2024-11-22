@@ -113,9 +113,11 @@ class FundingsController extends AppController
         if (!empty($this->request->getData())) {
 
             $associations = ['Workshops', 'OwnerUsers', 'Fundingdatas', 'Fundingsupporters', 'Fundinguploads', 'Fundingbudgetplans'];
+            $associationsWithoutValidation = $this->removeValidationFromAssociations($associations);
             $singularizedAssociations = array_map(function($association) {
                 return Inflector::singularize(Inflector::tableize($association));
             }, $associations);
+            $associations['OwnerUsers'] = ['validate' => 'funding'];
 
             foreach($singularizedAssociations as $association) {
                 $dataKey = 'Fundings.'.$association;
@@ -208,7 +210,6 @@ class FundingsController extends AppController
                 $patchedEntity->setError('files_fundinguploads[]', $fundinguploadsErrors);
             }
 
-            $associationsWithoutValidation = $this->removeValidationFromAssociations($associations);
             if (!empty($errors)) {
                 $patchedEntity = $this->getPatchedFundingForValidFields($errors, $workshopUid, $associationsWithoutValidation);
             }
@@ -221,6 +222,7 @@ class FundingsController extends AppController
                 }
             }
 
+            $patchedEntity->owner_user->private = $this->updatePrivateFieldsForFieldsThatAreNotRequiredInUserProfile($patchedEntity->owner_user->private);
             $fundingsTable->save($patchedEntity, ['associated' => $associationsWithoutValidation]);
             $this->AppFlash->setFlashMessage('Der Förderantrag wurde erfolgreich zwischengespeichert.');
 
@@ -250,6 +252,13 @@ class FundingsController extends AppController
         ]);
         $this->set('funding', $funding);
 
+    }
+
+    private function updatePrivateFieldsForFieldsThatAreNotRequiredInUserProfile($privateFields) {
+        $fields = ['street', 'city', 'phone'];
+        $existingArray = array_map('trim', explode(',', $privateFields));
+        $updatedArray = array_unique(array_merge($existingArray, $fields));
+        return implode(',', $updatedArray);
     }
 
     private function patchFundingStatusIfActivityProofWasUploaded($newFundinguploads, $patchedEntity) {

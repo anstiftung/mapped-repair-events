@@ -208,6 +208,7 @@ class FundingsControllerTest extends AppTestCase
         $this->assertEquals($newOwnerFirstname, $funding->owner_user->firstname);
         $this->assertEquals($newOwnerLastname, $funding->owner_user->lastname);
         $this->assertEquals($newOwnerEmail, $funding->owner_user->email);
+        $this->assertTextEndsWith('street,phone,city', $funding->owner_user->private);
 
         $this->assertEquals($newFundingdataDescription, $funding->fundingdata->description);
 

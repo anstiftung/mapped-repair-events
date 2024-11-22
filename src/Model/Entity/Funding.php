@@ -45,10 +45,10 @@ class Funding extends Entity
         ['name' => 'firstname', 'options' => ['label' => 'Vorname']],
         ['name' => 'lastname', 'options' => ['label' => 'Nachname']],
         ['name' => 'email', 'options' => ['label' => 'E-Mail']],
-        ['name' => 'street', 'options' => ['label' => 'Straße + Hausnummer']],
+        ['name' => 'street', 'options' => ['label' => 'Straße + Hausnummer', 'required' => true]],
         ['name' => 'zip', 'options' => ['label' => 'PLZ']],
-        ['name' => 'city', 'options' => ['label' => 'Stadt']],
-        ['name' => 'phone', 'options' => ['label' => 'Telefon']],
+        ['name' => 'city', 'options' => ['label' => 'Stadt', 'required' => true]],
+        ['name' => 'phone', 'options' => ['label' => 'Telefon', 'required' => true]],
     ];
 
     const FIELDS_FUNDINGSUPPORTER_ORGANIZATION = [

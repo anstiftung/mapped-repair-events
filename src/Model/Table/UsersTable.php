@@ -274,9 +274,8 @@ class UsersTable extends AppTable
         return $validator;
     }
 
-    public function validationDefault(Validator $validator): \Cake\Validation\Validator
+    public function validationFunding(Validator $validator): \Cake\Validation\Validator
     {
-
         $validator->notEmptyString('nick', 'Bitte trage deinen Nickname ein.');
         $validator->minLength('nick', 2, 'Mindestens 2 Zeichen bitte (Nickname).');
         $validator->add('nick', 'unique', [
@@ -288,12 +287,11 @@ class UsersTable extends AppTable
         $validator->notEmptyString('firstname', 'Bitte trage deinen Vornamen ein.');
         $validator->requirePresence('firstname', true, 'Bitte trage deinen Vornamen ein.');
         $validator->minLength('firstname', 2, 'Mindestens 2 Zeichen bitte (Vorname).');
-
+        
         $validator->notEmptyString('lastname', 'Bitte trage deinen Nachnamen ein.');
         $validator->requirePresence('lastname', true, 'Bitte trage deinen Nachnamen ein.');
         $validator->minLength('lastname', 2, 'Mindestens 2 Zeichen bitte (Nachname).');
 
-        $validator->allowEmptyString('city');
         $validator->minLength('city', 2, 'Mindestens 2 Zeichen bitte (Ort).');
 
         $validator->url('website', 'Bitte trage eine gültige Url ein.');
@@ -315,8 +313,20 @@ class UsersTable extends AppTable
             'message' => 'Die PLZ ist nicht gültig.'
         ]);
 
+        $validator->notEmptyString('phone', 'Bitte trage deine Telefonnummer ein.');
+        $validator->notEmptyString('street', 'Bitte trage deine Straße + Hausnummer ein.');
+
         return $validator;
 
+    }
+
+    public function validationDefault(Validator $validator): \Cake\Validation\Validator
+    {
+        $validator = $this->validationFunding($validator);
+        $validator->allowEmptyString('street');
+        $validator->allowEmptyString('phone');
+        $validator->allowEmptyString('city');
+        return $validator;
     }
 
     public function validationRequestPassword(Validator $validator)
