@@ -20,6 +20,8 @@ class AppTestCase extends TestCase
         'app.FormFields',
         'app.FormFieldOptions',
         'app.Fundings',
+        'app.Fundingbudgetplans',
+        'app.Fundingdatas',
         'app.Fundingsupporters',
         'app.Fundinguploads',
         'app.Groups',
