@@ -6,7 +6,8 @@ use Cake\Core\Configure;
 $this->element('addScript', ['script' =>
     JS_NAMESPACE.".Helper.bindCancelButton();".
     JS_NAMESPACE.".Funding.bindDeleteButton(".$funding->uid.");".
-    JS_NAMESPACE.".Funding.init();".
+    JS_NAMESPACE.".Funding.initIsMissing();".
+    JS_NAMESPACE.".Funding.initTextareaCounter();".
     JS_NAMESPACE.".Funding.initIsVerified('".json_encode($funding->verified_fields)."');".
     JS_NAMESPACE.".Funding.updateProgressBar(" . $funding->verified_fields_count . ",  ".$funding->required_fields_count.");"
 ]);

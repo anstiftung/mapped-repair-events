@@ -1,10 +1,28 @@
 MappedRepairEvents.Funding = {
 
-    init: () => {
+    initIsMissing: () => {
         $('#fundingForm fieldset:not(.fundingbudgetplan) .input.required').find('input, textarea').each(function() {
             if ($(this).val() === '') {
                 $(this).closest('.input').addClass('is-missing');
             }
+        });
+    },
+
+    initTextareaCounter: () => {
+        $('#fundingForm textarea').each(function() {
+            const maxLength = $(this).attr('maxlength');
+            const currentLength = $(this).val().length;
+            const counter = $('<span>', {
+                class: 'counter',
+                text: `${currentLength} / ${maxLength}`
+            });
+
+            $(this).after(counter);
+
+            $(this).on('input', function() {
+                const updatedLength = $(this).val().length;
+                counter.text(`${updatedLength} / ${maxLength}`);
+            });
         });
     },
 
