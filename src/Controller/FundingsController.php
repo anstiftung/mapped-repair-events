@@ -286,7 +286,7 @@ class FundingsController extends AppController
         $fundingUid = (int) $this->request->getParam('fundingUid');
         $fundingsTable = $this->getTableLocator()->get('Fundings');
         $fundingsTable->deleteCustom($fundingUid);
-        $this->AppFlash->setFlashMessage('Der Förderantrag wurde erfolgreich gelöscht');
+        $this->AppFlash->setFlashMessage('Der Förderantrag wurde erfolgreich gelöscht.');
         $this->redirect(Configure::read('AppConfig.htmlHelper')->urlFundings());
     }
 

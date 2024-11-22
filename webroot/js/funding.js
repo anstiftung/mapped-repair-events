@@ -38,7 +38,7 @@ MappedRepairEvents.Funding = {
                     buttons: {L\u00f6schen: true, Abbrechen: false},
                     submit: function(v,m,f) {
                         if(m) {
-                            document.location.href = '/foerderantrag/delete/' + uid;
+                            document.location.href = '/mein-foerderantrag/delete/' + uid;
                         }
                     }
                 }

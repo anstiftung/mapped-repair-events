@@ -240,6 +240,10 @@ class MyHtmlHelper extends HtmlHelper {
         return $this->urlFundings() . '/uploadDetail/' . $fundinguploadId;
     }
 
+    function urlFundingsDelete($fundinguploadId) {
+        return $this->urlFundings() . '/delete/' . $fundinguploadId;
+    }
+
     function getUserBackendNaviLinks($userUid, $isMyProfile, $isOrga) {
         $result = [];
         $result[] = ['url' => $this->urlUserHome(), 'name' => 'INFO'];

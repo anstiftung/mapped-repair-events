@@ -32,6 +32,7 @@ class FundingsPolicy implements RequestPolicyInterface
         if (in_array($request->getParam('action'), ['uploadDetail'])) {
             return true;
         }
+
         if (in_array($request->getParam('action'), ['delete'])) {
             $fundingUid = (int) $request->getParam('fundingUid');
             $fundingsTable = FactoryLocator::get('Table')->get('Fundings');

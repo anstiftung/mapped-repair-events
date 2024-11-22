@@ -89,6 +89,37 @@ class FundingsControllerTest extends AppTestCase
         $this->assertRedirectContains(Configure::read('AppConfig.htmlHelper')->urlFundings());
     }
 
+    public function testDelete() {
+        $this->loginAsOrga();
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlFundingsEdit(2));
+        $fundingsTable = $this->getTableLocator()->get('Fundings');
+        $funding = $fundingsTable->find()->where(['workshop_uid' => 2])->first();
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlFundingsDelete($funding->uid));
+        $this->assertResponseCode(302);
+        $this->assertRedirectContains(Configure::read('AppConfig.htmlHelper')->urlFundings());
+        $this->assertFlashMessage('Der Förderantrag wurde erfolgreich gelöscht.');
+
+        $deletedFunding = $fundingsTable->find()->where(['workshop_uid' => 2])->first();
+        $this->assertEmpty($deletedFunding);
+
+        $fundingsupportersTable = $this->getTableLocator()->get('Fundingsupporters');
+        $fundingsupporter = $fundingsupportersTable->find()->where([$fundingsupportersTable->getPrimaryKey() => $funding->fundingsupporter_id])->first();
+        $this->assertEmpty($fundingsupporter);
+
+        $fundingdatasTable = $this->getTableLocator()->get('Fundingdatas');
+        $fundingdata = $fundingdatasTable->find()->where([$fundingdatasTable->getPrimaryKey() => $funding->fundingdata_id])->first();
+        $this->assertEmpty($fundingdata);
+
+        $fundingbudgetplansTable = $this->getTableLocator()->get('Fundingbudgetplans');
+        $fundingdatas = $fundingbudgetplansTable->find()->where([$fundingbudgetplansTable->aliasField('funding_uid') => $funding->uid])->toArray();
+        $this->assertEmpty($fundingdatas);
+
+        $fundinguploadsTable = $this->getTableLocator()->get('Fundinguploads');
+        $fundinguploads = $fundinguploadsTable->find()->where([$fundinguploadsTable->aliasField('funding_uid') => $funding->uid])->toArray();
+        $this->assertEmpty($fundinguploads);
+
+    }
+
     public function testEditAsOrgaOk() {
 
         $testWorkshopUid = 2;
