@@ -112,7 +112,7 @@ class FundingsController extends AppController
 
         if (!empty($this->request->getData())) {
 
-            $associations = ['Workshops', 'OwnerUsers', 'Fundingsupporters', 'Fundinguploads', 'Fundingbudgetplans'];
+            $associations = ['Workshops', 'OwnerUsers', 'Fundingdatas', 'Fundingsupporters', 'Fundinguploads', 'Fundingbudgetplans'];
             $singularizedAssociations = array_map(function($association) {
                 return Inflector::singularize(Inflector::tableize($association));
             }, $associations);
@@ -213,9 +213,8 @@ class FundingsController extends AppController
                 $patchedEntity = $this->getPatchedFundingForValidFields($errors, $workshopUid, $associationsWithoutValidation);
             }
             $patchedEntity = $this->patchFundingStatusIfActivityProofWasUploaded($newFundinguploads, $patchedEntity);
-            if ($fundingsTable->save($patchedEntity, ['associated' => $associationsWithoutValidation, 'validate' => false])) {
-                $this->AppFlash->setFlashMessage('Der Förderantrag wurde erfolgreich zwischengespeichert.');
-            }
+            $fundingsTable->save($patchedEntity, ['associated' => $associationsWithoutValidation]);
+            $this->AppFlash->setFlashMessage('Der Förderantrag wurde erfolgreich zwischengespeichert.');
 
             if (!empty($this->request->getData('Fundings.fundinguploads'))) {
                 // patch id for new fundinguploads

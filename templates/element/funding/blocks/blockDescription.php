@@ -8,6 +8,6 @@ echo '<fieldset class="full-width">';
         echo '<p>' . $funding->description_status_human_readable . '</p>';
     echo '</div>';
     echo '<div>';
-        echo Funding::getRenderedFields(Funding::FIELDS_FUNDING_DESCRIPTION, 'funding', $this->Form);
+        echo Funding::getRenderedFields(Funding::FIELDS_FUNDINGDATA_DESCRIPTION, 'fundingdata', $this->Form);
     echo '</div>';
 echo '</fieldset>';

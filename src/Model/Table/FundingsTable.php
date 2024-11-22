@@ -17,15 +17,14 @@ class FundingsTable extends AppTable
     const FUNDINGBUDGETPLANS_COUNT_VISIBLE = 5;
     const FUNDINGBUDGETPLANS_COUNT_HIDDEN = 10;
     const FUNDINGBUDGETPLANS_COUNT = self::FUNDINGBUDGETPLANS_COUNT_VISIBLE + self::FUNDINGBUDGETPLANS_COUNT_HIDDEN;
-    
-    const DESCRIPTION_MIN_LENGTH = 250;
-    const DESCRIPTION_MAX_LENGTH = 1500;
-    const DESCRIPTION_ERROR_MESSAGE = self::DESCRIPTION_MIN_LENGTH . ' bis ' . self::DESCRIPTION_MAX_LENGTH . ' Zeichen';
 
     public function initialize(array $config): void {
         parent::initialize($config);
         $this->belongsTo('Workshops', [
             'foreignKey' => 'workshop_uid',
+        ]);
+        $this->belongsTo('Fundingdatas', [
+            'foreignKey' => 'fundingdata_id',
         ]);
         $this->belongsTo('Fundingsupporters', [
             'foreignKey' => 'fundingsupporter_id',
@@ -47,9 +46,6 @@ class FundingsTable extends AppTable
 
     public function validationDefault(Validator $validator): Validator
     {
-
-        $validator->minLength('description', self::DESCRIPTION_MIN_LENGTH, self::DESCRIPTION_ERROR_MESSAGE);
-        $validator->maxLength('description', self::DESCRIPTION_MAX_LENGTH, self::DESCRIPTION_ERROR_MESSAGE);
 
         $validator->add('fundinguploads', 'fileCount', [
             'rule' => function ($value, $context) {
@@ -97,13 +93,17 @@ class FundingsTable extends AppTable
 
         $funding = $this->find()->where([
             $this->aliasField('uid') => $fundingUid,
-        ])->contain(['Fundingsupporters'])->first();
+        ])->contain(['Fundingsupporters', 'Fundingdatas'])->first();
         if (empty($funding)) {
             throw new NotFoundException('funding (UID: '.$fundingUid.') was not found');
         }
         $this->delete($funding);
+
         $fundingsupportersTable = FactoryLocator::get('Table')->get('Fundingsupporters');
         $fundingsupportersTable->delete($funding->fundingsupporter);
+
+        $fundingdatasTable = FactoryLocator::get('Table')->get('Fundingdatas');
+        $fundingdatasTable->delete($funding->fundingdata);
 
         // fundinguploads and fundingbudgetplans are deleted automatically by dependent option
 
@@ -120,16 +120,24 @@ class FundingsTable extends AppTable
         ])->first();
 
         if (empty($funding)) {
+
             $fundingsupportersTable = FactoryLocator::get('Table')->get('Fundingsupporters');
             $fundingsupporterEntity = $fundingsupportersTable->newEmptyEntity();
             $fundingsupporterEntity->name = '';
-            $fundingsupporter = $fundingsupportersTable->save($fundingsupporterEntity);
-            $associations = ['Fundingsupporters'];
+            $fundingsupporterEntity = $fundingsupportersTable->save($fundingsupporterEntity);
+            
+            $fundingdatasTable = FactoryLocator::get('Table')->get('Fundingdatas');
+            $fundingdataEntity = $fundingdatasTable->newEmptyEntity();
+            $fundingdataEntity->description = '';
+            $fundingdataEntity = $fundingdatasTable->save($fundingdataEntity);
+
+            $associations = ['Fundingsupporters', 'Fundingdatas'];
             $newEntity = $this->newEntity([
                 'workshop_uid' => $workshopUid,
                 'status' => APP_ON,
                 'owner' => Router::getRequest()?->getAttribute('identity')?->uid,
-                'fundingsupporter_id' => $fundingsupporter->id,
+                'fundingdata_id' => $fundingdataEntity->id,
+                'fundingsupporter_id' => $fundingsupporterEntity->id,
             ]);
             $funding = $this->save($newEntity, ['associated' => $associations]);
         }
@@ -142,6 +150,7 @@ class FundingsTable extends AppTable
             'Workshops' => $workshopsTable->getFundingContain(),
             'OwnerUsers',
             'Fundingbudgetplans',
+            'Fundingdatas',
             'Fundingsupporters',
             'Fundinguploads',
         ])->first();

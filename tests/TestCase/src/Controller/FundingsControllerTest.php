@@ -2,6 +2,7 @@
 
 namespace App\Test\TestCase\Controller;
 
+use App\Model\Entity\Fundingbudgetplan;
 use App\Test\TestCase\AppTestCase;
 use App\Test\TestCase\Traits\LogFileAssertionsTrait;
 use App\Test\TestCase\Traits\LoginTrait;
@@ -10,6 +11,7 @@ use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use App\Test\Mock\GeoServiceMock;
 use Cake\Controller\Controller;
+use App\Model\Table\FundingsTable;
 
 class FundingsControllerTest extends AppTestCase
 {
@@ -122,6 +124,11 @@ class FundingsControllerTest extends AppTestCase
         $newOwnerLastname = 'Owner Lastname';
         $newOwnerEmail = 'test@test.at';
 
+        $newFundingdataDescription = 'Fundingdata Description';
+
+        $newFundingdataDescriptionOk = 'Fundingdata Description Ok';
+        $newFundingdataAmountOk = 99;
+
         $verifiedFields = [
             'fundings-workshop-name',
         ];
@@ -142,6 +149,37 @@ class FundingsControllerTest extends AppTestCase
                     'name' => $newFundingsupporterName,
                     'website' => 'orf.at',
                 ],
+                'fundingdata' => [
+                    'description' => $newFundingdataDescription,
+                ],
+                'fundingbudgetplans' => [
+                    [
+                        'id' => 1,
+                        'type' => Fundingbudgetplan::TYPE_A,
+                        'description' => $newFundingdataDescriptionOk,
+                        'amount' => $newFundingdataAmountOk,
+                    ],
+                    /*
+                    [
+                        'id' => 2,
+                        'type' => 'invalid',
+                        'description' => $newFundingdataDescriptionOk,
+                        'amount' => $newFundingdataAmountOk,
+                    ],
+                    [
+                        'id' => 3,
+                        'type' => Fundingbudgetplan::TYPE_B,
+                        'description' => 'too short',
+                        'amount' => $newFundingdataAmountOk,
+                    ],
+                    [
+                        'id' => 4,
+                        'type' => Fundingbudgetplan::TYPE_C,
+                        'description' => $newFundingdataDescriptionOk,
+                        'amount' => -1, // invalid
+                    ],
+                    */
+                ],
                 'owner_user' => [
                     'firstname' => $newOwnerFirstname,
                     'lastname' => $newOwnerLastname,
@@ -154,7 +192,7 @@ class FundingsControllerTest extends AppTestCase
         $this->assertResponseContains('Der Förderantrag wurde erfolgreich zwischengespeichert.');
 
         $fundingsTable = $this->getTableLocator()->get('Fundings');
-        $funding = $fundingsTable->find(contain: ['Workshops', 'OwnerUsers', 'Fundingsupporters'])->first();
+        $funding = $fundingsTable->find(contain: ['Workshops', 'OwnerUsers', 'Fundingsupporters', 'Fundingdatas', 'Fundingbudgetplans'])->first();
         $funding->owner_user->revertPrivatizeData();
 
         $this->assertEquals($verifiedFields, $funding->verified_fields); // must not contain invalid workshops-website
@@ -172,6 +210,22 @@ class FundingsControllerTest extends AppTestCase
         $this->assertEquals($newOwnerFirstname, $funding->owner_user->firstname);
         $this->assertEquals($newOwnerLastname, $funding->owner_user->lastname);
         $this->assertEquals($newOwnerEmail, $funding->owner_user->email);
+
+        $this->assertEquals($newFundingdataDescription, $funding->fundingdata->description);
+
+        $this->assertEquals(FundingsTable::FUNDINGBUDGETPLANS_COUNT, count($funding->fundingbudgetplans));
+        $this->assertEquals(Fundingbudgetplan::TYPE_A, $funding->fundingbudgetplans[0]->type);
+        $this->assertEquals($newFundingdataDescriptionOk, $funding->fundingbudgetplans[0]->description);
+        $this->assertEquals($newFundingdataAmountOk, $funding->fundingbudgetplans[0]->amount);
+
+        $emptyFundingbudgets = [2, 3, 4];
+        foreach($funding->fundingbudgetplans as $fundingbudgetplan) {
+            if (!in_array($fundingbudgetplan->id, $emptyFundingbudgets)) {
+                continue;
+            }
+            $this->assertFalse($fundingbudgetplan->is_valid);
+            $this->assertFalse($fundingbudgetplan->is_not_empty);
+        }
 
     }
 

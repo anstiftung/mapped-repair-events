@@ -13,11 +13,19 @@ class Fundings extends AbstractMigration
             `owner` int UNSIGNED DEFAULT NULL,
             `workshop_uid` int UNSIGNED DEFAULT NULL,
             `fundingsupporter_id` int UNSIGNED DEFAULT NULL,
+            `fundingdata_id` int UNSIGNED DEFAULT NULL,
             `status` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
             `activity_proof_status` int(10) DEFAULT 10,
             `activity_proof_comment` text,
-            `description` text,
             `verified_fields` JSON DEFAULT NULL,
+            `created` datetime DEFAULT CURRENT_TIMESTAMP,
+            `modified` datetime DEFAULT CURRENT_TIMESTAMP
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
+        $this->execute($query);
+
+        $query = "CREATE TABLE `fundingdatas` (
+            `id` int UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `description` text,
             `created` datetime DEFAULT CURRENT_TIMESTAMP,
             `modified` datetime DEFAULT CURRENT_TIMESTAMP
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
@@ -46,7 +54,7 @@ class Fundings extends AbstractMigration
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
         $this->execute($query);
 
-        $query = "CREATE TABLE `fundinguploads` (
+    $query = "CREATE TABLE `fundinguploads` (
             `id` CHAR(36) PRIMARY KEY,
             `funding_uid` int UNSIGNED DEFAULT NULL,
             `type` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,

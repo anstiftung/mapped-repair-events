@@ -3,7 +3,7 @@ namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
 use App\Model\Table\FundingbudgetplansTable;
-use App\Model\Table\FundingsTable;
+use App\Model\Table\FundingdatasTable;
 
 class Funding extends Entity
 {
@@ -71,8 +71,8 @@ class Funding extends Entity
         ['name' => 'iban', 'options' => ['label' => 'IBAN']],
     ];
 
-    const FIELDS_FUNDING_DESCRIPTION = [
-        ['name' => 'description', 'options' => ['label' =>  FundingsTable::DESCRIPTION_ERROR_MESSAGE, 'type' => 'textarea', 'rows' => 15, 'maxlength' => FundingsTable::DESCRIPTION_MAX_LENGTH, 'minlength' => FundingsTable::DESCRIPTION_MIN_LENGTH, 'class' => 'no-verify']],
+    const FIELDS_FUNDINGDATA_DESCRIPTION = [
+        ['name' => 'description', 'options' => ['label' =>  FundingdatasTable::DESCRIPTION_ERROR_MESSAGE, 'type' => 'textarea', 'rows' => 15, 'maxlength' => FundingdatasTable::DESCRIPTION_MAX_LENGTH, 'minlength' => FundingdatasTable::DESCRIPTION_MIN_LENGTH, 'class' => 'no-verify']],
     ];
 
     const FIELDS_FUNDINGBUDGETPLAN = [
@@ -92,11 +92,7 @@ class Funding extends Entity
                     $field['options']['value'] = number_format($value, 2);
                 }
             }
-            $preparedEntityStringMiddlePart = '';
-            if ($entityString != 'funding') {
-                $preparedEntityStringMiddlePart = $entityString . '.';
-            }
-            $preparedEntityString = 'Fundings.' . $preparedEntityStringMiddlePart . $field['name'];
+            $preparedEntityString = 'Fundings.' . $entityString . '.' . $field['name'];
             $renderedFields .= $form->control($preparedEntityString, $field['options']);
         }
         return $renderedFields;
@@ -159,7 +155,7 @@ class Funding extends Entity
     }
 
     public function _getDescriptionStatus() {
-        $isValid = isset($this->description) && strlen($this->description) >= FundingsTable::DESCRIPTION_MIN_LENGTH && strlen($this->description) <= FundingsTable::DESCRIPTION_MAX_LENGTH;
+        $isValid = isset($this->description) && strlen($this->description) >= FundingdatasTable::DESCRIPTION_MIN_LENGTH && strlen($this->description) <= FundingdatasTable::DESCRIPTION_MAX_LENGTH;
         if ($isValid) {
             return self::STATUS_DATA_OK;
         };
@@ -187,7 +183,7 @@ class Funding extends Entity
               + count(self::FIELDS_FUNDINGSUPPORTER_ORGANIZATION)
               + count(self::FIELDS_FUNDINGSUPPORTER_USER)
               + count(self::FIELDS_FUNDINGSUPPORTER_BANK)
-              + count(self::FIELDS_FUNDING_DESCRIPTION)
+              + count(self::FIELDS_FUNDINGDATA_DESCRIPTION)
               + 1 // fundingbudgetplan
               ;
     }
