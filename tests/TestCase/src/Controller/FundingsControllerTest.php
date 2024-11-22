@@ -157,8 +157,8 @@ class FundingsControllerTest extends AppTestCase
 
         $newFundingdataDescription = 'Fundingdata Description';
 
-        $newFundingdataDescriptionOk = 'Fundingdata Description Ok';
-        $newFundingdataAmountOk = 99;
+        $newFundingbudgetplanDescriptionOk = 'Fundingdata Description Ok';
+        $newFundingbudgetplanAmountOk = 99;
 
         $verifiedFields = [
             'fundings-workshop-name',
@@ -181,31 +181,31 @@ class FundingsControllerTest extends AppTestCase
                     'website' => 'orf.at',
                 ],
                 'fundingdata' => [
-                    'description' => $newFundingdataDescription,
+                    'description' => $newFundingdataDescription . '<script>alert("XSS");</script>',
                 ],
                 'fundingbudgetplans' => [
                     [
                         'id' => 1,
                         'type' => Fundingbudgetplan::TYPE_A,
-                        'description' => $newFundingdataDescriptionOk,
-                        'amount' => $newFundingdataAmountOk,
+                        'description' => $newFundingbudgetplanDescriptionOk,
+                        'amount' => $newFundingbudgetplanAmountOk,
                     ],
                     [
                         'id' => 2,
                         'type' => '', // invalid
-                        'description' => $newFundingdataDescriptionOk,
-                        'amount' => $newFundingdataAmountOk,
+                        'description' => $newFundingbudgetplanDescriptionOk,
+                        'amount' => $newFundingbudgetplanAmountOk,
                     ],
                     [
                         'id' => 3,
                         'type' => Fundingbudgetplan::TYPE_B,
                         'description' => 'abc', // invalid
-                        'amount' => $newFundingdataAmountOk,
+                        'amount' => $newFundingbudgetplanAmountOk,
                     ],
                     [
                         'id' => 4,
                         'type' => Fundingbudgetplan::TYPE_C,
-                        'description' => $newFundingdataDescriptionOk,
+                        'description' => $newFundingbudgetplanDescriptionOk,
                         'amount' => -1, // invalid
                     ],
                 ],
@@ -245,8 +245,8 @@ class FundingsControllerTest extends AppTestCase
 
         $this->assertEquals(FundingsTable::FUNDINGBUDGETPLANS_COUNT, count($funding->fundingbudgetplans));
         $this->assertEquals(Fundingbudgetplan::TYPE_A, $funding->fundingbudgetplans[0]->type);
-        $this->assertEquals($newFundingdataDescriptionOk, $funding->fundingbudgetplans[0]->description);
-        $this->assertEquals($newFundingdataAmountOk, $funding->fundingbudgetplans[0]->amount);
+        $this->assertEquals($newFundingbudgetplanDescriptionOk, $funding->fundingbudgetplans[0]->description);
+        $this->assertEquals($newFundingbudgetplanAmountOk, $funding->fundingbudgetplans[0]->amount);
 
         $emptyFundingbudgets = [2, 3, 4];
         foreach($funding->fundingbudgetplans as $fundingbudgetplan) {

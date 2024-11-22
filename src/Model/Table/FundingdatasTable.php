@@ -3,6 +3,9 @@ namespace App\Model\Table;
 
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\Event\EventInterface;
+use ArrayObject;
+use App\Controller\Component\StringComponent;
 
 class FundingdatasTable extends Table
 {
@@ -15,6 +18,11 @@ class FundingdatasTable extends Table
     {
         parent::initialize($config);
         $this->addBehavior('Timestamp');
+    }
+
+    public function beforeMarshal(EventInterface $event, ArrayObject $data, ArrayObject $options)
+    {
+        $data = StringComponent::cleanAllStringsInData($data);
     }
 
     public function validationDefault(Validator $validator): Validator
