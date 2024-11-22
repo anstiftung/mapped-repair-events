@@ -19,7 +19,7 @@ echo '<fieldset>';
     echo '</div>';
 
     $formattedFundingStartDate = date('d.m.Y', strtotime(Configure::read('AppConfig.fundingsStartDate')));
-    echo '<div style="margin-bottom:10px;">';
+    echo '<div style="margin-bottom:10px;padding:10px;">';
         echo '<p>Da für die Initiative "' . h($funding->workshop->name) . '" keine Termine vor dem '.$formattedFundingStartDate.' vorhanden sind, bitten wir dich, maximal 5 Aktivitätsnachweise hochzuladen. Dieser wird dann zeitnah von uns bestätigt.</p>';
     echo '</div>';
 
@@ -42,7 +42,7 @@ echo '<fieldset>';
             JS_NAMESPACE.".Funding.initBindDeleteFundinguploads();"
         ]);
 
-        echo '<div style="margin-top:10px;">';
+        echo '<div style="margin-top:10px;padding:10px;">';
             echo '<p>Nur PDF, JPG und PNG-Dateien sind erlaubt, und jede Datei muss unter 5 MB sein.</p>';
         echo '</div>';
 

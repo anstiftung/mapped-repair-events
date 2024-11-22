@@ -10,6 +10,11 @@ echo '<fieldset class="fundingbudgetplan full-width">';
         echo '<p>' . $funding->budgetplan_status_human_readable . '</p>';
     echo '</div>';
 
+    echo '<div style="margin-bottom:5px;padding:10px;">';
+        echo '<p>Es können maximal ' . FundingsTable::FUNDINGBUDGETPLANS_COUNT . ' Zeilen eingetragen werden.</p>';
+    echo '</div>';
+
+
     $shownFundingbudgetplans = array_slice($funding->fundingbudgetplans, 0, FundingsTable::FUNDINGBUDGETPLANS_COUNT_VISIBLE, true);
     $hiddenFundingbudgetplans = array_slice($funding->fundingbudgetplans, FundingsTable::FUNDINGBUDGETPLANS_COUNT_VISIBLE, FundingsTable::FUNDINGBUDGETPLANS_COUNT, true);
 
@@ -27,7 +32,7 @@ echo '<fieldset class="fundingbudgetplan full-width">';
     $this->element('addScript', ['script' =>
         JS_NAMESPACE . ".Helper.bindShowMoreLink(" . ($nonEmptyHiddenRecordsExist ? 'true'  : 'false') . ");
     "]);
-    echo '<a href="javascript:void(0);" class="show-more-link" style="margin-left:5px;line-height:30px;"><i class="fa fa-plus-circle"></i> Mehr Felder anzeigen</a>';
+    echo '<a href="javascript:void(0);" class="show-more-link" style="margin-left:5px;line-height:30px;"><i class="fa fa-plus-circle"></i> Mehr Zeilen anzeigen</a>';
 
     echo '<div class="row-wrapper" style="display:none;">';
         foreach($hiddenFundingbudgetplans as $fundingbudgetplanIndex => $fundingbudgetplan) {
