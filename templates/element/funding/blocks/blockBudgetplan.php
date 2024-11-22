@@ -38,7 +38,7 @@ echo '<div class="row-wrapper" style="display:none;">';
 echo '</div>';
 
 echo '<div class="fundingbudgets-total-wrapper">';
-    echo '<p class="total">Summe der eingereichten Kosten: <b>' . $this->MyNumber->formatAsDecimal($funding->budgetplan_total) . ' €</b></p>';
+    echo '<p class="total">Kosten gesamt: <b>' . $this->MyNumber->formatAsDecimal($funding->budgetplan_total) . ' €</b></p>';
     if ($funding->budgetplan_total > Funding::MAX_FUNDING_SUM) {
         echo '<p>Maximale Fördersumme: ' . $this->MyNumber->formatAsDecimal(Funding::MAX_FUNDING_SUM) . ' €</p>';
     }
