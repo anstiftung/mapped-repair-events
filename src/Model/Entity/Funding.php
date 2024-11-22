@@ -89,7 +89,7 @@ class Funding extends Entity
             if ($entity !== null && in_array($field['name'], $fieldsToBeFormattedWithToDigits)) {
                 $value = $entity[$field['name']];
                 if ($value !== null) {
-                    $field['options']['value'] = number_format($value, 2);
+                    $field['options']['value'] = number_format($value, 2, '.', '');
                 }
             }
             $preparedEntityString = 'Fundings.' . $entityString . '.' . $field['name'];
