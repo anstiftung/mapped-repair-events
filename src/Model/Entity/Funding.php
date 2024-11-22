@@ -23,7 +23,7 @@ class Funding extends Entity
         self::STATUS_PENDING => 'Bestätigung von Admin ausstehend',
         self::STATUS_VERIFIED => 'von Admin bestätigt',
         self::STATUS_REJECTED => 'von Admin beanstandet',
-        self::STATUS_BUDGETPLAN_DATA_MISSING => 'Du musst mindestens einen Eintrag hinzufügen',
+        self::STATUS_BUDGETPLAN_DATA_MISSING => 'Du musst mindestens eine investive Maßnahme hinzufügen',
         self::STATUS_DATA_OK => 'Die eingegebenen Daten sind ok',
         self::STATUS_DESCRIPTION_MISSING => 'Die Beschreibung ist nicht vollständig',
     ];
