@@ -6,6 +6,7 @@ use Cake\Routing\Router;
 use Cake\Database\Schema\TableSchemaInterface;
 use Cake\Datasource\FactoryLocator;
 use App\Model\Entity\Funding;
+use App\Model\Entity\Fundingupload;
 use App\Services\FolderService;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Validation\Validator;
@@ -33,8 +34,20 @@ class FundingsTable extends AppTable
             'foreignKey' => 'funding_uid',
             'dependent' => true,
         ]);
-        $this->hasMany('Fundinguploads', [
+        $this->hasMany('FundinguploadsActivityProofs', [
+            'className' => 'Fundinguploads',
             'foreignKey' => 'funding_uid',
+            'conditions' => [
+                'FundinguploadsActivityProofs.type' => Fundingupload::TYPE_ACTIVITY_PROOF
+            ],
+            'dependent' => true,
+        ]);
+        $this->hasMany('FundinguploadsFreistellungsbescheids', [
+            'className' => 'Fundinguploads',
+            'foreignKey' => 'funding_uid',
+            'conditions' => [
+                'FundinguploadsFreistellungsbescheids.type' => Fundingupload::TYPE_FREISTELLUNGSBESCHEID
+            ],
             'dependent' => true,
         ]);
     }
@@ -47,7 +60,7 @@ class FundingsTable extends AppTable
     public function validationDefault(Validator $validator): Validator
     {
 
-        $validator->add('fundinguploads', 'fileCount', [
+        $validator->add('fundinguploads_activity_proofs', 'fileCount', [
             'rule' => function ($value, $context) {
                 if (count($value) > 5) {
                     return 'Insgesamt sind maximal 5 Dateien erlaubt.';
@@ -56,37 +69,52 @@ class FundingsTable extends AppTable
             },
         ]);
 
-        $validator->add('files_fundinguploads', 'fileTypeAndSize', [
+        $validator->add('fundinguploads_freistellungsbescheids', 'fileCount', [
             'rule' => function ($value, $context) {
-                $allowedMimeTypes = ['application/pdf', 'image/jpeg', 'image/png'];
-                $maxSize = 5 * 1024 * 1024; // 5 MB in bytes
-
-                $errorMessages = [];
-                foreach ($context['data']['files_fundinguploads'] as $file) {
-                    if (!$file instanceof UploadedFile) {
-                        continue;
-                    }
-                    if ($file->getError() !== UPLOAD_ERR_OK) {
-                        continue;
-                    }
-
-                    if ($file->getSize() > $maxSize) {
-                        $errorMessages[] = $file->getClientFilename() . ': Datei muss weniger als 5 MB groß sein.';
-                    }
-
-                    if (!in_array($file->getClientMediaType(), $allowedMimeTypes)) {
-                        $errorMessages[] = $file->getClientFilename() . ': Nur PDF, JPG und PNG-Dateien sind erlaubt.';
-                    }
-
-                }
-
-                if (!empty($errorMessages)) {
-                    return implode(' / ', $errorMessages);
+                if (count($value) > 1) {
+                    return 'Es ist nur eine Datei erlaubt.';
                 }
                 return true;
             },
         ]);
+
+        $validator->add('files_fundinguploads_activity_proofs', 'fileTypeAndSize', [
+            'rule' => [$this, 'validateFileTypeAndSize'],
+        ]);
+        $validator->add('files_fundinguploads_freistellungsbescheids', 'fileTypeAndSize', [
+            'rule' => [$this, 'validateFileTypeAndSize'],
+        ]);
         return $validator;
+    }
+
+    public function validateFileTypeAndSize($value, $context)
+    {
+        $allowedMimeTypes = ['application/pdf', 'image/jpeg', 'image/png'];
+        $maxSize = 5 * 1024 * 1024; // 5 MB in bytes
+
+        $errorMessages = [];
+        foreach ($value as $file) {
+            if (!$file instanceof UploadedFile) {
+                continue;
+            }
+            if ($file->getError() !== UPLOAD_ERR_OK) {
+                continue;
+            }
+
+            if ($file->getSize() > $maxSize) {
+                $errorMessages[] = $file->getClientFilename() . ': Datei muss weniger als 5 MB groß sein.';
+            }
+
+            if (!in_array($file->getClientMediaType(), $allowedMimeTypes)) {
+                $errorMessages[] = $file->getClientFilename() . ': Nur PDF, JPG und PNG-Dateien sind erlaubt.';
+            }
+
+        }
+
+        if (!empty($errorMessages)) {
+            return implode(' / ', $errorMessages);
+        }
+        return true;
     }
 
     public function deleteCustom($fundingUid) {
@@ -107,7 +135,7 @@ class FundingsTable extends AppTable
 
         // fundinguploads and fundingbudgetplans are deleted automatically by dependent option
 
-        $filePath = Funding::UPLOAD_PATH . $funding->uid;
+        $filePath = Fundingupload::UPLOAD_PATH . $funding->uid;
         FolderService::deleteFolder($filePath);
 
     }
@@ -152,7 +180,8 @@ class FundingsTable extends AppTable
             'Fundingbudgetplans',
             'Fundingdatas',
             'Fundingsupporters',
-            'Fundinguploads',
+            'FundinguploadsActivityProofs',
+            'FundinguploadsFreistellungsbescheids',
         ])->first();
 
         if (empty($funding->fundingbudgetplans)) {

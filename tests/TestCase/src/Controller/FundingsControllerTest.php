@@ -12,6 +12,9 @@ use Cake\Event\EventInterface;
 use App\Test\Mock\GeoServiceMock;
 use Cake\Controller\Controller;
 use App\Model\Table\FundingsTable;
+use Laminas\Diactoros\UploadedFile;
+use App\Model\Entity\Fundingupload;
+use App\Test\Fixture\UsersFixture;
 
 class FundingsControllerTest extends AppTestCase
 {
@@ -133,6 +136,10 @@ class FundingsControllerTest extends AppTestCase
             'fundings-workshop-name',
         ];
 
+        $uploadTemplateFile = TESTS . 'files/test.jpg';
+        $uploadFile = TESTS . 'files/uploadTest.jpg';
+        copy($uploadTemplateFile, $uploadFile);
+
         $this->post(Configure::read('AppConfig.htmlHelper')->urlFundingsEdit($testWorkshopUid), [
             'referer' => '/',
             'Fundings' => [
@@ -151,6 +158,15 @@ class FundingsControllerTest extends AppTestCase
                 ],
                 'fundingdata' => [
                     'description' => $newFundingdataDescription . '<script>alert("XSS");</script>',
+                ],
+                'files_fundinguploads_activity_proofs' => [
+                        new UploadedFile(
+                            $uploadFile,
+                            filesize($uploadFile),
+                            UPLOAD_ERR_OK,
+                            'test.jpg',
+                            'image/jpeg',
+                        ),
                 ],
                 'fundingbudgetplans' => [
                     [
@@ -190,7 +206,7 @@ class FundingsControllerTest extends AppTestCase
         $this->assertResponseContains('Der Förderantrag wurde erfolgreich zwischengespeichert.');
 
         $fundingsTable = $this->getTableLocator()->get('Fundings');
-        $funding = $fundingsTable->find(contain: ['Workshops', 'OwnerUsers', 'Fundingsupporters', 'Fundingdatas', 'Fundingbudgetplans'])->first();
+        $funding = $fundingsTable->find(contain: ['Workshops', 'OwnerUsers', 'Fundingsupporters', 'Fundingdatas', 'Fundingbudgetplans', 'FundinguploadsActivityProofs'])->first();
         $funding->owner_user->revertPrivatizeData();
 
         $this->assertEquals($verifiedFields, $funding->verified_fields); // must not contain invalid workshops-website
@@ -212,6 +228,12 @@ class FundingsControllerTest extends AppTestCase
 
         $this->assertEquals($newFundingdataDescription, $funding->fundingdata->description);
 
+        $this->assertNotEmpty($funding->fundinguploads_activity_proofs);
+        foreach($funding->fundinguploads_activity_proofs as $fundingupload) {
+            $this->assertEquals(Fundingupload::TYPE_ACTIVITY_PROOF, $fundingupload->type);
+            $this->assertFileExists($fundingupload->full_path);
+        }
+
         $this->assertEquals(FundingsTable::FUNDINGBUDGETPLANS_COUNT, count($funding->fundingbudgetplans));
         $this->assertEquals(Fundingbudgetplan::TYPE_A, $funding->fundingbudgetplans[0]->type);
         $this->assertEquals($newFundingbudgetplanDescriptionOk, $funding->fundingbudgetplans[0]->description);
@@ -225,6 +247,9 @@ class FundingsControllerTest extends AppTestCase
             $this->assertFalse($fundingbudgetplan->is_valid);
             $this->assertFalse($fundingbudgetplan->is_not_empty);
         }
+
+        // cleanup file uploads
+        $fundingsTable->deleteCustom($funding->uid);
 
     }
 
@@ -257,7 +282,7 @@ class FundingsControllerTest extends AppTestCase
         $fundinguploads = $fundinguploadsTable->find()->where([$fundinguploadsTable->aliasField('funding_uid') => $funding->uid])->toArray();
         $this->assertEmpty($fundinguploads);
 
-    }    
+    }
 
 }
 ?>

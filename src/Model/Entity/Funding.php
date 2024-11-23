@@ -8,8 +8,6 @@ use App\Model\Table\FundingdatasTable;
 class Funding extends Entity
 {
 
-    const UPLOAD_PATH = ROOT . DS . 'files_private' . DS . 'fundings' . DS;
-
     const STATUS_PENDING = 10;
     const STATUS_VERIFIED = 20;
     const STATUS_REJECTED = 30;
@@ -217,15 +215,6 @@ class Funding extends Entity
 
     public function _getAllFieldsVerified(): bool {
         return $this->verified_fields_count == $this->required_fields_count;
-    }
-
-    public function _getFundinguploadsActivityProofs(): array {
-        if ($this->fundinguploads === null) {
-            return [];
-        }
-        return array_filter($this->fundinguploads, function($upload) {
-            return $upload->type == Fundingupload::TYPE_ACTIVITY_PROOF;
-        });
     }
 
     public function _getActivityProofsCount(): int {

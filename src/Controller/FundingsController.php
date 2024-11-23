@@ -112,7 +112,7 @@ class FundingsController extends AppController
 
         if (!empty($this->request->getData())) {
 
-            $associations = ['Workshops', 'OwnerUsers', 'Fundingdatas', 'Fundingsupporters', 'Fundinguploads', 'Fundingbudgetplans'];
+            $associations = ['Workshops', 'OwnerUsers', 'Fundingdatas', 'Fundingsupporters', 'FundinguploadsActivityProofs', 'FundinguploadsFreistellungsbescheids', 'Fundingbudgetplans'];
             $associationsWithoutValidation = $this->removeValidationFromAssociations($associations);
             $singularizedAssociations = array_map(function($association) {
                 return Inflector::singularize(Inflector::tableize($association));
@@ -142,12 +142,12 @@ class FundingsController extends AppController
 
             $patchedEntity = $this->patchFunding($funding, $associations);
             $errors = $patchedEntity->getErrors();
-            $filesFundinguploadsErrors = $patchedEntity->getError('files_fundinguploads');
+            $filesFundinguploadsErrors = $patchedEntity->getError('files_fundinguploads_activity_proofs');
             $newFundinguploads = [];
             if (!empty($filesFundinguploadsErrors)) {
-                $patchedEntity->setError('files_fundinguploads[]', $filesFundinguploadsErrors);
+                $patchedEntity->setError('files_fundinguploads_activity_proofs[]', $filesFundinguploadsErrors);
             } else {
-                $filesFileuploads = $this->request->getData('Fundings.files_fundinguploads');
+                $filesFileuploads = $this->request->getData('Fundings.files_fundinguploads_activity_proofs');
                 if (!empty($filesFileuploads)) {
                     foreach ($filesFileuploads as $fileupload) {
                         if ($fileupload->getError() !== UPLOAD_ERR_OK) {
@@ -162,21 +162,21 @@ class FundingsController extends AppController
                             'owner' => $this->loggedUser->uid,
                             'status' => Funding::STATUS_PENDING,
                         ];
-                        $filePath = Funding::UPLOAD_PATH . $funding->uid . DS . $filename;
+                        $filePath = Fundingupload::UPLOAD_PATH . $funding->uid . DS . $filename;
                         if (!is_dir(dirname($filePath))) {
                             mkdir(dirname($filePath), 0777, true);
                         }
                         $fileupload->moveTo($filePath);
                     }
                     
-                    $this->request = $this->request->withData('Fundings.fundinguploads', array_merge($this->request->getData('Fundings.fundinguploads') ?? [], $newFundinguploads));
+                    $this->request = $this->request->withData('Fundings.fundinguploads_activity_proofs', array_merge($this->request->getData('Fundings.fundinguploads_activity_proofs') ?? [], $newFundinguploads));
                     $patchedEntity = $this->patchFunding($funding, $associations);
                 }
             }
 
-            $deleteFundinguploads = $this->request->getData('Fundings.delete_fundinguploads');
+            $deleteFundinguploads = $this->request->getData('Fundings.delete_fundinguploads_activity_proofs');
             if (!empty($deleteFundinguploads)) {
-                $remainingFundinguploads = $this->request->getData('Fundings.fundinguploads') ?? [];
+                $remainingFundinguploads = $this->request->getData('Fundings.fundinguploads_activity_proofs') ?? [];
                 foreach($deleteFundinguploads as $fundinguploadId) {
                     $fundinguploadsTable = $this->getTableLocator()->get('Fundinguploads');
                     $fundingupload = $fundinguploadsTable->find()->where([
@@ -186,22 +186,21 @@ class FundingsController extends AppController
                         ])->first();
                     if (!empty($fundingupload)) {
                         $fundinguploadsTable->delete($fundingupload);
-                        $filePath = Funding::UPLOAD_PATH . $funding->uid . DS . $fundingupload->filename;
-                        if (file_exists($filePath)) {
-                            unlink($filePath);
+                        if (file_exists($fundingupload->full_path)) {
+                            unlink($fundingupload->full_path);
                         }
                         $remainingFundinguploads = array_filter($remainingFundinguploads, function($fundingupload) use ($fundinguploadId) {
                             return $fundingupload['id'] != $fundinguploadId;
                         });
                     }
-                    $this->request = $this->request->withData('Fundings.fundinguploads' ?? [], $remainingFundinguploads);
+                    $this->request = $this->request->withData('Fundings.fundinguploads_activity_proofs' ?? [], $remainingFundinguploads);
                     $patchedEntity = $this->patchFunding($funding, $associations);
                 }
             }
 
-            $fundinguploadsErrors = $patchedEntity->getError('fundinguploads');
+            $fundinguploadsErrors = $patchedEntity->getError('fundinguploads_activity_proofs');
             if (!empty($fundinguploadsErrors)) {
-                $patchedEntity->setError('files_fundinguploads[]', $fundinguploadsErrors);
+                $patchedEntity->setError('files_fundinguploads_activity_proofs[]', $fundinguploadsErrors);
             }
 
             if (!empty($errors)) {
@@ -220,13 +219,13 @@ class FundingsController extends AppController
             $fundingsTable->save($patchedEntity, ['associated' => $associationsWithoutValidation]);
             $this->AppFlash->setFlashMessage('Der Förderantrag wurde erfolgreich zwischengespeichert.');
 
-            if (!empty($this->request->getData('Fundings.fundinguploads'))) {
+            if (!empty($this->request->getData('Fundings.fundinguploads_activity_proofs'))) {
                 // patch id for new fundinguploads
                 $fundinguploadsFromDatabase = $this->getTableLocator()->get('Fundinguploads')->find()->where([
                     'Fundinguploads.funding_uid' => $funding->uid,
                 ])->toArray();
                 $updatedFundinguploads = [];
-                foreach($this->request->getData('Fundings.fundinguploads') as $fundingupload) {
+                foreach($this->request->getData('Fundings.fundinguploads_activity_proofs') as $fundingupload) {
                     foreach($fundinguploadsFromDatabase as $fundinguploadFromDatabaseEntity) {
                         if ($fundingupload['filename'] == $fundinguploadFromDatabaseEntity->filename) {
                             $fundingupload['id'] = $fundinguploadFromDatabaseEntity->id;
@@ -234,7 +233,7 @@ class FundingsController extends AppController
                         }
                     }
                 }
-                $this->request = $this->request->withData('Fundings.fundinguploads' ?? [], $updatedFundinguploads);
+                $this->request = $this->request->withData('Fundings.fundinguploads_activity_proofs' ?? [], $updatedFundinguploads);
                 $patchedEntity = $this->patchFunding($funding, $associations);
             }
         }
@@ -262,7 +261,7 @@ class FundingsController extends AppController
     }
 
     private function patchFundingStatusIfActivityProofWasUploaded($newFundinguploads, $patchedEntity) {
-        $errors = $patchedEntity->getErrors('files_fundinguploads') + $patchedEntity->getErrors('fundinguploads');
+        $errors = $patchedEntity->getErrors('files_fundinguploads_activity_proofs') + $patchedEntity->getErrors('fundinguploads_activity_proofs');
         if (empty($errors) && !empty($newFundinguploads)) {
             $newStatus = Funding::STATUS_PENDING;
             $this->request = $this->request->withData('Fundings.activity_proof_status', $newStatus);
@@ -347,8 +346,7 @@ class FundingsController extends AppController
             throw new NotFoundException;
         }
 
-        $filePath = Funding::UPLOAD_PATH . $fundingupload->funding_uid . DS . $fundingupload->filename;
-        $response = $this->response->withFile($filePath);
+        $response = $this->response->withFile($fundingupload->full_path);
         $response = $response->withHeader('Content-Disposition', 'inline; filename="' . $fundingupload->filename . '"');
         return $response;
 

@@ -34,10 +34,10 @@ MappedRepairEvents.Funding = {
         fieldNameInputField.prop('readonly', checked);
     },
 
-    onClickHandlerDeleteCheckbox: () => {
-        const deleteUploadCheckboxes = $('input[name="Fundings[delete_fundinguploads][]"]');
+    onClickHandlerDeleteCheckbox: (uploadType) => {
+        const deleteUploadCheckboxes = $('input[name="Fundings[delete_fundinguploads_' + uploadType + '][]"]');
         const deleteUploadCheckboxesChecked = deleteUploadCheckboxes.is(':checked');
-        const uploadInput = $('#fundings-files-fundinguploads');
+        const uploadInput = $('#fundings-files-fundinguploads' + uploadType);
         uploadInput.prop('disabled', deleteUploadCheckboxesChecked);
         const uploadButton = $('button.upload-button');
         if (deleteUploadCheckboxesChecked) {
@@ -80,15 +80,16 @@ MappedRepairEvents.Funding = {
             const fieldName = $(this).attr('id');
             const fileuploadIdField = fieldName.replace('filename', 'id');
             const fileuploadId = $(`#${fileuploadIdField}`).val();
+            const uploadType = $(this).data('upload-type');
 
             const checkbox = $('<input>', {
                 type: 'checkbox',
                 value: fileuploadId,
                 class: 'is-upload',
-                name: 'Fundings[delete_fundinguploads][]',
+                name: 'Fundings[delete_fundinguploads_' + uploadType + '][]',
                 checked: false,
                 on: {
-                    change: (e) => MappedRepairEvents.Funding.onClickHandlerDeleteCheckbox(fieldName, e.target.checked),
+                    change: (e) => MappedRepairEvents.Funding.onClickHandlerDeleteCheckbox(uploadType, e.target.checked),
                 }
             });
 

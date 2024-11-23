@@ -36,8 +36,11 @@ class FundingsController extends AdminAppController
         ],
         contain: [
             'Workshops',
-            'Fundinguploads' => function($q) {
-                return $q->order(['Fundinguploads.created' => 'DESC']);
+            'FundinguploadsActivityProofs' => function($q) {
+                return $q->order(['FundinguploadsActivityProofs.created' => 'DESC']);
+            },
+            'FundinguploadsFreistellungsbescheids' => function($q) {
+                return $q->order(['FundinguploadsFreistellungsbescheids.created' => 'DESC']);
             },
         ])->first();
 
@@ -50,7 +53,7 @@ class FundingsController extends AdminAppController
         $this->setReferer();
 
         if (!empty($this->request->getData())) {
-            $associtions =  ['associated' => ['Fundinguploads']];
+            $associtions =  ['associated' => ['FundinguploadsActivityProofs', 'FundinguploadsFreistellungsbescheids']];
             $patchedEntity = $fundingsTable->patchEntity($funding, $this->request->getData(), $associtions);
             if (!($patchedEntity->hasErrors())) {
                 $fundingsTable->save($patchedEntity, $associtions);
