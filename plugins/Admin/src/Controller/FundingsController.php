@@ -74,6 +74,7 @@ class FundingsController extends AdminAppController
         contain: [
             'Workshops' => $workshopsTable->getFundingContain(),
             'OwnerUsers',
+            'Fundingdatas',
             'Fundinguploads',
             'Fundingbudgetplans',
         ]);
