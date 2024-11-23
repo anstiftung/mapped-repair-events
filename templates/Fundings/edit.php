@@ -1,5 +1,4 @@
 <?php
-use App\Model\Entity\Funding;
 
 $this->element('addScript', ['script' =>
     JS_NAMESPACE.".Helper.bindCancelButton();".
@@ -21,46 +20,46 @@ echo $this->element('jqueryTabsWithoutAjax', [
             echo $this->element('heading', ['first' => $metaTags['title']]);
             echo $this->element('funding/blocks/blockColorCodes');
 
-        echo $this->Form->create($funding, [
-            'novalidate' => 'novalidate',
-            'url' => $this->Html->urlFundingsEdit($funding->workshop->uid),
-            'type' => 'file',
-            'id' => 'fundingForm',
-        ]);
-
-            echo $this->Form->hidden('referer', ['value' => $referer]);
-            $this->Form->unlockField('referer');
-            $this->Form->unlockField('verified_fields');
-            $this->Form->unlockField('delete_fundinguploads');
-            $this->Form->unlockField('files_fundinguploads');
-            echo $this->Form->hidden('Fundings.workshop.use_custom_coordinates');
-            echo $this->Form->hidden('Fundings.owner_user.use_custom_coordinates');
-
-            echo $this->element('funding/blocks/blockProgressBar', ['funding' => $funding]);
-
-            echo '<div class="flexbox">';
-                echo $this->element('funding/blocks/blockActivityProof', ['funding' => $funding]);
-                echo $this->element('funding/blocks/blockWorkshop', ['funding' => $funding]);
-                echo $this->element('funding/blocks/blockOwnerUser', ['funding' => $funding]);
-                echo $this->element('funding/blocks/blockFundingsupporterOrganziation', ['funding' => $funding]);
-                echo $this->element('funding/blocks/blockFundingsupporterUser', ['funding' => $funding]);
-                echo $this->element('funding/blocks/blockFundingsupporterBank', ['funding' => $funding]);
-                echo $this->element('funding/blocks/blockDescription', ['funding' => $funding]);
-                echo $this->element('funding/blocks/blockBudgetplan', ['funding' => $funding]);
-            echo '</div>';
-
-            echo $this->element('funding/blocks/blockProgressBar', ['funding' => $funding]);
-
-            $deleteButton = $this->Form->button('Förderantrag löschen', [
-                'type' => 'button',
-                'id' => 'delete-button',
-                'class' => 'rounded red',
+            echo $this->Form->create($funding, [
+                'novalidate' => 'novalidate',
+                'url' => $this->Html->urlFundingsEdit($funding->workshop->uid),
+                'type' => 'file',
+                'id' => 'fundingForm',
             ]);
 
-            echo $this->element('cancelAndSaveButton', [
-                'saveLabel' => 'Förderantrag zwischenspeichern',
-                'additionalButton' => $deleteButton,
-            ]);
+                echo $this->Form->hidden('referer', ['value' => $referer]);
+                $this->Form->unlockField('referer');
+                $this->Form->unlockField('verified_fields');
+                $this->Form->unlockField('delete_fundinguploads');
+                $this->Form->unlockField('files_fundinguploads');
+                echo $this->Form->hidden('Fundings.workshop.use_custom_coordinates');
+                echo $this->Form->hidden('Fundings.owner_user.use_custom_coordinates');
+
+                echo $this->element('funding/blocks/blockProgressBar', ['funding' => $funding]);
+
+                echo '<div class="flexbox">';
+                    echo $this->element('funding/blocks/blockActivityProof', ['funding' => $funding]);
+                    echo $this->element('funding/blocks/blockWorkshop', ['funding' => $funding]);
+                    echo $this->element('funding/blocks/blockOwnerUser', ['funding' => $funding]);
+                    echo $this->element('funding/blocks/blockFundingsupporterOrganziation', ['funding' => $funding]);
+                    echo $this->element('funding/blocks/blockFundingsupporterUser', ['funding' => $funding]);
+                    echo $this->element('funding/blocks/blockFundingsupporterBank', ['funding' => $funding]);
+                    echo $this->element('funding/blocks/blockDescription', ['funding' => $funding]);
+                    echo $this->element('funding/blocks/blockBudgetplan', ['funding' => $funding]);
+                echo '</div>';
+
+                echo $this->element('funding/blocks/blockProgressBar', ['funding' => $funding]);
+
+                $deleteButton = $this->Form->button('Förderantrag löschen', [
+                    'type' => 'button',
+                    'id' => 'delete-button',
+                    'class' => 'rounded red',
+                ]);
+
+                echo $this->element('cancelAndSaveButton', [
+                    'saveLabel' => 'Förderantrag zwischenspeichern',
+                    'additionalButton' => $deleteButton,
+                ]);
 
             echo $this->Form->end();
 
