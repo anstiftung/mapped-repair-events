@@ -248,6 +248,7 @@ class Funding extends Entity
         if ($this->workshop->funding_activity_proof_required) {
             $result++;
         };
+        $result++; // freistellungsbescheid
         return $result;
     }
 
