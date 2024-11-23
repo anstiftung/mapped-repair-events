@@ -39,48 +39,14 @@ echo $this->element('jqueryTabsWithoutAjax', [
             echo $this->element('funding/blocks/blockProgressBar', ['funding' => $funding]);
 
             echo '<div class="flexbox">';
-
                 echo $this->element('funding/blocks/blockActivityProof', ['funding' => $funding]);
-
-                echo $this->Form->fieldset(
-                    Funding::getRenderedFields(Funding::FIELDS_WORKSHOP, 'workshop', $this->Form),
-                    [
-                        'legend' => 'Stammdaten der Reparatur-Initiative (UID: ' . $funding->workshop->uid . ')'
-                    ]
-                );
-
-                echo $this->Form->fieldset(
-                    Funding::getRenderedFields(Funding::FIELDS_OWNER_USER, 'owner_user', $this->Form),
-                    [
-                        'legend' => 'Personenbezogene Daten Ansprechpartner*in (UID: ' . $funding->owner_user->uid . ')',
-                    ]
-                );
-
-                echo $this->Form->fieldset(
-                    Funding::getRenderedFields(Funding::FIELDS_FUNDINGSUPPORTER_ORGANIZATION, 'fundingsupporter', $this->Form),
-                    [
-                        'legend' => 'Stammdaten der Trägerorganisation',
-                    ]
-                );
-
-                echo $this->Form->fieldset(
-                    Funding::getRenderedFields(Funding::FIELDS_FUNDINGSUPPORTER_USER, 'fundingsupporter', $this->Form),
-                    [
-                        'legend' => 'Ansprechpartner*in der Trägerorganisation',
-                    ]
-                );
-
-                echo $this->Form->fieldset(
-                    Funding::getRenderedFields(Funding::FIELDS_FUNDINGSUPPORTER_BANK, 'fundingsupporter', $this->Form),
-                    [
-                        'legend' => 'Bankverbindung der Trägerorganisation',
-                    ]
-                );
-
+                echo $this->element('funding/blocks/blockWorkshop', ['funding' => $funding]);
+                echo $this->element('funding/blocks/blockOwnerUser', ['funding' => $funding]);
+                echo $this->element('funding/blocks/blockFundingsupporterOrganziation', ['funding' => $funding]);
+                echo $this->element('funding/blocks/blockFundingsupporterUser', ['funding' => $funding]);
+                echo $this->element('funding/blocks/blockFundingsupporterBank', ['funding' => $funding]);
                 echo $this->element('funding/blocks/blockDescription', ['funding' => $funding]);
-
                 echo $this->element('funding/blocks/blockBudgetplan', ['funding' => $funding]);
-
             echo '</div>';
 
             echo $this->element('funding/blocks/blockProgressBar', ['funding' => $funding]);
