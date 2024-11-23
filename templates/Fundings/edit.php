@@ -1,7 +1,5 @@
 <?php
 use App\Model\Entity\Funding;
-use App\Model\Table\FundingsTable;
-use Cake\Core\Configure;
 
 $this->element('addScript', ['script' =>
     JS_NAMESPACE.".Helper.bindCancelButton();".
@@ -21,25 +19,7 @@ echo $this->element('jqueryTabsWithoutAjax', [
     <div class="ui-tabs-panel">
         <?php
             echo $this->element('heading', ['first' => $metaTags['title']]);
-
-            ?>
-
-            <div class="color-codes-wrapper">
-                <div class="is-verified">
-                    bestätigt
-                </div>
-                <div class="is-pending">
-                    Bestätigung ausstehend
-                </div>
-                <div class="is-missing">
-                    fehlt
-                </div>
-                <div class="is-rejected">
-                    durch Admin beanstandet
-                </div>
-            </div>
-
-        <?php
+            echo $this->element('funding/blocks/blockColorCodes');
 
         echo $this->Form->create($funding, [
             'novalidate' => 'novalidate',
