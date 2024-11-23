@@ -1,6 +1,7 @@
 <?php
 
 use App\Model\Entity\Funding;
+use App\Model\Entity\Fundingupload;
 
 $this->element('addScript', ['script' =>
     JS_NAMESPACE.".Helper.bindCancelButton();".
@@ -20,34 +21,35 @@ $this->element('addScript', ['script' =>
     echo $this->Form->hidden('referer', ['value' => $referer]);
     $this->Form->unlockField('referer');
 
-    if (!empty($funding->fundinguploads_activity_proofs)) {
-        $i = 0;
-        $activityProofsFormFields = '';
-        foreach($funding->fundinguploads_activity_proofs as $fundingupload) {
-            $activityProofFilenameLabel = $this->Html->link('Vorschau', $this->Html->urlFundinguploadDetail($fundingupload->id), ['target' => '_blank']);
-            $activityProofsFormFields .= $this->Form->control('Fundings.fundinguploads.'.$i.'.id', ['type' => 'hidden']);
-            $activityProofsFormFields .= $this->Form->control('Fundings.fundinguploads.'.$i.'.filename', ['label' => $activityProofFilenameLabel, 'escape' => false, 'readonly' => true]);
-            $activityProofsFormFields .= $this->Form->control('Fundings.fundinguploads.'.$i.'.created', ['label' => 'Datum', 'readonly' => true]);
-            $i++;
-        }
-        echo $this->Form->fieldset(
-            $activityProofsFormFields.
-            [
-                'legend' => 'Aktivitätsnachweise',
-            ]
-        );
-
-    }
+    echo $this->element('funding/fundingForm', [
+        'fundinguploads' => $funding->fundinguploads_activity_proofs,
+        'uploadType' => Fundingupload::TYPE_MAP[Fundingupload::TYPE_ACTIVITY_PROOF],
+        'legend' => 'Aktivitätsnachweis',
+    ]);
 
     if ($funding->workshop->funding_activity_proof_required) {
         echo $this->Form->fieldset(
             $this->Form->control('Fundings.activity_proof_status', ['label' => 'Status', 'options' => Funding::STATUS_MAPPING_UPLOADS]).
             $this->Form->control('Fundings.activity_proof_comment', ['label' => 'Kommentar']),
             [
-                'legend' => 'Aktivitätsnachweis Status',
+                'legend' => 'Status Aktivitätsnachweis',
             ]
         );
     }
+
+    echo $this->element('funding/fundingForm', [
+        'fundinguploads' => $funding->fundinguploads_freistellungsbescheids,
+        'uploadType' => Fundingupload::TYPE_MAP[Fundingupload::TYPE_FREISTELLUNGSBESCHEID],
+        'legend' => 'Freistellungsbescheid',
+    ]);
+
+    echo $this->Form->fieldset(
+        $this->Form->control('Fundings.freistellungsbescheid_status', ['label' => 'Status', 'options' => Funding::STATUS_MAPPING_UPLOADS]).
+        $this->Form->control('Fundings.freistellungsbescheid_comment', ['label' => 'Kommentar']),
+        [
+            'legend' => ' Status Freistellungsbescheid',
+        ]
+    );
 
     echo $this->element('cancelAndSaveButton', ['saveLabel' => 'Speichern']);
     echo $this->Form->end();

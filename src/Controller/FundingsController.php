@@ -143,9 +143,9 @@ class FundingsController extends AppController
             $patchedEntity = $this->patchFunding($funding, $associations);
             $errors = $patchedEntity->getErrors();
 
+            $newFundinguploads = [];
             foreach(Fundingupload::TYPE_MAP as $uploadTypeId => $uploadType) {
                 $filesFundinguploadsErrors = $patchedEntity->getError('files_fundinguploads_' . $uploadType);
-                $newFundinguploads = [];
                 if (!empty($filesFundinguploadsErrors)) {
                     $patchedEntity->setError('files_fundinguploads_' . $uploadType . '[]', $filesFundinguploadsErrors);
                 } else {
@@ -157,7 +157,7 @@ class FundingsController extends AppController
                             }
                             $filename = $fileupload->getClientFilename();
                             $filename =  StringComponent::slugifyAndKeepCase(pathinfo($filename, PATHINFO_FILENAME)) . '_' . bin2hex(random_bytes(5)) . '.' . pathinfo($filename, PATHINFO_EXTENSION);
-                            $newFundinguploads[] = [
+                            $newFundinguploads[$uploadType][] = [
                                 'filename' => $filename,
                                 'funding_uid' => $funding->uid,
                                 'type' => $uploadTypeId,
@@ -171,7 +171,9 @@ class FundingsController extends AppController
                             $fileupload->moveTo($filePath);
                         }
                         
-                        $this->request = $this->request->withData('Fundings.fundinguploads_' . $uploadType, array_merge($this->request->getData('Fundings.fundinguploads_' . $uploadType) ?? [], $newFundinguploads));
+                        if (!empty($newFundinguploads[$uploadType])) {
+                            $this->request = $this->request->withData('Fundings.fundinguploads_' . $uploadType, array_merge($this->request->getData('Fundings.fundinguploads_' . $uploadType) ?? [], $newFundinguploads[$uploadType]));
+                        }
                         $patchedEntity = $this->patchFunding($funding, $associations);
                     }
                 }
@@ -210,9 +212,7 @@ class FundingsController extends AppController
                 if (!empty($errors)) {
                     $patchedEntity = $this->getPatchedFundingForValidFields($errors, $workshopUid, $associationsWithoutValidation);
                 }
-                if ($uploadType == Fundingupload::TYPE_ACTIVITY_PROOF) {
-                    $patchedEntity = $this->patchFundingStatusIfActivityProofWasUploaded($newFundinguploads, $patchedEntity);
-                }
+                $patchedEntity = $this->patchFundingStatusIfNewUploadWasUploadedOrDeleted($newFundinguploads[$uploadType] ?? [], $patchedEntity, $uploadType, $deleteFundinguploads);
             }
 
             // remove all invalid fundingbudgetplans in order to avoid saving nothing
@@ -225,7 +225,6 @@ class FundingsController extends AppController
             $patchedEntity->owner_user->private = $this->updatePrivateFieldsForFieldsThatAreNotRequiredInUserProfile($patchedEntity->owner_user->private);
             $fundingsTable->save($patchedEntity, ['associated' => $associationsWithoutValidation]);
             $this->AppFlash->setFlashMessage('Der Förderantrag wurde erfolgreich zwischengespeichert.');
-
 
             foreach(Fundingupload::TYPE_MAP as $uploadTypeId => $uploadType) {
                 if (!empty($this->request->getData('Fundings.fundinguploads_' . $uploadType))) {
@@ -270,12 +269,13 @@ class FundingsController extends AppController
         return implode(',', $updatedArray);
     }
 
-    private function patchFundingStatusIfActivityProofWasUploaded($newFundinguploads, $patchedEntity) {
-        $errors = $patchedEntity->getErrors('files_fundinguploads_activity_proofs') + $patchedEntity->getErrors('fundinguploads_activity_proofs');
-        if (empty($errors) && !empty($newFundinguploads)) {
+    private function patchFundingStatusIfNewUploadWasUploadedOrDeleted($newFundinguploads, $patchedEntity, $uploadType, $deleteFundinguploads) {
+        $errors = $patchedEntity->getErrors('files_fundinguploads_' . $uploadType) + $patchedEntity->getErrors('fundinguploads_' . $uploadType);
+        if (empty($errors) && (!empty($newFundinguploads) || !empty($deleteFundinguploads))) {
             $newStatus = Funding::STATUS_PENDING;
-            $this->request = $this->request->withData('Fundings.activity_proof_status', $newStatus);
-            $patchedEntity->activity_proof_status = $newStatus;
+            $singularizedUploadType = Inflector::singularize($uploadType);
+            $this->request = $this->request->withData('Fundings.' . $singularizedUploadType . '_status', $newStatus);
+            $patchedEntity->{$singularizedUploadType . '_status'} = $newStatus;
         }
         return $patchedEntity;
     }

@@ -20,9 +20,10 @@ echo '<fieldset>';
     echo '</div>';
 
     echo $this->element('funding/blocks/upload/listUploadsAndUploadForm', [
-        'uploadType' => Fundingupload::TYPE_FREISTELLUNGSBESCHEID,
+        'uploadType' => Fundingupload::TYPE_MAP[Fundingupload::TYPE_FREISTELLUNGSBESCHEID],
         'fundinguploads' => $funding->fundinguploads_freistellungsbescheids,
         'showUploadForm' => $funding->freistellungsbecheid_status != Funding::STATUS_VERIFIED,
+        'validationMessage' => 'Nur PDF, JPG und PNG-Dateien sind erlaubt. Die Datei muss kleiner als 5 MB sein.',
         'multiple' => false,
     ]);
 

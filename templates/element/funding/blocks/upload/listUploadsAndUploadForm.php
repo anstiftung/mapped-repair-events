@@ -2,8 +2,6 @@
 
 use App\Model\Entity\Fundingupload;
 
-$uploadType = Fundingupload::TYPE_MAP[$uploadType];
-
 $this->Form->unlockField('delete_fundinguploads_' . $uploadType);
 $this->Form->unlockField('files_fundinguploads_' . $uploadType);
 
@@ -31,7 +29,7 @@ $this->element('addScript', ['script' =>
 ]);
 
 echo '<div style="margin-top:10px;padding:10px;">';
-    echo '<p>Nur PDF, JPG und PNG-Dateien sind erlaubt, und jede Datei muss unter 5 MB sein.</p>';
+    echo '<p>' . $validationMessage . '</p>';
 echo '</div>';
 
 echo $this->Form->control('Fundings.files_fundinguploads_' . $uploadType . '[]', [

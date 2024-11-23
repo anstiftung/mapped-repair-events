@@ -239,6 +239,10 @@ class Funding extends Entity
         return count($this->fundinguploads_activity_proofs);
     }
 
+    public function _getFreistellungsbescheidsCount(): int {
+        return count($this->fundinguploads_freistellungsbescheids);
+    }
+
     public function _getRequiredFieldsCount(): int {
         $result = self::getFieldsCount();
         if ($this->workshop->funding_activity_proof_required) {
