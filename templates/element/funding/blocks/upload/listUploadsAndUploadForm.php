@@ -17,7 +17,7 @@ if (!empty($fundinguploads)) {
         echo $this->Form->control('Fundings.fundinguploads_' . $uploadType . '.' . $i.'.id', ['type' => 'hidden']);
         echo $this->Form->control('Fundings.fundinguploads_' . $uploadType . '.' . $i.'.owner', ['type' => 'hidden']);
         echo $this->Form->control('Fundings.fundinguploads_' . $uploadType . '.' . $i.'.type', ['type' => 'hidden']);
-        echo $this->Form->control('Fundings.fundinguploads_' . $uploadType . '.' . $i.'.filename', ['label' => $label, 'readonly' => true, 'class' => 'is-upload no-verify', 'escape' => false, 'data-upload-type' => $uploadType]);
+        echo $this->Form->control('Fundings.fundinguploads_' . $uploadType . '.' . $i.'.filename', ['label' => $label, 'readonly' => true, 'class' => 'is-upload no-verify ' . $uploadType, 'escape' => false]);
         $i++;
     }
 }
@@ -27,7 +27,7 @@ if (!$showUploadForm) {
 }
 
 $this->element('addScript', ['script' =>
-    JS_NAMESPACE.".Funding.initBindDeleteFundinguploads();"
+    JS_NAMESPACE.".Funding.initBindDeleteFundinguploads('".$uploadType."');"
 ]);
 
 echo '<div style="margin-top:10px;padding:10px;">';

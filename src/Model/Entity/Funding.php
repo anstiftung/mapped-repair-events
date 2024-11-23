@@ -17,7 +17,7 @@ class Funding extends Entity
 
     const MAX_FUNDING_SUM = 3000;
 
-    const STATUS_MAPPING_ACTIVITY_PROOF = [
+    const STATUS_MAPPING_UPLOADS = [
         self::STATUS_PENDING => 'Bestätigung von Admin ausstehend',
         self::STATUS_VERIFIED => 'von Admin bestätigt',
         self::STATUS_REJECTED => 'von Admin beanstandet',
@@ -99,10 +99,6 @@ class Funding extends Entity
         return $renderedFields;
     }
 
-    public function _getActivityProofStatusIsVerified() {
-        return $this->activity_proof_status == self::STATUS_VERIFIED;
-    }
-
     public function _getBudgetplanTotal() {
         $total = 0;
         foreach($this->fundingbudgetplans as $fundingbudgetplan) {
@@ -154,6 +150,20 @@ class Funding extends Entity
         return '';
     }
 
+    public function _getFreistellungsbescheidStatusCssClass() {
+
+        if ($this->freistellungsbescheid_status == self::STATUS_PENDING) {
+            return 'is-pending';
+        }
+        if ($this->freistellungsbescheid_status == self::STATUS_VERIFIED) {
+            return 'is-verified';
+        }
+        if ($this->freistellungsbescheid_status == self::STATUS_REJECTED) {
+            return 'is-rejected';
+        }
+        return '';
+    }
+
     public function _getDescriptionStatus() {
         $length = mb_strlen($this->fundingdata->description);
         $isValid = isset($this->fundingdata->description)
@@ -177,7 +187,11 @@ class Funding extends Entity
     }
 
     public function _getActivityProofStatusHumanReadable() {
-        return self::STATUS_MAPPING_ACTIVITY_PROOF[$this->activity_proof_status];
+        return self::STATUS_MAPPING_UPLOADS[$this->activity_proof_status];
+    }
+
+    public function _getFreistellungsbescheidStatusHumanReadable() {
+        return self::STATUS_MAPPING_UPLOADS[$this->freistellungsbescheid_status];
     }
 
     public static function getFieldsCount() {
@@ -199,6 +213,10 @@ class Funding extends Entity
         }
 
         if ($this->workshop->funding_activity_proof_required && $this->activity_proof_status == self::STATUS_VERIFIED) {
+            $result++;
+        }
+
+        if ($this->freistellungsbescheid_status == self::STATUS_VERIFIED) {
             $result++;
         }
 

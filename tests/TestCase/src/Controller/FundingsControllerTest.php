@@ -137,8 +137,10 @@ class FundingsControllerTest extends AppTestCase
         ];
 
         $uploadTemplateFile = TESTS . 'files/test.jpg';
-        $uploadFile = TESTS . 'files/uploadTest.jpg';
-        copy($uploadTemplateFile, $uploadFile);
+        $uploadFileActivityProof = TESTS . 'files/uploadTest1.jpg';
+        $uploadFileFreistellungsbescheid = TESTS . 'files/uploadTest2.jpg';
+        copy($uploadTemplateFile, $uploadFileActivityProof);
+        copy($uploadTemplateFile, $uploadFileFreistellungsbescheid);
 
         $this->post(Configure::read('AppConfig.htmlHelper')->urlFundingsEdit($testWorkshopUid), [
             'referer' => '/',
@@ -160,13 +162,22 @@ class FundingsControllerTest extends AppTestCase
                     'description' => $newFundingdataDescription . '<script>alert("XSS");</script>',
                 ],
                 'files_fundinguploads_activity_proofs' => [
-                        new UploadedFile(
-                            $uploadFile,
-                            filesize($uploadFile),
-                            UPLOAD_ERR_OK,
-                            'test.jpg',
-                            'image/jpeg',
-                        ),
+                    new UploadedFile(
+                        $uploadFileActivityProof,
+                        filesize($uploadFileActivityProof),
+                        UPLOAD_ERR_OK,
+                        'test.jpg',
+                        'image/jpeg',
+                    ),
+                ],
+                'files_fundinguploads_freistellungsbescheids' => [
+                    new UploadedFile(
+                        $uploadFileFreistellungsbescheid,
+                        filesize($uploadFileFreistellungsbescheid),
+                        UPLOAD_ERR_OK,
+                        'test.jpg',
+                        'image/jpeg',
+                    ),
                 ],
                 'fundingbudgetplans' => [
                     [
@@ -206,7 +217,7 @@ class FundingsControllerTest extends AppTestCase
         $this->assertResponseContains('Der Förderantrag wurde erfolgreich zwischengespeichert.');
 
         $fundingsTable = $this->getTableLocator()->get('Fundings');
-        $funding = $fundingsTable->find(contain: ['Workshops', 'OwnerUsers', 'Fundingsupporters', 'Fundingdatas', 'Fundingbudgetplans', 'FundinguploadsActivityProofs'])->first();
+        $funding = $fundingsTable->find(contain: ['Workshops', 'OwnerUsers', 'Fundingsupporters', 'Fundingdatas', 'Fundingbudgetplans', 'FundinguploadsActivityProofs', 'FundinguploadsFreistellungsbescheids'])->first();
         $funding->owner_user->revertPrivatizeData();
 
         $this->assertEquals($verifiedFields, $funding->verified_fields); // must not contain invalid workshops-website
@@ -231,6 +242,12 @@ class FundingsControllerTest extends AppTestCase
         $this->assertNotEmpty($funding->fundinguploads_activity_proofs);
         foreach($funding->fundinguploads_activity_proofs as $fundingupload) {
             $this->assertEquals(Fundingupload::TYPE_ACTIVITY_PROOF, $fundingupload->type);
+            $this->assertFileExists($fundingupload->full_path);
+        }
+
+        $this->assertNotEmpty($funding->fundinguploads_freistellungsbescheids);
+        foreach($funding->fundinguploads_freistellungsbescheids as $fundingupload) {
+            $this->assertEquals(Fundingupload::TYPE_FREISTELLUNGSBESCHEID, $fundingupload->type);
             $this->assertFileExists($fundingupload->full_path);
         }
 

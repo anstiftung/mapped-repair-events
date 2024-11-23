@@ -31,5 +31,4 @@ echo '<fieldset>';
         'multiple' => 'multiple',
     ]);
 
-
 echo '</fieldset>';

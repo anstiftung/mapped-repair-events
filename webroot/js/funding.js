@@ -37,9 +37,9 @@ MappedRepairEvents.Funding = {
     onClickHandlerDeleteCheckbox: (uploadType) => {
         const deleteUploadCheckboxes = $('input[name="Fundings[delete_fundinguploads_' + uploadType + '][]"]');
         const deleteUploadCheckboxesChecked = deleteUploadCheckboxes.is(':checked');
-        const uploadInput = $('#fundings-files-fundinguploads' + uploadType);
+        const uploadInput = $('#fundings-files-fundinguploads-' + uploadType.replace('_', '-'));
         uploadInput.prop('disabled', deleteUploadCheckboxesChecked);
-        const uploadButton = $('button.upload-button');
+        const uploadButton = uploadInput.closest('fieldset').find('.upload-button');
         if (deleteUploadCheckboxesChecked) {
             uploadButton.text('Dateien löschen');
             uploadButton.addClass('red');
@@ -75,12 +75,11 @@ MappedRepairEvents.Funding = {
         }
     },
 
-    initBindDeleteFundinguploads: () => {
-        $('#fundingForm .input').find('input.is-upload').each(function() {
+    initBindDeleteFundinguploads: (uploadType) => {
+        $('#fundingForm .input').find('input.is-upload.' + uploadType).each(function() {
             const fieldName = $(this).attr('id');
             const fileuploadIdField = fieldName.replace('filename', 'id');
             const fileuploadId = $(`#${fileuploadIdField}`).val();
-            const uploadType = $(this).data('upload-type');
 
             const checkbox = $('<input>', {
                 type: 'checkbox',

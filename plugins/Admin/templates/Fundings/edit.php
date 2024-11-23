@@ -41,7 +41,7 @@ $this->element('addScript', ['script' =>
 
     if ($funding->workshop->funding_activity_proof_required) {
         echo $this->Form->fieldset(
-            $this->Form->control('Fundings.activity_proof_status', ['label' => 'Status', 'options' => Funding::STATUS_MAPPING_ACTIVITY_PROOF]).
+            $this->Form->control('Fundings.activity_proof_status', ['label' => 'Status', 'options' => Funding::STATUS_MAPPING_UPLOADS]).
             $this->Form->control('Fundings.activity_proof_comment', ['label' => 'Kommentar']),
             [
                 'legend' => 'Aktivitätsnachweis Status',
