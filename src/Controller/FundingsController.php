@@ -140,9 +140,7 @@ class FundingsController extends AppController
             $addressStringWorkshop = $this->request->getData('Fundings.workshop.street') . ', ' . $this->request->getData('Fundings.workshop.zip') . ' ' . $this->request->getData('Fundings.workshop.city') . ', ' . $this->request->getData('Fundings.workshop.country_code');
             $this->updateCoordinates($funding->workshop, 'workshop', $addressStringWorkshop);
 
-            $patchedEntity = $fundingsTable->patchEntity($funding, $this->request->getData(), [
-                'associated' => $associations,
-            ]);
+            $patchedEntity = $this->patchFunding($funding, $associations);
             $errors = $patchedEntity->getErrors();
             $filesFundinguploadsErrors = $patchedEntity->getError('files_fundinguploads');
             $newFundinguploads = [];
@@ -172,9 +170,7 @@ class FundingsController extends AppController
                     }
                     
                     $this->request = $this->request->withData('Fundings.fundinguploads', array_merge($this->request->getData('Fundings.fundinguploads') ?? [], $newFundinguploads));
-                    $patchedEntity = $fundingsTable->patchEntity($funding, $this->request->getData(), [
-                        'associated' => $associations,
-                    ]);
+                    $patchedEntity = $this->patchFunding($funding, $associations);
                 }
             }
 
@@ -199,9 +195,7 @@ class FundingsController extends AppController
                         });
                     }
                     $this->request = $this->request->withData('Fundings.fundinguploads' ?? [], $remainingFundinguploads);
-                    $patchedEntity = $fundingsTable->patchEntity($funding, $this->request->getData(), [
-                        'associated' => $associations,
-                    ]);
+                    $patchedEntity = $this->patchFunding($funding, $associations);
                 }
             }
 
@@ -241,9 +235,7 @@ class FundingsController extends AppController
                     }
                 }
                 $this->request = $this->request->withData('Fundings.fundinguploads' ?? [], $updatedFundinguploads);
-                $patchedEntity = $fundingsTable->patchEntity($funding, $this->request->getData(), [
-                    'associated' => $associations,
-                ]);
+                $patchedEntity = $this->patchFunding($funding, $associations);
             }
         }
 
@@ -252,6 +244,14 @@ class FundingsController extends AppController
         ]);
         $this->set('funding', $funding);
 
+    }
+
+    private function patchFunding($funding, $associations) {
+        $fundingsTable = $this->getTableLocator()->get('Fundings');
+        $patchedEntity = $fundingsTable->patchEntity($funding, $this->request->getData(), [
+            'associated' => $associations,
+        ]);
+        return $patchedEntity;
     }
 
     private function updatePrivateFieldsForFieldsThatAreNotRequiredInUserProfile($privateFields) {
