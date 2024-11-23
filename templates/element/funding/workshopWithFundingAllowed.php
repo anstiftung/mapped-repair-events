@@ -29,6 +29,7 @@ echo '<div class="workshop-wrapper">';
             echo $this->element('funding/owner', ['funding' => $workshop->workshop_funding]);
             echo $this->element('funding/orgaTeam', ['orgaTeam' => $workshop->orga_team]);
             echo $this->element('funding/activityProof', ['workshop' => $workshop]);
+            echo $this->element('funding/freistellungsbescheid', ['workshop' => $workshop]);
         echo '</div>';
 
     echo '</div>';

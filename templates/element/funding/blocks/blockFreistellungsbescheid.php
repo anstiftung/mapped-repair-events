@@ -1,7 +1,6 @@
 <?php
 
 use App\Model\Entity\Funding;
-use Cake\Core\Configure;
 use App\Model\Entity\Fundingupload;
 
 echo '<fieldset>';
