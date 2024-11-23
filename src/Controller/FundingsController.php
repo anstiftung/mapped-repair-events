@@ -207,12 +207,14 @@ class FundingsController extends AppController
                 $fundinguploadsErrors = $patchedEntity->getError('fundinguploads_' . $uploadType);
                 if (!empty($fundinguploadsErrors)) {
                     $patchedEntity->setError('files_fundinguploads_' . $uploadType . '[]', $fundinguploadsErrors);
+                } else {
+                    $patchedEntity = $this->patchFundingStatusIfNewUploadWasUploadedOrDeleted($newFundinguploads[$uploadType] ?? [], $patchedEntity, $uploadType, $deleteFundinguploads);
                 }
 
-                if (!empty($errors)) {
-                    $patchedEntity = $this->getPatchedFundingForValidFields($errors, $workshopUid, $associationsWithoutValidation);
-                }
-                $patchedEntity = $this->patchFundingStatusIfNewUploadWasUploadedOrDeleted($newFundinguploads[$uploadType] ?? [], $patchedEntity, $uploadType, $deleteFundinguploads);
+            }
+
+            if (!empty($errors)) {
+                $patchedEntity = $this->getPatchedFundingForValidFields($errors, $workshopUid, $associationsWithoutValidation);
             }
 
             // remove all invalid fundingbudgetplans in order to avoid saving nothing
@@ -270,8 +272,7 @@ class FundingsController extends AppController
     }
 
     private function patchFundingStatusIfNewUploadWasUploadedOrDeleted($newFundinguploads, $patchedEntity, $uploadType, $deleteFundinguploads) {
-        $errors = $patchedEntity->getErrors('files_fundinguploads_' . $uploadType) + $patchedEntity->getErrors('fundinguploads_' . $uploadType);
-        if (empty($errors) && (!empty($newFundinguploads) || !empty($deleteFundinguploads))) {
+        if (!empty($newFundinguploads) || !empty($deleteFundinguploads)) {
             $newStatus = Funding::STATUS_PENDING;
             $singularizedUploadType = Inflector::singularize($uploadType);
             $this->request = $this->request->withData('Fundings.' . $singularizedUploadType . '_status', $newStatus);
