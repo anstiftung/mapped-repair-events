@@ -1,7 +1,5 @@
 <?php
 
-use App\Model\Entity\Fundingupload;
-
 $this->Form->unlockField('delete_fundinguploads_' . $uploadType);
 $this->Form->unlockField('files_fundinguploads_' . $uploadType);
 
@@ -28,10 +26,11 @@ $this->element('addScript', ['script' =>
     JS_NAMESPACE.".Funding.initBindDeleteFundinguploads('".$uploadType."');"
 ]);
 
-echo '<div style="margin-top:10px;padding:10px;">';
-    echo '<p>' . $validationMessage . '</p>';
-echo '</div>';
-
+if ($validationMessage != '') {
+    echo '<div style="margin-top:10px;padding:10px;">';
+        echo '<p>' . $validationMessage . '</p>';
+    echo '</div>';
+}
 echo $this->Form->control('Fundings.files_fundinguploads_' . $uploadType . '[]', [
     'type' => 'file',
     'multiple' => $multiple,

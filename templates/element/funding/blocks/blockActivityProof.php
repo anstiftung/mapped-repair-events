@@ -21,7 +21,7 @@ echo '<fieldset>';
 
     $formattedFundingStartDate = date('d.m.Y', strtotime(Configure::read('AppConfig.fundingsStartDate')));
     echo '<div style="margin-bottom:10px;padding:10px;">';
-        echo '<p>Da für die Initiative "' . h($funding->workshop->name) . '" keine Termine vor dem '.$formattedFundingStartDate.' vorhanden sind, bitten wir dich, maximal 5 Aktivitätsnachweise hochzuladen. Dieser wird dann zeitnah von uns bestätigt.</p>';
+        echo '<p>Für die Initiative "' . h($funding->workshop->name) . '" sind keine Termine vor dem '.$formattedFundingStartDate.' vorhanden. Bitte lade geeignete Materialien hoch, aus denen zweifelsfrei hervorgeht, dass ihr bereits mindestens eine Reparaturveranstaltungen durchgeführt habt. Maximal fünf Dateien können hochgeladen werden. Wir überprüfen Nachweise zeitnah und Du wirst automatisch benachrichtigt.</p>';
     echo '</div>';
 
     echo $this->element('funding/blocks/upload/listUploadsAndUploadForm', [

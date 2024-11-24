@@ -18,6 +18,7 @@ echo $this->element('jqueryTabsWithoutAjax', [
     <div class="ui-tabs-panel">
         <?php
             echo $this->element('heading', ['first' => $metaTags['title']]);
+            echo $this->element('funding/blocks/blockMainInfo');
             echo $this->element('funding/blocks/blockColorCodes');
 
             echo $this->Form->create($funding, [
