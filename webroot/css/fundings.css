@@ -77,7 +77,7 @@ body.fundings.edit div.admin.edit {
     grid-template-rows: auto auto;
     gap: 5px;
     align-items: baseline;
-    padding: 10px 5px 5px 5px;
+    padding: 10px 5px 5px 10px;
     margin-top: 1px;
     border-radius: 3px;
 }
