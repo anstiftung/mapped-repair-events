@@ -5,7 +5,7 @@ $this->Form->unlockField('files_fundinguploads_' . $uploadType);
 
 if (!empty($fundinguploads)) {
 
-    echo '<p style="padding:10px;">Bereits hochgeladen</p>';
+    echo '<p style="padding:0 10px;">Bereits hochgeladen:</p>';
 
     $i = 0;
     foreach($fundinguploads as $fundingupload) {
