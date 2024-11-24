@@ -4,7 +4,6 @@ namespace App\Test\Fixture;
 
 class InfoSheetsFixture extends AppFixture
 {
-    public $import = ['table' => 'info_sheets'];
 
     public array $records = [
         [

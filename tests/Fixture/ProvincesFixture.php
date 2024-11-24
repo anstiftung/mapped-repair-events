@@ -6,7 +6,6 @@ use Cake\TestSuite\Fixture\TestFixture;
 
 class ProvincesFixture extends TestFixture
 {
-    public $import = ['table' => 'provinces'];
 
     public array $records = [
         [

@@ -1,7 +1,7 @@
 <?php
-$this->element('addScript', array('script' =>
+$this->element('addScript', ['script' =>
     JS_NAMESPACE.".AppFeatherlight.initLightboxForHref('a.help-link');"
-));
+]);
 $id = 'id-' . rand(10000, 20000);
 ?>
 

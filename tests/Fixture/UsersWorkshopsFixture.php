@@ -6,7 +6,6 @@ use Cake\I18n\Date;
 
 class UsersWorkshopsFixture extends AppFixture
 {
-    public $import = ['table' => 'users_workshops'];
 
     public function init(): void
     {

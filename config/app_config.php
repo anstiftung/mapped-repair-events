@@ -1,5 +1,7 @@
 <?php
 
+use Cake\View\Helper\MyNumberHelper;
+
 define('LF', "\n");
 define('TAB', "\t");
 
@@ -30,6 +32,7 @@ define('GROUPS_ORGA', 	          9);
 
 define('PASSWORD_REGEX', '/^([^\\s]){10,32}$/');
 define('ZIP_REGEX', '/^[0-9]{4,5}$/');
+define('ZIP_REGEX_DE', '/^[0-9]{5}$/');
 
 return [
     'Email' => [
@@ -106,6 +109,8 @@ return [
         'notificationMailAddress' => 'office@example.com',
         'statisticsEnabled' => true,
         'mapWidgetEnabled' => true,
+        'fundingsEnabled' => date('Y-m-d') >= '2024-12-01',
+        'fundingsStartDate' => '2024-12-01',
         'activeUsersFrontendEnabled' => true,
         'tagsFrontendEnabled' => true,
         'onlineEventsEnabled' => true,
@@ -142,7 +147,7 @@ return [
             '800' => [] //800 is maximum! (tmpUploadFileSize)
         ],
         'textHelper' => new Cake\View\Helper\TextHelper(new Cake\View\View()),
-        'numberHelper' => new Cake\View\Helper\NumberHelper(new Cake\View\View()),
+        'numberHelper' => new App\View\Helper\MyNumberHelper(new Cake\View\View()),
         'htmlHelper' => new App\View\Helper\MyHtmlHelper(new Cake\View\View()),
         'timeHelper' => new App\View\Helper\MyTimeHelper(new Cake\View\View()),
         'widgetHelper' => new App\View\Helper\WidgetHelper(new Cake\View\View())

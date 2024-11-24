@@ -123,6 +123,28 @@ return function (RouteBuilder $routes) {
             ])->setMethods(['GET']);
         }
 
+        if (Configure::read('AppConfig.fundingsEnabled')) {
+            $routes->connect('/mein-foerderantrag', ['controller'=>'fundings', 'action'=>'index']);
+            $routes->connect('/mein-foerderantrag/{action}/{workshopUid}', [
+                'controller'=>'fundings',
+                'action'=>'{action}'
+            ],
+            )->setPatterns([
+                'action' => 'edit',
+                'workshopUid' => '[0-9]+'
+            ]);
+
+            $routes->connect('/mein-foerderantrag/delete/{fundingUid}', [
+                'controller'=>'fundings',
+                'action'=>'delete'
+            ])->setPatterns(['fundingUid' => '[0-9]+']);
+
+            $routes->connect('/mein-foerderantrag/uploadDetail/{fundinguploadId}', [
+                'controller'=>'fundings',
+                'action'=>'uploadDetail'
+            ]);
+        }
+
         // für normale cake routings (users controller)
         $routes->connect('/{controller}/{action}/*');
 

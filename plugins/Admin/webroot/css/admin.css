@@ -1,8 +1,7 @@
-/* START admin layout änderungen */
 body, html {
     font-family: var(--theme-font), arial, helvetica;
     font-size: 13px;
-    color: #727374;
+    color: var(--default-font-color);
     background-color: #f2f2f2;
     margin: 0px auto;
     padding: 0;

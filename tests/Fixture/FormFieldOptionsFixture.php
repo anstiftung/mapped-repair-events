@@ -4,7 +4,6 @@ namespace App\Test\Fixture;
 
 class FormFieldOptionsFixture extends AppFixture
 {
-    public $import = ['table' => 'form_field_options'];
 
     public function init(): void
     {

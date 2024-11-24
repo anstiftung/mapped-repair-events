@@ -2,12 +2,12 @@
 use Cake\Core\Configure;
 
     if ($isEditMode) {
-        $this->element('addScript', array('script' =>
+        $this->element('addScript', ['script' =>
             JS_NAMESPACE.".Helper.doCurrentlyUpdatedActions(".$isCurrentlyUpdated.");"
-        ));
+        ]);
     }
 
-    $this->element('addScript', array('script' =>
+    $this->element('addScript', ['script' =>
         JS_NAMESPACE.".Helper.bindCancelButtonWithFixedRedirect('".$infoSheet->uid."', '".$this->Html->urlMyEvents()."');".
         JS_NAMESPACE.".Helper.bindSaveAndRedirectToUrlButton();".
         JS_NAMESPACE.".InfoSheet.initSubCategoryDropdown('#infosheets-category-id');".
@@ -15,7 +15,7 @@ use Cake\Core\Configure;
         JS_NAMESPACE.".InfoSheet.initBrandDropdown('#infosheets-brand-id');".
         JS_NAMESPACE.".InfoSheet.initDependentRadioButtons();".
         JS_NAMESPACE.".Helper.layoutEditButtons();
-    "));
+    "]);
 ?>
 
 

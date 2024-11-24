@@ -5,6 +5,11 @@ use App\Model\Traits\SearchExceptionsTrait;
 use Cake\Validation\Validator;
 use Cake\Datasource\FactoryLocator;
 use App\Services\GeoService;
+use Cake\Core\Configure;
+use Cake\Event\EventInterface;
+use ArrayObject;
+use App\Controller\Component\StringComponent;
+use Cake\Database\Query;
 
 class WorkshopsTable extends AppTable
 {
@@ -36,6 +41,27 @@ class WorkshopsTable extends AppTable
         $this->belongsTo('Provinces', [
             'foreignKey' => 'province_id',
         ]);
+        $this->hasOne('WorkshopFundings', [
+            'className' => 'Fundings',
+            'foreignKey' => 'workshop_uid',
+        ]);
+        $this->hasMany('FundingAllPastEvents', [
+            'className' => 'Events',
+            'foreignKey' => 'workshop_uid',
+            'conditions' => [
+                'FundingAllPastEvents.created <' => Configure::read('AppConfig.fundingsStartDate'),
+                'FundingAllPastEvents.datumstart <=' => Configure::read('AppConfig.fundingsStartDate'),
+                'FundingAllPastEvents.status' => APP_ON,
+            ],
+        ]);
+        $this->hasMany('FundingAllFutureEvents', [
+            'className' => 'Events',
+            'foreignKey' => 'workshop_uid',
+            'conditions' => [
+                'FundingAllFutureEvents.datumstart BETWEEN "2025-01-01" AND "2025-12-31"',
+                'FundingAllFutureEvents.status' => APP_ON,
+            ],
+        ]);
         $this->hasMany('Events', [
             'foreignKey' => 'workshop_uid',
             'conditions' => [
@@ -64,6 +90,13 @@ class WorkshopsTable extends AppTable
             'foreignKey' => 'workshop_uid',
             'targetForeignKey' => 'category_id'
         ]);
+    }
+
+    public function beforeMarshal(EventInterface $event, ArrayObject $data, ArrayObject $options)
+    {
+        if (isset($data['website'])) {
+            $data['website'] = StringComponent::addProtocolToUrl($data['website']);
+        }
     }
 
     public function validationDefault(Validator $validator): \Cake\Validation\Validator
@@ -138,9 +171,9 @@ class WorkshopsTable extends AppTable
      * @param int $userUid
      * @return array
      */
-    public function getWorkshopsForAssociatedUser($userUid, $workshopStatus)
+    public function getWorkshopsForAssociatedUser($userUid, $workshopStatus, $additionalContains = [])
     {
-        $workshops = $this->getWorkshopsWithUsers($workshopStatus);
+        $workshops = $this->getWorkshopsWithUsers($workshopStatus, $additionalContains);
         $workshops->matching('Users', function ($q) use ($userUid) {
             return $q->where([
                 'UsersWorkshops.user_uid' => $userUid,
@@ -156,11 +189,6 @@ class WorkshopsTable extends AppTable
         return $workshops;
     }
 
-    public function getWorkshopsForAdmin($workshopStatus)
-    {
-        return $this->getWorkshopsWithUsers($workshopStatus);
-    }
-
     public function transformForDropdown($workshops)
     {
         $result = [];
@@ -170,7 +198,20 @@ class WorkshopsTable extends AppTable
         return $result;
     }
 
-    public function getWorkshopsWithUsers($workshopStatus)
+    public function getFundingContain() {
+        return [
+            'WorkshopFundings.OwnerUsers',
+            'FundingAllPastEvents' => function (Query $q) {
+                return $q->select(['workshop_uid', 'count' => $q->func()->count('*')])->groupBy('workshop_uid');
+            },
+            'FundingAllFutureEvents' => function (Query $q) {
+                return $q->select(['workshop_uid', 'count' => $q->func()->count('*')])->groupBy('workshop_uid');
+            },
+            'Users.Groups',
+        ];
+    }
+
+    public function getWorkshopsWithUsers($workshopStatus, $additionalContains = [])
     {
         $workshops = $this->find('all',
         conditions: [
@@ -178,7 +219,8 @@ class WorkshopsTable extends AppTable
         ],
         contain: [
             'Users',
-            'Users.Groups'
+            'Users.Groups',
+            ...$additionalContains,
         ],
         order: [
             'Workshops.name' => 'ASC'

@@ -28,7 +28,6 @@ class EventsController extends AppController
 
     public $Category;
     public $Event;
-    public $Workshop;
     public $Worknews;
 
     public function beforeFilter(EventInterface $event) {
@@ -166,11 +165,10 @@ class EventsController extends AppController
         $hasEditEventPermissions = $this->isAdmin() || $this->isOrga();
 
         $this->Workshop = $this->getTableLocator()->get('Workshops');
-        // complicated is-user-orga-check no needed again because this page is only accessible for orga users
         if ($this->isAdmin()) {
-            $workshops = $this->Workshop->getWorkshopsForAdmin(APP_DELETED);
+            $workshops = $this->Workshop->getWorkshopsWithUsers(APP_DELETED);
         } else {
-            $workshops = $this->Workshop->getWorkshopsForAssociatedUser($this->isLoggedIn() ? $this->loggedUser->uid : 0, APP_DELETED);
+            $workshops = $this->Workshop->getWorkshopsForAssociatedUser($this->loggedUser->uid, APP_DELETED);
         }
 
         $workshops->contain([
@@ -314,7 +312,7 @@ class EventsController extends AppController
             $this->AppFlash->setErrorMessage('Beim Löschen ist ein Fehler aufgetreten');
         }
 
-        $this->redirect($this->referer());
+        $this->redirect(Configure::read('AppConfig.htmlHelper')->urlMyEvents());
 
     }
 
@@ -334,7 +332,7 @@ class EventsController extends AppController
         $this->Workshop = $this->getTableLocator()->get('Workshops');
         // complicated is-user-orga-check no needed again because this page is only accessible for orga users
         if ($this->isAdmin()) {
-            $workshops = $this->Workshop->getWorkshopsForAdmin(APP_DELETED);
+            $workshops = $this->Workshop->getWorkshopsWithUsers(APP_DELETED);
         } else {
             $workshops = $this->Workshop->getWorkshopsForAssociatedUser($this->isLoggedIn() ? $this->loggedUser->uid : 0, APP_DELETED);
         }

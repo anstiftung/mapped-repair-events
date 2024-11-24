@@ -4,7 +4,6 @@ namespace App\Services;
 
 use Cake\Core\Configure;
 use Cake\Datasource\FactoryLocator;
-use Cake\Http\Exception\ServiceUnavailableException;
 use Cake\Validation\Validator;
 use Cake\Log\Log;
 

@@ -224,6 +224,26 @@ class MyHtmlHelper extends HtmlHelper {
         return '/users/welcome';
     }
 
+    function urlFundings() {
+        return '/mein-foerderantrag';
+    }
+
+    function urlFundingsEdit($workshopUid) {
+        return $this->urlFundings() . '/edit/' . $workshopUid;
+    }
+
+    function urlFundingsAdminEdit($fundingUid) {
+        return '/admin/fundings/edit/' . $fundingUid;
+    }
+
+    function urlFundinguploadDetail($fundinguploadId) {
+        return $this->urlFundings() . '/uploadDetail/' . $fundinguploadId;
+    }
+
+    function urlFundingsDelete($fundinguploadId) {
+        return $this->urlFundings() . '/delete/' . $fundinguploadId;
+    }
+
     function getUserBackendNaviLinks($userUid, $isMyProfile, $isOrga) {
         $result = [];
         $result[] = ['url' => $this->urlUserHome(), 'name' => 'INFO'];
@@ -233,6 +253,9 @@ class MyHtmlHelper extends HtmlHelper {
         }
         $result[] = ['url' => $this->urlMyEvents(), 'name' => 'MEINE TERMINE'];
         $result[] = ['url' => '/initiativen/mitmachen', 'name' => 'MITMACHEN'];
+        if (Configure::read('AppConfig.fundingsEnabled') && $isOrga) {
+            $result[] = ['url' => $this->urlFundings(), 'name' => 'FÖRDERANTRAG'];
+        }
         return $result;
     }
 
@@ -380,8 +403,8 @@ class MyHtmlHelper extends HtmlHelper {
     function urlEventDuplicate($uid) {
         return '/termine/duplicate/' . $uid;
     }
-    function urlEventNew($preselectedWorkshopUid = null) {
-        return '/termine/add' . (!is_null($preselectedWorkshopUid) ? '/'.$preselectedWorkshopUid : '');
+    function urlEventNew($workshopUid = null) {
+        return '/termine/add' . (!is_null($workshopUid) ? '/'.$workshopUid : '');
     }
     function urlInfoSheetNew($eventUid) {
         return '/laufzettel/add/' . $eventUid;

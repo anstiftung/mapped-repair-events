@@ -1,0 +1,323 @@
+:root {
+    --is-verified: rgba(0, 128, 0, 0.7);
+    --is-pending: rgba(255, 255, 0, 0.8);
+    --is-missing: rgba(255, 0, 0, 0.8);
+    --is-rejected: rgba(0, 0, 255, 0.7);
+}
+
+body.fundings.index .admin tr.is-verified {
+    background-color: var(--is-verified);
+    color: #fff;
+}
+body.fundings.index .info-box-counts {
+    margin-bottom: 10px;
+}
+body.fundings.index .workshop-wrapper {
+    padding: 15px 0;
+}
+body.fundings.index .workshop-wrapper > div.table {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-top: 10px;
+}
+body.fundings.index .workshop-wrapper a.heading {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+body.fundings.index .workshop-wrapper a.button {
+    flex: 0 0 180px;
+}
+body.fundings.index .workshop-wrapper > div.table > div {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+body.fundings.index .workshop-wrapper > div.table > div * {
+    flex: 1;
+}
+body.fundings.index .workshop-wrapper a:not(.button) {
+    padding: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+body.fundings.index .workshop-wrapper .orga-user {
+    margin-right: 3px;
+}
+body.fundings.index .workshop-wrapper .orga-user:not(:last-child)::after {
+    content: ",";
+}
+body.fundings.edit h1 {
+    margin-bottom: 20px;
+}
+body.fundings .verification-wrapper {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 3px;
+}
+body.fundings .verification-wrapper p.comment {
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #fff;
+    border-radius: 3px;
+}
+body.fundings .upload-button-wrapper {
+    display: flex;
+    justify-content: flex-end;
+}
+body.fundings button.upload-button {
+    margin-top: 10px;
+}
+body.fundings.edit div.admin.edit {
+    padding: 20px;
+}
+#fundingForm fieldset:not(.fundingbudgetplan) div.input:not(.file) {
+    display: grid;
+    grid-template-columns: 165px auto 100px;
+    grid-template-rows: auto auto;
+    gap: 5px;
+    align-items: baseline;
+    padding: 10px 5px 5px 5px;
+    margin-top: 1px;
+    border-radius: 3px;
+}
+#fundingForm fieldset.fundingbudgetplan div.row {
+    display: grid;
+    grid-template-columns: 180px auto 100px;
+    gap: 5px;
+    align-items: baseline;
+    padding: 5px 0px 5px 0px;
+    border-radius: 3px;
+}
+#fundingForm fieldset.fundingbudgetplan select,
+#fundingForm fieldset.fundingbudgetplan input {
+    width: 100% ! important; /* fallback */
+    width: -webkit-fill-available ! important;
+}
+#fundingForm div.input.file {
+    grid-template-columns: auto;
+    gap: 0;
+    text-align: center;
+}
+#fundingForm div.input.number input {
+    text-align: right;
+}
+#fundingForm div.input textarea {
+    height: auto;
+}
+@keyframes lockAnimation {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.02);
+    }
+    100% {
+      transform: scale(1);
+    }
+}
+#fundingForm div.input.is-pending {
+    background-color: var(--is-pending);
+    color: var(--default-font-color);
+}
+#fundingForm div.input.is-missing {
+    background-color: var(--is-missing);
+    color: #fff;
+}
+#fundingForm div.input.is-verified {
+    background-color: var(--is-verified);
+    animation: lockAnimation .3s;
+    color: #fff;
+}
+#fundingForm div.input.is-rejected {
+    background-color: var(--is-rejected);
+    color: #fff;
+}
+#fundingForm div.input.is-verified input,
+#fundingForm div.input.is-verified textarea {
+    color: grey;
+}
+#fundingForm div.input label {
+    grid-column: 1;
+    grid-row: 1;
+    word-break: break-word;
+}
+#fundingForm div.input input,
+#fundingForm div.input textarea {
+    grid-column: 2;
+    grid-row: 1;
+    width: auto;
+}
+#fundingForm .input.is-missing.error input,
+#fundingForm .input.is-missing.error textarea {
+    border-color: #fff;
+}
+#fundingForm div.input .error-message {
+    grid-column: 2;
+    grid-row: 2;
+}
+#fundingForm div.input label.verified,
+#fundingForm div.input label.delete-upload {
+        grid-column: 3;
+}
+#fundingForm div.input.checkbox label,
+#fundingForm div.input label.checkbox {
+    line-height: 24px;
+}
+#fundingForm div.input input[type="checkbox"] {
+    float: left;
+}
+#fundingForm div.input .error-message {
+    margin-left: 0;
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+#fundingForm div.input.is-missing.required label::after,
+#fundingForm div.input.is-verified.required label::after,
+#fundingForm div.input.is-missing .error-message,
+#fundingForm div.input.is-verified .error-message {
+    color: #fff;
+}
+#fundingForm fieldset {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    padding: 10px;
+}
+#fundingForm fieldset legend {
+    font-weight: bold;
+    font-size: 16px;
+    color: var(--default-font-color);
+}
+#fundingForm .flexbox {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+#fundingForm .flexbox > fieldset {
+    flex: 1;
+    flex-basis: calc(50% - 40px);
+}
+#fundingForm .flexbox fieldset.full-width {
+    flex-basis: 100%;
+}
+#fundingForm .flexbox fieldset.fundingbudgetplan .fundingbudgets-total-wrapper {
+    display: flex;
+    margin: 10px 0;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+#fundingForm .flexbox fieldset.fundingbudgetplan .fundingbudgets-total-wrapper p.total {
+    font-size: 1.3em;
+}
+#fundingForm .flexbox fieldset.fundingbudgetplan .fundingbudgets-total-wrapper p {
+    width: 100%;
+    text-align: right;
+}
+#fundingForm .upload-form-field-wrapper {
+    padding: 10px;
+}
+#fundingForm .upload-form-field-wrapper .hint {
+    float: left;
+    width: 100%;
+    margin-bottom: 20px;
+}
+#fundingForm .checkbox {
+    float: none;
+    padding: 0;
+}
+#fundingForm textarea {
+    width: auto;
+}
+#fundingForm #delete-button {
+    margin-left: 10px;
+}
+body.fundings.edit .progress-wrapper {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;;
+}
+body.fundings.edit .progress-wrapper .progress-bar {
+    margin-top: 10px;
+}
+body.fundings.edit .ui-progressbar-value {
+    background-color: var(--is-verified);
+    margin: 0;
+}
+body.fundings.edit .color-codes-wrapper {
+    margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
+    width: 70%;
+}
+body.fundings.edit .color-codes-wrapper > div {
+    flex: 1;
+    padding: 10px;
+    border-radius: 3px;
+}
+body.fundings div.is-verified {
+    background-color: var(--is-verified);
+    color: #fff;
+}
+body.fundings div.is-pending {
+    background-color: var(--is-pending);
+}
+body.fundings div.is-missing {
+    background-color: var(--is-missing);
+    color: #fff;
+}
+body.fundings div.is-rejected {
+    background-color: var(--is-rejected);
+    color: #fff;
+}
+@media (max-width: 767px) {
+
+    #fundingForm fieldset:not(.fundingbudgetplan) div.input {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto auto;
+        padding-bottom: 0;
+    }
+    #fundingForm fieldset:not(.fundingbudgetplan) div.input label {
+        padding-left: 5px;
+    }
+    #fundingForm fieldset:not(.fundingbudgetplan) div.input input,
+    #fundingForm fieldset:not(.fundingbudgetplan) div.input textarea {
+        grid-column: 1 / span 3;
+        grid-row: 2;
+    }
+    #fundingForm fieldset:not(.fundingbudgetplan) div.input label.verified,
+    #fundingForm fieldset:not(.fundingbudgetplan) div.input label.delete-upload {
+        grid-column: 1 / span 3;
+        grid-row: 4;
+        justify-self: end;
+        padding-right: 5px;
+    }
+    #fundingForm fieldset:not(.fundingbudgetplan) div.input .error-message {
+        grid-column: 1 / span 3;
+        grid-row: 3;
+        padding-left: 5px;
+    }
+    body.fundings.index .workshop-wrapper > div.table {
+        flex-direction: column;
+    }
+    body.fundings.index .workshop-wrapper a.button {
+        flex: 0 0 0;
+    }
+    body.fundings.index .workshop-wrapper > div.table {
+        align-items: start;
+    }
+    #fundingForm #delete-button {
+        margin-left: 0;
+        margin-top: 10px;
+    }
+    #fundingForm fieldset.fundingbudgetplan div.row {
+        grid-template-columns: auto;
+    }
+    #fundingForm fieldset.fundingbudgetplan div.row select {
+        max-width: 100%;
+    }
+    #fundingForm .flexbox > fieldset {
+        flex-basis: 100%;
+    }
+
+}

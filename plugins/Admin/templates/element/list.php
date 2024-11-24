@@ -19,25 +19,26 @@ if (!isset($hideDeleteLink) || !$hideDeleteLink) {
 
 $hasUid = false;
 foreach($fields as $field) {
+    if (!isset($field['name'])) {
+        continue;
+    }
     if ($field['name'] == 'uid') {
         $hasUid = true;
     }
 }
 
 if ($showDeleteLink) {
-    
-    if ($hasUid) {
-        $this->element('addScript', array(
-            'script' =>
-                JS_NAMESPACE.".Admin.bindDelete('ajaxChangeAppObjectStatus');"
-        ));
-    } else {
-        $this->element('addScript', array(
-            'script' =>
-                JS_NAMESPACE.".Admin.bindDelete('ajaxDeleteObject');"
-        ));
+    if (!isset($deleteMethod)) {
+        if ($hasUid) {
+            $deleteMethod = '/admin/intern/ajaxChangeAppObjectStatus';
+        } else {
+            $deleteMethod = '/admin/intern/ajaxDeleteObject';
+        }
     }
-
+    $this->element('addScript', [
+        'script' =>
+            JS_NAMESPACE.".Admin.bindDelete('".$deleteMethod."');"
+    ]);
 }
 
 ?>
@@ -48,7 +49,7 @@ if ($showDeleteLink) {
 
         <?php
         if (! isset($heading)) {
-            $heading = ucfirst($this->request->getParam('controller'));
+            $heading = $this->request->getParam('controller');
         }
         $this->Paginator->setPaginated($objects);
         $paginatorParams = $this->Paginator->params();
@@ -102,6 +103,11 @@ if ($showDeleteLink) {
         <table class="list">
             <?php
             foreach ($fields as $field) {
+
+                if (isset($field['template'])) {
+                    echo '<th>' . $field['label'] . '</th>';
+                    continue;
+                }
 
                 // wenn das feld "label" gesetzt ist, label anzeigen und zum nächsten feld
                 $label = $field['name'];
@@ -160,13 +166,20 @@ if ($showDeleteLink) {
 
             foreach ($objects as $object) {
 
-                $rowStatusClass = 'status-online';
+                $rowStatusClasses = ['status-online'];
                 if (isset($object['status']) && $object['status'] == APP_OFF) {
-                    $rowStatusClass = ' status-offline';
+                    $rowStatusClasses = ['status-offline'];
                 }
-                echo '<tr class="' . $rowStatusClass . '">';
+                echo '<tr class="' . implode(' ', $rowStatusClasses) . '">';
 
                 foreach ($fields as $field) {
+
+                    if (isset($field['template'])) {
+                        echo '<td>';
+                        echo $this->element($field['template'], ['object' => $object]);
+                        echo '</td>';
+                        continue;
+                    }
 
                     $value = '';
                     if (isset($field['type']) && $field['type'] == 'array') {
@@ -198,13 +211,13 @@ if ($showDeleteLink) {
                                     }
                                 }
                             } else {
-                                    if (isset($splittedField[1])) {
-                                        if (!is_null($object->{$splittedField[0]})) {
-                                            $value = $object->{$splittedField[0]}[$splittedField[1]];
-                                        }
-                                    } else {
-                                        $value = $object[$splittedField[0]];
+                                if (isset($splittedField[1])) {
+                                    if (!is_null($object->{$splittedField[0]})) {
+                                        $value = $object->{$splittedField[0]}[$splittedField[1]];
                                     }
+                                } else {
+                                    $value = $object[$splittedField[0]];
+                                }
                             }
                         } else {
                             // example: entity.association.name
@@ -248,6 +261,18 @@ if ($showDeleteLink) {
                             $formattedTime = $value->i18nFormat(Configure::read('DateFormat.de.TimeShort'));
                             if ($formattedTime != '00:00') {
                                 echo $formattedTime;
+                            }
+                        }
+                        if ($field['type'] == 'linkedUrl') {
+                            if ($value) {
+                                $linkedUrl = $field['linkedUrl'];
+                                echo $this->Html->link(
+                                    $value,
+                                    $this->Html->$linkedUrl($object['id']),
+                                    [
+                                        'target' => '_blank'
+                                    ],
+                                );
                             }
                         }
                         if (in_array($field['type'], [

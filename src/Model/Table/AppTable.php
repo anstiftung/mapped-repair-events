@@ -135,13 +135,6 @@ abstract class AppTable extends Table
              */
         }
 
-        // add default protocol to field website
-        if ($this->hasField('website') && $entity->website != '') {
-            if (!preg_match('/^https?:\/\//', $entity->website)) {
-                $entity->website = 'http://'.$entity->website;
-            }
-        }
-
         $entity->updated_by = $this->loggedUserUid;
 
     }

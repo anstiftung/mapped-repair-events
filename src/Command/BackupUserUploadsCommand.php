@@ -39,16 +39,22 @@ class BackupUserUploadsCommand extends Command
             $zipFilename = $folderToSaveBackup.DS.$filePrefix.'_backup_user_uploads_'.date('Y-m-d_H-i-s').'.zip';
             $zip->open($zipFilename, \ZipArchive::CREATE);
 
-            $folderToBackup = ROOT.DS.'webroot'.DS.'files';
-            $files = new \RecursiveIteratorIterator(
-                new \RecursiveDirectoryIterator($folderToBackup),
-                \RecursiveIteratorIterator::LEAVES_ONLY
-            );
+            $foldersToBackup = [
+                ROOT . DS . 'webroot' . DS . 'files',
+                ROOT . DS . 'files_private',
+            ];
+            foreach($foldersToBackup as $folderToBackup) {
 
-            foreach ($files as $name => $file) {
-                $fileWithPath = $file->getRealPath();
-                if (!is_dir($fileWithPath) && $fileWithPath != '') {
-                    $zip->addFile($fileWithPath);
+                $files = new \RecursiveIteratorIterator(
+                    new \RecursiveDirectoryIterator($folderToBackup),
+                    \RecursiveIteratorIterator::LEAVES_ONLY
+                );
+
+                foreach ($files as $name => $file) {
+                    $fileWithPath = $file->getRealPath();
+                    if (!is_dir($fileWithPath) && $fileWithPath != '') {
+                        $zip->addFile($fileWithPath);
+                    }
                 }
             }
 

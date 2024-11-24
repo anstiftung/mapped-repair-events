@@ -13,6 +13,7 @@ table.list tr {
 }
 table.list tr:not(.subtable-container):hover {
     background-color: #efefef ! important;
+    color: var(--default-font-color) ! important;
 }
 table.list th,
 table.list td {

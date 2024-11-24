@@ -65,11 +65,11 @@ class WorkshopsPolicy implements RequestPolicyInterface
 
             $workshopUid = (int) $request->getParam('pass')[0];
 
-            // all approved orgas are alloewed to edit and add workshops
-            $this->Workshop = FactoryLocator::get('Table')->get('Workshops');
+            // all approved orgas are allowed to edit and add workshops
+            $workshopsTable = FactoryLocator::get('Table')->get('Workshops');
 
-            $workshop = $this->Workshop->getWorkshopForIsUserInOrgaTeamCheck($workshopUid);
-            if ($this->Workshop->isUserInOrgaTeam($identity, $workshop)) {
+            $workshop = $workshopsTable->getWorkshopForIsUserInOrgaTeamCheck($workshopUid);
+            if ($workshopsTable->isUserInOrgaTeam($identity, $workshop)) {
                 return true;
             }
 

@@ -3,7 +3,6 @@ namespace App\Controller\Component;
 
 use Cake\Controller\Component; // for unit tests
 use Cake\Core\Configure;
-use Cake\Utility\Text;
 
 class StringComponent extends Component
 {
@@ -18,6 +17,35 @@ class StringComponent extends Component
     {
         return preg_replace('/^([\d]+)-(.*)$/', '$2', $string);
     }
+
+    public static function cleanAllStringsInData($data)
+    {
+        foreach ($data as $key => $value) {
+            if (is_string($value)) {
+                $data[$key] = strip_tags($value);
+            }
+        }
+        return $data;
+    }
+
+    public static function removeWhitespace($string)
+    {
+        return preg_replace('/\s+/', '', $string);
+    }
+
+    public static function addProtocolToUrl($url)
+    {
+        if ($url == '') {
+            return $url;
+        }
+
+        if (!preg_match('/^https?:\/\//', $url)) {
+            $url = 'https://' . $url;
+        }
+        
+        return $url;
+    }
+
 
     /**
      * Prepares text for output on the website

@@ -5,9 +5,9 @@
 </style>
 
 <?php
-    $this->element('addScript', array('script' =>
+    $this->element('addScript', ['script' =>
         JS_NAMESPACE.".WidgetEvents.loadEventsForWorkshop(".$workshopUid.", ".$num.");"
-));
+]);
 ?>
 
 <div id="wrapper">

@@ -1,10 +1,10 @@
 <?php
 use Cake\Core\Configure;
-  $this->element('addScript', array('script' =>
+  $this->element('addScript', ['script' =>
     JS_NAMESPACE.".Helper.doCurrentlyUpdatedActions(".$isCurrentlyUpdated.");".
     JS_NAMESPACE.".Helper.bindCancelButton(".$uid.");".
     JS_NAMESPACE.".Helper.layoutEditButtons();
-  "));
+  "]);
   echo $this->element('highlightNavi', ['main' => 'Seiten']);
 ?>
 

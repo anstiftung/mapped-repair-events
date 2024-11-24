@@ -44,7 +44,7 @@ if (Configure::read('AppConfig.statisticsEnabled')) {
                 <a class="toggle-link heading <?php echo join(' ', $workshopRowClass); ?>" href="javascript:void(0);">
                     <?php
                         $workshopToggleLinkLabel = $workshop->name;
-                        $workshopToggleLinkLabelAdditionalInfos = [count($workshop->events) . ' Termin' . (count($workshop->events) == 1 ? '' : 'e')];
+                        $workshopToggleLinkLabelAdditionalInfos = [$this->Number->precision(count($workshop->events), 0) . ' Termin' . (count($workshop->events) == 1 ? '' : 'e')];
                         if (Configure::read('AppConfig.statisticsEnabled')) {
                             $workshopToggleLinkLabelAdditionalInfos[] = $this->Number->precision($workshop->infoSheetCount, 0) . ' Laufzettel';
                         }

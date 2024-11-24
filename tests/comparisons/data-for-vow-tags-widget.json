@@ -14,7 +14,7 @@
             "website": null,
             "image": "{{serverName}}\/files\/uploadify\/workshops\/thumbs-100\/rclogo-100.jpg",
             "country": {
-                "name_de": ""
+                "name_de": "Deutschland"
             },
             "categories": [
                 "{{serverName}}\/img\/icons-skills\/drei-d-reparatur.png"

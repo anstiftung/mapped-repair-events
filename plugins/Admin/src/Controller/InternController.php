@@ -17,6 +17,7 @@ use App\Model\Table\WorkshopsTable;
 use App\Model\Table\EventsTable;
 use App\Model\Table\KnowledgesTable;
 use Cake\View\JsonView;
+use App\Model\Table\FundingsTable;
 
 class InternController extends AdminAppController
 {
@@ -28,6 +29,7 @@ class InternController extends AdminAppController
     public PostsTable $Post;
     public UsersTable $User;
     public WorkshopsTable $Workshop;
+    public FundingsTable $Funding;
 
     public function beforeFilter(EventInterface $event)
     {
@@ -368,6 +370,21 @@ class InternController extends AdminAppController
 
     }
 
+    public function ajaxDeleteFunding()
+    {
+        $this->request = $this->request->withParam('_ext', 'json');
+        
+        $uid = $this->request->getData('id');
+        $fundingsTable = $this->getTableLocator()->get('Fundings');
+        $fundingsTable->deleteCustom($uid);
+
+        $this->set([
+            'status' => 0,
+            'msg' => 'Erfolgreich gelöscht',
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['status', 'msg']);
+
+    }    
     public function ajaxChangeAppObjectStatus()
     {
         $this->request = $this->request->withParam('_ext', 'json');

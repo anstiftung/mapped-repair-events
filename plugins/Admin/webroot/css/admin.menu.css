@@ -24,7 +24,7 @@
 }
 
 #navadmin li a {
-    color: #333;
+    color: var(--default-font-color);
     display: block;
 }
 
@@ -64,13 +64,12 @@
 }
 
 #navadmin>ul>li>a {
-    padding: 10px 1px;
+    padding: 10px 0;
     display: block;
-    width: 74px;
+    width: 70px;
     font-size: 13px;
     text-align: center;
     font-weight: normal;
-    word-break: break-all;
 }
 #navadmin>ul>li>a.two-lines {
     padding-top: 9px;

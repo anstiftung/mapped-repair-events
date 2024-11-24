@@ -18,9 +18,9 @@ if (isset($checkOriginalStatus) && $checkOriginalStatus && $data->uid) {
 
 if ($this->Html->isUrlEditable($objectForEditableCheck)) {
     $entityNameForJquerySelector = strtolower(Inflector::camelize($type));
-    $this->element('addScript', array('script' => "
+    $this->element('addScript', ['script' => "
         $('#" . $entityNameForJquerySelector . "-url').slugify('#" . $entityNameForJquerySelector . "-name');"
-    ));
+    ]);
 }
 
 $htmlAttributes = array(
@@ -31,9 +31,9 @@ if (!$this->Html->isUrlEditable($objectForEditableCheck)) {
 }
 
 if (isset($hidden) && $hidden) {
-    $this->element('addScript', array('script' =>
+    $this->element('addScript', ['script' =>
         JS_NAMESPACE.".Helper.bindSlugToggle();"
-    ));
+    ]);
     echo '<div class="formfield-wrapper url-edit-field-wrapper">';
 
     $display = 'none';

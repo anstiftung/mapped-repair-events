@@ -12,6 +12,7 @@ use Cake\Utility\Inflector;
 use Cake\I18n\DateTime;
 use App\Model\Table\PagesTable;
 use App\Services\GeoService;
+use App\Model\Table\WorkshopsTable;
 
 class AppController extends Controller
 {
@@ -20,6 +21,7 @@ class AppController extends Controller
     public $loggedUser = null;
     public $connection;
     public RootsTable $Root;
+    public WorkshopsTable $Workshop;
     public $pluralizedModelName;
     public $Common;
     public $String;
@@ -31,6 +33,7 @@ class AppController extends Controller
         parent::__construct($request, $response);
         $this->connection = ConnectionManager::get('default');
         $this->Root = $this->getTableLocator()->get('Roots');
+        $this->Workshop = $this->getTableLocator()->get('Workshops');
         $this->modelName = Inflector::classify($this->name);
         $this->pluralizedModelName = Inflector::pluralize($this->modelName);
         $this->geoService = new GeoService();
