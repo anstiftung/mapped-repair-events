@@ -109,7 +109,7 @@ return [
         'notificationMailAddress' => 'office@example.com',
         'statisticsEnabled' => true,
         'mapWidgetEnabled' => true,
-        'fundingsEnabled' => true,
+        'fundingsEnabled' => date('Y-m-d') >= '2024-12-01',
         'fundingsStartDate' => '2024-12-01',
         'activeUsersFrontendEnabled' => true,
         'tagsFrontendEnabled' => true,
