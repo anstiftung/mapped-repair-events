@@ -3,6 +3,7 @@ namespace Admin\Controller;
 
 use Cake\Http\Exception\NotFoundException;
 use Cake\Event\EventInterface;
+use App\Mailer\AppMailer;
 
 class FundingsController extends AdminAppController
 {
@@ -65,6 +66,7 @@ class FundingsController extends AdminAppController
             $associtions =  ['associated' => ['FundinguploadsActivityProofs', 'FundinguploadsFreistellungsbescheids']];
             $patchedEntity = $fundingsTable->patchEntity($funding, $this->request->getData(), $associtions);
             if (!($patchedEntity->hasErrors())) {
+                $this->sendEmails($patchedEntity);
                 $fundingsTable->save($patchedEntity, $associtions);
                 $this->redirect($this->getReferer());
             } else {
@@ -73,6 +75,29 @@ class FundingsController extends AdminAppController
         }
 
         $this->set('funding', $funding);
+    }
+
+    private function sendEmails($funding) {
+        $email = new AppMailer();
+        if ($funding->isDirty('freistellungsbescheid_status')) {
+            $email->viewBuilder()->setTemplate('fundings/freistellungsbescheid_status_changed');
+            $email->setSubject('Der Status deines Freistellungsbescheides wurde geändert')
+            ->setViewVars([
+                'funding' => $funding,
+                'data' => $funding->owner_user,
+            ]);
+            $email->addToQueue();
+        }
+
+        if ($funding->isDirty('activity_proof_status')) {
+            $email->viewBuilder()->setTemplate('fundings/activity_proof_status_changed');
+            $email->setSubject('Der Status deines Aktivitätsnachweises wurde geändert')
+            ->setViewVars([
+                'funding' => $funding,
+                'data' => $funding->owner_user,
+            ]);
+            $email->addToQueue();
+        }
     }
 
     public function index()
