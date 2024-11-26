@@ -31,16 +31,19 @@ if ($validationMessage != '') {
         echo '<p>' . $validationMessage . '</p>';
     echo '</div>';
 }
-echo $this->Form->control('Fundings.files_fundinguploads_' . $uploadType . '[]', [
-    'type' => 'file',
-    'multiple' => $multiple,
-    'label' => '',
-    'accept' => '.jpg, .png, .pdf, .jpeg', 
-]);
 
-echo '<div class="upload-button-wrapper">';
-    echo $this->Form->button('Dateien hochladen', [
-        'type' => 'submit',
-        'class' => 'upload-button rounded',
+echo '<div class="upload-form-wrapper">';
+    echo $this->Form->control('Fundings.files_fundinguploads_' . $uploadType . '[]', [
+        'type' => 'file',
+        'multiple' => $multiple,
+        'label' => '',
+        'accept' => '.jpg, .png, .pdf, .jpeg', 
     ]);
+
+    echo '<div class="upload-button-wrapper">';
+        echo $this->Form->button('Dateien hochladen', [
+            'type' => 'submit',
+            'class' => 'upload-button rounded',
+        ]);
+    echo '</div>';
 echo '</div>';

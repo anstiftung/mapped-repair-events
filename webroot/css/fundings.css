@@ -61,12 +61,15 @@ body.fundings .verification-wrapper p.comment {
     border: 1px solid #fff;
     border-radius: 3px;
 }
+#fundingForm .upload-form-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 10px;
+}
 body.fundings .upload-button-wrapper {
     display: flex;
     justify-content: flex-end;
-}
-body.fundings button.upload-button {
-    margin-top: 10px;
 }
 body.fundings.edit div.admin.edit {
     padding: 20px;
@@ -272,6 +275,9 @@ body.fundings div.is-rejected {
 }
 @media (max-width: 767px) {
 
+    #fundingForm fieldset:not(.fundingbudgetplan) div.input:not(.file) {
+        padding-left: 5px;
+    }
     #fundingForm fieldset:not(.fundingbudgetplan) div.input {
         grid-template-columns: 1fr;
         grid-template-rows: auto auto auto auto;
@@ -318,6 +324,9 @@ body.fundings div.is-rejected {
     }
     #fundingForm .flexbox > fieldset {
         flex-basis: 100%;
+    }
+    #fundingForm .upload-form-wrapper {
+        grid-template-columns: 1fr;
     }
 
 }
