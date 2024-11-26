@@ -269,6 +269,9 @@ body.fundings div.is-rejected {
     background-color: var(--is-rejected);
     color: #fff;
 }
+body.fundings a.funding-delete-button {
+    color: red ! important;
+}
 @media (max-width: 767px) {
 
     #fundingForm fieldset:not(.fundingbudgetplan) div.input:not(.file) {
@@ -324,7 +327,6 @@ body.fundings div.is-rejected {
     #fundingForm .upload-form-wrapper {
         grid-template-columns: 1fr;
     }
-
 }
 
 body.fundings.index .admin tr.is-verified {

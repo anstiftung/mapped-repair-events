@@ -30,6 +30,9 @@ echo '<div class="workshop-wrapper">';
             echo $this->element('funding/orgaTeam', ['orgaTeam' => $workshop->orga_team]);
             echo $this->element('funding/activityProof', ['workshop' => $workshop]);
             echo $this->element('funding/freistellungsbescheid', ['workshop' => $workshop]);
+            if ($workshop->funding_exists) {
+                echo $this->element('funding/delete', ['funding' => $workshop->workshop_funding]);
+            }
         echo '</div>';
 
     echo '</div>';

@@ -2,7 +2,6 @@
 
 $this->element('addScript', ['script' =>
     JS_NAMESPACE.".Helper.bindCancelButton();".
-    JS_NAMESPACE.".Funding.bindDeleteButton(".$funding->uid.");".
     JS_NAMESPACE.".Funding.initIsMissing();".
     JS_NAMESPACE.".Funding.initTextareaCounter();".
     JS_NAMESPACE.".Funding.initIsVerified('".json_encode($funding->verified_fields)."');".
@@ -50,15 +49,8 @@ echo $this->element('jqueryTabsWithoutAjax', [
 
                 echo $this->element('funding/blocks/blockProgressBar', ['funding' => $funding]);
 
-                $deleteButton = $this->Form->button('Förderantrag löschen', [
-                    'type' => 'button',
-                    'id' => 'delete-button',
-                    'class' => 'rounded red',
-                ]);
-
                 echo $this->element('cancelAndSaveButton', [
                     'saveLabel' => 'Förderantrag zwischenspeichern',
-                    'additionalButton' => $deleteButton,
                 ]);
 
             echo $this->Form->end();
