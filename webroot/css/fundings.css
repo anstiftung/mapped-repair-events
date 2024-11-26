@@ -70,7 +70,7 @@ body.fundings .upload-button-wrapper {
 body.fundings.edit div.admin.edit {
     padding: 20px;
 }
-#fundingForm fieldset:not(.fundingbudgetplan) div.input:not(.file) {
+#fundingForm fieldset:not(.fundingbudgetplan) div.input:not(.file):not(.checkbox) {
     display: grid;
     grid-template-columns: 165px auto 100px;
     grid-template-rows: auto auto;
@@ -159,8 +159,14 @@ body.fundings.edit div.admin.edit {
 #fundingForm div.input label.delete-upload {
         grid-column: 3;
 }
+#fundingForm div.input.checkbox label {
+    margin-left: 5px;
+}
 #fundingForm div.input.checkbox label,
 #fundingForm div.input label.checkbox {
+    line-height: 27px;
+}
+#fundingForm div.input label.checkbox.verified {
     line-height: 24px;
 }
 #fundingForm div.input input[type="checkbox"] {
@@ -224,6 +230,9 @@ body.fundings.edit div.admin.edit {
 #fundingForm .checkbox {
     float: none;
     padding: 0;
+}
+#fundingForm .checkbox:not(.verified) {
+    margin-bottom: 5px;
 }
 #fundingForm textarea {
     width: auto;

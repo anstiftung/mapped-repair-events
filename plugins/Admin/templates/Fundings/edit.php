@@ -58,6 +58,7 @@ $this->element('addScript', ['script' =>
         echo $this->element('funding/blocks/blockFundingsupporterUser', ['funding' => $funding, 'disabled' => true]);
         echo $this->element('funding/blocks/blockFundingsupporterBank', ['funding' => $funding, 'disabled' => true]);
         echo $this->element('funding/blocks/blockDescription', ['funding' => $funding, 'disabled' => true]);
+        echo $this->element('funding/blocks/blockCheckboxes', ['funding' => $funding, 'disabled' => true]);
 
         //TODO budgetplans
 

@@ -45,6 +45,7 @@ echo $this->element('jqueryTabsWithoutAjax', [
                     echo $this->element('funding/blocks/blockFundingsupporterBank', ['funding' => $funding, 'disabled' => false]);
                     echo $this->element('funding/blocks/blockDescription', ['funding' => $funding, 'disabled' => false]);
                     echo $this->element('funding/blocks/blockBudgetplan', ['funding' => $funding]);
+                    echo $this->element('funding/blocks/blockCheckboxes', ['funding' => $funding, 'disabled' => false]);
                 echo '</div>';
 
                 echo $this->element('funding/blocks/blockProgressBar', ['funding' => $funding]);

@@ -106,7 +106,7 @@ MappedRepairEvents.Funding = {
 
         const parsedIsVerifiedData = JSON.parse(isVerifiedData);
 
-        $('#fundingForm .input:not(.is-missing)').find('input[type="text"]:not(.no-verify), input[type="checkbox"]:not(.is-upload), input[type="email"],  input[type="tel"], textarea:not(.no-verify)').each(function() {
+        $('#fundingForm .input:not(.is-missing)').find('input[type="text"]:not(.no-verify), input[type="checkbox"]:not(.is-upload):not(.no-verify), input[type="email"],  input[type="tel"], textarea:not(.no-verify)').each(function() {
 
             const fieldName = $(this).attr('id');
             const checked = parsedIsVerifiedData === null ? false : parsedIsVerifiedData.includes(fieldName);

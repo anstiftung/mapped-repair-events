@@ -14,6 +14,8 @@ class Funding extends Entity
     const STATUS_BUDGETPLAN_DATA_MISSING = 40;
     const STATUS_DATA_OK = 50;
     const STATUS_DESCRIPTION_MISSING = 60;
+    const STATUS_CHECKBOXES_MISSING = 70;
+    const STATUS_CHECKBOXES_OK = 80;
 
     const MAX_FUNDING_SUM = 3000;
 
@@ -27,6 +29,8 @@ class Funding extends Entity
         self::STATUS_BUDGETPLAN_DATA_MISSING => 'Du musst mindestens eine investive Maßnahme hinzufügen',
         self::STATUS_DATA_OK => 'Die eingegebenen Daten sind ok',
         self::STATUS_DESCRIPTION_MISSING => 'Die Beschreibung ist nicht vollständig',
+        self::STATUS_CHECKBOXES_MISSING => 'Bitte bestätige alle Checkboxen',
+        self::STATUS_CHECKBOXES_OK => 'Alle Checkboxen bestätigt',
     ];
 
     const FIELDS_WORKSHOP = [
@@ -83,6 +87,13 @@ class Funding extends Entity
         ['name' => 'amount', 'options' => ['label' => false, 'placeholder' => 'Kosten in € ', 'type' => 'number', 'step' => '0.01']],
     ];
 
+    const FIELDS_FUNDING_DATA_CHECKBOXES = [
+        ['name' => 'checkbox_a', 'options' => ['type' => 'checkbox', 'class' => 'no-verify', 'label' => 'Mit der zu bewilligenden Maßnahme wurde noch nicht begonnen und wird auch nicht vor Erhalt des Bewilligungsbescheides begonnen.']],
+        ['name' => 'checkbox_b', 'options' => ['type' => 'checkbox', 'class' => 'no-verify', 'label' => 'Die in diesem Antrag gemachten Angaben (einschließlich Anlagen) sind vollständig und richtig.']],
+        ['name' => 'checkbox_c', 'options' => ['type' => 'checkbox', 'class' => 'no-verify', 'label' => 'Mit der Einreichung bestätige ich die zugrundeliegende Förderrichtlinie zur Kenntnis genommen, verstanden und vollumfänglich akzeptiert zu haben.']],
+        ['name' => 'checkbox_d', 'options' => ['type' => 'checkbox', 'class' => 'no-verify', 'label' => 'Mit der Einreichung stimme ich der Speicherung und Verarbeitung personenbezogener Daten, die zur Förderabwicklung und -Auswertung zu.']],
+    ];
+
     public static function getRenderedFields($fields, $entityString, $form, $disabled, $entity = null) {
         $renderedFields = '';
         $fieldsToBeFormattedWithToDigits = ['amount'];
@@ -117,6 +128,34 @@ class Funding extends Entity
             }
         }
         return self::STATUS_BUDGETPLAN_DATA_MISSING;
+    }
+
+    public function _getCheckboxesStatus() {
+        $checkboxes = array_map(function($checkbox) {
+            return $checkbox['name'];
+        }, self::FIELDS_FUNDING_DATA_CHECKBOXES);
+
+        foreach($checkboxes as $checkbox) {
+            if (!$this->fundingdata->$checkbox) {
+                return self::STATUS_CHECKBOXES_MISSING;
+            }
+        }
+        return self::STATUS_CHECKBOXES_OK;
+
+    }
+
+    public function _getCheckboxesStatusCssClass() {
+        if ($this->checkboxes_status == self::STATUS_CHECKBOXES_MISSING) {
+            return 'is-pending';
+        }
+        if ($this->checkboxes_status == self::STATUS_CHECKBOXES_OK) {
+            return 'is-verified';
+        }
+        return '';
+    }
+
+    public function _getCheckboxesStatusHumanReadable() {
+        return self::STATUS_MAPPING[$this->checkboxes_status];
     }
 
     public function _getBudgetplanStatusCssClass() {
@@ -202,6 +241,7 @@ class Funding extends Entity
               + count(self::FIELDS_FUNDINGSUPPORTER_USER)
               + count(self::FIELDS_FUNDINGSUPPORTER_BANK)
               + count(self::FIELDS_FUNDINGDATA_DESCRIPTION)
+              + count(self::FIELDS_FUNDING_DATA_CHECKBOXES)
               + 1 // fundingbudgetplan
               ;
     }
