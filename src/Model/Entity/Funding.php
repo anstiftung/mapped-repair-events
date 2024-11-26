@@ -241,8 +241,8 @@ class Funding extends Entity
               + count(self::FIELDS_FUNDINGSUPPORTER_USER)
               + count(self::FIELDS_FUNDINGSUPPORTER_BANK)
               + count(self::FIELDS_FUNDINGDATA_DESCRIPTION)
-              + 1 // checkboxes count as 1
               + 1 // fundingbudgetplan
+              + 1 // checkboxes count as 1
               ;
     }
 
@@ -261,6 +261,10 @@ class Funding extends Entity
             $count++;
         }
 
+        if ($this->checkboxes_status == self::STATUS_CHECKBOXES_OK) {
+            $count++;
+        }
+
         return $count;
     }
 
@@ -273,10 +277,6 @@ class Funding extends Entity
         }
 
         if ($this->freistellungsbescheid_status == self::STATUS_VERIFIED_BY_ADMIN) {
-            $count++;
-        }
-
-        if ($this->checkboxes_status == self::STATUS_CHECKBOXES_OK) {
             $count++;
         }
 
@@ -305,7 +305,7 @@ class Funding extends Entity
         return $this->user_fields_verified_count + $this->admin_fields_verified_count;
     }
 
-    public function _getAllUserFieldsVerifiedCount(): int {
+    public function _getUserFieldsVerified(): int {
         return $this->user_fields_verified_count == $this->user_fields_count;
     }
 
