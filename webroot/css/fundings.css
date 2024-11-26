@@ -345,8 +345,10 @@ body.fundings.index .admin tr.is-verified {
 body.fundings.edit .admin #fundingForm fieldset:not(.fundingbudgetplan) div.input:not(.file) {
     grid-template-columns: 185px auto;
 }
-
 body.fundings.edit div.admin.edit #cancel-button {
     clear: none;
     margin-right: 10px;
+}
+body.fundings.edit div.admin.edit #fundingForm fieldset:not(.fundingbudgetplan) div.input:not(.file):not(.checkbox) {
+    padding: 0;
 }
