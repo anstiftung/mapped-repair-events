@@ -83,7 +83,7 @@ class Funding extends Entity
         ['name' => 'amount', 'options' => ['label' => false, 'placeholder' => 'Kosten in € ', 'type' => 'number', 'step' => '0.01']],
     ];
 
-    public static function getRenderedFields($fields, $entityString, $form, $entity = null) {
+    public static function getRenderedFields($fields, $entityString, $form, $disabled, $entity = null) {
         $renderedFields = '';
         $fieldsToBeFormattedWithToDigits = ['amount'];
         foreach($fields as $field) {
@@ -93,6 +93,7 @@ class Funding extends Entity
                     $field['options']['value'] = number_format($value, 2, '.', '');
                 }
             }
+            $field['options']['disabled'] = $disabled;
             $preparedEntityString = 'Fundings.' . $entityString . '.' . $field['name'];
             $renderedFields .= $form->control($preparedEntityString, $field['options']);
         }

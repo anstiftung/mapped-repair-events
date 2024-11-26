@@ -7,7 +7,7 @@ echo $this->element('list',
         'deleteMethod' => '/admin/intern/ajaxDeleteFunding',
         'fields' => [
             ['name' => 'uid', 'label' => 'UID'],
-            ['name' => 'workshop.name', 'label' => 'Initiative'],
+            ['name' => 'workshop.name', 'label' => 'Initiative', 'sortable' => false],
             ['label' => 'AN', 'template' => 'list/fundings/activityProof'],
             ['label' => 'FB', 'template' => 'list/fundings/freistellungsbescheid'],
             ['label' => 'bestätigte Felder', 'template' => 'list/fundings/verifiedFields'],

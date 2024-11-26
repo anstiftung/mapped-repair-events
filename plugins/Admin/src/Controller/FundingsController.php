@@ -36,6 +36,10 @@ class FundingsController extends AdminAppController
         ],
         contain: [
             'Workshops',
+            'OwnerUsers',
+            'Fundingdatas',
+            'Fundingbudgetplans',
+            'Fundingsupporters',
             'FundinguploadsActivityProofs' => function($q) {
                 return $q->order(['FundinguploadsActivityProofs.created' => 'DESC']);
             },
@@ -43,6 +47,10 @@ class FundingsController extends AdminAppController
                 return $q->order(['FundinguploadsFreistellungsbescheids.created' => 'DESC']);
             },
         ])->first();
+
+        if ($funding->owner_user) {
+            $funding->owner_user->revertPrivatizeData();
+        }
 
         if (empty($funding)) {
             throw new NotFoundException;
@@ -83,8 +91,12 @@ class FundingsController extends AdminAppController
             'Fundingbudgetplans',
         ]);
 
+        // TODO Sorting not yet working
         $objects = $this->paginate($query, [
             'sortableFields' => [
+                'Fundings.uid',
+                'Fundings.created',
+                'Fundings.modified',
                 'Workshops.name',
             ],
             'order' => [

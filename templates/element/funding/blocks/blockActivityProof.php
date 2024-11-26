@@ -12,12 +12,7 @@ echo '<fieldset>';
 
     echo '<legend>Aktivitätsnachweis</legend>';
 
-    echo '<div class="verification-wrapper ' . $funding->activity_proof_status_css_class . '">';
-        echo '<p>' . $funding->activity_proof_status_human_readable . '</p>';
-            if ($funding->activity_proof_comment != '') {
-                echo '<p class="comment">' . h($funding->activity_proof_comment) . '</p>';
-            }
-    echo '</div>';
+    echo $this->element('funding/status/activityProofStatus', ['funding' => $funding]);
 
     $formattedFundingStartDate = date('d.m.Y', strtotime(Configure::read('AppConfig.fundingsStartDate')));
     echo '<div style="margin-bottom:10px;padding:10px;">';

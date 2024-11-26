@@ -39,12 +39,12 @@ echo $this->element('jqueryTabsWithoutAjax', [
                 echo '<div class="flexbox">';
                     echo $this->element('funding/blocks/blockActivityProof', ['funding' => $funding]);
                     echo $this->element('funding/blocks/blockFreistellungsbescheid', ['funding' => $funding]);
-                    echo $this->element('funding/blocks/blockWorkshop', ['funding' => $funding]);
-                    echo $this->element('funding/blocks/blockOwnerUser', ['funding' => $funding]);
-                    echo $this->element('funding/blocks/blockFundingsupporterOrganziation', ['funding' => $funding]);
-                    echo $this->element('funding/blocks/blockFundingsupporterUser', ['funding' => $funding]);
-                    echo $this->element('funding/blocks/blockFundingsupporterBank', ['funding' => $funding]);
-                    echo $this->element('funding/blocks/blockDescription', ['funding' => $funding]);
+                    echo $this->element('funding/blocks/blockWorkshop', ['funding' => $funding, 'disabled' => false]);
+                    echo $this->element('funding/blocks/blockOwnerUser', ['funding' => $funding, 'disabled' => false]);
+                    echo $this->element('funding/blocks/blockFundingsupporterOrganziation', ['funding' => $funding, 'disabled' => false]);
+                    echo $this->element('funding/blocks/blockFundingsupporterUser', ['funding' => $funding, 'disabled' => false]);
+                    echo $this->element('funding/blocks/blockFundingsupporterBank', ['funding' => $funding, 'disabled' => false]);
+                    echo $this->element('funding/blocks/blockDescription', ['funding' => $funding, 'disabled' => false]);
                     echo $this->element('funding/blocks/blockBudgetplan', ['funding' => $funding]);
                 echo '</div>';
 

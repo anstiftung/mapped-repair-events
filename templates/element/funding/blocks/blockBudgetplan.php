@@ -20,7 +20,7 @@ echo '<fieldset class="fundingbudgetplan full-width">';
     echo '<div class="row-wrapper">';
         foreach($shownFundingbudgetplans as $fundingbudgetplanIndex => $fundingbudgetplan) {
             echo '<div class="row">';
-                echo Funding::getRenderedFields(Funding::FIELDS_FUNDINGBUDGETPLAN, 'fundingbudgetplans.'.$fundingbudgetplanIndex, $this->Form, $fundingbudgetplan);
+                echo Funding::getRenderedFields(Funding::FIELDS_FUNDINGBUDGETPLAN, 'fundingbudgetplans.'.$fundingbudgetplanIndex, $this->Form, false, $fundingbudgetplan);
             echo '</div>';
         }
     echo '</div>';
@@ -36,7 +36,7 @@ echo '<fieldset class="fundingbudgetplan full-width">';
     echo '<div class="row-wrapper" style="display:none;">';
         foreach($hiddenFundingbudgetplans as $fundingbudgetplanIndex => $fundingbudgetplan) {
             echo '<div class="row">';
-                echo Funding::getRenderedFields(Funding::FIELDS_FUNDINGBUDGETPLAN, 'fundingbudgetplans.'.$fundingbudgetplanIndex, $this->Form, $fundingbudgetplan);
+                echo Funding::getRenderedFields(Funding::FIELDS_FUNDINGBUDGETPLAN, 'fundingbudgetplans.'.$fundingbudgetplanIndex, $this->Form, false, $fundingbudgetplan);
             echo '</div>';
         }
     echo '</div>';
