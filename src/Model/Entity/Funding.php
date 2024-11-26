@@ -241,7 +241,7 @@ class Funding extends Entity
               + count(self::FIELDS_FUNDINGSUPPORTER_USER)
               + count(self::FIELDS_FUNDINGSUPPORTER_BANK)
               + count(self::FIELDS_FUNDINGDATA_DESCRIPTION)
-              + count(self::FIELDS_FUNDING_DATA_CHECKBOXES)
+              + 1 // checkboxes count as 1
               + 1 // fundingbudgetplan
               ;
     }
