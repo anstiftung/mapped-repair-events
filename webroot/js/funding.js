@@ -14,6 +14,7 @@ MappedRepairEvents.Funding = {
             const currentLength = $(this).val().length;
             const counter = $('<span>', {
                 class: 'counter',
+                style: 'width:75px;',
                 text: `${currentLength} / ${maxLength}`
             });
 
