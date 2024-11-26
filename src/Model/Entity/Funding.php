@@ -205,34 +205,67 @@ class Funding extends Entity
               ;
     }
 
-    public function _getVerifiedFieldsCount(): int {
-        $result = 0;
+    public function _getUserFieldsVerifiedCount(): int {
+        $count = 0;
 
         if ($this->verified_fields !== null) {
-            $result = count($this->verified_fields);
-        }
-
-        if ($this->workshop->funding_activity_proof_required && $this->activity_proof_status == self::STATUS_VERIFIED) {
-            $result++;
-        }
-
-        if ($this->freistellungsbescheid_status == self::STATUS_VERIFIED) {
-            $result++;
+            $count = count($this->verified_fields);
         }
 
         if ($this->description_status == self::STATUS_DATA_OK) {
-            $result++;
+            $count++;
         }
 
         if ($this->budgetplan_status == self::STATUS_DATA_OK) {
-            $result++;
+            $count++;
         }
 
-        return $result;
+        return $count;
     }
 
-    public function _getAllFieldsVerified(): bool {
-        return $this->verified_fields_count == $this->required_fields_count;
+    public function _getAdminFieldsVerifiedCount(): int {
+        
+        $count = 0;
+
+        if ($this->workshop->funding_activity_proof_required && $this->activity_proof_status == self::STATUS_VERIFIED) {
+            $count++;
+        }
+
+        if ($this->freistellungsbescheid_status == self::STATUS_VERIFIED) {
+            $count++;
+        }
+
+        return $count;
+    }
+
+    public function _getUserFieldsCount(): int {
+        return self::getFieldsCount();
+    }
+
+    public function _getAdminFieldsCount(): int {
+        $count = 0;
+        if ($this->workshop->funding_activity_proof_required) {
+            $count++;
+        };
+        $count++; // freistellungsbescheid
+        return $count;
+
+    }
+
+    public function _getAllFieldsCount(): int {
+        return $this->user_fields_count + $this->admin_fields_count;
+    }
+
+    public function _getAllFieldsVerifiedCount(): int {
+        return $this->user_fields_verified_count + $this->admin_fields_verified_count;
+    }
+
+    public function _getAllUserFieldsVerifiedCount(): int {
+        return $this->user_fields_verified_count == $this->user_fields_count;
+    }
+
+    public function _getFundingSubmittable(): bool {
+        return $this->all_fields_verified_count == $this->all_fields_count;
     }
 
     public function _getActivityProofsCount(): int {
@@ -241,15 +274,6 @@ class Funding extends Entity
 
     public function _getFreistellungsbescheidsCount(): int {
         return count($this->fundinguploads_freistellungsbescheids);
-    }
-
-    public function _getRequiredFieldsCount(): int {
-        $result = self::getFieldsCount();
-        if ($this->workshop->funding_activity_proof_required) {
-            $result++;
-        };
-        $result++; // freistellungsbescheid
-        return $result;
     }
 
 }

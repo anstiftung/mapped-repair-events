@@ -6,7 +6,7 @@ $this->element('addScript', ['script' =>
     JS_NAMESPACE.".Funding.initIsMissing();".
     JS_NAMESPACE.".Funding.initTextareaCounter();".
     JS_NAMESPACE.".Funding.initIsVerified('".json_encode($funding->verified_fields)."');".
-    JS_NAMESPACE.".Funding.updateProgressBar(" . $funding->verified_fields_count . ",  ".$funding->required_fields_count.");"
+    JS_NAMESPACE.".Funding.updateProgressBar(" . $funding->all_fields_verified_count . ", ".$funding->all_fields_count.");"
 ]);
 echo $this->element('jqueryTabsWithoutAjax', [
     'links' => $this->Html->getUserBackendNaviLinks($loggedUser->uid, true, $loggedUser->isOrga()),
