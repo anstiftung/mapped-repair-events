@@ -39,8 +39,8 @@ echo $this->element('jqueryTabsWithoutAjax', [
                 echo '<div class="flexbox">';
                     echo $this->element('funding/blocks/blockActivityProof', ['funding' => $funding]);
                     echo $this->element('funding/blocks/blockFreistellungsbescheid', ['funding' => $funding]);
-                    echo $this->element('funding/blocks/blockOwnerUser', ['funding' => $funding]);
                     echo $this->element('funding/blocks/blockWorkshop', ['funding' => $funding]);
+                    echo $this->element('funding/blocks/blockOwnerUser', ['funding' => $funding]);
                     echo $this->element('funding/blocks/blockFundingsupporterOrganziation', ['funding' => $funding]);
                     echo $this->element('funding/blocks/blockFundingsupporterUser', ['funding' => $funding]);
                     echo $this->element('funding/blocks/blockFundingsupporterBank', ['funding' => $funding]);
