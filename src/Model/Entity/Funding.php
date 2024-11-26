@@ -276,6 +276,10 @@ class Funding extends Entity
             $count++;
         }
 
+        if ($this->checkboxes_status == self::STATUS_CHECKBOXES_OK) {
+            $count++;
+        }
+
         return $count;
     }
 
