@@ -4,7 +4,7 @@
     font-weight: 400;
     width: 80%;
     margin-top: 7px;
-    margin-left: 25px;
+    margin-left: 15px;
 }
 
 #login-box {
@@ -52,13 +52,13 @@
 
 #navadmin>ul>li {
     margin-right: 2px;
-    margin-top: 5px;
+    margin-top: 10px;
     display: block;
     float: left;
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 40px;
+    height: 35px;
     background-color: #efefef;
     border-radius: 5px;
 }
@@ -66,8 +66,8 @@
 #navadmin>ul>li>a {
     padding: 10px 0;
     display: block;
-    width: 70px;
-    font-size: 13px;
+    width: 65px;
+    font-size: 12px;
     text-align: center;
     font-weight: normal;
 }
