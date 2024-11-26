@@ -82,6 +82,7 @@ class FundingsController extends AdminAppController
         if ($funding->isDirty('freistellungsbescheid_status')) {
             $email->viewBuilder()->setTemplate('fundings/freistellungsbescheid_status_changed');
             $email->setSubject('Der Status deines Freistellungsbescheides wurde geändert')
+            ->setTo($funding->owner_user->email)
             ->setViewVars([
                 'funding' => $funding,
                 'data' => $funding->owner_user,
@@ -92,6 +93,7 @@ class FundingsController extends AdminAppController
         if ($funding->isDirty('activity_proof_status')) {
             $email->viewBuilder()->setTemplate('fundings/activity_proof_status_changed');
             $email->setSubject('Der Status deines Aktivitätsnachweises wurde geändert')
+            ->setTo($funding->owner_user->email)
             ->setViewVars([
                 'funding' => $funding,
                 'data' => $funding->owner_user,
