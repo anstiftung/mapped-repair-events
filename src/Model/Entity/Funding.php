@@ -9,8 +9,8 @@ class Funding extends Entity
 {
 
     const STATUS_PENDING = 10;
-    const STATUS_VERIFIED = 20;
-    const STATUS_REJECTED = 30;
+    const STATUS_VERIFIED_BY_ADMIN = 20;
+    const STATUS_REJECTED_BY_ADMIN = 30;
     const STATUS_BUDGETPLAN_DATA_MISSING = 40;
     const STATUS_DATA_OK = 50;
     const STATUS_DESCRIPTION_MISSING = 60;
@@ -21,8 +21,8 @@ class Funding extends Entity
 
     const STATUS_MAPPING_UPLOADS = [
         self::STATUS_PENDING => 'Bestätigung von Admin ausstehend',
-        self::STATUS_VERIFIED => 'von Admin bestätigt',
-        self::STATUS_REJECTED => 'von Admin beanstandet',
+        self::STATUS_VERIFIED_BY_ADMIN => 'von Admin bestätigt',
+        self::STATUS_REJECTED_BY_ADMIN => 'von Admin beanstandet',
     ];
 
     const STATUS_MAPPING = [
@@ -181,10 +181,10 @@ class Funding extends Entity
         if ($this->activity_proof_status == self::STATUS_PENDING) {
             return 'is-pending';
         }
-        if ($this->activity_proof_status == self::STATUS_VERIFIED) {
+        if ($this->activity_proof_status == self::STATUS_VERIFIED_BY_ADMIN) {
             return 'is-verified';
         }
-        if ($this->activity_proof_status == self::STATUS_REJECTED) {
+        if ($this->activity_proof_status == self::STATUS_REJECTED_BY_ADMIN) {
             return 'is-rejected';
         }
         return '';
@@ -195,10 +195,10 @@ class Funding extends Entity
         if ($this->freistellungsbescheid_status == self::STATUS_PENDING) {
             return 'is-pending';
         }
-        if ($this->freistellungsbescheid_status == self::STATUS_VERIFIED) {
+        if ($this->freistellungsbescheid_status == self::STATUS_VERIFIED_BY_ADMIN) {
             return 'is-verified';
         }
-        if ($this->freistellungsbescheid_status == self::STATUS_REJECTED) {
+        if ($this->freistellungsbescheid_status == self::STATUS_REJECTED_BY_ADMIN) {
             return 'is-rejected';
         }
         return '';
@@ -268,11 +268,11 @@ class Funding extends Entity
         
         $count = 0;
 
-        if ($this->workshop->funding_activity_proof_required && $this->activity_proof_status == self::STATUS_VERIFIED) {
+        if ($this->workshop->funding_activity_proof_required && $this->activity_proof_status == self::STATUS_VERIFIED_BY_ADMIN) {
             $count++;
         }
 
-        if ($this->freistellungsbescheid_status == self::STATUS_VERIFIED) {
+        if ($this->freistellungsbescheid_status == self::STATUS_VERIFIED_BY_ADMIN) {
             $count++;
         }
 
