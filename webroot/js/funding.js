@@ -50,7 +50,7 @@ MappedRepairEvents.Funding = {
     },
 
     bindDeleteButton: (uid) => {
-        $('.funding-delete-button').on('click', function() {
+        $('#funding-delete-button-' + uid).on('click', function() {
             const workshopName = $(this).closest('.workshop-wrapper').find('.heading').text();
             $.prompt('Möchtest du den Förderantrag der Initiative <b>' + workshopName + '</b> wirklich löschen?',
                 {
