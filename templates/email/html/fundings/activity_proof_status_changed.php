@@ -8,7 +8,7 @@ use Cake\Core\Configure;
             <td>
                 <p>
                     Der Status deines Aktivitätsnachweises wurde geändert auf:<br />
-                    <?php echo $funding->activity_proof_status_human_readable; ?>
+                    <b><?php echo $funding->activity_proof_status_human_readable; ?></b>
                 </p>
                 <?php if ($funding->activity_proof_comment != '') { ?>
                     <p>

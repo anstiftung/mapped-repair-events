@@ -8,7 +8,7 @@ use Cake\Core\Configure;
             <td>
                 <p>
                     Der Status deines Freistellungsbescheides wurde geändert auf:<br />
-                    <?php echo $funding->freistellungsbescheid_status_human_readable; ?>
+                    <b><?php echo $funding->freistellungsbescheid_status_human_readable; ?></b>
                 </p>
                 <?php if ($funding->freistellungsbescheid_comment != '') { ?>
                     <p>
