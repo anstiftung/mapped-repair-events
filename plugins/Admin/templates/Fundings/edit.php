@@ -23,13 +23,13 @@ $this->element('addScript', ['script' =>
 
     echo '<div class="flexbox">';
 
-        echo $this->element('funding/fundingUploadsForm', [
-            'fundinguploads' => $funding->fundinguploads_activity_proofs,
-            'uploadType' => Fundingupload::TYPE_MAP[Fundingupload::TYPE_ACTIVITY_PROOF],
-            'legend' => 'Uploads Aktivitätsnachweis',
-        ]);
-
         if ($funding->workshop->funding_activity_proof_required) {
+            echo $this->element('funding/fundingUploadsForm', [
+                'fundinguploads' => $funding->fundinguploads_activity_proofs,
+                'uploadType' => Fundingupload::TYPE_MAP[Fundingupload::TYPE_ACTIVITY_PROOF],
+                'legend' => 'Uploads Aktivitätsnachweis',
+            ]);
+
             echo '<fieldset>';
                 echo '<legend>Status Aktivitätsnachweis</legend>';
                 echo $this->element('funding/status/activityProofStatus', ['funding' => $funding]);

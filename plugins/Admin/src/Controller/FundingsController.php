@@ -30,12 +30,13 @@ class FundingsController extends AdminAppController
         }
 
         $fundingsTable = $this->getTableLocator()->get('Fundings');
+        $workshopsTable = $this->getTableLocator()->get('Workshops');
         $funding = $fundingsTable->find('all',
         conditions: [
             $fundingsTable->aliasField('uid') => $uid,
         ],
         contain: [
-            'Workshops',
+            'Workshops' => $workshopsTable->getFundingContain(),
             'OwnerUsers',
             'Fundingdatas',
             'Fundingbudgetplans',

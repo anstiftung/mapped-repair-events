@@ -2,21 +2,22 @@
 
 use Cake\Core\Configure;
 
+$uploadFormFields = '<p>Noch keine Dateien vorhanden</p>';
 if (!empty($fundinguploads)) {
-    $i = 0;
     $uploadFormFields = '';
+    $i = 0;
     foreach($fundinguploads as $fundingupload) {
         $label = $this->Html->link('Vorschau', $this->Html->urlFundinguploadDetail($fundingupload->id), ['target' => '_blank']);
-        $uploadFormFields .= $this->Form->control('Fundings.fundinguploads_' . $uploadType . '.' . $i.'.id', ['type' => 'hidden']);
-        $uploadFormFields .= $this->Form->control('Fundings.fundinguploads_' . $uploadType . '.' . $i.'.filename', ['label' => $label . ' / ' . $fundingupload->created->i18nFormat(Configure::read('DateFormat.de.DateNTimeShort')), 'escape' => false, 'readonly' => true]);
-        $uploadFormFields .= $this->Form->control('Fundings.fundinguploads_' . $uploadType . '.' . $i.'.created', ['label' => 'Datum', 'type' => 'hidden']);
+        $formattedCreated = $fundingupload->created->i18nFormat(Configure::read('DateFormat.de.DateNTimeShort'));
+        $uploadFormFields .= $this->Form->hidden('Fundings.fundinguploads_' . $uploadType . '.' . $i.'.id');
+        $uploadFormFields .= $this->Form->control('Fundings.fundinguploads_' . $uploadType . '.' . $i.'.filename', ['label' => $label . ' / ' . $formattedCreated, 'escape' => false, 'readonly' => true]);
         $i++;
     }
-    echo $this->Form->fieldset(
-        $uploadFormFields,
-        [
-            'legend' => $legend,
-        ]
-    );
-
 }
+echo $this->Form->fieldset(
+    $uploadFormFields,
+    [
+        'legend' => $legend,
+    ]
+);
+
