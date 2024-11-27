@@ -32,6 +32,10 @@ body.fundings.index .workshop-wrapper > div.table > div {
 body.fundings.index .workshop-wrapper > div.table > div * {
     flex: 1;
 }
+body.fundings.index .funding-delete-button {
+    margin-top: 10px ! important;
+    align-self: flex-end;
+}
 body.fundings.index .workshop-wrapper a:not(.button) {
     padding: 0;
     margin-top: 0;
