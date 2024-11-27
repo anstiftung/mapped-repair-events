@@ -121,14 +121,8 @@ class FundingsController extends AdminAppController
 
         // TODO Sorting not yet working
         $objects = $this->paginate($query, [
-            'sortableFields' => [
-                'Fundings.uid',
-                'Fundings.created',
-                'Fundings.modified',
-                'Workshops.name',
-            ],
             'order' => [
-                'Workshops.name' => 'ASC'
+                'Fundings.created' => 'DESC'
             ],
         ]);
 
