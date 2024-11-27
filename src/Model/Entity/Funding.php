@@ -121,6 +121,28 @@ class Funding extends Entity
         return $total;
     }
 
+    public function _getGroupedValidBudgetplans() {
+        $result = [];
+        foreach($this->fundingbudgetplans as $fundingbudgetplan) {
+            if ($fundingbudgetplan->is_valid) {
+                $result[$fundingbudgetplan->type][] = $fundingbudgetplan;
+            }
+        }
+        return $result;
+    }
+
+    public function _getGroupedValidBudgetplansTotals() {
+        $result = [];
+        foreach($this->grouped_valid_budgetplans as $typeId => $fundingbudgetplans) {
+            $total = 0;
+            foreach($fundingbudgetplans as $fundingbudgetplan) {
+                $total += $fundingbudgetplan->amount;
+            }
+            $result[$typeId] = $total;
+        }
+        return $result;
+    }
+
     public function _getBudgetplanStatus() {
         foreach($this->fundingbudgetplans as $fundingbudgetplan) {
             if ($fundingbudgetplan->is_valid && $fundingbudgetplan->type == Fundingbudgetplan::TYPE_A) {

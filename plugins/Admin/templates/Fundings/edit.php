@@ -2,6 +2,7 @@
 
 use App\Model\Entity\Funding;
 use App\Model\Entity\Fundingupload;
+use App\Model\Entity\Fundingbudgetplan;
 
 $this->element('addScript', ['script' =>
     JS_NAMESPACE.".Helper.bindCancelButton();".
@@ -60,7 +61,20 @@ $this->element('addScript', ['script' =>
         echo $this->element('funding/blocks/blockDescription', ['funding' => $funding, 'disabled' => true]);
         echo $this->element('funding/blocks/blockCheckboxes', ['funding' => $funding, 'disabled' => true]);
 
-        //TODO budgetplans
+        echo '<fieldset>';
+            echo '<legend>Kostenplan</legend>';
+            foreach($funding->grouped_valid_budgetplans as $typeId => $fundingbudgetplans) {
+                echo '<div class="fundingbudgetplans" style="margin-bottom:10px;">';
+                    echo '<div style="margin-bottom:5px;"><b>' . Fundingbudgetplan::TYPE_MAP[$typeId] . '</b></div>';
+                    foreach($fundingbudgetplans as $fundingbudgetplan) {
+                        echo $fundingbudgetplan->description . ' ' . $this->MyNumber->formatAsDecimal($fundingbudgetplan->amount) . ' €<br />';
+                    }
+                    echo '<div style="margin-top:5px;"><i>Summe: ' . $this->MyNumber->formatAsDecimal($funding->grouped_valid_budgetplans_totals[$typeId]) . ' €</i></div>';
+                echo '</div>';
+            }
+            echo '<div style="font-size:14px;"><b>Gesamtsumme: ' . $this->MyNumber->formatAsDecimal($funding->budgetplan_total) . ' €</b></div>';
+
+        echo '</fieldset>';
 
     echo '</div>';
 
