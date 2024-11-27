@@ -8,6 +8,21 @@ MappedRepairEvents.Funding = {
         });
     },
 
+    bindSubmitFundingButton: (uid) => {
+        $('#submit-funding-button-' + uid).on('click', function() {
+            $.prompt('Wir bitten um etwas Geduld.',
+                {
+                    buttons: {Ok: false},
+                    submit: function(v,m,f) {
+                        if(m) {
+                            //document.location.href = '/mein-foerderantrag/submit/' + uid;
+                        }
+                    }
+                }
+            );
+        });
+    },
+
     initTextareaCounter: () => {
         $('#fundingForm textarea').each(function() {
             const maxLength = $(this).attr('maxlength');

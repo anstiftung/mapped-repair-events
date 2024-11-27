@@ -4,6 +4,7 @@ $this->element('addScript', ['script' =>
     JS_NAMESPACE.".Helper.bindCancelButton();".
     JS_NAMESPACE.".Funding.initIsMissing();".
     JS_NAMESPACE.".Funding.initTextareaCounter();".
+    JS_NAMESPACE.".Funding.bindSubmitFundingButton(".$funding->uid.");".
     JS_NAMESPACE.".Funding.initIsVerified('".json_encode($funding->verified_fields)."');".
     JS_NAMESPACE.".Funding.updateProgressBar(" . $funding->all_fields_verified_count . ", ".$funding->all_fields_count.");"
 ]);
@@ -54,6 +55,15 @@ echo $this->element('jqueryTabsWithoutAjax', [
                     'saveLabel' => 'Förderantrag zwischenspeichern',
                 ]);
 
+                echo '<div class="submit-funding-button-wrapper">';
+                    echo $this->Form->button('Förderantrag einreichen', [
+                        'type' => 'button',
+                        'id' => 'submit-funding-button-' . $funding->uid,
+                        'class' => 'rounded red ' . (!$funding->funding_submittable ? 'disabled' : ''),
+                        'disabled' => !$funding->funding_submittable,
+                    ]);
+                echo '</div>';
+    
             echo $this->Form->end();
 
         ?>
