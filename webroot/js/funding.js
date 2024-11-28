@@ -10,9 +10,9 @@ MappedRepairEvents.Funding = {
 
     bindSubmitFundingButton: (uid) => {
         $('#submit-funding-button-' + uid).on('click', function() {
-            $.prompt('Möchtest du diesen Förderantrag wirklich einreichen?',
+            $.prompt('Möchtest du den Förderantrag wirklich einreichen?',
                 {
-                    buttons: {'Ja, einreichen': true, Abbrechen: false},
+                    buttons: {'Ja, jetzt einreichen': true, Abbrechen: false},
                     submit: function(v,m,f) {
                         if(m) {
                             const form = document.getElementById('fundingForm');
