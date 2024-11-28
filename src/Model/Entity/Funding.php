@@ -331,8 +331,12 @@ class Funding extends Entity
         return $this->user_fields_verified_count == $this->user_fields_count;
     }
 
-    public function _getFundingSubmittable(): bool {
+    public function _getIsSubmittable(): bool {
         return $this->all_fields_verified_count == $this->all_fields_count;
+    }
+
+    public function _getIsSubmitted(): bool {
+        return $this->submit_date !== null;
     }
 
     public function _getActivityProofsCount(): int {

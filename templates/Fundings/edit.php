@@ -61,10 +61,10 @@ echo $this->element('jqueryTabsWithoutAjax', [
                     echo $this->Form->button('Förderantrag einreichen', [
                         'type' => 'button',
                         'id' => 'submit-funding-button-' . $funding->uid,
-                        'class' => 'rounded red ' . (!$funding->funding_submittable ? 'disabled' : ''),
-                        'disabled' => !$funding->funding_submittable,
+                        'class' => 'rounded red ' . (!$funding->is_submittable ? 'disabled' : ''),
+                        'disabled' => !$funding->is_submittable,
                     ]);
-                    if ($funding->funding_submittable) {
+                    if ($funding->is_submittable) {
                         if (Configure::read('AppConfig.fundingsSubmitEnabled')) {
                             $this->element('addScript', ['script' =>
                                 JS_NAMESPACE.".Funding.bindSubmitFundingButton(".$funding->uid.");"
