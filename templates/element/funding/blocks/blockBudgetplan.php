@@ -11,7 +11,7 @@ echo '<fieldset class="fundingbudgetplan full-width">';
     echo '</div>';
 
     echo '<div style="margin-bottom:5px;padding:10px;">';
-        echo '<p>Mindestens eine förderfähige investive Maßnahme muss eingetragen werden. Führe alle Gegenstände/Maßnahmen auf, für die Förderung beantragt werden soll. Maximal können 3.000,00 Euro bewilligt werden, auch wenn die Gesamtsumme aller Einzelpositionen im Kostenplan höher ausfallen sollte. Alle über 3000,00 veranschlagten Kosten sind durch die Initiative/den Träger selbst zu tragen.</p>';
+        echo '<p>Mindestens eine förderfähige investive Maßnahme muss eingetragen werden. Führe alle Gegenstände/Maßnahmen auf, für die Förderung beantragt werden soll. Maximal können 3.000,00 Euro bewilligt werden, auch wenn die Gesamtsumme aller Einzelpositionen im Kostenplan höher ausfallen sollte. Alle über 3000,00 veranschlagten Kosten sind durch die Initiative/den Träger selbst zu tragen. Durch Klick auf “Förderantrag zwischenspeichern” werden die Einzelpositionen auch aufsummiert angezeigt.</p>';
     echo '</div>';
 
     $shownFundingbudgetplans = array_slice($funding->fundingbudgetplans, 0, FundingsTable::FUNDINGBUDGETPLANS_COUNT_VISIBLE, true);
