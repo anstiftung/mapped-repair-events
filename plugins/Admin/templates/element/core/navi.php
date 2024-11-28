@@ -7,6 +7,11 @@ echo $this->Html->createMenuEntry([
     'level' => 'main'
 ]);
 echo $this->Html->createMenuEntry([
+    'name' => 'E-Mails',
+    'url' => '/admin/queuedJobs',
+    'level' => 'main'
+]);
+echo $this->Html->createMenuEntry([
     'name' => 'Kategorien',
     'url' => '/admin/categories/index',
     'level' => 'main'

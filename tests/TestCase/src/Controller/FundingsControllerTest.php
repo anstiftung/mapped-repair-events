@@ -92,18 +92,13 @@ class FundingsControllerTest extends AppTestCase
         $this->assertRedirectContains(Configure::read('AppConfig.htmlHelper')->urlFundings());
     }
 
-    public function testEditAsOrgaOk() {
-
-        $testWorkshopUid = 2;
-
-        $this->loginAsOrga();
-
+    private function prepareWorkshopForFunding($workshopUid) {
         // add 4 events for 2025 (required for funding)
         $eventsTable = $this->getTableLocator()->get('Events');
         $i = 0;
         while($i<4) {
             $event = $eventsTable->newEntity([
-                'workshop_uid' => $testWorkshopUid,
+                'workshop_uid' => $workshopUid,
                 'datumstart' => '2025-01-01',
                 'status' => APP_ON,
                 'created' => '2020-01-01 00:00:00',
@@ -111,6 +106,20 @@ class FundingsControllerTest extends AppTestCase
             $eventsTable->save($event);
             $i++;
         }
+    }
+
+    private function getFundingWithAssociations() {
+        $fundingsTable = $this->getTableLocator()->get('Fundings');
+        $funding = $fundingsTable->find(contain: ['Workshops', 'OwnerUsers', 'Fundingsupporters', 'Fundingdatas', 'Fundingbudgetplans', 'FundinguploadsActivityProofs', 'FundinguploadsFreistellungsbescheids'])->first();
+        $funding->owner_user->revertPrivatizeData();
+        return $funding;
+    }
+
+    public function testEditAsOrgaOk() {
+
+        $testWorkshopUid = 2;
+        $this->loginAsOrga();
+        $this->prepareWorkshopForFunding($testWorkshopUid);
 
         $this->get(Configure::read('AppConfig.htmlHelper')->urlFundingsEdit($testWorkshopUid));
         $this->assertResponseOk();
@@ -136,35 +145,57 @@ class FundingsControllerTest extends AppTestCase
             'fundings-workshop-name',
         ];
 
-        $uploadTemplateFile = TESTS . 'files/test.jpg';
-        $uploadFileActivityProof = TESTS . 'files/uploadTest1.jpg';
-        $uploadFileFreistellungsbescheid = TESTS . 'files/uploadTest2.jpg';
-        copy($uploadTemplateFile, $uploadFileActivityProof);
-        copy($uploadTemplateFile, $uploadFileFreistellungsbescheid);
+        $testWorkshop = [
+            'name' => $newName,
+            'street' => $newStreet . '<script>alert("XSS");</script>',
+            'zip' => $newZip,
+            'city' => $newCity,
+            'adresszusatz' => $newAdresszusatz,
+            'website' => 'non valid string',
+            'use_custom_coordinates' => 0,
+        ];
 
+        $testFundingsupporter = [
+            'name' => $newFundingsupporterName,
+            'website' => 'orf.at',
+        ];
+
+        $testFundingdata = [
+            'description' => $newFundingdataDescription,
+        ];
+
+        $testOwnerUser = [
+            'firstname' => $newOwnerFirstname,
+            'lastname' => $newOwnerLastname,
+            'email' => $newOwnerEmail,
+            'use_custom_coordinates' => 0,
+        ];
+
+
+        $uploadTemplateJpgFile = TESTS . 'files/test.jpg';
+        $uploadTemplateTxtFile = TESTS . 'files/test.txt';
+        $uploadFileActivityProof1 = TESTS . 'files/uploadActivityProof1.jpg';
+        $uploadFileActivityProof2 = TESTS . 'files/uploadActivityProof2.txt';
+        $uploadFileFreistellungsbescheid1 = TESTS . 'files/uploadTFreistellungsbescheid1.jpg';
+        $uploadFileFreistellungsbescheid2 = TESTS . 'files/uploadFreistellungsbescheid2.jpg';
+        copy($uploadTemplateJpgFile, $uploadFileActivityProof1);
+        copy($uploadTemplateTxtFile, $uploadFileActivityProof2);
+        copy($uploadTemplateJpgFile, $uploadFileFreistellungsbescheid1);
+        copy($uploadTemplateJpgFile, $uploadFileFreistellungsbescheid2);
+
+        // 1) POST
         $this->post(Configure::read('AppConfig.htmlHelper')->urlFundingsEdit($testWorkshopUid), [
             'referer' => '/',
             'Fundings' => [
-                'workshop' => [
-                    'name' => $newName,
-                    'street' => $newStreet . '<script>alert("XSS");</script>',
-                    'zip' => $newZip,
-                    'city' => $newCity,
-                    'adresszusatz' => $newAdresszusatz,
-                    'website' => 'non valid string',
-                    'use_custom_coordinates' => 0,
-                ],
-                'fundingsupporter' => [
-                    'name' => $newFundingsupporterName,
-                    'website' => 'orf.at',
-                ],
-                'fundingdata' => [
-                    'description' => $newFundingdataDescription . '<script>alert("XSS");</script>',
-                ],
+                'workshop' => $testWorkshop,
+                'fundingsupporter' => $testFundingsupporter,
+                'fundingdata' => $testFundingdata,
+                'owner_user' => $testOwnerUser,
+                'verified_fields' => array_merge($verifiedFields, ['fundings-workshop-website']),
                 'files_fundinguploads_activity_proofs' => [
                     new UploadedFile(
-                        $uploadFileActivityProof,
-                        filesize($uploadFileActivityProof),
+                        $uploadFileActivityProof1,
+                        filesize($uploadFileActivityProof1),
                         UPLOAD_ERR_OK,
                         'test.jpg',
                         'image/jpeg',
@@ -172,8 +203,8 @@ class FundingsControllerTest extends AppTestCase
                 ],
                 'files_fundinguploads_freistellungsbescheids' => [
                     new UploadedFile(
-                        $uploadFileFreistellungsbescheid,
-                        filesize($uploadFileFreistellungsbescheid),
+                        $uploadFileFreistellungsbescheid1,
+                        filesize($uploadFileFreistellungsbescheid1),
                         UPLOAD_ERR_OK,
                         'test.jpg',
                         'image/jpeg',
@@ -205,20 +236,11 @@ class FundingsControllerTest extends AppTestCase
                         'amount' => -1, // invalid
                     ],
                 ],
-                'owner_user' => [
-                    'firstname' => $newOwnerFirstname,
-                    'lastname' => $newOwnerLastname,
-                    'email' => $newOwnerEmail,
-                    'use_custom_coordinates' => 0,
-                ],
-                'verified_fields' => array_merge($verifiedFields, ['fundings-workshop-website']),
             ]
         ]);
         $this->assertResponseContains('Der Förderantrag wurde erfolgreich zwischengespeichert.');
 
-        $fundingsTable = $this->getTableLocator()->get('Fundings');
-        $funding = $fundingsTable->find(contain: ['Workshops', 'OwnerUsers', 'Fundingsupporters', 'Fundingdatas', 'Fundingbudgetplans', 'FundinguploadsActivityProofs', 'FundinguploadsFreistellungsbescheids'])->first();
-        $funding->owner_user->revertPrivatizeData();
+        $funding = $this->getFundingWithAssociations();
 
         $this->assertEquals($verifiedFields, $funding->verified_fields); // must not contain invalid workshops-website
 
@@ -239,13 +261,13 @@ class FundingsControllerTest extends AppTestCase
 
         $this->assertEquals($newFundingdataDescription, $funding->fundingdata->description);
 
-        $this->assertNotEmpty($funding->fundinguploads_activity_proofs);
+        $this->count(1, $funding->fundinguploads_activity_proofs);
         foreach($funding->fundinguploads_activity_proofs as $fundingupload) {
             $this->assertEquals(Fundingupload::TYPE_ACTIVITY_PROOF, $fundingupload->type);
             $this->assertFileExists($fundingupload->full_path);
         }
 
-        $this->assertNotEmpty($funding->fundinguploads_freistellungsbescheids);
+        $this->count(1, $funding->fundinguploads_freistellungsbescheids);
         foreach($funding->fundinguploads_freistellungsbescheids as $fundingupload) {
             $this->assertEquals(Fundingupload::TYPE_FREISTELLUNGSBESCHEID, $fundingupload->type);
             $this->assertFileExists($fundingupload->full_path);
@@ -265,9 +287,82 @@ class FundingsControllerTest extends AppTestCase
             $this->assertFalse($fundingbudgetplan->is_not_empty);
         }
 
-        // cleanup file uploads
+        // 2) POST test upload validations
+        $this->post(Configure::read('AppConfig.htmlHelper')->urlFundingsEdit($testWorkshopUid), [
+            'referer' => '/',
+            'Fundings' => [
+                'workshop' => $testWorkshop,
+                'fundingsupporter' => $testFundingsupporter,
+                'fundingdata' => $testFundingdata,
+                'owner_user' => $testOwnerUser,
+                'fundinguploads_activity_proofs' => [
+                    $funding->fundinguploads_activity_proofs[0]->toArray(),
+                ],
+                'fundinguploads_freistellungsbescheids' => [
+                    $funding->fundinguploads_freistellungsbescheids[0]->toArray(),
+                ],
+                'files_fundinguploads_activity_proofs' => [
+                    new UploadedFile(
+                        $uploadFileActivityProof2,
+                        filesize($uploadFileActivityProof2),
+                        UPLOAD_ERR_OK,
+                        'test.txt',
+                        'text/plain',
+                    ),
+                ],
+                'files_fundinguploads_freistellungsbescheids' => [
+                    new UploadedFile(
+                        $uploadFileFreistellungsbescheid2,
+                        filesize($uploadFileFreistellungsbescheid2),
+                        UPLOAD_ERR_OK,
+                        'test.jpg',
+                        'image/jpeg',
+                    ),
+                ],
+            ]
+        ]);
+        $this->assertResponseContains('Es ist nur eine Datei erlaubt.');
+        $this->assertResponseContains('Nur PDF, JPG und PNG-Dateien sind erlaubt.');
+
+        $funding = $this->getFundingWithAssociations();
+
+        $this->assertCount(1, $funding->fundinguploads_activity_proofs);
+        $this->assertCount(1, $funding->fundinguploads_freistellungsbescheids);
+
+        // 2) POST test delete uploads
+        $this->post(Configure::read('AppConfig.htmlHelper')->urlFundingsEdit($testWorkshopUid), [
+            'referer' => '/',
+            'Fundings' => [
+                'workshop' => $testWorkshop,
+                'fundingsupporter' => $testFundingsupporter,
+                'fundingdata' => $testFundingdata,
+                'owner_user' => $testOwnerUser,
+                'delete_fundinguploads_freistellungsbescheids' => [
+                    $funding->fundinguploads_freistellungsbescheids[0]->id,
+                ],
+                'delete_fundinguploads_activity_proofs' => [
+                    $funding->fundinguploads_activity_proofs[0]->id,
+                ],
+            ]
+        ]);
+
+        $funding = $this->getFundingWithAssociations();
+        $this->assertCount(0, $funding->fundinguploads_activity_proofs);
+        $this->assertCount(0, $funding->fundinguploads_freistellungsbescheids);
+
+
+        // cleanup everything including file uploads
+        $fundingsTable = $this->getTableLocator()->get('Fundings');
         $fundingsTable->deleteCustom($funding->uid);
 
+    }
+
+    public function testIndex() {
+        $testWorkshopUid = 2;
+        $this->loginAsOrga();
+        $this->prepareWorkshopForFunding($testWorkshopUid);
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlFundings());
+        $this->assertResponseOk();
     }
 
     public function testDelete() {

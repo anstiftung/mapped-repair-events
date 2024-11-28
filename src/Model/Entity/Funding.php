@@ -9,24 +9,28 @@ class Funding extends Entity
 {
 
     const STATUS_PENDING = 10;
-    const STATUS_VERIFIED = 20;
-    const STATUS_REJECTED = 30;
+    const STATUS_VERIFIED_BY_ADMIN = 20;
+    const STATUS_REJECTED_BY_ADMIN = 30;
     const STATUS_BUDGETPLAN_DATA_MISSING = 40;
     const STATUS_DATA_OK = 50;
     const STATUS_DESCRIPTION_MISSING = 60;
+    const STATUS_CHECKBOXES_MISSING = 70;
+    const STATUS_CHECKBOXES_OK = 80;
 
     const MAX_FUNDING_SUM = 3000;
 
     const STATUS_MAPPING_UPLOADS = [
         self::STATUS_PENDING => 'Bestätigung von Admin ausstehend',
-        self::STATUS_VERIFIED => 'von Admin bestätigt',
-        self::STATUS_REJECTED => 'von Admin beanstandet',
+        self::STATUS_VERIFIED_BY_ADMIN => 'von Admin bestätigt',
+        self::STATUS_REJECTED_BY_ADMIN => 'von Admin beanstandet',
     ];
 
     const STATUS_MAPPING = [
         self::STATUS_BUDGETPLAN_DATA_MISSING => 'Du musst mindestens eine investive Maßnahme hinzufügen',
         self::STATUS_DATA_OK => 'Die eingegebenen Daten sind ok',
         self::STATUS_DESCRIPTION_MISSING => 'Die Beschreibung ist nicht vollständig',
+        self::STATUS_CHECKBOXES_MISSING => 'Bitte bestätige alle Checkboxen',
+        self::STATUS_CHECKBOXES_OK => 'Alle Checkboxen bestätigt',
     ];
 
     const FIELDS_WORKSHOP = [
@@ -83,7 +87,14 @@ class Funding extends Entity
         ['name' => 'amount', 'options' => ['label' => false, 'placeholder' => 'Kosten in € ', 'type' => 'number', 'step' => '0.01']],
     ];
 
-    public static function getRenderedFields($fields, $entityString, $form, $entity = null) {
+    const FIELDS_FUNDING_DATA_CHECKBOXES = [
+        ['name' => 'checkbox_a', 'options' => ['type' => 'checkbox', 'class' => 'no-verify', 'label' => 'Mit der zu bewilligenden Maßnahme wurde noch nicht begonnen und wird auch nicht vor Erhalt des Bewilligungsbescheides begonnen.']],
+        ['name' => 'checkbox_b', 'options' => ['type' => 'checkbox', 'class' => 'no-verify', 'label' => 'Die in diesem Antrag gemachten Angaben (einschließlich Anlagen) sind vollständig und richtig.']],
+        ['name' => 'checkbox_c', 'options' => ['type' => 'checkbox', 'class' => 'no-verify', 'label' => 'Mit der Einreichung bestätige ich die zugrundeliegende Förderrichtlinie zur Kenntnis genommen, verstanden und vollumfänglich akzeptiert zu haben.']],
+        ['name' => 'checkbox_d', 'options' => ['type' => 'checkbox', 'class' => 'no-verify', 'label' => 'Mit der Einreichung stimme ich der Speicherung und Verarbeitung personenbezogener Daten, die zur Förderabwicklung und -Auswertung zu.']],
+    ];
+
+    public static function getRenderedFields($fields, $entityString, $form, $disabled, $entity = null) {
         $renderedFields = '';
         $fieldsToBeFormattedWithToDigits = ['amount'];
         foreach($fields as $field) {
@@ -93,6 +104,7 @@ class Funding extends Entity
                     $field['options']['value'] = number_format($value, 2, '.', '');
                 }
             }
+            $field['options']['disabled'] = $disabled;
             $preparedEntityString = 'Fundings.' . $entityString . '.' . $field['name'];
             $renderedFields .= $form->control($preparedEntityString, $field['options']);
         }
@@ -109,6 +121,28 @@ class Funding extends Entity
         return $total;
     }
 
+    public function _getGroupedValidBudgetplans() {
+        $result = [];
+        foreach($this->fundingbudgetplans as $fundingbudgetplan) {
+            if ($fundingbudgetplan->is_valid) {
+                $result[$fundingbudgetplan->type][] = $fundingbudgetplan;
+            }
+        }
+        return $result;
+    }
+
+    public function _getGroupedValidBudgetplansTotals() {
+        $result = [];
+        foreach($this->grouped_valid_budgetplans as $typeId => $fundingbudgetplans) {
+            $total = 0;
+            foreach($fundingbudgetplans as $fundingbudgetplan) {
+                $total += $fundingbudgetplan->amount;
+            }
+            $result[$typeId] = $total;
+        }
+        return $result;
+    }
+
     public function _getBudgetplanStatus() {
         foreach($this->fundingbudgetplans as $fundingbudgetplan) {
             if ($fundingbudgetplan->is_valid && $fundingbudgetplan->type == Fundingbudgetplan::TYPE_A) {
@@ -116,6 +150,34 @@ class Funding extends Entity
             }
         }
         return self::STATUS_BUDGETPLAN_DATA_MISSING;
+    }
+
+    public function _getCheckboxesStatus() {
+        $checkboxes = array_map(function($checkbox) {
+            return $checkbox['name'];
+        }, self::FIELDS_FUNDING_DATA_CHECKBOXES);
+
+        foreach($checkboxes as $checkbox) {
+            if (!$this->fundingdata->$checkbox) {
+                return self::STATUS_CHECKBOXES_MISSING;
+            }
+        }
+        return self::STATUS_CHECKBOXES_OK;
+
+    }
+
+    public function _getCheckboxesStatusCssClass() {
+        if ($this->checkboxes_status == self::STATUS_CHECKBOXES_MISSING) {
+            return 'is-pending';
+        }
+        if ($this->checkboxes_status == self::STATUS_CHECKBOXES_OK) {
+            return 'is-verified';
+        }
+        return '';
+    }
+
+    public function _getCheckboxesStatusHumanReadable() {
+        return self::STATUS_MAPPING[$this->checkboxes_status];
     }
 
     public function _getBudgetplanStatusCssClass() {
@@ -141,10 +203,10 @@ class Funding extends Entity
         if ($this->activity_proof_status == self::STATUS_PENDING) {
             return 'is-pending';
         }
-        if ($this->activity_proof_status == self::STATUS_VERIFIED) {
+        if ($this->activity_proof_status == self::STATUS_VERIFIED_BY_ADMIN) {
             return 'is-verified';
         }
-        if ($this->activity_proof_status == self::STATUS_REJECTED) {
+        if ($this->activity_proof_status == self::STATUS_REJECTED_BY_ADMIN) {
             return 'is-rejected';
         }
         return '';
@@ -155,10 +217,10 @@ class Funding extends Entity
         if ($this->freistellungsbescheid_status == self::STATUS_PENDING) {
             return 'is-pending';
         }
-        if ($this->freistellungsbescheid_status == self::STATUS_VERIFIED) {
+        if ($this->freistellungsbescheid_status == self::STATUS_VERIFIED_BY_ADMIN) {
             return 'is-verified';
         }
-        if ($this->freistellungsbescheid_status == self::STATUS_REJECTED) {
+        if ($this->freistellungsbescheid_status == self::STATUS_REJECTED_BY_ADMIN) {
             return 'is-rejected';
         }
         return '';
@@ -202,37 +264,75 @@ class Funding extends Entity
               + count(self::FIELDS_FUNDINGSUPPORTER_BANK)
               + count(self::FIELDS_FUNDINGDATA_DESCRIPTION)
               + 1 // fundingbudgetplan
+              + 1 // checkboxes count as 1
               ;
     }
 
-    public function _getVerifiedFieldsCount(): int {
-        $result = 0;
+    public function _getUserFieldsVerifiedCount(): int {
+        $count = 0;
 
         if ($this->verified_fields !== null) {
-            $result = count($this->verified_fields);
-        }
-
-        if ($this->workshop->funding_activity_proof_required && $this->activity_proof_status == self::STATUS_VERIFIED) {
-            $result++;
-        }
-
-        if ($this->freistellungsbescheid_status == self::STATUS_VERIFIED) {
-            $result++;
+            $count = count($this->verified_fields);
         }
 
         if ($this->description_status == self::STATUS_DATA_OK) {
-            $result++;
+            $count++;
         }
 
         if ($this->budgetplan_status == self::STATUS_DATA_OK) {
-            $result++;
+            $count++;
         }
 
-        return $result;
+        if ($this->checkboxes_status == self::STATUS_CHECKBOXES_OK) {
+            $count++;
+        }
+
+        return $count;
     }
 
-    public function _getAllFieldsVerified(): bool {
-        return $this->verified_fields_count == $this->required_fields_count;
+    public function _getAdminFieldsVerifiedCount(): int {
+        
+        $count = 0;
+
+        if ($this->workshop->funding_activity_proof_required && $this->activity_proof_status == self::STATUS_VERIFIED_BY_ADMIN) {
+            $count++;
+        }
+
+        if ($this->freistellungsbescheid_status == self::STATUS_VERIFIED_BY_ADMIN) {
+            $count++;
+        }
+
+        return $count;
+    }
+
+    public function _getUserFieldsCount(): int {
+        return self::getFieldsCount();
+    }
+
+    public function _getAdminFieldsCount(): int {
+        $count = 0;
+        if ($this->workshop->funding_activity_proof_required) {
+            $count++;
+        };
+        $count++; // freistellungsbescheid
+        return $count;
+
+    }
+
+    public function _getAllFieldsCount(): int {
+        return $this->user_fields_count + $this->admin_fields_count;
+    }
+
+    public function _getAllFieldsVerifiedCount(): int {
+        return $this->user_fields_verified_count + $this->admin_fields_verified_count;
+    }
+
+    public function _getUserFieldsVerified(): int {
+        return $this->user_fields_verified_count == $this->user_fields_count;
+    }
+
+    public function _getFundingSubmittable(): bool {
+        return $this->all_fields_verified_count == $this->all_fields_count;
     }
 
     public function _getActivityProofsCount(): int {
@@ -241,15 +341,6 @@ class Funding extends Entity
 
     public function _getFreistellungsbescheidsCount(): int {
         return count($this->fundinguploads_freistellungsbescheids);
-    }
-
-    public function _getRequiredFieldsCount(): int {
-        $result = self::getFieldsCount();
-        if ($this->workshop->funding_activity_proof_required) {
-            $result++;
-        };
-        $result++; // freistellungsbescheid
-        return $result;
     }
 
 }

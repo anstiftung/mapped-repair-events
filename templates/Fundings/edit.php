@@ -2,11 +2,11 @@
 
 $this->element('addScript', ['script' =>
     JS_NAMESPACE.".Helper.bindCancelButton();".
-    JS_NAMESPACE.".Funding.bindDeleteButton(".$funding->uid.");".
     JS_NAMESPACE.".Funding.initIsMissing();".
     JS_NAMESPACE.".Funding.initTextareaCounter();".
+    JS_NAMESPACE.".Funding.bindSubmitFundingButton(".$funding->uid.");".
     JS_NAMESPACE.".Funding.initIsVerified('".json_encode($funding->verified_fields)."');".
-    JS_NAMESPACE.".Funding.updateProgressBar(" . $funding->verified_fields_count . ",  ".$funding->required_fields_count.");"
+    JS_NAMESPACE.".Funding.updateProgressBar(" . $funding->all_fields_verified_count . ", ".$funding->all_fields_count.");"
 ]);
 echo $this->element('jqueryTabsWithoutAjax', [
     'links' => $this->Html->getUserBackendNaviLinks($loggedUser->uid, true, $loggedUser->isOrga()),
@@ -39,28 +39,31 @@ echo $this->element('jqueryTabsWithoutAjax', [
                 echo '<div class="flexbox">';
                     echo $this->element('funding/blocks/blockActivityProof', ['funding' => $funding]);
                     echo $this->element('funding/blocks/blockFreistellungsbescheid', ['funding' => $funding]);
-                    echo $this->element('funding/blocks/blockOwnerUser', ['funding' => $funding]);
-                    echo $this->element('funding/blocks/blockWorkshop', ['funding' => $funding]);
-                    echo $this->element('funding/blocks/blockFundingsupporterOrganziation', ['funding' => $funding]);
-                    echo $this->element('funding/blocks/blockFundingsupporterUser', ['funding' => $funding]);
-                    echo $this->element('funding/blocks/blockFundingsupporterBank', ['funding' => $funding]);
-                    echo $this->element('funding/blocks/blockDescription', ['funding' => $funding]);
+                    echo $this->element('funding/blocks/blockWorkshop', ['funding' => $funding, 'disabled' => false]);
+                    echo $this->element('funding/blocks/blockOwnerUser', ['funding' => $funding, 'disabled' => false]);
+                    echo $this->element('funding/blocks/blockFundingsupporterOrganziation', ['funding' => $funding, 'disabled' => false]);
+                    echo $this->element('funding/blocks/blockFundingsupporterUser', ['funding' => $funding, 'disabled' => false]);
+                    echo $this->element('funding/blocks/blockFundingsupporterBank', ['funding' => $funding, 'disabled' => false]);
+                    echo $this->element('funding/blocks/blockDescription', ['funding' => $funding, 'disabled' => false]);
                     echo $this->element('funding/blocks/blockBudgetplan', ['funding' => $funding]);
+                    echo $this->element('funding/blocks/blockCheckboxes', ['funding' => $funding, 'disabled' => false]);
                 echo '</div>';
 
                 echo $this->element('funding/blocks/blockProgressBar', ['funding' => $funding]);
 
-                $deleteButton = $this->Form->button('Förderantrag löschen', [
-                    'type' => 'button',
-                    'id' => 'delete-button',
-                    'class' => 'rounded red',
-                ]);
-
                 echo $this->element('cancelAndSaveButton', [
                     'saveLabel' => 'Förderantrag zwischenspeichern',
-                    'additionalButton' => $deleteButton,
                 ]);
 
+                echo '<div class="submit-funding-button-wrapper">';
+                    echo $this->Form->button('Förderantrag einreichen', [
+                        'type' => 'button',
+                        'id' => 'submit-funding-button-' . $funding->uid,
+                        'class' => 'rounded red ' . (!$funding->funding_submittable ? 'disabled' : ''),
+                        'disabled' => !$funding->funding_submittable,
+                    ]);
+                echo '</div>';
+    
             echo $this->Form->end();
 
         ?>

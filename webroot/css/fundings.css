@@ -5,10 +5,6 @@
     --is-rejected: rgba(0, 0, 255, 0.7);
 }
 
-body.fundings.index .admin tr.is-verified {
-    background-color: var(--is-verified);
-    color: #fff;
-}
 body.fundings.index .info-box-counts {
     margin-bottom: 10px;
 }
@@ -36,6 +32,11 @@ body.fundings.index .workshop-wrapper > div.table > div {
 body.fundings.index .workshop-wrapper > div.table > div * {
     flex: 1;
 }
+body.fundings.index .funding-delete-button {
+    margin-top: 10px ! important;
+    align-self: flex-end;
+    font-weight: normal;
+}
 body.fundings.index .workshop-wrapper a:not(.button) {
     padding: 0;
     margin-top: 0;
@@ -61,23 +62,36 @@ body.fundings .verification-wrapper p.comment {
     border: 1px solid #fff;
     border-radius: 3px;
 }
+#fundingForm .upload-form-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 10px;
+}
+#fundingForm .submit-funding-button-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+#fundingForm .submit-funding-button-wrapper button {
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding: 10px 15px;
+}
 body.fundings .upload-button-wrapper {
     display: flex;
     justify-content: flex-end;
 }
-body.fundings button.upload-button {
-    margin-top: 10px;
-}
 body.fundings.edit div.admin.edit {
     padding: 20px;
 }
-#fundingForm fieldset:not(.fundingbudgetplan) div.input:not(.file) {
+#fundingForm fieldset:not(.fundingbudgetplan) div.input:not(.file):not(.checkbox) {
     display: grid;
     grid-template-columns: 165px auto 100px;
     grid-template-rows: auto auto;
     gap: 5px;
     align-items: baseline;
-    padding: 10px 5px 5px 5px;
+    padding: 10px 5px 5px 10px;
     margin-top: 1px;
     border-radius: 3px;
 }
@@ -160,8 +174,14 @@ body.fundings.edit div.admin.edit {
 #fundingForm div.input label.delete-upload {
         grid-column: 3;
 }
+#fundingForm div.input.checkbox label {
+    margin-left: 5px;
+}
 #fundingForm div.input.checkbox label,
 #fundingForm div.input label.checkbox {
+    line-height: 27px;
+}
+#fundingForm div.input label.checkbox.verified {
     line-height: 24px;
 }
 #fundingForm div.input input[type="checkbox"] {
@@ -226,6 +246,9 @@ body.fundings.edit div.admin.edit {
     float: none;
     padding: 0;
 }
+#fundingForm .checkbox:not(.verified) {
+    margin-bottom: 5px;
+}
 #fundingForm textarea {
     width: auto;
 }
@@ -270,8 +293,14 @@ body.fundings div.is-rejected {
     background-color: var(--is-rejected);
     color: #fff;
 }
+body.fundings a.funding-delete-button {
+    color: red ! important;
+}
 @media (max-width: 767px) {
 
+    #fundingForm fieldset:not(.fundingbudgetplan) div.input:not(.file) {
+        padding-left: 5px ! important;
+    }
     #fundingForm fieldset:not(.fundingbudgetplan) div.input {
         grid-template-columns: 1fr;
         grid-template-rows: auto auto auto auto;
@@ -319,5 +348,22 @@ body.fundings div.is-rejected {
     #fundingForm .flexbox > fieldset {
         flex-basis: 100%;
     }
+    #fundingForm .upload-form-wrapper {
+        grid-template-columns: 1fr;
+    }
+}
 
+body.fundings.index .admin tr.is-verified {
+    background-color: var(--is-verified);
+    color: #fff;
+}
+body.fundings.edit .admin #fundingForm fieldset:not(.fundingbudgetplan) div.input:not(.file) {
+    grid-template-columns: 185px auto;
+}
+body.fundings.edit div.admin.edit #cancel-button {
+    clear: none;
+    margin-right: 10px;
+}
+body.fundings.edit div.admin.edit #fundingForm fieldset:not(.fundingbudgetplan) div.input:not(.file):not(.checkbox) {
+    padding: 0;
 }

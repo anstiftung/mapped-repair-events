@@ -3,6 +3,7 @@ namespace Admin\Controller;
 
 use Cake\Http\Exception\NotFoundException;
 use Cake\Event\EventInterface;
+use App\Mailer\AppMailer;
 
 class FundingsController extends AdminAppController
 {
@@ -30,12 +31,17 @@ class FundingsController extends AdminAppController
         }
 
         $fundingsTable = $this->getTableLocator()->get('Fundings');
+        $workshopsTable = $this->getTableLocator()->get('Workshops');
         $funding = $fundingsTable->find('all',
         conditions: [
             $fundingsTable->aliasField('uid') => $uid,
         ],
         contain: [
-            'Workshops',
+            'Workshops' => $workshopsTable->getFundingContain(),
+            'OwnerUsers',
+            'Fundingdatas',
+            'Fundingbudgetplans',
+            'Fundingsupporters',
             'FundinguploadsActivityProofs' => function($q) {
                 return $q->order(['FundinguploadsActivityProofs.created' => 'DESC']);
             },
@@ -43,6 +49,10 @@ class FundingsController extends AdminAppController
                 return $q->order(['FundinguploadsFreistellungsbescheids.created' => 'DESC']);
             },
         ])->first();
+
+        if ($funding->owner_user) {
+            $funding->owner_user->revertPrivatizeData();
+        }
 
         if (empty($funding)) {
             throw new NotFoundException;
@@ -56,6 +66,7 @@ class FundingsController extends AdminAppController
             $associtions =  ['associated' => ['FundinguploadsActivityProofs', 'FundinguploadsFreistellungsbescheids']];
             $patchedEntity = $fundingsTable->patchEntity($funding, $this->request->getData(), $associtions);
             if (!($patchedEntity->hasErrors())) {
+                $this->sendEmails($patchedEntity);
                 $fundingsTable->save($patchedEntity, $associtions);
                 $this->redirect($this->getReferer());
             } else {
@@ -64,6 +75,31 @@ class FundingsController extends AdminAppController
         }
 
         $this->set('funding', $funding);
+    }
+
+    private function sendEmails($funding) {
+        $email = new AppMailer();
+        if ($funding->isDirty('freistellungsbescheid_status')) {
+            $email->viewBuilder()->setTemplate('fundings/freistellungsbescheid_status_changed');
+            $email->setSubject('Der Status deines Freistellungsbescheides wurde geändert')
+            ->setTo($funding->owner_user->email)
+            ->setViewVars([
+                'funding' => $funding,
+                'data' => $funding->owner_user,
+            ]);
+            $email->addToQueue();
+        }
+
+        if ($funding->isDirty('activity_proof_status')) {
+            $email->viewBuilder()->setTemplate('fundings/activity_proof_status_changed');
+            $email->setSubject('Der Status deines Aktivitätsnachweises wurde geändert')
+            ->setTo($funding->owner_user->email)
+            ->setViewVars([
+                'funding' => $funding,
+                'data' => $funding->owner_user,
+            ]);
+            $email->addToQueue();
+        }
     }
 
     public function index()
@@ -83,12 +119,10 @@ class FundingsController extends AdminAppController
             'Fundingbudgetplans',
         ]);
 
+        // TODO Sorting not yet working
         $objects = $this->paginate($query, [
-            'sortableFields' => [
-                'Workshops.name',
-            ],
             'order' => [
-                'Workshops.name' => 'ASC'
+                'Fundings.created' => 'DESC'
             ],
         ]);
 
