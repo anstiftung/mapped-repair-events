@@ -56,6 +56,10 @@ body.fundings .verification-wrapper {
     margin-bottom: 10px;
     border-radius: 3px;
 }
+body.fundings.index .verification-wrapper {
+    margin-bottom: 0;
+    margin-top: 10px;
+}
 body.fundings .verification-wrapper p.comment {
     padding: 10px;
     margin-top: 10px;

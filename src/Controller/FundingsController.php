@@ -99,6 +99,11 @@ class FundingsController extends AppController
         $fundingsTable = $this->getTableLocator()->get('Fundings');
         $funding = $fundingsTable->findOrCreateCustom($workshopUid);
 
+        if ($funding->is_submitted) {
+            $this->AppFlash->setFlashError('Der Förderantrag wurde bereits eingereicht und kann nicht mehr bearbeitet werden.');
+            return $this->redirect(Configure::read('AppConfig.htmlHelper')->urlFundings());
+        }
+
         $this->setReferer();
 
         $basicErrors = $this->getBasicErrorMessages($funding);

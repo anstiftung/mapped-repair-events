@@ -120,9 +120,14 @@ class FundingsTable extends AppTable
         $funding = $this->find()->where([
             $this->aliasField('uid') => $fundingUid,
         ])->contain(['Fundingsupporters', 'Fundingdatas'])->first();
+
         if (empty($funding)) {
             throw new NotFoundException('funding (UID: '.$fundingUid.') was not found');
         }
+        if ($funding->is_submitted) {
+            throw new NotFoundException('funding (UID: '.$fundingUid.') is submitted and cannot be deleted');
+        }
+        
         $this->delete($funding);
 
         $fundingsupportersTable = FactoryLocator::get('Table')->get('Fundingsupporters');

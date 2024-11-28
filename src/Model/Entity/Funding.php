@@ -339,6 +339,13 @@ class Funding extends Entity
         return $this->submit_date !== null;
     }
 
+    public function _getSubmitDateFormatted(): string {
+        if ($this->submit_date !== null) {
+            return $this->submit_date->format('d.m.Y H:i');
+        }
+        return '';
+    }
+
     public function _getActivityProofsCount(): int {
         return count($this->fundinguploads_activity_proofs);
     }

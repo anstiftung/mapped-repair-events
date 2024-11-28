@@ -44,6 +44,11 @@ class FundingsPolicy implements RequestPolicyInterface
             if (empty($entity)) {
                 return false;
             }
+
+            if ($entity->is_submitted) {
+                return false;
+            }
+
             return true;
         }
 
