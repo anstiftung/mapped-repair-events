@@ -357,6 +357,14 @@ class FundingsControllerTest extends AppTestCase
 
     }
 
+    public function testIndex() {
+        $testWorkshopUid = 2;
+        $this->loginAsOrga();
+        $this->prepareWorkshopForFunding($testWorkshopUid);
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlFundings());
+        $this->assertResponseOk();
+    }
+
     public function testDelete() {
         $this->loginAsOrga();
         $this->get(Configure::read('AppConfig.htmlHelper')->urlFundingsEdit(2));
