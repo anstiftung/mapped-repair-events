@@ -261,13 +261,13 @@ class FundingsControllerTest extends AppTestCase
 
         $this->assertEquals($newFundingdataDescription, $funding->fundingdata->description);
 
-        $this->count(1, $funding->fundinguploads_activity_proofs);
+        $this->assertCount(1, $funding->fundinguploads_activity_proofs);
         foreach($funding->fundinguploads_activity_proofs as $fundingupload) {
             $this->assertEquals(Fundingupload::TYPE_ACTIVITY_PROOF, $fundingupload->type);
             $this->assertFileExists($fundingupload->full_path);
         }
 
-        $this->count(1, $funding->fundinguploads_freistellungsbescheids);
+        $this->assertCount(1, $funding->fundinguploads_freistellungsbescheids);
         foreach($funding->fundinguploads_freistellungsbescheids as $fundingupload) {
             $this->assertEquals(Fundingupload::TYPE_FREISTELLUNGSBESCHEID, $fundingupload->type);
             $this->assertFileExists($fundingupload->full_path);

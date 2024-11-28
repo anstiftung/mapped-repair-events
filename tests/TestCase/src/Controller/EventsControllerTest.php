@@ -168,7 +168,6 @@ class EventsControllerTest extends AppTestCase
         $data = [
             'renotify' => true,
             'status' => APP_OFF,
-            'datumstart' => new Date('02.01.2040'),
             'eventbeschreibung' => 'new description',
             'strasse' => 'new street',
             'zip' => '46464',
@@ -214,7 +213,7 @@ class EventsControllerTest extends AppTestCase
         $this->loginAsOrga();
         $this->get(Configure::read('AppConfig.htmlHelper')->urlEventDelete(6));
         $this->runAndAssertQueue();
-        
+
         $this->Event = $this->getTableLocator()->get('Events');
         $event = $this->Event->find('all', conditions: [
             'Events.uid' => 6
