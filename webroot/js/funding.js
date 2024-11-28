@@ -10,14 +10,30 @@ MappedRepairEvents.Funding = {
 
     bindSubmitFundingButton: (uid) => {
         $('#submit-funding-button-' + uid).on('click', function() {
+            $.prompt('Möchtest du diesen Förderantrag wirklich einreichen?',
+                {
+                    buttons: {'Ja, einreichen': true, Abbrechen: false},
+                    submit: function(v,m,f) {
+                        if(m) {
+                            const form = document.getElementById('fundingForm');
+                            const input = document.createElement('input');
+                            input.type = 'hidden';
+                            input.name = 'submit_funding';
+                            input.value = 1;
+                            form.appendChild(input);
+                            form.submit();
+                        }
+                    }
+                }
+            );
+        });
+    },
+
+    bindSubmitFundingButtonNotYetEnabled: (uid) => {
+        $('#submit-funding-button-' + uid).on('click', function() {
             $.prompt('Wir bitten um etwas Geduld.',
                 {
                     buttons: {Ok: false},
-                    submit: function(v,m,f) {
-                        if(m) {
-                            //document.location.href = '/mein-foerderantrag/submit/' + uid;
-                        }
-                    }
                 }
             );
         });

@@ -1,10 +1,11 @@
 <?php
 
+use Cake\Core\Configure;
+
 $this->element('addScript', ['script' =>
     JS_NAMESPACE.".Helper.bindCancelButton();".
     JS_NAMESPACE.".Funding.initIsMissing();".
     JS_NAMESPACE.".Funding.initTextareaCounter();".
-    JS_NAMESPACE.".Funding.bindSubmitFundingButton(".$funding->uid.");".
     JS_NAMESPACE.".Funding.initIsVerified('".json_encode($funding->verified_fields)."');".
     JS_NAMESPACE.".Funding.updateProgressBar(" . $funding->all_fields_verified_count . ", ".$funding->all_fields_count.");"
 ]);
@@ -30,6 +31,7 @@ echo $this->element('jqueryTabsWithoutAjax', [
 
                 echo $this->Form->hidden('referer', ['value' => $referer]);
                 $this->Form->unlockField('referer');
+                $this->Form->unlockField('submit_funding');
                 $this->Form->unlockField('verified_fields');
                 echo $this->Form->hidden('Fundings.workshop.use_custom_coordinates');
                 echo $this->Form->hidden('Fundings.owner_user.use_custom_coordinates');
@@ -62,6 +64,17 @@ echo $this->element('jqueryTabsWithoutAjax', [
                         'class' => 'rounded red ' . (!$funding->funding_submittable ? 'disabled' : ''),
                         'disabled' => !$funding->funding_submittable,
                     ]);
+                    if ($funding->funding_submittable) {
+                        if (Configure::read('AppConfig.fundingsSubmitEnabled')) {
+                            $this->element('addScript', ['script' =>
+                                JS_NAMESPACE.".Funding.bindSubmitFundingButton(".$funding->uid.");"
+                            ]);
+                        } else {
+                            $this->element('addScript', ['script' =>
+                                JS_NAMESPACE.".Funding.bindSubmitFundingButtonNotYetEnabled(".$funding->uid.");"
+                            ]);
+                        }
+                    }
                 echo '</div>';
     
             echo $this->Form->end();

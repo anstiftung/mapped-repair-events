@@ -180,6 +180,12 @@ class FundingsController extends AppController
                     $patchedEntity = $this->patchFunding($funding, $associations);
                 }
             }
+
+            if ($funding->funding_submittable && !empty($this->request->getData('submit_funding'))) {
+                $this->AppFlash->setFlashMessage('Der Förderantrag wurde erfolgreich eingereicht.');
+                return $this->redirect(Configure::read('AppConfig.htmlHelper')->urlFundings());
+            }
+
         }
 
         $this->set('metaTags', [
