@@ -9,6 +9,7 @@ use App\Model\Entity\Fundingupload;
 use Cake\Http\Exception\NotFoundException;
 use App\Controller\Component\StringComponent;
 use Cake\I18n\DateTime;
+use App\Services\PdfWriter\FoerderbewilligungPdfWriterService;
 
 class FundingsController extends AppController
 {
@@ -189,8 +190,7 @@ class FundingsController extends AppController
             }
 
             if ($funding->is_submittable && !empty($this->request->getData('submit_funding'))) {
-                $funding->submit_date = DateTime::now();
-                $fundingsTable->save($funding);
+                $this->submitFunding($funding);
                 $this->AppFlash->setFlashMessage('Der Förderantrag wurde erfolgreich eingereicht.');
                 return $this->redirect(Configure::read('AppConfig.htmlHelper')->urlFundings());
             }
@@ -202,6 +202,24 @@ class FundingsController extends AppController
         ]);
         $this->set('funding', $funding);
 
+    }
+
+    private function submitFunding($funding) {
+        $fundingsTable = $this->getTableLocator()->get('Fundings');
+        $funding->submit_date = DateTime::now();
+        $fundingsTable->save($funding);
+
+        // generate pdf
+        $pdfWriterService = new FoerderbewilligungPdfWriterService();
+        $foerderbewilligungFilename = 'Foerderbewilligung_' . $funding->uid . '_' . $funding->submit_date_formatted_for_filename . '.pdf';
+        $pdfWriterService->setFilename(Fundingupload::UPLOAD_PATH . $funding->uid . DS . 'attachments' . DS . $foerderbewilligungFilename);
+        $pdfWriterService->writeFile();
+
+        // TODO remove this!
+        /*
+        $funding->submit_date = null;
+        $fundingsTable->save($funding);
+        */
     }
 
     private function handleDeleteFundinguploads($funding, $associations, $patchedEntity, $newFundinguploads) {
