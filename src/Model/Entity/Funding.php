@@ -74,6 +74,7 @@ class Funding extends Entity
         ['name' => 'bank_account_owner', 'options' => ['label' => 'Kontoinhaber']],
         ['name' => 'bank_institute', 'options' => ['label' => 'Kreditinstitut']],
         ['name' => 'iban', 'options' => ['label' => 'IBAN']],
+        ['name' => 'bic', 'options' => ['label' => 'BIC']],
     ];
 
     const FIELDS_FUNDINGDATA_DESCRIPTION = [
