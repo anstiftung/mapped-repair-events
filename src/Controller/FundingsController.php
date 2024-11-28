@@ -211,8 +211,7 @@ class FundingsController extends AppController
 
         // generate pdf
         $pdfWriterService = new FoerderbewilligungPdfWriterService();
-        $foerderbewilligungFilename = 'Foerderbewilligung_' . $funding->uid . '_' . $funding->submit_date_formatted_for_filename . '.pdf';
-        $pdfWriterService->setFilename(Fundingupload::UPLOAD_PATH . $funding->uid . DS . 'attachments' . DS . $foerderbewilligungFilename);
+        $pdfWriterService->prepareAndSetData($funding->uid);
         $pdfWriterService->writeFile();
 
         // TODO remove this!
@@ -220,6 +219,12 @@ class FundingsController extends AppController
         $funding->submit_date = null;
         $fundingsTable->save($funding);
         */
+    }
+
+    public function fb($fundingUid) {
+        $pdfWriterService = new FoerderbewilligungPdfWriterService();
+        $pdfWriterService->prepareAndSetData($fundingUid);
+        $pdfWriterService->writeInline();
     }
 
     private function handleDeleteFundinguploads($funding, $associations, $patchedEntity, $newFundinguploads) {

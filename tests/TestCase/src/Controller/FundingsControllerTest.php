@@ -108,15 +108,9 @@ class FundingsControllerTest extends AppTestCase
         }
     }
 
-    private function getFundingWithAssociations() {
-        $fundingsTable = $this->getTableLocator()->get('Fundings');
-        $funding = $fundingsTable->find(contain: ['Workshops', 'OwnerUsers', 'Fundingsupporters', 'Fundingdatas', 'Fundingbudgetplans', 'FundinguploadsActivityProofs', 'FundinguploadsFreistellungsbescheids'])->first();
-        $funding->owner_user->revertPrivatizeData();
-        return $funding;
-    }
-
     public function testEditAsOrgaOk() {
 
+        $fundingsTable = $this->getTableLocator()->get('Fundings');
         $testWorkshopUid = 2;
         $this->loginAsOrga();
         $this->prepareWorkshopForFunding($testWorkshopUid);
@@ -240,7 +234,8 @@ class FundingsControllerTest extends AppTestCase
         ]);
         $this->assertResponseContains('Der Förderantrag wurde erfolgreich zwischengespeichert.');
 
-        $funding = $this->getFundingWithAssociations();
+        $fundingUid = $fundingsTable->find()->first()->uid;
+        $funding = $fundingsTable->getUnprivatizedFundingWithAllAssociations($fundingUid);
 
         $this->assertEquals($verifiedFields, $funding->verified_fields); // must not contain invalid workshops-website
 
@@ -324,7 +319,7 @@ class FundingsControllerTest extends AppTestCase
         $this->assertResponseContains('Es ist nur eine Datei erlaubt.');
         $this->assertResponseContains('Nur PDF, JPG und PNG-Dateien sind erlaubt.');
 
-        $funding = $this->getFundingWithAssociations();
+        $funding = $fundingsTable->getUnprivatizedFundingWithAllAssociations($fundingUid);
 
         $this->assertCount(1, $funding->fundinguploads_activity_proofs);
         $this->assertCount(1, $funding->fundinguploads_freistellungsbescheids);
@@ -346,7 +341,7 @@ class FundingsControllerTest extends AppTestCase
             ]
         ]);
 
-        $funding = $this->getFundingWithAssociations();
+        $funding = $fundingsTable->getUnprivatizedFundingWithAllAssociations($fundingUid);
         $this->assertCount(0, $funding->fundinguploads_activity_proofs);
         $this->assertCount(0, $funding->fundinguploads_freistellungsbescheids);
 

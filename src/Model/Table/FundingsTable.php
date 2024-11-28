@@ -115,6 +115,22 @@ class FundingsTable extends AppTable
         return true;
     }
 
+    public function getUnprivatizedFundingWithAllAssociations($fundingUid) {
+        $funding = $this->find(contain: [
+            'Workshops',
+            'OwnerUsers',
+            'Fundingsupporters',
+            'Fundingdatas',
+            'Fundingbudgetplans',
+            'FundinguploadsActivityProofs',
+            'FundinguploadsFreistellungsbescheids'
+        ])->where([
+            $this->aliasField('uid') => $fundingUid,
+        ])->first();
+        $funding->owner_user->revertPrivatizeData();
+        return $funding;
+    }
+
     public function deleteCustom($fundingUid) {
 
         $funding = $this->find()->where([

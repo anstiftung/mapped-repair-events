@@ -121,6 +121,14 @@ class Funding extends Entity
         return $total;
     }
 
+    public function _getBudgetplanTotalWithLimit() {
+        $total = $this->budgetplan_total;
+        if ($total > self::MAX_FUNDING_SUM) {
+            return self::MAX_FUNDING_SUM;
+        }
+        return $total;
+    }
+
     public function _getGroupedValidBudgetplans() {
         $result = [];
         foreach($this->fundingbudgetplans as $fundingbudgetplan) {
@@ -342,13 +350,6 @@ class Funding extends Entity
     public function _getSubmitDateFormatted(): string {
         if ($this->submit_date !== null) {
             return $this->submit_date->format('d.m.Y H:i');
-        }
-        return '';
-    }
-
-    public function _getSubmitDateFormattedForFilename(): string {
-        if ($this->submit_date !== null) {
-            return $this->submit_date->format('Y-m-d_H-i');
         }
         return '';
     }
