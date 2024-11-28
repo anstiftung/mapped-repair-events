@@ -8,6 +8,7 @@ use Cake\Utility\Inflector;
 use App\Model\Entity\Fundingupload;
 use Cake\Http\Exception\NotFoundException;
 use App\Controller\Component\StringComponent;
+use Cake\I18n\DateTime;
 
 class FundingsController extends AppController
 {
@@ -158,6 +159,7 @@ class FundingsController extends AppController
             }
 
             $patchedEntity->owner_user->private = $this->updatePrivateFieldsForFieldsThatAreNotRequiredInUserProfile($patchedEntity->owner_user->private);
+            $patchedEntity->modified = DateTime::now();
             $fundingsTable->save($patchedEntity, ['associated' => $associationsWithoutValidation]);
             $this->AppFlash->setFlashMessage('Der Förderantrag wurde erfolgreich zwischengespeichert.');
 

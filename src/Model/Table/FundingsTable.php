@@ -1,11 +1,9 @@
 <?php
 namespace App\Model\Table;
 
-use AssetCompress\Factory;
 use Cake\Routing\Router;
 use Cake\Database\Schema\TableSchemaInterface;
 use Cake\Datasource\FactoryLocator;
-use App\Model\Entity\Funding;
 use App\Model\Entity\Fundingupload;
 use App\Services\FolderService;
 use Cake\Http\Exception\NotFoundException;
