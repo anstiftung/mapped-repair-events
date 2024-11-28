@@ -2,7 +2,7 @@
     use App\Model\Entity\Funding;
 ?>
 
-<fieldset>
+<fieldset class="full-width">
     <legend>Einverständniserklärungen</legend>
     <?php
         echo '<div class="verification-wrapper ' . $funding->checkboxes_status_css_class . '">';
