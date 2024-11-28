@@ -22,6 +22,9 @@ class FundingsupportersTable extends Table
         if (isset($data['iban'])) {
             $data['iban'] = StringComponent::removeWhitespace($data['iban']);
         }
+        if (isset($data['bic'])) {
+            $data['bic'] = StringComponent::removeWhitespace($data['bic']);
+        }
         if (isset($data['website'])) {
             $data['website'] = StringComponent::addProtocolToUrl($data['website']);
         }
@@ -65,6 +68,10 @@ class FundingsupportersTable extends Table
         $validator->add('iban', 'iban', [
             'rule' => 'iban',
             'message' => 'Bitte trage eine gültige IBAN ein.'
+        ]);
+        $validator->add('bic', 'validFormat', [
+            'rule' => ['custom', BIC_REGEX],
+            'message' => 'Bitte trage einen gültigen BIC ein'
         ]);
         return $validator;
     }
