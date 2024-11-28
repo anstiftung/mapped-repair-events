@@ -59,7 +59,6 @@ $this->element('addScript', ['script' =>
         echo $this->element('funding/blocks/blockFundingsupporterUser', ['funding' => $funding, 'disabled' => true]);
         echo $this->element('funding/blocks/blockFundingsupporterBank', ['funding' => $funding, 'disabled' => true]);
         echo $this->element('funding/blocks/blockDescription', ['funding' => $funding, 'disabled' => true]);
-        echo $this->element('funding/blocks/blockCheckboxes', ['funding' => $funding, 'disabled' => true]);
 
         echo '<fieldset>';
             echo '<legend>Kostenplan</legend>';
@@ -75,6 +74,8 @@ $this->element('addScript', ['script' =>
             echo '<div style="font-size:14px;"><b>Gesamtsumme: ' . $this->MyNumber->formatAsDecimal($funding->budgetplan_total) . ' €</b></div>';
 
         echo '</fieldset>';
+
+        echo $this->element('funding/blocks/blockCheckboxes', ['funding' => $funding, 'disabled' => true]);
 
     echo '</div>';
 
