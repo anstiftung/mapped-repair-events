@@ -56,26 +56,21 @@ abstract class PdfWriterService
         $viewBuilder->setLayout('ajax')->setVars($this->getData())->setTemplate($this->templateFile)->build()->render();
     }
 
-    private function setContent()
-    {
-        $this->pdfLibrary->html = $this->getContent();
-    }
-
     public function writeInline()
     {
-        $this->setContent();
+        $this->getContent();
         return $this->pdfLibrary->Output($this->getFilename(), 'I');
     }
 
     public function writeAttachment()
     {
-        $this->setContent();
+        $this->getContent();
         return $this->pdfLibrary->Output('', 'S');
     }
 
     public function writeFile()
     {
-        $this->setContent();
+        $this->getContent();
 
         // pdf saved on server
         if (file_exists($this->getFilename())) {
@@ -92,7 +87,7 @@ abstract class PdfWriterService
 
     public function writeHtml()
     {
-        $this->setContent();
+        $this->getContent();
         return $this->pdfLibrary->getHtml();
     }
 
