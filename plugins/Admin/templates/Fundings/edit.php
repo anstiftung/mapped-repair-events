@@ -19,6 +19,10 @@ $this->element('addScript', ['script' =>
     ]);
     echo $this->element('heading', ['first' => 'Förderantrag (UID: ' . $funding->uid . ') ' . $funding->workshop->name]);
 
+    if ($funding->is_submitted) {
+        echo $this->element('funding/submitInfo', ['funding' => $funding]);
+    }
+
     echo $this->Form->hidden('referer', ['value' => $referer]);
     $this->Form->unlockField('referer');
 
@@ -34,8 +38,9 @@ $this->element('addScript', ['script' =>
             echo '<fieldset>';
                 echo '<legend>Status Aktivitätsnachweis</legend>';
                 echo $this->element('funding/status/activityProofStatus', ['funding' => $funding]);
-                echo $this->Form->control('Fundings.activity_proof_status', ['label' => 'Status', 'options' => Funding::STATUS_MAPPING_UPLOADS]);
-                echo $this->Form->control('Fundings.activity_proof_comment', ['label' => 'Kommentar']);
+                echo $this->Form->control('Fundings.activity_proof_status', ['label' => 'Status', 'options' => Funding::STATUS_MAPPING_UPLOADS, 'disabled' => $funding->is_submitted]);
+               
+                echo $this->Form->control('Fundings.activity_proof_comment', ['label' => 'Kommentar', 'disabled' => $funding->is_submitted]);
 
             echo '</fieldset>';
         }
@@ -49,8 +54,8 @@ $this->element('addScript', ['script' =>
         echo '<fieldset>';
             echo '<legend>Status Freistellungsbescheid</legend>';
             echo $this->element('funding/status/freistellungsbescheidStatus', ['funding' => $funding]);
-            echo $this->Form->control('Fundings.freistellungsbescheid_status', ['label' => 'Status', 'options' => Funding::STATUS_MAPPING_UPLOADS]);
-            echo $this->Form->control('Fundings.freistellungsbescheid_comment', ['label' => 'Kommentar']);
+            echo $this->Form->control('Fundings.freistellungsbescheid_status', ['label' => 'Status', 'options' => Funding::STATUS_MAPPING_UPLOADS, 'disabled' => $funding->is_submitted]);
+            echo $this->Form->control('Fundings.freistellungsbescheid_comment', ['label' => 'Kommentar', 'disabled' => $funding->is_submitted]);
         echo '</fieldset>';
 
         echo $this->element('funding/blocks/blockWorkshop', ['funding' => $funding, 'disabled' => true]);

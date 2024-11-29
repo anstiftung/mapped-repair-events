@@ -361,6 +361,9 @@ body.fundings.index .admin tr.is-verified {
     background-color: var(--is-verified);
     color: #fff;
 }
+body.fundings.edit .admin .verification-wrapper {
+    margin-bottom: 20px;
+}
 body.fundings.edit .admin #fundingForm fieldset:not(.fundingbudgetplan) div.input:not(.file) {
     grid-template-columns: 185px auto;
 }
