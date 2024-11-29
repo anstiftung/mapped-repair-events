@@ -15,7 +15,7 @@ return [
         'workertimeout' => 360, // cron starts new worker every 5 min (=300 sec), overlap
         'workermaxruntime' => 360,
         'sleeptime' => 5,
-        'cleanuptimeout' => 60 * 60 * 24 * 30, // 30 days
+        'cleanuptimeout' => 60 * 60 * 24 * 10, // 10 days
         'gcprob' => 100,
         'connection' => $connection,
         'exitwhennothingtodo' => $exitwhennothingtodo,
