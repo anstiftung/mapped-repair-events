@@ -161,6 +161,7 @@ return [
             'DateLong2' => 'dd.MM.yyyy',
             'DateLong2WithWeekday' => 'EEEE, dd.MM.yyyy',
             'DateNTimeShort' => 'dd.MM.y HH:mm',
+            'DateNTimeShortWithSeconds' => 'dd.MM.y HH:mm:ss',
             'TimeShort' => 'HH:mm',
             'TimeWithSeconds' => 'HH:mm:ss',
             'DateNTimeForDatepicker' => 'dd.MM.yyyy HH:mm'
