@@ -40,6 +40,8 @@ $pdf->writeHTML($html, true, false, true, false, '');
 $pdf->Ln(3);
 
 $html = '';
+$tableArgs = ['100%', '85%', '15%', 'left', 'right'];
+
 foreach($funding->grouped_valid_budgetplans as $typeId => $fundingbudgetplans) {
     $html .= '<b>' . Fundingbudgetplan::TYPE_MAP[$typeId] . '</b><br />';
     $preparedDataForTable = [];
@@ -49,14 +51,14 @@ foreach($funding->grouped_valid_budgetplans as $typeId => $fundingbudgetplans) {
             'value' => $this->MyNumber->formatAsDecimal($fundingbudgetplan->amount) . ' €',
         ];
     }
-    $html .= $pdf->getFundingDataAsTable($preparedDataForTable, '75%', '70%', '30%', 'left', 'right');
+    $html .= $pdf->getFundingDataAsTable($preparedDataForTable, ...$tableArgs);
     $preparedSumDataForTable = [
         [
             'label' => '',
             'value' => '<b>' . $this->MyNumber->formatAsDecimal($funding->grouped_valid_budgetplans_totals[$typeId]) . ' €</b>',
         ],
     ];
-    $html .= $pdf->getFundingDataAsTable($preparedSumDataForTable, '75%', '70%', '30%', 'left', 'right');
+    $html .= $pdf->getFundingDataAsTable($preparedSumDataForTable, ...$tableArgs);
 }
 $pdf->writeHTML($html, true, false, true, false, '');
 
@@ -67,6 +69,6 @@ $preparedSumDataForTable = [
     ],
 ];
 
-$html = $pdf->getFundingDataAsTable($preparedSumDataForTable, '75%', '70%', '30%', 'left', 'right');
+$html = $pdf->getFundingDataAsTable($preparedSumDataForTable, ...$tableArgs);
 $pdf->SetFontSizeDefault();
 $pdf->writeHTML($html, true, false, true, false, '');
