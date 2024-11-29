@@ -37,7 +37,6 @@ $html = '
         <td align="left"><b>Förderbewilligung</b></td>
         <td align="right">München, ' . $formattedCurrentDate . '</td>
     </tr>
-    <tr>
 </table>';
 
 $pdf->writeHTML($html, true, false, true, false, '');
@@ -55,24 +54,36 @@ Umwelt, Naturschutz, nukleare Sicherheit und Verbraucherschutz (BMUV) aufgrund e
 in Höhe von <b>' . $this->MyNumber->formatAsDecimal($funding->budgetplan_total_with_limit) . ' €</b> Euro gewährt.
 </p>
 
-<p>Die Mittel sind vorgesehen für Anschaffungen/Maßnahmen gemäß Antrag vom ' . $formattedCurrentDate . '.</p>
+<p>
+Die Mittel sind vorgesehen für Anschaffungen/Maßnahmen gemäß Antrag vom ' . $formattedCurrentDate . '.
+</p>
 
-<p>Die Fördersumme wird auf das Konto ' . $funding->fundingsupporter->iban . ' überwiesen.</p>
+<p>
+Die Fördersumme wird auf das Konto ' . $funding->fundingsupporter->iban . ' überwiesen.
+</p>
 
 <p>Die zugrundeliegenden
 <a href="'.Configure::read('AppConfig.serverName') . $this->MyHtml->urlPageDetail('richtlinie').'">Förderrichtlinien</a>
-sind verbindlich einzuhalten.</p>
+sind verbindlich einzuhalten.
+</p>
 
-<p>Der Empfänger stellt der anstiftung <b><u>unmittelbar nach Erhalt</b></u> der Zuwendung eine Zuwendungsbestätigung gemäß dem aktuell
+<p>
+Der Empfänger stellt der anstiftung <b><u>unmittelbar nach Erhalt</b></u> der Zuwendung eine Zuwendungsbestätigung gemäß dem aktuell
 gültigen amtlichen Muster (§ 10 b EStG) des Bundesministeriums der Finanzen über die erhaltene Fördersumme aus und lädt
-sie im Förderportal hoch.</p>
+sie im Förderportal hoch.
+</p>
 ';
 $pdf->writeHTML($html, true, false, true, false, '');
 
 $pdf->Ln(10);
 
 $html = '
-<p>Mit freundlichen Grüßen</p>
-<p>anstiftung</p>';
+<p>
+Mit freundlichen Grüßen
+</p>
+
+<p>
+anstiftung
+</p>';
 
 $pdf->writeHTML($html, true, false, true, false, '');
