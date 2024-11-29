@@ -250,7 +250,7 @@ if ($showDeleteLink) {
 
                         if ($field['type'] == 'datetime') {
                             if ($value) {
-                                echo $value->i18nFormat(Configure::read('DateFormat.de.DateNTimeShortWithSeconds'));
+                                echo $value->i18nFormat(Configure::read('DateFormat.de.DateNTimeShort'));
                             }
                         }
                         if ($field['type'] == 'datetimeWithSeconds') {
