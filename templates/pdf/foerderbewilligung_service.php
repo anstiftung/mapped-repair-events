@@ -36,7 +36,7 @@ in Höhe von <b>' . $this->MyNumber->formatAsDecimal($funding->budgetplan_total_
 </p>
 
 <p>
-Die Mittel sind vorgesehen für Anschaffungen/Maßnahmen gemäß Antrag vom ' . $formattedCurrentDate . '.
+Die Mittel sind vorgesehen für Anschaffungen/Maßnahmen gemäß Antrag vom ' . $formattedTimestamp . '.
 </p>
 
 <p>
