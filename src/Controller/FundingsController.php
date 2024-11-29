@@ -224,7 +224,7 @@ class FundingsController extends AppController
     public function fb($fundingUid) {
         $pdfWriterService = new FoerderbewilligungPdfWriterService();
         $pdfWriterService->prepareAndSetData($fundingUid);
-        $pdfWriterService->writeInline();
+        die($pdfWriterService->writeInline());
     }
 
     private function handleDeleteFundinguploads($funding, $associations, $patchedEntity, $newFundinguploads) {
