@@ -614,7 +614,7 @@ class MyHtmlHelper extends HtmlHelper {
 
         $bytes /= pow(1024, $pow);
 
-        return round($bytes, $precision) . ' ' . $units[$pow];
+        return number_format($bytes, $precision, ',', '.') . ' ' . $units[$pow];
     }
 
     function getPhotoDimensions($dimension) {
