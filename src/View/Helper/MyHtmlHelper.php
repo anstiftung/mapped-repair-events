@@ -240,6 +240,14 @@ class MyHtmlHelper extends HtmlHelper {
         return $this->urlFundings() . '/uploadDetail/' . $fundinguploadId;
     }
 
+    function urlFundingFoerderantragDownload($fundingUid) {
+        return $this->urlFundings() . '/download/foerderantrag/' . $fundingUid;
+    }
+
+    function urlFundingFoerderbewilligungDownload($fundingUid) {
+        return $this->urlFundings() . '/download/foerderbewilligung/' . $fundingUid;
+    }
+
     function urlFundingsDelete($fundinguploadId) {
         return $this->urlFundings() . '/delete/' . $fundinguploadId;
     }

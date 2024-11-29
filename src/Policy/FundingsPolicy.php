@@ -28,9 +28,21 @@ class FundingsPolicy implements RequestPolicyInterface
             return false;
         }
 
+        if (in_array($request->getParam('action'), ['uploadDetail', 'download'])) {
 
-        if (in_array($request->getParam('action'), ['uploadDetail'])) {
+            $fundingUid = (int) $request->getParam('fundingUid');
+            $fundingsTable = FactoryLocator::get('Table')->get('Fundings');
+            $entity = $fundingsTable->find()->where([
+                $fundingsTable->aliasField('uid') => $fundingUid,
+                $fundingsTable->aliasField('owner') => $identity->uid,
+            ])->first();
+
+            if (empty($entity)) {
+                return false;
+            }
+
             return true;
+
         }
 
         if (in_array($request->getParam('action'), ['delete'])) {
@@ -53,10 +65,6 @@ class FundingsPolicy implements RequestPolicyInterface
         }
 
         if (in_array($request->getParam('action'), ['edit'])) {
-
-            if ($identity->isAdmin()) {
-                return true;
-            }
 
             $workshopUid = (int) $request->getParam('workshopUid');
 

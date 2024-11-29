@@ -436,6 +436,29 @@ class FundingsController extends AppController
 
     }
 
+    public function download() {
+
+        $fundingUid = $this->getRequest()->getParam('fundingUid');
+        $type = $this->getRequest()->getParam('type');
+
+        $fundingsTable = $this->getTableLocator()->get('Fundings');
+        $funding = $fundingsTable->find()->where([
+            $fundingsTable->aliasField('uid') => $fundingUid,
+            $fundingsTable->aliasField('submit_date IS NOT NULL'),
+        ])->first();
+
+        if (empty($funding)) {
+            throw new NotFoundException;
+        }
+
+        $filename = ucfirst($type) . '_' . $funding->uid . '_' . $funding->submit_date->i18nFormat('yyyyMMdd_HHmmss') . '.pdf';
+        $filenameWithPath = Fundingupload::UPLOAD_PATH . $funding->uid . DS . 'attachments' . DS . $filename;
+        $response = $this->response->withFile($filenameWithPath);
+        $response = $response->withHeader('Content-Disposition', 'inline; filename="' . $filename . '"');
+        return $response;
+
+    }
+
 
     public function uploadDetail() {
 
