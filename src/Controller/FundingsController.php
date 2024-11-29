@@ -134,6 +134,7 @@ class FundingsController extends AppController
                     // cleaning cannot be done in entity because of allowedBasicHtmlFields
                     foreach ($this->request->getData($dataKey) as $field => $value) {
                         $cleanedValue = strip_tags($value);
+                        $cleanedValue = StringComponent::removeEmojis($cleanedValue);
                         $this->request = $this->request->withData($dataKey . '.' . $field, $cleanedValue);
                     }
                 }

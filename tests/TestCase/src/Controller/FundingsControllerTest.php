@@ -140,7 +140,7 @@ class FundingsControllerTest extends AppTestCase
         ];
 
         $testWorkshop = [
-            'name' => $newName,
+            'name' => $newName . '🥳',
             'street' => $newStreet . '<script>alert("XSS");</script>',
             'zip' => $newZip,
             'city' => $newCity,
@@ -150,16 +150,16 @@ class FundingsControllerTest extends AppTestCase
         ];
 
         $testFundingsupporter = [
-            'name' => $newFundingsupporterName,
+            'name' => $newFundingsupporterName . '🥳',
             'website' => 'orf.at',
         ];
 
         $testFundingdata = [
-            'description' => $newFundingdataDescription,
+            'description' => $newFundingdataDescription . '🥳',
         ];
 
         $testOwnerUser = [
-            'firstname' => $newOwnerFirstname,
+            'firstname' => $newOwnerFirstname . '🥳',
             'lastname' => $newOwnerLastname,
             'email' => $newOwnerEmail,
             'use_custom_coordinates' => 0,
