@@ -25,8 +25,8 @@ class FoerderbewilligungPdfWriterService extends PdfWriterService
         $funding = $fundingsTable->getUnprivatizedFundingWithAllAssociations($fundingUid);
 
         $now = DateTime::now();
-        $foerderbewilligungFilename = 'Foerderbewilligung_' . $funding->uid . '_' . $now->i18nFormat('yyyyMMdd_HHmmss') . '.pdf';
-        $this->setFilename(Fundingupload::UPLOAD_PATH . $funding->uid . DS . 'attachments' . DS . $foerderbewilligungFilename);
+        $filename = 'Foerderbewilligung_' . $funding->uid . '_' . $now->i18nFormat('yyyyMMdd_HHmmss') . '.pdf';
+        $this->setFilename(Fundingupload::UPLOAD_PATH . $funding->uid . DS . 'attachments' . DS . $filename);
         
         $this->setData([
             'funding' => $funding,

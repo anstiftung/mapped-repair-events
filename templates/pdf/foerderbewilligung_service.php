@@ -1,26 +1,7 @@
 <?php
 use Cake\Core\Configure;
 
-$pdf->setPrintHeader(false);
-$pdf->setPrintFooter(false);
-
-$pdf->AddPage();
-
-$pdf->SetMargins(0, 0, 0);
-$pdf->SetAutoPageBreak(false, 0);
-
-$pageWidth = $pdf->getPageWidth();
-$pageHeight = $pdf->getPageHeight();
-
-$imageFile = WWW_ROOT . '/img/core/foerderbewilligung-pdf-background.png';
-$pdf->Image($imageFile, 0, 0, $pageWidth, $pageHeight);
-
-$pdf->SetLeftMargin(18);
-$pdf->SetRightMargin(18);
-
-$pdf->SetAutoPageBreak(true, 0);
-
-$pdf->Ln(60);
+$pdf->setDefaults();
 
 $html = '
 <p>' .

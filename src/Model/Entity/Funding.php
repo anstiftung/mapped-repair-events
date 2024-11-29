@@ -94,6 +94,15 @@ class Funding extends Entity
         ['name' => 'checkbox_c', 'options' => ['type' => 'checkbox', 'class' => 'no-verify', 'label' => 'Mit der Einreichung erkläre ich mein Einverständnis, dass vorstehende Daten erhoben und elektronisch gespeichert werden, sowie das Einverständnis betroffener Dritter dazu eingeholt zu haben.']],
     ];
 
+    const FIELDS_WORKSHOP_LABEL = 'Stammdaten der Reparatur-Initiative';
+    const FIELDS_OWNER_USER_LABEL = 'Personenbezogene Daten Ansprechpartner*in';
+    const FIELDS_FUNDINGSUPPORTER_ORGANIZATION_LABEL = 'Stammdaten der Trägerorganisation';
+    const FIELDS_FUNDINGSUPPORTER_USER_LABEL = 'Ansprechpartner*in der Trägerorganisation';
+    const FIELDS_FUNDINGSUPPORTER_BANK_LABEL = 'Bankverbindung der Trägerorganisation';
+    const FIELDS_FUNDINGDATA_DESCRIPTION_LABEL = 'Kurzbeschreibung Vorhaben';
+    const FIELDS_FUNDINGBUDGETPLAN_LABEL = 'Kostenplan';
+    const FIELDS_FUNDING_DATA_CHECKBOXES_LABEL = 'Einverständniserklärungen';
+    
     public static function getRenderedFields($fields, $entityString, $form, $disabled, $entity = null) {
         $renderedFields = '';
         $fieldsToBeFormattedWithToDigits = ['amount'];

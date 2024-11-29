@@ -10,6 +10,7 @@ use Cake\Http\Exception\NotFoundException;
 use App\Controller\Component\StringComponent;
 use Cake\I18n\DateTime;
 use App\Services\PdfWriter\FoerderbewilligungPdfWriterService;
+use App\Services\PdfWriter\FoerderantragPdfWriterService;
 
 class FundingsController extends AppController
 {
@@ -209,8 +210,13 @@ class FundingsController extends AppController
         $funding->submit_date = DateTime::now();
         $fundingsTable->save($funding);
 
-        // generate pdf
+        // generate foerderbewilligung pdf
         $pdfWriterService = new FoerderbewilligungPdfWriterService();
+        $pdfWriterService->prepareAndSetData($funding->uid);
+        $pdfWriterService->writeFile();
+
+        // generate foerderantrag pdf
+        $pdfWriterService = new FoerderantragPdfWriterService();
         $pdfWriterService->prepareAndSetData($funding->uid);
         $pdfWriterService->writeFile();
 
@@ -221,8 +227,14 @@ class FundingsController extends AppController
         */
     }
 
-    public function fb($fundingUid) {
+    public function foerderbewilligungPdf($fundingUid) {
         $pdfWriterService = new FoerderbewilligungPdfWriterService();
+        $pdfWriterService->prepareAndSetData($fundingUid);
+        die($pdfWriterService->writeInline());
+    }
+
+    public function foerderantragPdf($fundingUid) {
+        $pdfWriterService = new FoerderantragPdfWriterService();
         $pdfWriterService->prepareAndSetData($fundingUid);
         die($pdfWriterService->writeInline());
     }

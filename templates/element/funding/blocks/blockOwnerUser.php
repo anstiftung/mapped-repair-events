@@ -3,7 +3,7 @@
 ?>
 
 <fieldset>
-    <legend>Personenbezogene Daten Ansprechpartner*in (UID: <?php echo $funding->owner_user->uid; ?>)</legend>
+    <legend><?php echo Funding::FIELDS_OWNER_USER_LABEL; ?> (UID: <?php echo $funding->owner_user->uid; ?>)</legend>
     <?php if (!$disabled) { ?>
         <p style="margin-bottom:10px;padding:5px;">
             Überprüfe deine persönlichen Daten.

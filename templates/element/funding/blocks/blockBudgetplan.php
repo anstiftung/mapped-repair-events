@@ -4,7 +4,7 @@ use App\Model\Table\FundingsTable;
 use App\Model\Entity\Funding;
 
 echo '<fieldset class="fundingbudgetplan full-width">';
-    echo '<legend>Kostenplan</legend>';
+    echo '<legend>' . Funding::FIELDS_FUNDINGBUDGETPLAN_LABEL . '</legend>';
 
     echo '<div class="verification-wrapper ' . $funding->budgetplan_status_css_class . '">';
         echo '<p>' . $funding->budgetplan_status_human_readable . '</p>';
