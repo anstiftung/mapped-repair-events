@@ -30,6 +30,10 @@ class FundingsPolicy implements RequestPolicyInterface
 
         if (in_array($request->getParam('action'), ['uploadDetail', 'download'])) {
 
+            if  ($identity->isAdmin()) {
+                return true;
+            }
+            
             $fundingUid = (int) $request->getParam('fundingUid');
             $fundingsTable = FactoryLocator::get('Table')->get('Fundings');
             $entity = $fundingsTable->find()->where([

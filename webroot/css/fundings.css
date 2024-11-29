@@ -60,6 +60,9 @@ body.fundings.index .verification-wrapper {
     margin-bottom: 0;
     margin-top: 10px;
 }
+body.fundings.index .download-links {
+    margin-top: 10px;
+}
 body.fundings .verification-wrapper p.comment {
     padding: 10px;
     margin-top: 10px;
@@ -361,9 +364,14 @@ body.fundings.index .admin tr.is-verified {
     background-color: var(--is-verified);
     color: #fff;
 }
-body.fundings.edit .admin .verification-wrapper {
-    margin-bottom: 20px;
+body.fundings.edit .admin .verification-wrapper,
+body.fundings.edit .admin .download-links {
+    margin-bottom: 10px;
 }
+body.fundings.edit .admin .download-links {
+    padding-left: 10px;
+}
+
 body.fundings.edit .admin #fundingForm fieldset:not(.fundingbudgetplan) div.input:not(.file) {
     grid-template-columns: 185px auto;
 }
