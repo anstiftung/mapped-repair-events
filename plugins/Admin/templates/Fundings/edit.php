@@ -21,6 +21,7 @@ $this->element('addScript', ['script' =>
 
     if ($funding->is_submitted) {
         echo $this->element('funding/submitInfo', ['funding' => $funding]);
+        echo $this->Form->control('Fundings.reopen', ['type' => 'checkbox', 'label' => 'Förderstatus "eingereicht" zurücksetzen']);
     }
 
     echo $this->Form->hidden('referer', ['value' => $referer]);

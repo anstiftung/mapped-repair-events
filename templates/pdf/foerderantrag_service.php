@@ -5,7 +5,7 @@ use App\Model\Entity\Funding;
 
 $pdf->setDefaults();
 
-$html = '<b>Förderantrag vom ' . $formattedCurrentDate . ' - UID: ' . $funding->uid . '</b>';
+$html = '<b>Förderantrag vom ' . $formattedTimestamp . ' - UID: ' . $funding->uid . '</b>';
 $pdf->writeHTML($html, true, false, true, false, '');
 $pdf->Ln(15);
 

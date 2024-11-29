@@ -16,7 +16,7 @@ $html = '
 <table border="1" cellpadding="0">
     <tr>
         <td align="left"><b>Förderbewilligung</b></td>
-        <td align="right">München, ' . $formattedCurrentDate . '</td>
+        <td align="right">München, ' . $formattedTimestamp . '</td>
     </tr>
 </table>';
 

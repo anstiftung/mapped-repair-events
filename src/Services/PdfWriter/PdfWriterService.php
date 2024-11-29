@@ -31,6 +31,11 @@ abstract class PdfWriterService
         return $this->filename;
     }
 
+    public function getFilenameWithoutPath(): string
+    {
+        return basename($this->filename);
+    }
+
     public function setFilename($filename): PdfWriterService
     {
         $this->filename = $filename;

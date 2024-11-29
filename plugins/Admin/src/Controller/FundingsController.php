@@ -64,9 +64,16 @@ class FundingsController extends AdminAppController
 
         if (!empty($this->request->getData())) {
             $associtions =  ['associated' => ['FundinguploadsActivityProofs', 'FundinguploadsFreistellungsbescheids']];
+
             $patchedEntity = $fundingsTable->patchEntity($funding, $this->request->getData(), $associtions);
             if (!($patchedEntity->hasErrors())) {
+
                 $this->sendEmails($patchedEntity);
+
+                if (!empty($this->request->getData('Fundings.reopen') && $this->request->getData('Fundings.reopen'))) {
+                    $patchedEntity->submit_date = null;
+                }
+    
                 $fundingsTable->save($patchedEntity, $associtions);
                 $this->redirect($this->getReferer());
             } else {

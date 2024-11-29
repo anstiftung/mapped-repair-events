@@ -11,6 +11,7 @@ use App\Controller\Component\StringComponent;
 use Cake\I18n\DateTime;
 use App\Services\PdfWriter\FoerderbewilligungPdfWriterService;
 use App\Services\PdfWriter\FoerderantragPdfWriterService;
+use App\Mailer\AppMailer;
 
 class FundingsController extends AppController
 {
@@ -192,7 +193,7 @@ class FundingsController extends AppController
 
             if ($funding->is_submittable && !empty($this->request->getData('submit_funding'))) {
                 $this->submitFunding($funding);
-                $this->AppFlash->setFlashMessage('Der Förderantrag wurde erfolgreich eingereicht.');
+                $this->AppFlash->setFlashMessage('Der Förderantrag wurde erfolgreich eingereicht und bewilligt.');
                 return $this->redirect(Configure::read('AppConfig.htmlHelper')->urlFundings());
             }
 
@@ -206,36 +207,62 @@ class FundingsController extends AppController
     }
 
     private function submitFunding($funding) {
+
+        try {
+
+            $subject = 'Förderantrag erfolgreich eingereicht (UID: ' . $funding->uid . ')';
+            $email = new AppMailer();
+            $email->viewBuilder()->setTemplate('fundings/funding_submitted');
+            $email->setTo($funding->owner_user->email);
+            $email->setSubject($subject);
+            $email->setViewVars([
+                'data' => $funding->owner_user,
+            ]);
+    
+            $timestamp = DateTime::now();
+
+            $pdfWriterServiceA = new FoerderbewilligungPdfWriterService();
+            $pdfWriterServiceA->prepareAndSetData($funding->uid, $timestamp);
+            $pdfWriterServiceA->writeFile();
+            $email->addAttachments([$pdfWriterServiceA->getFilenameWithoutPath() => [
+                'data' => file_get_contents($pdfWriterServiceA->getFilename()),
+                'mimetype' => 'application/pdf',
+            ]]);
+    
+            $pdfWriterServiceB = new FoerderantragPdfWriterService();
+            $pdfWriterServiceB->prepareAndSetData($funding->uid, $timestamp);
+            $pdfWriterServiceB->writeFile();
+            $email->addAttachments([$pdfWriterServiceB->getFilenameWithoutPath() => [
+                'data' => file_get_contents($pdfWriterServiceB->getFilename()),
+                'mimetype' => 'application/pdf',
+            ]]);
+    
+            $email->addAttachments(['Foerderrichtlinie.pdf' => [
+                'data' => file_get_contents(WWW_ROOT . 'files/foerderung/Foerderrichtlinie.pdf'),
+                'mimetype' => 'application/pdf',
+            ]]);
+    
+            $email->addToQueue();
+    
+        } catch (\Exception $e) {
+            $this->AppFlash->setFlashError('Fehler beim Versenden der E-Mail.');
+        }
+
         $fundingsTable = $this->getTableLocator()->get('Fundings');
-        $funding->submit_date = DateTime::now();
+        $funding->submit_date = $timestamp;;
         $fundingsTable->save($funding);
 
-        // generate foerderbewilligung pdf
-        $pdfWriterService = new FoerderbewilligungPdfWriterService();
-        $pdfWriterService->prepareAndSetData($funding->uid);
-        $pdfWriterService->writeFile();
-
-        // generate foerderantrag pdf
-        $pdfWriterService = new FoerderantragPdfWriterService();
-        $pdfWriterService->prepareAndSetData($funding->uid);
-        $pdfWriterService->writeFile();
-
-        // TODO remove this!
-        /*
-        $funding->submit_date = null;
-        $fundingsTable->save($funding);
-        */
     }
 
     public function foerderbewilligungPdf($fundingUid) {
         $pdfWriterService = new FoerderbewilligungPdfWriterService();
-        $pdfWriterService->prepareAndSetData($fundingUid);
+        $pdfWriterService->prepareAndSetData($fundingUid, DateTime::now());
         die($pdfWriterService->writeInline());
     }
 
     public function foerderantragPdf($fundingUid) {
         $pdfWriterService = new FoerderantragPdfWriterService();
-        $pdfWriterService->prepareAndSetData($fundingUid);
+        $pdfWriterService->prepareAndSetData($fundingUid, DateTime::now());
         die($pdfWriterService->writeInline());
     }
 

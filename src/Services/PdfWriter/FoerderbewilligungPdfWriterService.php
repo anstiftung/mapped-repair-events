@@ -18,19 +18,18 @@ class FoerderbewilligungPdfWriterService extends PdfWriterService
         $this->setPdfLibrary(new AppTcpdfService());
     }
 
-    public function prepareAndSetData($fundingUid)
+    public function prepareAndSetData($fundingUid, $timestamp)
     {
 
         $fundingsTable = FactoryLocator::get('Table')->get('Fundings');
         $funding = $fundingsTable->getUnprivatizedFundingWithAllAssociations($fundingUid);
 
-        $now = DateTime::now();
-        $filename = 'Foerderbewilligung_' . $funding->uid . '_' . $now->i18nFormat('yyyyMMdd_HHmmss') . '.pdf';
+        $filename = 'Foerderbewilligung_' . $funding->uid . '_' . $timestamp->i18nFormat('yyyyMMdd_HHmmss') . '.pdf';
         $this->setFilename(Fundingupload::UPLOAD_PATH . $funding->uid . DS . 'attachments' . DS . $filename);
         
         $this->setData([
             'funding' => $funding,
-            'formattedCurrentDate' => $now->i18nFormat(Configure::read('DateFormat.de.DateLong2')),
+            'formattedTimestamp' => $timestamp->i18nFormat(Configure::read('DateFormat.de.DateLong2')),
         ]);
 
     }

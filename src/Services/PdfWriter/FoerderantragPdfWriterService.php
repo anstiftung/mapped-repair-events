@@ -19,14 +19,13 @@ class FoerderantragPdfWriterService extends PdfWriterService
         $this->setPdfLibrary(new AppTcpdfService());
     }
 
-    public function prepareAndSetData($fundingUid)
+    public function prepareAndSetData($fundingUid, $timestamp)
     {
 
         $fundingsTable = FactoryLocator::get('Table')->get('Fundings');
         $funding = $fundingsTable->getUnprivatizedFundingWithAllAssociations($fundingUid);
 
-        $now = DateTime::now();
-        $filename = 'Foerderantrag_' . $funding->uid . '_' . $now->i18nFormat('yyyyMMdd_HHmmss') . '.pdf';
+        $filename = 'Foerderantrag_' . $funding->uid . '_' . $timestamp->i18nFormat('yyyyMMdd_HHmmss') . '.pdf';
         $this->setFilename(Fundingupload::UPLOAD_PATH . $funding->uid . DS . 'attachments' . DS . $filename);
         
         $blocks = [
@@ -51,11 +50,11 @@ class FoerderantragPdfWriterService extends PdfWriterService
                 'fields' => $this->getPreparedFields(Funding::FIELDS_FUNDINGSUPPORTER_BANK, $funding->fundingsupporter),
             ],
         ];
-
+        
         $this->setData([
             'blocks' => $blocks,
             'description' => $this->getPreparedFields(Funding::FIELDS_FUNDINGDATA_DESCRIPTION, $funding->fundingdata),
-            'formattedCurrentDate' => $now->i18nFormat(Configure::read('DateFormat.de.DateLong2')),
+            'formattedTimestamp' => $timestamp->i18nFormat(Configure::read('DateFormat.de.DateLong2')),
             'funding' => $funding,
         ]);
 
