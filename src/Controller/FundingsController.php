@@ -208,6 +208,8 @@ class FundingsController extends AppController
 
     private function submitFunding($funding) {
 
+        $timestamp = DateTime::now();
+
         try {
 
             $subject = 'Förderantrag erfolgreich eingereicht (UID: ' . $funding->uid . ')';
@@ -219,8 +221,6 @@ class FundingsController extends AppController
                 'data' => $funding->owner_user,
             ]);
     
-            $timestamp = DateTime::now();
-
             $pdfWriterServiceA = new FoerderbewilligungPdfWriterService();
             $pdfWriterServiceA->prepareAndSetData($funding->uid, $timestamp);
             $pdfWriterServiceA->writeFile();
