@@ -70,5 +70,20 @@ $preparedSumDataForTable = [
 ];
 
 $html = $pdf->getFundingDataAsTable($preparedSumDataForTable, ...$tableArgs);
+
+$html = '<b>' . Funding::FIELDS_FUNDING_DATA_CHECKBOXES_LABEL . '</b>';
+$pdf->writeHTML($html, true, false, true, false, '');
+$pdf->Ln(3);
+
+$html = '';
+foreach($checkboxes as $checkbox) {
+    if ($funding->fundingdata[$checkbox['name']] == 0) {
+        $html .= 'Bestätigt';
+    } else {
+        $html .= 'Nicht bestätigt';
+    }
+    $html .= ': "' .$checkbox['label'] . '"<br /><br />';
+}
+
 $pdf->SetFontSizeDefault();
 $pdf->writeHTML($html, true, false, true, false, '');

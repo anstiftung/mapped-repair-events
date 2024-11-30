@@ -54,6 +54,7 @@ class FoerderantragPdfWriterService extends PdfWriterService
         $this->setData([
             'blocks' => $blocks,
             'description' => $this->getPreparedFields(Funding::FIELDS_FUNDINGDATA_DESCRIPTION, $funding->fundingdata),
+            'checkboxes' => $this->getPreparedFields(Funding::FIELDS_FUNDING_DATA_CHECKBOXES, $funding->fundingdata),
             'formattedTimestamp' => $timestamp->i18nFormat(Configure::read('DateFormat.de.DateLong2')),
             'funding' => $funding,
         ]);
@@ -65,6 +66,7 @@ class FoerderantragPdfWriterService extends PdfWriterService
         foreach($definedFields as $workshopField) {
             $workshopFieldName = $workshopField['name'];
             $preparedFields[$workshopFieldName] = [
+                'name' => $workshopFieldName,
                 'label' => $workshopField['options']['label'],
                 'value' => $entity[$workshopFieldName],
             ];
