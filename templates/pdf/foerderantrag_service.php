@@ -2,10 +2,11 @@
 
 use App\Model\Entity\Fundingbudgetplan;
 use App\Model\Entity\Funding;
+use Cake\Core\Configure;
 
 $pdf->setDefaults();
 
-$html = '<b>Förderantrag vom ' . $formattedTimestamp . ' - UID: ' . $funding->uid . '</b>';
+$html = '<b>Förderantrag vom ' . $timestamp->i18nFormat(Configure::read('DateFormat.de.DateNTimeLongWithSeconds')) . ' - UID: ' . $funding->uid . '</b>';
 $pdf->writeHTML($html, true, false, true, false, '');
 $pdf->Ln(15);
 

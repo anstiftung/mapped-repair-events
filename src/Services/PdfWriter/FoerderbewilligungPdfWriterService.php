@@ -29,7 +29,7 @@ class FoerderbewilligungPdfWriterService extends PdfWriterService
         
         $this->setData([
             'funding' => $funding,
-            'formattedTimestamp' => $timestamp->i18nFormat(Configure::read('DateFormat.de.DateLong2')),
+            'timestamp' => $timestamp,
         ]);
 
     }

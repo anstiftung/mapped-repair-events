@@ -16,7 +16,7 @@ $html = '
 <table border="1" cellpadding="0">
     <tr>
         <td align="left"><b>Förderbewilligung</b></td>
-        <td align="right">München, ' . $formattedTimestamp . '</td>
+        <td align="right">München, ' . $timestamp->i18nFormat(Configure::read('DateFormat.de.DateLong2')) . '</td>
     </tr>
 </table>';
 
@@ -36,7 +36,7 @@ in Höhe von <b>' . $this->MyNumber->formatAsDecimal($funding->budgetplan_total_
 </p>
 
 <p>
-Die Mittel sind vorgesehen für Anschaffungen/Maßnahmen gemäß Antrag vom ' . $formattedTimestamp . '.
+Die Mittel sind vorgesehen für Anschaffungen/Maßnahmen gemäß Antrag vom ' . $timestamp->i18nFormat(Configure::read('DateFormat.de.DateNTimeLongWithSeconds')) . '.
 </p>
 
 <p>

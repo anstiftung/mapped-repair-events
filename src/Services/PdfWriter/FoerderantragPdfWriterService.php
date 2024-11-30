@@ -55,7 +55,7 @@ class FoerderantragPdfWriterService extends PdfWriterService
             'blocks' => $blocks,
             'description' => $this->getPreparedFields(Funding::FIELDS_FUNDINGDATA_DESCRIPTION, $funding->fundingdata),
             'checkboxes' => $this->getPreparedFields(Funding::FIELDS_FUNDING_DATA_CHECKBOXES, $funding->fundingdata),
-            'formattedTimestamp' => $timestamp->i18nFormat(Configure::read('DateFormat.de.DateLong2')),
+            'timestamp' => $timestamp,
             'funding' => $funding,
         ]);
 
