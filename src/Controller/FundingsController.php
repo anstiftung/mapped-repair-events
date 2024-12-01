@@ -458,12 +458,17 @@ class FundingsController extends AppController
         if ($type == 'foerderbewilligung') {
             $pdfWriterService = new FoerderbewilligungPdfWriterService();
         }
-        $filename = $pdfWriterService->getFilenameCustom($funding, $funding->submit_date);
-        $filenameWithPath = $pdfWriterService->getUploadPath($funding->uid) . $filename;
 
-        $response = $this->response->withFile($filenameWithPath);
-        $response = $response->withHeader('Content-Disposition', 'inline; filename="' . $filename . '"');
-        return $response;
+        if (isset($pdfWriterService)) {
+            $filename = $pdfWriterService->getFilenameCustom($funding, $funding->submit_date);
+            $filenameWithPath = $pdfWriterService->getUploadPath($funding->uid) . $filename;
+
+            $response = $this->response->withFile($filenameWithPath);
+            $response = $response->withHeader('Content-Disposition', 'inline; filename="' . $filename . '"');
+            return $response;
+        }
+        
+        throw new NotFoundException;
 
     }
 
