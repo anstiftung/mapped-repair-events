@@ -2,6 +2,7 @@
 
 namespace App\Test\TestCase\Controller;
 
+use App\Model\Entity\Funding;
 use App\Model\Entity\Fundingbudgetplan;
 use App\Test\TestCase\AppTestCase;
 use App\Test\TestCase\Traits\LogFileAssertionsTrait;
@@ -15,6 +16,8 @@ use App\Model\Table\FundingsTable;
 use Laminas\Diactoros\UploadedFile;
 use App\Model\Entity\Fundingupload;
 use App\Test\Fixture\UsersFixture;
+use App\Services\PdfWriter\FoerderantragPdfWriterService;
+use App\Services\PdfWriter\FoerderbewilligungPdfWriterService;
 
 class FundingsControllerTest extends AppTestCase
 {
@@ -346,8 +349,96 @@ class FundingsControllerTest extends AppTestCase
         $this->assertCount(0, $funding->fundinguploads_freistellungsbescheids);
 
 
+        // 4) POST create a valid funding and submit
+        $funding->activity_proof_status = Funding::STATUS_VERIFIED_BY_ADMIN;
+        $funding->freistellungsbescheid_status = Funding::STATUS_VERIFIED_BY_ADMIN;
+        $fundingsTable->save($funding);
+
+        $validTestWorkshop = $testWorkshop;
+
+        $validTestOwnerUser = $testOwnerUser;
+        $validTestOwnerUser['email'] = 'test@mailinator.com';
+        $validTestOwnerUser['zip'] = 22222;
+        $validTestOwnerUser['city'] = 'Berlin';
+        $validTestOwnerUser['phone'] = '1234567890';
+
+        $validTestFundingsupporter = $testFundingsupporter;
+        $validTestFundingsupporter['legal_form'] = 'Rechtsform';
+        $validTestFundingsupporter['street'] = 'asdfasdf';
+        $validTestFundingsupporter['zip'] = 22222;
+        $validTestFundingsupporter['city'] = 'Berlin';
+        $validTestFundingsupporter['contact_firstname'] = 'Test';
+        $validTestFundingsupporter['contact_lastname'] = 'Test';
+        $validTestFundingsupporter['contact_phone'] = '1234590';
+        $validTestFundingsupporter['contact_email'] = 'test1@mailinator.com';
+        $validTestFundingsupporter['contact_function'] = 'Funktion';
+        $validTestFundingsupporter['bank_account_owner'] = 'Kontoinhaber';
+        $validTestFundingsupporter['bank_institute'] = 'Bank';
+        $validTestFundingsupporter['iban'] = 'DE89370400440532013000';
+        $validTestFundingsupporter['bic'] = 'RZOODE2L510';
+
+        $validTestFundingdata['description'] = 'Fundingdata Description Ok Fundingdata Description OkFundingdata Description OkFundingdata Description OkFundingdata Description OkFundingdata Description OkFundingdata Description OkFundingdata Description OkFundingdata Description OkFundingdata Description OkFundingdata Description OkFundingdata Description OkFundingdata Description';
+        $validTestFundingdata['checkbox_a'] = 1;
+        $validTestFundingdata['checkbox_b'] = 1;
+        $validTestFundingdata['checkbox_c'] = 1;
+
+        $verifiedFields = [
+            'fundings-workshop-name',
+            'fundings-workshop-street',
+            'fundings-workshop-zip',
+            'fundings-workshop-city',
+            'fundings-workshop-adresszusatz',
+            'fundings-workshop-website',
+            'fundings-workshop-email',
+            'fundings-owner-user-firstname',
+            'fundings-owner-user-lastname',
+            'fundings-owner-user-street',
+            'fundings-owner-user-email',
+            'fundings-owner-user-zip',
+            'fundings-owner-user-city',
+            'fundings-owner-user-phone',
+            'fundings-fundingsupporter-name',
+            'fundings-fundingsupporter-legal-form',
+            'fundings-fundingsupporter-street',
+            'fundings-fundingsupporter-zip',
+            'fundings-fundingsupporter-city',
+            'fundings-fundingsupporter-website',
+            'fundings-fundingsupporter-contact-firstname',
+            'fundings-fundingsupporter-contact-lastname',
+            'fundings-fundingsupporter-contact-phone',
+            'fundings-fundingsupporter-contact-email',
+            'fundings-fundingsupporter-contact-function',
+            'fundings-fundingsupporter-bank-account-owner',
+            'fundings-fundingsupporter-bank-institute',
+            'fundings-fundingsupporter-iban',
+            'fundings-fundingsupporter-bic',
+        ];
+        $validTestWorkshop['website'] = 'https://example.com';
+        $this->post(Configure::read('AppConfig.htmlHelper')->urlFundingsEdit($testWorkshopUid), [
+            'referer' => '/',
+            'Fundings' => [
+                'workshop' => $validTestWorkshop,
+                'owner_user' => $validTestOwnerUser,
+                'fundingsupporter' => $validTestFundingsupporter,
+                'fundingdata' => $validTestFundingdata,
+                'verified_fields' => $verifiedFields,
+            ],
+            'submit_funding' => 1,
+        ]);
+
+        $funding = $fundingsTable->getUnprivatizedFundingWithAllAssociations($fundingUid);
+        $this->assertNotNull($funding->submit_date);
+
+        $foerderantragPdfWriterService = new FoerderantragPdfWriterService();
+        $this->assertFileExists($foerderantragPdfWriterService->getUploadPath($funding->uid) . $foerderantragPdfWriterService->getFilenameCustom($funding, $funding->submit_date));
+
+        $foerderbewilligungPdfWriterService = new FoerderbewilligungPdfWriterService();
+        $this->assertFileExists($foerderbewilligungPdfWriterService->getUploadPath($funding->uid) . $foerderbewilligungPdfWriterService->getFilenameCustom($funding, $funding->submit_date));
+
         // cleanup everything including file uploads
         $fundingsTable = $this->getTableLocator()->get('Fundings');
+        $funding->submit_date = null;
+        $fundingsTable->save($funding);
         $fundingsTable->deleteCustom($funding->uid);
 
     }
