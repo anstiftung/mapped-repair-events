@@ -452,7 +452,7 @@ class FundingsController extends AppController
             throw new NotFoundException;
         }
 
-        $filename = ucfirst($type) . '_anstiftung_bmuv_' . $funding->uid . '_' . $funding->submit_date->i18nFormat('yyyyMMdd_HHmmss') . '.pdf';
+        $filename = ucfirst($type) . 'anstiftung_bmuv_' . $funding->uid . '_' . $funding->submit_date->i18nFormat('yyyyMMdd_HHmmss') . '.pdf';
         $filenameWithPath = Fundingupload::UPLOAD_PATH . $funding->uid . DS . 'attachments' . DS . $filename;
         $response = $this->response->withFile($filenameWithPath);
         $response = $response->withHeader('Content-Disposition', 'inline; filename="' . $filename . '"');

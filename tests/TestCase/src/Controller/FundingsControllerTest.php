@@ -15,16 +15,19 @@ use Cake\Controller\Controller;
 use App\Model\Table\FundingsTable;
 use Laminas\Diactoros\UploadedFile;
 use App\Model\Entity\Fundingupload;
-use App\Test\Fixture\UsersFixture;
 use App\Services\PdfWriter\FoerderantragPdfWriterService;
 use App\Services\PdfWriter\FoerderbewilligungPdfWriterService;
+use App\Test\TestCase\Traits\QueueTrait;
+use Cake\TestSuite\EmailTrait;
 
 class FundingsControllerTest extends AppTestCase
 {
 
+    use EmailTrait;
     use IntegrationTestTrait;
     use LogFileAssertionsTrait;
     use LoginTrait;
+    use QueueTrait;
 
 	public function controllerSpy(EventInterface $event, ?Controller $controller = null): void
     {
@@ -111,7 +114,7 @@ class FundingsControllerTest extends AppTestCase
         }
     }
 
-    public function testEditAsOrgaOk() {
+    public function testEditAndSubmitAsOrgaOk() {
 
         $fundingsTable = $this->getTableLocator()->get('Fundings');
         $testWorkshopUid = 2;
@@ -430,10 +433,19 @@ class FundingsControllerTest extends AppTestCase
         $this->assertNotNull($funding->submit_date);
 
         $foerderantragPdfWriterService = new FoerderantragPdfWriterService();
-        $this->assertFileExists($foerderantragPdfWriterService->getUploadPath($funding->uid) . $foerderantragPdfWriterService->getFilenameCustom($funding, $funding->submit_date));
-
+        $foerderantragPdfFilename = $foerderantragPdfWriterService->getFilenameCustom($funding, $funding->submit_date);
         $foerderbewilligungPdfWriterService = new FoerderbewilligungPdfWriterService();
-        $this->assertFileExists($foerderbewilligungPdfWriterService->getUploadPath($funding->uid) . $foerderbewilligungPdfWriterService->getFilenameCustom($funding, $funding->submit_date));
+        $foerderbewilligungPdfFilename = $foerderbewilligungPdfWriterService->getFilenameCustom($funding, $funding->submit_date);
+        
+        $this->assertFileExists($foerderantragPdfWriterService->getUploadPath($funding->uid) . $foerderantragPdfFilename);
+        $this->assertFileExists($foerderbewilligungPdfWriterService->getUploadPath($funding->uid) . $foerderbewilligungPdfFilename);
+
+        $this->runAndAssertQueue();
+        $this->assertMailCount(1);
+        $this->assertMailSentToAt(0, 'test@mailinator.com');
+        $this->assertMailContainsAt(0, 'Download Förderlogo BMUV');
+        $this->assertMailContainsAttachment($foerderbewilligungPdfFilename);
+        $this->assertMailContainsAttachment($foerderantragPdfFilename);
 
         // cleanup everything including file uploads
         $fundingsTable = $this->getTableLocator()->get('Fundings');
