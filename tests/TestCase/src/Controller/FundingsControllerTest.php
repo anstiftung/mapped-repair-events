@@ -447,6 +447,13 @@ class FundingsControllerTest extends AppTestCase
         $this->assertMailContainsAttachment($foerderbewilligungPdfFilename);
         $this->assertMailContainsAttachment($foerderantragPdfFilename);
 
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlFundingFoerderbewilligungDownload($funding->uid));
+        $this->assertResponseOk();
+        $this->assertContentType('application/pdf');
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlFundingFoerderantragDownload($funding->uid));
+        $this->assertResponseOk();
+        $this->assertContentType('application/pdf');
+
         // cleanup everything including file uploads
         $fundingsTable = $this->getTableLocator()->get('Fundings');
         $funding->submit_date = null;

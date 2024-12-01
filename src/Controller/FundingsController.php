@@ -452,14 +452,20 @@ class FundingsController extends AppController
             throw new NotFoundException;
         }
 
-        $filename = ucfirst($type) . 'anstiftung_bmuv_' . $funding->uid . '_' . $funding->submit_date->i18nFormat('yyyyMMdd_HHmmss') . '.pdf';
-        $filenameWithPath = Fundingupload::UPLOAD_PATH . $funding->uid . DS . 'attachments' . DS . $filename;
+        if ($type == 'foerderantrag') {
+            $pdfWriterService = new FoerderantragPdfWriterService();
+        }
+        if ($type == 'foerderbewilligung') {
+            $pdfWriterService = new FoerderbewilligungPdfWriterService();
+        }
+        $filename = $pdfWriterService->getFilenameCustom($funding, $funding->submit_date);
+        $filenameWithPath = $pdfWriterService->getUploadPath($funding->uid) . $filename;
+
         $response = $this->response->withFile($filenameWithPath);
         $response = $response->withHeader('Content-Disposition', 'inline; filename="' . $filename . '"');
         return $response;
 
     }
-
 
     public function uploadDetail() {
 
