@@ -19,6 +19,7 @@ use App\Services\PdfWriter\FoerderantragPdfWriterService;
 use App\Services\PdfWriter\FoerderbewilligungPdfWriterService;
 use App\Test\TestCase\Traits\QueueTrait;
 use Cake\TestSuite\EmailTrait;
+use Cake\Http\Exception\NotFoundException;
 
 class FundingsControllerTest extends AppTestCase
 {
@@ -186,6 +187,7 @@ class FundingsControllerTest extends AppTestCase
         // 1) POST
         $this->post(Configure::read('AppConfig.htmlHelper')->urlFundingsEdit($testWorkshopUid), [
             'referer' => '/',
+            'submit_funding' => 1, // must fail
             'Fundings' => [
                 'workshop' => $testWorkshop,
                 'fundingsupporter' => $testFundingsupporter,
@@ -243,6 +245,7 @@ class FundingsControllerTest extends AppTestCase
         $fundingUid = $fundingsTable->find()->first()->uid;
         $funding = $fundingsTable->getUnprivatizedFundingWithAllAssociations($fundingUid);
 
+        $this->assertNull($funding->submit_date);
         $this->assertEquals($verifiedFields, $funding->verified_fields); // must not contain invalid workshops-website
 
         $this->assertEquals($newName, $funding->workshop->name);
@@ -419,6 +422,7 @@ class FundingsControllerTest extends AppTestCase
         $validTestWorkshop['website'] = 'https://example.com';
         $this->post(Configure::read('AppConfig.htmlHelper')->urlFundingsEdit($testWorkshopUid), [
             'referer' => '/',
+            'submit_funding' => 1,
             'Fundings' => [
                 'workshop' => $validTestWorkshop,
                 'owner_user' => $validTestOwnerUser,
@@ -426,7 +430,6 @@ class FundingsControllerTest extends AppTestCase
                 'fundingdata' => $validTestFundingdata,
                 'verified_fields' => $verifiedFields,
             ],
-            'submit_funding' => 1,
         ]);
 
         $funding = $fundingsTable->getUnprivatizedFundingWithAllAssociations($fundingUid);
@@ -456,8 +459,11 @@ class FundingsControllerTest extends AppTestCase
 
         // cleanup everything including file uploads
         $fundingsTable = $this->getTableLocator()->get('Fundings');
-        $funding->submit_date = null;
         $fundingsTable->save($funding);
+        $this->expectException(NotFoundException::class);
+        $this->expectExceptionMessage('funding (UID: 14) is submitted and cannot be deleted');
+        
+        $funding->submit_date = null;
         $fundingsTable->deleteCustom($funding->uid);
 
     }
