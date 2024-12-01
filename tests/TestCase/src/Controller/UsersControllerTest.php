@@ -81,6 +81,30 @@ class UsersControllerTest extends AppTestCase
         $this->assertResponseContains('>Weitere Kontaktmöglichkeiten</b><ul><li>my-additional@email.com</li>');
     }
 
+    public function testProfileEdit()
+    {
+        $this->loginAsOrga();
+        $this->post(Configure::read('AppConfig.htmlHelper')->urlUserEdit(1, true), [
+            'referer' => '/',
+            'Users' => [
+                'nick' => 'JohnDoeB',
+                'firstname' => 'JohnX',
+                'lastname' => 'DoeB',
+                'zip' => '12345',
+                'email' => 'johndowx@mailinator.com',
+            ],
+        ]);
+
+        $usersTable = $this->getTableLocator()->get('Users');
+        $user = $usersTable->get(1);
+        $this->assertEquals('JohnDoeB', $user->nick);
+        $this->assertEquals('JohnX', $user->firstname);
+        $this->assertEquals('DoeB', $user->lastname);
+        $this->assertEquals('12345', $user->zip);
+        $this->assertEquals('johndowx@mailinator.com', $user->email);
+
+    }
+
     public function testRegisterOrga()
     {
         $this->post(
