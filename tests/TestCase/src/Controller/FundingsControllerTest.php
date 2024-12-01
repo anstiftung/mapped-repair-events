@@ -388,7 +388,7 @@ class FundingsControllerTest extends AppTestCase
         $validTestFundingsupporter['contact_function'] = 'Funktion';
         $validTestFundingsupporter['bank_account_owner'] = 'Kontoinhaber';
         $validTestFundingsupporter['bank_institute'] = 'Bank';
-        $validTestFundingsupporter['iban'] = 'DE89370400440532013000';
+        $validTestFundingsupporter['iban'] = 'DE 89370400440532013000';
         $validTestFundingsupporter['bic'] = 'RZOODE2L510';
 
         $validTestFundingdata['description'] = 'Fundingdata Description Ok Fundingdata Description OkFundingdata Description OkFundingdata Description OkFundingdata Description OkFundingdata Description OkFundingdata Description OkFundingdata Description OkFundingdata Description OkFundingdata Description OkFundingdata Description OkFundingdata Description OkFundingdata Description';
@@ -442,6 +442,7 @@ class FundingsControllerTest extends AppTestCase
 
         $funding = $fundingsTable->getUnprivatizedFundingWithAllAssociations($fundingUid);
         $this->assertNotNull($funding->submit_date);
+        $this->assertEquals('DE89370400440532013000', $funding->fundingsupporter->iban); // must be cleaned
 
         $foerderantragPdfWriterService = new FoerderantragPdfWriterService();
         $foerderantragPdfFilename = $foerderantragPdfWriterService->getFilenameCustom($funding, $funding->submit_date);
