@@ -110,7 +110,7 @@ return [
         'notificationMailAddress' => 'office@example.com',
         'statisticsEnabled' => true,
         'mapWidgetEnabled' => true,
-        'fundingsEnabled' => date('Y-m-d') >= '2024-12-02',
+        'fundingsEnabled' => true,
         'fundingsStartDate' => '2024-12-01',
         'activeUsersFrontendEnabled' => true,
         'tagsFrontendEnabled' => true,
