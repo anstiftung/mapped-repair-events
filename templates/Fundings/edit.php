@@ -65,15 +65,9 @@ echo $this->element('jqueryTabsWithoutAjax', [
                         'disabled' => !$funding->is_submittable,
                     ]);
                     if ($funding->is_submittable) {
-                        if (Configure::read('AppConfig.fundingsSubmitEnabled')) {
-                            $this->element('addScript', ['script' =>
-                                JS_NAMESPACE.".Funding.bindSubmitFundingButton(".$funding->uid.");"
-                            ]);
-                        } else {
-                            $this->element('addScript', ['script' =>
-                                JS_NAMESPACE.".Funding.bindSubmitFundingButtonNotYetEnabled(".$funding->uid.");"
-                            ]);
-                        }
+                        $this->element('addScript', ['script' =>
+                            JS_NAMESPACE.".Funding.bindSubmitFundingButton(".$funding->uid.");"
+                        ]);
                     }
                 echo '</div>';
     

@@ -112,7 +112,6 @@ return [
         'mapWidgetEnabled' => true,
         'fundingsEnabled' => date('Y-m-d') >= '2024-12-02',
         'fundingsStartDate' => '2024-12-01',
-        'fundingsSubmitEnabled' => false,
         'activeUsersFrontendEnabled' => true,
         'tagsFrontendEnabled' => true,
         'onlineEventsEnabled' => true,

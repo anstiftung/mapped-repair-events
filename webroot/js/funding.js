@@ -29,16 +29,6 @@ MappedRepairEvents.Funding = {
         });
     },
 
-    bindSubmitFundingButtonNotYetEnabled: (uid) => {
-        $('#submit-funding-button-' + uid).on('click', function() {
-            $.prompt('Wir bitten um etwas Geduld.',
-                {
-                    buttons: {Ok: false},
-                }
-            );
-        });
-    },
-
     initTextareaCounter: () => {
         $('#fundingForm textarea').each(function() {
             const maxLength = $(this).attr('maxlength');
