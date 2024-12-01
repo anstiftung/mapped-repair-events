@@ -352,10 +352,20 @@ class UsersController extends AppController
         $this->set('user', $user);
 
         $this->Page = $this->getTableLocator()->get('Pages');
-        $orgaInfotext = $this->Page->getPageByName('Was.ist.ein.Organisator');
-        $this->set('orgaInfotext', $orgaInfotext->text);
-        $repairhelperInfotext = $this->Page->getPageByName('Was.ist.ein.Reparateur');
-        $this->set('repairhelperInfotext', $repairhelperInfotext->text);
+
+        $orgaInfotextEntity = $this->Page->getPageByName('Was.ist.ein.Organisator');
+        $orgaInfotext = '';
+        if (!empty($orgaInfotextEntity)) {
+            $orgaInfotext = $orgaInfotextEntity->text;
+        }
+        $this->set('orgaInfotext', $orgaInfotext);
+
+        $repairhelperInfotextEntity = $this->Page->getPageByName('Was.ist.ein.Reparateur');
+        $repairhelperInfotext = '';
+        if (!empty($repairhelperInfotextEntity)) {
+            $repairhelperInfotext = $repairhelperInfotextEntity->text;
+        }
+        $this->set('repairhelperInfotext', $repairhelperInfotext);
 
         $this->set('isMyProfile', $isMyProfile);
         $this->set('isEditMode', $isEditMode);
