@@ -15,6 +15,7 @@ use Cake\Controller\Controller;
 use App\Model\Table\FundingsTable;
 use Laminas\Diactoros\UploadedFile;
 use App\Model\Entity\Fundingupload;
+use App\Model\Table\FundingbudgetplansTable;
 use App\Services\PdfWriter\FoerderantragPdfWriterService;
 use App\Services\PdfWriter\FoerderbewilligungPdfWriterService;
 use App\Test\TestCase\Traits\QueueTrait;
@@ -124,6 +125,14 @@ class FundingsControllerTest extends AppTestCase
 
         $this->get(Configure::read('AppConfig.htmlHelper')->urlFundingsEdit($testWorkshopUid));
         $this->assertResponseOk();
+
+        $fundingUid = $fundingsTable->find()->first()->uid;
+        $funding = $fundingsTable->getUnprivatizedFundingWithAllAssociations($fundingUid);
+        $this->assertEquals(FundingsTable::FUNDINGBUDGETPLANS_COUNT, count($funding->fundingbudgetplans));
+        $this->assertNotEmpty($funding->fundingsupporter);
+        $this->assertNotEmpty($funding->fundingdata);
+        $this->assertNotEmpty($funding->owner_user);
+        $this->assertEquals(1, $funding->owner_user->uid);
 
         $newName = 'Testname';
         $newStreet = 'Teststraße 1';
@@ -242,7 +251,6 @@ class FundingsControllerTest extends AppTestCase
         ]);
         $this->assertResponseContains('Der Förderantrag wurde erfolgreich zwischengespeichert.');
 
-        $fundingUid = $fundingsTable->find()->first()->uid;
         $funding = $fundingsTable->getUnprivatizedFundingWithAllAssociations($fundingUid);
 
         $this->assertNull($funding->submit_date);
