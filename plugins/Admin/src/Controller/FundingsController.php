@@ -129,6 +129,7 @@ class FundingsController extends AdminAppController
         // TODO Sorting not yet working
         $objects = $this->paginate($query, [
             'order' => [
+                'Fundings.submit_date' => 'ASC',
                 'Fundings.created' => 'DESC'
             ],
         ]);
