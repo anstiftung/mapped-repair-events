@@ -121,6 +121,7 @@ class FundingsController extends AdminAppController
             'Workshops' => $workshopsTable->getFundingContain(),
             'OwnerUsers',
             'Fundingdatas',
+            'Fundingsupporters',
             'FundinguploadsActivityProofs',
             'FundinguploadsFreistellungsbescheids',
             'Fundingbudgetplans',
