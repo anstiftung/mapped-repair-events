@@ -65,7 +65,7 @@ Mit freundlichen Grüßen<br />
 </p>
 
 <p>
-anstiftung
+Tom Hansing und Ina Hemmelmann
 </p>';
 
 $pdf->writeHTML($html, true, false, true, false, '');
