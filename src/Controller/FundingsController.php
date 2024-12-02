@@ -149,6 +149,7 @@ class FundingsController extends AppController
 
             if (!empty($errors)) {
                 $patchedEntity = $this->getPatchedFundingForValidFields($errors, $workshopUid, $associationsWithoutValidation);
+                $funding->verified_fields = $patchedEntity->verified_fields;
             }
 
             // remove all invalid fundingbudgetplans in order to avoid saving nothing
