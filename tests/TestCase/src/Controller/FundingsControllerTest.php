@@ -454,7 +454,8 @@ class FundingsControllerTest extends AppTestCase
 
         $this->runAndAssertQueue();
         $this->assertMailCount(1);
-        $this->assertMailSentToAt(0, 'test@mailinator.com');
+        $this->assertMailSentToAt(0, $validTestOwnerUser['email']);
+        $this->assertMailSentToAt(0, $validTestFundingsupporter['contact_email']);
         $this->assertMailContainsAt(0, 'Download Förderlogo BMUV');
         $this->assertMailContainsAttachment($foerderbewilligungPdfFilename);
         $this->assertMailContainsAttachment($foerderantragPdfFilename);
