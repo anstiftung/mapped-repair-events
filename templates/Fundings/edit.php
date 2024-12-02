@@ -1,12 +1,10 @@
 <?php
 
-use Cake\Core\Configure;
-
 $this->element('addScript', ['script' =>
     JS_NAMESPACE.".Helper.bindCancelButton();".
     JS_NAMESPACE.".Funding.initIsMissing();".
     JS_NAMESPACE.".Funding.initTextareaCounter();".
-    JS_NAMESPACE.".Funding.initIsVerified('".json_encode($funding->verified_fields)."');".
+    JS_NAMESPACE.".Funding.initIsVerified('".json_encode($funding->verified_fields)."', false);".
     JS_NAMESPACE.".Funding.updateProgressBar(" . $funding->all_fields_verified_count . ", ".$funding->all_fields_count.");"
 ]);
 echo $this->element('jqueryTabsWithoutAjax', [

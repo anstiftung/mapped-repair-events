@@ -6,6 +6,7 @@ use App\Model\Entity\Fundingbudgetplan;
 
 $this->element('addScript', ['script' =>
     JS_NAMESPACE.".Helper.bindCancelButton();".
+    JS_NAMESPACE.".Funding.initIsVerified('".json_encode($funding->verified_fields)."', true);".
     JS_NAMESPACE.".Helper.layoutEditButtons();
 "]);
 ?>

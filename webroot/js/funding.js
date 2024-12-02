@@ -124,7 +124,7 @@ MappedRepairEvents.Funding = {
         });
     },
 
-    initIsVerified: (isVerifiedData) => {
+    initIsVerified: (isVerifiedData, isAdminView) => {
 
         const parsedIsVerifiedData = JSON.parse(isVerifiedData);
 
@@ -148,7 +148,9 @@ MappedRepairEvents.Funding = {
                 text: 'bestätigt?'
             }).append(checkbox);
 
-            label.appendTo($(this).closest('.input'));
+            if (!isAdminView) {
+                label.appendTo($(this).closest('.input'));
+            }
         });
     }
 };
