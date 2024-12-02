@@ -80,7 +80,7 @@ $this->element('addScript', ['script' =>
                                 echo $fundingbudgetplan->description;
                             echo '</div>';
                             echo '<div style="align-self:flex-end;">';
-                                echo $this->MyNumber->formatAsDecimal($fundingbudgetplan->amount) . ' €';
+                                echo $this->MyNumber->formatAsDecimal($fundingbudgetplan->amount) . ' €';
                             echo '</div>';
                         echo '</div>';
                     }
@@ -90,7 +90,7 @@ $this->element('addScript', ['script' =>
                             echo '<b>Summe</b>';
                         echo '</div>';
                         echo '<div style="align-self:flex-end;">';
-                            echo '<b>' . $this->MyNumber->formatAsDecimal($funding->grouped_valid_budgetplans_totals[$typeId]) . ' €</b>';
+                            echo '<b>' . $this->MyNumber->formatAsDecimal($funding->grouped_valid_budgetplans_totals[$typeId]) . ' €</b>';
                         echo '</div>';
                     echo '</div>';
 
@@ -102,7 +102,7 @@ $this->element('addScript', ['script' =>
                     echo '<b>Kosten gesamt</b>';
                 echo '</div>';
                 echo '<div style="align-self:flex-end;">';
-                    echo '<b>' . $this->MyNumber->formatAsDecimal($funding->budgetplan_total) . ' €</b>';
+                    echo '<b>' . $this->MyNumber->formatAsDecimal($funding->budgetplan_total) . ' €</b>';
                 echo '</div>';
             echo '</div>';
 

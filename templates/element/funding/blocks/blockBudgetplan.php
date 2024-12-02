@@ -42,9 +42,9 @@ echo '<fieldset class="fundingbudgetplan full-width">';
     echo '</div>';
 
     echo '<div class="fundingbudgets-total-wrapper">';
-        echo '<p class="total">Kosten gesamt: <b>' . $this->MyNumber->formatAsDecimal($funding->budgetplan_total) . ' €</b></p>';
+        echo '<p class="total">Kosten gesamt: <b>' . $this->MyNumber->formatAsDecimal($funding->budgetplan_total) . ' €</b></p>';
         if ($funding->budgetplan_total > Funding::MAX_FUNDING_SUM) {
-            echo '<p>Maximale Fördersumme: ' . $this->MyNumber->formatAsDecimal(Funding::MAX_FUNDING_SUM) . ' €</p>';
+            echo '<p>Maximale Fördersumme: ' . $this->MyNumber->formatAsDecimal(Funding::MAX_FUNDING_SUM) . ' €</p>';
         }
     echo '</div>';
 
