@@ -213,7 +213,7 @@ class FundingsController extends AppController
 
         try {
 
-            $subject = 'Förderantrag erfolgreich eingereicht (UID: ' . $funding->uid . ')';
+            $subject = 'Förderantrag erfolgreich eingereicht und bewilligt (UID: ' . $funding->uid . ')';
             $email = new AppMailer();
             $email->viewBuilder()->setTemplate('fundings/funding_submitted');
             $email->setTo($funding->owner_user->email);

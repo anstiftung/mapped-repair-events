@@ -7,7 +7,7 @@ use Cake\Core\Configure;
         <tr>
             <td>
                 <p>
-                    Dein Förderantrag wurde erfolgreich eingereicht.
+                    Dein Förderantrag wurde erfolgreich eingereicht und bewilligt.
                 </p>
                 <p>
                     <?php

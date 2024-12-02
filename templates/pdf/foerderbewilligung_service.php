@@ -37,16 +37,16 @@ in Höhe von <b>' . $this->MyNumber->formatAsDecimal($funding->budgetplan_total_
 </p>
 
 <p>
-Die Mittel sind vorgesehen für Anschaffungen/Maßnahmen gemäß Antrag ' . $funding->uid . '  vom ' . $timestamp->i18nFormat(Configure::read('DateFormat.de.DateNTimeLongWithSeconds')) . '.
+Die Mittel sind vorgesehen für Anschaffungen/Maßnahmen gemäß Antrag <b>' . $funding->uid . '</b>  vom <b>' . $timestamp->i18nFormat(Configure::read('DateFormat.de.DateNTimeLongWithSeconds')) . '</b>.
 </p>
 
 <p>
 Die Fördersumme wird auf das Konto ' . $funding->fundingsupporter->iban . ' überwiesen.
 </p>
 
-<p>Die zugrundeliegenden
+<p>Die zugrundeliegende
 <a href="'.Configure::read('AppConfig.serverName') . $this->MyHtml->urlPageDetail('richtlinie').'">Förderrichtlinie</a>
-sind verbindlich einzuhalten.
+ist verbindlich einzuhalten.
 </p>
 
 <p>
