@@ -2,6 +2,7 @@
 use Cake\Core\Configure;
 
 $pdf->setDefaults();
+$pdf->Ln(60);
 
 $html = '
 <p>' .
@@ -13,7 +14,7 @@ $pdf->writeHTML($html, true, false, true, false, '');
 $pdf->Ln(15);
 
 $html = '
-<table border="1" cellpadding="0">
+<table border="0" cellpadding="0">
     <tr>
         <td align="left"><b>Förderbewilligung</b></td>
         <td align="right">München, ' . $timestamp->i18nFormat(Configure::read('DateFormat.de.DateLong2')) . '</td>

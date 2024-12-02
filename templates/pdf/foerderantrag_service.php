@@ -5,9 +5,12 @@ use App\Model\Entity\Funding;
 use Cake\Core\Configure;
 
 $pdf->setDefaults();
+$pdf->Ln(50);
 
+$pdf->SetFontSizeBig();
 $html = '<b>Förderantrag vom ' . $timestamp->i18nFormat(Configure::read('DateFormat.de.DateNTimeLongWithSeconds')) . ' - UID: ' . $funding->uid . '</b>';
 $pdf->writeHTML($html, true, false, true, false, '');
+$pdf->SetFontSizeDefault();
 $pdf->Ln(15);
 
 $i = 0;
@@ -20,7 +23,7 @@ foreach($blocks as $block) {
     $pdf->writeHTML($html, true, false, true, false, '');
     $pdf->Ln(3);
 
-    if ($i == 3) {
+    if ($i == 4) {
         $pdf->addPage();
         $pdf->Ln(25);
     }
@@ -28,6 +31,7 @@ foreach($blocks as $block) {
     $i++;
 }
 
+$pdf->Ln(10);
 $html = '<b>' . Funding::FIELDS_FUNDINGDATA_DESCRIPTION_LABEL . '</b>';
 $pdf->writeHTML($html, true, false, true, false, '');
 $pdf->Ln(3);

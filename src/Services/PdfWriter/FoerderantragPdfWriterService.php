@@ -4,17 +4,17 @@ declare(strict_types=1);
 namespace App\Services\PdfWriter;
 
 use App\Model\Entity\Funding;
-use App\Services\Pdf\AppTcpdfService;
 use App\Services\PdfWriter\PdfWriterService;
 use App\Model\Entity\Fundingupload;
 use Cake\Datasource\FactoryLocator;
+use App\Services\Pdf\FoerderantragTcpdfService;
 
 class FoerderantragPdfWriterService extends PdfWriterService
 {
 
     public function __construct()
     {
-        $this->setPdfLibrary(new AppTcpdfService());
+        $this->setPdfLibrary(new FoerderantragTcpdfService());
     }
 
     public function getFilenameCustom($funding, $timestamp) {

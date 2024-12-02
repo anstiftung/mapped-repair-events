@@ -3,9 +3,10 @@ namespace App\Services\Pdf;
 
 use TCPDF;
 
-class AppTcpdfService extends TCPDF
+abstract class AppTcpdfService extends TCPDF
 {
 
+    public $backgroundImageFile = '';
     public $fontSizeBig = 12;
     public $fontSizeDefault = 10;
     public $fontSizeSmall = 8;
@@ -40,26 +41,25 @@ class AppTcpdfService extends TCPDF
     public function setDefaults()
     {
 
-        $this->setPrintHeader(false);
         $this->setPrintFooter(false);
 
         $this->AddPage();
-
-        $this->SetMargins(0, 0, 0);
-        $this->SetAutoPageBreak(false, 0);
-
-        $pageWidth = $this->getPageWidth();
-        $pageHeight = $this->getPageHeight();
-
-        $imageFile = WWW_ROOT . '/img/core/foerderbewilligung-pdf-background.png';
-        $this->Image($imageFile, 0, 0, $pageWidth, $pageHeight);
 
         $this->SetLeftMargin(18);
         $this->SetRightMargin(18);
 
         $this->SetAutoPageBreak(true, 0);
 
-        $this->Ln(60);
+    }
+
+    public function Header() {
+        $this->SetMargins(0, 0, 0);
+        $this->SetAutoPageBreak(false, 0);
+
+        $pageWidth = $this->getPageWidth();
+        $pageHeight = $this->getPageHeight();
+
+        $this->Image($this->backgroundImageFile, 0, 0, $pageWidth, $pageHeight);
     }
 
     public function getFundingDataAsTable($data, $width = '100%', $widthColumnA = '30%', $widthColumnB = '70%', $alignmentColumnA = 'left', $alignmentColumnB = 'left')
