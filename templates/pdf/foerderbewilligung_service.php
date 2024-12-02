@@ -2,7 +2,7 @@
 use Cake\Core\Configure;
 
 $pdf->setDefaults();
-$pdf->Ln(60);
+$pdf->Ln(65);
 
 $html = '
 <p>' .
@@ -61,7 +61,7 @@ $pdf->Ln(10);
 
 $html = '
 <p>
-Mit freundlichen Grüßen
+Mit freundlichen Grüßen<br />
 </p>
 
 <p>
