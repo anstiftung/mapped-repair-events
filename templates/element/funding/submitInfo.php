@@ -30,7 +30,7 @@ echo '<div class="download-links">';
 
     echo $this->Html->link(
         'Förderrichtlinie',
-        '/files/foerderung/Foerderrichtlinie.pdf',
+        '/files/foerderung/Foerderrichtlinie-anstiftung-bmuv-nov-2024.pdf',
         [
             'target' => '_blank',
         ],
