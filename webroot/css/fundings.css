@@ -225,7 +225,7 @@ body.fundings.edit div.admin.edit {
     flex: 1;
     flex-basis: calc(50% - 40px);
 }
-#fundingForm .flexbox fieldset.full-width {
+#fundingForm .flexbox .full-width {
     flex-basis: 100%;
 }
 #fundingForm .flexbox fieldset.fundingbudgetplan .fundingbudgets-total-wrapper {

@@ -69,15 +69,41 @@ $this->element('addScript', ['script' =>
         echo '<fieldset>';
             echo '<legend>Kostenplan</legend>';
             foreach($funding->grouped_valid_budgetplans as $typeId => $fundingbudgetplans) {
-                echo '<div class="fundingbudgetplans" style="margin-bottom:10px;">';
-                    echo '<div style="margin-bottom:5px;"><b>' . Fundingbudgetplan::TYPE_MAP[$typeId] . '</b></div>';
+                echo '<div class="fundingbudgetplans flexbox full-width" style="gap:5px;">';
+
+                    echo '<div class="full-width""><b>' . Fundingbudgetplan::TYPE_MAP[$typeId] . '</b></div>';
+
                     foreach($fundingbudgetplans as $fundingbudgetplan) {
-                        echo $fundingbudgetplan->description . ' ' . $this->MyNumber->formatAsDecimal($fundingbudgetplan->amount) . ' €<br />';
+                        echo '<div class="flexbox full-width">';
+                            echo '<div style="flex-grow:1;">';
+                                echo $fundingbudgetplan->description;
+                            echo '</div>';
+                            echo '<div style="align-self:flex-end;">';
+                                echo $this->MyNumber->formatAsDecimal($fundingbudgetplan->amount) . ' €';
+                            echo '</div>';
+                        echo '</div>';
                     }
-                    echo '<div style="margin-top:5px;"><i>Summe: ' . $this->MyNumber->formatAsDecimal($funding->grouped_valid_budgetplans_totals[$typeId]) . ' €</i></div>';
+
+                    echo '<div class="flexbox full-width" style="margin-bottom:10px;">';
+                        echo '<div style="flex-grow:1;">';
+                            echo '<b>Summe</b>';
+                        echo '</div>';
+                        echo '<div style="align-self:flex-end;">';
+                            echo '<b>' . $this->MyNumber->formatAsDecimal($funding->grouped_valid_budgetplans_totals[$typeId]) . ' €</b>';
+                        echo '</div>';
+                    echo '</div>';
+
                 echo '</div>';
             }
-            echo '<div style="font-size:14px;"><b>Kosten gesamt: ' . $this->MyNumber->formatAsDecimal($funding->budgetplan_total) . ' €</b></div>';
+
+            echo '<div class="flexbox full-width" style="margin-bottom:10px;font-size:14px;">';
+                echo '<div style="flex-grow:1;">';
+                    echo '<b>Kosten gesamt</b>';
+                echo '</div>';
+                echo '<div style="align-self:flex-end;">';
+                    echo '<b>' . $this->MyNumber->formatAsDecimal($funding->budgetplan_total) . ' €</b>';
+                echo '</div>';
+            echo '</div>';
 
         echo '</fieldset>';
 
