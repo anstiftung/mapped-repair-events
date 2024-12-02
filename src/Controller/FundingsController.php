@@ -238,8 +238,8 @@ class FundingsController extends AppController
                 'mimetype' => 'application/pdf',
             ]]);
     
-            $email->addAttachments(['Foerderrichtlinie.pdf' => [
-                'data' => file_get_contents(WWW_ROOT . 'files/foerderung/Foerderrichtlinie.pdf'),
+            $email->addAttachments(['Foerderrichtlinie-anstiftung-bmuv-nov-2024.pdf' => [
+                'data' => file_get_contents(WWW_ROOT . 'files/foerderung/Foerderrichtlinie-anstiftung-bmuv-nov-2024.pdf'),
                 'mimetype' => 'application/pdf',
             ]]);
     

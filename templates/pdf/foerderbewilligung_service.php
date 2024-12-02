@@ -45,7 +45,7 @@ Die Fördersumme wird auf das Konto ' . $funding->fundingsupporter->iban . ' üb
 </p>
 
 <p>Die zugrundeliegenden
-<a href="'.Configure::read('AppConfig.serverName') . $this->MyHtml->urlPageDetail('richtlinie').'">Förderrichtlinien</a>
+<a href="'.Configure::read('AppConfig.serverName') . $this->MyHtml->urlPageDetail('richtlinie').'">Förderrichtlinie</a>
 sind verbindlich einzuhalten.
 </p>
 
