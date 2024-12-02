@@ -193,7 +193,7 @@ class FundingsController extends AppController
                 }
             }
 
-            if ($funding->is_submittable && !empty($this->request->getData('submit_funding'))) {
+            if (!$patchedEntity->hasErrors() && $funding->is_submittable && !empty($this->request->getData('submit_funding'))) {
                 $this->submitFunding($funding);
                 $this->AppFlash->setFlashMessage('Der Förderantrag wurde erfolgreich eingereicht und bewilligt.');
                 return $this->redirect(Configure::read('AppConfig.htmlHelper')->urlFundings());
