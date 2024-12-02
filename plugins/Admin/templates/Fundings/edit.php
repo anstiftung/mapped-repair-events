@@ -77,7 +77,7 @@ $this->element('addScript', ['script' =>
                     echo '<div style="margin-top:5px;"><i>Summe: ' . $this->MyNumber->formatAsDecimal($funding->grouped_valid_budgetplans_totals[$typeId]) . ' €</i></div>';
                 echo '</div>';
             }
-            echo '<div style="font-size:14px;"><b>Gesamtsumme: ' . $this->MyNumber->formatAsDecimal($funding->budgetplan_total) . ' €</b></div>';
+            echo '<div style="font-size:14px;"><b>Kosten gesamt: ' . $this->MyNumber->formatAsDecimal($funding->budgetplan_total) . ' €</b></div>';
 
         echo '</fieldset>';
 

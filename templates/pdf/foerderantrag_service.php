@@ -69,13 +69,26 @@ $pdf->writeHTML($html, true, false, true, false, '');
 
 $preparedSumDataForTable = [
     [
-        'label' => '<b>Gesamtsumme</b>',
+        'label' => '<b>Kosten gesamt</b>',
         'value' => '<b>' . $this->MyNumber->formatAsDecimal($funding->budgetplan_total) . ' €</b>',
     ],
 ];
 
 $html = $pdf->getFundingDataAsTable($preparedSumDataForTable, ...$tableArgs);
+$pdf->writeHTML($html, true, false, true, false, '');
 
+if ($funding->budgetplan_total > Funding::MAX_FUNDING_SUM) {
+    $preparedSumDataForTable = [
+        [
+            'label' => 'Maximaler Förderbetrag',
+            'value' =>  $this->MyNumber->formatAsDecimal(Funding::MAX_FUNDING_SUM) . ' €',
+        ],
+    ];
+    $html = $pdf->getFundingDataAsTable($preparedSumDataForTable, ...$tableArgs);
+    $pdf->writeHTML($html, true, false, true, false, '');
+}
+
+$pdf->Ln(10);
 $html = '<b>' . Funding::FIELDS_FUNDING_DATA_CHECKBOXES_LABEL . '</b>';
 $pdf->writeHTML($html, true, false, true, false, '');
 $pdf->Ln(3);
