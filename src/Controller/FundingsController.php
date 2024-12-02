@@ -415,7 +415,7 @@ class FundingsController extends AppController
         // never save "verified" if field has error
         $verifiedFields = $data['Fundings']['verified_fields'];
         $patchedVerifiedFieldsWithoutErrorFields = array_diff($verifiedFields, $verifiedFieldsWithErrors);
-        $data['Fundings']['verified_fields'] = $patchedVerifiedFieldsWithoutErrorFields;
+        $data['Fundings']['verified_fields'] = array_values($patchedVerifiedFieldsWithoutErrorFields);
 
         $fundingsTable = $this->getTableLocator()->get('Fundings');
         $fundingForSaving = $fundingsTable->findOrCreateCustom($workshopUid);
