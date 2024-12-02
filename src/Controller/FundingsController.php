@@ -213,6 +213,8 @@ class FundingsController extends AppController
 
         try {
 
+            $funding->owner_user->revertPrivatizeData();
+
             $email = new AppMailer();
             $email->viewBuilder()->setTemplate('fundings/funding_submitted');
             $email->setTo([
