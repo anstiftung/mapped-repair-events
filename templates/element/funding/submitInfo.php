@@ -46,6 +46,4 @@ echo '<div class="download-links">';
         ],
     );
 
-
-
 echo '</div>';
