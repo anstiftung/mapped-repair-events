@@ -95,7 +95,7 @@ $pdf->Ln(3);
 
 $html = '';
 foreach($checkboxes as $checkbox) {
-    if ($funding->fundingdata[$checkbox['name']] == 0) {
+    if ($funding->fundingdata[$checkbox['name']] == 1) {
         $html .= 'Bestätigt';
     } else {
         $html .= 'Nicht bestätigt';
