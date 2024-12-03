@@ -120,7 +120,7 @@ $this->element('addScript', ['script' =>
             
             echo '<fieldset>';
                 echo '<legend>Status Zuwendungsbestätigung</legend>';
-                echo $this->element('funding/status/zuwendungsbestaetigungStatus', ['funding' => $funding, 'additionalTextBefore' => '', 'additionalTextAfter' => '']);
+                echo $this->element('funding/status/zuwendungsbestaetigungStatus', ['funding' => $funding, 'additionalTextBefore' => '']);
                 echo $this->Form->control('Fundings.zuwendungsbestaetigung_status', ['label' => 'Status', 'options' => Funding::STATUS_MAPPING_UPLOADS, 'disabled' => !$funding->is_submitted, 'class' => 'no-verify']);
                 echo $this->Form->control('Fundings.zuwendungsbestaetigung_comment', ['label' => 'Kommentar', 'disabled' => !$funding->is_submitted, 'class' => 'no-verify']);
             echo '</fieldset>';

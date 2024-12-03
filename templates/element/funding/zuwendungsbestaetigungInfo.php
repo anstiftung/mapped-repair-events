@@ -1,11 +1,10 @@
 <?php
 
+use App\Model\Entity\Funding;
+
 echo $this->element('funding/status/zuwendungsbestaetigungStatus', [
     'funding' => $funding,
     'additionalTextBefore' => 'Zuwendungsbestätigung: ',
-    'additionalTextAfter' => ' - ' . $this->Html->link('Jetzt hochladen', [
-       'javascript:void(0)',
-    ]),
 ]);
 
 echo '<div class="download-links">';
@@ -28,6 +27,20 @@ echo '<div class="download-links">';
         [
             'target' => '_blank',
         ],
-    );
+    );    
 
+echo '</div>';
+
+if ($funding->zuwendungsbestaetigung_status == Funding::STATUS_VERIFIED_BY_ADMIN) {
+    return;
+}
+
+echo '<div style="margin-top:10px;">';
+    echo $this->Html->link(
+        'Zuwendungsbestätigung hochladen',
+        'javascript:void(0);',
+        [
+            'class' => 'button',
+        ],
+    );
 echo '</div>';
