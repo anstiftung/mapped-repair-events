@@ -2,6 +2,7 @@
 
 namespace App\Test\TestCase\Controller;
 
+use App\Model\Entity\Funding;
 use App\Model\Entity\Fundingbudgetplan;
 use App\Test\TestCase\AppTestCase;
 use App\Test\TestCase\Traits\LogFileAssertionsTrait;
@@ -14,14 +15,21 @@ use Cake\Controller\Controller;
 use App\Model\Table\FundingsTable;
 use Laminas\Diactoros\UploadedFile;
 use App\Model\Entity\Fundingupload;
-use App\Test\Fixture\UsersFixture;
+use App\Model\Table\FundingbudgetplansTable;
+use App\Services\PdfWriter\FoerderantragPdfWriterService;
+use App\Services\PdfWriter\FoerderbewilligungPdfWriterService;
+use App\Test\TestCase\Traits\QueueTrait;
+use Cake\TestSuite\EmailTrait;
+use Cake\Http\Exception\NotFoundException;
 
 class FundingsControllerTest extends AppTestCase
 {
 
+    use EmailTrait;
     use IntegrationTestTrait;
     use LogFileAssertionsTrait;
     use LoginTrait;
+    use QueueTrait;
 
 	public function controllerSpy(EventInterface $event, ?Controller $controller = null): void
     {
@@ -108,21 +116,23 @@ class FundingsControllerTest extends AppTestCase
         }
     }
 
-    private function getFundingWithAssociations() {
+    public function testEditAndSubmitAsOrgaOk() {
+
         $fundingsTable = $this->getTableLocator()->get('Fundings');
-        $funding = $fundingsTable->find(contain: ['Workshops', 'OwnerUsers', 'Fundingsupporters', 'Fundingdatas', 'Fundingbudgetplans', 'FundinguploadsActivityProofs', 'FundinguploadsFreistellungsbescheids'])->first();
-        $funding->owner_user->revertPrivatizeData();
-        return $funding;
-    }
-
-    public function testEditAsOrgaOk() {
-
         $testWorkshopUid = 2;
         $this->loginAsOrga();
         $this->prepareWorkshopForFunding($testWorkshopUid);
 
         $this->get(Configure::read('AppConfig.htmlHelper')->urlFundingsEdit($testWorkshopUid));
         $this->assertResponseOk();
+
+        $fundingUid = $fundingsTable->find()->first()->uid;
+        $funding = $fundingsTable->getUnprivatizedFundingWithAllAssociations($fundingUid);
+        $this->assertEquals(FundingsTable::FUNDINGBUDGETPLANS_COUNT, count($funding->fundingbudgetplans));
+        $this->assertNotEmpty($funding->fundingsupporter);
+        $this->assertNotEmpty($funding->fundingdata);
+        $this->assertNotEmpty($funding->owner_user);
+        $this->assertEquals(1, $funding->owner_user->uid);
 
         $newName = 'Testname';
         $newStreet = 'Teststraße 1';
@@ -186,6 +196,7 @@ class FundingsControllerTest extends AppTestCase
         // 1) POST
         $this->post(Configure::read('AppConfig.htmlHelper')->urlFundingsEdit($testWorkshopUid), [
             'referer' => '/',
+            'submit_funding' => 1, // must fail
             'Fundings' => [
                 'workshop' => $testWorkshop,
                 'fundingsupporter' => $testFundingsupporter,
@@ -240,8 +251,9 @@ class FundingsControllerTest extends AppTestCase
         ]);
         $this->assertResponseContains('Der Förderantrag wurde erfolgreich zwischengespeichert.');
 
-        $funding = $this->getFundingWithAssociations();
+        $funding = $fundingsTable->getUnprivatizedFundingWithAllAssociations($fundingUid);
 
+        $this->assertNull($funding->submit_date);
         $this->assertEquals($verifiedFields, $funding->verified_fields); // must not contain invalid workshops-website
 
         $this->assertEquals($newName, $funding->workshop->name);
@@ -324,7 +336,7 @@ class FundingsControllerTest extends AppTestCase
         $this->assertResponseContains('Es ist nur eine Datei erlaubt.');
         $this->assertResponseContains('Nur PDF, JPG und PNG-Dateien sind erlaubt.');
 
-        $funding = $this->getFundingWithAssociations();
+        $funding = $fundingsTable->getUnprivatizedFundingWithAllAssociations($fundingUid);
 
         $this->assertCount(1, $funding->fundinguploads_activity_proofs);
         $this->assertCount(1, $funding->fundinguploads_freistellungsbescheids);
@@ -346,13 +358,122 @@ class FundingsControllerTest extends AppTestCase
             ]
         ]);
 
-        $funding = $this->getFundingWithAssociations();
+        $funding = $fundingsTable->getUnprivatizedFundingWithAllAssociations($fundingUid);
         $this->assertCount(0, $funding->fundinguploads_activity_proofs);
         $this->assertCount(0, $funding->fundinguploads_freistellungsbescheids);
 
 
+        // 4) POST create a valid funding and submit
+        $funding->activity_proof_status = Funding::STATUS_VERIFIED_BY_ADMIN;
+        $funding->freistellungsbescheid_status = Funding::STATUS_VERIFIED_BY_ADMIN;
+        $fundingsTable->save($funding);
+
+        $validTestWorkshop = $testWorkshop;
+
+        $validTestOwnerUser = $testOwnerUser;
+        $validTestOwnerUser['email'] = 'test@mailinator.com';
+        $validTestOwnerUser['zip'] = 22222;
+        $validTestOwnerUser['city'] = 'Berlin';
+        $validTestOwnerUser['phone'] = '1234567890';
+
+        $validTestFundingsupporter = $testFundingsupporter;
+        $validTestFundingsupporter['legal_form'] = 'Rechtsform';
+        $validTestFundingsupporter['street'] = 'asdfasdf';
+        $validTestFundingsupporter['zip'] = 22222;
+        $validTestFundingsupporter['city'] = 'Berlin';
+        $validTestFundingsupporter['contact_firstname'] = 'Test';
+        $validTestFundingsupporter['contact_lastname'] = 'Test';
+        $validTestFundingsupporter['contact_phone'] = '1234590';
+        $validTestFundingsupporter['contact_email'] = 'test1@mailinator.com';
+        $validTestFundingsupporter['contact_function'] = 'Funktion';
+        $validTestFundingsupporter['bank_account_owner'] = 'Kontoinhaber';
+        $validTestFundingsupporter['bank_institute'] = 'Bank';
+        $validTestFundingsupporter['iban'] = 'DE 89370400440532013000';
+        $validTestFundingsupporter['bic'] = 'RZOODE2L510';
+
+        $validTestFundingdata['description'] = 'Fundingdata Description Ok Fundingdata Description OkFundingdata Description OkFundingdata Description OkFundingdata Description OkFundingdata Description OkFundingdata Description OkFundingdata Description OkFundingdata Description OkFundingdata Description OkFundingdata Description OkFundingdata Description OkFundingdata Description';
+        $validTestFundingdata['checkbox_a'] = 1;
+        $validTestFundingdata['checkbox_b'] = 1;
+        $validTestFundingdata['checkbox_c'] = 1;
+
+        $verifiedFields = [
+            'fundings-workshop-name',
+            'fundings-workshop-street',
+            'fundings-workshop-zip',
+            'fundings-workshop-city',
+            'fundings-workshop-adresszusatz',
+            'fundings-workshop-website',
+            'fundings-workshop-email',
+            'fundings-owner-user-firstname',
+            'fundings-owner-user-lastname',
+            'fundings-owner-user-street',
+            'fundings-owner-user-email',
+            'fundings-owner-user-zip',
+            'fundings-owner-user-city',
+            'fundings-owner-user-phone',
+            'fundings-fundingsupporter-name',
+            'fundings-fundingsupporter-legal-form',
+            'fundings-fundingsupporter-street',
+            'fundings-fundingsupporter-zip',
+            'fundings-fundingsupporter-city',
+            'fundings-fundingsupporter-website',
+            'fundings-fundingsupporter-contact-firstname',
+            'fundings-fundingsupporter-contact-lastname',
+            'fundings-fundingsupporter-contact-phone',
+            'fundings-fundingsupporter-contact-email',
+            'fundings-fundingsupporter-contact-function',
+            'fundings-fundingsupporter-bank-account-owner',
+            'fundings-fundingsupporter-bank-institute',
+            'fundings-fundingsupporter-iban',
+            'fundings-fundingsupporter-bic',
+        ];
+        $validTestWorkshop['website'] = 'https://example.com';
+        $this->post(Configure::read('AppConfig.htmlHelper')->urlFundingsEdit($testWorkshopUid), [
+            'referer' => '/',
+            'submit_funding' => 1,
+            'Fundings' => [
+                'workshop' => $validTestWorkshop,
+                'owner_user' => $validTestOwnerUser,
+                'fundingsupporter' => $validTestFundingsupporter,
+                'fundingdata' => $validTestFundingdata,
+                'verified_fields' => $verifiedFields,
+            ],
+        ]);
+
+        $funding = $fundingsTable->getUnprivatizedFundingWithAllAssociations($fundingUid);
+        $this->assertNotNull($funding->submit_date);
+        $this->assertEquals('DE89370400440532013000', $funding->fundingsupporter->iban); // must be cleaned
+
+        $foerderantragPdfWriterService = new FoerderantragPdfWriterService();
+        $foerderantragPdfFilename = $foerderantragPdfWriterService->getFilenameCustom($funding, $funding->submit_date);
+        $foerderbewilligungPdfWriterService = new FoerderbewilligungPdfWriterService();
+        $foerderbewilligungPdfFilename = $foerderbewilligungPdfWriterService->getFilenameCustom($funding, $funding->submit_date);
+        
+        $this->assertFileExists($foerderantragPdfWriterService->getUploadPath($funding->uid) . $foerderantragPdfFilename);
+        $this->assertFileExists($foerderbewilligungPdfWriterService->getUploadPath($funding->uid) . $foerderbewilligungPdfFilename);
+
+        $this->runAndAssertQueue();
+        $this->assertMailCount(1);
+        $this->assertMailSentToAt(0, $validTestOwnerUser['email']);
+        $this->assertMailSentToAt(0, $validTestFundingsupporter['contact_email']);
+        $this->assertMailContainsAt(0, 'Download Förderlogo BMUV');
+        $this->assertMailContainsAttachment($foerderbewilligungPdfFilename);
+        $this->assertMailContainsAttachment($foerderantragPdfFilename);
+
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlFundingFoerderbewilligungDownload($funding->uid));
+        $this->assertResponseOk();
+        $this->assertContentType('application/pdf');
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlFundingFoerderantragDownload($funding->uid));
+        $this->assertResponseOk();
+        $this->assertContentType('application/pdf');
+
         // cleanup everything including file uploads
         $fundingsTable = $this->getTableLocator()->get('Fundings');
+        $fundingsTable->save($funding);
+        $this->expectException(NotFoundException::class);
+        $this->expectExceptionMessage('funding (UID: 14) is submitted and cannot be deleted');
+        
+        $funding->submit_date = null;
         $fundingsTable->deleteCustom($funding->uid);
 
     }

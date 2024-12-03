@@ -110,7 +110,7 @@ return [
         'notificationMailAddress' => 'office@example.com',
         'statisticsEnabled' => true,
         'mapWidgetEnabled' => true,
-        'fundingsEnabled' => date('Y-m-d') >= '2024-12-02',
+        'fundingsEnabled' => true,
         'fundingsStartDate' => '2024-12-01',
         'activeUsersFrontendEnabled' => true,
         'tagsFrontendEnabled' => true,
@@ -162,6 +162,7 @@ return [
             'DateLong2WithWeekday' => 'EEEE, dd.MM.yyyy',
             'DateNTimeShort' => 'dd.MM.y HH:mm',
             'DateNTimeShortWithSeconds' => 'dd.MM.y HH:mm:ss',
+            'DateNTimeLongWithSeconds' => 'dd.MM.yy HH:mm:ss',
             'TimeShort' => 'HH:mm',
             'TimeWithSeconds' => 'HH:mm:ss',
             'DateNTimeForDatepicker' => 'dd.MM.yyyy HH:mm'

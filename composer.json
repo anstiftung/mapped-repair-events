@@ -30,7 +30,8 @@
         "eluceo/ical": "2.*",
         "gregwar/captcha": "^1.1",
         "druidfi/mysqldump-php": "^1.0",
-        "dereuromark/cakephp-queue": "8.*"
+        "dereuromark/cakephp-queue": "8.*",
+        "tecnickcom/tcpdf": "^6.7"
     },
     "require-dev": {
         "cakephp/debug_kit": "5.*",

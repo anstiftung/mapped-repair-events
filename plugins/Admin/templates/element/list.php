@@ -1,6 +1,7 @@
 <?php
 use Cake\Core\Configure;
 use Cake\Utility\Hash;
+use App\Model\Entity\Funding;
 
 $this->element('addScript', array(
     'script' =>
@@ -343,18 +344,26 @@ if ($showDeleteLink) {
                 }
 
                 if ($showDeleteLink) {
+                    
+                    $showDeleteLinkRow = true;
+                    if (get_class($object) === Funding::class && $object->is_submitted) {
+                        $showDeleteLinkRow = false;
+                    }
+
                     echo '<td class="icon">';
-                        echo $this->Html->link(
-                            '<i class="far fa-trash-alt fa-border"></i>',
-                            'javascript:void(0);',
-                            [
-                                'class' => 'delete-link',
-                                'data-object-type' => lcfirst($this->request->getParam('controller')),
-                                'id' => 'delete-link-' . ($hasUid ? $object['uid'] : $object['id']),
-                                'title' => 'löschen',
-                                'escape' => false
-                            ]
-                        );
+                        if ($showDeleteLinkRow) {
+                            echo $this->Html->link(
+                                '<i class="far fa-trash-alt fa-border"></i>',
+                                'javascript:void(0);',
+                                [
+                                    'class' => 'delete-link',
+                                    'data-object-type' => lcfirst($this->request->getParam('controller')),
+                                    'id' => 'delete-link-' . ($hasUid ? $object['uid'] : $object['id']),
+                                    'title' => 'löschen',
+                                    'escape' => false
+                                ]
+                            );
+                        }
                     echo '</td>';
                 }
                 // edit link

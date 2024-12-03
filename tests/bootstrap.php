@@ -19,8 +19,8 @@ $schemLoader->loadSqlFiles(dirname(__DIR__) . '/config/sql/init/phinxlog.sql', '
 
 // 1) run migrations
 $migrations = new Migrations();
-$migrations->migrate(['connection' => 'test']);
 $migrations->migrate(['connection' => 'test', 'plugin' => 'Queue']);
+$migrations->migrate(['connection' => 'test']);
 
 $_SERVER['PHP_SELF'] = '/';
 

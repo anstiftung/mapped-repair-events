@@ -8,6 +8,10 @@ use Cake\Utility\Inflector;
 use App\Model\Entity\Fundingupload;
 use Cake\Http\Exception\NotFoundException;
 use App\Controller\Component\StringComponent;
+use Cake\I18n\DateTime;
+use App\Services\PdfWriter\FoerderbewilligungPdfWriterService;
+use App\Services\PdfWriter\FoerderantragPdfWriterService;
+use App\Mailer\AppMailer;
 
 class FundingsController extends AppController
 {
@@ -98,6 +102,11 @@ class FundingsController extends AppController
         $fundingsTable = $this->getTableLocator()->get('Fundings');
         $funding = $fundingsTable->findOrCreateCustom($workshopUid);
 
+        if ($funding->is_submitted) {
+            $this->AppFlash->setFlashError('Der Förderantrag wurde bereits eingereicht und kann nicht mehr bearbeitet werden.');
+            return $this->redirect(Configure::read('AppConfig.htmlHelper')->urlFundings());
+        }
+
         $this->setReferer();
 
         $basicErrors = $this->getBasicErrorMessages($funding);
@@ -160,6 +169,7 @@ class FundingsController extends AppController
             }
 
             $patchedEntity->owner_user->private = $this->updatePrivateFieldsForFieldsThatAreNotRequiredInUserProfile($patchedEntity->owner_user->private);
+            $patchedEntity->modified = DateTime::now();
             $fundingsTable->save($patchedEntity, ['associated' => $associationsWithoutValidation]);
             $this->AppFlash->setFlashMessage('Der Förderantrag wurde erfolgreich zwischengespeichert.');
 
@@ -182,6 +192,13 @@ class FundingsController extends AppController
                     $patchedEntity = $this->patchFunding($funding, $associations);
                 }
             }
+
+            if (!$patchedEntity->hasErrors() && $funding->is_submittable && !empty($this->request->getData('submit_funding'))) {
+                $this->submitFunding($funding);
+                $this->AppFlash->setFlashMessage('Der Förderantrag wurde erfolgreich eingereicht und bewilligt.');
+                return $this->redirect(Configure::read('AppConfig.htmlHelper')->urlFundings());
+            }
+
         }
 
         $this->set('metaTags', [
@@ -189,6 +206,76 @@ class FundingsController extends AppController
         ]);
         $this->set('funding', $funding);
 
+    }
+
+    private function submitFunding($funding) {
+
+        $timestamp = DateTime::now();
+
+        try {
+
+            $funding->owner_user->revertPrivatizeData();
+
+            $email = new AppMailer();
+            $email->viewBuilder()->setTemplate('fundings/funding_submitted');
+            $email->setTo([
+                $funding->owner_user->email,
+                $funding->fundingsupporter->contact_email,
+            ]);
+            $email->setSubject('Förderantrag erfolgreich eingereicht und bewilligt (UID: ' . $funding->uid . ')');
+            $email->setViewVars([
+                'data' => $funding->owner_user,
+            ]);
+    
+            $pdfWriterServiceA = new FoerderbewilligungPdfWriterService();
+            $pdfWriterServiceA->prepareAndSetData($funding->uid, $timestamp);
+            $pdfWriterServiceA->writeFile();
+            $email->addAttachments([$pdfWriterServiceA->getFilenameWithoutPath() => [
+                'data' => file_get_contents($pdfWriterServiceA->getFilename()),
+                'mimetype' => 'application/pdf',
+            ]]);
+    
+            $pdfWriterServiceB = new FoerderantragPdfWriterService();
+            $pdfWriterServiceB->prepareAndSetData($funding->uid, $timestamp);
+            $pdfWriterServiceB->writeFile();
+            $email->addAttachments([$pdfWriterServiceB->getFilenameWithoutPath() => [
+                'data' => file_get_contents($pdfWriterServiceB->getFilename()),
+                'mimetype' => 'application/pdf',
+            ]]);
+    
+            $email->addAttachments(['Foerderrichtlinie-anstiftung-bmuv-nov-2024.pdf' => [
+                'data' => file_get_contents(WWW_ROOT . 'files/foerderung/Foerderrichtlinie-anstiftung-bmuv-nov-2024.pdf'),
+                'mimetype' => 'application/pdf',
+            ]]);
+    
+            $email->addToQueue();
+    
+        } catch (\Exception $e) {
+            $this->AppFlash->setFlashError('Fehler beim Versenden der E-Mail.');
+        }
+
+        $fundingsTable = $this->getTableLocator()->get('Fundings');
+        $funding->submit_date = $timestamp;;
+        $fundingsTable->save($funding);
+
+    }
+
+    public function foerderbewilligungPdf($fundingUid) {
+        if (!$this->isAdmin()) {
+            throw new NotFoundException;
+        }
+        $pdfWriterService = new FoerderbewilligungPdfWriterService();
+        $pdfWriterService->prepareAndSetData($fundingUid, DateTime::now());
+        die($pdfWriterService->writeInline());
+    }
+
+    public function foerderantragPdf($fundingUid) {
+        if (!$this->isAdmin()) {
+            throw new NotFoundException;
+        }
+        $pdfWriterService = new FoerderantragPdfWriterService();
+        $pdfWriterService->prepareAndSetData($fundingUid, DateTime::now());
+        die($pdfWriterService->writeInline());
     }
 
     private function handleDeleteFundinguploads($funding, $associations, $patchedEntity, $newFundinguploads) {
@@ -355,6 +442,40 @@ class FundingsController extends AppController
 
     }
 
+    public function download() {
+
+        $fundingUid = $this->getRequest()->getParam('fundingUid');
+        $type = $this->getRequest()->getParam('type');
+
+        $fundingsTable = $this->getTableLocator()->get('Fundings');
+        $funding = $fundingsTable->find()->where([
+            $fundingsTable->aliasField('uid') => $fundingUid,
+            $fundingsTable->aliasField('submit_date IS NOT NULL'),
+        ])->first();
+
+        if (empty($funding)) {
+            throw new NotFoundException;
+        }
+
+        if ($type == 'foerderantrag') {
+            $pdfWriterService = new FoerderantragPdfWriterService();
+        }
+        if ($type == 'foerderbewilligung') {
+            $pdfWriterService = new FoerderbewilligungPdfWriterService();
+        }
+
+        if (isset($pdfWriterService)) {
+            $filename = $pdfWriterService->getFilenameCustom($funding, $funding->submit_date);
+            $filenameWithPath = $pdfWriterService->getUploadPath($funding->uid) . $filename;
+
+            $response = $this->response->withFile($filenameWithPath);
+            $response = $response->withHeader('Content-Disposition', 'inline; filename="' . $filename . '"');
+            return $response;
+        }
+        
+        throw new NotFoundException;
+
+    }
 
     public function uploadDetail() {
 

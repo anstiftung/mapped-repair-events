@@ -1,11 +1,9 @@
 <?php
 namespace App\Model\Table;
 
-use AssetCompress\Factory;
 use Cake\Routing\Router;
 use Cake\Database\Schema\TableSchemaInterface;
 use Cake\Datasource\FactoryLocator;
-use App\Model\Entity\Funding;
 use App\Model\Entity\Fundingupload;
 use App\Services\FolderService;
 use Cake\Http\Exception\NotFoundException;
@@ -117,14 +115,35 @@ class FundingsTable extends AppTable
         return true;
     }
 
+    public function getUnprivatizedFundingWithAllAssociations($fundingUid) {
+        $funding = $this->find(contain: [
+            'Workshops',
+            'OwnerUsers',
+            'Fundingsupporters',
+            'Fundingdatas',
+            'Fundingbudgetplans',
+            'FundinguploadsActivityProofs',
+            'FundinguploadsFreistellungsbescheids'
+        ])->where([
+            $this->aliasField('uid') => $fundingUid,
+        ])->first();
+        $funding->owner_user->revertPrivatizeData();
+        return $funding;
+    }
+
     public function deleteCustom($fundingUid) {
 
         $funding = $this->find()->where([
             $this->aliasField('uid') => $fundingUid,
         ])->contain(['Fundingsupporters', 'Fundingdatas'])->first();
+
         if (empty($funding)) {
             throw new NotFoundException('funding (UID: '.$fundingUid.') was not found');
         }
+        if ($funding->is_submitted) {
+            throw new NotFoundException('funding (UID: '.$fundingUid.') is submitted and cannot be deleted');
+        }
+        
         $this->delete($funding);
 
         $fundingsupportersTable = FactoryLocator::get('Table')->get('Fundingsupporters');

@@ -89,11 +89,20 @@ class Funding extends Entity
     ];
 
     const FIELDS_FUNDING_DATA_CHECKBOXES = [
-        ['name' => 'checkbox_a', 'options' => ['type' => 'checkbox', 'class' => 'no-verify', 'label' => 'Mit der zu bewilligende Maßnahme wurde noch nicht begonnen und wird auch nicht vor Erhalt des Bewilligungsbescheides begonnen.']],
-        ['name' => 'checkbox_b', 'options' => ['type' => 'checkbox', 'class' => 'no-verify', 'label' => 'Die zugrundeliegende <a href="/seite/richtlinie" target="_blank">Förderrichtlinie</a> habe ich/haben wir zur Kenntnis genommen.<br /><i>Die Erhebung, Verarbeitung und Nutzung vorstehender personenbezogener Daten sind nur zulässig, wenn der Betroffene (Antragsteller) eingewilligt hat. Für den Fall, dass hierzu die Einwilligung verweigert wird, kann der Antrag nicht bearbeitet und die beantragte Förderung damit nicht bewilligt werden.</i>', 'escape' => false]],
-        ['name' => 'checkbox_c', 'options' => ['type' => 'checkbox', 'class' => 'no-verify', 'label' => 'Mit der Einreichung erkläre ich mein Einverständnis, dass vorstehende Daten erhoben und elektronisch gespeichert werden, sowie das Einverständnis betroffener Dritter dazu eingeholt zu haben.']],
+        ['name' => 'checkbox_a', 'options' => ['type' => 'checkbox', 'class' => 'no-verify', 'label' => 'Mit der zu bewilligende Maßnahme wurde noch nicht begonnen und wird auch nicht vor Erhalt des Bewilligungsbescheides begonnen.', 'escape' => false]],
+        ['name' => 'checkbox_b', 'options' => ['type' => 'checkbox', 'class' => 'no-verify', 'label' => 'Die zugrundeliegende <a href="/seite/richtlinie" target="_blank">Förderrichtlinie</a> habe ich/haben wir zur Kenntnis genommen.', 'escape' => false]],
+        ['name' => 'checkbox_c', 'options' => ['type' => 'checkbox', 'class' => 'no-verify', 'label' => 'Mit der Einreichung erkläre ich mein Einverständnis, dass vorstehende Daten erhoben und elektronisch gespeichert werden, sowie das Einverständnis betroffener Dritter dazu eingeholt zu haben.<br /><i>Die Erhebung, Verarbeitung und Nutzung vorstehender personenbezogener Daten sind nur zulässig, wenn der Betroffene (Antragsteller) eingewilligt hat. Für den Fall, dass hierzu die Einwilligung verweigert wird, kann der Antrag nicht bearbeitet und die beantragte Förderung damit nicht bewilligt werden.</i>', 'escape' => false]],
     ];
 
+    const FIELDS_WORKSHOP_LABEL = 'Stammdaten der Reparatur-Initiative';
+    const FIELDS_OWNER_USER_LABEL = 'Personenbezogene Daten Ansprechpartner*in';
+    const FIELDS_FUNDINGSUPPORTER_ORGANIZATION_LABEL = 'Stammdaten der Trägerorganisation';
+    const FIELDS_FUNDINGSUPPORTER_USER_LABEL = 'Ansprechpartner*in der Trägerorganisation';
+    const FIELDS_FUNDINGSUPPORTER_BANK_LABEL = 'Bankverbindung der Trägerorganisation';
+    const FIELDS_FUNDINGDATA_DESCRIPTION_LABEL = 'Kurzbeschreibung Vorhaben';
+    const FIELDS_FUNDINGBUDGETPLAN_LABEL = 'Kostenplan';
+    const FIELDS_FUNDING_DATA_CHECKBOXES_LABEL = 'Einverständniserklärungen';
+    
     public static function getRenderedFields($fields, $entityString, $form, $disabled, $entity = null) {
         $renderedFields = '';
         $fieldsToBeFormattedWithToDigits = ['amount'];
@@ -117,6 +126,14 @@ class Funding extends Entity
             if ($fundingbudgetplan->is_valid) {
                 $total += $fundingbudgetplan->amount;
             }
+        }
+        return $total;
+    }
+
+    public function _getBudgetplanTotalWithLimit() {
+        $total = $this->budgetplan_total;
+        if ($total > self::MAX_FUNDING_SUM) {
+            return self::MAX_FUNDING_SUM;
         }
         return $total;
     }
@@ -331,8 +348,19 @@ class Funding extends Entity
         return $this->user_fields_verified_count == $this->user_fields_count;
     }
 
-    public function _getFundingSubmittable(): bool {
+    public function _getIsSubmittable(): bool {
         return $this->all_fields_verified_count == $this->all_fields_count;
+    }
+
+    public function _getIsSubmitted(): bool {
+        return $this->submit_date !== null;
+    }
+
+    public function _getSubmitDateFormatted(): string {
+        if ($this->submit_date !== null) {
+            return $this->submit_date->format('d.m.Y H:i');
+        }
+        return '';
     }
 
     public function _getActivityProofsCount(): int {

@@ -64,9 +64,16 @@ class FundingsController extends AdminAppController
 
         if (!empty($this->request->getData())) {
             $associtions =  ['associated' => ['FundinguploadsActivityProofs', 'FundinguploadsFreistellungsbescheids']];
+
             $patchedEntity = $fundingsTable->patchEntity($funding, $this->request->getData(), $associtions);
             if (!($patchedEntity->hasErrors())) {
+
                 $this->sendEmails($patchedEntity);
+
+                if (!empty($this->request->getData('Fundings.reopen') && $this->request->getData('Fundings.reopen'))) {
+                    $patchedEntity->submit_date = null;
+                }
+    
                 $fundingsTable->save($patchedEntity, $associtions);
                 $this->redirect($this->getReferer());
             } else {
@@ -114,6 +121,7 @@ class FundingsController extends AdminAppController
             'Workshops' => $workshopsTable->getFundingContain(),
             'OwnerUsers',
             'Fundingdatas',
+            'Fundingsupporters',
             'FundinguploadsActivityProofs',
             'FundinguploadsFreistellungsbescheids',
             'Fundingbudgetplans',
@@ -122,6 +130,7 @@ class FundingsController extends AdminAppController
         // TODO Sorting not yet working
         $objects = $this->paginate($query, [
             'order' => [
+                'Fundings.submit_date' => 'ASC',
                 'Fundings.created' => 'DESC'
             ],
         ]);

@@ -10,12 +10,18 @@ MappedRepairEvents.Funding = {
 
     bindSubmitFundingButton: (uid) => {
         $('#submit-funding-button-' + uid).on('click', function() {
-            $.prompt('Wir bitten um etwas Geduld.',
+            $.prompt('Möchtest du den Förderantrag wirklich einreichen?',
                 {
-                    buttons: {Ok: false},
+                    buttons: {'Ja, jetzt einreichen': true, Abbrechen: false},
                     submit: function(v,m,f) {
                         if(m) {
-                            //document.location.href = '/mein-foerderantrag/submit/' + uid;
+                            const form = document.getElementById('fundingForm');
+                            const input = document.createElement('input');
+                            input.type = 'hidden';
+                            input.name = 'submit_funding';
+                            input.value = 1;
+                            form.appendChild(input);
+                            form.submit();
                         }
                     }
                 }
@@ -118,7 +124,7 @@ MappedRepairEvents.Funding = {
         });
     },
 
-    initIsVerified: (isVerifiedData) => {
+    initIsVerified: (isVerifiedData, isAdminView) => {
 
         const parsedIsVerifiedData = JSON.parse(isVerifiedData);
 
@@ -142,7 +148,9 @@ MappedRepairEvents.Funding = {
                 text: 'bestätigt?'
             }).append(checkbox);
 
-            label.appendTo($(this).closest('.input'));
+            if (!isAdminView) {
+                label.appendTo($(this).closest('.input'));
+            }
         });
     }
 };

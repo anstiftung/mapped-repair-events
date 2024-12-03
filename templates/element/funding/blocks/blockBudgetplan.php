@@ -4,7 +4,7 @@ use App\Model\Table\FundingsTable;
 use App\Model\Entity\Funding;
 
 echo '<fieldset class="fundingbudgetplan full-width">';
-    echo '<legend>Kostenplan</legend>';
+    echo '<legend>' . Funding::FIELDS_FUNDINGBUDGETPLAN_LABEL . '</legend>';
 
     echo '<div class="verification-wrapper ' . $funding->budgetplan_status_css_class . '">';
         echo '<p>' . $funding->budgetplan_status_human_readable . '</p>';
@@ -42,9 +42,9 @@ echo '<fieldset class="fundingbudgetplan full-width">';
     echo '</div>';
 
     echo '<div class="fundingbudgets-total-wrapper">';
-        echo '<p class="total">Kosten gesamt: <b>' . $this->MyNumber->formatAsDecimal($funding->budgetplan_total) . ' €</b></p>';
+        echo '<p class="total">Kosten gesamt: <b>' . $this->MyNumber->formatAsDecimal($funding->budgetplan_total) . ' €</b></p>';
         if ($funding->budgetplan_total > Funding::MAX_FUNDING_SUM) {
-            echo '<p>Maximale Fördersumme: ' . $this->MyNumber->formatAsDecimal(Funding::MAX_FUNDING_SUM) . ' €</p>';
+            echo '<p>Maximale Fördersumme: ' . $this->MyNumber->formatAsDecimal(Funding::MAX_FUNDING_SUM) . ' €</p>';
         }
     echo '</div>';
 

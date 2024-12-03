@@ -3,7 +3,7 @@
 ?>
 
 <fieldset>
-    <legend>Stammdaten der Reparatur-Initiative (UID: <?php echo $funding->workshop->uid; ?>)</legend>
+    <legend><?php echo Funding::FIELDS_WORKSHOP_LABEL; ?> (UID: <?php echo $funding->workshop->uid; ?>)</legend>
     <?php if (!$disabled) { ?>
         <p style="margin-bottom:10px;padding:5px;">
             Ist die hier angegebene Adresse der Hauptort der Reparatur-Initiative? Änderungen werden auch auf der Plattform angezeigt.

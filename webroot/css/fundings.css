@@ -56,6 +56,13 @@ body.fundings .verification-wrapper {
     margin-bottom: 10px;
     border-radius: 3px;
 }
+body.fundings.index .verification-wrapper {
+    margin-bottom: 0;
+    margin-top: 10px;
+}
+body.fundings.index .download-links {
+    margin-top: 10px;
+}
 body.fundings .verification-wrapper p.comment {
     padding: 10px;
     margin-top: 10px;
@@ -218,7 +225,7 @@ body.fundings.edit div.admin.edit {
     flex: 1;
     flex-basis: calc(50% - 40px);
 }
-#fundingForm .flexbox fieldset.full-width {
+#fundingForm .flexbox .full-width {
     flex-basis: 100%;
 }
 #fundingForm .flexbox fieldset.fundingbudgetplan .fundingbudgets-total-wrapper {
@@ -357,13 +364,18 @@ body.fundings.index .admin tr.is-verified {
     background-color: var(--is-verified);
     color: #fff;
 }
+body.fundings.edit .admin .verification-wrapper,
+body.fundings.edit .admin .download-links {
+    margin-bottom: 10px;
+}
+body.fundings.edit .admin .download-links {
+    padding-left: 10px;
+}
+
 body.fundings.edit .admin #fundingForm fieldset:not(.fundingbudgetplan) div.input:not(.file) {
     grid-template-columns: 185px auto;
 }
 body.fundings.edit div.admin.edit #cancel-button {
     clear: none;
     margin-right: 10px;
-}
-body.fundings.edit div.admin.edit #fundingForm fieldset:not(.fundingbudgetplan) div.input:not(.file):not(.checkbox) {
-    padding: 0;
 }

@@ -139,6 +139,14 @@ return function (RouteBuilder $routes) {
                 'action'=>'delete'
             ])->setPatterns(['fundingUid' => '[0-9]+']);
 
+            $routes->connect('/mein-foerderantrag/download/{type}/{fundingUid}', [
+                'controller'=>'fundings',
+                'action'=>'download'
+            ])->setPatterns([
+                'type' => 'foerderantrag|foerderbewilligung',
+                'fundingUid' => '[0-9]+'
+            ]);
+
             $routes->connect('/mein-foerderantrag/uploadDetail/{fundinguploadId}', [
                 'controller'=>'fundings',
                 'action'=>'uploadDetail'

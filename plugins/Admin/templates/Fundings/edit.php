@@ -6,6 +6,7 @@ use App\Model\Entity\Fundingbudgetplan;
 
 $this->element('addScript', ['script' =>
     JS_NAMESPACE.".Helper.bindCancelButton();".
+    JS_NAMESPACE.".Funding.initIsVerified('".json_encode($funding->verified_fields)."', true);".
     JS_NAMESPACE.".Helper.layoutEditButtons();
 "]);
 ?>
@@ -18,6 +19,11 @@ $this->element('addScript', ['script' =>
         'id' => 'fundingForm',
     ]);
     echo $this->element('heading', ['first' => 'Förderantrag (UID: ' . $funding->uid . ') ' . $funding->workshop->name]);
+
+    if ($funding->is_submitted) {
+        echo $this->element('funding/submitInfo', ['funding' => $funding]);
+        echo $this->Form->control('Fundings.reopen', ['type' => 'checkbox', 'label' => 'Förderstatus "eingereicht" zurücksetzen', 'class' => 'no-verify']);
+    }
 
     echo $this->Form->hidden('referer', ['value' => $referer]);
     $this->Form->unlockField('referer');
@@ -34,8 +40,9 @@ $this->element('addScript', ['script' =>
             echo '<fieldset>';
                 echo '<legend>Status Aktivitätsnachweis</legend>';
                 echo $this->element('funding/status/activityProofStatus', ['funding' => $funding]);
-                echo $this->Form->control('Fundings.activity_proof_status', ['label' => 'Status', 'options' => Funding::STATUS_MAPPING_UPLOADS]);
-                echo $this->Form->control('Fundings.activity_proof_comment', ['label' => 'Kommentar']);
+                echo $this->Form->control('Fundings.activity_proof_status', ['label' => 'Status', 'options' => Funding::STATUS_MAPPING_UPLOADS, 'disabled' => $funding->is_submitted, 'class' => 'no-verify']);
+               
+                echo $this->Form->control('Fundings.activity_proof_comment', ['label' => 'Kommentar', 'disabled' => $funding->is_submitted, 'class' => 'no-verify']);
 
             echo '</fieldset>';
         }
@@ -49,8 +56,8 @@ $this->element('addScript', ['script' =>
         echo '<fieldset>';
             echo '<legend>Status Freistellungsbescheid</legend>';
             echo $this->element('funding/status/freistellungsbescheidStatus', ['funding' => $funding]);
-            echo $this->Form->control('Fundings.freistellungsbescheid_status', ['label' => 'Status', 'options' => Funding::STATUS_MAPPING_UPLOADS]);
-            echo $this->Form->control('Fundings.freistellungsbescheid_comment', ['label' => 'Kommentar']);
+            echo $this->Form->control('Fundings.freistellungsbescheid_status', ['label' => 'Status', 'options' => Funding::STATUS_MAPPING_UPLOADS, 'disabled' => $funding->is_submitted, 'class' => 'no-verify']);
+            echo $this->Form->control('Fundings.freistellungsbescheid_comment', ['label' => 'Kommentar', 'disabled' => $funding->is_submitted, 'class' => 'no-verify']);
         echo '</fieldset>';
 
         echo $this->element('funding/blocks/blockWorkshop', ['funding' => $funding, 'disabled' => true]);
@@ -59,22 +66,49 @@ $this->element('addScript', ['script' =>
         echo $this->element('funding/blocks/blockFundingsupporterUser', ['funding' => $funding, 'disabled' => true]);
         echo $this->element('funding/blocks/blockFundingsupporterBank', ['funding' => $funding, 'disabled' => true]);
         echo $this->element('funding/blocks/blockDescription', ['funding' => $funding, 'disabled' => true]);
-        echo $this->element('funding/blocks/blockCheckboxes', ['funding' => $funding, 'disabled' => true]);
 
         echo '<fieldset>';
             echo '<legend>Kostenplan</legend>';
             foreach($funding->grouped_valid_budgetplans as $typeId => $fundingbudgetplans) {
-                echo '<div class="fundingbudgetplans" style="margin-bottom:10px;">';
-                    echo '<div style="margin-bottom:5px;"><b>' . Fundingbudgetplan::TYPE_MAP[$typeId] . '</b></div>';
+                echo '<div class="fundingbudgetplans flexbox full-width" style="gap:5px;">';
+
+                    echo '<div class="full-width""><b>' . Fundingbudgetplan::TYPE_MAP[$typeId] . '</b></div>';
+
                     foreach($fundingbudgetplans as $fundingbudgetplan) {
-                        echo $fundingbudgetplan->description . ' ' . $this->MyNumber->formatAsDecimal($fundingbudgetplan->amount) . ' €<br />';
+                        echo '<div class="flexbox full-width">';
+                            echo '<div style="flex-grow:1;">';
+                                echo $fundingbudgetplan->description;
+                            echo '</div>';
+                            echo '<div style="align-self:flex-end;">';
+                                echo $this->MyNumber->formatAsDecimal($fundingbudgetplan->amount) . ' €';
+                            echo '</div>';
+                        echo '</div>';
                     }
-                    echo '<div style="margin-top:5px;"><i>Summe: ' . $this->MyNumber->formatAsDecimal($funding->grouped_valid_budgetplans_totals[$typeId]) . ' €</i></div>';
+
+                    echo '<div class="flexbox full-width" style="margin-bottom:10px;">';
+                        echo '<div style="flex-grow:1;">';
+                            echo '<b>Summe</b>';
+                        echo '</div>';
+                        echo '<div style="align-self:flex-end;">';
+                            echo '<b>' . $this->MyNumber->formatAsDecimal($funding->grouped_valid_budgetplans_totals[$typeId]) . ' €</b>';
+                        echo '</div>';
+                    echo '</div>';
+
                 echo '</div>';
             }
-            echo '<div style="font-size:14px;"><b>Gesamtsumme: ' . $this->MyNumber->formatAsDecimal($funding->budgetplan_total) . ' €</b></div>';
+
+            echo '<div class="flexbox full-width" style="margin-bottom:10px;font-size:14px;">';
+                echo '<div style="flex-grow:1;">';
+                    echo '<b>Kosten gesamt</b>';
+                echo '</div>';
+                echo '<div style="align-self:flex-end;">';
+                    echo '<b>' . $this->MyNumber->formatAsDecimal($funding->budgetplan_total) . ' €</b>';
+                echo '</div>';
+            echo '</div>';
 
         echo '</fieldset>';
+
+        echo $this->element('funding/blocks/blockCheckboxes', ['funding' => $funding, 'disabled' => true]);
 
     echo '</div>';
 

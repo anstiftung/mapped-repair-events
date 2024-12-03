@@ -4,8 +4,7 @@ $this->element('addScript', ['script' =>
     JS_NAMESPACE.".Helper.bindCancelButton();".
     JS_NAMESPACE.".Funding.initIsMissing();".
     JS_NAMESPACE.".Funding.initTextareaCounter();".
-    JS_NAMESPACE.".Funding.bindSubmitFundingButton(".$funding->uid.");".
-    JS_NAMESPACE.".Funding.initIsVerified('".json_encode($funding->verified_fields)."');".
+    JS_NAMESPACE.".Funding.initIsVerified('".json_encode($funding->verified_fields)."', false);".
     JS_NAMESPACE.".Funding.updateProgressBar(" . $funding->all_fields_verified_count . ", ".$funding->all_fields_count.");"
 ]);
 echo $this->element('jqueryTabsWithoutAjax', [
@@ -30,6 +29,7 @@ echo $this->element('jqueryTabsWithoutAjax', [
 
                 echo $this->Form->hidden('referer', ['value' => $referer]);
                 $this->Form->unlockField('referer');
+                $this->Form->unlockField('submit_funding');
                 $this->Form->unlockField('verified_fields');
                 echo $this->Form->hidden('Fundings.workshop.use_custom_coordinates');
                 echo $this->Form->hidden('Fundings.owner_user.use_custom_coordinates');
@@ -59,9 +59,14 @@ echo $this->element('jqueryTabsWithoutAjax', [
                     echo $this->Form->button('Förderantrag einreichen', [
                         'type' => 'button',
                         'id' => 'submit-funding-button-' . $funding->uid,
-                        'class' => 'rounded red ' . (!$funding->funding_submittable ? 'disabled' : ''),
-                        'disabled' => !$funding->funding_submittable,
+                        'class' => 'rounded red ' . (!$funding->is_submittable ? 'disabled' : ''),
+                        'disabled' => !$funding->is_submittable,
                     ]);
+                    if ($funding->is_submittable) {
+                        $this->element('addScript', ['script' =>
+                            JS_NAMESPACE.".Funding.bindSubmitFundingButton(".$funding->uid.");"
+                        ]);
+                    }
                 echo '</div>';
     
             echo $this->Form->end();
