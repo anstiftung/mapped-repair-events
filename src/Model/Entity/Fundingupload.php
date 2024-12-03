@@ -10,10 +10,12 @@ class Fundingupload extends Entity
 
     const TYPE_ACTIVITY_PROOF = 1;
     const TYPE_FREISTELLUNGSBESCHEID = 2;
+    const TYPE_ZUWENDUNGSBESTAETIGUNG = 3;
 
     const TYPE_MAP = [
         self::TYPE_ACTIVITY_PROOF => 'activity_proofs',
         self::TYPE_FREISTELLUNGSBESCHEID => 'freistellungsbescheids',
+        self::TYPE_ZUWENDUNGSBESTAETIGUNG => 'zuwendungsbestaetigungs',
     ];
 
     public function _getFullPath() {

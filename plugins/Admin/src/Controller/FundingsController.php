@@ -107,6 +107,18 @@ class FundingsController extends AdminAppController
             ]);
             $email->addToQueue();
         }
+
+        if ($funding->isDirty('zuwendungsbestaetigung_status')) {
+            $email->viewBuilder()->setTemplate('fundings/zuwendungsbestaetigung_status_changed');
+            $email->setSubject('Der Status deiner Zuwendungsbestätigung wurde geändert')
+            ->setTo($funding->owner_user->email)
+            ->setViewVars([
+                'funding' => $funding,
+                'data' => $funding->owner_user,
+            ]);
+            $email->addToQueue();
+        }
+
     }
 
     public function index()
@@ -124,6 +136,7 @@ class FundingsController extends AdminAppController
             'Fundingsupporters',
             'FundinguploadsActivityProofs',
             'FundinguploadsFreistellungsbescheids',
+            'FundinguploadsZuwendungsbestaetigungs',
             'Fundingbudgetplans',
         ]);
 

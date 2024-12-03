@@ -216,28 +216,25 @@ class Funding extends Entity
         if (!empty($this->workshop) && !$this->workshop->funding_activity_proof_required) {
             return '';
         }
-
-        if ($this->activity_proof_status == self::STATUS_PENDING) {
-            return 'is-pending';
-        }
-        if ($this->activity_proof_status == self::STATUS_VERIFIED_BY_ADMIN) {
-            return 'is-verified';
-        }
-        if ($this->activity_proof_status == self::STATUS_REJECTED_BY_ADMIN) {
-            return 'is-rejected';
-        }
-        return '';
+        return $this->getAdminStatusCssClass('activity_proof_status');
     }
 
     public function _getFreistellungsbescheidStatusCssClass() {
+        return $this->getAdminStatusCssClass('freistellungsbescheid_status');
+    }
 
-        if ($this->freistellungsbescheid_status == self::STATUS_PENDING) {
+    public function _getZuwendungsbestaetigungStatusCssClass() {
+        return $this->getAdminStatusCssClass('zuwendungsbestaetigung_status');
+    }
+
+    private function getAdminStatusCssClass($statusField) {
+        if ($this->$statusField == self::STATUS_PENDING) {
             return 'is-pending';
         }
-        if ($this->freistellungsbescheid_status == self::STATUS_VERIFIED_BY_ADMIN) {
+        if ($this->$statusField == self::STATUS_VERIFIED_BY_ADMIN) {
             return 'is-verified';
         }
-        if ($this->freistellungsbescheid_status == self::STATUS_REJECTED_BY_ADMIN) {
+        if ($this->$statusField == self::STATUS_REJECTED_BY_ADMIN) {
             return 'is-rejected';
         }
         return '';
@@ -271,6 +268,10 @@ class Funding extends Entity
 
     public function _getFreistellungsbescheidStatusHumanReadable() {
         return self::STATUS_MAPPING_UPLOADS[$this->freistellungsbescheid_status];
+    }
+
+    public function _getZuwendungsbestaetigungStatusHumanReadable() {
+        return self::STATUS_MAPPING_UPLOADS[$this->zuwendungsbestaetigung_status];
     }
 
     public static function getFieldsCount() {
@@ -369,6 +370,10 @@ class Funding extends Entity
 
     public function _getFreistellungsbescheidsCount(): int {
         return count($this->fundinguploads_freistellungsbescheids);
+    }
+
+    public function _getZuwendungsbestaetigungsCount(): int {
+        return count($this->fundinguploads_zuwendungsbestaetigungs);
     }
 
 }

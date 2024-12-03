@@ -110,6 +110,23 @@ $this->element('addScript', ['script' =>
 
         echo $this->element('funding/blocks/blockCheckboxes', ['funding' => $funding, 'disabled' => true]);
 
+
+        if ($funding->is_submitted) {
+            echo $this->element('funding/fundingUploadsForm', [
+                'fundinguploads' => $funding->fundinguploads_zuwendungsbestaetigungs,
+                'uploadType' => Fundingupload::TYPE_MAP[Fundingupload::TYPE_ZUWENDUNGSBESTAETIGUNG],
+                'legend' => 'Upload Zuwendungsbestätigung',
+            ]);
+            
+            echo '<fieldset>';
+                echo '<legend>Status Zuwendungsbestätigung</legend>';
+                echo $this->element('funding/status/zuwendungsbestaetigungStatus', ['funding' => $funding, 'additionalTextBefore' => '', 'additionalTextAfter' => '']);
+                echo $this->Form->control('Fundings.zuwendungsbestaetigung_status', ['label' => 'Status', 'options' => Funding::STATUS_MAPPING_UPLOADS, 'disabled' => !$funding->is_submitted, 'class' => 'no-verify']);
+                echo $this->Form->control('Fundings.zuwendungsbestaetigung_comment', ['label' => 'Kommentar', 'disabled' => !$funding->is_submitted, 'class' => 'no-verify']);
+            echo '</fieldset>';
+        }
+
+
     echo '</div>';
 
     echo $this->element('cancelAndSaveButton', ['saveLabel' => 'Speichern']);

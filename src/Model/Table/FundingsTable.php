@@ -36,7 +36,7 @@ class FundingsTable extends AppTable
             'className' => 'Fundinguploads',
             'foreignKey' => 'funding_uid',
             'conditions' => [
-                'FundinguploadsActivityProofs.type' => Fundingupload::TYPE_ACTIVITY_PROOF
+                'FundinguploadsActivityProofs.type' => Fundingupload::TYPE_ACTIVITY_PROOF,
             ],
             'dependent' => true,
         ]);
@@ -44,7 +44,15 @@ class FundingsTable extends AppTable
             'className' => 'Fundinguploads',
             'foreignKey' => 'funding_uid',
             'conditions' => [
-                'FundinguploadsFreistellungsbescheids.type' => Fundingupload::TYPE_FREISTELLUNGSBESCHEID
+                'FundinguploadsFreistellungsbescheids.type' => Fundingupload::TYPE_FREISTELLUNGSBESCHEID,
+            ],
+            'dependent' => true,
+        ]);
+        $this->hasMany('FundinguploadsZuwendungsbestaetigungs', [
+            'className' => 'Fundinguploads',
+            'foreignKey' => 'funding_uid',
+            'conditions' => [
+                'FundinguploadsZuwendungsbestaetigungs.type' => Fundingupload::TYPE_ZUWENDUNGSBESTAETIGUNG,
             ],
             'dependent' => true,
         ]);
@@ -201,6 +209,7 @@ class FundingsTable extends AppTable
             'Fundingsupporters',
             'FundinguploadsActivityProofs',
             'FundinguploadsFreistellungsbescheids',
+            'FundinguploadsZuwendungsbestaetigungs',
         ])->first();
 
         if (empty($funding->fundingbudgetplans)) {

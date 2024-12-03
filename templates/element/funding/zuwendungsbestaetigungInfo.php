@@ -1,8 +1,12 @@
 <?php
 
-echo '<div class="verification-wrapper is-pending">';
-    echo 'Zuwendungsbestätigung: Bestätigung von Admin ausstehend (Der Upload wird in Kürze möglich sein)';
-echo '</div>';
+echo $this->element('funding/status/zuwendungsbestaetigungStatus', [
+    'funding' => $funding,
+    'additionalTextBefore' => 'Zuwendungsbestätigung: ',
+    'additionalTextAfter' => ' - ' . $this->Html->link('Jetzt hochladen', [
+       'javascript:void(0)',
+    ]),
+]);
 
 echo '<div class="download-links">';
 
