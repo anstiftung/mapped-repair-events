@@ -3,12 +3,16 @@ $classes = [];
 if ($object->is_submitted) {
     $classes[] = 'is-verified';
 } else {
-    $classes[] = 'is-pending';
+    if ($object->is_submittable) {
+        $classes[] = 'is-pending';
+    }
 }
 echo '<div style="padding:5px;" class="'. implode(' ', $classes) .'">';
     if ($object->is_submitted) {
         echo $object->submit_date_formatted;
     } else {
-        echo 'Nein';
+        if ($object->is_submittable) {
+            echo 'Nein';
+        }
     }
 echo '</div>';
