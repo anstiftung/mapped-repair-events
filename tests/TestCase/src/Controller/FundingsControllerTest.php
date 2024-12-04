@@ -15,7 +15,6 @@ use Cake\Controller\Controller;
 use App\Model\Table\FundingsTable;
 use Laminas\Diactoros\UploadedFile;
 use App\Model\Entity\Fundingupload;
-use App\Model\Table\FundingbudgetplansTable;
 use App\Services\PdfWriter\FoerderantragPdfWriterService;
 use App\Services\PdfWriter\FoerderbewilligungPdfWriterService;
 use App\Test\TestCase\Traits\QueueTrait;
@@ -277,12 +276,16 @@ class FundingsControllerTest extends AppTestCase
         foreach($funding->fundinguploads_activity_proofs as $fundingupload) {
             $this->assertEquals(Fundingupload::TYPE_ACTIVITY_PROOF, $fundingupload->type);
             $this->assertFileExists($fundingupload->full_path);
+            $this->get(Configure::read('AppConfig.htmlHelper')->urlFundinguploadDetail($fundingupload->id));
+            $this->assertResponseOk();
         }
 
         $this->assertCount(1, $funding->fundinguploads_freistellungsbescheids);
         foreach($funding->fundinguploads_freistellungsbescheids as $fundingupload) {
             $this->assertEquals(Fundingupload::TYPE_FREISTELLUNGSBESCHEID, $fundingupload->type);
             $this->assertFileExists($fundingupload->full_path);
+            $this->get(Configure::read('AppConfig.htmlHelper')->urlFundinguploadDetail($fundingupload->id));
+            $this->assertResponseOk();
         }
 
         $this->assertEquals(FundingsTable::FUNDINGBUDGETPLANS_COUNT, count($funding->fundingbudgetplans));

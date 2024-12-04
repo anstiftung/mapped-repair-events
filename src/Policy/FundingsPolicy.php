@@ -30,7 +30,7 @@ class FundingsPolicy implements RequestPolicyInterface
 
         $fundingsTable = FactoryLocator::get('Table')->get('Fundings');
 
-        if (in_array($request->getParam('action'), ['uploadDetail', 'download', 'uploadZb'])) {
+        if (in_array($request->getParam('action'), ['download', 'uploadZuwendungsbestaetigung'])) {
 
             if  ($identity->isAdmin()) {
                 return true;
@@ -49,6 +49,36 @@ class FundingsPolicy implements RequestPolicyInterface
             return true;
 
         }
+
+        if (in_array($request->getParam('action'), ['uploadDetail'])) {
+
+            if  ($identity->isAdmin()) {
+                return true;
+            }
+
+            $fundinguploadId = $request->getParam('uid');
+            $fundinguploadsTable = FactoryLocator::get('Table')->get('Fundinguploads');
+            $fundinguploadEntity = $fundinguploadsTable->find()->where([
+                $fundinguploadsTable->aliasField('id') => $fundinguploadId,
+            ])->first();
+
+            if (empty($fundinguploadEntity)) {
+                return false;
+            }
+            
+            $entity = $fundingsTable->find()->where([
+                $fundingsTable->aliasField('uid') => $fundinguploadEntity->funding_uid,
+                $fundingsTable->aliasField('owner') => $identity->uid,
+            ])->first();
+
+            if (empty($entity)) {
+                return false;
+            }
+
+            return true;
+
+        }
+
 
         if (in_array($request->getParam('action'), ['delete'])) {
             $fundingUid = (int) $request->getParam('uid');
