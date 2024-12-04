@@ -18,7 +18,7 @@ use Cake\Core\Configure;
                 <p>
                     <?php
                         echo $this->MyHtml->link(
-                            'Link zu deiner Zuwendungsbestätigung',
+                            'Zum Upload-Formular der Zuwendungsbestätigung',
                             Configure::read('AppConfig.serverName') . $this->MyHtml->urlFundingsUploadZuwendungsbestaetigung($funding->uid),
                         );
                     ?>

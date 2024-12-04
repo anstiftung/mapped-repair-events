@@ -308,6 +308,9 @@ body.fundings.uploadZuwendungsbestaetigung fieldset {
     flex: 0 ! important;
     flex-basis: calc(50% - 40px) ! important;
 }
+body.fundings.uploadZuwendungsbestaetigung h1 {
+    margin-bottom: 20px;
+}
 @media (max-width: 767px) {
 
     #fundingForm fieldset:not(.fundingbudgetplan) div.input:not(.file) {
