@@ -115,7 +115,7 @@ class FundingsControllerTest extends AppTestCase
         }
     }
 
-    public function testEditAndSubmitAsOrgaOk() {
+    public function testCompleteFundingProcess() {
 
         $fundingsTable = $this->getTableLocator()->get('Fundings');
         $testWorkshopUid = 2;
@@ -187,10 +187,12 @@ class FundingsControllerTest extends AppTestCase
         $uploadFileActivityProof2 = TESTS . 'files/uploadActivityProof2.txt';
         $uploadFileFreistellungsbescheid1 = TESTS . 'files/uploadTFreistellungsbescheid1.jpg';
         $uploadFileFreistellungsbescheid2 = TESTS . 'files/uploadFreistellungsbescheid2.jpg';
+        $uploadFileZuwendungsbestaetigung1 = TESTS . 'files/uploadZuwendungsbestaetigung1.jpg';
         copy($uploadTemplateJpgFile, $uploadFileActivityProof1);
         copy($uploadTemplateTxtFile, $uploadFileActivityProof2);
         copy($uploadTemplateJpgFile, $uploadFileFreistellungsbescheid1);
         copy($uploadTemplateJpgFile, $uploadFileFreistellungsbescheid2);
+        copy($uploadTemplateJpgFile, $uploadFileZuwendungsbestaetigung1);
 
         // 1) POST
         $this->post(Configure::read('AppConfig.htmlHelper')->urlFundingsEdit($testWorkshopUid), [
@@ -365,7 +367,6 @@ class FundingsControllerTest extends AppTestCase
         $this->assertCount(0, $funding->fundinguploads_activity_proofs);
         $this->assertCount(0, $funding->fundinguploads_freistellungsbescheids);
 
-
         // 4) POST create a valid funding and submit
         $funding->activity_proof_status = Funding::STATUS_VERIFIED_BY_ADMIN;
         $funding->freistellungsbescheid_status = Funding::STATUS_VERIFIED_BY_ADMIN;
@@ -452,8 +453,8 @@ class FundingsControllerTest extends AppTestCase
         $foerderbewilligungPdfWriterService = new FoerderbewilligungPdfWriterService();
         $foerderbewilligungPdfFilename = $foerderbewilligungPdfWriterService->getFilenameCustom($funding, $funding->submit_date);
         
-        $this->assertFileExists($foerderantragPdfWriterService->getUploadPath($funding->uid) . $foerderantragPdfFilename);
-        $this->assertFileExists($foerderbewilligungPdfWriterService->getUploadPath($funding->uid) . $foerderbewilligungPdfFilename);
+        $this->assertFileExists($foerderantragPdfWriterService->getUploadPath($fundingUid) . $foerderantragPdfFilename);
+        $this->assertFileExists($foerderbewilligungPdfWriterService->getUploadPath($fundingUid) . $foerderbewilligungPdfFilename);
 
         $this->runAndAssertQueue();
         $this->assertMailCount(1);
@@ -463,12 +464,52 @@ class FundingsControllerTest extends AppTestCase
         $this->assertMailContainsAttachment($foerderbewilligungPdfFilename);
         $this->assertMailContainsAttachment($foerderantragPdfFilename);
 
-        $this->get(Configure::read('AppConfig.htmlHelper')->urlFundingFoerderbewilligungDownload($funding->uid));
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlFundingFoerderbewilligungDownload($fundingUid));
         $this->assertResponseOk();
         $this->assertContentType('application/pdf');
-        $this->get(Configure::read('AppConfig.htmlHelper')->urlFundingFoerderantragDownload($funding->uid));
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlFundingFoerderantragDownload($fundingUid));
         $this->assertResponseOk();
         $this->assertContentType('application/pdf');
+
+        // 5) POST zuwendungsbestaetigung upload
+        $this->post(Configure::read('AppConfig.htmlHelper')->urlFundingsUploadZuwendungsbestaetigung($fundingUid), [
+            'referer' => '/',
+            'Fundings' => [
+                'files_fundinguploads_zuwendungsbestaetigungs' => [
+                    new UploadedFile(
+                        $uploadFileZuwendungsbestaetigung1,
+                        filesize($uploadFileZuwendungsbestaetigung1),
+                        UPLOAD_ERR_OK,
+                        'test.jpg',
+                        'image/jpeg',
+                    ),
+                ],
+            ],
+        ]);
+        $this->assertResponseContains('Die Zuwendungsbestägigung wurde erfolgreich gespeichert.');
+        $funding = $fundingsTable->getUnprivatizedFundingWithAllAssociations($fundingUid);
+
+        $this->assertCount(1, $funding->fundinguploads_zuwendungsbestaetigungs);
+        foreach($funding->fundinguploads_zuwendungsbestaetigungs as $fundingupload) {
+            $this->assertEquals(Fundingupload::TYPE_ZUWENDUNGSBESTAETIGUNG, $fundingupload->type);
+            $this->assertFileExists($fundingupload->full_path);
+            $this->get(Configure::read('AppConfig.htmlHelper')->urlFundinguploadDetail($fundingupload->id));
+            $this->assertResponseOk();
+        }
+
+        // 6) POST zuwendungsbestaetigung delete
+        $this->post(Configure::read('AppConfig.htmlHelper')->urlFundingsUploadZuwendungsbestaetigung($fundingUid), [
+            'referer' => '/',
+            'Fundings' => [
+                'delete_fundinguploads_zuwendungsbestaetigungs' => [
+                    $funding->fundinguploads_zuwendungsbestaetigungs[0]->id,
+                ],
+            ]
+        ]);
+
+        $funding = $fundingsTable->getUnprivatizedFundingWithAllAssociations($fundingUid);
+        $this->assertCount(0, $funding->fundinguploads_zuwendungsbestaetigungs);
+        
 
         // cleanup everything including file uploads
         $fundingsTable = $this->getTableLocator()->get('Fundings');
@@ -477,7 +518,7 @@ class FundingsControllerTest extends AppTestCase
         $this->expectExceptionMessage('funding (UID: 14) is submitted and cannot be deleted');
         
         $funding->submit_date = null;
-        $fundingsTable->deleteCustom($funding->uid);
+        $fundingsTable->deleteCustom($fundingUid);
 
     }
 
