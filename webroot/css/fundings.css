@@ -88,6 +88,7 @@ body.fundings .verification-wrapper p.comment {
 body.fundings .upload-button-wrapper {
     display: flex;
     justify-content: flex-end;
+    max-height: 34px; /* if upload input has error */
 }
 body.fundings.edit div.admin.edit {
     padding: 20px;
@@ -274,13 +275,13 @@ body.fundings.edit .ui-progressbar-value {
     background-color: var(--is-verified);
     margin: 0;
 }
-body.fundings.edit .color-codes-wrapper {
+body.fundings .color-codes-wrapper {
     margin-bottom: 20px;
     display: flex;
     gap: 10px;
     width: 70%;
 }
-body.fundings.edit .color-codes-wrapper > div {
+body.fundings .color-codes-wrapper > div {
     flex: 1;
     padding: 10px;
     border-radius: 3px;
@@ -302,6 +303,10 @@ body.fundings div.is-rejected {
 }
 body.fundings a.funding-delete-button {
     color: red ! important;
+}
+body.fundings.uploadZuwendungsbestaetigung fieldset {
+    flex: 0 ! important;
+    flex-basis: calc(50% - 40px) ! important;
 }
 @media (max-width: 767px) {
 

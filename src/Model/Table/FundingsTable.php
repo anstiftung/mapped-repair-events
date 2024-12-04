@@ -84,10 +84,22 @@ class FundingsTable extends AppTable
             },
         ]);
 
+        $validator->add('fundinguploads_zuwendungsbestaetigungs', 'fileCount', [
+            'rule' => function ($value, $context) {
+                if (count($value) > 1) {
+                    return 'Es ist nur eine Datei erlaubt.';
+                }
+                return true;
+            },
+        ]);
+
         $validator->add('files_fundinguploads_activity_proofs', 'fileTypeAndSize', [
             'rule' => [$this, 'validateFileTypeAndSize'],
         ]);
         $validator->add('files_fundinguploads_freistellungsbescheids', 'fileTypeAndSize', [
+            'rule' => [$this, 'validateFileTypeAndSize'],
+        ]);
+        $validator->add('files_fundinguploads_zuwendungsbestaetigungs', 'fileTypeAndSize', [
             'rule' => [$this, 'validateFileTypeAndSize'],
         ]);
         return $validator;
@@ -131,7 +143,8 @@ class FundingsTable extends AppTable
             'Fundingdatas',
             'Fundingbudgetplans',
             'FundinguploadsActivityProofs',
-            'FundinguploadsFreistellungsbescheids'
+            'FundinguploadsFreistellungsbescheids',
+            'FundinguploadsZuwendungsbestaetigungs',
         ])->where([
             $this->aliasField('uid') => $fundingUid,
         ])->first();

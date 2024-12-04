@@ -38,7 +38,7 @@ if ($funding->zuwendungsbestaetigung_status == Funding::STATUS_VERIFIED_BY_ADMIN
 echo '<div style="margin-top:10px;">';
     echo $this->Html->link(
         'Zuwendungsbestätigung hochladen',
-        'javascript:void(0);',
+        $this->Html->urlFundingsUploadZuwendungsbestaetigung($funding->uid),
         [
             'class' => 'button',
         ],

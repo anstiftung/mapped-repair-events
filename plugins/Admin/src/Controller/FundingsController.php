@@ -48,6 +48,9 @@ class FundingsController extends AdminAppController
             'FundinguploadsFreistellungsbescheids' => function($q) {
                 return $q->order(['FundinguploadsFreistellungsbescheids.created' => 'DESC']);
             },
+            'FundinguploadsZuwendungsbestaetigungs' => function($q) {
+                return $q->order(['FundinguploadsZuwendungsbestaetigungs.created' => 'DESC']);
+            },
         ])->first();
 
         if ($funding->owner_user) {

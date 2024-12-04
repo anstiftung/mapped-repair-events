@@ -28,14 +28,15 @@ class FundingsPolicy implements RequestPolicyInterface
             return false;
         }
 
-        if (in_array($request->getParam('action'), ['uploadDetail', 'download'])) {
+        $fundingsTable = FactoryLocator::get('Table')->get('Fundings');
+
+        if (in_array($request->getParam('action'), ['uploadDetail', 'download', 'uploadZb'])) {
 
             if  ($identity->isAdmin()) {
                 return true;
             }
             
-            $fundingUid = (int) $request->getParam('fundingUid');
-            $fundingsTable = FactoryLocator::get('Table')->get('Fundings');
+            $fundingUid = (int) $request->getParam('uid');
             $entity = $fundingsTable->find()->where([
                 $fundingsTable->aliasField('uid') => $fundingUid,
                 $fundingsTable->aliasField('owner') => $identity->uid,
@@ -50,8 +51,7 @@ class FundingsPolicy implements RequestPolicyInterface
         }
 
         if (in_array($request->getParam('action'), ['delete'])) {
-            $fundingUid = (int) $request->getParam('fundingUid');
-            $fundingsTable = FactoryLocator::get('Table')->get('Fundings');
+            $fundingUid = (int) $request->getParam('uid');
             $entity = $fundingsTable->find()->where([
                 $fundingsTable->aliasField('uid') => $fundingUid,
                 $fundingsTable->aliasField('owner') => $identity->uid,
@@ -70,9 +70,9 @@ class FundingsPolicy implements RequestPolicyInterface
 
         if (in_array($request->getParam('action'), ['edit'])) {
 
-            $workshopUid = (int) $request->getParam('workshopUid');
+            $workshopUid = (int) $request->getParam('uid');
 
-            // all approved orgas are allowed to edit fundings
+            // only approved orgas are allowed to edit fundings
             $workshopsTable = FactoryLocator::get('Table')->get('Workshops');
             $workshop = $workshopsTable->getWorkshopForIsUserInOrgaTeamCheck($workshopUid);
             if ($workshopsTable->isUserInOrgaTeam($identity, $workshop)) {

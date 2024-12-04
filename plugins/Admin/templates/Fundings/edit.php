@@ -33,7 +33,7 @@ $this->element('addScript', ['script' =>
         if ($funding->workshop->funding_activity_proof_required) {
             echo $this->element('funding/fundingUploadsForm', [
                 'fundinguploads' => $funding->fundinguploads_activity_proofs,
-                'uploadType' => Fundingupload::TYPE_MAP[Fundingupload::TYPE_ACTIVITY_PROOF],
+                'uploadType' => Fundingupload::TYPE_MAP_STEP_1[Fundingupload::TYPE_ACTIVITY_PROOF],
                 'legend' => 'Uploads Aktivitätsnachweis',
             ]);
 
@@ -49,7 +49,7 @@ $this->element('addScript', ['script' =>
 
         echo $this->element('funding/fundingUploadsForm', [
             'fundinguploads' => $funding->fundinguploads_freistellungsbescheids,
-            'uploadType' => Fundingupload::TYPE_MAP[Fundingupload::TYPE_FREISTELLUNGSBESCHEID],
+            'uploadType' => Fundingupload::TYPE_MAP_STEP_1[Fundingupload::TYPE_FREISTELLUNGSBESCHEID],
             'legend' => 'Upload Freistellungsbescheid',
         ]);
         
@@ -114,7 +114,7 @@ $this->element('addScript', ['script' =>
         if ($funding->is_submitted) {
             echo $this->element('funding/fundingUploadsForm', [
                 'fundinguploads' => $funding->fundinguploads_zuwendungsbestaetigungs,
-                'uploadType' => Fundingupload::TYPE_MAP[Fundingupload::TYPE_ZUWENDUNGSBESTAETIGUNG],
+                'uploadType' => Fundingupload::TYPE_MAP_STEP_2[Fundingupload::TYPE_ZUWENDUNGSBESTAETIGUNG],
                 'legend' => 'Upload Zuwendungsbestätigung',
             ]);
             

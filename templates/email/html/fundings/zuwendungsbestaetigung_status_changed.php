@@ -17,12 +17,10 @@ use Cake\Core\Configure;
                 <?php } ?>
                 <p>
                     <?php
-                        /*
                         echo $this->MyHtml->link(
                             'Link zu deiner Zuwendungsbestätigung',
-                            Configure::read('AppConfig.serverName') . $this->MyHtml->urlFundingsEdit($funding->workshop->uid),
+                            Configure::read('AppConfig.serverName') . $this->MyHtml->urlFundingsUploadZuwendungsbestaetigung($funding->uid),
                         );
-                        */
                     ?>
                 </p>
             </td>
