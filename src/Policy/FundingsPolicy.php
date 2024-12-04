@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Policy;
 
-use AssetCompress\Factory;
 use Cake\Http\ServerRequest;
 use Authorization\Policy\RequestPolicyInterface;
 use Authorization\Policy\ResultInterface;
@@ -12,6 +11,15 @@ use Cake\Datasource\FactoryLocator;
 
 class FundingsPolicy implements RequestPolicyInterface
 {
+
+    private function getOwnerEntity($fundingUid, $identity) {
+        $fundingsTable = FactoryLocator::get('Table')->get('Fundings');
+        $entity = $fundingsTable->find()->where([
+            $fundingsTable->aliasField('uid') => $fundingUid,
+            $fundingsTable->aliasField('owner') => $identity->uid,
+        ])->first();
+        return $entity;
+    }
 
     public function canAccess($identity, ServerRequest $request): bool|ResultInterface
     {
@@ -28,20 +36,27 @@ class FundingsPolicy implements RequestPolicyInterface
             return false;
         }
 
-        $fundingsTable = FactoryLocator::get('Table')->get('Fundings');
 
-        if (in_array($request->getParam('action'), ['download', 'uploadZuwendungsbestaetigung'])) {
+        if (in_array($request->getParam('action'), ['uploadZuwendungsbestaetigung'])) {
+            
+            $fundingUid = (int) $request->getParam('uid');
+            $entity = $this->getOwnerEntity($fundingUid, $identity);
+            if (empty($entity)) {
+                return false;
+            }
+
+            return true;
+
+        }
+
+        if (in_array($request->getParam('action'), ['download'])) {
 
             if  ($identity->isAdmin()) {
                 return true;
             }
             
             $fundingUid = (int) $request->getParam('uid');
-            $entity = $fundingsTable->find()->where([
-                $fundingsTable->aliasField('uid') => $fundingUid,
-                $fundingsTable->aliasField('owner') => $identity->uid,
-            ])->first();
-
+            $entity = $this->getOwnerEntity($fundingUid, $identity);
             if (empty($entity)) {
                 return false;
             }
@@ -66,11 +81,7 @@ class FundingsPolicy implements RequestPolicyInterface
                 return false;
             }
             
-            $entity = $fundingsTable->find()->where([
-                $fundingsTable->aliasField('uid') => $fundinguploadEntity->funding_uid,
-                $fundingsTable->aliasField('owner') => $identity->uid,
-            ])->first();
-
+            $entity = $this->getOwnerEntity($fundinguploadEntity->funding_uid, $identity);
             if (empty($entity)) {
                 return false;
             }
@@ -79,14 +90,9 @@ class FundingsPolicy implements RequestPolicyInterface
 
         }
 
-
         if (in_array($request->getParam('action'), ['delete'])) {
             $fundingUid = (int) $request->getParam('uid');
-            $entity = $fundingsTable->find()->where([
-                $fundingsTable->aliasField('uid') => $fundingUid,
-                $fundingsTable->aliasField('owner') => $identity->uid,
-            ])->first();
-
+            $entity = $this->getOwnerEntity($fundingUid, $identity);
             if (empty($entity)) {
                 return false;
             }
