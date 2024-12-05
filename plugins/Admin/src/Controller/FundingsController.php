@@ -7,6 +7,7 @@ use App\Mailer\AppMailer;
 use App\Services\PdfWriter\FoerderbewilligungPdfWriterService;
 use Cake\I18n\DateTime;
 use App\Services\PdfWriter\FoerderantragPdfWriterService;
+use League\Csv\Writer;
 
 class FundingsController extends AdminAppController
 {
@@ -38,6 +39,115 @@ class FundingsController extends AdminAppController
         die($pdfWriterService->writeInline());
     }
 
+    public function bankExport() {
+
+        $this->disableAutoRender();
+        $fundingsTable = $this->getTableLocator()->get('Fundings');
+
+        $fundings = $fundingsTable->find('all',
+            conditions: [
+                $fundingsTable->aliasField('submit_date IS NOT NULL'),
+            ],
+            contain: [
+                'OwnerUsers',
+                'Fundingsupporters',
+                'Fundingbudgetplans',
+            ])->toArray();
+
+        $validFundings = [];
+        foreach($fundings as $funding) {
+            $funding->owner_user->revertPrivatizeData();
+            $validFundings[] = $funding;
+        }
+
+        $writer = Writer::createFromString();
+        $writer->setDelimiter(';');
+
+        $writer->insertOne($this->getCsvHeader());
+        $records = [];
+        foreach($validFundings as $funding) {
+            $record = [];
+            $record = [
+                'EUR', // Währung
+                number_format($funding->budgetplan_total_with_limit, 2, ',', ''), // VorzBetrag
+                'Antrag-' . $funding->uid, // RechNr
+                date('d.m.Y'), // Belegdatum
+                '', // InterneRechNr
+                $funding->fundingsupporter->name, // LieferantName
+                $funding->fundingsupporter->city, // LieferantOrt
+                $funding->owner_user->uid, // LieferantKonto
+                '', // BU
+                '5010', // Konto
+                '', // Kontobezeichnung
+                'Reparaturförderung', // Ware/Leistung
+                date('d.m.Y'), // Fällig_am
+                '', // gezahlt_am
+                '', // UStSatz
+                '', // USt-IdNr.Kunde
+                '', // Kunden-Nr.
+                '', // KOST1
+                '', // KOST2
+                '', // KOSTmenge
+                '', // Kurs
+                '', // Skonto
+                '', // Nachricht
+                '', // Skto_Fällig_am
+                '', // BankKonto
+                '', // BankBlz
+                $funding->fundingsupporter->bank_institute, // Bankname
+                $funding->fundingsupporter->iban, // BankIban
+                $funding->fundingsupporter->bic, // BankBic
+                '', // Skto_Proz
+                '', // Leistungsdatum
+            ];
+            $records[] = $record;
+        }
+        $writer->insertAll($records);
+
+        $response = $this->response;
+        $response = $response->withStringBody($writer->toString());
+        $response = $response->withCharset('UTF-8');
+        $response = $response->withDownload('bankexport-' . DateTime::now()->i18nFormat('yyyyMMdd_HHmmss') .  '.csv');
+        return $response;
+
+    }
+
+    private function getCsvHeader() {
+        return [
+            'Währung',
+            'VorzBetrag',
+            'RechNr',
+            'Belegdatum',
+            'InterneRechNr',
+            'LieferantName',
+            'LieferantOrt',
+            'LieferantKonto',
+            'BU',
+            'Konto',
+            'Kontobezeichnung',
+            'Ware/Leistung',
+            'Fällig_am',
+            'gezahlt_am',
+            'UStSatz',
+            'USt-IdNr.Lieferant',
+            'Kunden-Nr.',
+            'KOST1',
+            'KOST2',
+            'KOSTmenge',
+            'Kurs',
+            'Skonto',
+            'Nachricht',
+            'Skto_Fällig_am',
+            'BankKonto',
+            'BankBlz',
+            'Bankname',
+            'BankIban',
+            'BankBic',
+            'Skto_Proz',
+            'Leistungsdatum',
+        ];
+    }
+    
     public function edit($uid)
     {
 
