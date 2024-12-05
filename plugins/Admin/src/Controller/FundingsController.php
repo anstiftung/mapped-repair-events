@@ -4,6 +4,9 @@ namespace Admin\Controller;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Event\EventInterface;
 use App\Mailer\AppMailer;
+use App\Services\PdfWriter\FoerderbewilligungPdfWriterService;
+use Cake\I18n\DateTime;
+use App\Services\PdfWriter\FoerderantragPdfWriterService;
 
 class FundingsController extends AdminAppController
 {
@@ -21,6 +24,18 @@ class FundingsController extends AdminAppController
             ],
         ]);
         parent::beforeFilter($event);
+    }
+
+    public function foerderbewilligungPdf($fundingUid) {
+        $pdfWriterService = new FoerderbewilligungPdfWriterService();
+        $pdfWriterService->prepareAndSetData($fundingUid, DateTime::now());
+        die($pdfWriterService->writeInline());
+    }
+
+    public function foerderantragPdf($fundingUid) {
+        $pdfWriterService = new FoerderantragPdfWriterService();
+        $pdfWriterService->prepareAndSetData($fundingUid, DateTime::now());
+        die($pdfWriterService->writeInline());
     }
 
     public function edit($uid)
