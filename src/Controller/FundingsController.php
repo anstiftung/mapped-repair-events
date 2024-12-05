@@ -260,24 +260,6 @@ class FundingsController extends AppController
 
     }
 
-    public function foerderbewilligungPdf($fundingUid) {
-        if (!$this->isAdmin()) {
-            throw new NotFoundException;
-        }
-        $pdfWriterService = new FoerderbewilligungPdfWriterService();
-        $pdfWriterService->prepareAndSetData($fundingUid, DateTime::now());
-        die($pdfWriterService->writeInline());
-    }
-
-    public function foerderantragPdf($fundingUid) {
-        if (!$this->isAdmin()) {
-            throw new NotFoundException;
-        }
-        $pdfWriterService = new FoerderantragPdfWriterService();
-        $pdfWriterService->prepareAndSetData($fundingUid, DateTime::now());
-        die($pdfWriterService->writeInline());
-    }
-
     private function handleDeleteFundinguploads($funding, $associations, $patchedEntity, $newFundinguploads) {
 
         foreach(Fundingupload::TYPE_MAP as $uploadTypeId => $uploadType) {
