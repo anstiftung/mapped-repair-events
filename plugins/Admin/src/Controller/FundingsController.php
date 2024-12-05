@@ -8,6 +8,7 @@ use App\Services\PdfWriter\FoerderbewilligungPdfWriterService;
 use Cake\I18n\DateTime;
 use App\Services\PdfWriter\FoerderantragPdfWriterService;
 use League\Csv\Writer;
+use App\Model\Entity\Funding;
 
 class FundingsController extends AdminAppController
 {
@@ -15,7 +16,7 @@ class FundingsController extends AdminAppController
     public $searchName = false;
     public $searchText = false;
     public $searchUid = false;
-
+    public $searchStatus = false;
 
     public function beforeFilter(EventInterface $event) {
         $this->addSearchOptions([
@@ -23,7 +24,13 @@ class FundingsController extends AdminAppController
                 'name' => 'Workshops.name',
                 'searchType' => 'search'
             ],
+            'FundingStatus' => [
+                'searchType' => 'custom',
+                'conditions' => Funding::ADMIN_FILTER_CONDITIONS,
+                'extraDropdown' => true
+            ],
         ]);
+        $this->generateSearchConditions('opt-1');
         parent::beforeFilter($event);
     }
 
@@ -283,6 +290,7 @@ class FundingsController extends AdminAppController
         }
 
         $this->set('objects', $objects);
+        $this->set('fundingStatus', Funding::ADMIN_FILTER_OPTIONS);
 
     }
 

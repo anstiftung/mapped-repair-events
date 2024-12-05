@@ -5,7 +5,10 @@ echo $this->element('list',
         'heading' => 'Förderanträge',
         'editMethod' => ['url' => 'urlFundingsAdminEdit'],
         'deleteMethod' => '/admin/intern/ajaxDeleteFunding',
-        'fields' => [
+        'optionalSearchForms' => [
+            ['options' => $fundingStatus, 'value' => 'FundingStatus', 'label' => 'Status'],
+        ],
+          'fields' => [
             ['name' => 'uid', 'label' => 'UID'],
             ['name' => 'workshop.name', 'label' => 'Initiative', 'sortable' => false],
             ['label' => 'AN', 'template' => 'list/fundings/activityProof'],

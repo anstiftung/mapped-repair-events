@@ -8,6 +8,16 @@ use App\Model\Table\FundingdatasTable;
 class Funding extends Entity
 {
 
+    const ADMIN_FILTER_OPTIONS = [
+        'submitted' => 'eingereicht',
+        'not-submitted' => 'nicht eingereicht',
+    ];
+
+    const ADMIN_FILTER_CONDITIONS = [
+        'submitted' => 'Fundings.submit_date IS NOT NULL',
+        'not-submitted' => 'Fundings.submit_date IS NULL',
+    ];
+
     const STATUS_PENDING = 10;
     const STATUS_VERIFIED_BY_ADMIN = 20;
     const STATUS_REJECTED_BY_ADMIN = 30;
