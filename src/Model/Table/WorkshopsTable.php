@@ -200,7 +200,10 @@ class WorkshopsTable extends AppTable
 
     public function getFundingContain() {
         return [
-            'WorkshopFundings.OwnerUsers',
+            'WorkshopFundings' => [
+                'OwnerUsers',
+                'FundinguploadsZuwendungsbestaetigungs',
+            ],
             'FundingAllPastEvents' => function (Query $q) {
                 return $q->select(['workshop_uid', 'count' => $q->func()->count('*')])->groupBy('workshop_uid');
             },
