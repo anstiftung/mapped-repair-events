@@ -10,25 +10,22 @@ echo '<div class="workshop-wrapper">';
     );
     echo '<div class="table">';
 
-        $classes = ['button'];
-        $buttonHref = $this->Html->urlFundingsEdit($workshop->uid);
-        if ($workshop->funding_created_by_different_owner) {
-            $classes[] = 'disabled';
-            $buttonHref = 'javascript:void(0);';
-        }
         $isSubmitted = $workshop->funding_exists && $workshop->workshop_funding->is_submitted;
-        if ($isSubmitted) {
-            $classes[] = 'disabled';
-            $buttonHref = 'javascript:void(0);';
+        if (!$workshop->funding_exists || !$isSubmitted) {
+            $classes = ['button'];
+            $buttonHref = $this->Html->urlFundingsEdit($workshop->uid);
+            if ($workshop->funding_created_by_different_owner) {
+                $classes[] = 'disabled';
+                $buttonHref = 'javascript:void(0);';
+            }
+            echo $this->Html->link(
+                $workshop->funding_exists ? 'Förderantrag bearbeiten' : 'Förderantrag erstellen',
+                $buttonHref,
+                [
+                    'class' => implode(' ', $classes),
+                ],
+            );
         }
-        echo $this->Html->link(
-            $workshop->funding_exists ? 'Förderantrag bearbeiten' : 'Förderantrag erstellen',
-            $buttonHref,
-            [
-                'class' => implode(' ', $classes),
-                'disabled' => $isSubmitted,
-            ],
-        );
 
         echo '<div>';
             if ($workshop->funding_exists) {

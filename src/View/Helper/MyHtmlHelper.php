@@ -232,6 +232,10 @@ class MyHtmlHelper extends HtmlHelper {
         return $this->urlFundings() . '/edit/' . $workshopUid;
     }
 
+    function urlFundingsUploadZuwendungsbestaetigung($fundingUid) {
+        return $this->urlFundings() . '/uploadZuwendungsbestaetigung/' . $fundingUid;
+    }
+
     function urlFundingsAdminEdit($fundingUid) {
         return '/admin/fundings/edit/' . $fundingUid;
     }

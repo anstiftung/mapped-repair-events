@@ -144,6 +144,10 @@ class AdminAppController extends AppController
                         ]
                     ];
                     break;
+                case 'custom':
+                    $this->conditions[] = $searchOption['conditions'][$queryParams['val-' . $searchFieldKey]];
+                    break;
+
             }
         }
     }

@@ -64,7 +64,7 @@ class WorkshopsController extends AdminAppController
 
         $objects = $this->paginate($query, [
             'order' => [
-                'Workshops.name' => 'ASC'
+                'Workshops.created' => 'DESC'
             ],
         ]);
 

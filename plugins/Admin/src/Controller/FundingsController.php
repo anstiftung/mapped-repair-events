@@ -8,6 +8,7 @@ use App\Services\PdfWriter\FoerderbewilligungPdfWriterService;
 use Cake\I18n\DateTime;
 use App\Services\PdfWriter\FoerderantragPdfWriterService;
 use League\Csv\Writer;
+use App\Model\Entity\Funding;
 
 class FundingsController extends AdminAppController
 {
@@ -15,7 +16,7 @@ class FundingsController extends AdminAppController
     public $searchName = false;
     public $searchText = false;
     public $searchUid = false;
-
+    public $searchStatus = false;
 
     public function beforeFilter(EventInterface $event) {
         $this->addSearchOptions([
@@ -23,7 +24,13 @@ class FundingsController extends AdminAppController
                 'name' => 'Workshops.name',
                 'searchType' => 'search'
             ],
+            'FundingStatus' => [
+                'searchType' => 'custom',
+                'conditions' => Funding::ADMIN_FILTER_CONDITIONS,
+                'extraDropdown' => true
+            ],
         ]);
+        $this->generateSearchConditions('opt-1');
         parent::beforeFilter($event);
     }
 
@@ -173,6 +180,9 @@ class FundingsController extends AdminAppController
             'FundinguploadsFreistellungsbescheids' => function($q) {
                 return $q->order(['FundinguploadsFreistellungsbescheids.created' => 'DESC']);
             },
+            'FundinguploadsZuwendungsbestaetigungs' => function($q) {
+                return $q->order(['FundinguploadsZuwendungsbestaetigungs.created' => 'DESC']);
+            },
         ])->first();
 
         if ($funding->owner_user) {
@@ -232,6 +242,18 @@ class FundingsController extends AdminAppController
             ]);
             $email->addToQueue();
         }
+
+        if ($funding->isDirty('zuwendungsbestaetigung_status')) {
+            $email->viewBuilder()->setTemplate('fundings/zuwendungsbestaetigung_status_changed');
+            $email->setSubject('Der Status deiner Zuwendungsbestätigung wurde geändert')
+            ->setTo($funding->owner_user->email)
+            ->setViewVars([
+                'funding' => $funding,
+                'data' => $funding->owner_user,
+            ]);
+            $email->addToQueue();
+        }
+
     }
 
     public function index()
@@ -249,6 +271,7 @@ class FundingsController extends AdminAppController
             'Fundingsupporters',
             'FundinguploadsActivityProofs',
             'FundinguploadsFreistellungsbescheids',
+            'FundinguploadsZuwendungsbestaetigungs',
             'Fundingbudgetplans',
         ]);
 
@@ -267,6 +290,7 @@ class FundingsController extends AdminAppController
         }
 
         $this->set('objects', $objects);
+        $this->set('fundingStatus', Funding::ADMIN_FILTER_OPTIONS);
 
     }
 

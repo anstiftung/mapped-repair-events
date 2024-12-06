@@ -91,7 +91,7 @@ class FundingsController extends AppController
 
     public function edit() {
 
-        $workshopUid = (int) $this->getRequest()->getParam('workshopUid');
+        $workshopUid = (int) $this->getRequest()->getParam('uid');
 
         $createdByOtherOwnerCheckMessage = $this->createdByOtherOwnerCheck($workshopUid);
         if ($createdByOtherOwnerCheckMessage != '') {
@@ -153,8 +153,8 @@ class FundingsController extends AppController
             $patchedEntity = $this->patchFunding($funding, $associations);
             $errors = $patchedEntity->getErrors();
 
-            $newFundinguploads = $this->handleNewFundinguploads($funding, $associations, $patchedEntity);
-            $this->handleDeleteFundinguploads($funding, $associations, $patchedEntity, $newFundinguploads);
+            $newFundinguploads = $this->handleNewFundinguploads($funding, $associations, $patchedEntity, Fundingupload::TYPE_MAP_STEP_1);
+            $this->handleDeleteFundinguploads($funding, $associations, $patchedEntity, $newFundinguploads, Fundingupload::TYPE_MAP_STEP_1);
 
             if (!empty($errors)) {
                 $patchedEntity = $this->getPatchedFundingForValidFields($errors, $workshopUid, $associationsWithoutValidation);
@@ -173,25 +173,7 @@ class FundingsController extends AppController
             $fundingsTable->save($patchedEntity, ['associated' => $associationsWithoutValidation]);
             $this->AppFlash->setFlashMessage('Der Förderantrag wurde erfolgreich zwischengespeichert.');
 
-            foreach(Fundingupload::TYPE_MAP as $uploadTypeId => $uploadType) {
-                if (!empty($this->request->getData('Fundings.fundinguploads_' . $uploadType))) {
-                    // patch id for new fundinguploads
-                    $fundinguploadsFromDatabase = $this->getTableLocator()->get('Fundinguploads')->find()->where([
-                        'Fundinguploads.funding_uid' => $funding->uid,
-                    ])->toArray();
-                    $updatedFundinguploads = [];
-                    foreach($this->request->getData('Fundings.fundinguploads_' . $uploadType) as $fundingupload) {
-                        foreach($fundinguploadsFromDatabase as $fundinguploadFromDatabaseEntity) {
-                            if ($fundingupload['filename'] == $fundinguploadFromDatabaseEntity->filename) {
-                                $fundingupload['id'] = $fundinguploadFromDatabaseEntity->id;
-                                $updatedFundinguploads[] = $fundingupload;
-                            }
-                        }
-                    }
-                    $this->request = $this->request->withData('Fundings.fundinguploads_' . $uploadType ?? [], $updatedFundinguploads);
-                    $patchedEntity = $this->patchFunding($funding, $associations);
-                }
-            }
+            $patchedEntity = $this->handleUpdateNewFundinguploadsWithIds($funding, $associations, $patchedEntity, Fundingupload::TYPE_MAP_STEP_1);
 
             if (!$patchedEntity->hasErrors() && $funding->is_submittable && !empty($this->request->getData('submit_funding'))) {
                 $this->submitFunding($funding);
@@ -260,9 +242,32 @@ class FundingsController extends AppController
 
     }
 
-    private function handleDeleteFundinguploads($funding, $associations, $patchedEntity, $newFundinguploads) {
+    private function handleUpdateNewFundinguploadsWithIds($funding, $associations, $patchedEntity, $uploadTypes) {
+        foreach($uploadTypes as $uploadTypeId => $uploadType) {
+            if (!empty($this->request->getData('Fundings.fundinguploads_' . $uploadType))) {
+                // patch id for new fundinguploads
+                $fundinguploadsFromDatabase = $this->getTableLocator()->get('Fundinguploads')->find()->where([
+                    'Fundinguploads.funding_uid' => $funding->uid,
+                ])->toArray();
+                $updatedFundinguploads = [];
+                foreach($this->request->getData('Fundings.fundinguploads_' . $uploadType) as $fundingupload) {
+                    foreach($fundinguploadsFromDatabase as $fundinguploadFromDatabaseEntity) {
+                        if ($fundingupload['filename'] == $fundinguploadFromDatabaseEntity->filename) {
+                            $fundingupload['id'] = $fundinguploadFromDatabaseEntity->id;
+                            $updatedFundinguploads[] = $fundingupload;
+                        }
+                    }
+                }
+                $this->request = $this->request->withData('Fundings.fundinguploads_' . $uploadType ?? [], $updatedFundinguploads);
+                $patchedEntity = $this->patchFunding($funding, $associations);
+            }
+        }
+        return $patchedEntity;
+    }
 
-        foreach(Fundingupload::TYPE_MAP as $uploadTypeId => $uploadType) {
+    private function handleDeleteFundinguploads($funding, $associations, $patchedEntity, $newFundinguploads, $uploadTypes) {
+
+        foreach($uploadTypes as $uploadTypeId => $uploadType) {
             $deleteFundinguploads = $this->request->getData('Fundings.delete_fundinguploads_' . $uploadType);
             if (!empty($deleteFundinguploads)) {
                 $remainingFundinguploads = $this->request->getData('Fundings.fundinguploads_' . $uploadType) ?? [];
@@ -298,9 +303,9 @@ class FundingsController extends AppController
 
     }
 
-    private function handleNewFundinguploads($funding, $associations, $patchedEntity) {
+    private function handleNewFundinguploads($funding, $associations, $patchedEntity, $uploadTypes) {
         $newFundinguploads = [];
-        foreach(Fundingupload::TYPE_MAP as $uploadTypeId => $uploadType) {
+        foreach($uploadTypes as $uploadTypeId => $uploadType) {
             $filesFundinguploadsErrors = $patchedEntity->getError('files_fundinguploads_' . $uploadType);
             if (!empty($filesFundinguploadsErrors)) {
                 $patchedEntity->setError('files_fundinguploads_' . $uploadType . '[]', $filesFundinguploadsErrors);
@@ -374,7 +379,7 @@ class FundingsController extends AppController
 
     public function delete()
     {
-        $fundingUid = (int) $this->request->getParam('fundingUid');
+        $fundingUid = (int) $this->request->getParam('uid');
         $fundingsTable = $this->getTableLocator()->get('Fundings');
         $fundingsTable->deleteCustom($fundingUid);
         $this->AppFlash->setFlashMessage('Der Förderantrag wurde erfolgreich gelöscht.');
@@ -424,9 +429,41 @@ class FundingsController extends AppController
 
     }
 
+    public function uploadZuwendungsbestaetigung() {
+
+        $fundingsTable = $this->getTableLocator()->get('Fundings');
+        $fundingUid = $this->getRequest()->getParam('uid');
+        $funding = $fundingsTable->getUnprivatizedFundingWithAllAssociations($fundingUid);
+
+        if (!$funding->is_submitted) {
+            throw new NotFoundException('Förderantrag (UID: '.$fundingUid.') wurde noch nicht eingereicht.');
+        }
+
+        $this->setReferer();
+
+        if (!empty($this->request->getData())) {
+            $associations = ['FundinguploadsZuwendungsbestaetigungs'];
+            $patchedEntity = $this->patchFunding($funding, $associations);
+            $newFundinguploads = $this->handleNewFundinguploads($funding, $associations, $patchedEntity, Fundingupload::TYPE_MAP_STEP_2);
+            $this->handleDeleteFundinguploads($funding, $associations, $patchedEntity, $newFundinguploads, Fundingupload::TYPE_MAP_STEP_2);
+
+            $patchedEntity->modified = DateTime::now();
+            $fundingsTable->save($patchedEntity);
+            $this->AppFlash->setFlashMessage('Die Zuwendungsbestägigung wurde erfolgreich gespeichert.');
+            $patchedEntity = $this->handleUpdateNewFundinguploadsWithIds($funding, $associations, $patchedEntity, Fundingupload::TYPE_MAP_STEP_2);
+
+        }
+
+        $this->set('metaTags', [
+            'title' => 'Upload Zuwendungsbestätigung zu Förderantrag UID: ' . $funding->uid . ')',
+        ]);
+        $this->set('funding', $funding);
+
+    }
+
     public function download() {
 
-        $fundingUid = $this->getRequest()->getParam('fundingUid');
+        $fundingUid = $this->getRequest()->getParam('uid');
         $type = $this->getRequest()->getParam('type');
 
         $fundingsTable = $this->getTableLocator()->get('Fundings');
@@ -461,7 +498,7 @@ class FundingsController extends AppController
 
     public function uploadDetail() {
 
-        $fundinguploadUid = $this->getRequest()->getParam('fundinguploadId');
+        $fundinguploadUid = $this->getRequest()->getParam('uid');
         $fundinguploadsTable = $this->getTableLocator()->get('Fundinguploads');
         $fundingupload = $fundinguploadsTable->find('all',
         conditions: [

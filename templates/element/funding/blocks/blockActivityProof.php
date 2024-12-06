@@ -20,7 +20,7 @@ echo '<fieldset>';
     echo '</div>';
 
     echo $this->element('funding/blocks/upload/listUploadsAndUploadForm', [
-        'uploadType' => Fundingupload::TYPE_MAP[Fundingupload::TYPE_ACTIVITY_PROOF],
+        'uploadType' => Fundingupload::TYPE_MAP_STEP_1[Fundingupload::TYPE_ACTIVITY_PROOF],
         'fundinguploads' => $funding->fundinguploads_activity_proofs,
         'showUploadForm' => $funding->activity_proof_status != Funding::STATUS_VERIFIED_BY_ADMIN,
         'validationMessage' => 'Nur PDF, JPG und PNG-Dateien sind erlaubt. Jede Datei muss kleiner als 5 MB sein.',

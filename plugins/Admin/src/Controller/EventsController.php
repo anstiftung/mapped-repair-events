@@ -72,7 +72,7 @@ class EventsController extends AdminAppController
 
         $objects = $this->paginate($query, [
             'order' => [
-                'Events.updated' => 'DESC'
+                'Events.uid' => 'DESC'
             ]
         ]);
         foreach($objects as $object) {
