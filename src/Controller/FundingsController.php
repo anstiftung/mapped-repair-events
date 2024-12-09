@@ -323,7 +323,6 @@ class FundingsController extends AppController
                             'funding_uid' => $funding->uid,
                             'type' => $uploadTypeId,
                             'owner' => $this->loggedUser->uid,
-                            'status' => Funding::STATUS_PENDING,
                         ];
                         $filePath = Fundingupload::UPLOAD_PATH . $funding->uid . DS . $filename;
                         if (!is_dir(dirname($filePath))) {
@@ -361,6 +360,12 @@ class FundingsController extends AppController
         if (!empty($newFundinguploads) || !empty($deleteFundinguploads)) {
             $newStatus = Funding::STATUS_PENDING;
             $singularizedUploadType = Inflector::singularize($uploadType);
+            if (!empty($deleteFundinguploads)) {
+                $noUploadAvailable = count($patchedEntity->{'fundinguploads_' . $uploadType}) == 0;
+                if ($noUploadAvailable) {
+                    $newStatus = Funding::STATUS_UPLOAD_MISSING;
+                }
+            }
             $this->request = $this->request->withData('Fundings.' . $singularizedUploadType . '_status', $newStatus);
             $patchedEntity->{$singularizedUploadType . '_status'} = $newStatus;
         }
