@@ -26,10 +26,12 @@ class Funding extends Entity
     const STATUS_DESCRIPTION_MISSING = 60;
     const STATUS_CHECKBOXES_MISSING = 70;
     const STATUS_CHECKBOXES_OK = 80;
+    const STATUS_UPLOAD_MISSING = 90;
 
     const MAX_FUNDING_SUM = 3000;
 
     const STATUS_MAPPING_UPLOADS = [
+        self::STATUS_UPLOAD_MISSING => 'wurde noch nicht hochgeladen',
         self::STATUS_PENDING => 'Bestätigung von Admin ausstehend',
         self::STATUS_VERIFIED_BY_ADMIN => 'von Admin bestätigt',
         self::STATUS_REJECTED_BY_ADMIN => 'von Admin beanstandet',
@@ -238,6 +240,9 @@ class Funding extends Entity
     }
 
     private function getAdminStatusCssClass($statusField) {
+        if ($this->$statusField == self::STATUS_UPLOAD_MISSING) {
+            return 'is-missing';
+        }
         if ($this->$statusField == self::STATUS_PENDING) {
             return 'is-pending';
         }
