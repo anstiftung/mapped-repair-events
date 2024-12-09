@@ -125,31 +125,19 @@ return function (RouteBuilder $routes) {
 
         if (Configure::read('AppConfig.fundingsEnabled')) {
             $routes->connect('/mein-foerderantrag', ['controller'=>'fundings', 'action'=>'index']);
-            $routes->connect('/mein-foerderantrag/{action}/{workshopUid}', [
-                'controller'=>'fundings',
-                'action'=>'{action}'
-            ],
-            )->setPatterns([
-                'action' => 'edit',
-                'workshopUid' => '[0-9]+'
-            ]);
-
-            $routes->connect('/mein-foerderantrag/delete/{fundingUid}', [
-                'controller'=>'fundings',
-                'action'=>'delete'
-            ])->setPatterns(['fundingUid' => '[0-9]+']);
-
-            $routes->connect('/mein-foerderantrag/download/{type}/{fundingUid}', [
+            $routes->connect('/mein-foerderantrag/download/{type}/{uid}', [
                 'controller'=>'fundings',
                 'action'=>'download'
             ])->setPatterns([
                 'type' => 'foerderantrag|foerderbewilligung',
-                'fundingUid' => '[0-9]+'
+                'uid' => '[0-9]+'
             ]);
-
-            $routes->connect('/mein-foerderantrag/uploadDetail/{fundinguploadId}', [
-                'controller'=>'fundings',
-                'action'=>'uploadDetail'
+            $routes->connect('/mein-foerderantrag/{action}/{uid}', [
+                'controller' => 'fundings',
+                'action'=> '{action}'
+            ])->setPatterns([
+                'action' => 'uploadDetail|uploadZuwendungsbestaetigung|edit|delete',
+                'uid' => '[0-9]+|(' . UUID_REGEX . ')',
             ]);
         }
 

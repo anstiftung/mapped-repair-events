@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Policy;
 
-use AssetCompress\Factory;
 use Cake\Http\ServerRequest;
 use Authorization\Policy\RequestPolicyInterface;
 use Authorization\Policy\ResultInterface;
@@ -12,6 +11,15 @@ use Cake\Datasource\FactoryLocator;
 
 class FundingsPolicy implements RequestPolicyInterface
 {
+
+    private function getOwnerEntity($fundingUid, $identity) {
+        $fundingsTable = FactoryLocator::get('Table')->get('Fundings');
+        $entity = $fundingsTable->find()->where([
+            $fundingsTable->aliasField('uid') => $fundingUid,
+            $fundingsTable->aliasField('owner') => $identity->uid,
+        ])->first();
+        return $entity;
+    }
 
     public function canAccess($identity, ServerRequest $request): bool|ResultInterface
     {
@@ -28,19 +36,27 @@ class FundingsPolicy implements RequestPolicyInterface
             return false;
         }
 
+
+        if (in_array($request->getParam('action'), ['uploadZuwendungsbestaetigung'])) {
+            
+            $fundingUid = (int) $request->getParam('uid');
+            $entity = $this->getOwnerEntity($fundingUid, $identity);
+            if (empty($entity)) {
+                return false;
+            }
+
+            return true;
+
+        }
+
         if (in_array($request->getParam('action'), ['download'])) {
 
             if  ($identity->isAdmin()) {
                 return true;
             }
             
-            $fundingUid = (int) $request->getParam('fundingUid');
-            $fundingsTable = FactoryLocator::get('Table')->get('Fundings');
-            $entity = $fundingsTable->find()->where([
-                $fundingsTable->aliasField('uid') => $fundingUid,
-                $fundingsTable->aliasField('owner') => $identity->uid,
-            ])->first();
-
+            $fundingUid = (int) $request->getParam('uid');
+            $entity = $this->getOwnerEntity($fundingUid, $identity);
             if (empty($entity)) {
                 return false;
             }
@@ -54,8 +70,8 @@ class FundingsPolicy implements RequestPolicyInterface
             if  ($identity->isAdmin()) {
                 return true;
             }
-            
-            $fundinguploadId = $request->getParam('fundinguploadId');
+
+            $fundinguploadId = $request->getParam('uid');
             $fundinguploadsTable = FactoryLocator::get('Table')->get('Fundinguploads');
             $fundinguploadEntity = $fundinguploadsTable->find()->where([
                 $fundinguploadsTable->aliasField('id') => $fundinguploadId,
@@ -64,13 +80,8 @@ class FundingsPolicy implements RequestPolicyInterface
             if (empty($fundinguploadEntity)) {
                 return false;
             }
-
-            $fundingsTable = FactoryLocator::get('Table')->get('Fundings');
-            $entity = $fundingsTable->find()->where([
-                $fundingsTable->aliasField('uid') => $fundinguploadEntity->funding_uid,
-                $fundingsTable->aliasField('owner') => $identity->uid,
-            ])->first();
-
+            
+            $entity = $this->getOwnerEntity($fundinguploadEntity->funding_uid, $identity);
             if (empty($entity)) {
                 return false;
             }
@@ -80,13 +91,8 @@ class FundingsPolicy implements RequestPolicyInterface
         }
 
         if (in_array($request->getParam('action'), ['delete'])) {
-            $fundingUid = (int) $request->getParam('fundingUid');
-            $fundingsTable = FactoryLocator::get('Table')->get('Fundings');
-            $entity = $fundingsTable->find()->where([
-                $fundingsTable->aliasField('uid') => $fundingUid,
-                $fundingsTable->aliasField('owner') => $identity->uid,
-            ])->first();
-
+            $fundingUid = (int) $request->getParam('uid');
+            $entity = $this->getOwnerEntity($fundingUid, $identity);
             if (empty($entity)) {
                 return false;
             }
@@ -100,9 +106,9 @@ class FundingsPolicy implements RequestPolicyInterface
 
         if (in_array($request->getParam('action'), ['edit'])) {
 
-            $workshopUid = (int) $request->getParam('workshopUid');
+            $workshopUid = (int) $request->getParam('uid');
 
-            // all approved orgas are allowed to edit fundings
+            // only approved orgas are allowed to edit fundings
             $workshopsTable = FactoryLocator::get('Table')->get('Workshops');
             $workshop = $workshopsTable->getWorkshopForIsUserInOrgaTeamCheck($workshopUid);
             if ($workshopsTable->isUserInOrgaTeam($identity, $workshop)) {

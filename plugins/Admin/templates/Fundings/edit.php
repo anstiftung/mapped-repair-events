@@ -33,7 +33,7 @@ $this->element('addScript', ['script' =>
         if ($funding->workshop->funding_activity_proof_required) {
             echo $this->element('funding/fundingUploadsForm', [
                 'fundinguploads' => $funding->fundinguploads_activity_proofs,
-                'uploadType' => Fundingupload::TYPE_MAP[Fundingupload::TYPE_ACTIVITY_PROOF],
+                'uploadType' => Fundingupload::TYPE_MAP_STEP_1[Fundingupload::TYPE_ACTIVITY_PROOF],
                 'legend' => 'Uploads Aktivitätsnachweis',
             ]);
 
@@ -49,7 +49,7 @@ $this->element('addScript', ['script' =>
 
         echo $this->element('funding/fundingUploadsForm', [
             'fundinguploads' => $funding->fundinguploads_freistellungsbescheids,
-            'uploadType' => Fundingupload::TYPE_MAP[Fundingupload::TYPE_FREISTELLUNGSBESCHEID],
+            'uploadType' => Fundingupload::TYPE_MAP_STEP_1[Fundingupload::TYPE_FREISTELLUNGSBESCHEID],
             'legend' => 'Upload Freistellungsbescheid',
         ]);
         
@@ -109,6 +109,23 @@ $this->element('addScript', ['script' =>
         echo '</fieldset>';
 
         echo $this->element('funding/blocks/blockCheckboxes', ['funding' => $funding, 'disabled' => true]);
+
+
+        if ($funding->is_submitted) {
+            echo $this->element('funding/fundingUploadsForm', [
+                'fundinguploads' => $funding->fundinguploads_zuwendungsbestaetigungs,
+                'uploadType' => Fundingupload::TYPE_MAP_STEP_2[Fundingupload::TYPE_ZUWENDUNGSBESTAETIGUNG],
+                'legend' => 'Upload Zuwendungsbestätigung',
+            ]);
+            
+            echo '<fieldset>';
+                echo '<legend>Status Zuwendungsbestätigung</legend>';
+                echo $this->element('funding/status/zuwendungsbestaetigungStatus', ['funding' => $funding, 'additionalTextBefore' => '']);
+                echo $this->Form->control('Fundings.zuwendungsbestaetigung_status', ['label' => 'Status', 'options' => Funding::STATUS_MAPPING_UPLOADS, 'disabled' => !$funding->is_submitted, 'class' => 'no-verify']);
+                echo $this->Form->control('Fundings.zuwendungsbestaetigung_comment', ['label' => 'Kommentar', 'disabled' => !$funding->is_submitted, 'class' => 'no-verify']);
+            echo '</fieldset>';
+        }
+
 
     echo '</div>';
 

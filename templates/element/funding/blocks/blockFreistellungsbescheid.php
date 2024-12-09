@@ -14,7 +14,7 @@ echo '<fieldset>';
     echo '</div>';
 
     echo $this->element('funding/blocks/upload/listUploadsAndUploadForm', [
-        'uploadType' => Fundingupload::TYPE_MAP[Fundingupload::TYPE_FREISTELLUNGSBESCHEID],
+        'uploadType' => Fundingupload::TYPE_MAP_STEP_1[Fundingupload::TYPE_FREISTELLUNGSBESCHEID],
         'fundinguploads' => $funding->fundinguploads_freistellungsbescheids,
         'showUploadForm' => $funding->freistellungsbescheid_status != Funding::STATUS_VERIFIED_BY_ADMIN,
         'validationMessage' => '',

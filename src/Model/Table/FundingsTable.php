@@ -36,7 +36,7 @@ class FundingsTable extends AppTable
             'className' => 'Fundinguploads',
             'foreignKey' => 'funding_uid',
             'conditions' => [
-                'FundinguploadsActivityProofs.type' => Fundingupload::TYPE_ACTIVITY_PROOF
+                'FundinguploadsActivityProofs.type' => Fundingupload::TYPE_ACTIVITY_PROOF,
             ],
             'dependent' => true,
         ]);
@@ -44,7 +44,15 @@ class FundingsTable extends AppTable
             'className' => 'Fundinguploads',
             'foreignKey' => 'funding_uid',
             'conditions' => [
-                'FundinguploadsFreistellungsbescheids.type' => Fundingupload::TYPE_FREISTELLUNGSBESCHEID
+                'FundinguploadsFreistellungsbescheids.type' => Fundingupload::TYPE_FREISTELLUNGSBESCHEID,
+            ],
+            'dependent' => true,
+        ]);
+        $this->hasMany('FundinguploadsZuwendungsbestaetigungs', [
+            'className' => 'Fundinguploads',
+            'foreignKey' => 'funding_uid',
+            'conditions' => [
+                'FundinguploadsZuwendungsbestaetigungs.type' => Fundingupload::TYPE_ZUWENDUNGSBESTAETIGUNG,
             ],
             'dependent' => true,
         ]);
@@ -76,10 +84,22 @@ class FundingsTable extends AppTable
             },
         ]);
 
+        $validator->add('fundinguploads_zuwendungsbestaetigungs', 'fileCount', [
+            'rule' => function ($value, $context) {
+                if (count($value) > 1) {
+                    return 'Es ist nur eine Datei erlaubt.';
+                }
+                return true;
+            },
+        ]);
+
         $validator->add('files_fundinguploads_activity_proofs', 'fileTypeAndSize', [
             'rule' => [$this, 'validateFileTypeAndSize'],
         ]);
         $validator->add('files_fundinguploads_freistellungsbescheids', 'fileTypeAndSize', [
+            'rule' => [$this, 'validateFileTypeAndSize'],
+        ]);
+        $validator->add('files_fundinguploads_zuwendungsbestaetigungs', 'fileTypeAndSize', [
             'rule' => [$this, 'validateFileTypeAndSize'],
         ]);
         return $validator;
@@ -123,7 +143,8 @@ class FundingsTable extends AppTable
             'Fundingdatas',
             'Fundingbudgetplans',
             'FundinguploadsActivityProofs',
-            'FundinguploadsFreistellungsbescheids'
+            'FundinguploadsFreistellungsbescheids',
+            'FundinguploadsZuwendungsbestaetigungs',
         ])->where([
             $this->aliasField('uid') => $fundingUid,
         ])->first();
@@ -201,6 +222,7 @@ class FundingsTable extends AppTable
             'Fundingsupporters',
             'FundinguploadsActivityProofs',
             'FundinguploadsFreistellungsbescheids',
+            'FundinguploadsZuwendungsbestaetigungs',
         ])->first();
 
         if (empty($funding->fundingbudgetplans)) {
