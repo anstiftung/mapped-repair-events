@@ -59,6 +59,9 @@ class FundingsController extends AdminAppController
                 'OwnerUsers',
                 'Fundingsupporters',
                 'Fundingbudgetplans',
+            ],
+            order: [
+                $fundingsTable->aliasField('submit_date') => 'ASC',
             ])->toArray();
 
         $validFundings = [];
