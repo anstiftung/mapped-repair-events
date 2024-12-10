@@ -10,9 +10,6 @@ class Fundings7 extends AbstractMigration
     public function change(): void
     {
 
-        $sql = "ALTER TABLE `fundings` DROP `status`;";
-        $this->execute($sql);
-
         $uploadTypes = [
             'activity_proof',
             'freistellungsbescheid',
@@ -44,6 +41,9 @@ class Fundings7 extends AbstractMigration
             $sql = "ALTER TABLE `fundings` CHANGE `".$uploadStatusField."` `".$uploadStatusField."` INT NULL DEFAULT '" . Funding::STATUS_UPLOAD_MISSING . "';";
             $this->execute($sql);
         }
+
+        $sql = "ALTER TABLE `fundings` DROP `status`;";
+        $this->execute($sql);
 
     }
 }
