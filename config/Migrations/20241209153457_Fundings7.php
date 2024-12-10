@@ -27,10 +27,9 @@ class Fundings7 extends AbstractMigration
         ]);
 
         foreach($uploadTypes as $uploadType) {
+
             $uploadEntity = 'fundinguploads_' . $uploadType . 's';
             $uploadStatusField = $uploadType . '_status';
-            $sql = "ALTER TABLE `fundings` CHANGE `".$uploadStatusField."` `".$uploadStatusField."` INT NULL DEFAULT '" . Funding::STATUS_UPLOAD_MISSING . "';";
-            $this->execute($sql);
 
             foreach($fundings as $funding) {
                 $uploadsCount = count($funding->$uploadEntity);
@@ -39,6 +38,9 @@ class Fundings7 extends AbstractMigration
                     $fundingsTable->save($funding);
                 }
             }
+
+            $sql = "ALTER TABLE `fundings` CHANGE `".$uploadStatusField."` `".$uploadStatusField."` INT NULL DEFAULT '" . Funding::STATUS_UPLOAD_MISSING . "';";
+            $this->execute($sql);
 
         }
 
