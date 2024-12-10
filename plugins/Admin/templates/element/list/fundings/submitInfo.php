@@ -7,7 +7,7 @@ if ($object->is_submitted) {
         $classes[] = 'is-pending';
     }
 }
-echo '<div style="padding:5px;" class="'. implode(' ', $classes) .'">';
+echo '<div style="padding:5px;border-radius:3px;" class="'. implode(' ', $classes) .'">';
     if ($object->is_submitted) {
         echo $object->submit_date_formatted;
     } else {
