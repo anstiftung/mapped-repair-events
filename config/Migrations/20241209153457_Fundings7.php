@@ -39,11 +39,11 @@ class Fundings7 extends AbstractMigration
             $uploadEntity = 'fundinguploads_' . $uploadType . 's';
             $uploadStatusField = $uploadType . '_status';
             $sql = "ALTER TABLE `fundings` CHANGE `".$uploadStatusField."` `".$uploadStatusField."` INT NULL DEFAULT '" . Funding::STATUS_UPLOAD_MISSING . "';";
-            $this->execute($sql);
+            //$this->execute($sql);
         }
 
         $sql = "ALTER TABLE `fundings` DROP `status`;";
-        $this->execute($sql);
+        //$this->execute($sql);
 
     }
 }
