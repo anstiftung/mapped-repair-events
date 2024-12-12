@@ -13,6 +13,7 @@ class Funding extends Entity
         'rejected-by-admins' => 'AN / FB: ' . self::STATUS_MAPPING_UPLOADS[self::STATUS_REJECTED_BY_ADMIN],
         'submitted' => 'Förderantrag eingereicht',
         'not-submitted' => 'Förderantrag nicht eingereicht',
+        'no-data-verified' => 'Noch keine Felder bestätigt',
     ];
 
     const ADMIN_FILTER_CONDITIONS = [
@@ -20,6 +21,7 @@ class Funding extends Entity
         'rejected-by-admins' => 'Fundings.activity_proof_status = ' . self::STATUS_REJECTED_BY_ADMIN . ' OR Fundings.freistellungsbescheid_status = ' . self::STATUS_REJECTED_BY_ADMIN,
         'submitted' => 'Fundings.submit_date IS NOT NULL',
         'not-submitted' => 'Fundings.submit_date IS NULL',
+        'no-data-verified' => 'Fundings.verified_fields IS NULL',
     ];
 
     const STATUS_PENDING = 10;
