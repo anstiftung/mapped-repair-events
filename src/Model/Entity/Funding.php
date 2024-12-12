@@ -9,11 +9,15 @@ class Funding extends Entity
 {
 
     const ADMIN_FILTER_OPTIONS = [
-        'submitted' => 'eingereicht',
-        'not-submitted' => 'nicht eingereicht',
+        'to-be-verified-by-admins' => 'AN / FB: ' . self::STATUS_MAPPING_UPLOADS[self::STATUS_PENDING],
+        'rejected-by-admins' => 'AN / FB: ' . self::STATUS_MAPPING_UPLOADS[self::STATUS_REJECTED_BY_ADMIN],
+        'submitted' => 'Förderantrag eingereicht',
+        'not-submitted' => 'Förderantrag nicht eingereicht',
     ];
 
     const ADMIN_FILTER_CONDITIONS = [
+        'to-be-verified-by-admins' => 'Fundings.activity_proof_status = ' . self::STATUS_PENDING . ' OR Fundings.freistellungsbescheid_status = ' . self::STATUS_PENDING,
+        'rejected-by-admins' => 'Fundings.activity_proof_status = ' . self::STATUS_REJECTED_BY_ADMIN . ' OR Fundings.freistellungsbescheid_status = ' . self::STATUS_REJECTED_BY_ADMIN,
         'submitted' => 'Fundings.submit_date IS NOT NULL',
         'not-submitted' => 'Fundings.submit_date IS NULL',
     ];
