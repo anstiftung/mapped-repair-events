@@ -81,11 +81,11 @@ class FundingsController extends AdminAppController
                 'EUR', // Währung
                 number_format($funding->budgetplan_total_with_limit, 2, ',', ''), // VorzBetrag
                 'Antrag-' . $funding->uid, // RechNr
-                date('d.m.Y'), // Belegdatum
+                date('dm'), // Belegdatum
                 '', // InterneRechNr
-                $funding->fundingsupporter->name, // LieferantName
+                substr($funding->fundingsupporter->name, 0, 40), // LieferantName
                 $funding->fundingsupporter->city, // LieferantOrt
-                $funding->owner_user->uid, // LieferantKonto
+                '70001', // LieferantKonto
                 '', // BU
                 '5010', // Konto
                 '', // Kontobezeichnung
