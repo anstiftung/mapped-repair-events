@@ -69,6 +69,11 @@ $this->element('addScript', ['script' =>
 
         echo '<fieldset>';
             echo '<legend>Kostenplan</legend>';
+
+            echo '<div class="verification-wrapper ' . $funding->budgetplan_status_css_class . '">';
+                echo '<p>' . $funding->budgetplan_status_human_readable . '</p>';
+            echo '</div>';
+    
             foreach($funding->grouped_valid_budgetplans as $typeId => $fundingbudgetplans) {
                 echo '<div class="fundingbudgetplans flexbox full-width" style="gap:5px;">';
 
