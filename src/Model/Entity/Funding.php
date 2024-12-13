@@ -9,19 +9,19 @@ class Funding extends Entity
 {
 
     const ADMIN_FILTER_OPTIONS = [
-        'to-be-verified-by-admins' => 'AN / FB: ' . self::STATUS_MAPPING_UPLOADS[self::STATUS_PENDING],
-        'rejected-by-admins' => 'AN / FB: ' . self::STATUS_MAPPING_UPLOADS[self::STATUS_REJECTED_BY_ADMIN],
-        'submitted' => 'Förderantrag eingereicht',
-        'not-submitted' => 'Förderantrag nicht eingereicht',
+        'to-be-verified-by-admins' => 'Uploads: ' . self::STATUS_MAPPING_UPLOADS[self::STATUS_PENDING],
+        'rejected-by-admins' => 'Uploads: ' . self::STATUS_MAPPING_UPLOADS[self::STATUS_REJECTED_BY_ADMIN],
         'no-data-verified' => 'Noch keine Felder bestätigt',
+        'not-submitted' => 'Förderantrag nicht eingereicht',
+        'submitted' => 'Förderantrag eingereicht',
     ];
 
     const ADMIN_FILTER_CONDITIONS = [
-        'to-be-verified-by-admins' => 'Fundings.activity_proof_status = ' . self::STATUS_PENDING . ' OR Fundings.freistellungsbescheid_status = ' . self::STATUS_PENDING,
-        'rejected-by-admins' => 'Fundings.activity_proof_status = ' . self::STATUS_REJECTED_BY_ADMIN . ' OR Fundings.freistellungsbescheid_status = ' . self::STATUS_REJECTED_BY_ADMIN,
-        'submitted' => 'Fundings.submit_date IS NOT NULL',
-        'not-submitted' => 'Fundings.submit_date IS NULL',
+        'to-be-verified-by-admins' => 'Fundings.activity_proof_status = ' . self::STATUS_PENDING . ' OR Fundings.freistellungsbescheid_status = ' . self::STATUS_PENDING . ' OR (Fundings.submit_date IS NOT NULL AND Fundings.zuwendungsbestaetigung_status = ' . self::STATUS_PENDING . ')',  
+        'rejected-by-admins' => 'Fundings.activity_proof_status = ' . self::STATUS_REJECTED_BY_ADMIN . ' OR Fundings.freistellungsbescheid_status = ' . self::STATUS_REJECTED_BY_ADMIN . ' OR (Fundings.submit_date IS NOT NULL AND Fundings.zuwendungsbestaetigung_status = ' . self::STATUS_REJECTED_BY_ADMIN . ')',
         'no-data-verified' => 'Fundings.verified_fields IS NULL',
+        'not-submitted' => 'Fundings.submit_date IS NULL',
+        'submitted' => 'Fundings.submit_date IS NOT NULL',
     ];
 
     const STATUS_PENDING = 10;
