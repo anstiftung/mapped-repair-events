@@ -12,7 +12,7 @@ echo '<fieldset>';
     echo '<div style="margin-bottom:10px;padding:10px;">';
         
         echo '<p style="margin-bottom:10px;">';
-            echo 'Die Zuwendungsbestätigung muss lesbar sein. Bitte lade alle Seiten als ein PDF (unter 5MB) hoch.';
+            echo 'Bitte die Ausfüllhilfe beachten. Das Formular muss korrekt ausgefüllt sein. Bitte lade alle Seiten als ein PDF (unter 5MB) fristgerecht hoch.';
         echo '</p>';
 
         echo '<p>';
