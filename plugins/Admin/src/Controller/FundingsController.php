@@ -262,6 +262,9 @@ class FundingsController extends AdminAppController
     public function index()
     {
         parent::index();
+
+        $this->paginate['limit'] = 1000;
+
         $fundingsTable = $this->getTableLocator()->get('Fundings');
         $workshopsTable = $this->getTableLocator()->get('Workshops');
 
