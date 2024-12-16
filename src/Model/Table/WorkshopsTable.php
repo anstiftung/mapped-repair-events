@@ -202,6 +202,7 @@ class WorkshopsTable extends AppTable
         return [
             'WorkshopFundings' => [
                 'OwnerUsers',
+                'Fundingbudgetplans',
                 'FundinguploadsZuwendungsbestaetigungs',
             ],
             'FundingAllPastEvents' => function (Query $q) {

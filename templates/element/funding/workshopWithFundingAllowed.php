@@ -39,6 +39,7 @@ echo '<div class="workshop-wrapper">';
             } else {
                 echo $this->element('funding/submitInfo', ['funding' => $workshop->workshop_funding]);
                 echo $this->element('funding/zuwendungsbestaetigungInfo', ['funding' => $workshop->workshop_funding]);
+                echo $this->element('funding/moneyTransferInfo', ['funding' => $workshop->workshop_funding]);
            }
             if ($workshop->funding_exists && !$workshop->workshop_funding->is_submitted) {
                 echo $this->element('funding/delete', ['funding' => $workshop->workshop_funding]);
