@@ -1,5 +1,5 @@
 <?php
-use App\Controller\Component\StringComponent;
+declare(strict_types=1);
 echo $this->element('highlightNavi', ['main' => 'Wissen & Können']);
 ?>
 

@@ -1,5 +1,6 @@
 <?php
-    use Cake\Datasource\FactoryLocator;
+declare(strict_types=1);
+use Cake\Datasource\FactoryLocator;
 ?>
 
 <h1><?php echo $first; ?></h1>

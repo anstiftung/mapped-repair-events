@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 $explodedName = explode('.', $name);
 $convertedName = strtolower($explodedName[0]).'-'.$explodedName[1].'';

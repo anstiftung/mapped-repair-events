@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace App\Model\Table;
 
 use App\Model\Traits\SearchExceptionsTrait;
@@ -75,7 +76,6 @@ class WorkshopsTable extends AppTable
         // necessary to retrieve additional data of relation table (eg. Workshops.apply)
         $this->hasMany('UsersWorkshops', [
             'foreignKey' => 'workshop_uid',
-            'targetForeignKey' => 'user_uid'
         ]);
         $this->belongsToMany('Users', [
             'through' => 'UsersWorkshops',
@@ -105,8 +105,6 @@ class WorkshopsTable extends AppTable
         $invalidCoordinateMessage = 'Die Adresse wurde nicht gefunden. Bitte ändere sie oder lege die Koordinaten selbst fest.';
         $validator->numeric('lat', $invalidCoordinateMessage);
         $validator->numeric('lng', $invalidCoordinateMessage);
-        $validator->equals(0, $invalidCoordinateMessage);
-        $validator->equals(0, $invalidCoordinateMessage);
         $validator->notEmptyString('city', 'Bitte trage die Stadt ein.');
         $validator->minLength('city', 2, 'Bitte trage die Stadt ein.');
         $validator->notEmptyString('country_code', 'Bitte wähle dein Land aus.');

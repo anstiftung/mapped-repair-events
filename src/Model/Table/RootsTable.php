@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  *    Root Model - Basisklasse fuer alle APP-Objekte s. app_object.php
  */

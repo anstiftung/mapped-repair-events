@@ -1,3 +1,6 @@
+<?php
+declare(strict_types=1);
+?>
 <div id="neues-passwort-anfordern">
 
   <?php echo $this->element('heading', ['first' => 'Neues Passwort anfordern']); ?>

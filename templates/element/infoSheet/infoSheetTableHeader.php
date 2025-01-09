@@ -1,3 +1,6 @@
+<?php
+declare(strict_types=1);
+?>
 <tr>
     <th style="width:74px;">Laufzettel-Id</th>
     <th>Gerät</th>

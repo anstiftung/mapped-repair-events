@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 use Cake\Core\Configure;
 use Cake\Utility\Hash;
 use App\Model\Entity\Funding;

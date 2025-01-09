@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 $class = $object->user_fields_verified ? 'is-verified' : 'is-pending';
 
 if ($object->user_fields_verified_count == 0) {

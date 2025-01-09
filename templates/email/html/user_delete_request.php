@@ -1,3 +1,6 @@
+<?php
+declare(strict_types=1);
+?>
 <?php echo $this->element('email/tableHead'); ?>
     <tbody>
         <tr>

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Model\Table;
 
@@ -50,8 +51,6 @@ class EventsTable extends AppTable
         $invalidCoordinateMessage = 'Die Adresse wurde nicht gefunden. Bitte ändere sie oder lege die Koordinaten selbst fest.';
         $validator->numeric('lat', $invalidCoordinateMessage);
         $validator->numeric('lng', $invalidCoordinateMessage);
-        $validator->equals(0, $invalidCoordinateMessage);
-        $validator->equals(0, $invalidCoordinateMessage);
         $validator->notEmptyString('workshop_uid', 'Bitte wähle eine Initiative aus.');
         $validator->notEmptyString('ort', 'Bitte trage die Stadt ein.');
         $validator->minLength('ort', 2, 'Bitte trage die Stadt ein.');

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 use Migrations\AbstractMigration;
 
 class SqlModeFixes extends AbstractMigration

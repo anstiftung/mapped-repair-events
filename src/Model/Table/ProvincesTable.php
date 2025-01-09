@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace App\Model\Table;
 
 use Cake\ORM\Table;
@@ -10,9 +11,6 @@ class ProvincesTable extends Table
     {
         $this->belongsTo('Countries', [
             'foreignKey' => 'country_code',
-            'sort' => [
-                'Countries.name' => 'ASC'
-            ]
         ]);
     }
 

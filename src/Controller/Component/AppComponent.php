@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * damit der controller in jeder componente verfügbar ist
  * @author Mario Rothauer <marothauer@gmail.com>
