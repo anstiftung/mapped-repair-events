@@ -1,0 +1,1 @@
+UPDATE fundings SET money_transfer_date = CURDATE() WHERE uid IN (uids)
