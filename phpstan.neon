@@ -19,3 +19,7 @@ parameters:
             - plugins/Admin/templates
         - message: '#Variable \$.* in empty\(\) always exists and is .* falsy\.$#'
           path: src
+rules:
+    - Ergebnis\PHPStan\Rules\Files\DeclareStrictTypesRule
+includes:
+    - vendor/cakedc/cakephp-phpstan/extension.neon
