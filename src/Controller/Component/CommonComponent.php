@@ -30,6 +30,7 @@ class CommonComponent extends AppComponent {
         if ($this->controller->getRequest()->getData()) {
             $newData = $this->trimAndSanitizeDeep($request->getData());
             foreach ($newData as $k => $v) {
+                $k = (string) $k;
                 if ($request->getData($k) !== $v) {
                     $request = $request->withData($k, $v);
                 }
