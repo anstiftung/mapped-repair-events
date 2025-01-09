@@ -5,6 +5,7 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 use App\Model\Table\FundingbudgetplansTable;
 use App\Model\Table\FundingdatasTable;
+use Cake\Log\Log;
 
 class Funding extends Entity
 {
@@ -129,7 +130,7 @@ class Funding extends Entity
             if ($entity !== null && in_array($field['name'], $fieldsToBeFormattedWithToDigits)) {
                 $value = $entity[$field['name']];
                 if ($value !== null) {
-                    $field['options']['value'] = number_format($value, 2, '.', '');
+                    $field['options']['value'] = number_format((float) $value, 2, '.', '');
                 }
             }
             $field['options']['disabled'] = $disabled;
