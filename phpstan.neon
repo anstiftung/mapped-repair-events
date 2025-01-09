@@ -1,5 +1,5 @@
 parameters:
-    level: 1
+    level: 2
     bootstrapFiles:
         - config/bootstrap.php
     fileExtensions:
@@ -13,6 +13,8 @@ parameters:
         - plugins/Admin/templates
     ignoreErrors:
         - message: '#Access to an undefined property .*#'
+        - message: '#Cannot access property .*#'
+        - message: '#Call to an undefined method Authorization\\IdentityInterface::*.#'
         - message: '#Variable \$.* might not be defined#'
           paths:
             - templates

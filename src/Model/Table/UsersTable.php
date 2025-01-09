@@ -9,11 +9,11 @@ use Cake\Routing\Router;
 use Cake\ORM\RulesChecker;
 use Cake\Event\EventInterface;
 use Cake\Validation\Validator;
-use Cake\Datasource\FactoryLocator;
 use Authentication\PasswordHasher\DefaultPasswordHasher;
 use Cake\Datasource\EntityInterface;
 use App\Model\Rule\UserLinkToWorkshopRule;
 use App\Controller\Component\StringComponent;
+use Cake\ORM\TableRegistry;
 
 class UsersTable extends AppTable
 {
@@ -98,7 +98,7 @@ class UsersTable extends AppTable
         $userUid = $entity->get('uid');
 
         // 1. set owner to 0 for all deleted workshops where to-be-deleted user was owner
-        $workshopTable = FactoryLocator::get('Table')->get('Workshops');
+        $workshopTable = TableRegistry::getTableLocator()->get('Workshops');
         $deletedOwnerWorkshops = $workshopTable->find('all',
             conditions: [
                 'Workshops.owner' => $userUid,
@@ -191,14 +191,14 @@ class UsersTable extends AppTable
                     contain: [
                         'Groups'
                     ])->first();
-                    $groupsTable = FactoryLocator::get('Table')->get('Groups');
+                    $groupsTable = TableRegistry::getTableLocator()->get('Groups');
                     if (!$groupsTable->isOrga($user)) {
                         return true;
                     }
                 }
 
                 // actual check if user is last orga user in any of "his" workshops starts here
-                $workshopTable = FactoryLocator::get('Table')->get('Workshops');
+                $workshopTable = TableRegistry::getTableLocator()->get('Workshops');
                 $workshops = $workshopTable->getWorkshopsForAssociatedUser($context['data']['uid'], APP_OFF);
                 $associatedWorkshopsWhereUserIsLastOrgaUser = $this->getWorkshopsWhereUserIsLastOrgaUser($workshops);
                 if (!empty($associatedWorkshopsWhereUserIsLastOrgaUser)) {

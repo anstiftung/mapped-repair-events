@@ -7,13 +7,13 @@ use Cake\Http\ServerRequest;
 use Authorization\Policy\RequestPolicyInterface;
 use Authorization\Policy\ResultInterface;
 use Cake\Core\Configure;
-use Cake\Datasource\FactoryLocator;
+use Cake\ORM\TableRegistry;
 
 class FundingsPolicy implements RequestPolicyInterface
 {
 
     private function getOwnerEntity($fundingUid, $identity) {
-        $fundingsTable = FactoryLocator::get('Table')->get('Fundings');
+        $fundingsTable = TableRegistry::getTableLocator()->get('Fundings');
         $entity = $fundingsTable->find()->where([
             $fundingsTable->aliasField('uid') => $fundingUid,
             $fundingsTable->aliasField('owner') => $identity->uid,
@@ -72,7 +72,7 @@ class FundingsPolicy implements RequestPolicyInterface
             }
 
             $fundinguploadId = $request->getParam('uid');
-            $fundinguploadsTable = FactoryLocator::get('Table')->get('Fundinguploads');
+            $fundinguploadsTable = TableRegistry::getTableLocator()->get('Fundinguploads');
             $fundinguploadEntity = $fundinguploadsTable->find()->where([
                 $fundinguploadsTable->aliasField('id') => $fundinguploadId,
             ])->first();
@@ -109,7 +109,7 @@ class FundingsPolicy implements RequestPolicyInterface
             $workshopUid = (int) $request->getParam('uid');
 
             // only approved orgas are allowed to edit fundings
-            $workshopsTable = FactoryLocator::get('Table')->get('Workshops');
+            $workshopsTable = TableRegistry::getTableLocator()->get('Workshops');
             $workshop = $workshopsTable->getWorkshopForIsUserInOrgaTeamCheck($workshopUid);
             if ($workshopsTable->isUserInOrgaTeam($identity, $workshop)) {
                 return true;

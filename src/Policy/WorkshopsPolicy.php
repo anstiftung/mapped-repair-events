@@ -4,9 +4,9 @@ declare(strict_types=1);
 namespace App\Policy;
 
 use Cake\Http\ServerRequest;
-use Cake\Datasource\FactoryLocator;
 use Authorization\Policy\RequestPolicyInterface;
 use Authorization\Policy\ResultInterface;
+use Cake\ORM\TableRegistry;
 
 class WorkshopsPolicy implements RequestPolicyInterface
 {
@@ -66,8 +66,7 @@ class WorkshopsPolicy implements RequestPolicyInterface
             $workshopUid = (int) $request->getParam('pass')[0];
 
             // all approved orgas are allowed to edit and add workshops
-            $workshopsTable = FactoryLocator::get('Table')->get('Workshops');
-
+            $workshopsTable = TableRegistry::getTableLocator()->get('Workshops');
             $workshop = $workshopsTable->getWorkshopForIsUserInOrgaTeamCheck($workshopUid);
             if ($workshopsTable->isUserInOrgaTeam($identity, $workshop)) {
                 return true;

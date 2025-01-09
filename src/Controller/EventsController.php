@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Cake\Core\Configure;
-use Cake\Datasource\FactoryLocator;
 use Cake\Event\EventInterface;
 use Cake\Http\Exception\NotFoundException;
 use Eluceo\iCal\Domain\Entity\Calendar;
@@ -74,7 +73,7 @@ class EventsController extends AppController
         }
         $filename .= '.' . $this->request->getParam('_ext');
 
-        $eventTable = FactoryLocator::get('Table')->get('Events');
+        $eventTable = $this->getTableLocator()->get('Events');
         $events = $eventTable->find('all',
             conditions: $conditions,
             contain: [
@@ -182,6 +181,7 @@ class EventsController extends AppController
             }
         ]);
 
+        /* @phpstan-ignore-next-line */
         $this->Workshop->getAssociation('Events')->setConditions(['Events.status > ' . APP_DELETED])
         ->setSort([
             'Events.datumstart' => 'DESC',
@@ -197,6 +197,7 @@ class EventsController extends AppController
             $conditions['InfoSheets.owner'] = $this->isLoggedIn() ? $this->loggedUser->uid : 0;
         }
 
+        /* @phpstan-ignore-next-line */
         $this->Workshop->getAssociation('Events')->getAssociation('InfoSheets')
         ->setConditions($conditions)
         ->setSort([
@@ -207,7 +208,7 @@ class EventsController extends AppController
             'limit' => 100,
         ]);
 
-        $worknewsTable = FactoryLocator::get('Table')->get('Worknews');
+        $worknewsTable = $this->getTableLocator()->get('Worknews');
         foreach($workshops as $workshop) {
             $workshop->infoSheetCount = 0;
             $workshop->worknewsCount = $worknewsTable->getSubscribers($workshop->uid)->count();
@@ -402,7 +403,7 @@ class EventsController extends AppController
         $this->set('editFormUrl', Configure::read('AppConfig.htmlHelper')->urlEventEdit($event->uid));
         $this->set('isDuplicateMode', false);
 
-        $worknewsTable = FactoryLocator::get('Table')->get('Worknews');
+        $worknewsTable = $this->getTableLocator()->get('Worknews');
         $this->set('worknewsCount', $worknewsTable->getSubscribers($event->workshop_uid)->count());
 
         $eventStartInLessThan7Days = $event->datumstart->isWithinNext('7 days');
@@ -489,7 +490,7 @@ class EventsController extends AppController
             }
 
             if (!$hasErrors) {
-                $eventsTable = FactoryLocator::get('Table')->get('Events');
+                $eventsTable = $this->getTableLocator()->get('Events');
                 if (isset($event)) {
                     $dirtyFields = $event->getDirty();
                     $originalValues = $event->getOriginalValues();
@@ -598,7 +599,7 @@ class EventsController extends AppController
         $conditions = $this->Event->getListConditions();
 
         // get count without any filters
-        $eventsTable = FactoryLocator::get('Table')->get('Events');
+        $eventsTable = $this->getTableLocator()->get('Events');
         $allEventsCount = $eventsTable->find('all',
             conditions: $conditions,
             contain:  [

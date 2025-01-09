@@ -25,7 +25,9 @@ class UpdateProvicesFromGeoDataCommand extends Command
             [
                 $workshopsTable->aliasField('province_id') => 0,
             ]
-        )->orderAsc($workshopsTable->aliasField('uid'));
+        )->orderBy([
+            $workshopsTable->aliasField('uid') => 'ASC']
+        );
 
         foreach($workshops as $workshop) {
             $geoData = $geoService->getGeoDataByCoordinates($workshop->lat, $workshop->lng);
@@ -42,8 +44,10 @@ class UpdateProvicesFromGeoDataCommand extends Command
                 $eventsTable->aliasField('province_id') => 0,
                 'DATE(Events.datumstart) >= DATE(NOW())',
             ]
-        )->orderAsc($eventsTable->aliasField('uid'));
-
+        )->orderBy([
+            $eventsTable->aliasField('uid') => 'ASC']
+        );
+    
         foreach($events as $event) {
             $geoData = $geoService->getGeoDataByCoordinates($event->lat, $event->lng);
             $event->province_id = $geoData['provinceId'];
@@ -61,7 +65,9 @@ class UpdateProvicesFromGeoDataCommand extends Command
                 $usersTable->aliasField('country_code IN') => ['DE', 'AT', 'CH'],
                 
             ]
-        )->orderAsc($usersTable->aliasField('uid'));
+        )->orderBy([
+            $usersTable->aliasField('uid') => 'ASC']
+        );
 
         foreach($users as $user) {
             $user->revertPrivatizeData();

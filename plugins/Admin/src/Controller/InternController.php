@@ -341,6 +341,7 @@ class InternController extends AdminAppController
 
         $object = $objectTable->get($object->uid);
         if ($objectClass == 'User') {
+            /* @phpstan-ignore-next-line */
             $object->revertPrivatizeData();
         }
         $entity = $objectTable->patchEntity($object, ['image' => ''], ['validate' => false]);

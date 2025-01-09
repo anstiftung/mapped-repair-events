@@ -1,11 +1,16 @@
 <?php
 declare(strict_types=1);
+
 namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
 
 class Workshop extends Entity
 {
+
+    const STATISTICS_DISABLED = 0;
+    const STATISTICS_SHOW_ALL = 1;
+    const STATISTICS_SHOW_ONLY_CHART = 2;
 
     protected function _getFundingErrors(): array {
 

@@ -5,9 +5,9 @@ namespace App\Policy;
 
 use Cake\Core\Configure;
 use Cake\Http\ServerRequest;
-use Cake\Datasource\FactoryLocator;
 use Authorization\Policy\RequestPolicyInterface;
 use Authorization\Policy\ResultInterface;
+use Cake\ORM\TableRegistry;
 
 class InfoSheetsPolicy implements RequestPolicyInterface
 {
@@ -36,7 +36,7 @@ class InfoSheetsPolicy implements RequestPolicyInterface
 
             if ($identity->isOrga()) {
                 $workshopUid = (int) $request->getParam('pass')[0];
-                $this->Workshop = FactoryLocator::get('Table')->get('Workshops');
+                $this->Workshop = TableRegistry::getTableLocator()->get('Workshops');
                 $workshop = $this->Workshop->getWorkshopForIsUserInOrgaTeamCheck($workshopUid);
                 if ($this->Workshop->isUserInOrgaTeam($identity, $workshop)) {
                     return true;
@@ -53,7 +53,7 @@ class InfoSheetsPolicy implements RequestPolicyInterface
             }
 
             $infoSheetUid = (int) $request->getParam('pass')[0];
-            $this->InfoSheet = FactoryLocator::get('Table')->get('InfoSheets');
+            $this->InfoSheet = TableRegistry::getTableLocator()->get('InfoSheets');
 
             // orgas are allowed to edit and delete only info sheets of associated workshops
             if ($identity->isOrga()) {
@@ -69,7 +69,7 @@ class InfoSheetsPolicy implements RequestPolicyInterface
                 )->first();
 
                 $workshopUid = $infoSheet->event->workshop_uid;
-                $this->Workshop = FactoryLocator::get('Table')->get('Workshops');
+                $this->Workshop = TableRegistry::getTableLocator()->get('Workshops');
                 $workshop = $this->Workshop->getWorkshopForIsUserInOrgaTeamCheck($workshopUid);
                 if ($this->Workshop->isUserInOrgaTeam($identity, $workshop)) {
                     return true;

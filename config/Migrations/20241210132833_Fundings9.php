@@ -17,11 +17,13 @@ class Fundings9 extends AbstractMigration
         ];
 
         $fundingsTable = FactoryLocator::get('Table')->get('Fundings');
-        $fundings = $fundingsTable->find()->contain([
-            'FundinguploadsActivityProofs',
-            'FundinguploadsFreistellungsbescheids',
-            'FundinguploadsZuwendungsbestaetigungs',
-        ]);
+        $fundings = $fundingsTable->find(
+            contain: [
+                'FundinguploadsActivityProofs',
+                'FundinguploadsFreistellungsbescheids',
+                'FundinguploadsZuwendungsbestaetigungs',
+            ],
+        );
 
         foreach($uploadTypes as $uploadType) {
             $uploadEntity = 'fundinguploads_' . $uploadType . 's';

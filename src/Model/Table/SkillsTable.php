@@ -5,7 +5,7 @@ namespace App\Model\Table;
 use App\Controller\Component\StringComponent;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
-use Cake\Datasource\FactoryLocator;
+use Cake\ORM\TableRegistry;
 
 class SkillsTable extends Table
 {
@@ -86,7 +86,7 @@ class SkillsTable extends Table
     public function getForDropdownIncludingCategories($includeOffline): array
     {
         $skillsForDropdown = $this->getForDropdown(false);
-        $this->Category = FactoryLocator::get('Table')->get('Categories');
+        $this->Category = TableRegistry::getTableLocator()->get('Categories');
         $categoriesForDropdown = $this->Category->getMainCategoriesForFrontend();
         $preparedCategoriesForDropdown = [];
         foreach($categoriesForDropdown as $c) {

@@ -6,8 +6,8 @@ namespace App\View\Helper;
 use Cake\View\View;
 use Cake\Core\Configure;
 use Cake\View\Helper\HtmlHelper;
-use Cake\Datasource\FactoryLocator;
 use App\Controller\Component\StringComponent;
+use App\Model\Entity\Workshop;
 
 class MyHtmlHelper extends HtmlHelper {
 
@@ -22,11 +22,10 @@ class MyHtmlHelper extends HtmlHelper {
 
     public function getWorkshopStatisticTypes()
     {
-        $workshop = FactoryLocator::get('Table')->get('Workshops');
         return [
-            $workshop::STATISTICS_DISABLED => 'Keine Statistik im Profil anzeigen',
-            $workshop::STATISTICS_SHOW_ALL => 'Gesamte Statistik anzeigen',
-            $workshop::STATISTICS_SHOW_ONLY_CHART => 'Nur Zahlenstatistik im Profil anzeigen',
+            Workshop::STATISTICS_DISABLED => 'Keine Statistik im Profil anzeigen',
+            Workshop::STATISTICS_SHOW_ALL => 'Gesamte Statistik anzeigen',
+            Workshop::STATISTICS_SHOW_ONLY_CHART => 'Nur Zahlenstatistik im Profil anzeigen',
         ];
     }
 
@@ -280,10 +279,9 @@ class MyHtmlHelper extends HtmlHelper {
     /**
      * for google geocoder
      * eg: Mayrhofstr. 4 => Mayrhofstraße 4 / Test Str. => Test Straße
-     * @param string $string
-     * @return $string
      */
-    function replaceAddressAbbreviations($string) {
+    function replaceAddressAbbreviations(string $string): string
+    {
         $string = preg_replace('/(s)tr\./i', '$1traße', $string);
         return $string;
     }

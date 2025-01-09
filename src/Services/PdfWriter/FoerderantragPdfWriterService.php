@@ -6,8 +6,8 @@ namespace App\Services\PdfWriter;
 use App\Model\Entity\Funding;
 use App\Services\PdfWriter\PdfWriterService;
 use App\Model\Entity\Fundingupload;
-use Cake\Datasource\FactoryLocator;
 use App\Services\Pdf\FoerderantragTcpdfService;
+use Cake\ORM\TableRegistry;
 
 class FoerderantragPdfWriterService extends PdfWriterService
 {
@@ -28,7 +28,7 @@ class FoerderantragPdfWriterService extends PdfWriterService
     public function prepareAndSetData($fundingUid, $timestamp)
     {
 
-        $fundingsTable = FactoryLocator::get('Table')->get('Fundings');
+        $fundingsTable = TableRegistry::getTableLocator()->get('Fundings');
         $funding = $fundingsTable->getUnprivatizedFundingWithAllAssociations($fundingUid);
 
         $filename = $this->getFilenameCustom($funding, $timestamp);

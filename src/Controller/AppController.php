@@ -91,10 +91,6 @@ class AppController extends Controller
         $this->set('pagesForFooter', $pagesForFooter);
     }
 
-    /**
-     * @param \Cake\Event\Event $event
-     * @return \Cake\Http\Response|null
-     */
     public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);
@@ -150,11 +146,8 @@ class AppController extends Controller
      * und diese seite aber online ist, redirecten.
      * nur, wenn die seite offline ist, flash message anzeigen, sonst verwirrt es
      * den user
-     *
-     * @param int status of the object
-     * @param string url
      */
-    protected function doPreviewChecks($status, $redirectUrl)
+    protected function doPreviewChecks(int $status, string $redirectUrl): void
     {
         if ($status == APP_ON && $this->isPreview()) {
             $this->redirect($redirectUrl);
@@ -164,14 +157,7 @@ class AppController extends Controller
         }
     }
 
-    /**
-     * überprüft die url auf den parameter /vorschau
-     *
-     * @param string $modelName
-     * @param string url (zum zeitpunkt dieses methoden-aufrufes ist noch keine uid vorhanden, sondern nur die url
-     * @return array $params status for cake-condition
-     */
-    protected function getPreviewConditions($modelName, $url)
+    protected function getPreviewConditions(string $modelName, string $url): array
     {
         $previewConditions = [];
 

@@ -4,10 +4,10 @@ namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
 use Cake\Utility\Inflector;
-use Cake\Datasource\FactoryLocator;
 use Authentication\PasswordHasher\DefaultPasswordHasher;
 use Authentication\IdentityInterface;
 use ArrayAccess;
+use Cake\ORM\TableRegistry;
 
 class User extends Entity implements IdentityInterface
 {
@@ -35,39 +35,37 @@ class User extends Entity implements IdentityInterface
 
     public function isAdmin(): bool
     {
-        $group = FactoryLocator::get('Table')->get('Groups');
+        $group = TableRegistry::getTableLocator()->get('Groups');
         return $group->isAdmin($this);
     }
 
     public function isOrga(): bool
     {
-        $group = FactoryLocator::get('Table')->get('Groups');
+        $group = TableRegistry::getTableLocator()->get('Groups');
         return $group->isOrga($this);
     }
 
     public function isRepairhelper(): bool
     {
-        $group = FactoryLocator::get('Table')->get('Groups');
+        $group = TableRegistry::getTableLocator()->get('Groups');
         return $group->isRepairhelper($this);
     }
 
     public function IsInGroup($groups): bool
     {
-        $group = FactoryLocator::get('Table')->get('Groups');
+        $group = TableRegistry::getTableLocator()->get('Groups');
         return $group->isInGroup($this, $groups);
     }
 
     /**
-     * diese methode ist für das frontend (keine uid in url)
+     * diese methode ist für das frontend (keine uid in url vorhanden)
      * checks if the logged user is the owner of the passed modelName / url or not
-     * @param string $modelName
-     * @param string url
      */
-    public function isOwnerByModelNameAndUrl($modelName, $url): bool
+    public function isOwnerByModelNameAndUrl(string $modelName, string $url): bool
     {
 
         $pluralizedModelName = Inflector::pluralize($modelName);
-        $objectTable = FactoryLocator::get('Table')->get($pluralizedModelName);
+        $objectTable = TableRegistry::getTableLocator()->get($pluralizedModelName);
         $object = $objectTable->find('all',
             conditions: [
                 $pluralizedModelName.'.owner' => $this->get('uid'),
@@ -89,11 +87,11 @@ class User extends Entity implements IdentityInterface
    */
     public function isOwner(int $uid): bool
     {
-        $rootTable = FactoryLocator::get('Table')->get('Roots');
+        $rootTable = TableRegistry::getTableLocator()->get('Roots');
         $objectType = $rootTable->getType($uid);
         $objectClass = Inflector::classify($objectType);
         $pluralizedClass = Inflector::pluralize($objectClass);
-        $objectTable = FactoryLocator::get('Table')->get($pluralizedClass);
+        $objectTable = TableRegistry::getTableLocator()->get($pluralizedClass);
 
         $object = $objectTable->find('all',
             conditions: [

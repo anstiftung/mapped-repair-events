@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace App\Model\Rule;
 
 use Cake\Datasource\EntityInterface;
-use Cake\Datasource\FactoryLocator;
+use Cake\ORM\TableRegistry;
 use Cake\Utility\Hash;
 
 class UserLinkToWorkshopRule
@@ -19,7 +19,7 @@ class UserLinkToWorkshopRule
 
         $userUid = $entity->get('uid');
 
-        $this->User = FactoryLocator::get('Table')->get('Users');
+        $this->User = TableRegistry::getTableLocator()->get('Users');
         $user = $this->User->find('all',
             conditions: [
                 'Users.uid' => $userUid,
@@ -38,12 +38,12 @@ class UserLinkToWorkshopRule
             return true;
         }
 
-        $this->Group = FactoryLocator::get('Table')->get('Groups');
+        $this->Group = TableRegistry::getTableLocator()->get('Groups');
         if (!$this->Group->isOrga($user)) {
             return true;
         }
 
-        $this->Workshop = FactoryLocator::get('Table')->get('Workshops');
+        $this->Workshop = TableRegistry::getTableLocator()->get('Workshops');
         $workshops = $this->Workshop->getWorkshopsForAssociatedUser($userUid, APP_DELETED);
         $associatedWorkshopsWhereUserIsLastOrgaUser = $this->User->getWorkshopsWhereUserIsLastOrgaUser($workshops);
 

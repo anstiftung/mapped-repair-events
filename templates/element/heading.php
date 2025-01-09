@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-use Cake\Datasource\FactoryLocator;
+use Cake\ORM\TableRegistry;
 ?>
 
 <h1><?php echo $first; ?></h1>
@@ -9,8 +9,8 @@ use Cake\Datasource\FactoryLocator;
 
   $isLoggedUserApproved = false;
   if (isset($context) && $context['className'] == 'Workshop' && !empty($loggedUser)) {
-      $workshopTable = FactoryLocator::get('Table')->get('Workshops');
-    $isLoggedUserApproved = $workshopTable->isLoggedUserApproved($context['object']->uid, $loggedUser->uid);
+      $workshopTable = TableRegistry::getTableLocator()->get('Workshops');
+      $isLoggedUserApproved = $workshopTable->isLoggedUserApproved($context['object']->uid, $loggedUser->uid);
   }
   if (isset($context) && !empty($loggedUser) &&
     ($loggedUser->isAdmin() && ($context['className'] != 'Workshop')

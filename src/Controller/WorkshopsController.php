@@ -21,6 +21,7 @@ use App\Model\Table\UsersTable;
 use App\Model\Table\WorknewsTable;
 use App\Model\Entity\Worknews;
 use App\Mailer\AppMailer;
+use App\Model\Entity\Workshop;
 
 class WorkshopsController extends AppController
 {
@@ -402,7 +403,8 @@ class WorkshopsController extends AppController
 
     }
 
-    public function getWorkshopsWithCityFilter() {
+    public function getWorkshopsWithCityFilter()
+    {
 
         $this->response = $this->response->cors($this->request)
             ->allowOrigin(['*'])
@@ -413,6 +415,7 @@ class WorkshopsController extends AppController
 
         $city = $this->request->getQuery('city');
         if ($city === null || strlen($city) < 3) {
+            /* @phpstan-ignore-next-line */
             return $this->response->withStatus(400)->withType('json')->withStringBody(json_encode('city not passed or invalid (min 3 chars)'));
         }
 
@@ -436,6 +439,7 @@ class WorkshopsController extends AppController
         order: ['Workshops.name' => 'asc']);
 
         if ($workshops->count() == 0) {
+            /* @phpstan-ignore-next-line */
             return $this->response->withStatus(404)->withType('json')->withStringBody(json_encode('no workshops found'));
         }
 
@@ -781,7 +785,7 @@ class WorkshopsController extends AppController
                         ['email' => $this->loggedUser->email], ['validate' => false]
                     );
                 } else {
-                    $worknews = $this->Worknews->newEmptyEntity(['validate' => false]);
+                    $worknews = $this->Worknews->newEmptyEntity();
                 }
             }
         }
@@ -932,12 +936,12 @@ class WorkshopsController extends AppController
 
         $showStatistics = false;
         $this->InfoSheet = $this->getTableLocator()->get('InfoSheets');
-        if ($this->InfoSheet->workshopInfoSheetsCount($workshop->uid) > 0 && $workshop->show_statistics > $this->Workshop::STATISTICS_DISABLED) {
+        if ($this->InfoSheet->workshopInfoSheetsCount($workshop->uid) > 0 && $workshop->show_statistics > Workshop::STATISTICS_DISABLED) {
             $showStatistics = true;
         }
         $this->set('showStatistics', $showStatistics);
 
-        $showCarbonFootprint = $workshop->show_statistics == $this->Workshop::STATISTICS_SHOW_ALL;
+        $showCarbonFootprint = $workshop->show_statistics == Workshop::STATISTICS_SHOW_ALL;
         $this->set('showCarbonFootprint', $showCarbonFootprint);
 
     }
@@ -963,9 +967,6 @@ class WorkshopsController extends AppController
         return $preparedType;
     }
 
-    /**
-     * @return $workshop
-     */
     private function prepareUserWorkshopActions()
     {
         if (! $this->isLoggedIn()) {
@@ -1066,9 +1067,6 @@ class WorkshopsController extends AppController
         $this->redirect($this->referer());
     }
 
-    /**
-     * @return $workshop
-     */
     public function userDelete($type)
     {
         $preparedType = $this->checkType($type);

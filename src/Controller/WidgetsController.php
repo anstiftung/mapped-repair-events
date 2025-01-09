@@ -11,6 +11,7 @@ use stdClass;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use Cake\Http\Exception\NotFoundException;
+use App\Model\Entity\Workshop;
 
 class WidgetsController extends AppController
 {
@@ -223,7 +224,7 @@ class WidgetsController extends AppController
         $this->Workshop = $this->getTableLocator()->get('Workshops');
         $workshop = $this->Workshop->find('all', conditions: [
             'Workshops.uid' => $workshopUid,
-            'Workshops.show_statistics > ' => $this->Workshop::STATISTICS_DISABLED,
+            'Workshops.show_statistics > ' => Workshop::STATISTICS_DISABLED,
         ])->first();
         if (empty($workshop)) {
             throw new NotFoundException;

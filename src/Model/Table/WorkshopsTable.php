@@ -4,22 +4,19 @@ namespace App\Model\Table;
 
 use App\Model\Traits\SearchExceptionsTrait;
 use Cake\Validation\Validator;
-use Cake\Datasource\FactoryLocator;
 use App\Services\GeoService;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use ArrayObject;
 use App\Controller\Component\StringComponent;
-use Cake\Database\Query;
+use App\Model\Entity\Workshop;
+use Cake\ORM\TableRegistry;
+use Cake\ORM\Query\SelectQuery;
 
 class WorkshopsTable extends AppTable
 {
 
     use SearchExceptionsTrait;
-
-    public const STATISTICS_DISABLED = 0;
-    public const STATISTICS_SHOW_ALL = 1;
-    public const STATISTICS_SHOW_ONLY_CHART = 2;
 
     public $name_de = '';
 
@@ -135,9 +132,9 @@ class WorkshopsTable extends AppTable
         $validator->inList(
             'show_statistics',
             [
-                self::STATISTICS_DISABLED,
-                self::STATISTICS_SHOW_ALL,
-                self::STATISTICS_SHOW_ONLY_CHART,
+                Workshop::STATISTICS_DISABLED,
+                Workshop::STATISTICS_SHOW_ALL,
+                Workshop::STATISTICS_SHOW_ONLY_CHART,
             ],
             'Dieser Wert ist nicht gültig.',
         );
@@ -203,10 +200,10 @@ class WorkshopsTable extends AppTable
                 'Fundingbudgetplans',
                 'FundinguploadsZuwendungsbestaetigungs',
             ],
-            'FundingAllPastEvents' => function (Query $q) {
+            'FundingAllPastEvents' => function (SelectQuery $q) {
                 return $q->select(['workshop_uid', 'count' => $q->func()->count('*')])->groupBy('workshop_uid');
             },
-            'FundingAllFutureEvents' => function (Query $q) {
+            'FundingAllFutureEvents' => function (SelectQuery $q) {
                 return $q->select(['workshop_uid', 'count' => $q->func()->count('*')])->groupBy('workshop_uid');
             },
             'Users.Groups',
@@ -239,7 +236,7 @@ class WorkshopsTable extends AppTable
     {
         $validator->add('url', 'addBlockedWorkshopSlugsValidationRule', [
             'rule' => function($value, $context) {
-                $bws = FactoryLocator::get('Table')->get('BlockedWorkshopSlugs');
+                $bws = TableRegistry::getTableLocator()->get('BlockedWorkshopSlugs');
                 $recordCount = $bws->find('all',
                     conditions: [
                         'status' => APP_ON,

@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace App\Model\Table;
 
 use Cake\Core\Configure;
-use Cake\Datasource\FactoryLocator;
 use Cake\ORM\Table;
+use Cake\ORM\TableRegistry;
 use Cake\Utility\Hash;
 use Cake\Validation\Validator;
 
@@ -56,7 +56,7 @@ class CategoriesTable extends Table
 
     public function getInfoSheetCount($categoryId)
     {
-        $infoSheetTable = FactoryLocator::get('Table')->get('InfoSheets');
+        $infoSheetTable = TableRegistry::getTableLocator()->get('InfoSheets');
         $result = $infoSheetTable->find('all',
             conditions: [
                 $infoSheetTable->aliasField('category_id') => $categoryId,

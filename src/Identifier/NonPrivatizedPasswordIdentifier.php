@@ -16,6 +16,7 @@ class NonPrivatizedPasswordIdentifier extends PasswordIdentifier
 
         $identity = $this->_findIdentity($credentials[self::CREDENTIAL_USERNAME]);
         if (!is_null($identity)) {
+            /* @phpstan-ignore-next-line */
             $identity->revertPrivatizeData();
         }
 
