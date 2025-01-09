@@ -37,7 +37,8 @@
         "cakephp/debug_kit": "5.*",
         "phpstan/phpstan": "1.*",
         "phpunit/phpunit": "^11.0",
-        "friendsofcake/fixturize": "^3.0"
+        "friendsofcake/fixturize": "^3.0",
+        "cakedc/cakephp-phpstan": "^3.2"
     },
     "autoload": {
         "psr-4": {
