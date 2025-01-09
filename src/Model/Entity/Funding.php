@@ -309,7 +309,8 @@ class Funding extends Entity
               ;
     }
 
-    public function _getUserFieldsVerifiedCount(): int {
+    public function _getUserFieldsVerifiedCount(): int
+    {
         $count = 0;
 
         if ($this->verified_fields !== null) {
@@ -368,7 +369,7 @@ class Funding extends Entity
         return $this->user_fields_verified_count + $this->admin_fields_verified_count;
     }
 
-    public function _getUserFieldsVerified(): int {
+    public function _getUserFieldsVerified(): bool {
         return $this->user_fields_verified_count == $this->user_fields_count;
     }
 
