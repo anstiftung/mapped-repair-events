@@ -41,7 +41,7 @@ Die Mittel sind vorgesehen für Anschaffungen/Maßnahmen gemäß Antrag <b>' . $
 </p>
 
 <p>
-Die Fördersumme wird auf das Konto ' . $funding->fundingsupporter->iban . ' überwiesen.
+Die Fördersumme wird in den nächsten zwei bis vier Wochen, spätestens jedoch bis Anfang März, auf das Konto ' . $funding->fundingsupporter->iban . ' überwiesen.
 </p>
 
 <p>Die zugrundeliegende
