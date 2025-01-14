@@ -5,7 +5,6 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 use App\Model\Table\FundingbudgetplansTable;
 use App\Model\Table\FundingdatasTable;
-use Cake\Log\Log;
 
 class Funding extends Entity
 {

@@ -304,14 +304,12 @@ class InternController extends AdminAppController
 
     /**
      * deletes both db entries and physical files (thumbs)
-     *
-     * @param int $uid
      */
     public function ajaxMiniUploadFormDeleteImage($uid)
     {
         $uid = (int) $uid;
 
-        if ($uid == 0 || $uid == '') {
+        if ($uid == 0) {
             $message = '$uid nicht korrekt: ' . $uid;
             $this->log($message);
             die(json_encode([
