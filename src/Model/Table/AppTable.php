@@ -12,11 +12,9 @@ use Cake\Validation\Validator;
 abstract class AppTable extends Table
 {
 
-    public $allowedBasicHtmlFields = [];
+    public array $allowedBasicHtmlFields = [];
 
-    public $Root;
-
-    public $loggedUserUid = 0;
+    public ?int $loggedUserUid = 0;
 
     public function initialize(array $config): void
     {
@@ -109,15 +107,13 @@ abstract class AppTable extends Table
             /*
              * INSERT
              */
-            if (! $this->Root) {
-                $this->Root = FactoryLocator::get('Table')->get('Roots');
-            }
+            $rootsTable = FactoryLocator::get('Table')->get('Roots');
             $rootEntity = [
                 'Roots' => [
                     'object_type' => $this->getTable()
                 ]
             ];
-            $result = $this->Root->save($this->Root->newEntity($rootEntity));
+            $result = $rootsTable->save($rootsTable->newEntity($rootEntity));
             $entity->uid = $result->uid;
 
             if ($entity->url == '') {

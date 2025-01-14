@@ -7,10 +7,10 @@ use TCPDF;
 abstract class AppTcpdfService extends TCPDF
 {
 
-    public $backgroundImageFile = '';
-    public $fontSizeBig = 12;
-    public $fontSizeDefault = 10;
-    public $fontSizeSmall = 8;
+    public string $backgroundImageFile = '';
+    public int $fontSizeBig = 12;
+    public int $fontSizeDefault = 10;
+    public int $fontSizeSmall = 8;
 
     public function __construct($orientation = 'P', $unit = 'mm', $format = 'A4', $unicode = true, $encoding = 'UTF-8', $diskcache = false, $pdfa = false)
     {

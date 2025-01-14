@@ -6,7 +6,6 @@ namespace App\Services\PdfWriter;
 use App\Services\PdfWriter\PdfWriterService;
 use App\Model\Entity\Fundingupload;
 use App\Services\Pdf\FoerderbewilligungTcpdfService;
-use Cake\Datasource\FactoryLocator;
 use Cake\ORM\TableRegistry;
 
 class FoerderbewilligungPdfWriterService extends PdfWriterService

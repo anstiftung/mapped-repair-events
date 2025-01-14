@@ -21,14 +21,13 @@ use Cake\View\JsonView;
 use Cake\I18n\DateTime;
 use App\Model\Entity\Worknews;
 use App\Mailer\AppMailer;
+use App\Model\Table\EventsTable;
 use Cake\Database\Query;
 
 class EventsController extends AppController
 {
 
-    public $Category;
-    public $Event;
-    public $Worknews;
+    public EventsTable $Event;
 
     public function beforeFilter(EventInterface $event) {
 
@@ -288,8 +287,8 @@ class EventsController extends AppController
 
             if ($originalEventStatus && !$event->datumstart->isPast()) {
                 // START notify subscribers
-                $this->Worknews = $this->getTableLocator()->get('Worknews');
-                $subscribers = $this->Worknews->find('all', conditions: [
+                $worknewsTable = $this->getTableLocator()->get('Worknews');
+                $subscribers = $worknewsTable->find('all', conditions: [
                     'Worknews.workshop_uid' => $event->workshop_uid,
                     'Worknews.confirm' => Worknews::STATUS_OK,
                 ]);
@@ -420,18 +419,18 @@ class EventsController extends AppController
 
         // notify subscribers
         if (isset($workshop) && $patchedEntity->renotify) {
-            $this->Worknews = $this->getTableLocator()->get('Worknews');
-            $subscribers = $this->Worknews->getSubscribers($patchedEntity->workshop_uid);
+            $worknewsTable = $this->getTableLocator()->get('Worknews');
+            $subscribers = $worknewsTable->getSubscribers($patchedEntity->workshop_uid);
             if (!empty($subscribers)) {
-                $this->Worknews->sendNotifications($subscribers, 'Termin geändert: ' . $workshop->name, 'event_changed', $workshop, $patchedEntity, $patchedEntities['dirtyFields'], $patchedEntities['originalValues']);
+                $worknewsTable->sendNotifications($subscribers, 'Termin geändert: ' . $workshop->name, 'event_changed', $workshop, $patchedEntity, $patchedEntities['dirtyFields'], $patchedEntities['originalValues']);
             }
         }
     }
 
     private function _edit($events, $isEditMode)
     {
-        $this->Category = $this->getTableLocator()->get('Categories');
-        $this->set('categories', $this->Category->getForDropdown(APP_ON));
+        $categoriesTable = $this->getTableLocator()->get('Categories');
+        $this->set('categories', $categoriesTable->getForDropdown(APP_ON));
 
         $this->set('uid', $events[0]->uid);
 
@@ -615,8 +614,8 @@ class EventsController extends AppController
         $isOnlineEvent = (bool) h($isOnlineEvent);
         $this->set('isOnlineEvent', $isOnlineEvent);
 
-        $this->Category = $this->getTableLocator()->get('Categories');
-        $categories = $this->Category->getMainCategoriesForFrontend();
+        $categoriesTable = $this->getTableLocator()->get('Categories');
+        $categories = $categoriesTable->getMainCategoriesForFrontend();
 
         $preparedCategories = [];
         $categoryClass = '';

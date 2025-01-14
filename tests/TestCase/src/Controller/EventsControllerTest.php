@@ -29,8 +29,7 @@ class EventsControllerTest extends AppTestCase
     use LogFileAssertionsTrait;
     use QueueTrait;
 
-    private $newEventData;
-    private $Event;
+    private array $newEventData;
 
 	public function controllerSpy(EventInterface $event, ?Controller $controller = null): void
     {
@@ -115,8 +114,8 @@ class EventsControllerTest extends AppTestCase
         );
         $this->assertResponseNotContains('error');
 
-        $this->Event = $this->getTableLocator()->get('Events');
-        $events = $this->Event->find('all', contain: [
+        $eventsTable = $this->getTableLocator()->get('Events');
+        $events = $eventsTable->find('all', contain: [
             'Categories',
         ])->toArray();
 
@@ -214,8 +213,8 @@ class EventsControllerTest extends AppTestCase
         $this->get(Configure::read('AppConfig.htmlHelper')->urlEventDelete(6));
         $this->runAndAssertQueue();
 
-        $this->Event = $this->getTableLocator()->get('Events');
-        $event = $this->Event->find('all', conditions: [
+        $eventsTable = $this->getTableLocator()->get('Events');
+        $event = $eventsTable->find('all', conditions: [
             'Events.uid' => 6
         ])->first();
         $this->assertEquals($event->status, APP_DELETED);
@@ -226,8 +225,8 @@ class EventsControllerTest extends AppTestCase
 
     private function doTestEditForm($data)
     {
-        $this->Event = $this->getTableLocator()->get('Events');
-        $event = $this->Event->find('all', conditions: [
+        $eventsTable = $this->getTableLocator()->get('Events');
+        $event = $eventsTable->find('all', conditions: [
             'Events.uid' => 6,
         ])->first();
 
@@ -240,7 +239,7 @@ class EventsControllerTest extends AppTestCase
             ]
         );
 
-        $event = $this->Event->find('all',
+        $event = $eventsTable->find('all',
             conditions: [
                 'Events.uid' => 6,
             ]

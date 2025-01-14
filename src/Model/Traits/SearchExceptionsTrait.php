@@ -5,7 +5,7 @@ namespace App\Model\Traits;
 
 trait SearchExceptionsTrait {
 
-    private $searchExceptions = [
+    private array $searchExceptions = [
         'berlin',
         'münchen',
     ];

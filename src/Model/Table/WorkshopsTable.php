@@ -18,9 +18,9 @@ class WorkshopsTable extends AppTable
 
     use SearchExceptionsTrait;
 
-    public $name_de = '';
+    public string $name_de = '';
 
-    public $allowedBasicHtmlFields = [
+    public array $allowedBasicHtmlFields = [
         'additional_contact',
         'opening_hours',
         'rechtl_vertret',

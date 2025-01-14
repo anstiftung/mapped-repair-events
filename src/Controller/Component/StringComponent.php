@@ -8,9 +8,6 @@ use Cake\Core\Configure;
 class StringComponent extends Component
 {
 
-    public $seoLinkArray = [];
-
-
     /**
      * https://stackoverflow.com/a/35961386/2100184
      */

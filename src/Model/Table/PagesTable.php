@@ -7,7 +7,8 @@ use Cake\Validation\Validator;
 class PagesTable extends AppTable
 {
 
-    public $name_de = 'Seite';
+    public string $name_de = 'Seite';
+    private array $flattenedArray = [];
 
     public function initialize(array $config): void
     {
@@ -34,8 +35,6 @@ class PagesTable extends AppTable
         $validator->minLength('name', 2, 'Bitte gib einen gültigen Namen an.');
         return $validator;
     }
-
-    private $flattenedArray = [];
 
     private function flattenNestedArrayWithChildren($array, $separator = '')
     {

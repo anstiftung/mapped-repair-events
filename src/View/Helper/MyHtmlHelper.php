@@ -11,6 +11,13 @@ use App\Model\Entity\Workshop;
 
 class MyHtmlHelper extends HtmlHelper {
 
+    public array $selectedMain = [];
+    public array $selectedSub1 = [];
+    public array $selectedSub2 = [];
+    public array $selectedSub3 = [];
+
+    public bool $selectParentElements = true;
+
     public function getHostWithoutProtocol($hostnameWithProtocol)
     {
         $parsedHostnameWithProtocol = (parse_url($hostnameWithProtocol));
@@ -314,13 +321,6 @@ class MyHtmlHelper extends HtmlHelper {
             //]]>
         </script>";
     }
-
-    public $selectedMain = [];
-    public $selectedSub1 = [];
-    public $selectedSub2 = [];
-    public $selectedSub3 = [];
-
-    public $selectParentElements = true;
 
     function urlPageDetail($url, $preview=false) {
         $previewSuffix = '';

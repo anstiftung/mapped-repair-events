@@ -7,7 +7,11 @@ use Cake\ORM\Table;
 class CountriesTable extends Table
 {
 
-    public $primaryKey = 'code';
+    public function initialize(array $config): void
+    {
+        parent::initialize($config);
+        $this->setPrimaryKey('code');
+    }
 
     public function getForDropdown()
     {

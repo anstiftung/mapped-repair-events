@@ -8,16 +8,15 @@ use Cake\Validation\Validator;
 use App\Model\Traits\SearchExceptionsTrait;
 use App\Services\GeoService;
 use Cake\ORM\Query\SelectQuery;
-use Cake\I18n\DateTime;
 
 class EventsTable extends AppTable
 {
 
     use SearchExceptionsTrait;
 
-    public $name_de = 'Termin';
+    public string $name_de = 'Termin';
 
-    public $allowedBasicHtmlFields = [
+    public array $allowedBasicHtmlFields = [
         'eventbeschreibung'
     ];
 

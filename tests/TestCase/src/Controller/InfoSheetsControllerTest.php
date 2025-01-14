@@ -19,7 +19,7 @@ class InfoSheetsControllerTest extends AppTestCase
     use StringCompareTrait;
     use LogFileAssertionsTrait;
 
-    private $newInfoSheetData = [
+    private array $newInfoSheetData = [
         'category_id' => '',
         'new_subcategory_parent_id' => '',
         'new_subcategory_name' => '',

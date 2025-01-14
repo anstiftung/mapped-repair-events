@@ -7,7 +7,7 @@ use Cake\Validation\Validator;
 class KnowledgesTable extends AppTable
 {
 
-    public $name_de = 'Reparaturwissens-Beitrag';
+    public string $name_de = 'Reparaturwissens-Beitrag';
 
     public function initialize(array $config): void
     {

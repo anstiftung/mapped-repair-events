@@ -6,7 +6,7 @@ namespace App\Test\TestCase\Traits;
 trait LogFileAssertionsTrait
 {
 
-    public $executeLogFileAssertions = true;
+    public bool $executeLogFileAssertions = true;
 
     public function setUp(): void
     {

@@ -7,7 +7,7 @@ use Cake\Validation\Validator;
 class PostsTable extends AppTable
 {
 
-    public $name_de = 'Post';
+    public string $name_de = 'Post';
 
     public function initialize(array $config): void
     {

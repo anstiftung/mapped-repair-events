@@ -18,9 +18,9 @@ use Cake\ORM\TableRegistry;
 class UsersTable extends AppTable
 {
 
-    public $name_de = 'User';
+    public string  $name_de = 'User';
 
-    public $allowedBasicHtmlFields = [
+    public array $allowedBasicHtmlFields = [
         'street'
     ];
 

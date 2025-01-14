@@ -10,9 +10,8 @@ use Cake\ORM\TableRegistry;
 class SkillsTable extends Table
 {
 
-    public $allowedBasicHtmlFields = [];
-    public $name_de = 'Kenntnis';
-    private $Category;
+    public array $allowedBasicHtmlFields = [];
+    public string $name_de = 'Kenntnis';
 
     public function initialize(array $config): void
     {
@@ -86,8 +85,8 @@ class SkillsTable extends Table
     public function getForDropdownIncludingCategories($includeOffline): array
     {
         $skillsForDropdown = $this->getForDropdown(false);
-        $this->Category = TableRegistry::getTableLocator()->get('Categories');
-        $categoriesForDropdown = $this->Category->getMainCategoriesForFrontend();
+        $categoriesTable = TableRegistry::getTableLocator()->get('Categories');
+        $categoriesForDropdown = $categoriesTable->getMainCategoriesForFrontend();
         $preparedCategoriesForDropdown = [];
         foreach($categoriesForDropdown as $c) {
             $slugifiedCategoryName = StringComponent::slugify($c->name);

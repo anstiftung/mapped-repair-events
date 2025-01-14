@@ -3,14 +3,12 @@ declare(strict_types=1);
 namespace App\Model\Table;
 
 use Cake\Core\Configure;
-use Cake\Datasource\FactoryLocator;
 use Cake\ORM\Table;
 use Cake\I18n\DateTime;
+use Cake\ORM\TableRegistry;
 
 class ThirdPartyStatisticsTable extends Table
 {
-
-    private $Categories;
 
     public function initialize(array $config): void
     {
@@ -38,9 +36,9 @@ class ThirdPartyStatisticsTable extends Table
     public function sumUpForMainCategory($sums)
     {
         $preparedSums = [];
-        $this->Categories = FactoryLocator::get('Table')->get('Categories');
+        $categoriesTable = TableRegistry::getTableLocator()->get('Categories');
         foreach($sums as $sum) {
-            $category = $this->Categories->find('all',
+            $category = $categoriesTable->find('all',
                 conditions: [
                     'Categories.id' => $sum->category_id,
                 ]
@@ -63,9 +61,9 @@ class ThirdPartyStatisticsTable extends Table
     public function bindCategoryDataToSums($sums)
     {
         $preparedSums = [];
-        $this->Categories = FactoryLocator::get('Table')->get('Categories');
+        $categoriesTable = TableRegistry::getTableLocator()->get('Categories');
         foreach($sums as $categoryId => $sum) {
-            $category = $this->Categories->find('all',
+            $category = $categoriesTable->find('all',
                 conditions: [
                     'Categories.id' => $categoryId,
                 ],

@@ -11,8 +11,8 @@ use Cake\Validation\Validator;
 class CategoriesTable extends Table
 {
 
-    public $allowedBasicHtmlFields = [];
-    public $name_de = 'Kategorie';
+    public array $allowedBasicHtmlFields = [];
+    public string $name_de = 'Kategorie';
 
     public function initialize(array $config): void
     {

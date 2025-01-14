@@ -11,8 +11,6 @@ use Cake\ORM\TableRegistry;
 class WorkshopsPolicy implements RequestPolicyInterface
 {
 
-    protected $Workshop;
-
     public function canAccess($identity, ServerRequest $request): bool|ResultInterface
     {
 

@@ -9,7 +9,7 @@ use Cake\I18n\DateTime;
 class InfoSheetsTable extends AppTable
 {
 
-    public $name_de = 'Laufzettel';
+    public string $name_de = 'Laufzettel';
 
     public function initialize(array $config): void
     {
