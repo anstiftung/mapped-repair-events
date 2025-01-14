@@ -766,9 +766,6 @@ class EventsController extends AppController
 
     /**
      * combines multiple events to one marker
-     *
-     * @param array $events
-     * @return array
      */
     private function combineEventsForMap($events)
     {
