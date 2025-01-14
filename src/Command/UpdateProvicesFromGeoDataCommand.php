@@ -6,8 +6,8 @@ namespace App\Command;
 use Cake\Command\Command;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
-use Cake\Datasource\FactoryLocator;
 use App\Services\GeoService;
+use Cake\ORM\TableRegistry;
 
 class UpdateProvicesFromGeoDataCommand extends Command
 {
@@ -17,10 +17,10 @@ class UpdateProvicesFromGeoDataCommand extends Command
 
         $geoService = new GeoService();
         
-        $provincesTable = FactoryLocator::get('Table')->get('Provinces');
+        $provincesTable = TableRegistry::getTableLocator()->get('Provinces');
         $provincesMap = $provincesTable->find('list', keyField: 'id', valueField: 'name')->toArray();
 
-        $workshopsTable = FactoryLocator::get('Table')->get('Workshops');
+        $workshopsTable = TableRegistry::getTableLocator()->get('Workshops');
         $workshops = $workshopsTable->find('all')->where(
             [
                 $workshopsTable->aliasField('province_id') => 0,
@@ -38,7 +38,7 @@ class UpdateProvicesFromGeoDataCommand extends Command
             usleep(300000);
         }
 
-        $eventsTable = FactoryLocator::get('Table')->get('Events');
+        $eventsTable = TableRegistry::getTableLocator()->get('Events');
         $events = $eventsTable->find('all')->where(
             [
                 $eventsTable->aliasField('province_id') => 0,
@@ -57,7 +57,7 @@ class UpdateProvicesFromGeoDataCommand extends Command
             usleep(300000);
         }
 
-        $usersTable = FactoryLocator::get('Table')->get('Users');
+        $usersTable = TableRegistry::getTableLocator()->get('Users');
         $users = $usersTable->find('all')->where(
             [
                 $usersTable->aliasField('province_id') => 0,

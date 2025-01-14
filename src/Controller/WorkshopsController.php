@@ -406,6 +406,7 @@ class WorkshopsController extends AppController
     public function getWorkshopsWithCityFilter()
     {
 
+        /* @phpstan-ignore-next-line */
         $this->response = $this->response->cors($this->request)
             ->allowOrigin(['*'])
             ->allowMethods(['GET'])
