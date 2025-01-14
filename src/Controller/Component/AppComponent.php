@@ -20,9 +20,7 @@ class AppComponent extends Component
     {
         parent::__construct($registry, $config);
         $this->controller = $this->_registry->getController();
-        if ($this->controller) {
-            $this->session = $this->controller->getRequest()->getSession();
-        }
+        $this->session = $this->controller->getRequest()->getSession();
     }
 }
 

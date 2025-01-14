@@ -259,7 +259,7 @@ class FundingsController extends AppController
                         }
                     }
                 }
-                $this->request = $this->request->withData('Fundings.fundinguploads_' . $uploadType ?? [], $updatedFundinguploads);
+                $this->request = $this->request->withData('Fundings.fundinguploads_' . $uploadType, $updatedFundinguploads);
                 $patchedEntity = $this->patchFunding($funding, $associations);
             }
         }
@@ -288,7 +288,7 @@ class FundingsController extends AppController
                             return $fundingupload['id'] != $fundinguploadId;
                         });
                     }
-                    $this->request = $this->request->withData('Fundings.fundinguploads_' . $uploadType ?? [], $remainingFundinguploads);
+                    $this->request = $this->request->withData('Fundings.fundinguploads_' . $uploadType, $remainingFundinguploads);
                     $patchedEntity = $this->patchFunding($funding, $associations);
                 }
             }

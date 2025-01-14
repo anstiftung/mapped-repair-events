@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 use Cake\Core\Configure;
 
-    $wuid = !empty($wuid) ? $wuid : '';
-    $isHomeCalendar = $wuid == '';
-    empty($event) and $event = false;
+    $wuid = $wuid ?? '';
+    $isHomeCalendar = $wuid == '';    
+    $event = $event ?? false;
 
     $this->element('addScript', ['script' => 'initCal();']);
 
@@ -189,8 +189,8 @@ function getEvents() {
     <?php } ?>
 
     <?php if ($event): ?>
-        if (!autoClicked){
-            MappedRepairEvents.Helper.showEventDetail('<?php echo json_encode($event, true); ?>', false);
+        if (!autoClicked) {
+            MappedRepairEvents.Helper.showEventDetail('<?php echo json_encode($event); ?>', false);
             autoClicked = true;
         }
     <?php endif; ?>

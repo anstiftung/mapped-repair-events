@@ -388,7 +388,7 @@ class UsersController extends AppController
         // own profile
         $isMyProfile = false;
         if ($userUid === null && $this->isLoggedIn()) {
-            $userUid = $this->isLoggedIn() ? $this->loggedUser->uid : 0;
+            $userUid = $this->loggedUser->uid;
             $metaTags = [
                 'title' => 'Mein Profil'
             ];

@@ -34,7 +34,7 @@ foreach($skills as $letter => $letterSkills) {
                 case ($count > 2):
                     $class = 'skill-20';
                     break;
-                case ($count > 0):
+                default:
                     $class = 'skill-10';
                     break;
             }

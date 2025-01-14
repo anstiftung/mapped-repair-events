@@ -43,14 +43,23 @@ class GroupsTable extends Table
             return false;
     }
 
-    public function isInGroup($user, $groupNames) {
-        if ( empty($user['groups']) ) return false;
-        is_array($groupNames) or $groupNames = (array) $groupNames;
+    public function isInGroup($user, $groupNames): bool {
+
+        if (empty($user['groups'])) {
+            return false;
+        }
+        
+        $groupNames = (array) $groupNames;
         foreach( $user['groups'] as $group ) {
             foreach ( $groupNames as $groupName ) {
-                if ( $group['name'] == $groupName ) return true;
+                if ($group['name'] == $groupName) {
+                    return true;
+                }
             }
         }
+
+        return false;
+
     }
 
 }

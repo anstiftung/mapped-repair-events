@@ -59,15 +59,13 @@ class AppTestCase extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        if (method_exists($this, 'enableSecurityToken')) {
 
-                $this->enableCsrfToken();
+        $this->enableCsrfToken();
 
-                if (!in_array($this->toString(), [
-                    'testAddEventsOk',
-                ])) {
-                    $this->enableSecurityToken();
-                }
+        if (!in_array($this->toString(), [
+            'testAddEventsOk',
+        ])) {
+            $this->enableSecurityToken();
         }
     }
 

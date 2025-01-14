@@ -209,7 +209,7 @@ class FundingsController extends AdminAppController
 
                 $this->sendEmails($patchedEntity);
 
-                if (!empty($this->request->getData('Fundings.reopen') && $this->request->getData('Fundings.reopen'))) {
+                if (!empty($this->request->getData('Fundings.reopen'))) {
                     $patchedEntity->submit_date = null;
                 }
     

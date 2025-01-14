@@ -17,9 +17,6 @@ class CommonComponent extends AppComponent {
     /**
      * For this helper the controller has to be passed as reference
      * for manual startup with $disableStartup = true (requires this to be called prior to any other method)
-     *
-     * @param \Cake\Event\Event $event
-     * @return void
      */
     public function startup(EventInterface $event) {
 
@@ -61,10 +58,6 @@ class CommonComponent extends AppComponent {
 
     /**
      * Trim and sanitize recursively
-     *
-     * @param string|array|null $value
-     * @param bool $transformNullToString
-     * @return array|string
      */
     private function trimAndSanitizeDeep($value, $transformNullToString = false) {
 

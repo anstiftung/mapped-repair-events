@@ -357,7 +357,7 @@ class WorkshopsController extends AppController
                 $geoData = [];
 
                 // add user's geo data as geoData object
-                if (!is_null($user->lat) && !is_null($user->lng != 0)) {
+                if (!is_null($user->lat) && !is_null($user->lng)) {
                     $geoData[] = [
                         'lat' => $user->lat,
                         'lng' => $user->lng,
@@ -366,7 +366,7 @@ class WorkshopsController extends AppController
 
                 // add user's workshops geoData object
                 foreach($user->workshops as $workshop) {
-                    if (!is_null($workshop->lat) && !is_null($workshop->lng != 0)) {
+                    if (!is_null($workshop->lat) && !is_null($workshop->lng)) {
                         $geoData[] = [
                             'lat' => $workshop->lat,
                             'lng' => $workshop->lng,
@@ -931,7 +931,7 @@ class WorkshopsController extends AppController
         $event = false;
         if (!empty($_GET['event'])) {
             $event = explode(',', $_GET['event']);
-            count($event) == 2 or $event = false;
+            $event = count($event) == 2 ? $event : false;
         }
         $this->set('event', $event);
 

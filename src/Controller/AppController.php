@@ -217,49 +217,6 @@ class AppController extends Controller
         return $this->request->getData('referer') ?? $_SERVER['HTTP_REFERER'] ?? '/';
     }
 
-    /**
-     * checks if detail page is allowed for current user group
-     * currently implemented for pages and votings
-     *
-     * @param array $groups
-     * @throws NotFoundException
-     */
-    protected function doUserGroupAccessCheck($groups)
-    {
-
-        return true;
-
-        $loggedUserGroups = [];
-        if (!empty($this->loggedUser) && !empty($this->loggedUser->groups)) {
-            $loggedUserGroups = Hash::extract($this->loggedUser->groups, '{n}.id');
-        }
-
-        $objectGroups = [];
-        if (! empty($groups)) {
-            $objectGroups = Hash::extract($groups, '{n}.id');
-        }
-
-        if (! $this->isLoggedIn()) {
-            // ausgeloggt und page hat rechte gesetzt => 404
-            if (! empty($objectGroups)) {
-                throw new NotFoundException('user nicht eingeloggt und page verlangt view-rechte');
-            }
-        } else {
-            // eingeloggt und logged user hat keine rechte => 404
-            if (! empty($objectGroups)) {
-                $loggedUserHasRightsToViewPage = false;
-                foreach ($objectGroups as $objectGroup) {
-                    if (in_array($objectGroup, $loggedUserGroups)) {
-                        $loggedUserHasRightsToViewPage = true;
-                    }
-                }
-                if (! $loggedUserHasRightsToViewPage) {
-                    throw new NotFoundException('eingeloggter user besitzt keine view-rechte für diese seite');
-                }
-            }
-        }
-    }
-
     protected function patchEntityWithCurrentlyUpdatedFields($entity)
     {
         $modelName = $this->modelName;
@@ -324,7 +281,10 @@ class AppController extends Controller
             $diffInSeconds = time() - $currentlyUpdatedStart;
         }
 
-        if (! empty($data->currently_updated_by_user) && $data->currently_updated_by_user->uid != $this->isLoggedIn() ? $this->loggedUser->uid : 0 && $data->currently_updated_by_user->uid > 0 && $diffInSeconds < 60 * 60) {
+        if (! empty($data->currently_updated_by_user)
+            && $data->currently_updated_by_user->uid != ($this->isLoggedIn() ? $this->loggedUser->uid : 0)
+            && $data->currently_updated_by_user->uid > 0
+            && $diffInSeconds < 60 * 60) {
             $updatingUser = $data->currently_updated_by_user->firstname . ' ' . $data->currently_updated_by_user->lastname;
             $this->AppFlash->setFlashError('<b>Diese Seite ist gesperrt. ' . $updatingUser . ' hat ' . Configure::read('AppConfig.timeHelper')->timeAgoInWords($data->currentlyUpdatedStart) . ' begonnen, sie zu bearbeiten. <a id="unlockEditPageLink" href="javascript:void(0);">Entsperren?</a></b>');
             return true;

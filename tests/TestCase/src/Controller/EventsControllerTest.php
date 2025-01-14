@@ -31,7 +31,6 @@ class EventsControllerTest extends AppTestCase
 
     private $newEventData;
     private $Event;
-    private $User;
 
 	public function controllerSpy(EventInterface $event, ?Controller $controller = null): void
     {

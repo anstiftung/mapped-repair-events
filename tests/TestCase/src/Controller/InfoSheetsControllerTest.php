@@ -19,9 +19,6 @@ class InfoSheetsControllerTest extends AppTestCase
     use StringCompareTrait;
     use LogFileAssertionsTrait;
 
-    private $InfoSheet;
-    private $User;
-
     private $newInfoSheetData = [
         'category_id' => '',
         'new_subcategory_parent_id' => '',
@@ -72,8 +69,8 @@ class InfoSheetsControllerTest extends AppTestCase
         );
         $this->assertResponseNotContains('error');
 
-        $this->InfoSheet = $this->getTableLocator()->get('InfoSheets');
-        $infoSheets = $this->InfoSheet->find('all',
+        $infoSheetsTable = $this->getTableLocator()->get('InfoSheets');
+        $infoSheets = $infoSheetsTable->find('all',
         contain: [
             'Events.Workshops',
             'Categories',
@@ -94,8 +91,8 @@ class InfoSheetsControllerTest extends AppTestCase
         $this->get(Configure::read('AppConfig.htmlHelper')->urlInfoSheetDelete(7));
         $this->assertFlashMessage('Der Laufzettel wurde erfolgreich gelöscht.');
 
-        $this->InfoSheet = $this->getTableLocator()->get('InfoSheets');
-        $infoSheet = $this->InfoSheet->find('all', conditions: [
+        $infoSheetsTable = $this->getTableLocator()->get('InfoSheets');
+        $infoSheet = $infoSheetsTable->find('all', conditions: [
             'InfoSheets.uid' => 7
         ])->first();
         $this->assertEquals($infoSheet->status, APP_DELETED);

@@ -26,9 +26,6 @@ class WorkshopsControllerTest extends AppTestCase
     use LogFileAssertionsTrait;
     use QueueTrait;
 
-    private $Workshop;
-    private $User;
-
 	public function controllerSpy(EventInterface $event, ?Controller $controller = null): void
     {
 		parent::controllerSpy($event, $controller);
@@ -104,8 +101,8 @@ class WorkshopsControllerTest extends AppTestCase
         );
         $this->runAndAssertQueue();
 
-        $this->Workshop = $this->getTableLocator()->get('Workshops');
-        $workshop = $this->Workshop->find('all',
+        $workshopsTable = $this->getTableLocator()->get('Workshops');
+        $workshop = $workshopsTable->find('all',
         conditions: [
             'Workshops.uid' => $workshopUid,
         ],
@@ -149,8 +146,8 @@ class WorkshopsControllerTest extends AppTestCase
         );
         $this->runAndAssertQueue();
 
-        $this->Workshop = $this->getTableLocator()->get('Workshops');
-        $workshop = $this->Workshop->find('all', conditions: [
+        $workshopsTable = $this->getTableLocator()->get('Workshops');
+        $workshop = $workshopsTable->find('all', conditions: [
             'Workshops.url' => $workshopForPost['url']
         ])->first();
 
@@ -215,8 +212,8 @@ class WorkshopsControllerTest extends AppTestCase
         $this->assertMailSentTo(Configure::read('AppConfig.debugMailAddress'));
         $this->assertMailContainsHtmlAt(0, '"Test Workshop" geändert');
 
-        $this->Workshop = $this->getTableLocator()->get('Workshops');
-        $workshop = $this->Workshop->find('all', conditions: [
+        $workshopsTable = $this->getTableLocator()->get('Workshops');
+        $workshop = $workshopsTable->find('all', conditions: [
             'Workshops.uid' => $workshopUid,
         ])->first();
         $this->assertEquals('workshop info', $workshop->text);

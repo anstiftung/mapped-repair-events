@@ -18,8 +18,6 @@ class HtmlOutputTest extends AppTestCase
     use LogFileAssertionsTrait;
     use LoginTrait;
 
-    private $User;
-
     public function testHome()
     {
         $this->get('/');

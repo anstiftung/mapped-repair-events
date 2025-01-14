@@ -303,14 +303,5 @@ class UsersControllerTest extends AppTestCase
         return $user;
     }
 
-    private function assertEmptyData()
-    {
-        $this->assertResponseContains('Bitte trage deinen Nickname ein.');
-        $this->assertResponseContains('Bitte trage deinen Vornamen ein.');
-        $this->assertResponseContains('Bitte trage deinen Nachnamen ein.');
-        $this->assertResponseContains('Bitte trage deine PLZ ein.');
-        $this->assertResponseContains('Bitte akzeptiere die Datenschutzbestimmungen.');
-    }
-
 }
 ?>

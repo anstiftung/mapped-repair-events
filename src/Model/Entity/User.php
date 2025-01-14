@@ -35,26 +35,26 @@ class User extends Entity implements IdentityInterface
 
     public function isAdmin(): bool
     {
-        $group = TableRegistry::getTableLocator()->get('Groups');
-        return $group->isAdmin($this);
+        $groupsTable = TableRegistry::getTableLocator()->get('Groups');
+        return $groupsTable->isAdmin($this);
     }
 
     public function isOrga(): bool
     {
-        $group = TableRegistry::getTableLocator()->get('Groups');
-        return $group->isOrga($this);
+        $groupsTable = TableRegistry::getTableLocator()->get('Groups');
+        return $groupsTable->isOrga($this);
     }
 
     public function isRepairhelper(): bool
     {
-        $group = TableRegistry::getTableLocator()->get('Groups');
-        return $group->isRepairhelper($this);
+        $groupsTable = TableRegistry::getTableLocator()->get('Groups');
+        return $groupsTable->isRepairhelper($this);
     }
 
     public function IsInGroup($groups): bool
     {
-        $group = TableRegistry::getTableLocator()->get('Groups');
-        return $group->isInGroup($this, $groups);
+        $groupsTable = TableRegistry::getTableLocator()->get('Groups');
+        return $groupsTable->isInGroup($this, $groups);
     }
 
     /**
