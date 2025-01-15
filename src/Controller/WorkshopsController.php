@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Controller\Component\StringComponent;
 use App\Model\Table\WorkshopsTable;
 use Cake\Core\Configure;
-use Cake\Datasource\ConnectionManager;
 use Cake\Event\EventInterface;
 use Cake\Http\Exception\ForbiddenException;
 use Cake\Http\Exception\NotFoundException;
@@ -38,7 +37,6 @@ class WorkshopsController extends AppController
 
         parent::beforeFilter($event);
         $this->Workshop = $this->getTableLocator()->get('Workshops');
-        $this->connection = ConnectionManager::get('default');
         $this->Authentication->allowUnauthenticated([
             'ajaxGetAllWorkshopsForMap',
             'ajaxGetWorkshopDetail',
@@ -1032,7 +1030,9 @@ class WorkshopsController extends AppController
             'workshopUid' => $workshop->uid,
             'typeUid' => $workshop->users[0]->uid
         ];
-        $this->connection->execute($query, $params);
+
+        $workshopsTable = $this->getTableLocator()->get('Workshops');
+        $workshopsTable->getConnection()->getDriver()->prepare($query)->execute($params);
 
         /* START email-versand an anfrage-steller */
         $email = new AppMailer();
@@ -1077,7 +1077,8 @@ class WorkshopsController extends AppController
             'workshopUid' => $workshop->uid,
             'typeUid' => $workshop->users[0]->uid
         ];
-        $this->connection->execute($query, $params);
+        $workshopsTable = $this->getTableLocator()->get('Workshops');
+        $workshopsTable->getConnection()->getDriver()->prepare($query)->execute($params);
         return $workshop;
     }
 
@@ -1095,7 +1096,8 @@ class WorkshopsController extends AppController
             $workshopUid = $this->request->getData($relationTable.'.workshop_uid');
 
             $query = 'REPLACE INTO ' . $relationTable . ' (' . $foreignKey . ', workshop_uid, created) VALUES(' . $userUid . ', ' . $workshopUid . ', NOW());';
-            $this->connection->execute($query);
+            $workshopsTable = $this->getTableLocator()->get('Workshops');
+            $workshopsTable->getConnection()->getDriver()->prepare($query)->execute();
 
             // immediately approve relation, if done by admin
             if ($this->isAdmin()) {
@@ -1104,7 +1106,7 @@ class WorkshopsController extends AppController
                   'workshopUid' => $workshopUid,
                   'userUid' => $userUid
                 ];
-                $this->connection->execute($query, $params);
+                $workshopsTable->getConnection()->getDriver()->prepare($query)->execute($params);
             }
 
             $userModel = Inflector::pluralize($model);

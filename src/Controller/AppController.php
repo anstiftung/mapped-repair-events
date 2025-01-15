@@ -2,37 +2,35 @@
 declare(strict_types=1);
 namespace App\Controller;
 
+use App\Controller\Component\CommonComponent;
+use App\Controller\Component\StringComponent;
 use App\Model\Table\RootsTable;
 use Cake\Controller\Controller;
 use Cake\Core\Configure;
-use Cake\Datasource\ConnectionManager;
 use Cake\Event\EventInterface;
-use Cake\Http\Exception\NotFoundException;
-use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
 use Cake\I18n\DateTime;
 use App\Model\Table\PagesTable;
 use App\Services\GeoService;
 use App\Model\Table\WorkshopsTable;
+use App\Test\Mock\GeoServiceMock;
 
 class AppController extends Controller
 {
 
-    public $modelName;
-    public $loggedUser = null;
-    public $connection;
+    public string $modelName;
+    public mixed $loggedUser = null;
     public RootsTable $Root;
     public WorkshopsTable $Workshop;
-    public $pluralizedModelName;
-    public $Common;
-    public $String;
+    public string $pluralizedModelName;
+    public CommonComponent $Common;
+    public StringComponent $String;
     public PagesTable $Page;
-    public $geoService;
+    public GeoService|GeoServiceMock $geoService;
 
     public function __construct($request = null, $response = null)
     {
         parent::__construct($request, $response);
-        $this->connection = ConnectionManager::get('default');
         $this->Root = $this->getTableLocator()->get('Roots');
         $this->Workshop = $this->getTableLocator()->get('Workshops');
         $this->modelName = Inflector::classify($this->name);
@@ -40,15 +38,6 @@ class AppController extends Controller
         $this->geoService = new GeoService();
     }
 
-    /**
-     * Initialization hook method.
-     *
-     * Use this method to add common initialization code like loading components.
-     *
-     * e.g. `$this->loadComponent('Security');`
-     *
-     * @return void
-     */
     public function initialize(): void
     {
 

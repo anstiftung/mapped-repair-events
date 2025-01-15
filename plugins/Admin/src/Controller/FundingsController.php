@@ -14,10 +14,10 @@ use App\Model\Entity\Funding;
 class FundingsController extends AdminAppController
 {
 
-    public $searchName = false;
-    public $searchText = false;
-    public $searchUid = false;
-    public $searchStatus = false;
+    public bool $searchName = false;
+    public bool $searchText = false;
+    public bool $searchUid = false;
+    public bool $searchStatus = false;
 
     public function beforeFilter(EventInterface $event) {
         $this->addSearchOptions([

@@ -16,9 +16,8 @@ class UsersController extends AdminAppController
     public CountriesTable $Country;
     public GroupsTable $Group;
     
-    public $searchName = false;
-
-    public $searchText = false;
+    public bool $searchName = false;
+    public bool $searchText = false;
 
     public function __construct($request = null, $response = null)
     {

@@ -10,25 +10,21 @@ use Cake\Utility\Inflector;
 class AdminAppController extends AppController
 {
 
-    public $pluralizedModelName;
-
-    public $primaryKey;
-
     public array $paginate;
 
-    public $searchOptions = [];
+    public array $searchOptions = [];
 
-    public $searchName = true;
+    public bool $searchName = true;
 
-    public $searchText = true;
+    public bool $searchText = true;
 
-    public $searchUid = true;
+    public bool $searchUid = true;
 
-    public $searchStatus = true;
+    public bool $searchStatus = true;
 
-    public $conditions = [];
+    public array $conditions = [];
 
-    public $matchings = [];
+    public array $matchings = [];
 
     public function initialize(): void
     {
@@ -88,8 +84,6 @@ class AdminAppController extends AppController
 
     public function index()
     {
-
-        $this->primaryKey = $this->{$this->pluralizedModelName}->getPrimaryKey();
 
         $this->paginate['order'] = [
             $this->pluralizedModelName . '.updated' => 'DESC'

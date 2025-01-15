@@ -8,13 +8,14 @@ namespace App\Controller\Component;
 
 use Cake\Controller\Component;
 use Cake\Controller\ComponentRegistry;
+use Cake\Controller\Controller;
+use Cake\Http\Session;
 
 class AppComponent extends Component
 {
 
-    protected $controller;
-
-    protected $session;
+    protected Controller $controller;
+    protected Session $session;
 
     public function __construct(ComponentRegistry $registry, array $config = [])
     {
