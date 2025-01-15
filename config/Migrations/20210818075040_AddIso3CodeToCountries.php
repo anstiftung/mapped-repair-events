@@ -5,7 +5,7 @@ use Migrations\AbstractMigration;
 
 class AddIso3CodeToCountries extends AbstractMigration
 {
-    public function change()
+    public function change(): void
     {
         $sql = "CREATE TABLE IF NOT EXISTS `tmp_countries` (
               `id` int(11) NOT NULL AUTO_INCREMENT,

@@ -37,20 +37,23 @@ class FundingsControllerTest extends AppTestCase
 		$this->_controller->geoService = new GeoServiceMock();
 	}
 
-    public function setUp(): void {
+    public function setUp(): void
+    {
         parent::setUp();
         $this->resetLogs();
         Configure::write('AppConfig.fundingsEnabled', true);
     }
 
-    public function testRoutesLoggedOut() {
+    public function testRoutesLoggedOut(): void
+    {
         $this->get(Configure::read('AppConfig.htmlHelper')->urlFundings());
         $this->assertResponseCode(302);
         $this->get(Configure::read('AppConfig.htmlHelper')->urlFundingsEdit(2));
         $this->assertResponseCode(302);
     }
 
-    public function testRoutesAsRepairhelper() {
+    public function testRoutesAsRepairhelper(): void
+    {
         $this->loginAsRepairhelper();
         $this->get(Configure::read('AppConfig.htmlHelper')->urlFundings());
         $this->assertResponseCode(302);
@@ -58,7 +61,8 @@ class FundingsControllerTest extends AppTestCase
         $this->assertResponseCode(302);
     }
 
-    public function testEditWorkshopFundingNotAllowed() {
+    public function testEditWorkshopFundingNotAllowed(): void
+    {
 
         $workshopsTable = $this->getTableLocator()->get('Workshops');
         $workshop = $workshopsTable->get(2);
@@ -75,7 +79,8 @@ class FundingsControllerTest extends AppTestCase
         $this->assertRedirectContains(Configure::read('AppConfig.htmlHelper')->urlFundings());
     }
 
-    public function testEditNotInOrgaTeam() {
+    public function testEditNotInOrgaTeam(): void
+    {
         $userWorkshopsTable = $this->getTableLocator()->get('UsersWorkshops');
         $userWorkshop = $userWorkshopsTable->find()->where(['workshop_uid' => 2])->first();
         $userWorkshopsTable->delete($userWorkshop);
@@ -85,7 +90,8 @@ class FundingsControllerTest extends AppTestCase
         $this->assertRedirectContains('/users/login');
     }
 
-    public function testEditAlreadyCreatedByOtherOwner() {
+    public function testEditAlreadyCreatedByOtherOwner(): void
+    {
         $fundingsTable = $this->getTableLocator()->get('Fundings');
         $workshopUid = 2;
         $fundingsTable->save($fundingsTable->newEntity([
@@ -100,7 +106,8 @@ class FundingsControllerTest extends AppTestCase
         $this->assertRedirectContains(Configure::read('AppConfig.htmlHelper')->urlFundings());
     }
 
-    private function prepareWorkshopForFunding($workshopUid) {
+    private function prepareWorkshopForFunding($workshopUid): void
+    {
         // add 4 events for 2025 (required for funding)
         $eventsTable = $this->getTableLocator()->get('Events');
         $i = 0;
@@ -116,7 +123,8 @@ class FundingsControllerTest extends AppTestCase
         }
     }
 
-    public function testCompleteFundingProcess() {
+    public function testCompleteFundingProcess(): void
+    {
 
         $fundingsTable = $this->getTableLocator()->get('Fundings');
         $testWorkshopUid = 2;
@@ -523,7 +531,8 @@ class FundingsControllerTest extends AppTestCase
 
     }
 
-    public function testIndex() {
+    public function testIndex(): void
+    {
         $testWorkshopUid = 2;
         $this->loginAsOrga();
         $this->prepareWorkshopForFunding($testWorkshopUid);
@@ -531,7 +540,8 @@ class FundingsControllerTest extends AppTestCase
         $this->assertResponseOk();
     }
 
-    public function testDelete() {
+    public function testDelete(): void
+    {
         $this->loginAsOrga();
         $this->get(Configure::read('AppConfig.htmlHelper')->urlFundingsEdit(2));
         $fundingsTable = $this->getTableLocator()->get('Fundings');

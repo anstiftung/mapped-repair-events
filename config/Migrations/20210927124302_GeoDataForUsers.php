@@ -7,7 +7,7 @@ use Cake\ORM\TableRegistry;
 
 class GeoDataForUsers extends AbstractMigration
 {
-    public function change()
+    public function change(): void
     {
 
         $this->execute("ALTER TABLE `users` ADD `lat` DOUBLE NULL DEFAULT NULL AFTER `country_code`, ADD `lng` DOUBLE NULL DEFAULT NULL AFTER `lat`;");

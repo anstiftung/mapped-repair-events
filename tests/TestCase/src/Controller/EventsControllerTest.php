@@ -37,7 +37,7 @@ class EventsControllerTest extends AppTestCase
 		$this->_controller->geoService = new GeoServiceMock();
 	}
 
-    public function loadNewEventData()
+    public function loadNewEventData(): void
     {
         $this->newEventData = [
             'eventbeschreibung' => 'description',
@@ -61,7 +61,7 @@ class EventsControllerTest extends AppTestCase
         ];
     }
 
-    public function testAddEventValidations()
+    public function testAddEventValidations(): void
     {
         $this->loadNewEventData();
         $this->loginAsOrga();
@@ -82,7 +82,7 @@ class EventsControllerTest extends AppTestCase
 
     }
 
-    public function testAddEventsOk()
+    public function testAddEventsOk(): void
     {
         $this->loadNewEventData();
         $this->loginAsOrga();
@@ -141,7 +141,7 @@ class EventsControllerTest extends AppTestCase
 
     }
 
-    public function testEditEventWithoutNotifications()
+    public function testEditEventWithoutNotifications(): void
     {
         $data = [
             'renotify' => false,
@@ -162,7 +162,7 @@ class EventsControllerTest extends AppTestCase
         $this->assertMailCount(0);
     }
 
-    public function testEditEventWithNotifications()
+    public function testEditEventWithNotifications(): void
     {
         $data = [
             'renotify' => true,
@@ -192,7 +192,7 @@ class EventsControllerTest extends AppTestCase
         $this->assertMailContainsAt(0, '- Der Termin findet jetzt als <b>Online-Termin</b> statt.');
     }
 
-    public function testAjaxGetAllEventsForMap()
+    public function testAjaxGetAllEventsForMap(): void
     {
         $this->configRequest([
             'headers' => [
@@ -207,7 +207,7 @@ class EventsControllerTest extends AppTestCase
         $this->assertResponseOk();
     }
 
-    public function testDeleteEvent()
+    public function testDeleteEvent(): void
     {
         $this->loginAsOrga();
         $this->get(Configure::read('AppConfig.htmlHelper')->urlEventDelete(6));
@@ -223,7 +223,7 @@ class EventsControllerTest extends AppTestCase
         $this->assertMailContainsAt(0, 'Die von dir abonnierte Initiative <b>Test Workshop</b> hat folgenden Termin gelöscht: <b>Sonntag, 01.01.2040</b>.');
     }
 
-    private function doTestEditForm($data)
+    private function doTestEditForm($data): void
     {
         $eventsTable = $this->getTableLocator()->get('Events');
         $event = $eventsTable->find('all', conditions: [

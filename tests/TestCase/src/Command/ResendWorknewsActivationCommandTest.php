@@ -16,7 +16,7 @@ class ResendWorknewsActivationCommandTest extends AppTestCase
     use EmailTrait;
     use QueueTrait;
 
-    public function testRun()
+    public function testRun(): void
     {
         $this->exec('resend_worknews_activation');
         $this->runAndAssertQueue();

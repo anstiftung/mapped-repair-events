@@ -8,7 +8,7 @@ use Cake\TestSuite\TestCase;
 
 class GeoServiceTest extends TestCase
 {
-    public function testIsPointInBoundingBox()
+    public function testIsPointInBoundingBox(): void
     {
         $GeoService = new GeoService();
 

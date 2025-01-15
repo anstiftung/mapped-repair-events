@@ -40,7 +40,7 @@ class InfoSheetsControllerTest extends AppTestCase
         'no_repair_reason_text' => ''
     ];
 
-    public function testAddInfoSheetValidations()
+    public function testAddInfoSheetValidations(): void
     {
         $this->loginAsOrga();
         $this->post(
@@ -53,7 +53,7 @@ class InfoSheetsControllerTest extends AppTestCase
         $this->assertResponseContains('Bitte wähle eine Kategorie aus.');
     }
 
-    public function testAddInfoSheetOk()
+    public function testAddInfoSheetOk(): void
     {
         $this->loginAsOrga();
         $this->newInfoSheetData['defect_description'] = 'Defect description';
@@ -85,7 +85,7 @@ class InfoSheetsControllerTest extends AppTestCase
         $this->assertEquals($infoSheets[0]->owner, 1);
     }
 
-    public function testDeleteInfoSheetAsOrga()
+    public function testDeleteInfoSheetAsOrga(): void
     {
         $this->loginAsOrga();
         $this->get(Configure::read('AppConfig.htmlHelper')->urlInfoSheetDelete(7));
@@ -98,7 +98,7 @@ class InfoSheetsControllerTest extends AppTestCase
         $this->assertEquals($infoSheet->status, APP_DELETED);
     }
 
-    public function testDownloadAsOrga()
+    public function testDownloadAsOrga(): void
     {
         $this->loginAsOrga();
         $this->get('/laufzettel/download/2');

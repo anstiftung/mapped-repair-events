@@ -6,7 +6,7 @@ namespace App\Test\TestCase\Traits;
 trait HtmlOutputAssertionsTrait
 {
 
-    private function doAssertHtmlOutput()
+    private function doAssertHtmlOutput(): void
     {
 
         $notRegexp = [

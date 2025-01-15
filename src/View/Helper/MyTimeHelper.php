@@ -9,7 +9,7 @@ use DateTime;
 class MyTimeHelper extends TimeHelper {
 
 
-    public function getAllYearsUntilThisYear($thisYear, $firstYear)
+    public function getAllYearsUntilThisYear($thisYear, $firstYear): array
     {
         $years = [];
         while($thisYear >= $firstYear) {
@@ -19,7 +19,7 @@ class MyTimeHelper extends TimeHelper {
         return $years;
     }
 
-    public function getMonths()
+    public function getMonths(): array
     {
         $months = [
             '01' => 'Januar',
@@ -38,13 +38,13 @@ class MyTimeHelper extends TimeHelper {
         return $months;
     }
 
-    public function getLastDayOfGivenMonth($date)
+    public function getLastDayOfGivenMonth($date): string
     {
         return date('t', strtotime($date));
     }
 
 
-    function validateDate($date, $format = 'd.m.Y')
+    function validateDate($date, $format = 'd.m.Y'): bool
     {
         $d = DateTime::createFromFormat($format, $date);
         return $d && $d->format($format) == $date;

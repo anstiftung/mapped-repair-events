@@ -49,7 +49,7 @@ class UsersControllerTest extends AppTestCase
 		$this->_controller->geoService = new GeoServiceMock();
 	}
 
-    public function testAll()
+    public function testAll(): void
     {
         $this->get(Configure::read('AppConfig.htmlHelper')->urlUsers());
         $this->doUserPrivacyAssertions();
@@ -57,7 +57,7 @@ class UsersControllerTest extends AppTestCase
         $this->assertEquals(3, count($users));
     }
 
-    public function testPublicProfileFieldsPrivate()
+    public function testPublicProfileFieldsPrivate(): void
     {
         $this->get(Configure::read('AppConfig.htmlHelper')->urlUserProfile(1));
         $this->doUserPrivacyAssertions();
@@ -67,7 +67,7 @@ class UsersControllerTest extends AppTestCase
         $this->assertResponseNotRegExp('`'.preg_quote('[javascript protected email address]</span>').'`');
     }
 
-    public function testPublicProfileFieldsNotPrivate()
+    public function testPublicProfileFieldsNotPrivate(): void
     {
         $this->get(Configure::read('AppConfig.htmlHelper')->urlUserProfile(3));
         $this->assertResponseNotContains('<h1>MaxMuster</h1>');
@@ -77,7 +77,7 @@ class UsersControllerTest extends AppTestCase
         $this->assertResponseContains('>Weitere Kontaktmöglichkeiten</b><ul><li>my-additional@email.com</li>');
     }
 
-    public function testProfileEdit()
+    public function testProfileEdit(): void
     {
         $this->loginAsOrga();
         $this->post(Configure::read('AppConfig.htmlHelper')->urlUserEdit(1, true), [
@@ -101,7 +101,7 @@ class UsersControllerTest extends AppTestCase
 
     }
 
-    public function testRegisterOrga()
+    public function testRegisterOrga(): void
     {
         $this->post(
             Configure::read('AppConfig.htmlHelper')->urlRegisterOrga(),
@@ -143,7 +143,7 @@ class UsersControllerTest extends AppTestCase
 
     }
 
-    public function testRegisterValidationsEmail()
+    public function testRegisterValidationsEmail(): void
     {
         $this->post(
             Configure::read('AppConfig.htmlHelper')->urlRegisterOrga(),
@@ -157,7 +157,7 @@ class UsersControllerTest extends AppTestCase
         $this->assertNoRedirect();
     }
 
-    public function testRegisterValidationsMxRecord()
+    public function testRegisterValidationsMxRecord(): void
     {
         $this->post(
             Configure::read('AppConfig.htmlHelper')->urlRegisterOrga(),
@@ -171,7 +171,7 @@ class UsersControllerTest extends AppTestCase
         $this->assertNoRedirect();
     }
 
-    public function testDeleteRepairhelperUserWithNonDeletedWorkshop()
+    public function testDeleteRepairhelperUserWithNonDeletedWorkshop(): void
     {
         $userUid = 1;
         $usersTable = $this->getTableLocator()->get('Users');
@@ -204,7 +204,7 @@ class UsersControllerTest extends AppTestCase
         $this->assertEmpty($user);
     }
 
-    public function testDeleteLastOrgaUserWithNonDeletedWorkshop()
+    public function testDeleteLastOrgaUserWithNonDeletedWorkshop(): void
     {
 
         $userUid = 1;
@@ -243,7 +243,7 @@ class UsersControllerTest extends AppTestCase
 
     }
 
-    public function testDeleteLastOrgaUserWithDeletedWorkshop()
+    public function testDeleteLastOrgaUserWithDeletedWorkshop(): void
     {
 
         $userUid = 1;
@@ -282,7 +282,7 @@ class UsersControllerTest extends AppTestCase
 
     }
 
-    private function getRegisteredUser()
+    private function getRegisteredUser(): User
     {
         $usersTable = $this->getTableLocator()->get('Users');
         $user = $usersTable->find('all',
