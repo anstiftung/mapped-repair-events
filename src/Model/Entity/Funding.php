@@ -13,7 +13,7 @@ class Funding extends Entity
         'rejected-by-admins' => 'Uploads: ' . self::STATUS_MAPPING_UPLOADS[self::STATUS_REJECTED_BY_ADMIN],
         'no-data-verified' => 'Noch keine Felder bestätigt',
         'not-submitted' => 'Förderantrag nicht eingereicht',
-        'submitted' => 'Förderantrag eingereicht',
+        'submitted' => 'Förderantrag eingereicht (und noch nicht überwiesen)',
         'submitted-and-money-transferred' => 'Förderantrag überwiesen',
     ];
 
