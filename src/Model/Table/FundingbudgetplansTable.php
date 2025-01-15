@@ -25,7 +25,7 @@ class FundingbudgetplansTable extends Table
         ]);
     }
 
-    public function beforeMarshal(EventInterface $event, ArrayObject $data, ArrayObject $options)
+    public function beforeMarshal(EventInterface $event, ArrayObject $data, ArrayObject $options): void
     {
         $data = StringComponent::cleanAllStringsInData($data);
     }

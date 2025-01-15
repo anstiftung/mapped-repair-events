@@ -10,7 +10,8 @@ trait SearchExceptionsTrait {
         'münchen',
     ];
 
-    public function getChangeableOrConditions($keyword, $changeableOrConditions) {
+    public function getChangeableOrConditions(string $keyword, array $changeableOrConditions): array
+    {
 
         if (!in_array(strtolower($keyword), $this->searchExceptions)) {
             return $changeableOrConditions;

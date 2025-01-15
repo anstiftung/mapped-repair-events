@@ -89,14 +89,14 @@ class WorkshopsTable extends AppTable
         ]);
     }
 
-    public function beforeMarshal(EventInterface $event, ArrayObject $data, ArrayObject $options)
+    public function beforeMarshal(EventInterface $event, ArrayObject $data, ArrayObject $options): void
     {
         if (isset($data['website'])) {
             $data['website'] = StringComponent::addProtocolToUrl($data['website']);
         }
     }
 
-    public function validationDefault(Validator $validator): \Cake\Validation\Validator
+    public function validationDefault(Validator $validator): Validator
     {
         $validator = $this->validationAdmin($validator);
         $invalidCoordinateMessage = 'Die Adresse wurde nicht gefunden. Bitte ändere sie oder lege die Koordinaten selbst fest.';
@@ -117,7 +117,7 @@ class WorkshopsTable extends AppTable
         return $validator;
     }
 
-    public function validationAdmin(Validator $validator)
+    public function validationAdmin(Validator $validator): Validator
     {
         $geoService = new GeoService();
         $validator = $geoService->getGeoCoordinatesValidator($validator);
@@ -141,7 +141,8 @@ class WorkshopsTable extends AppTable
         return $validator;
     }
 
-    public function getProvinceCounts() {
+    public function getProvinceCounts(): array
+    {
         
         $query = $this->find('all')
         ->select([
@@ -161,12 +162,7 @@ class WorkshopsTable extends AppTable
         return $provincesMap;
     }
 
-    /**
-     *
-     * @param int $userUid
-     * @return array
-     */
-    public function getWorkshopsForAssociatedUser($userUid, $workshopStatus, $additionalContains = [])
+    public function getWorkshopsForAssociatedUser(int $userUid, $workshopStatus, array $additionalContains = []): SelectQuery
     {
         $workshops = $this->getWorkshopsWithUsers($workshopStatus, $additionalContains);
         $workshops->matching('Users', function ($q) use ($userUid) {
@@ -184,7 +180,7 @@ class WorkshopsTable extends AppTable
         return $workshops;
     }
 
-    public function transformForDropdown($workshops)
+    public function transformForDropdown($workshops): array
     {
         $result = [];
         foreach($workshops as $workshop) {
@@ -193,7 +189,8 @@ class WorkshopsTable extends AppTable
         return $result;
     }
 
-    public function getFundingContain() {
+    public function getFundingContain(): array
+    {
         return [
             'WorkshopFundings' => [
                 'OwnerUsers',
@@ -210,7 +207,7 @@ class WorkshopsTable extends AppTable
         ];
     }
 
-    public function getWorkshopsWithUsers($workshopStatus, $additionalContains = [])
+    public function getWorkshopsWithUsers($workshopStatus, $additionalContains = []): SelectQuery
     {
         $workshops = $this->find('all',
         conditions: [
@@ -232,7 +229,7 @@ class WorkshopsTable extends AppTable
         return $workshops;
     }
 
-    private function addBlockedWorkshopSlugsValidationRule($validator)
+    private function addBlockedWorkshopSlugsValidationRule($validator): Validator
     {
         $validator->add('url', 'addBlockedWorkshopSlugsValidationRule', [
             'rule' => function($value, $context) {
@@ -254,17 +251,15 @@ class WorkshopsTable extends AppTable
 
     }
 
-    public function getTeam($workshop)
+    public function getTeam($workshop): array
     {
         return $workshop->users;
     }
 
     /**
      * returns owner and approved users_workshops users with group $orgaTeamGroups
-     * @param $workshop
-     * @return array
      */
-    public function getOrgaTeam($workshop)
+    public function getOrgaTeam($workshop): array
     {
         $orgaTeam = $this->getTeam($workshop);
         if (!empty($orgaTeam)) {
@@ -287,7 +282,7 @@ class WorkshopsTable extends AppTable
         return $orgaTeam;
     }
 
-    public function getWorkshopForIsUserInOrgaTeamCheck($workshopUid)
+    public function getWorkshopForIsUserInOrgaTeamCheck($workshopUid): Workshop
     {
         $usersAssociation = $this->getAssociation('Users');
         $usersAssociation->setConditions([
@@ -305,7 +300,7 @@ class WorkshopsTable extends AppTable
         return $workshop;
     }
 
-    public function isUserInOrgaTeam($user, $workshop)
+    public function isUserInOrgaTeam($user, $workshop): bool
     {
         if ($user === null) {
             return false;
@@ -321,7 +316,8 @@ class WorkshopsTable extends AppTable
         return $userFound;
     }
 
-    public function getKeywordSearchConditions($keyword, $negate) {
+    public function getKeywordSearchConditions(string $keyword, bool $negate): mixed
+    {
 
         $changeableOrConditions = [
             'Workshops.city LIKE' => "%{$keyword}%",
@@ -344,7 +340,8 @@ class WorkshopsTable extends AppTable
         };
     }
 
-    public function getLatestWorkshops() {
+    public function getLatestWorkshops(): SelectQuery
+    {
         $workshops = $this->find('all',
         fields: [
             'Workshops.uid',
@@ -365,12 +362,7 @@ class WorkshopsTable extends AppTable
         return $workshops;
     }
 
-    /**
-     *
-     * @param int $workshopUid
-     * @return boolean
-     */
-    public function isLoggedUserApproved($workshopUid, $userUid)
+    public function isLoggedUserApproved(int $workshopUid, int $userUid): bool
     {
         $usersAssociation = $this->getAssociation('UsersWorkshops');
         $usersAssociation->setConditions([
@@ -386,14 +378,10 @@ class WorkshopsTable extends AppTable
             'UsersWorkshops'
         ])->first();
 
-        if (!empty($workshop->users_workshops)) {
-            return true;
-        } else {
-            return false;
-        }
+        return !empty($workshop->users_workshops);
     }
 
-    public function getForDropdown()
+    public function getForDropdown(): array
     {
         $workshops = $this->find('all',
         conditions: [

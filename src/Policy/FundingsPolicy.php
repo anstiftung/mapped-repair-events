@@ -8,11 +8,13 @@ use Authorization\Policy\RequestPolicyInterface;
 use Authorization\Policy\ResultInterface;
 use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
+use App\Model\Entity\Funding;
 
 class FundingsPolicy implements RequestPolicyInterface
 {
 
-    private function getOwnerEntity($fundingUid, $identity) {
+    private function getOwnerEntity($fundingUid, $identity): Funding
+    {
         $fundingsTable = TableRegistry::getTableLocator()->get('Fundings');
         $entity = $fundingsTable->find()->where([
             $fundingsTable->aliasField('uid') => $fundingUid,

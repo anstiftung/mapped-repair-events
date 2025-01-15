@@ -17,15 +17,17 @@ class FoerderantragPdfWriterService extends PdfWriterService
         $this->setPdfLibrary(new FoerderantragTcpdfService());
     }
 
-    public function getFilenameCustom($funding, $timestamp) {
+    public function getFilenameCustom($funding, $timestamp): string
+    {
         return 'Foerderantrag_anstiftung_bmuv_' . $funding->uid . '_' . $timestamp->i18nFormat('yyyyMMdd_HHmmss') . '.pdf';
     }
 
-    public function getUploadPath($fundingUid) {
+    public function getUploadPath($fundingUid): string
+    {
         return Fundingupload::UPLOAD_PATH . $fundingUid . DS . 'attachments' . DS;
     }
 
-    public function prepareAndSetData($fundingUid, $timestamp)
+    public function prepareAndSetData($fundingUid, $timestamp): void
     {
 
         $fundingsTable = TableRegistry::getTableLocator()->get('Fundings');
@@ -67,7 +69,8 @@ class FoerderantragPdfWriterService extends PdfWriterService
 
     }
 
-    private function getPreparedFields($definedFields, $entity) {
+    private function getPreparedFields($definedFields, $entity): array
+    {
         $preparedFields = [];
         foreach($definedFields as $workshopField) {
             $workshopFieldName = $workshopField['name'];

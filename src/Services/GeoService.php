@@ -23,7 +23,8 @@ class GeoService {
 
     const ERROR_OUT_OF_BOUNDING_BOX = 'Die Geo-Koordinaten liegen nicht in Europa, vielleicht hast du Breite (Lat) und Länge (Long) vertauscht?';
 
-    public function isPointInBoundingBox($lat, $lng) {
+    public function isPointInBoundingBox($lat, $lng): bool
+    {
         return $lat >= self::VALID_BOUNDING_BOX['lat']['min'] && $lat <= self::VALID_BOUNDING_BOX['lat']['max'] && $lng >= self::VALID_BOUNDING_BOX['lng']['min'] && $lng <= self::VALID_BOUNDING_BOX['lng']['max'];
     }
 
@@ -35,7 +36,8 @@ class GeoService {
         return ['provinceId' => $provinceId];
     }
 
-    public function getGeoDataByAddress($addressString): array {
+    public function getGeoDataByAddress($addressString): array
+    {
 
         $lat = 'ungültig';
         $lng = 'ungültig';
@@ -55,13 +57,15 @@ class GeoService {
         return ['lat' => $lat, 'lng' => $lng, 'provinceId' => $provinceId];
     }
 
-    private function getDecodedOutput(string $requestUrl) {
+    private function getDecodedOutput(string $requestUrl): object
+    {
         $geocode = file_get_contents($requestUrl);
         $output = json_decode($geocode);
         return $output;
     }
 
-    private function getProvinceIdByGeocodeResult($output): int {
+    private function getProvinceIdByGeocodeResult($output): int
+    {
 
         $provinceId = 0;
 
@@ -88,7 +92,7 @@ class GeoService {
         return $provinceId;
     }
 
-    public function getGeoCoordinatesValidator(Validator $validator)
+    public function getGeoCoordinatesValidator(Validator $validator): Validator
     {
         $geoFields = ['lat', 'lng'];
         foreach($geoFields as $geoField) {

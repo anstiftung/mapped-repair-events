@@ -21,7 +21,7 @@ class FundingdatasTable extends Table
         $this->addBehavior('Timestamp');
     }
 
-    public function beforeMarshal(EventInterface $event, ArrayObject $data, ArrayObject $options)
+    public function beforeMarshal(EventInterface $event, ArrayObject $data, ArrayObject $options): void
     {
         $data = StringComponent::cleanAllStringsInData($data);
     }

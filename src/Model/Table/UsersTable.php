@@ -14,6 +14,7 @@ use Cake\Datasource\EntityInterface;
 use App\Model\Rule\UserLinkToWorkshopRule;
 use App\Controller\Component\StringComponent;
 use Cake\ORM\TableRegistry;
+use Cake\ORM\Query\SelectQuery;
 
 class UsersTable extends AppTable
 {
@@ -24,7 +25,7 @@ class UsersTable extends AppTable
         'street'
     ];
 
-    public function beforeMarshal(EventInterface $event, ArrayObject $data, ArrayObject $options)
+    public function beforeMarshal(EventInterface $event, ArrayObject $data, ArrayObject $options): void
     {
         if (isset($data['website'])) {
             $data['website'] = StringComponent::addProtocolToUrl($data['website']);
@@ -75,7 +76,7 @@ class UsersTable extends AppTable
         ]);
     }
 
-    public function getDefaultPrivateFields()
+    public function getDefaultPrivateFields(): string
     {
         return 'lastname,email,street,zip,phone,additional_contact';
     }
@@ -92,7 +93,7 @@ class UsersTable extends AppTable
         return $rules;
     }
 
-    public function beforeDelete(EventInterface $event, EntityInterface $entity, ArrayObject $options)
+    public function beforeDelete(EventInterface $event, EntityInterface $entity, ArrayObject $options): void
     {
 
         $userUid = $entity->get('uid');
@@ -151,7 +152,7 @@ class UsersTable extends AppTable
         }
     }
 
-    private function addGroupsValidation($validator, $groups, $multiple)
+    private function addGroupsValidation($validator, $groups, $multiple): Validator
     {
         $validator->add('groups', 'checkForAllowedGroups', [
             'rule' => function($value, $context) use ($groups, $multiple) {
@@ -170,7 +171,7 @@ class UsersTable extends AppTable
         return $validator;
     }
 
-    private function addLastOrgaValidation($validator)
+    private function addLastOrgaValidation($validator): Validator
     {
         $validator->add('groups', 'checkLastOrga', [
             'rule' => function($value, $context) {
@@ -210,7 +211,7 @@ class UsersTable extends AppTable
         return $validator;
     }
 
-    public function getWorkshopsWhereUserIsLastOrgaUser($workshops)
+    public function getWorkshopsWhereUserIsLastOrgaUser($workshops): array
     {
         $lastOrgaWorkshops = [];
         foreach($workshops as $workshop) {
@@ -232,7 +233,7 @@ class UsersTable extends AppTable
         return $lastOrgaWorkshops;
     }
 
-    private function getLastOrgaValidationErrorMessage($workshops)
+    private function getLastOrgaValidationErrorMessage($workshops): string
     {
         $workshopLinks = [];
         $workshopNames = [];
@@ -250,7 +251,7 @@ class UsersTable extends AppTable
         return $result;
     }
 
-    public function validationRegistration(Validator $validator)
+    public function validationRegistration(Validator $validator): Validator
     {
         $validator = $this->validationDefault($validator);
         $validator->requirePresence('privacy_policy_accepted', true, 'Bitte akzeptiere die Datenschutzbestimmungen.');
@@ -259,7 +260,7 @@ class UsersTable extends AppTable
         return $validator;
     }
 
-    public function validationUserEditUser(Validator $validator)
+    public function validationUserEditUser(Validator $validator): Validator
     {
         $validator = $this->validationDefault($validator);
         $validator = $this->addLastOrgaValidation($validator);
@@ -267,7 +268,7 @@ class UsersTable extends AppTable
         return $validator;
     }
 
-    public function validationUserEditAdmin(Validator $validator)
+    public function validationUserEditAdmin(Validator $validator): Validator
     {
         $validator = $this->validationDefault($validator);
         $validator = $this->addLastOrgaValidation($validator);
@@ -275,7 +276,7 @@ class UsersTable extends AppTable
         return $validator;
     }
 
-    public function validationFunding(Validator $validator): \Cake\Validation\Validator
+    public function validationFunding(Validator $validator): Validator
     {
         $validator->notEmptyString('nick', 'Bitte trage deinen Nickname ein.');
         $validator->minLength('nick', 2, 'Mindestens 2 Zeichen bitte (Nickname).');
@@ -321,7 +322,7 @@ class UsersTable extends AppTable
 
     }
 
-    public function validationDefault(Validator $validator): \Cake\Validation\Validator
+    public function validationDefault(Validator $validator): Validator
     {
         $validator = $this->validationFunding($validator);
         $validator->allowEmptyString('street');
@@ -330,7 +331,7 @@ class UsersTable extends AppTable
         return $validator;
     }
 
-    public function validationRequestPassword(Validator $validator)
+    public function validationRequestPassword(Validator $validator): Validator
     {
 
         $validator->notEmptyString('email', 'Bitte trage deine E-Mail-Adresse ein.');
@@ -349,7 +350,7 @@ class UsersTable extends AppTable
         return $validator;
     }
 
-    public function validationChangePassword(Validator $validator)
+    public function validationChangePassword(Validator $validator): Validator
     {
         $validator->add('password', 'oldPasswordCheck', [
             'rule' => function ($value, $context) {
@@ -403,17 +404,17 @@ class UsersTable extends AppTable
         return $validator;
     }
 
-    public function newPasswordEqualsValidator($value, $context)
+    public function newPasswordEqualsValidator($value, $context): bool
     {
         return $context['data']['password_new_1'] == $context['data']['password_new_2'];
     }
 
-    public function newPasswordDiffersToOldValidator($value, $context)
+    public function newPasswordDiffersToOldValidator($value, $context): bool
     {
         return $context['data']['password_new_1'] != $context['data']['password'];
     }
 
-    public function findAuth(\Cake\ORM\Query $query, array $options)
+    public function findAuth(SelectQuery $query, array $options): SelectQuery
     {
         $query->where([
             'Users.status' => APP_ON,
@@ -425,7 +426,7 @@ class UsersTable extends AppTable
         return $query;
     }
 
-    public function getForDropdown()
+    public function getForDropdown(): array
     {
         $users = $this->find('all',
         conditions: [
@@ -445,7 +446,7 @@ class UsersTable extends AppTable
         return $preparedUsers;
     }
 
-    public function setNewPassword($userUid)
+    public function setNewPassword(int $userUid): string
     {
         $newPassword = StringComponent::createPassword();
         $user = $this->get($userUid, conditions: [
@@ -461,7 +462,7 @@ class UsersTable extends AppTable
     /**
      * check if the given string is the password of the logged in user
      */
-    public function isUserPassword($uid, $hashedPassword)
+    public function isUserPassword($uid, $hashedPassword): bool
     {
         $user = $this->find('all',
         conditions: [
