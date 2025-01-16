@@ -15,7 +15,7 @@ class ThirdPartyStatisticsTable extends Table
         parent::initialize($config);
     }
 
-    public function getSumsByDate($dateFrom, $dateTo)
+    public function getSumsByDate($dateFrom, $dateTo): array
     {
 
         $query = $this->find();
@@ -33,7 +33,7 @@ class ThirdPartyStatisticsTable extends Table
 
     }
 
-    public function sumUpForMainCategory($sums)
+    public function sumUpForMainCategory($sums): array
     {
         $preparedSums = [];
         $categoriesTable = TableRegistry::getTableLocator()->get('Categories');
@@ -58,7 +58,7 @@ class ThirdPartyStatisticsTable extends Table
         return $preparedSums;
     }
 
-    public function bindCategoryDataToSums($sums)
+    public function bindCategoryDataToSums($sums): array
     {
         $preparedSums = [];
         $categoriesTable = TableRegistry::getTableLocator()->get('Categories');
@@ -77,7 +77,7 @@ class ThirdPartyStatisticsTable extends Table
         return $preparedSums;
     }
 
-    public function getCategoryNames($sums)
+    public function getCategoryNames($sums): array
     {
         $result = [];
         foreach($sums as $sum) {
@@ -86,7 +86,7 @@ class ThirdPartyStatisticsTable extends Table
         return $result;
     }
 
-    public function getSumsRepaired($sums)
+    public function getSumsRepaired($sums): array
     {
         $result = [];
         foreach($sums as $sum) {

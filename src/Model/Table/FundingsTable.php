@@ -10,6 +10,7 @@ use Cake\Http\Exception\NotFoundException;
 use Cake\Validation\Validator;
 use Laminas\Diactoros\UploadedFile;
 use Cake\ORM\TableRegistry;
+use App\Model\Entity\Funding;
 
 class FundingsTable extends AppTable
 {
@@ -106,7 +107,7 @@ class FundingsTable extends AppTable
         return $validator;
     }
 
-    public function validateFileTypeAndSize($value, $context)
+    public function validateFileTypeAndSize($value, $context): true|string
     {
         $allowedMimeTypes = ['application/pdf', 'image/jpeg', 'image/png'];
         $maxSize = 5 * 1024 * 1024; // 5 MB in bytes
@@ -136,7 +137,8 @@ class FundingsTable extends AppTable
         return true;
     }
 
-    public function getUnprivatizedFundingWithAllAssociations($fundingUid) {
+    public function getUnprivatizedFundingWithAllAssociations($fundingUid): Funding
+    {
         $funding = $this->find(contain: [
             'Workshops',
             'OwnerUsers',
@@ -153,7 +155,8 @@ class FundingsTable extends AppTable
         return $funding;
     }
 
-    public function deleteCustom($fundingUid) {
+    public function deleteCustom($fundingUid): void
+    {
 
         $funding = $this->find()->where([
             $this->aliasField('uid') => $fundingUid,
@@ -181,7 +184,8 @@ class FundingsTable extends AppTable
 
     }
 
-    public function findOrCreateCustom($workshopUid) {
+    public function findOrCreateCustom($workshopUid): Funding
+    {
 
         $funding = $this->find()->where([
             $this->aliasField('workshop_uid') => $workshopUid,

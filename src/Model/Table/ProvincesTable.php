@@ -14,7 +14,7 @@ class ProvincesTable extends Table
         ]);
     }
 
-    public function getForDropdown($provinceCountsMap)
+    public function getForDropdown($provinceCountsMap): array
     {
         $provinces = $this->find('all',
             order: [

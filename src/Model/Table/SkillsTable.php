@@ -31,13 +31,14 @@ class SkillsTable extends Table
         ]);
     }
 
-    public function validationDefault(Validator $validator): \Cake\Validation\Validator
+    public function validationDefault(Validator $validator): Validator
     {
         $validator->notEmptyString('name', 'Bitte trage den Namen ein.');
         return $validator;
     }
 
-    public function getNewSkillsFromRequest($associatedSkills) {
+    public function getNewSkillsFromRequest($associatedSkills): array
+    {
         if (!is_array($associatedSkills)) {
             return [];
         }
@@ -47,7 +48,8 @@ class SkillsTable extends Table
         return $skills;
     }
 
-    public function getExistingSkillsFromRequest($associatedSkills) {
+    public function getExistingSkillsFromRequest($associatedSkills): array
+    {
         if (!is_array($associatedSkills)) {
             return [];
         }
@@ -57,7 +59,7 @@ class SkillsTable extends Table
         return $skills;
     }
 
-    public function addSkills($newSkills, $isAdmin, $userUid)
+    public function addSkills($newSkills, $isAdmin, $userUid): array
     {
 
         $skillsToAdd = [];
@@ -82,7 +84,7 @@ class SkillsTable extends Table
 
     }
 
-    public function getForDropdownIncludingCategories($includeOffline): array
+    public function getForDropdownIncludingCategories(): array
     {
         $skillsForDropdown = $this->getForDropdown(false);
         $categoriesTable = TableRegistry::getTableLocator()->get('Categories');

@@ -17,7 +17,7 @@ class FundinguploadsTable extends Table
         ]);
     }
 
-    public function beforeSave($event, $entity, $options)
+    public function beforeSave($event, $entity, $options): void
     {
         if ($entity->isNew() && !$entity->id) {
             $entity->id = Text::uuid();

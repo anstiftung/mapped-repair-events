@@ -3,6 +3,8 @@ declare(strict_types=1);
 namespace App\Model\Table;
 
 use Cake\Validation\Validator;
+use App\Model\Entity\Page;
+use Cake\ORM\Query\SelectQuery;
 
 class PagesTable extends AppTable
 {
@@ -20,7 +22,7 @@ class PagesTable extends AppTable
         $this->addBehavior('Tree');
     }
 
-    public function getPageByName($name)
+    public function getPageByName($name): Page
     {
         $page = $this->find('all', conditions: [
             'Pages.name' => $name
@@ -28,7 +30,7 @@ class PagesTable extends AppTable
         return $page;
     }
 
-    public function validationAdmin(Validator $validator)
+    public function validationAdmin(Validator $validator): Validator
     {
         $validator = parent::addUrlValidation($validator);
         $validator->notEmptyString('name', 'Bitte trage den Namen ein.');
@@ -36,7 +38,7 @@ class PagesTable extends AppTable
         return $validator;
     }
 
-    private function flattenNestedArrayWithChildren($array, $separator = '')
+    private function flattenNestedArrayWithChildren($array, $separator = ''): array
     {
         foreach ($array as $item) {
             $statusString = '';
@@ -55,7 +57,7 @@ class PagesTable extends AppTable
         return $this->flattenedArray;
     }
 
-    public function getThreaded($conditions = [])
+    public function getThreaded($conditions = []): SelectQuery
     {
         $pages = $this->find('threaded',
         parentField: 'parent_uid',
@@ -68,7 +70,7 @@ class PagesTable extends AppTable
         return $pages;
     }
 
-    public function getForSelect($excludePageId = null)
+    public function getForSelect($excludePageId = null): array
     {
         $conditions = [];
         $conditions[] = 'Pages.status > ' . APP_DELETED;

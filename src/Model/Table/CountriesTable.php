@@ -13,7 +13,7 @@ class CountriesTable extends Table
         $this->setPrimaryKey('code');
     }
 
-    public function getForDropdown()
+    public function getForDropdown(): array
     {
         $countries = $this->find('all', order: [
             'rank' => 'ASC',

@@ -7,7 +7,7 @@ use Cake\ORM\Table;
 class GroupsTable extends Table
 {
 
-    public function isAdmin($user)
+    public function isAdmin($user): bool
     {
         if (empty($user['groups']))
             return false;
@@ -19,7 +19,7 @@ class GroupsTable extends Table
         return false;
     }
 
-    public function isOrga($user)
+    public function isOrga($user): bool
     {
         if (empty($user['groups']))
             return false;
@@ -31,7 +31,7 @@ class GroupsTable extends Table
         return false;
     }
 
-    public function isRepairhelper($user)
+    public function isRepairhelper($user): bool
     {
         if (empty($user['groups']))
             return false;
@@ -43,8 +43,8 @@ class GroupsTable extends Table
             return false;
     }
 
-    public function isInGroup($user, $groupNames): bool {
-
+    public function isInGroup($user, $groupNames): bool
+    {
         if (empty($user['groups'])) {
             return false;
         }
@@ -59,8 +59,6 @@ class GroupsTable extends Table
         }
 
         return false;
-
     }
-
 }
 ?>

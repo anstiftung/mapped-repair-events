@@ -39,7 +39,7 @@ class EventsTable extends AppTable
         ]);
     }
 
-    public function validationDefault(Validator $validator): \Cake\Validation\Validator
+    public function validationDefault(Validator $validator): Validator
     {
         $geoService = new GeoService();
         $validator = $geoService->getGeoCoordinatesValidator($validator);
@@ -65,8 +65,8 @@ class EventsTable extends AppTable
         return $validator;
     }
 
-    public function getKeywordSearchConditions($keyword, $negate) {
-
+    public function getKeywordSearchConditions(string $keyword, bool $negate): mixed
+    {
         $changeableOrConditions = [
             'Workshops.name LIKE' => "%{$keyword}%",
             'Events.ort LIKE' => "%{$keyword}%",
@@ -88,7 +88,8 @@ class EventsTable extends AppTable
         };
     }
 
-    public function getProvinceCounts() {
+    public function getProvinceCounts(): array
+    {
         
         $query = $this->find('all')
         ->select([
@@ -107,7 +108,8 @@ class EventsTable extends AppTable
         return $provincesMap;
     }    
 
-    public function getListConditions() {
+    public function getListConditions(): array
+    {
         return [
             'Events.status' => APP_ON,
             'Workshops.status' => APP_ON,
@@ -115,7 +117,8 @@ class EventsTable extends AppTable
         ];
     }
 
-    public function getListFields() {
+    public function getListFields(): array
+    {
         return [
             'Events.uid',
             'Events.lat',
@@ -139,7 +142,8 @@ class EventsTable extends AppTable
         ];
     }
 
-    public function getListOrder() {
+    public function getListOrder(): array
+    {
         return [
             'Events.datumstart' => 'ASC',
             'Events.uhrzeitstart' => 'ASC'

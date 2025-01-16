@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace App\Model\Table;
 
 use Cake\ORM\Table;
+use App\Model\Entity\FormField;
 
 class FormFieldsTable extends Table
 {
@@ -15,7 +16,7 @@ class FormFieldsTable extends Table
         ]);
     }
 
-    public function getForForm($formFieldId)
+    public function getForForm($formFieldId): FormField
     {
         $formField = $this->find('all',
         conditions: [

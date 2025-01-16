@@ -27,7 +27,7 @@ class OrdsCategoriesTable extends Table
         return $validator;
     }
 
-    public function getForDropdown()
+    public function getForDropdown(): array
     {
 
         $categories = $this->find('all',

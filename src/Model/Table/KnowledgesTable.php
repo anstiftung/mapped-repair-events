@@ -30,7 +30,7 @@ class KnowledgesTable extends AppTable
         ]);
     }
 
-    public function validationAdmin(Validator $validator)
+    public function validationAdmin(Validator $validator): Validator
     {
         $validator->notEmptyString('title', 'Bitte gib einen Titel an.');
         $validator->minLength('title', 2, 'Bitte gib einen gültigen Titel an.');
