@@ -14,6 +14,8 @@ use App\Model\Table\PagesTable;
 use App\Services\GeoService;
 use App\Model\Table\WorkshopsTable;
 use App\Test\Mock\GeoServiceMock;
+use Cake\Datasource\EntityInterface;
+use Cake\ORM\Entity;
 
 class AppController extends Controller
 {
@@ -60,7 +62,7 @@ class AppController extends Controller
 
     }
 
-    protected function setNavigation()
+    protected function setNavigation(): void
     {
         $this->Page = $this->getTableLocator()->get('Pages');
         $conditions = [];
@@ -80,7 +82,7 @@ class AppController extends Controller
         $this->set('pagesForFooter', $pagesForFooter);
     }
 
-    public function beforeFilter(EventInterface $event)
+    public function beforeFilter(EventInterface $event): void
     {
         parent::beforeFilter($event);
         $this->loggedUser = $this->request->getAttribute('identity');
@@ -90,7 +92,7 @@ class AppController extends Controller
         $this->set('loggedUser', $this->loggedUser);
     }
 
-    public function beforeRender(EventInterface $event)
+    public function beforeRender(EventInterface $event): void
     {
         if (!$this->request->getSession()->check('isMobile') && $this->request->is('mobile')) {
             $this->request->getSession()->write('isMobile', true);
@@ -121,13 +123,10 @@ class AppController extends Controller
 
     /**
      * checks the url for parameter "preview"
-     * @return boolean preview
      */
-    protected function isPreview()
+    protected function isPreview(): bool
     {
-        if (isset($this->request->getParam('pass')['1']) && $this->request->getParam('pass')['1'] == 'vorschau')
-            return true;
-        return false;
+        return isset($this->request->getParam('pass')['1']) && $this->request->getParam('pass')['1'] == 'vorschau';
     }
 
     /**
@@ -168,7 +167,7 @@ class AppController extends Controller
         return $previewConditions;
     }
 
-    public function setContext($object)
+    public function setContext($object): void
     {
         $className = Inflector::classify($this->name);
         $this->set('context', [
@@ -177,7 +176,7 @@ class AppController extends Controller
         ]);
     }
 
-    public function mergeCustomMetaTags($metaTags, $object)
+    public function mergeCustomMetaTags(array $metaTags, $object): array
     {
         if (!empty($object->metatag) && !empty($object->metatag->title)) {
             $metaTags['title'] = $object->metatag->title;
@@ -191,22 +190,22 @@ class AppController extends Controller
         return $metaTags;
     }
 
-    public function getPreparedReferer()
+    public function getPreparedReferer(): string
     {
         return htmlspecialchars_decode($this->getRequest()->getData('referer'));
     }
 
-    public function setReferer()
+    public function setReferer(): void
     {
         $this->set('referer', $this->getReferer());
     }
 
-    public function getReferer()
+    public function getReferer(): string
     {
         return $this->request->getData('referer') ?? $_SERVER['HTTP_REFERER'] ?? '/';
     }
 
-    protected function patchEntityWithCurrentlyUpdatedFields($entity)
+    protected function patchEntityWithCurrentlyUpdatedFields($entity): EntityInterface
     {
         $modelName = $this->modelName;
         $entity = $this->$modelName->patchEntity($entity, [
@@ -216,7 +215,7 @@ class AppController extends Controller
         return $entity;
     }
 
-    protected function stripTagsFromFields($entity, $modelName)
+    protected function stripTagsFromFields($entity, $modelName): EntityInterface
     {
         foreach ($entity->toArray() as $field => $data) {
             if (in_array($field, $this->$modelName->allowedBasicHtmlFields)) {
@@ -241,16 +240,12 @@ class AppController extends Controller
         return $entity;
     }
 
-    public function setIsCurrentlyUpdated($uid)
+    public function setIsCurrentlyUpdated($uid): void
     {
         $this->set('isCurrentlyUpdated', $this->isCurrentlyUpdated($uid) ? '1' : '0');
     }
 
-    /**
-     * @param int $uid
-     * @return boolean $success
-     */
-    protected function isCurrentlyUpdated($uid)
+    protected function isCurrentlyUpdated(int $uid): bool
     {
         $modelName = $this->modelName;
         $data = $this->$modelName->find('all',

@@ -21,6 +21,9 @@ use App\Model\Table\WorknewsTable;
 use App\Model\Entity\Worknews;
 use App\Mailer\AppMailer;
 use App\Model\Entity\Workshop;
+use Cake\Http\Response;
+use Cake\Datasource\EntityInterface;
+use App\Model\Entity\User;
 
 class WorkshopsController extends AppController
 {
@@ -33,7 +36,8 @@ class WorkshopsController extends AppController
     public PostsTable $Post;
     public WorknewsTable $Worknews;
 
-    public function beforeFilter(EventInterface $event) {
+    public function beforeFilter(EventInterface $event): void
+    {
 
         parent::beforeFilter($event);
         $this->Workshop = $this->getTableLocator()->get('Workshops');
@@ -56,7 +60,7 @@ class WorkshopsController extends AppController
         $this->addViewClasses([JsonView::class]);
     }
 
-    public function add()
+    public function add(): void
     {
         $workshop = $this->Workshop->newEntity(
             ['status' => APP_OFF],
@@ -71,7 +75,7 @@ class WorkshopsController extends AppController
         }
     }
 
-    public function edit($uid)
+    public function edit($uid): void
     {
 
         if ($uid === null) {
@@ -97,7 +101,7 @@ class WorkshopsController extends AppController
 
     }
 
-    private function _edit($workshop, $isEditMode)
+    private function _edit($workshop, $isEditMode): void
     {
 
         $this->User = $this->getTableLocator()->get('Users');
@@ -200,7 +204,7 @@ class WorkshopsController extends AppController
         }
     }
 
-    private function getPreparedCategoryIcons($categories)
+    private function getPreparedCategoryIcons($categories): array
     {
         $preparedCategories = [];
         $i = 0;
@@ -214,7 +218,8 @@ class WorkshopsController extends AppController
         return $preparedCategories;
     }
 
-    public function ajaxGetWorkshopsAndUsersForTags() {
+    public function ajaxGetWorkshopsAndUsersForTags(): void
+    {
 
         $this->request = $this->request->withParam('_ext', 'json');
 
@@ -401,7 +406,7 @@ class WorkshopsController extends AppController
 
     }
 
-    public function getWorkshopsWithCityFilter()
+    public function getWorkshopsWithCityFilter(): ?Response
     {
 
         /* @phpstan-ignore-next-line */
@@ -482,9 +487,10 @@ class WorkshopsController extends AppController
             'workshops' => $preparedWorkshops,
         ]);
         $this->viewBuilder()->setOption('serialize', ['workshops']);
+        return null;
     }
 
-    public function getWorkshopsForHyperModeWebsite()
+    public function getWorkshopsForHyperModeWebsite(): void
     {
 
         $this->request = $this->request->withParam('_ext', 'json');
@@ -522,7 +528,8 @@ class WorkshopsController extends AppController
 
     }
 
-    public function ajaxGetAllWorkshopsForMap() {
+    public function ajaxGetAllWorkshopsForMap(): void
+    {
 
         if (!$this->request->is('ajax')) {
             throw new ForbiddenException();
@@ -700,7 +707,8 @@ class WorkshopsController extends AppController
 
     }
 
-    public function home() {
+    public function home(): void
+    {
 
         $this->Workshop = $this->getTableLocator()->get('Workshops');
         $latestWorkshops = $this->Workshop->getLatestWorkshops();
@@ -716,12 +724,12 @@ class WorkshopsController extends AppController
 
     }
 
-    private function processWorknewsAddForm($workshop)
+    private function processWorknewsAddForm($workshop): null
     {
 
         if (!empty($this->getRequest()->getData()) && ($this->getRequest()->getData('botEwX482') == '' || $this->getRequest()->getData('botEwX482') < 1)) {
             $this->redirect('/');
-            return;
+            return null;
         }
 
         $this->Worknews = $this->getTableLocator()->get('Worknews');
@@ -791,10 +799,11 @@ class WorkshopsController extends AppController
         $subscribed = $worknews->confirm == Worknews::STATUS_OK && $this->isLoggedIn() && $worknews->email == $this->loggedUser->email;
         $this->set('subscribed', $subscribed);
         $this->set('worknews', $worknews);
+        return null;
 
     }
 
-    public function detail()
+    public function detail(): void
     {
 
         if (! isset($this->request->getParam('pass')['0'])) {
@@ -945,7 +954,7 @@ class WorkshopsController extends AppController
 
     }
 
-    private function checkType($type)
+    private function checkType($type): array
     {
         if (! in_array($type, [
             'user',
@@ -966,7 +975,7 @@ class WorkshopsController extends AppController
         return $preparedType;
     }
 
-    private function prepareUserWorkshopActions()
+    private function prepareUserWorkshopActions(): Workshop
     {
         if (! $this->isLoggedIn()) {
             throw new NotFoundException('nicht eingeloggt');
@@ -1019,12 +1028,12 @@ class WorkshopsController extends AppController
         return $workshop;
     }
 
-    public function userApprove()
+    public function userApprove(): void
     {
         $type = $this->request->getParam('pass')[0];
         $preparedType = $this->checkType($type);
         $workshop = $this->prepareUserWorkshopActions();
-        $userEntity = $this->getUserEntity($preparedType['pluralized'], $workshop);
+        $userEntity = $this->getUserEntity($workshop);
         $query = 'UPDATE ' . $preparedType['pluralized'] . '_workshops SET approved = NOW() WHERE workshop_uid = :workshopUid AND ' . $type . '_uid = :typeUid;';
         $params = [
             'workshopUid' => $workshop->uid,
@@ -1050,25 +1059,25 @@ class WorkshopsController extends AppController
         $this->redirect($this->referer());
     }
 
-    public function userRefuse()
+    public function userRefuse(): void
     {
         $preparedType = $this->checkType($this->request->getParam('pass')[0]);
         $workshop = $this->userDelete($this->request->getParam('pass')[0]);
-        $userEntity = $this->getUserEntity($preparedType['pluralized'], $workshop);
+        $userEntity = $this->getUserEntity($workshop);
         $this->AppFlash->setFlashMessage(str_replace('%name%', $userEntity->name, $preparedType['refuseMessage']));
         $this->redirect($this->referer());
     }
 
-    public function userResign()
+    public function userResign(): void
     {
         $preparedType = $this->checkType($this->request->getParam('pass')[0]);
         $workshop = $this->userDelete($this->request->getParam('pass')[0]);
-        $userEntity = $this->getUserEntity($preparedType['pluralized'], $workshop);
+        $userEntity = $this->getUserEntity($workshop);
         $this->AppFlash->setFlashMessage(str_replace('%name%', $userEntity->name, $preparedType['resignMessage']));
         $this->redirect($this->referer());
     }
 
-    public function userDelete($type)
+    public function userDelete($type): Workshop
     {
         $preparedType = $this->checkType($type);
         $workshop = $this->prepareUserWorkshopActions();
@@ -1082,14 +1091,12 @@ class WorkshopsController extends AppController
         return $workshop;
     }
 
-    private function getUserEntity($type, $workshop)
+    private function getUserEntity($workshop): User
     {
-        if ($type == 'users') {
-            return $workshop->$type[0];
-        }
+        return $workshop->users[0];
     }
 
-    public function apply($relationModel, $relationTable, $foreignKey, $model, $userUid, $filterCondition)
+    public function apply($relationTable, $foreignKey, $model, $userUid): void
     {
         if (! empty($this->request->getData())) {
 
@@ -1194,16 +1201,13 @@ class WorkshopsController extends AppController
         $this->set('workshopsForDropdown', $workshopsForDropdown);
     }
 
-    public function applyAsUser()
+    public function applyAsUser(): void
     {
 
         $metaTags = [
             'title' => 'Mitmachen'
         ];
         $this->set('metaTags', $metaTags);
-        $filterCondition = [
-            'UsersWorkshops.user_uid' => $this->isLoggedIn() ? $this->loggedUser->uid : 0
-        ];
 
         // admins can apply in the name of another user
         $userUid = $this->isLoggedIn() ? $this->loggedUser->uid : 0;
@@ -1211,7 +1215,7 @@ class WorkshopsController extends AppController
             $userUid = $this->request->getData('users_workshops.user_uid');
         }
 
-        $this->apply('UsersWorkshops', 'users_workshops', 'user_uid', 'Users', $userUid, $filterCondition);
+        $this->apply('users_workshops', 'user_uid', 'Users', $userUid);
 
         if ($this->isAdmin()) {
             $this->User = $this->getTableLocator()->get('Users');
@@ -1220,7 +1224,7 @@ class WorkshopsController extends AppController
 
     }
 
-    public function verwalten()
+    public function verwalten(): void
     {
         $workshopsTable = $this->getTableLocator()->get('Workshops');
         if ($this->isAdmin()) {
@@ -1246,7 +1250,8 @@ class WorkshopsController extends AppController
 
     }
 
-    public function ajaxGetWorkshopDetail($workshopUid) {
+    public function ajaxGetWorkshopDetail($workshopUid): void
+    {
 
         if (!$this->request->is('ajax')) {
             throw new ForbiddenException();
@@ -1274,7 +1279,8 @@ class WorkshopsController extends AppController
 
     }
 
-    public function all() {
+    public function all(): void
+    {
 
         $metaTags = Configure::read('AppConfig.metaTags.' . $this->request->getParam('controller') . '.' . $this->request->getParam('action'));
         $metaTags['keywords'] = Configure::read('AppConfig.platformName') . ', ' . $metaTags['keywords'];

@@ -18,7 +18,7 @@ class InfoSheetsController extends AdminAppController
         $this->InfoSheet = $this->getTableLocator()->get('InfoSheets');
     }
 
-    public function beforeFilter(EventInterface $event)
+    public function beforeFilter(EventInterface $event): void
     {
 
         $this->addSearchOptions(array(
@@ -36,7 +36,7 @@ class InfoSheetsController extends AdminAppController
         parent::beforeFilter($event);
     }
 
-    public function index()
+    public function index(): void
     {
         parent::index();
 

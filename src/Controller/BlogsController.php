@@ -28,7 +28,7 @@ class BlogsController extends AppController
         $this->addViewClasses([RssView::class]);
     }
 
-    public function beforeFilter(EventInterface $event)
+    public function beforeFilter(EventInterface $event): void
     {
         parent::beforeFilter($event);
         $this->Authentication->allowUnauthenticated([
@@ -37,7 +37,7 @@ class BlogsController extends AppController
         ]);
     }
 
-    public function feed()
+    public function feed(): void
     {
 
         $this->request->addDetector(
@@ -89,7 +89,7 @@ class BlogsController extends AppController
 
     }
 
-    private function preparePostsForFeed($posts)
+    private function preparePostsForFeed($posts): array
     {
         $items = [];
         foreach ($posts as $post) {
@@ -123,10 +123,10 @@ class BlogsController extends AppController
         
             $items[] = $preparedItem;
         }
-        return $items;        
+        return $items;
     }
 
-    public function detail()
+    public function detail(): void
     {
         if (empty($this->request->getParam('blogUrl'))) {
             throw new NotFoundException('page not found');

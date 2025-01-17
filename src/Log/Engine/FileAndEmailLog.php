@@ -20,7 +20,7 @@ class FileAndEmailLog extends FileLog
         }
     }
 
-    private function sendEmailWithErrorInformation($message)
+    private function sendEmailWithErrorInformation($message): bool
     {
 
         $ignoredExceptionsRegex = [
@@ -59,6 +59,8 @@ class FileAndEmailLog extends FileLog
         } catch (SocketException $e) {
             return false;
         }
+
+        return true;
 
     }
 

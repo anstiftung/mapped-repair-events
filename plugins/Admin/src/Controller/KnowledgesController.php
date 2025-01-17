@@ -13,7 +13,7 @@ class KnowledgesController extends AdminAppController
     public CategoriesTable $Category;
     public SkillsTable $Skill;
 
-    public function insert()
+    public function insert(): void
     {
         $knowledge = [
             'name' => 'Neuer Reparaturwissens-Beitrag von ' . $this->loggedUser->name,
@@ -25,7 +25,7 @@ class KnowledgesController extends AdminAppController
         $this->redirect($this->getReferer());
     }
 
-    public function edit($uid)
+    public function edit($uid): void
     {
 
         if (empty($uid)) {
@@ -98,7 +98,7 @@ class KnowledgesController extends AdminAppController
 
     }
 
-    public function index()
+    public function index(): void
     {
         parent::index();
 

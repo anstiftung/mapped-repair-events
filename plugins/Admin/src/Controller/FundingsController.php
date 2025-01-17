@@ -10,6 +10,7 @@ use Cake\I18n\DateTime;
 use App\Services\PdfWriter\FoerderantragPdfWriterService;
 use League\Csv\Writer;
 use App\Model\Entity\Funding;
+use Cake\Http\Response;
 
 class FundingsController extends AdminAppController
 {
@@ -19,7 +20,8 @@ class FundingsController extends AdminAppController
     public bool $searchUid = false;
     public bool $searchStatus = false;
 
-    public function beforeFilter(EventInterface $event) {
+    public function beforeFilter(EventInterface $event): void
+    {
         $this->addSearchOptions([
             'Workshops.name' => [
                 'name' => 'Workshops.name',
@@ -35,19 +37,22 @@ class FundingsController extends AdminAppController
         parent::beforeFilter($event);
     }
 
-    public function foerderbewilligungPdf($fundingUid) {
+    public function foerderbewilligungPdf($fundingUid): void
+    {
         $pdfWriterService = new FoerderbewilligungPdfWriterService();
         $pdfWriterService->prepareAndSetData($fundingUid, DateTime::now());
         die($pdfWriterService->writeInline());
     }
 
-    public function foerderantragPdf($fundingUid) {
+    public function foerderantragPdf($fundingUid): void
+    {
         $pdfWriterService = new FoerderantragPdfWriterService();
         $pdfWriterService->prepareAndSetData($fundingUid, DateTime::now());
         die($pdfWriterService->writeInline());
     }
 
-    public function bankExport() {
+    public function bankExport(): Response
+    {
 
         $this->disableAutoRender();
         $fundingsTable = $this->getTableLocator()->get('Fundings');
@@ -124,7 +129,8 @@ class FundingsController extends AdminAppController
 
     }
 
-    private function getCsvHeader() {
+    private function getCsvHeader(): array
+    {
         return [
             'Währung',
             'VorzBetrag',
@@ -160,7 +166,7 @@ class FundingsController extends AdminAppController
         ];
     }
     
-    public function edit($uid)
+    public function edit($uid): void
     {
 
         if (empty($uid)) {
@@ -224,7 +230,8 @@ class FundingsController extends AdminAppController
         $this->set('funding', $funding);
     }
 
-    private function sendEmails($funding) {
+    private function sendEmails($funding): void
+    {
         $email = new AppMailer();
         if ($funding->isDirty('freistellungsbescheid_status')) {
             $email->viewBuilder()->setTemplate('fundings/freistellungsbescheid_status_changed');
@@ -261,7 +268,7 @@ class FundingsController extends AdminAppController
 
     }
 
-    public function index()
+    public function index(): void
     {
         parent::index();
 

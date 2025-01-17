@@ -4,6 +4,7 @@ namespace App\Controller\Component;
 
 use Cake\Controller\Component; // for unit tests
 use Cake\Core\Configure;
+use ArrayObject;
 
 class StringComponent extends Component
 {
@@ -22,7 +23,7 @@ class StringComponent extends Component
         return preg_replace('/^([\d]+)-(.*)$/', '$2', $string);
     }
 
-    public static function cleanAllStringsInData(array $data): array
+    public static function cleanAllStringsInData(array|ArrayObject $data): array|ArrayObject
     {
         foreach ($data as $key => $value) {
             if (is_string($value)) {
@@ -67,9 +68,7 @@ class StringComponent extends Component
 
     public static function prepareTextPreview(string $text): string
     {
-        if (!is_null($text)) {
-            $text = strip_tags($text, '<ul><li><p><b><a><h2><strong>');
-        }
+        $text = strip_tags($text, '<ul><li><p><b><a><h2><strong>');
         return $text;
     }
 
@@ -90,7 +89,7 @@ class StringComponent extends Component
     {
 
         if (is_null($str)) {
-            return $str;
+            return '';
         }
 
         // See if there is already a "rel" attribute
@@ -175,10 +174,6 @@ class StringComponent extends Component
 
     public static function cutHtmlString(string $text, int $length = 100, string $ending = '...', bool $exact = false, bool $considerHtml = true): string
     {
-
-        if (is_null($text)) {
-            return '';
-        }
 
         if ($considerHtml) {
             // if the plain text is shorter than the maximum length, return the whole text

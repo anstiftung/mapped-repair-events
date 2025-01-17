@@ -108,31 +108,27 @@ class User extends Entity implements IdentityInterface
 
     }
 
-    public function revertPrivatizeData()
+    public function revertPrivatizeData(): void
     {
         foreach($this->extractOriginalChanged($this->getVisible()) as $property => $value) {
             $this->$property = $value;
         }
     }
 
-    public function privatizeData(&$user)
+    public function privatizeData(&$user): void
     {
-
-        if (is_null($user->private)) {
-            return;
-        }
-
-        $privateFields = explode(',',  $user->private);
-        $privateFields = str_replace('-', '_', $privateFields);
-        foreach($user->getVisible() as $property) {
-            if (in_array($property, $privateFields)) {
-                $user->$property = null;
+        if (!is_null($user->private)) {
+            $privateFields = explode(',',  $user->private);
+            $privateFields = str_replace('-', '_', $privateFields);
+            foreach($user->getVisible() as $property) {
+                if (in_array($property, $privateFields)) {
+                    $user->$property = null;
+                }
             }
         }
-
     }
 
-    protected function _getName()
+    protected function _getName(): string
     {
         $names = [];
         if (isset($this->_fields['firstname'])) {
@@ -144,11 +140,12 @@ class User extends Entity implements IdentityInterface
         return join(' ', $names);
     }
 
-    protected function _setPassword($password)
+    protected function _setPassword($password): string
     {
         if (strlen($password) > 0) {
             return (new DefaultPasswordHasher)->hash($password);
         }
+        return '';
     }
 
     protected array $_hidden = [

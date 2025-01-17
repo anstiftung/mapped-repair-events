@@ -18,7 +18,8 @@ class CommonComponent extends AppComponent {
      * For this helper the controller has to be passed as reference
      * for manual startup with $disableStartup = true (requires this to be called prior to any other method)
      */
-    public function startup(EventInterface $event) {
+    public function startup(EventInterface $event): void
+    {
 
         $request = $this->controller->getRequest();
 
@@ -48,18 +49,17 @@ class CommonComponent extends AppComponent {
             }
         }
 
-        if ($request === $this->controller->getRequest()) {
-            return;
+        if ($request !== $this->controller->getRequest()) {
+            $this->controller->setRequest($request);
         }
-
-        $this->controller->setRequest($request);
 
     }
 
     /**
      * Trim and sanitize recursively
      */
-    private function trimAndSanitizeDeep($value, $transformNullToString = false) {
+    private function trimAndSanitizeDeep($value, $transformNullToString = false): mixed
+    {
 
         // Laminas\Diactoros\UploadedFile
         if (is_object($value)) {

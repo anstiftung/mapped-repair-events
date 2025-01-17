@@ -13,6 +13,7 @@ use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use Cake\Http\Exception\NotFoundException;
 use League\Csv\Writer;
+use Cake\Http\Response;
 
 class InfoSheetsController extends AppController
 {
@@ -24,13 +25,14 @@ class InfoSheetsController extends AppController
     public BrandsTable $Brand;
     public FormFieldsTable $FormField;
     
-    public function beforeFilter(EventInterface $event) {
+    public function beforeFilter(EventInterface $event): void
+    {
 
         parent::beforeFilter($event);
         $this->InfoSheet = $this->getTableLocator()->get('InfoSheets');
     }
 
-    public function fullDownload($date=null)
+    public function fullDownload($date=null): Response
     {
 
         $query = file_get_contents(ROOT . DS . 'config' . DS. 'sql' . DS . 'info-sheets-full-download.sql');
@@ -69,7 +71,8 @@ class InfoSheetsController extends AppController
 
     }
 
-    public function download($workshopUid, $year=null) {
+    public function download($workshopUid, $year=null): Response
+    {
 
         $this->Workshop = $this->getTableLocator()->get('Workshops');
         $workshop = $this->Workshop->find('all', conditions: [
@@ -116,7 +119,7 @@ class InfoSheetsController extends AppController
         return $response;
     }
 
-    public function delete($infoSheetUid)
+    public function delete($infoSheetUid): void
     {
         if ($infoSheetUid === null) {
             throw new NotFoundException;
@@ -146,7 +149,7 @@ class InfoSheetsController extends AppController
 
     }
 
-    public function add($eventUid)
+    public function add($eventUid): void
     {
 
         if ($eventUid === null) {
@@ -186,7 +189,7 @@ class InfoSheetsController extends AppController
         }
     }
 
-    public function edit($infoSheetUid)
+    public function edit($infoSheetUid): void
     {
 
         if ($infoSheetUid === null) {
@@ -232,7 +235,7 @@ class InfoSheetsController extends AppController
         $this->_edit($infoSheet, true);
     }
 
-    private function _edit($infoSheet, $isEditMode)
+    private function _edit($infoSheet, $isEditMode): void
     {
 
         $this->set('uid', $infoSheet->uid);

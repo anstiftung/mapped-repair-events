@@ -7,7 +7,7 @@ use Cake\Event\EventInterface;
 class QueuedJobsController extends AdminAppController
 {
 
-    public function beforeFilter(EventInterface $event)
+    public function beforeFilter(EventInterface $event): void
     {
 
         $this->searchUid = false;
@@ -25,7 +25,7 @@ class QueuedJobsController extends AdminAppController
         parent::beforeFilter($event);
     }
 
-    public function index()
+    public function index(): void
     {
         parent::index();
         $queuedJobsTable = $this->getTableLocator()->get('QueuedJobs');

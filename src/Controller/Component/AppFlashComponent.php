@@ -7,7 +7,7 @@ use Cake\Controller\Component\FlashComponent;
 class AppFlashComponent extends FlashComponent
 {
 
-    public function setFlashMessage($message)
+    public function setFlashMessage($message): void
     {
         $this->set($message, [
             'element' => 'default',
@@ -17,7 +17,7 @@ class AppFlashComponent extends FlashComponent
         ]);
     }
 
-    public function setFlashError($message)
+    public function setFlashError($message): void
     {
         $this->set($message, [
             'element' => 'default',

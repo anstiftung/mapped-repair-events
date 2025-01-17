@@ -22,10 +22,10 @@ class PagesTable extends AppTable
         $this->addBehavior('Tree');
     }
 
-    public function getPageByName($name): Page
+    public function getPageByName($name): ?Page
     {
         $page = $this->find('all', conditions: [
-            'Pages.name' => $name
+            'Pages.name' => $name,
         ])->first();
         return $page;
     }

@@ -11,7 +11,7 @@ class SkillsController extends AdminAppController
 
     public SkillsTable $Skill;
     
-    public function beforeFilter(EventInterface $event)
+    public function beforeFilter(EventInterface $event): void
     {
         $this->searchUid = false;
         $this->searchText = false;
@@ -24,7 +24,7 @@ class SkillsController extends AdminAppController
         $this->Skill = $this->getTableLocator()->get('Skills');
     }
 
-    public function insert()
+    public function insert(): void
     {
         $skill = [
             'name' => 'Neue Kenntnis',
@@ -37,7 +37,7 @@ class SkillsController extends AdminAppController
         $this->redirect($this->getReferer());
     }
 
-    public function edit($id)
+    public function edit($id): void
     {
 
         if (empty($id)) {
@@ -79,7 +79,7 @@ class SkillsController extends AdminAppController
 
     }
 
-    public function index()
+    public function index(): void
     {
         parent::index();
 

@@ -8,7 +8,7 @@ use Cake\View\JsonView;
 class DetectsController extends AppController
 {
 
-    public function beforeFilter(EventInterface $event)
+    public function beforeFilter(EventInterface $event): void
     {
         parent::beforeFilter($event);
         $this->Authentication->allowUnauthenticated([
@@ -22,7 +22,7 @@ class DetectsController extends AppController
         $this->addViewClasses([JsonView::class]);
     }
 
-    public function setIsMobile()
+    public function setIsMobile(): void
     {
         $this->request = $this->request->withParam('_ext', 'json');
         $isMobile = $this->request->getData('width') < 768;

@@ -18,7 +18,7 @@ class EventsController extends AdminAppController
         $this->Event = $this->getTableLocator()->get('Events');
     }
 
-    public function beforeFilter(EventInterface $event)
+    public function beforeFilter(EventInterface $event): void
     {
 
         $this->searchText = false;
@@ -51,7 +51,7 @@ class EventsController extends AdminAppController
         parent::beforeFilter($event);
     }
 
-    public function index()
+    public function index(): void
     {
         parent::index();
 

@@ -15,7 +15,7 @@ class SitemapsController extends AppController
     public PostsTable $Post;
     public PagesTable $Page;
     
-    public function beforeFilter(EventInterface $event)
+    public function beforeFilter(EventInterface $event): void
     {
         parent::beforeFilter($event);
         $this->Authentication->allowUnauthenticated([
@@ -29,7 +29,7 @@ class SitemapsController extends AppController
         $this->addViewClasses([XmlView::class]);
     }
 
-    public function index()
+    public function index(): void
     {
 
         $this->request = $this->request->withParam('_ext', 'xml');

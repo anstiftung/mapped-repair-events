@@ -13,6 +13,7 @@ class WorkshopsFixture extends AppFixture
             'url' => 'test-workshop',
             'email' => 'test-workshop@mailinator.com',
             'owner' => 1,
+            'text' => 'Test Workshop Text',
             'city' => 'Berlin',
             'zip' => '10115',
             'country_code' => 'DE',

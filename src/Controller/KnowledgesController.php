@@ -20,7 +20,7 @@ class KnowledgesController extends AppController
         $this->Knowledge = $this->getTableLocator()->get('Knowledges');
     }
 
-    public function beforeFilter(EventInterface $event)
+    public function beforeFilter(EventInterface $event): void
     {
         parent::beforeFilter($event);
         $this->Authentication->allowUnauthenticated([
@@ -28,7 +28,7 @@ class KnowledgesController extends AppController
         ]);
     }
 
-    public function all()
+    public function all(): void
     {
 
         $knowledges = $this->Knowledge->find('all',

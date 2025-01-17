@@ -23,13 +23,15 @@ use App\Model\Entity\Worknews;
 use App\Mailer\AppMailer;
 use App\Model\Table\EventsTable;
 use Cake\Database\Query;
+use Cake\Http\Response;
 
 class EventsController extends AppController
 {
 
     public EventsTable $Event;
 
-    public function beforeFilter(EventInterface $event) {
+    public function beforeFilter(EventInterface $event): void
+    {
 
         parent::beforeFilter($event);
         $this->Event = $this->getTableLocator()->get('Events');
@@ -55,7 +57,7 @@ class EventsController extends AppController
     
     }
 
-    public function ical()
+    public function ical(): Response
     {
 
         if ($this->request->getParam('_ext') != 'ics') {
@@ -158,7 +160,7 @@ class EventsController extends AppController
 
     }
 
-    public function myEvents()
+    public function myEvents(): void
     {
 
         $hasEditEventPermissions = $this->isAdmin() || $this->isOrga();
@@ -232,7 +234,7 @@ class EventsController extends AppController
 
     }
 
-    public function feed()
+    public function feed(): void
     {
 
         $this->Event = $this->getTableLocator()->get('Events');
@@ -253,7 +255,7 @@ class EventsController extends AppController
 
     }
 
-    public function delete($eventUid)
+    public function delete($eventUid): void
     {
         if ($eventUid === null) {
             throw new NotFoundException;
@@ -317,7 +319,7 @@ class EventsController extends AppController
 
     }
 
-    public function add($preselectedWorkshopUid)
+    public function add($preselectedWorkshopUid): void
     {
 
         $event = $this->Event->newEntity(
@@ -351,7 +353,8 @@ class EventsController extends AppController
         }
     }
 
-    public function duplicate($eventUid) {
+    public function duplicate($eventUid): void
+    {
         $event = $this->Event->find('all',
             conditions: [
                 'Events.uid' => $eventUid,
@@ -375,7 +378,7 @@ class EventsController extends AppController
         $this->render('edit');
     }
 
-    public function edit($eventUid)
+    public function edit($eventUid): void
     {
 
         if ($eventUid === null) {
@@ -427,7 +430,7 @@ class EventsController extends AppController
         }
     }
 
-    private function _edit($events, $isEditMode)
+    private function _edit($events, $isEditMode): array
     {
         $categoriesTable = $this->getTableLocator()->get('Categories');
         $this->set('categories', $categoriesTable->getForDropdown(APP_ON));
@@ -526,7 +529,7 @@ class EventsController extends AppController
 
     }
 
-    public function ajaxGetAllEventsForMap()
+    public function ajaxGetAllEventsForMap(): void
     {
 
         if (!$this->request->is('ajax')) {
@@ -580,7 +583,7 @@ class EventsController extends AppController
         $this->viewBuilder()->setOption('serialize', ['status', 'message', 'events']);
     }
 
-    public function all()
+    public function all(): void
     {
 
         $metaTags = Configure::read('AppConfig.metaTags.' . $this->request->getParam('controller') . '.' . $this->request->getParam('action'));
@@ -766,7 +769,7 @@ class EventsController extends AppController
     /**
      * combines multiple events to one marker
      */
-    private function combineEventsForMap($events)
+    private function combineEventsForMap($events): array
     {
         $eventsForMap1 = [];
 

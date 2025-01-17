@@ -29,7 +29,7 @@ use Cake\Event\EventInterface;
 class PagesController extends AppController
 {
 
-    public function beforeFilter(EventInterface $event)
+    public function beforeFilter(EventInterface $event): void
     {
         parent::beforeFilter($event);
         $this->Authentication->allowUnauthenticated([
@@ -37,7 +37,7 @@ class PagesController extends AppController
         ]);
     }
 
-    public function detail()
+    public function detail(): void
     {
 
         if (! isset($this->request->getParam('pass')['0'])) {

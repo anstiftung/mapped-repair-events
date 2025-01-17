@@ -16,7 +16,7 @@ class BrandsController extends AdminAppController
         $this->Brand = $this->getTableLocator()->get('Brands');
     }
 
-    public function insert()
+    public function insert(): void
     {
         $brand = [
             'name' => 'Neue Marke',
@@ -29,7 +29,7 @@ class BrandsController extends AdminAppController
         $this->redirect($this->getReferer());
     }
 
-    public function edit($id)
+    public function edit($id): void
     {
 
         if (empty($id)) {
@@ -71,7 +71,7 @@ class BrandsController extends AdminAppController
 
     }
 
-    public function index()
+    public function index(): void
     {
         parent::index();
 

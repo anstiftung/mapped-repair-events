@@ -13,7 +13,7 @@ class PostsController extends AppController
 
     public PostsTable $Post;
     
-    public function beforeFilter(EventInterface $event)
+    public function beforeFilter(EventInterface $event): void
     {
         parent::beforeFilter($event);
         $this->Authentication->allowUnauthenticated([
@@ -28,7 +28,7 @@ class PostsController extends AppController
         $this->addViewClasses([JsonView::class]);
     }
 
-    public function getSplitter()
+    public function getSplitter(): void
     {
         $this->request = $this->request->withParam('_ext', 'json');
         $dir = new \DirectoryIterator(WWW_ROOT . Configure::read('AppConfig.splitterPath'));
@@ -58,7 +58,7 @@ class PostsController extends AppController
 
     }
 
-    public function detail()
+    public function detail(): void
     {
         if (! isset($this->request->getParam('pass')['0'])) {
             throw new NotFoundException('page not found');

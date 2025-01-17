@@ -10,7 +10,7 @@ use Cake\Utility\Hash;
 class UserLinkToWorkshopRule
 {
 
-    public function __invoke(EntityInterface $entity, array $options)
+    public function __invoke(EntityInterface $entity, array $options): bool|string
     {
 
         $userUid = $entity->get('uid');

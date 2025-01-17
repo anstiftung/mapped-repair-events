@@ -28,7 +28,7 @@ class UsersController extends AdminAppController
         $this->Group = $this->getTableLocator()->get('Groups');
     }
 
-    public function beforeFilter(EventInterface $event)
+    public function beforeFilter(EventInterface $event): void
     {
 
         $this->addSearchOptions([
@@ -66,7 +66,7 @@ class UsersController extends AdminAppController
 
     }
 
-    public function index()
+    public function index(): void
     {
         parent::index();
 

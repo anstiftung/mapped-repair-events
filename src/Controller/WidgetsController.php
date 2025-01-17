@@ -21,7 +21,8 @@ class WidgetsController extends AppController
     public ThirdPartyStatisticsTable $ThirdPartyStatistic;
     public WorkshopsTable $Workshop;
 
-    public function beforeFilter(EventInterface $event) {
+    public function beforeFilter(EventInterface $event): void
+    {
 
         parent::beforeFilter($event);
         $this->Authentication->allowUnauthenticated([
@@ -34,12 +35,12 @@ class WidgetsController extends AppController
 
     }
 
-    public function integration()
+    public function integration(): void
     {
         $this->set('metaTags', ['title' => 'Widgets Integration']);
     }
 
-    public function events()
+    public function events(): void
     {
         $this->viewBuilder()->setLayout('widget');
 
@@ -65,7 +66,7 @@ class WidgetsController extends AppController
 
     }
 
-    public function map()
+    public function map(): void
     {
 
         $this->viewBuilder()->setLayout('widget');
@@ -167,7 +168,7 @@ class WidgetsController extends AppController
 
     }
 
-    public function statisticsGlobal()
+    public function statisticsGlobal(): void
     {
         $this->viewBuilder()->setLayout('widget');
         $this->parseStatisticsParams();
@@ -211,7 +212,7 @@ class WidgetsController extends AppController
 
     }
 
-    public function statisticsWorkshop($workshopUid)
+    public function statisticsWorkshop($workshopUid): void
     {
 
         $this->parseStatisticsParams();
@@ -275,7 +276,7 @@ class WidgetsController extends AppController
         $borderColorOk,
         $borderColorRepairable,
         $borderColorNotOk
-        )
+        ): void
     {
 
         $this->InfoSheet = $this->getTableLocator()->get('InfoSheets');
@@ -350,7 +351,7 @@ class WidgetsController extends AppController
         $borderColorOk,
         $borderColorRepairable,
         $borderColorNotOk
-        )
+        ): void
     {
 
         $this->InfoSheet = $this->getTableLocator()->get('InfoSheets');
@@ -378,7 +379,7 @@ class WidgetsController extends AppController
 
     }
 
-    private function parseStatisticsWorkshopParams()
+    private function parseStatisticsWorkshopParams(): void
     {
         $dateFrom = '01.01.2010';
         if (!empty($this->request->getQuery('dateTo') && Configure::read('AppConfig.timeHelper')->validateDate($this->request->getQuery('dateFrom')))) {
@@ -406,7 +407,7 @@ class WidgetsController extends AppController
 
     }
 
-    private function parseStatisticsGlobalParams()
+    private function parseStatisticsGlobalParams(): void
     {
 
         $dataSources = [
@@ -451,7 +452,7 @@ class WidgetsController extends AppController
 
     }
 
-    private function parseStatisticsParams()
+    private function parseStatisticsParams(): void
     {
 
         $showDonutChart = true;
@@ -504,7 +505,7 @@ class WidgetsController extends AppController
 
     }
 
-    private function getDateFromByMonthAndYear($month, $year)
+    private function getDateFromByMonthAndYear($month, $year): array
     {
         $yearTo = $year;
         if (is_array($year) && isset($year['year'])) {
@@ -541,7 +542,7 @@ class WidgetsController extends AppController
         $borderColorRepairable,
         $borderColorNotOk,
         $dataSource
-        )
+        ): void
     {
 
         $dates = $this->getDateFromByMonthAndYear($month, $year);
@@ -676,7 +677,7 @@ class WidgetsController extends AppController
         $borderColorOk,
         $borderColorRepairable,
         $borderColorNotOk
-        )
+        ): void
     {
 
         $dates = $this->getDateFromByMonthAndYear($month, $year);
@@ -707,17 +708,18 @@ class WidgetsController extends AppController
 
     }
 
-    private function setDonutChartHasData($statisticsData)
+    private function setDonutChartHasData($statisticsData): void
     {
         $this->set('chartHasData', $statisticsData['data'][0] > 0 || $statisticsData['data'][1] > 0);
     }
 
-    private function setBarChartHasData($statisticsData)
+    private function setBarChartHasData($statisticsData): void
     {
         $this->set('chartHasData', !empty($statisticsData['datasets'][0]['data']) || !empty($statisticsData['datasets'][1]['data']));
     }
 
-    private function validateHtmlColor($color): false|string {
+    private function validateHtmlColor($color): false|string
+    {
 
         $namedColors = array('aliceblue', 'antiquewhite', 'aqua', 'aquamarine', 'azure', 'beige', 'bisque', 'black', 'blanchedalmond', 'blue', 'blueviolet', 'brown', 'burlywood', 'cadetblue', 'chartreuse', 'chocolate', 'coral', 'cornflowerblue', 'cornsilk', 'crimson', 'cyan', 'darkblue', 'darkcyan', 'darkgoldenrod', 'darkgray', 'darkgreen', 'darkkhaki', 'darkmagenta', 'darkolivegreen', 'darkorange', 'darkorchid', 'darkred', 'darksalmon', 'darkseagreen', 'darkslateblue', 'darkslategray', 'darkturquoise', 'darkviolet', 'deeppink', 'deepskyblue', 'dimgray', 'dodgerblue', 'firebrick', 'floralwhite', 'forestgreen', 'fuchsia', 'gainsboro', 'ghostwhite', 'gold', 'goldenrod', 'gray', 'green', 'greenyellow', 'honeydew', 'hotpink', 'indianred', 'indigo', 'ivory', 'khaki', 'lavender', 'lavenderblush', 'lawngreen', 'lemonchiffon', 'lightblue', 'lightcoral', 'lightcyan', 'lightgoldenrodyellow', 'lightgreen', 'lightgrey', 'lightpink', 'lightsalmon', 'lightseagreen', 'lightskyblue', 'lightslategray', 'lightsteelblue', 'lightyellow', 'lime', 'limegreen', 'linen', 'magenta', 'maroon', 'mediumaquamarine', 'mediumblue', 'mediumorchid', 'mediumpurple', 'mediumseagreen', 'mediumslateblue', 'mediumspringgreen', 'mediumturquoise', 'mediumvioletred', 'midnightblue', 'mintcream', 'mistyrose', 'moccasin', 'navajowhite', 'navy', 'oldlace', 'olive', 'olivedrab', 'orange', 'orangered', 'orchid', 'palegoldenrod', 'palegreen', 'paleturquoise', 'palevioletred', 'papayawhip', 'peachpuff', 'peru', 'pink', 'plum', 'powderblue', 'purple', 'red', 'rosybrown', 'royalblue', 'saddlebrown', 'salmon', 'sandybrown', 'seagreen', 'seashell', 'sienna', 'silver', 'skyblue', 'slateblue', 'slategray', 'snow', 'springgreen', 'steelblue', 'tan', 'teal', 'thistle', 'tomato', 'turquoise', 'violet', 'wheat', 'white', 'whitesmoke', 'yellow', 'yellowgreen');
         if (in_array($color, $namedColors)) {

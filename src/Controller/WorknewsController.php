@@ -13,17 +13,17 @@ class WorknewsController extends AppController {
 
     public WorknewsTable $Worknews;
 
-    public function beforeFilter(EventInterface $event) {
-
+    public function beforeFilter(EventInterface $event): void
+    {
         parent::beforeFilter($event);
         $this->Authentication->allowUnauthenticated([
             'worknewsActivate',
             'worknewsUnsubscribe'
         ]);
-
     }
 
-    public function worknewsActivate() {
+    public function worknewsActivate(): null
+    {
 
         if (empty($this->request->getParam('pass')['0'])) {
             throw new NotFoundException('param not found');
@@ -42,7 +42,7 @@ class WorknewsController extends AppController {
         if (empty($worknews)) {
             $this->AppFlash->setFlashError(__('Invalid activation code.'));
             $this->redirect('/');
-            return;
+            return null;
         }
 
         $this->Worknews->save(
@@ -57,10 +57,12 @@ class WorknewsController extends AppController {
         $this->AppFlash->setFlashMessage(__('Your subscription is activated!'));
 
         $this->redirect($worknews->workshop->url);
+        return null;
 
     }
 
-    public function worknewsUnsubscribe() {
+    public function worknewsUnsubscribe(): void
+    {
 
         if (empty($this->request->getParam('pass')['0'])) {
             throw new NotFoundException('param not found');
