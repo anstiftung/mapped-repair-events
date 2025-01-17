@@ -12,7 +12,7 @@ echo $this->element('list',
         'emailFields' => [
             [
                 'label' => 'Träger',
-                'field' => 'fundingsupporter.email',
+                'field' => 'fundingsupporter.contact_email',
             ],
             [
                 'label' => 'Owner',
