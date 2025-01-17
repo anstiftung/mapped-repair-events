@@ -100,9 +100,9 @@ div.admin div.list a.new-link {
 }
 
 div.admin div.list a.email-link {
-    position: absolute;
-    top: -25px;
-    right: 35px;
+    float: right;
+    margin-bottom: 5px;
+    margin-left: 5px;
 }
 
 div.admin div.list div.pagination {

@@ -13,6 +13,12 @@ echo $this->element('list'
             'optionalSearchForms' => [
                 ['options' => $workshops, 'value' => 'UsersWorkshops.workshop_uid', 'label' => 'Mitarbeiter'],
             ],
+            'emailFields' => [
+                [
+                    'label' => 'E-Mails',
+                    'field' => 'email',
+                ]
+            ],
             'fields' => [
                 ['name' => 'uid', 'label' => 'UID'],
                 ['name' => 'nick', 'label' => 'Nick'],

@@ -85,14 +85,19 @@ if ($showDeleteLink) {
 
     <?php
     $objects = $objects->toArray();
-     if (isset($objects[0]) && isset($objects[0]['email'])) {
-         $rawEmails = Hash::extract($objects, '{n}.email');
-         $emails = [];
-         foreach($rawEmails as $email) {
-           $emails[] = $email;
-         }
-         echo $this->Html->link('<i class="far fa-envelope fa-border"></i>', 'mailto:'.join(';', $emails), ['escape' => false, 'title' => 'E-Mail an alle in Liste versenden', 'class' => 'email-link']);
-     }
+    if (isset($emailFields) && isset($objects[0])) {
+        foreach($emailFields as $emailField) {
+            $rawEmails = Hash::extract($objects, '{n}.'.$emailField['field']);
+            $rawEmails = array_filter($rawEmails);
+            $emails = [];
+            foreach($rawEmails as $email) {
+              $emails[] = $email;
+            }
+            if (!empty($emails)) {
+                echo $this->Html->link($emailField['label'] .  ' <i class="far fa-envelope fa-border"></i>', 'mailto:'.join(';', $emails), ['escape' => false, 'title' => 'E-Mail an alle in Liste versenden', 'class' => 'email-link']);
+            }
+        }
+    }
     ?>
 
     <?php
