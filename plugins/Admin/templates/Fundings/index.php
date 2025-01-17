@@ -8,7 +8,17 @@ echo $this->element('list',
         'optionalSearchForms' => [
             ['options' => $fundingStatus, 'value' => 'FundingStatus', 'label' => 'Status'],
         ],
-          'fields' => [
+        'emailFields' => [
+            [
+                'label' => 'Träger',
+                'field' => 'fundingsupporter.email',
+            ],
+            [
+                'label' => 'Owner',
+                'field' => 'owner_user.email',
+            ],
+        ],
+        'fields' => [
             ['name' => 'uid', 'label' => 'UID'],
             ['name' => 'workshop.name', 'label' => 'Initiative', 'sortable' => false],
             ['label' => 'AN', 'template' => 'list/fundings/activityProof'],

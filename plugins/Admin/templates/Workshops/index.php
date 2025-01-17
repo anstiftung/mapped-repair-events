@@ -11,7 +11,13 @@ echo $this->element('list', [
           ['options' => $users, 'value' => 'Workshops.owner', 'label' => 'Owner'],
           ['options' => $users, 'value' => 'UsersWorkshops.user_uid', 'label' => 'Mitarbeiter']
       ],
-      'fields' => [
+      'emailFields' => [
+        [
+            'label' => 'E-Mails',
+            'field' => 'email',
+        ]
+    ],
+    'fields' => [
         ['name' => 'uid', 'label' => 'UID'],
         ['name' => 'image', 'label' => 'Bild'],
         ['name' => 'name', 'label' => 'Name'],
