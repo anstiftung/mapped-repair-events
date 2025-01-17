@@ -93,7 +93,7 @@ if ($showDeleteLink) {
               $emails[] = $email;
             }
             if (!empty($emails)) {
-                echo $this->Html->link($emailField['label'] .  ' <i class="far fa-envelope fa-border"></i>', 'mailto:'.join(';', $emails), ['escape' => false, 'title' => 'E-Mail an alle in Liste versenden', 'class' => 'email-link']);
+                echo $this->Html->link($emailField['label'] .  ' (' . count($emails) . 'x) <i class="far fa-envelope fa-border"></i>', 'mailto:'.join(';', $emails), ['escape' => false, 'title' => 'E-Mail an alle in Liste versenden', 'class' => 'email-link']);
             }
         }
     }
