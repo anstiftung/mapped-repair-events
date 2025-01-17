@@ -1,5 +1,7 @@
+<?php
+declare(strict_types=1);
+?>
 <div id="ViewsWrapper">
-
 
 <?php
 echo $this->element('highlightNavi' ,['main' => '']);

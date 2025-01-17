@@ -4,15 +4,12 @@ declare(strict_types=1);
 namespace App\Policy;
 
 use Cake\Http\ServerRequest;
-use Cake\Datasource\FactoryLocator;
 use Authorization\Policy\RequestPolicyInterface;
 use Authorization\Policy\ResultInterface;
+use Cake\ORM\TableRegistry;
 
 class EventsPolicy implements RequestPolicyInterface
 {
-
-    protected $Event;
-    protected $Workshop;
 
     public function canAccess($identity, ServerRequest $request): bool|ResultInterface
     {
@@ -37,9 +34,9 @@ class EventsPolicy implements RequestPolicyInterface
             }
 
             $workshopUid = (int) $request->getParam('pass')[0];
-            $this->Workshop = FactoryLocator::get('Table')->get('Workshops');
-            $workshop = $this->Workshop->getWorkshopForIsUserInOrgaTeamCheck($workshopUid);
-            if ($this->Workshop->isUserInOrgaTeam($identity, $workshop)) {
+            $workshopsTable = TableRegistry::getTableLocator()->get('Workshops');
+            $workshop = $workshopsTable->getWorkshopForIsUserInOrgaTeamCheck($workshopUid);
+            if ($workshopsTable->isUserInOrgaTeam($identity, $workshop)) {
                 return true;
             }
 
@@ -58,8 +55,8 @@ class EventsPolicy implements RequestPolicyInterface
 
             $eventUid = (int) $request->getParam('pass')[0];
 
-            $this->Event = FactoryLocator::get('Table')->get('Events');
-            $event = $this->Event->find('all',
+            $eventsTable = TableRegistry::getTableLocator()->get('Events');
+            $event = $eventsTable->find('all',
                 conditions: [
                     'Events.uid' => $eventUid,
                     'Events.status > ' . APP_DELETED,
@@ -76,9 +73,9 @@ class EventsPolicy implements RequestPolicyInterface
             }
 
             // all approved orgas are allowed to edit their events
-            $this->Workshop = FactoryLocator::get('Table')->get('Workshops');
-            $workshop = $this->Workshop->getWorkshopForIsUserInOrgaTeamCheck($workshopUid);
-            if ($this->Workshop->isUserInOrgaTeam($identity, $workshop)) {
+            $workshopsTable = TableRegistry::getTableLocator()->get('Workshops');
+            $workshop = $workshopsTable->getWorkshopForIsUserInOrgaTeamCheck($workshopUid);
+            if ($workshopsTable->isUserInOrgaTeam($identity, $workshop)) {
                 return true;
             }
 

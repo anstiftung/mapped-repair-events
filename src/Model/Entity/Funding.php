@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
@@ -123,14 +124,15 @@ class Funding extends Entity
     const FIELDS_FUNDINGBUDGETPLAN_LABEL = 'Kostenplan';
     const FIELDS_FUNDING_DATA_CHECKBOXES_LABEL = 'Einverständniserklärungen';
     
-    public static function getRenderedFields($fields, $entityString, $form, $disabled, $entity = null) {
+    public static function getRenderedFields($fields, $entityString, $form, $disabled, $entity = null): string
+    {
         $renderedFields = '';
         $fieldsToBeFormattedWithToDigits = ['amount'];
         foreach($fields as $field) {
             if ($entity !== null && in_array($field['name'], $fieldsToBeFormattedWithToDigits)) {
                 $value = $entity[$field['name']];
                 if ($value !== null) {
-                    $field['options']['value'] = number_format($value, 2, '.', '');
+                    $field['options']['value'] = number_format((float) $value, 2, '.', '');
                 }
             }
             $field['options']['disabled'] = $disabled;
@@ -140,7 +142,8 @@ class Funding extends Entity
         return $renderedFields;
     }
 
-    public function _getBudgetplanTotal() {
+    public function _getBudgetplanTotal(): float
+    {
         $total = 0;
         foreach($this->fundingbudgetplans as $fundingbudgetplan) {
             if ($fundingbudgetplan->is_valid) {
@@ -150,7 +153,8 @@ class Funding extends Entity
         return $total;
     }
 
-    public function _getBudgetplanTotalWithLimit() {
+    public function _getBudgetplanTotalWithLimit(): float
+    {
         $total = $this->budgetplan_total;
         if ($total > self::MAX_FUNDING_SUM) {
             return self::MAX_FUNDING_SUM;
@@ -158,7 +162,8 @@ class Funding extends Entity
         return $total;
     }
 
-    public function _getGroupedValidBudgetplans() {
+    public function _getGroupedValidBudgetplans(): array
+    {
         $result = [];
         foreach($this->fundingbudgetplans as $fundingbudgetplan) {
             if ($fundingbudgetplan->is_valid) {
@@ -168,7 +173,8 @@ class Funding extends Entity
         return $result;
     }
 
-    public function _getGroupedValidBudgetplansTotals() {
+    public function _getGroupedValidBudgetplansTotals(): array
+    {
         $result = [];
         foreach($this->grouped_valid_budgetplans as $typeId => $fundingbudgetplans) {
             $total = 0;
@@ -180,7 +186,8 @@ class Funding extends Entity
         return $result;
     }
 
-    public function _getBudgetplanStatus() {
+    public function _getBudgetplanStatus(): int
+    {
         foreach($this->fundingbudgetplans as $fundingbudgetplan) {
             if ($fundingbudgetplan->is_valid && $fundingbudgetplan->type == Fundingbudgetplan::TYPE_A) {
                 return self::STATUS_DATA_OK;
@@ -189,7 +196,8 @@ class Funding extends Entity
         return self::STATUS_BUDGETPLAN_DATA_MISSING;
     }
 
-    public function _getCheckboxesStatus() {
+    public function _getCheckboxesStatus(): int
+    {
         $checkboxes = array_map(function($checkbox) {
             return $checkbox['name'];
         }, self::FIELDS_FUNDING_DATA_CHECKBOXES);
@@ -203,7 +211,8 @@ class Funding extends Entity
 
     }
 
-    public function _getCheckboxesStatusCssClass() {
+    public function _getCheckboxesStatusCssClass(): string
+    {
         if ($this->checkboxes_status == self::STATUS_CHECKBOXES_MISSING) {
             return 'is-pending';
         }
@@ -213,11 +222,13 @@ class Funding extends Entity
         return '';
     }
 
-    public function _getCheckboxesStatusHumanReadable() {
+    public function _getCheckboxesStatusHumanReadable(): string
+    {
         return self::STATUS_MAPPING[$this->checkboxes_status];
     }
 
-    public function _getBudgetplanStatusCssClass() {
+    public function _getBudgetplanStatusCssClass(): string
+    {
         if ($this->budgetplan_status == self::STATUS_BUDGETPLAN_DATA_MISSING) {
             return 'is-pending';
         }
@@ -227,11 +238,13 @@ class Funding extends Entity
         return '';
     }
 
-    public function _getBudgetplanStatusHumanReadable() {
+    public function _getBudgetplanStatusHumanReadable(): string
+    {
         return self::STATUS_MAPPING[$this->budgetplan_status];
     }
 
-    public function _getActivityProofStatusCssClass() {
+    public function _getActivityProofStatusCssClass(): string
+    {
 
         if (!empty($this->workshop) && !$this->workshop->funding_activity_proof_required) {
             return '';
@@ -239,15 +252,18 @@ class Funding extends Entity
         return $this->getAdminStatusCssClass('activity_proof_status');
     }
 
-    public function _getFreistellungsbescheidStatusCssClass() {
+    public function _getFreistellungsbescheidStatusCssClass(): string
+    {
         return $this->getAdminStatusCssClass('freistellungsbescheid_status');
     }
 
-    public function _getZuwendungsbestaetigungStatusCssClass() {
+    public function _getZuwendungsbestaetigungStatusCssClass(): string
+    {
         return $this->getAdminStatusCssClass('zuwendungsbestaetigung_status');
     }
 
-    private function getAdminStatusCssClass($statusField) {
+    private function getAdminStatusCssClass($statusField): string
+    {
         if ($this->$statusField == self::STATUS_UPLOAD_MISSING) {
             return 'is-missing';
         }
@@ -263,7 +279,8 @@ class Funding extends Entity
         return '';
     }
 
-    public function _getDescriptionStatus() {
+    public function _getDescriptionStatus(): int
+    {
         $length = mb_strlen($this->fundingdata->description);
         $isValid = isset($this->fundingdata->description)
             && $length >= FundingdatasTable::DESCRIPTION_MIN_LENGTH
@@ -274,30 +291,36 @@ class Funding extends Entity
         return self::STATUS_DESCRIPTION_MISSING;
     }
 
-    public function _getDescriptionStatusCssClass() {
+    public function _getDescriptionStatusCssClass(): string
+    {
         if ($this->description_status == self::STATUS_DATA_OK) {
             return 'is-verified';
         }
         return 'is-pending';
     }
 
-    public function _getDescriptionStatusHumanReadable() {
+    public function _getDescriptionStatusHumanReadable(): string
+    {
         return self::STATUS_MAPPING[$this->description_status];
     }
 
-    public function _getActivityProofStatusHumanReadable() {
+    public function _getActivityProofStatusHumanReadable(): string
+    {
         return self::STATUS_MAPPING_UPLOADS[$this->activity_proof_status];
     }
 
-    public function _getFreistellungsbescheidStatusHumanReadable() {
+    public function _getFreistellungsbescheidStatusHumanReadable(): string
+    {
         return self::STATUS_MAPPING_UPLOADS[$this->freistellungsbescheid_status];
     }
 
-    public function _getZuwendungsbestaetigungStatusHumanReadable() {
+    public function _getZuwendungsbestaetigungStatusHumanReadable(): string
+    {
         return self::STATUS_MAPPING_UPLOADS[$this->zuwendungsbestaetigung_status];
     }
 
-    public static function getFieldsCount() {
+    public static function getFieldsCount(): int
+    {
         return count(self::FIELDS_WORKSHOP)
               + count(self::FIELDS_OWNER_USER)
               + count(self::FIELDS_FUNDINGSUPPORTER_ORGANIZATION)
@@ -309,7 +332,8 @@ class Funding extends Entity
               ;
     }
 
-    public function _getUserFieldsVerifiedCount(): int {
+    public function _getUserFieldsVerifiedCount(): int
+    {
         $count = 0;
 
         if ($this->verified_fields !== null) {
@@ -368,7 +392,7 @@ class Funding extends Entity
         return $this->user_fields_verified_count + $this->admin_fields_verified_count;
     }
 
-    public function _getUserFieldsVerified(): int {
+    public function _getUserFieldsVerified(): bool {
         return $this->user_fields_verified_count == $this->user_fields_count;
     }
 

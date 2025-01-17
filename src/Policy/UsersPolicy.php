@@ -18,10 +18,8 @@ class UsersPolicy implements RequestPolicyInterface
             case 'profil':
             case 'welcome':
                 return $identity !== null;
-                break;
             case 'add':
                 return $identity->isAdmin();
-                break;
         }
 
         return true;

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 $options = [];
 if (isset($this->request->getQueryParams()['key-standard']) && isset($this->request->getQueryParams()['val-standard'])) {

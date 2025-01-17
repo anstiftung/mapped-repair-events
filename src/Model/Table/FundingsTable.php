@@ -1,14 +1,16 @@
 <?php
+declare(strict_types=1);
 namespace App\Model\Table;
 
 use Cake\Routing\Router;
 use Cake\Database\Schema\TableSchemaInterface;
-use Cake\Datasource\FactoryLocator;
 use App\Model\Entity\Fundingupload;
 use App\Services\FolderService;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Validation\Validator;
 use Laminas\Diactoros\UploadedFile;
+use Cake\ORM\TableRegistry;
+use App\Model\Entity\Funding;
 
 class FundingsTable extends AppTable
 {
@@ -105,7 +107,7 @@ class FundingsTable extends AppTable
         return $validator;
     }
 
-    public function validateFileTypeAndSize($value, $context)
+    public function validateFileTypeAndSize($value, $context): true|string
     {
         $allowedMimeTypes = ['application/pdf', 'image/jpeg', 'image/png'];
         $maxSize = 5 * 1024 * 1024; // 5 MB in bytes
@@ -135,7 +137,8 @@ class FundingsTable extends AppTable
         return true;
     }
 
-    public function getUnprivatizedFundingWithAllAssociations($fundingUid) {
+    public function getUnprivatizedFundingWithAllAssociations($fundingUid): Funding
+    {
         $funding = $this->find(contain: [
             'Workshops',
             'OwnerUsers',
@@ -152,7 +155,8 @@ class FundingsTable extends AppTable
         return $funding;
     }
 
-    public function deleteCustom($fundingUid) {
+    public function deleteCustom($fundingUid): void
+    {
 
         $funding = $this->find()->where([
             $this->aliasField('uid') => $fundingUid,
@@ -167,10 +171,10 @@ class FundingsTable extends AppTable
         
         $this->delete($funding);
 
-        $fundingsupportersTable = FactoryLocator::get('Table')->get('Fundingsupporters');
+        $fundingsupportersTable = TableRegistry::getTableLocator()->get('Fundingsupporters');
         $fundingsupportersTable->delete($funding->fundingsupporter);
 
-        $fundingdatasTable = FactoryLocator::get('Table')->get('Fundingdatas');
+        $fundingdatasTable = TableRegistry::getTableLocator()->get('Fundingdatas');
         $fundingdatasTable->delete($funding->fundingdata);
 
         // fundinguploads and fundingbudgetplans are deleted automatically by dependent option
@@ -180,7 +184,8 @@ class FundingsTable extends AppTable
 
     }
 
-    public function findOrCreateCustom($workshopUid) {
+    public function findOrCreateCustom($workshopUid): Funding
+    {
 
         $funding = $this->find()->where([
             $this->aliasField('workshop_uid') => $workshopUid,
@@ -189,12 +194,12 @@ class FundingsTable extends AppTable
 
         if (empty($funding)) {
 
-            $fundingsupportersTable = FactoryLocator::get('Table')->get('Fundingsupporters');
+            $fundingsupportersTable = TableRegistry::getTableLocator()->get('Fundingsupporters');
             $fundingsupporterEntity = $fundingsupportersTable->newEmptyEntity();
             $fundingsupporterEntity->name = '';
             $fundingsupporterEntity = $fundingsupportersTable->save($fundingsupporterEntity);
             
-            $fundingdatasTable = FactoryLocator::get('Table')->get('Fundingdatas');
+            $fundingdatasTable = TableRegistry::getTableLocator()->get('Fundingdatas');
             $fundingdataEntity = $fundingdatasTable->newEmptyEntity();
             $fundingdataEntity->description = '';
             $fundingdataEntity = $fundingdatasTable->save($fundingdataEntity);
@@ -210,7 +215,7 @@ class FundingsTable extends AppTable
             $funding = $this->save($newEntity, ['associated' => $associations]);
         }
 
-        $workshopsTable = FactoryLocator::get('Table')->get('Workshops');
+        $workshopsTable = TableRegistry::getTableLocator()->get('Workshops');
         $funding = $this->find()->where([
             $this->aliasField('uid') => $funding->uid,
             $this->aliasField('owner') => Router::getRequest()?->getAttribute('identity')?->uid,
@@ -226,7 +231,7 @@ class FundingsTable extends AppTable
         ])->first();
 
         if (empty($funding->fundingbudgetplans)) {
-            $fundingbudgetplansTable = FactoryLocator::get('Table')->get('Fundingbudgetplans');
+            $fundingbudgetplansTable = TableRegistry::getTableLocator()->get('Fundingbudgetplans');
             $fundingbudgetplanEntities = [];
             for ($i = 0; $i < self::FUNDINGBUDGETPLANS_COUNT; $i++) {
                 $fundingbudgetplanEntity = $fundingbudgetplansTable->newEmptyEntity();

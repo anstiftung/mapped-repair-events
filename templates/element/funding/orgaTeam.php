@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 if (!empty($orgaTeam)) {
     echo '<div>' . (count($orgaTeam) == 1 ? 'OrganisatorIn' : 'OrganisatorInnen') . ': ';

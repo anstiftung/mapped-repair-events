@@ -1,5 +1,6 @@
 <?php
-    use App\Controller\Component\StringComponent;
+declare(strict_types=1);
+use App\Controller\Component\StringComponent;
 
 if ($linkToProfile) {
     echo '<a class="public-user-wrapper" href="'.$this->Html->urlUserProfile($user->uid).'" title="Zum Profil von '.h($user->nick).'">';

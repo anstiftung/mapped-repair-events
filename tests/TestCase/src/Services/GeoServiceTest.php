@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Test\TestCase\Services;
 
@@ -7,7 +8,7 @@ use Cake\TestSuite\TestCase;
 
 class GeoServiceTest extends TestCase
 {
-    public function testIsPointInBoundingBox()
+    public function testIsPointInBoundingBox(): void
     {
         $GeoService = new GeoService();
 

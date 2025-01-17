@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Test\TestCase\Controller;
 
@@ -25,16 +26,13 @@ class WorkshopsControllerTest extends AppTestCase
     use LogFileAssertionsTrait;
     use QueueTrait;
 
-    private $Workshop;
-    private $User;
-
 	public function controllerSpy(EventInterface $event, ?Controller $controller = null): void
     {
 		parent::controllerSpy($event, $controller);
 		$this->_controller->geoService = new GeoServiceMock();
 	}
 
-    public function testAjaxGetAllWorkshopsForMap()
+    public function testAjaxGetAllWorkshopsForMap(): void
     {
 
         $expectedResult = file_get_contents(TESTS . 'comparisons' . DS . 'rest-workshops-berlin.json');
@@ -58,7 +56,7 @@ class WorkshopsControllerTest extends AppTestCase
         $this->assertResponseOk();
     }
 
-    public function testWorkshopDetail()
+    public function testWorkshopDetail(): void
     {
         $this->get(Configure::read('AppConfig.htmlHelper')->urlWorkshopDetail('test-workshop'));
         $this->assertResponseOk();
@@ -66,7 +64,7 @@ class WorkshopsControllerTest extends AppTestCase
         $this->doUserPrivacyAssertions();
     }
 
-    public function testWorkshopSearchWithExceptionKeyword()
+    public function testWorkshopSearchWithExceptionKeyword(): void
     {
         $this->get(Configure::read('AppConfig.htmlHelper')->urlWorkshops('aachen'));
         $this->assertResponseOk();
@@ -74,7 +72,7 @@ class WorkshopsControllerTest extends AppTestCase
         $this->assertResponseContains('<div class="numbers">0 Initiativen gefunden</div>');
     }
 
-    public function testWorkshopSearchWithNonExceptionKeyword()
+    public function testWorkshopSearchWithNonExceptionKeyword(): void
     {
         $this->get(Configure::read('AppConfig.htmlHelper')->urlWorkshops('Test'));
         $this->assertResponseOk();
@@ -82,7 +80,7 @@ class WorkshopsControllerTest extends AppTestCase
         $this->assertResponseContains('<div class="numbers">1 Initiative gefunden</div>');
     }
 
-    public function testApplyToWorkshopAsRepairhelper()
+    public function testApplyToWorkshopAsRepairhelper(): void
     {
 
         $this->executeLogFileAssertions = false;
@@ -103,8 +101,8 @@ class WorkshopsControllerTest extends AppTestCase
         );
         $this->runAndAssertQueue();
 
-        $this->Workshop = $this->getTableLocator()->get('Workshops');
-        $workshop = $this->Workshop->find('all',
+        $workshopsTable = $this->getTableLocator()->get('Workshops');
+        $workshop = $workshopsTable->find('all',
         conditions: [
             'Workshops.uid' => $workshopUid,
         ],
@@ -126,7 +124,7 @@ class WorkshopsControllerTest extends AppTestCase
 
     }
 
-    public function testAddWorkshopWithCustomCoordinates()
+    public function testAddWorkshopWithCustomCoordinates(): void
     {
 
         $workshopForPost = [
@@ -148,8 +146,8 @@ class WorkshopsControllerTest extends AppTestCase
         );
         $this->runAndAssertQueue();
 
-        $this->Workshop = $this->getTableLocator()->get('Workshops');
-        $workshop = $this->Workshop->find('all', conditions: [
+        $workshopsTable = $this->getTableLocator()->get('Workshops');
+        $workshop = $workshopsTable->find('all', conditions: [
             'Workshops.url' => $workshopForPost['url']
         ])->first();
 
@@ -163,7 +161,7 @@ class WorkshopsControllerTest extends AppTestCase
 
     }
 
-    public function testAddWorkshopWithWrongGeoData()
+    public function testAddWorkshopWithWrongGeoData(): void
     {
 
         $workshopForPost = [
@@ -189,7 +187,7 @@ class WorkshopsControllerTest extends AppTestCase
     }
 
 
-    public function testEditWorkshopAsOrga()
+    public function testEditWorkshopAsOrga(): void
     {
         $this->loginAsOrga();
         $workshopUid = 2;
@@ -214,15 +212,15 @@ class WorkshopsControllerTest extends AppTestCase
         $this->assertMailSentTo(Configure::read('AppConfig.debugMailAddress'));
         $this->assertMailContainsHtmlAt(0, '"Test Workshop" geändert');
 
-        $this->Workshop = $this->getTableLocator()->get('Workshops');
-        $workshop = $this->Workshop->find('all', conditions: [
+        $workshopsTable = $this->getTableLocator()->get('Workshops');
+        $workshop = $workshopsTable->find('all', conditions: [
             'Workshops.uid' => $workshopUid,
         ])->first();
         $this->assertEquals('workshop info', $workshop->text);
 
     }
 
-    public function testAjaxGetWorkshopsAndUsersForTags()
+    public function testAjaxGetWorkshopsAndUsersForTags(): void
     {
         $this->configRequest([
             'headers' => [
@@ -236,7 +234,7 @@ class WorkshopsControllerTest extends AppTestCase
     }
 
 
-    public function testRestWorkshopsBerlin()
+    public function testRestWorkshopsBerlin(): void
     {
         $expectedResult = file_get_contents(TESTS . 'comparisons' . DS . 'rest-workshops-berlin.json');
         $expectedResult = $this->correctServerName($expectedResult);
@@ -247,14 +245,14 @@ class WorkshopsControllerTest extends AppTestCase
         $this->assertResponseOk();
     }
 
-    public function testRestWorkshopsHamburg()
+    public function testRestWorkshopsHamburg(): void
     {
         $this->get('/api/v1/workshops?city=hamburg');
         $this->assertResponseContains('no workshops found');
         $this->assertResponseCode(404);
     }
 
-    public function testRestWorkshopsWrongParam()
+    public function testRestWorkshopsWrongParam(): void
     {
         $this->get('/api/v1/workshops?city=ha');
         $this->assertResponseContains('city not passed or invalid (min 3 chars)');

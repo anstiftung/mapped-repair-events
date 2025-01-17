@@ -1,12 +1,13 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Command;
 
 use Cake\Command\Command;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
-use Cake\Datasource\FactoryLocator;
 use App\Services\GeoService;
+use Cake\ORM\TableRegistry;
 
 class UpdateProvicesFromGeoDataCommand extends Command
 {
@@ -16,15 +17,17 @@ class UpdateProvicesFromGeoDataCommand extends Command
 
         $geoService = new GeoService();
         
-        $provincesTable = FactoryLocator::get('Table')->get('Provinces');
+        $provincesTable = TableRegistry::getTableLocator()->get('Provinces');
         $provincesMap = $provincesTable->find('list', keyField: 'id', valueField: 'name')->toArray();
 
-        $workshopsTable = FactoryLocator::get('Table')->get('Workshops');
+        $workshopsTable = TableRegistry::getTableLocator()->get('Workshops');
         $workshops = $workshopsTable->find('all')->where(
             [
                 $workshopsTable->aliasField('province_id') => 0,
             ]
-        )->orderAsc($workshopsTable->aliasField('uid'));
+        )->orderBy([
+            $workshopsTable->aliasField('uid') => 'ASC']
+        );
 
         foreach($workshops as $workshop) {
             $geoData = $geoService->getGeoDataByCoordinates($workshop->lat, $workshop->lng);
@@ -35,14 +38,16 @@ class UpdateProvicesFromGeoDataCommand extends Command
             usleep(300000);
         }
 
-        $eventsTable = FactoryLocator::get('Table')->get('Events');
+        $eventsTable = TableRegistry::getTableLocator()->get('Events');
         $events = $eventsTable->find('all')->where(
             [
                 $eventsTable->aliasField('province_id') => 0,
                 'DATE(Events.datumstart) >= DATE(NOW())',
             ]
-        )->orderAsc($eventsTable->aliasField('uid'));
-
+        )->orderBy([
+            $eventsTable->aliasField('uid') => 'ASC']
+        );
+    
         foreach($events as $event) {
             $geoData = $geoService->getGeoDataByCoordinates($event->lat, $event->lng);
             $event->province_id = $geoData['provinceId'];
@@ -52,7 +57,7 @@ class UpdateProvicesFromGeoDataCommand extends Command
             usleep(300000);
         }
 
-        $usersTable = FactoryLocator::get('Table')->get('Users');
+        $usersTable = TableRegistry::getTableLocator()->get('Users');
         $users = $usersTable->find('all')->where(
             [
                 $usersTable->aliasField('province_id') => 0,
@@ -60,7 +65,9 @@ class UpdateProvicesFromGeoDataCommand extends Command
                 $usersTable->aliasField('country_code IN') => ['DE', 'AT', 'CH'],
                 
             ]
-        )->orderAsc($usersTable->aliasField('uid'));
+        )->orderBy([
+            $usersTable->aliasField('uid') => 'ASC']
+        );
 
         foreach($users as $user) {
             $user->revertPrivatizeData();

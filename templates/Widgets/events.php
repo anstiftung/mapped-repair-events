@@ -1,3 +1,6 @@
+<?php
+declare(strict_types=1);
+?>
 <style type="text/css">
     .truncate {
         width: <?php echo $trunc; ?>px;

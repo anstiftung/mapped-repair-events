@@ -1,25 +1,22 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Model\Rule;
 
 use Cake\Datasource\EntityInterface;
-use Cake\Datasource\FactoryLocator;
+use Cake\ORM\TableRegistry;
 use Cake\Utility\Hash;
 
 class UserLinkToWorkshopRule
 {
 
-    public $User;
-    public $Group;
-    public $Workshop;
-
-    public function __invoke(EntityInterface $entity, array $options)
+    public function __invoke(EntityInterface $entity, array $options): bool|string
     {
 
         $userUid = $entity->get('uid');
 
-        $this->User = FactoryLocator::get('Table')->get('Users');
-        $user = $this->User->find('all',
+        $usersTable = TableRegistry::getTableLocator()->get('Users');
+        $user = $usersTable->find('all',
             conditions: [
                 'Users.uid' => $userUid,
             ],
@@ -37,14 +34,14 @@ class UserLinkToWorkshopRule
             return true;
         }
 
-        $this->Group = FactoryLocator::get('Table')->get('Groups');
-        if (!$this->Group->isOrga($user)) {
+        $groupsTable = TableRegistry::getTableLocator()->get('Groups');
+        if (!$groupsTable->isOrga($user)) {
             return true;
         }
 
-        $this->Workshop = FactoryLocator::get('Table')->get('Workshops');
-        $workshops = $this->Workshop->getWorkshopsForAssociatedUser($userUid, APP_DELETED);
-        $associatedWorkshopsWhereUserIsLastOrgaUser = $this->User->getWorkshopsWhereUserIsLastOrgaUser($workshops);
+        $workshopsTable = TableRegistry::getTableLocator()->get('Workshops');
+        $workshops = $workshopsTable->getWorkshopsForAssociatedUser($userUid, APP_DELETED);
+        $associatedWorkshopsWhereUserIsLastOrgaUser = $usersTable->getWorkshopsWhereUserIsLastOrgaUser($workshops);
 
         if (empty($associatedWorkshopsWhereUserIsLastOrgaUser)) {
             return true;

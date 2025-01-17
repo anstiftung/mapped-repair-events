@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 if (!empty($funding->owner_user)) {
     echo '<div>Förderantrag erstellt von: ';

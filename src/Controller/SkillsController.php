@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace App\Controller;
 
 use App\Controller\Component\StringComponent;
@@ -14,7 +15,7 @@ class SkillsController extends AppController
     public CategoriesTable $Category;
     public SkillsTable $Skill;
     
-    public function beforeFilter(EventInterface $event)
+    public function beforeFilter(EventInterface $event): void
     {
         parent::beforeFilter($event);
         $this->Authentication->allowUnauthenticated([
@@ -23,7 +24,7 @@ class SkillsController extends AppController
         ]);
     }
 
-    public function all()
+    public function all(): void
     {
         $metaTags = [
             'title' => 'Kenntnisse & Interessen',

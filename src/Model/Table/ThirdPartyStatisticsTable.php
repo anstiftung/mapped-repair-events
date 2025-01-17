@@ -1,22 +1,21 @@
 <?php
+declare(strict_types=1);
 namespace App\Model\Table;
 
 use Cake\Core\Configure;
-use Cake\Datasource\FactoryLocator;
 use Cake\ORM\Table;
 use Cake\I18n\DateTime;
+use Cake\ORM\TableRegistry;
 
 class ThirdPartyStatisticsTable extends Table
 {
-
-    private $Categories;
 
     public function initialize(array $config): void
     {
         parent::initialize($config);
     }
 
-    public function getSumsByDate($dateFrom, $dateTo)
+    public function getSumsByDate($dateFrom, $dateTo): array
     {
 
         $query = $this->find();
@@ -34,12 +33,12 @@ class ThirdPartyStatisticsTable extends Table
 
     }
 
-    public function sumUpForMainCategory($sums)
+    public function sumUpForMainCategory($sums): array
     {
         $preparedSums = [];
-        $this->Categories = FactoryLocator::get('Table')->get('Categories');
+        $categoriesTable = TableRegistry::getTableLocator()->get('Categories');
         foreach($sums as $sum) {
-            $category = $this->Categories->find('all',
+            $category = $categoriesTable->find('all',
                 conditions: [
                     'Categories.id' => $sum->category_id,
                 ]
@@ -59,12 +58,12 @@ class ThirdPartyStatisticsTable extends Table
         return $preparedSums;
     }
 
-    public function bindCategoryDataToSums($sums)
+    public function bindCategoryDataToSums($sums): array
     {
         $preparedSums = [];
-        $this->Categories = FactoryLocator::get('Table')->get('Categories');
+        $categoriesTable = TableRegistry::getTableLocator()->get('Categories');
         foreach($sums as $categoryId => $sum) {
-            $category = $this->Categories->find('all',
+            $category = $categoriesTable->find('all',
                 conditions: [
                     'Categories.id' => $categoryId,
                 ],
@@ -78,7 +77,7 @@ class ThirdPartyStatisticsTable extends Table
         return $preparedSums;
     }
 
-    public function getCategoryNames($sums)
+    public function getCategoryNames($sums): array
     {
         $result = [];
         foreach($sums as $sum) {
@@ -87,7 +86,7 @@ class ThirdPartyStatisticsTable extends Table
         return $result;
     }
 
-    public function getSumsRepaired($sums)
+    public function getSumsRepaired($sums): array
     {
         $result = [];
         foreach($sums as $sum) {

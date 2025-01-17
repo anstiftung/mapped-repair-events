@@ -1,9 +1,11 @@
+<?php
+declare(strict_types=1);
+use Cake\Core\Configure;
+?>
+
 <div class="ViewsWrapper">
 
 <?php
-
-use Cake\Core\Configure;
-
     echo $this->element('highlightNavi', [
         'main' => 'Registrieren'
     ]);

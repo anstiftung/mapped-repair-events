@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace App\Model\Table;
 
 use Cake\ORM\Table;
@@ -16,7 +17,7 @@ class BlogsTable extends Table
         ]);
     }
 
-    public function getForDropdown()
+    public function getForDropdown(): array
     {
         $blogs = $this->find('all', order: [
             'Blogs.name' => 'ASC'

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\View\Helper;
 
@@ -8,7 +9,7 @@ use Cake\View\Helper;
 class MenuHelper extends Helper
 {
 
-    public function render($array, $options)
+    public function render($array, $options): string
     {
         $tmpMenu = '<ul id="'.$options['id'].'" class="'.$options['class'].'">';
         if (!empty($options['header'])) {
@@ -24,7 +25,7 @@ class MenuHelper extends Helper
         return $tmpMenu;
     }
 
-    public function buildPageMenu($pages)
+    public function buildPageMenu($pages): array
     {
 
         $menu = [];
@@ -57,7 +58,7 @@ class MenuHelper extends Helper
         return $menu;
     }
 
-    private function buildMenuItem($item, $index)
+    private function buildMenuItem($item, $index): string
     {
 
         $liClass = [];
@@ -88,18 +89,14 @@ class MenuHelper extends Helper
         return $tmpMenuItem;
     }
 
-    private function renderMenuElement($slug, $name, $style = '', $class = [], $target = '')
+    private function renderMenuElement($slug, $name, $style = '', $class = [], $target = ''): string
     {
 
         if ($style != '') {
             $style = ' style="'.$style.'"';
         }
-        if ($slug != '/' && isset($_SERVER['REQUEST_URI']) && preg_match('`' . preg_quote($slug) . '`', $_SERVER['REQUEST_URI'])) {
-            $applyActiveClass = true;
-
-            if ($applyActiveClass) {
-                $class[] = 'active';
-            }
+        if ($slug != '/' && isset($_SERVER['REQUEST_URI']) && preg_match('`' . preg_quote($slug, '`') . '`', $_SERVER['REQUEST_URI'])) {
+            $class[] = 'active';
         }
 
         if ($slug == '/' && isset($_SERVER['REQUEST_URI']) && $_SERVER['REQUEST_URI'] == '/') {

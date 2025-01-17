@@ -1,10 +1,12 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Services;
 
 class FolderService {
 
-    public static function deleteFolder($folder) {
+    public static function deleteFolder($folder): bool
+    {
         if (!is_dir($folder)) {
             return false;
         }

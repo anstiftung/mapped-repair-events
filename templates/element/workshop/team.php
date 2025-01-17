@@ -1,4 +1,7 @@
-<?php if (!$this->request->getSession()->read('isMobile')) { ?>
+<?php
+declare(strict_types=1);
+
+if (!$this->request->getSession()->read('isMobile')) { ?>
     <div id="tabs-2">
 
     <?php

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 $teasers = [
     ['url' => 'javascript:void(0);'],
     ['url' => 'javascript:void(0);'],

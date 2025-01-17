@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 echo '<h2 class="metatags">Metatags</h2>';
 echo $this->Form->control($entity.'.metatag.title', ['label' => 'Title']).'<br />';

@@ -1,10 +1,8 @@
 <?php
-/**
- *    Root Model - Basisklasse fuer alle APP-Objekte s. app_object.php
- */
+declare(strict_types=1);
+
 namespace App\Model\Table;
 
-use Cake\Http\Exception\NotFoundException;
 use Cake\ORM\Table;
 
 class RootsTable extends Table
@@ -16,14 +14,9 @@ class RootsTable extends Table
         $this->setPrimaryKey('uid');
     }
 
-    public function getType($uid)
+    public function getType($uid): string
     {
         $data = $this->get($uid);
-
-        if (! $data) {
-            throw new NotFoundException('Object not found! uid: ' . $uid);
-        }
-
         return $data->object_type;
     }
 }

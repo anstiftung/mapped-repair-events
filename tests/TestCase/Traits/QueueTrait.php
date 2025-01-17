@@ -10,9 +10,7 @@ trait QueueTrait
 
     use ConsoleIntegrationTestTrait;
     
-    protected $QueuedJobs;
-
-    protected function runAndAssertQueue()
+    protected function runAndAssertQueue(): void
     {
         $this->exec('queue run -q');
     }

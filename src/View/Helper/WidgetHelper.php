@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\View\Helper;
 
@@ -7,32 +8,32 @@ use Cake\View\Helper\HtmlHelper;
 class WidgetHelper extends HtmlHelper {
 
 
-    function getDefaultChartBackgroundColorOk()
+    function getDefaultChartBackgroundColorOk(): string
     {
         return 'rgba(200,210,24,.6)';
     }
 
-    function getDefaultChartBackgroundColorNotOk()
+    function getDefaultChartBackgroundColorNotOk(): string
     {
         return 'rgba(181,124,219,.6)';
     }
 
-    function getDefaultChartBackgroundColorRepairable()
+    function getDefaultChartBackgroundColorRepairable(): string
     {
         return 'rgba(77,142,162,1)';
     }
 
-    function getDefaultChartBorderColorOk()
+    function getDefaultChartBorderColorOk(): string
     {
         return 'rgba(200,210,24,1)';
     }
 
-    function getDefaultChartBorderColorNotOk()
+    function getDefaultChartBorderColorNotOk(): string
     {
         return 'rgba(181,124,219,1)';
     }
 
-    function getDefaultChartBorderColorRepairable()
+    function getDefaultChartBorderColorRepairable(): string
     {
         return 'rgba(77,142,162,1)';
     }

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 use Cake\Core\Configure;
 if ($this->request->getSession()->read('isMobile')) {
@@ -118,7 +119,7 @@ if (!$this->request->getSession()->read('isMobile')) {
                 echo '<div id="calEvents"></div>';
                 $this->element('addScript', ['script' => "
                     var calEvents = [];
-                    var events = ".json_encode($workshop->events, true).";
+                    var events = ".json_encode($workshop->events).";
                     for(var i=0;i<events.length;i++) {
                         events[i].hasModifyPermissions = '".$hasModifyPermissions."';
                         var calEvent = ".JS_NAMESPACE.".Helper.getCalEventHtml(
@@ -141,7 +142,7 @@ if (!$this->request->getSession()->read('isMobile')) {
 
                 if ($event) {
                     $this->element('addScript', ['script' =>
-                        JS_NAMESPACE.".Helper.showEventDetail('".json_encode($event, true)."', true);
+                        JS_NAMESPACE.".Helper.showEventDetail('".json_encode($event)."', true);
                     "]);
                 }
 

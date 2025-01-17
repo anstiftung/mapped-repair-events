@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
@@ -22,7 +23,8 @@ class Fundingupload extends Entity
     ];
 
 
-    public function _getFullPath() {
+    public function _getFullPath(): string
+    {
         return self::UPLOAD_PATH . $this->funding_uid . DS . $this->filename;
     }
 

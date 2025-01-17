@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -28,7 +29,7 @@ use Cake\Event\EventInterface;
 class PagesController extends AppController
 {
 
-    public function beforeFilter(EventInterface $event)
+    public function beforeFilter(EventInterface $event): void
     {
         parent::beforeFilter($event);
         $this->Authentication->allowUnauthenticated([
@@ -36,7 +37,7 @@ class PagesController extends AppController
         ]);
     }
 
-    public function detail()
+    public function detail(): void
     {
 
         if (! isset($this->request->getParam('pass')['0'])) {

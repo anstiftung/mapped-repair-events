@@ -1,11 +1,5 @@
 <?php
-/**
- * @param string field (eg Post.image)
- * @param objectType
- * @param string image
- * @param int uid
- * @parms string label
- */
+declare(strict_types=1);
 
 if (empty($image)) {
     $linkSrcForOverlay = '';

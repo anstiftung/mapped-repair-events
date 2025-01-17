@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 use App\Model\Entity\Funding;
 use App\Model\Entity\Fundingupload;
@@ -126,8 +127,8 @@ $this->element('addScript', ['script' =>
             echo '<fieldset>';
                 echo '<legend>Status Zuwendungsbestätigung</legend>';
                 echo $this->element('funding/status/zuwendungsbestaetigungStatus', ['funding' => $funding, 'additionalTextBefore' => '']);
-                echo $this->Form->control('Fundings.zuwendungsbestaetigung_status', ['label' => 'Status', 'options' => Funding::STATUS_MAPPING_UPLOADS, 'disabled' => !$funding->is_submitted, 'class' => 'no-verify']);
-                echo $this->Form->control('Fundings.zuwendungsbestaetigung_comment', ['label' => 'Kommentar', 'disabled' => !$funding->is_submitted, 'class' => 'no-verify']);
+                echo $this->Form->control('Fundings.zuwendungsbestaetigung_status', ['label' => 'Status', 'options' => Funding::STATUS_MAPPING_UPLOADS, 'class' => 'no-verify']);
+                echo $this->Form->control('Fundings.zuwendungsbestaetigung_comment', ['label' => 'Kommentar', 'class' => 'no-verify']);
             echo '</fieldset>';
         }
 

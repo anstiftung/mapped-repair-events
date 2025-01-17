@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace App\Log\Engine;
 
 use Cake\Mailer\Mailer;
@@ -19,7 +20,7 @@ class FileAndEmailLog extends FileLog
         }
     }
 
-    private function sendEmailWithErrorInformation($message)
+    private function sendEmailWithErrorInformation($message): bool
     {
 
         $ignoredExceptionsRegex = [
@@ -58,6 +59,8 @@ class FileAndEmailLog extends FileLog
         } catch (SocketException $e) {
             return false;
         }
+
+        return true;
 
     }
 

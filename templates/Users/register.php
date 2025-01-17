@@ -1,5 +1,6 @@
 <?php
-    use Cake\Core\Configure;
+declare(strict_types=1);
+use Cake\Core\Configure;
 ?>
 
 <div id="UserRegIntroWrapper">
@@ -94,7 +95,6 @@ echo '<div align="center">' . $this->element('heading', [
 <a name="reg"></a>
 
 <?php
-
 $this->element('addScript', ['script' =>
     JS_NAMESPACE.".Helper.initRegistration();
 "]);

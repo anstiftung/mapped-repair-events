@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace App\Controller;
 
 use App\Model\Table\PagesTable;
@@ -14,7 +15,7 @@ class SitemapsController extends AppController
     public PostsTable $Post;
     public PagesTable $Page;
     
-    public function beforeFilter(EventInterface $event)
+    public function beforeFilter(EventInterface $event): void
     {
         parent::beforeFilter($event);
         $this->Authentication->allowUnauthenticated([
@@ -28,7 +29,7 @@ class SitemapsController extends AppController
         $this->addViewClasses([XmlView::class]);
     }
 
-    public function index()
+    public function index(): void
     {
 
         $this->request = $this->request->withParam('_ext', 'xml');

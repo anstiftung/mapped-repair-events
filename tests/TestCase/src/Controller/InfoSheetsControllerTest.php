@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Test\TestCase\Controller;
 
@@ -18,10 +19,7 @@ class InfoSheetsControllerTest extends AppTestCase
     use StringCompareTrait;
     use LogFileAssertionsTrait;
 
-    private $InfoSheet;
-    private $User;
-
-    private $newInfoSheetData = [
+    private array $newInfoSheetData = [
         'category_id' => '',
         'new_subcategory_parent_id' => '',
         'new_subcategory_name' => '',
@@ -42,7 +40,7 @@ class InfoSheetsControllerTest extends AppTestCase
         'no_repair_reason_text' => ''
     ];
 
-    public function testAddInfoSheetValidations()
+    public function testAddInfoSheetValidations(): void
     {
         $this->loginAsOrga();
         $this->post(
@@ -55,7 +53,7 @@ class InfoSheetsControllerTest extends AppTestCase
         $this->assertResponseContains('Bitte wähle eine Kategorie aus.');
     }
 
-    public function testAddInfoSheetOk()
+    public function testAddInfoSheetOk(): void
     {
         $this->loginAsOrga();
         $this->newInfoSheetData['defect_description'] = 'Defect description';
@@ -71,8 +69,8 @@ class InfoSheetsControllerTest extends AppTestCase
         );
         $this->assertResponseNotContains('error');
 
-        $this->InfoSheet = $this->getTableLocator()->get('InfoSheets');
-        $infoSheets = $this->InfoSheet->find('all',
+        $infoSheetsTable = $this->getTableLocator()->get('InfoSheets');
+        $infoSheets = $infoSheetsTable->find('all',
         contain: [
             'Events.Workshops',
             'Categories',
@@ -87,20 +85,20 @@ class InfoSheetsControllerTest extends AppTestCase
         $this->assertEquals($infoSheets[0]->owner, 1);
     }
 
-    public function testDeleteInfoSheetAsOrga()
+    public function testDeleteInfoSheetAsOrga(): void
     {
         $this->loginAsOrga();
         $this->get(Configure::read('AppConfig.htmlHelper')->urlInfoSheetDelete(7));
         $this->assertFlashMessage('Der Laufzettel wurde erfolgreich gelöscht.');
 
-        $this->InfoSheet = $this->getTableLocator()->get('InfoSheets');
-        $infoSheet = $this->InfoSheet->find('all', conditions: [
+        $infoSheetsTable = $this->getTableLocator()->get('InfoSheets');
+        $infoSheet = $infoSheetsTable->find('all', conditions: [
             'InfoSheets.uid' => 7
         ])->first();
         $this->assertEquals($infoSheet->status, APP_DELETED);
     }
 
-    public function testDownloadAsOrga()
+    public function testDownloadAsOrga(): void
     {
         $this->loginAsOrga();
         $this->get('/laufzettel/download/2');

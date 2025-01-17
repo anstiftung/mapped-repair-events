@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 $classes = [];
 if ($object->is_submitted) {
     $classes[] = 'is-verified';

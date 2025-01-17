@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Admin\Controller;
 
 use Cake\Event\EventInterface;
@@ -15,9 +16,8 @@ class UsersController extends AdminAppController
     public CountriesTable $Country;
     public GroupsTable $Group;
     
-    public $searchName = false;
-
-    public $searchText = false;
+    public bool $searchName = false;
+    public bool $searchText = false;
 
     public function __construct($request = null, $response = null)
     {
@@ -28,7 +28,7 @@ class UsersController extends AdminAppController
         $this->Group = $this->getTableLocator()->get('Groups');
     }
 
-    public function beforeFilter(EventInterface $event)
+    public function beforeFilter(EventInterface $event): void
     {
 
         $this->addSearchOptions([
@@ -66,7 +66,7 @@ class UsersController extends AdminAppController
 
     }
 
-    public function index()
+    public function index(): void
     {
         parent::index();
 

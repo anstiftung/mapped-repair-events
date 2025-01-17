@@ -3,16 +3,16 @@ declare(strict_types=1);
 
 use Migrations\AbstractMigration;
 use Cake\Core\Configure;
-use Cake\Datasource\FactoryLocator;
+use Cake\ORM\TableRegistry;
 
 class GeoDataForUsers extends AbstractMigration
 {
-    public function change()
+    public function change(): void
     {
 
         $this->execute("ALTER TABLE `users` ADD `lat` DOUBLE NULL DEFAULT NULL AFTER `country_code`, ADD `lng` DOUBLE NULL DEFAULT NULL AFTER `lat`;");
 
-        $um = FactoryLocator::get('Table')->get('Users');
+        $um = TableRegistry::getTableLocator()->get('Users');
         $users = $um->find('all',
             order: [
                 'Users.uid' => 'ASC',

@@ -1,4 +1,7 @@
-<?php if ($showWorkshopName) { ?>
+<?php
+declare(strict_types=1);
+
+if ($showWorkshopName) { ?>
     <style>
        h2 a {
            color: <?php echo $borderColorOk;?>;

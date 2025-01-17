@@ -1,17 +1,17 @@
 <?php
+declare(strict_types=1);
 namespace App\Model\Table;
 
 use App\Controller\Component\StringComponent;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
-use Cake\Datasource\FactoryLocator;
+use Cake\ORM\TableRegistry;
 
 class SkillsTable extends Table
 {
 
-    public $allowedBasicHtmlFields = [];
-    public $name_de = 'Kenntnis';
-    private $Category;
+    public array $allowedBasicHtmlFields = [];
+    public string $name_de = 'Kenntnis';
 
     public function initialize(array $config): void
     {
@@ -31,13 +31,14 @@ class SkillsTable extends Table
         ]);
     }
 
-    public function validationDefault(Validator $validator): \Cake\Validation\Validator
+    public function validationDefault(Validator $validator): Validator
     {
         $validator->notEmptyString('name', 'Bitte trage den Namen ein.');
         return $validator;
     }
 
-    public function getNewSkillsFromRequest($associatedSkills) {
+    public function getNewSkillsFromRequest($associatedSkills): array
+    {
         if (!is_array($associatedSkills)) {
             return [];
         }
@@ -47,7 +48,8 @@ class SkillsTable extends Table
         return $skills;
     }
 
-    public function getExistingSkillsFromRequest($associatedSkills) {
+    public function getExistingSkillsFromRequest($associatedSkills): array
+    {
         if (!is_array($associatedSkills)) {
             return [];
         }
@@ -57,7 +59,7 @@ class SkillsTable extends Table
         return $skills;
     }
 
-    public function addSkills($newSkills, $isAdmin, $userUid)
+    public function addSkills($newSkills, $isAdmin, $userUid): array
     {
 
         $skillsToAdd = [];
@@ -82,11 +84,11 @@ class SkillsTable extends Table
 
     }
 
-    public function getForDropdownIncludingCategories($includeOffline): array
+    public function getForDropdownIncludingCategories(): array
     {
         $skillsForDropdown = $this->getForDropdown(false);
-        $this->Category = FactoryLocator::get('Table')->get('Categories');
-        $categoriesForDropdown = $this->Category->getMainCategoriesForFrontend();
+        $categoriesTable = TableRegistry::getTableLocator()->get('Categories');
+        $categoriesForDropdown = $categoriesTable->getMainCategoriesForFrontend();
         $preparedCategoriesForDropdown = [];
         foreach($categoriesForDropdown as $c) {
             $slugifiedCategoryName = StringComponent::slugify($c->name);

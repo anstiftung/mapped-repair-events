@@ -1,5 +1,6 @@
 <?php
-    use App\Model\Entity\Funding;
+declare(strict_types=1);
+use App\Model\Entity\Funding;
 ?>
 
 <fieldset>

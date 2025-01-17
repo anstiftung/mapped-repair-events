@@ -1,7 +1,9 @@
 <?php
+declare(strict_types=1);
 namespace App\Model\Table;
 
 use App\Controller\Component\StringComponent;
+use Cake\Datasource\EntityInterface;
 use Cake\Datasource\FactoryLocator;
 use Cake\Event\EventInterface;
 use Cake\ORM\Table;
@@ -11,11 +13,9 @@ use Cake\Validation\Validator;
 abstract class AppTable extends Table
 {
 
-    public $allowedBasicHtmlFields = [];
+    public array $allowedBasicHtmlFields = [];
 
-    public $Root;
-
-    public $loggedUserUid = 0;
+    public ?int $loggedUserUid = 0;
 
     public function initialize(array $config): void
     {
@@ -49,7 +49,7 @@ abstract class AppTable extends Table
 
     }
 
-    public function addUrlValidation(Validator $validator)
+    public function addUrlValidation(Validator $validator): Validator
     {
         $validator->notEmptyString('url', 'Bitte trage einen Slug ein.');
         $validator->add('url', 'unique', [
@@ -66,19 +66,19 @@ abstract class AppTable extends Table
         return $validator;
     }
 
-    public function validationAdmin(Validator $validator)
+    public function validationAdmin(Validator $validator): Validator
     {
         $validator = $this->addUrlValidation($validator);
         return $validator;
     }
 
-    public function validationDefault(Validator $validator): \Cake\Validation\Validator
+    public function validationDefault(Validator $validator): Validator
     {
         $validator = $this->validationAdmin($validator);
         return $validator;
     }
 
-    public function getNumberRangeValidator(Validator $validator, $field, $min, $max)
+    public function getNumberRangeValidator(Validator $validator, $field, $min, $max): Validator
     {
         $message = 'Die Eingabe muss eine Zahl zwischen ' . $min . ' und ' . $max . ' sein.';
         $validator->lessThanOrEqual($field, $max, $message);
@@ -87,7 +87,7 @@ abstract class AppTable extends Table
         return $validator;
     }
 
-    public function getPatchedEntityForAdminEdit($entity, $data)
+    public function getPatchedEntityForAdminEdit($entity, $data): EntityInterface
     {
         $isAdmin = Router::getRequest()?->getAttribute('identity')?->isAdmin();
         $patchedEntity = $this->patchEntity(
@@ -98,25 +98,19 @@ abstract class AppTable extends Table
         return $patchedEntity;
     }
 
-    public function beforeSave(EventInterface $event, $entity, $options)
+    public function beforeSave(EventInterface $event, $entity, $options): void
     {
 
         $this->loggedUserUid = Router::getRequest()?->getAttribute('identity')?->uid;
 
         if ($entity->isNew()) {
-
-            /*
-             * INSERT
-             */
-            if (! $this->Root) {
-                $this->Root = FactoryLocator::get('Table')->get('Roots');
-            }
+            $rootsTable = FactoryLocator::get('Table')->get('Roots');
             $rootEntity = [
                 'Roots' => [
                     'object_type' => $this->getTable()
                 ]
             ];
-            $result = $this->Root->save($this->Root->newEntity($rootEntity));
+            $result = $rootsTable->save($rootsTable->newEntity($rootEntity));
             $entity->uid = $result->uid;
 
             if ($entity->url == '') {
@@ -128,11 +122,6 @@ abstract class AppTable extends Table
             if ($entity->status == '') {
                 $entity->status = APP_OFF;
             }
-
-        } else {
-            /*
-             * UPDATE
-             */
         }
 
         $entity->updated_by = $this->loggedUserUid;

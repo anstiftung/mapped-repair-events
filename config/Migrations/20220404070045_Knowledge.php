@@ -5,7 +5,7 @@ use Migrations\AbstractMigration;
 
 class Knowledge extends AbstractMigration
 {
-    public function change()
+    public function change(): void
     {
         $sql = "ALTER TABLE `roots` CHANGE `object_type` `object_type` ENUM('pages','users','posts','workshops','events','coaches','votings','photos','info_sheets','knowledges') CHARACTER SET ascii COLLATE ascii_bin NULL DEFAULT NULL;";
         $this->execute($sql);

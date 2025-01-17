@@ -1,5 +1,5 @@
 <?php
-declare( strict_types = 1 );
+declare(strict_types=1);
 
 namespace App\Middleware\UnauthorizedHandler;
 
@@ -11,6 +11,7 @@ use Psr\Http\Message\ServerRequestInterface;
 class CustomRedirectHandler extends RedirectHandler {
     public function handle( Exception $exception, ServerRequestInterface $request, array $options = [] ): ResponseInterface {
         $response = parent::handle( $exception, $request, $options );
+        /* @phpstan-ignore-next-line */
         $request->getFlash()->set('Zugriff verweigert, bitte melde dich an.', [
             'element' => 'default',
             'params' => [

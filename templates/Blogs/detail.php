@@ -1,11 +1,11 @@
 <?php
+declare(strict_types=1);
 echo $this->element('highlightNavi',['main' => $blog->name]);
 ?>
 
 <div class="blog-detail <?php echo $blog->url; ?>">
 
 <?php
-
     $blogHeading = $blog->name;
     if ($blogHeading == 'Aktuelles') {
         $blogHeading = 'Aktuelles & Neuigkeiten';

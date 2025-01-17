@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 use Cake\Core\Configure;
 
@@ -18,7 +19,6 @@ if (count($workshop->{$objectMember}) > 0) {
     </tr>
 
 <?php
-
     foreach($workshop->{$objectMember} as $user) {
 
     echo '<tr>';

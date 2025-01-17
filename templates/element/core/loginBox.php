@@ -1,7 +1,10 @@
+<?php
+declare(strict_types=1);
+?>
+
 <div id="login-box">
 
 <?php
-
   if (!empty($loggedUser)) {
 
       echo '<div class="top">';

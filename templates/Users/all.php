@@ -1,5 +1,6 @@
 <?php
-    use App\Controller\Component\StringComponent;
+declare(strict_types=1);
+use App\Controller\Component\StringComponent;
 
     echo $this->element('highlightNavi', ['main' => 'Aktive']);
     $this->element('addScript', ['script' => "

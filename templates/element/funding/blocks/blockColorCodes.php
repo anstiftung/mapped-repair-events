@@ -1,3 +1,6 @@
+<?php
+declare(strict_types=1);
+?>
 <div class="color-codes-wrapper">
     <div class="is-verified">
         bestätigt

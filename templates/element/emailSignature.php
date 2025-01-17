@@ -1,3 +1,6 @@
+<?php
+declare(strict_types=1);
+?>
 --
 
 Netzwerk Reparatur-Initiativen

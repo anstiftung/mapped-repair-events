@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 if ($this->request->getSession()->read('isMobile')) {
     $this->element('addScript', ['script' => "
         $('#profile').before($('.left-wrapper'));

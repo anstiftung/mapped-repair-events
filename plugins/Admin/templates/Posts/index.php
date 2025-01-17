@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
   echo $this->element('highlightNavi', ['main' => 'Posts']);
   $heading = null;
   $blogUrl = '';

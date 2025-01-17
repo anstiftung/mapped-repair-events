@@ -1,5 +1,6 @@
 #!/usr/bin/php -q
 <?php
+declare(strict_types=1);
 // Check platform requirements
 require dirname(__DIR__) . '/vendor/autoload.php';
 

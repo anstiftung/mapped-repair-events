@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 echo $this->element('highlightNavi' ,['main' => $post->blog->name]);
 echo $this->element('heading', ['first' => $post->name]);

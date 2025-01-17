@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Admin\Controller;
 
@@ -31,7 +32,7 @@ class InternController extends AdminAppController
     public WorkshopsTable $Workshop;
     public FundingsTable $Funding;
 
-    public function beforeFilter(EventInterface $event)
+    public function beforeFilter(EventInterface $event): void
     {
         parent::beforeFilter($event);
         $this->loadComponent('FormProtection');
@@ -44,7 +45,7 @@ class InternController extends AdminAppController
         $this->addViewClasses([JsonView::class]);
     }
 
-    public function addCategory($name)
+    public function addCategory($name): void
     {
         $categories = $this->getTableLocator()->get('Categories');
         $c = $categories->save($categories->newEntity(['name' => $name, 'icon' => StringComponent::slugify($name)]));
@@ -52,7 +53,7 @@ class InternController extends AdminAppController
         exit;
     }
 
-    public function addSubCategory($name, $parentId)
+    public function addSubCategory($name, $parentId): void
     {
         $categories = $this->getTableLocator()->get('Categories');
         $c = $categories->save($categories->newEntity([
@@ -64,7 +65,7 @@ class InternController extends AdminAppController
         exit;
     }
 
-    private function getExtension($mimeType)
+    private function getExtension($mimeType): string
     {
         $extensions = [
             'image/jpeg' => 'jpg',
@@ -79,7 +80,7 @@ class InternController extends AdminAppController
 
     }
 
-    public function ajaxMiniUploadFormTmpImageUpload()
+    public function ajaxMiniUploadFormTmpImageUpload(): void
     {
         $this->autoRender = false;
 
@@ -115,7 +116,7 @@ class InternController extends AdminAppController
         ]));
     }
 
-    public function ajaxMiniUploadFormRotateImage()
+    public function ajaxMiniUploadFormRotateImage(): void
     {
         $this->autoRender = false;
 
@@ -165,7 +166,7 @@ class InternController extends AdminAppController
         ]));
     }
 
-    public function ajaxMiniUploadFormSaveUploadedImagesMultiple()
+    public function ajaxMiniUploadFormSaveUploadedImagesMultiple(): void
     {
         $this->autoRender = false;
         $this->Photo = $this->getTableLocator()->get('Photos');
@@ -244,7 +245,7 @@ class InternController extends AdminAppController
         ]));
     }
 
-    public function ajaxMiniUploadFormSaveUploadedImage()
+    public function ajaxMiniUploadFormSaveUploadedImage(): void
     {
         $this->autoRender = false;
 
@@ -303,14 +304,12 @@ class InternController extends AdminAppController
 
     /**
      * deletes both db entries and physical files (thumbs)
-     *
-     * @param int $uid
      */
-    public function ajaxMiniUploadFormDeleteImage($uid)
+    public function ajaxMiniUploadFormDeleteImage($uid): void
     {
         $uid = (int) $uid;
 
-        if ($uid == 0 || $uid == '') {
+        if ($uid == 0) {
             $message = '$uid nicht korrekt: ' . $uid;
             $this->log($message);
             die(json_encode([
@@ -340,6 +339,7 @@ class InternController extends AdminAppController
 
         $object = $objectTable->get($object->uid);
         if ($objectClass == 'User') {
+            /* @phpstan-ignore-next-line */
             $object->revertPrivatizeData();
         }
         $entity = $objectTable->patchEntity($object, ['image' => ''], ['validate' => false]);
@@ -350,7 +350,7 @@ class InternController extends AdminAppController
         $this->redirect($this->referer());
     }
 
-    public function ajaxDeleteObject()
+    public function ajaxDeleteObject(): void
     {
         $this->request = $this->request->withParam('_ext', 'json');
         
@@ -370,7 +370,7 @@ class InternController extends AdminAppController
 
     }
 
-    public function ajaxDeleteFunding()
+    public function ajaxDeleteFunding(): void
     {
         $this->request = $this->request->withParam('_ext', 'json');
         
@@ -385,7 +385,7 @@ class InternController extends AdminAppController
         $this->viewBuilder()->setOption('serialize', ['status', 'msg']);
 
     }    
-    public function ajaxChangeAppObjectStatus()
+    public function ajaxChangeAppObjectStatus(): null
     {
         $this->request = $this->request->withParam('_ext', 'json');
 
@@ -412,7 +412,7 @@ class InternController extends AdminAppController
                     'msg' => join("\r\n", $errorMessages),
                 ]);
                 $this->viewBuilder()->setOption('serialize', ['status', 'msg']);
-                return;
+                return null;
             }
         }
         $entity = $this->{$objectClass}->patchEntity(
@@ -431,18 +431,18 @@ class InternController extends AdminAppController
                 'uid' => $uid,
             ]);
             $this->viewBuilder()->setOption('serialize', ['status', 'msg', 'uid']);
-            return;
+            return null;
         } else {
             $this->set([
                 'status' => 0,
                 'msg' => 'delete did not work'
             ]);
             $this->viewBuilder()->setOption('serialize', ['status', 'msg']);
-            return;
+            return null;
         }
     }
 
-    public function ajaxCancelAdminEditPage()
+    public function ajaxCancelAdminEditPage(): null
     {
 
         $uid = (int) $this->request->getData('uid');
@@ -478,7 +478,7 @@ class InternController extends AdminAppController
             'referer' => $referer,
         ]);
         $this->viewBuilder()->setOption('serialize', ['status', 'msg', 'referer']);
-        return;
+        return null;
     }
 
 }

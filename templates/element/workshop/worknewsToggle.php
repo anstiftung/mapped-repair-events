@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types=1);
 
     $this->element('addScript', ['script' =>
         JS_NAMESPACE.".Helper.initBoxToggle();
@@ -17,7 +17,6 @@
 <div id="collapseterminabo" class="collapse">
 
 <?php
-
     if (!$subscribed) {
         $this->element('addScript', ['script' =>
             JS_NAMESPACE.".Helper.updateAntiSpamField('#WorknewsForm', $('#WorkNewsForm" . $workshop->uid . "'), ".$workshop->uid.");

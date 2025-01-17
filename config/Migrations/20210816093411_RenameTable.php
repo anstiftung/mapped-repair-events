@@ -5,7 +5,7 @@ use Migrations\AbstractMigration;
 
 class RenameTable extends AbstractMigration
 {
-    public function change()
+    public function change(): void
     {
         $this->execute("RENAME TABLE form_field_options_extra_info TO form_field_options_extra_infos;");
     }

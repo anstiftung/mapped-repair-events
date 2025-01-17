@@ -14,7 +14,7 @@ class Provinces extends AbstractMigration
      */
     public function change(): void
     {
-        $table = $this->table('provinces')
+        $this->table('provinces')
             ->addColumn('name', 'string', ['limit' => 255])
             ->addColumn('alternative_names', 'string', ['limit' => 1024])
             ->addColumn('country_code', 'string', ['limit' => 2])

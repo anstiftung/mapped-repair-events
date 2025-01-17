@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 if (!$workshop->funding_activity_proof_required) {
     return;

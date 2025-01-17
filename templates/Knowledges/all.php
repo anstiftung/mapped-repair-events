@@ -1,5 +1,6 @@
 <?php
-    use App\Controller\Component\StringComponent;
+declare(strict_types=1);
+use App\Controller\Component\StringComponent;
 use Cake\Core\Configure;
 
 echo $this->element('highlightNavi', ['main' => 'Reparaturwissen']);
@@ -39,7 +40,6 @@ echo $this->element('highlightNavi', ['main' => 'Reparaturwissen']);
 
 
 <?php
-
 foreach($knowledges as $knowledge) {
 
     echo '<div class="knowledge-row '. join(' ', $knowledge->itemSkillClasses) .'">';
@@ -86,18 +86,7 @@ foreach($knowledges as $knowledge) {
             }
             ?>
 
-            <?php
-            /*
-            echo $this->Html->link(
-                'Permalink kopieren',
-                'javascript:void(0);',
-                [
-                    'class' => 'knowledge-permalink',
-                    'escape' => false,
-                    'data-url' => Configure::read('AppConfig.serverName') . $this->Html->urlKnowledgeDetail($knowledge->uid),
-                ]
-            );
-            */
+        <?php
         echo '</div>';
 
     echo '</div>';

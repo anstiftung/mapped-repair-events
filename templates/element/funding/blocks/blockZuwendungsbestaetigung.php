@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 use App\Model\Entity\Funding;
 use App\Model\Entity\Fundingupload;

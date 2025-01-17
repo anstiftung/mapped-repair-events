@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 use Cake\Core\Configure;
 echo $this->element('jqueryTabsWithoutAjax', [
     'links' => $this->Html->getUserBackendNaviLinks($loggedUser->uid, true, $loggedUser->isOrga())

@@ -15,7 +15,7 @@ class SendWorknewsNotificationCommandTest extends AppTestCase
     use EmailTrait;
     use QueueTrait;
 
-    public function testRun()
+    public function testRun(): void
     {
         $this->exec('send_worknews_notification');
         $this->runAndAssertQueue();

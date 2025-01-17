@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 $this->Form->unlockField('delete_fundinguploads_' . $uploadType);
 $this->Form->unlockField('files_fundinguploads_' . $uploadType);

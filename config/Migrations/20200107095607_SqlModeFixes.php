@@ -1,9 +1,10 @@
 <?php
+declare(strict_types=1);
 use Migrations\AbstractMigration;
 
 class SqlModeFixes extends AbstractMigration
 {
-    public function change()
+    public function change(): void
     {
         $this->execute("
             ALTER TABLE `blocked_workshop_slugs` CHANGE `url` `url` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL, CHANGE `status` `status` TINYINT(4) NULL DEFAULT NULL;

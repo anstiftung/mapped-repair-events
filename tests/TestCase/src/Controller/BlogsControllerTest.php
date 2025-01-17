@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Test\TestCase\Controller;
 
@@ -12,7 +13,8 @@ class BlogsControllerTest extends AppTestCase
     use IntegrationTestTrait;
     use LogFileAssertionsTrait;
 
-    public function testFeed() {
+    public function testFeed(): void
+    {
         $this->get('/feed.rss');
         $this->assertResponseOk();
         $this->assertResponseContains('<?xml version="1.0" encoding="UTF-8"?>');
