@@ -419,7 +419,6 @@ class WorkshopsController extends AppController
 
         $city = $this->request->getQuery('city');
         if ($city === null || strlen($city) < 3) {
-            /* @phpstan-ignore-next-line */
             return $this->response->withStatus(400)->withType('json')->withStringBody(json_encode('city not passed or invalid (min 3 chars)'));
         }
 
@@ -443,7 +442,6 @@ class WorkshopsController extends AppController
         order: ['Workshops.name' => 'asc']);
 
         if ($workshops->count() == 0) {
-            /* @phpstan-ignore-next-line */
             return $this->response->withStatus(404)->withType('json')->withStringBody(json_encode('no workshops found'));
         }
 
