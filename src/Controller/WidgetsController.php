@@ -602,9 +602,9 @@ class WidgetsController extends AppController
             foreach($categoriesIds as $index => $categoryId) {
                 foreach($thirdPartyPreparedSums as $thirdPartyPreparedSum) {
                     /* @phpstan-ignore-next-line */
-                    $carbonFootprintSum += $this->Category->calculateCarbonFootprint($thirdPartyPreparedSum['repaired'], $categoriesCarbonFootprint[$index]);
+                    $carbonFootprintSum += $this->Category->calculateCarbonFootprint((float) $thirdPartyPreparedSum['repaired'], (float) $categoriesCarbonFootprint[$index]);
                     /* @phpstan-ignore-next-line */
-                    $materialFootprintSum += $this->Category->calculateMaterialFootprint($thirdPartyPreparedSum['repaired'], $categoriesMaterialFootprint[$index]);
+                    $materialFootprintSum += $this->Category->calculateMaterialFootprint((float) $thirdPartyPreparedSum['repaired'], (float) $categoriesMaterialFootprint[$index]);
                     if ($categoryId == $thirdPartyPreparedSum['id']) {
                         @$categoriesDataRepaired[$index] += $thirdPartyPreparedSum['repaired'];
                         continue;
