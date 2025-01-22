@@ -242,7 +242,7 @@ class AppController extends Controller
 
     public function setIsCurrentlyUpdated($uid): void
     {
-        $this->set('isCurrentlyUpdated', $this->isCurrentlyUpdated($uid) ? '1' : '0');
+        $this->set('isCurrentlyUpdated', $this->isCurrentlyUpdated((int) $uid) ? '1' : '0');
     }
 
     protected function isCurrentlyUpdated(int $uid): bool
