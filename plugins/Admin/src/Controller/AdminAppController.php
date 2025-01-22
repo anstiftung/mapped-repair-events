@@ -25,6 +25,8 @@ class AdminAppController extends AppController
 
     public array $conditions = [];
 
+    public array $afterFindCallbacks = [];
+
     public array $matchings = [];
 
     public function initialize(): void
@@ -143,7 +145,12 @@ class AdminAppController extends AppController
                     ];
                     break;
                 case 'custom':
-                    $this->conditions[] = $searchOption['conditions'][$queryParams['val-' . $searchFieldKey]];
+                    $customCondition = $searchOption['conditions'][$queryParams['val-' . $searchFieldKey]];
+                    if (is_string($customCondition)) {
+                        $this->conditions[] = $customCondition;
+                    } else {
+                        $this->afterFindCallbacks[] = $customCondition;
+                    }
                     break;
 
             }

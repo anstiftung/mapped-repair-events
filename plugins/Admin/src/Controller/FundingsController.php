@@ -29,8 +29,8 @@ class FundingsController extends AdminAppController
             ],
             'FundingStatus' => [
                 'searchType' => 'custom',
-                'conditions' => Funding::ADMIN_FILTER_CONDITIONS,
-                'extraDropdown' => true
+                'conditions' => Funding::getAdminFilterConditions(),
+                'extraDropdown' => true,
             ],
         ]);
         $this->generateSearchConditions('opt-1');
@@ -277,6 +277,7 @@ class FundingsController extends AdminAppController
         $fundingsTable = $this->getTableLocator()->get('Fundings');
         $workshopsTable = $this->getTableLocator()->get('Workshops');
 
+
         $query = $fundingsTable->find('all',
         conditions: $this->conditions,
         contain: [
@@ -290,8 +291,24 @@ class FundingsController extends AdminAppController
             'Fundingbudgetplans',
         ]);
 
+        $uids = [];
+        foreach($query->toArray() as $object) {
+            if (!empty($this->afterFindCallbacks)) {
+                foreach($this->afterFindCallbacks as $afterFindCallback) {
+                    if ($afterFindCallback($object)) {
+                        $uids[] = $object->uid;
+                    }
+                }
+            }
+        }
+        
+        $clonedQuery = clone $query;
+        if (!empty($uids)) {
+            $clonedQuery->where([$fundingsTable->aliasField('uid IN') => $uids]);
+        }
+
         // TODO Sorting not yet working
-        $objects = $this->paginate($query, [
+        $objects = $this->paginate($clonedQuery, [
             'order' => [
                 'Fundings.submit_date' => 'ASC',
                 'Fundings.created' => 'DESC'
@@ -305,7 +322,7 @@ class FundingsController extends AdminAppController
         }
 
         $this->set('objects', $objects);
-        $this->set('fundingStatus', Funding::ADMIN_FILTER_OPTIONS);
+        $this->set('fundingStatus', Funding::getAdminFilterOptions());
 
     }
 
