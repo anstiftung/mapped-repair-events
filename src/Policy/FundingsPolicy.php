@@ -13,7 +13,7 @@ use App\Model\Entity\Funding;
 class FundingsPolicy implements RequestPolicyInterface
 {
 
-    private function getOwnerEntity($fundingUid, $identity): Funding
+    private function getOwnerEntity($fundingUid, $identity): ?Funding
     {
         $fundingsTable = TableRegistry::getTableLocator()->get('Fundings');
         $entity = $fundingsTable->find()->where([
