@@ -78,7 +78,7 @@ class CategoriesTable extends Table
             $result = $category->material_footprint;
         }
 
-        return $result;
+        return (float) $result;
     }
 
     public function getCarbonFootprintByParentCategoryId($parentCategoryId): float
@@ -92,7 +92,7 @@ class CategoriesTable extends Table
             $result = $category->carbon_footprint;
         }
 
-        return $result;
+        return (float) $result;
     }
 
     public function getForSubcategoryDropdown(): array
@@ -129,13 +129,13 @@ class CategoriesTable extends Table
 
     }
 
-    public function calculateMaterialFootprint($repairedCount, $materialFootprintFactor): float
+    public function calculateMaterialFootprint(float $repairedCount, float $materialFootprintFactor): float
     {
         $savedEnergyPart = 0.3;
         return $repairedCount * $materialFootprintFactor * $savedEnergyPart;
     }
 
-    public function calculateCarbonFootprint($repairedCount, $carbonFootprintFactor): float
+    public function calculateCarbonFootprint(float $repairedCount, float $carbonFootprintFactor): float
     {
         $savedEnergyPart = 0.3;
         return $repairedCount * $carbonFootprintFactor * $savedEnergyPart;
