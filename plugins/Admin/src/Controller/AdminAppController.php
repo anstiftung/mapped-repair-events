@@ -1,33 +1,31 @@
 <?php
+declare(strict_types=1);
 namespace Admin\Controller;
 
 use App\Controller\AppController;
 use Cake\Event\EventInterface;
 use Cake\ORM\Query;
+use Cake\ORM\Query\SelectQuery;
 use Cake\Utility\Inflector;
 
 class AdminAppController extends AppController
 {
 
-    public $pluralizedModelName;
-
-    public $primaryKey;
-
     public array $paginate;
 
-    public $searchOptions = [];
+    public array $searchOptions = [];
 
-    public $searchName = true;
+    public bool $searchName = true;
 
-    public $searchText = true;
+    public bool $searchText = true;
 
-    public $searchUid = true;
+    public bool $searchUid = true;
 
-    public $searchStatus = true;
+    public bool $searchStatus = true;
 
-    public $conditions = [];
+    public array $conditions = [];
 
-    public $matchings = [];
+    public array $matchings = [];
 
     public function initialize(): void
     {
@@ -38,7 +36,7 @@ class AdminAppController extends AppController
         ];
     }
 
-    public function beforeFilter(EventInterface $event)
+    public function beforeFilter(EventInterface $event): void
     {
         parent::beforeFilter($event);
 
@@ -85,10 +83,8 @@ class AdminAppController extends AppController
         $this->prepareSearchOptionsForDropdown();
     }
 
-    public function index()
+    public function index(): void
     {
-
-        $this->primaryKey = $this->{$this->pluralizedModelName}->getPrimaryKey();
 
         $this->paginate['order'] = [
             $this->pluralizedModelName . '.updated' => 'DESC'
@@ -101,14 +97,14 @@ class AdminAppController extends AppController
         $this->set('searchStatus', $this->searchStatus);
     }
 
-    protected function generateSearchConditions($searchFieldKey)
+    protected function generateSearchConditions($searchFieldKey): null
     {
         $queryParams = $this->request->getQueryParams();
 
         if (isset($queryParams['val-' . $searchFieldKey])) {
             $filterValue = $queryParams['val-' . $searchFieldKey];
             if ($filterValue == '') {
-                return;
+                return null;
             }
             $key = isset($this->searchOptions[$queryParams[
                 'key-' . $searchFieldKey
@@ -121,7 +117,7 @@ class AdminAppController extends AppController
                 $negate = $searchOption['negate'] ?? false;
             } else {
                 $this->AppFlash->setFlashError('Bitte wähle im Dropdown ein Suchfeld aus.');
-                return;
+                return null;
             }
             switch ($searchType) {
                 case 'equal':
@@ -152,20 +148,21 @@ class AdminAppController extends AppController
 
             }
         }
+        return null;
     }
 
-    protected function addMatchingsToQuery($query)
+    protected function addMatchingsToQuery($query): SelectQuery
     {
 
         foreach($this->matchings as $matching) {
-            $query->matching($matching['association'], function(Query $q) use ($matching) {
+            $query->matching($matching['association'], function(SelectQuery $q) use ($matching) {
                 return $q->where($matching['condition']);
             });
         }
         return $query;
     }
 
-    protected function saveObject($entity)
+    protected function saveObject($entity): void
     {
         $modelName = $this->modelName;
         $entity = $this->stripTagsFromFields($entity, $modelName);
@@ -177,7 +174,7 @@ class AdminAppController extends AppController
         }
     }
 
-    protected function addSearchOptions($searchOptions)
+    protected function addSearchOptions($searchOptions): void
     {
         $searchOptions = array_reverse($searchOptions);
         if (empty($this->searchOptions)) {
@@ -188,7 +185,7 @@ class AdminAppController extends AppController
         $this->prepareSearchOptionsForDropdown();
     }
 
-    private function prepareSearchOptionsForDropdown()
+    private function prepareSearchOptionsForDropdown(): void
     {
         $searchOptionsForDropdown = $this->searchOptions;
         foreach ($searchOptionsForDropdown as $key => $searchOption) {

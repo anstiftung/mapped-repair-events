@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Admin\Controller;
 
 use Cake\Event\EventInterface;
@@ -13,7 +14,7 @@ class WorkshopsController extends AdminAppController
     public UsersTable $User;
     public InfoSheetsTable $InfoSheet;
 
-    public function beforeFilter(EventInterface $event)
+    public function beforeFilter(EventInterface $event): void
     {
 
         $this->addSearchOptions([
@@ -39,7 +40,7 @@ class WorkshopsController extends AdminAppController
 
     }
 
-    public function index()
+    public function index(): void
     {
         parent::index();
 

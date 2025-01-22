@@ -1,5 +1,5 @@
 parameters:
-    level: 1
+    level: 6
     bootstrapFiles:
         - config/bootstrap.php
     fileExtensions:
@@ -12,15 +12,23 @@ parameters:
         - plugins/Admin/src
         - plugins/Admin/templates
     ignoreErrors:
+        - message: '#Access to an undefined property .*#'
+        - message: '#Cannot access property .*#'
+        - message: '#Call to an undefined method Authorization\\IdentityInterface::*.#'
+        - message: '#Method .* has parameter .* with no type specified.#'
+        - message: '#Method .* has parameter .* with no value type specified in iterable type array.#'
+        - message: '#Method .* return type has no value type specified in iterable type array.#'
+        - message: '#Property .* type has no value type specified in iterable type array.#'
+        - message: '#Class .* extends generic class .* but does not specify its types: .*#'
+        - message: '#Method .* has parameter .* with generic (class|interface) .* but does not specify its types: .*#'
+        - message: '#Method .* return type with generic (class|interface) .* does not specify its types: .*#'
         - message: '#Variable \$.* might not be defined#'
-          path: templates
-        - message: '#Variable \$.* might not be defined#'
-          path: plugins/Admin/templates
+          paths:
+            - templates
+            - plugins/Admin/templates
         - message: '#Variable \$.* in empty\(\) always exists and is .* falsy\.$#'
           path: src
-        - message: '#Access to an undefined property#'
-          path: src/View/Helper
-        - message: '#Access to an undefined property#'
-          path: src/Model/Entity
-        - message: '#Access to an undefined property.*\$(AppFlash|Authentication)#'
-          path: .
+rules:
+    - Ergebnis\PHPStan\Rules\Files\DeclareStrictTypesRule
+includes:
+    - vendor/cakedc/cakephp-phpstan/extension.neon

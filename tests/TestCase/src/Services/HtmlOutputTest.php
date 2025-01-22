@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Test\TestCase\Services;
 
@@ -17,75 +18,73 @@ class HtmlOutputTest extends AppTestCase
     use LogFileAssertionsTrait;
     use LoginTrait;
 
-    private $User;
-
-    public function testHome()
+    public function testHome(): void
     {
         $this->get('/');
         $this->doAssertHtmlOutput();
     }
 
-    public function testWorkshopDetail()
+    public function testWorkshopDetail(): void
     {
         $this->get(Configure::read('AppConfig.htmlHelper')->urlWorkshopDetail('test-workshop'));
         $this->doAssertHtmlOutput();
     }
 
-    public function testPostDetail()
+    public function testPostDetail(): void
     {
         $this->get(Configure::read('AppConfig.htmlHelper')->urlPostDetail('test-post'));
         $this->doAssertHtmlOutput();
     }
 
-    public function testBlogDetail()
+    public function testBlogDetail(): void
     {
         $this->get(Configure::read('AppConfig.htmlHelper')->urlBlogDetail('neuigkeiten'));
         $this->doAssertHtmlOutput();
     }
 
-    public function testPageDetail()
+    public function testPageDetail(): void
     {
         $this->get(Configure::read('AppConfig.htmlHelper')->urlPageDetail('test-page'));
         $this->doAssertHtmlOutput();
     }
 
-    public function testUsers()
+    public function testUsers(): void
     {
         $this->get(Configure::read('AppConfig.htmlHelper')->urlUsers());
         $this->doAssertHtmlOutput();
     }
 
-    public function testUserProfile()
+    public function testUserProfile(): void
     {
         $this->get(Configure::read('AppConfig.htmlHelper')->urlUserProfile(1));
         $this->doAssertHtmlOutput();
     }
 
-    public function testWorkshops()
+    public function testWorkshops(): void
     {
         $this->get(Configure::read('AppConfig.htmlHelper')->urlWorkshops());
         $this->doAssertHtmlOutput();
     }
 
-    public function testStatisticsGlobal()
+    public function testStatisticsGlobal(): void
     {
         $this->get('/widgets/statisticsGlobal');
         $this->doAssertHtmlOutput();
     }
 
-    public function testSkills()
+    public function testSkills(): void
     {
         $this->get(Configure::read('AppConfig.htmlHelper')->urlSkills());
         $this->doAssertHtmlOutput();
     }
 
-    public function testKnowledges()
+    public function testKnowledges(): void
     {
         $this->get(Configure::read('AppConfig.htmlHelper')->urlKnowledges());
         $this->doAssertHtmlOutput();
     }
 
-    public function testUserBackendLoggedOut()
+    public function testUserBackendLoggedOut(): void
     {
         $this->get(Configure::read('AppConfig.htmlHelper')->urlUserHome());
         $this->assertResponseCode(302);
@@ -93,20 +92,20 @@ class HtmlOutputTest extends AppTestCase
         $this->assertResponseCode(302);
     }
 
-    public function testUserBackendLoggedIn()
+    public function testUserBackendLoggedIn(): void
     {
         $this->loginAsRepairhelper();
         $this->get(Configure::read('AppConfig.htmlHelper')->urlUserHome());
         $this->doAssertHtmlOutput();
     }
 
-    public function testSitemap()
+    public function testSitemap(): void
     {
         $this->get('/sitemap.xml');
         $this->assertResponseCode(200);
     }
 
-    public function testEventsWithCategoryFilterFound()
+    public function testEventsWithCategoryFilterFound(): void
     {
         $this->changeEventDate();
         $this->get(Configure::read('AppConfig.htmlHelper')->urlEvents() . '?categories=87');
@@ -114,7 +113,7 @@ class HtmlOutputTest extends AppTestCase
         $this->assertResponseContains('<div class="numbers">1 von insgesamt 2 Terminen gefunden</div>');
     }
 
-    public function testEventsWithCategoryFilterNotFound()
+    public function testEventsWithCategoryFilterNotFound(): void
     {
         $this->changeEventDate();
         $this->get(Configure::read('AppConfig.htmlHelper')->urlEvents() . '?categories=88');
@@ -122,7 +121,8 @@ class HtmlOutputTest extends AppTestCase
         $this->assertResponseContains('<div class="numbers">0 von insgesamt 2 Terminen gefunden</div>');
     }
 
-    private function changeEventDate() {
+    private function changeEventDate(): void
+    {
         $eventsTable = $this->getTableLocator()->get('Events');
         $event = $eventsTable->get(6);
         $event->datumstart = Date::now()->addDays(20);

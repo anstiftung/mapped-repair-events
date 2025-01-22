@@ -1,12 +1,14 @@
 <?php
+declare(strict_types=1);
 namespace App\Model\Table;
 
 use Cake\Validation\Validator;
+use Cake\ORM\Query\SelectQuery;
 
 class PostsTable extends AppTable
 {
 
-    public $name_de = 'Post';
+    public string $name_de = 'Post';
 
     public function initialize(array $config): void
     {
@@ -24,7 +26,7 @@ class PostsTable extends AppTable
         ]);
     }
 
-    public function validationDefault(Validator $validator): \Cake\Validation\Validator
+    public function validationDefault(Validator $validator): Validator
     {
         $validator = $this->validationAdmin($validator);
         $validator->minLength('city', 2, 'Bitte trage einen Ort ein.');
@@ -32,7 +34,7 @@ class PostsTable extends AppTable
         return $validator;
     }
 
-    public function validationAdmin(Validator $validator)
+    public function validationAdmin(Validator $validator): Validator
     {
         $validator = parent::addUrlValidation($validator);
         $validator->notEmptyString('name', 'Bitte gib einen Titel an.');
@@ -41,7 +43,8 @@ class PostsTable extends AppTable
         return $validator;
     }
 
-    public function getLatestPosts() {
+    public function getLatestPosts(): SelectQuery
+    {
         $posts = $this->find('all',
         fields: [
             'Posts.uid',

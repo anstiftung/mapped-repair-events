@@ -1,3 +1,6 @@
+<?php
+declare(strict_types=1);
+?>
 <tr>
     <td class="infoSheetUid">
         <?php echo $info_sheet->uid; ?>

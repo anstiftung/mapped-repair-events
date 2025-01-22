@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 use Migrations\AbstractMigration;
 use App\Model\Entity\Funding;
-use Cake\Datasource\FactoryLocator;
+use Cake\ORM\TableRegistry;
 
 class Fundings9 extends AbstractMigration
 {
@@ -16,12 +16,14 @@ class Fundings9 extends AbstractMigration
             'zuwendungsbestaetigung',
         ];
 
-        $fundingsTable = FactoryLocator::get('Table')->get('Fundings');
-        $fundings = $fundingsTable->find()->contain([
-            'FundinguploadsActivityProofs',
-            'FundinguploadsFreistellungsbescheids',
-            'FundinguploadsZuwendungsbestaetigungs',
-        ]);
+        $fundingsTable = TableRegistry::getTableLocator()->get('Fundings');
+        $fundings = $fundingsTable->find(
+            contain: [
+                'FundinguploadsActivityProofs',
+                'FundinguploadsFreistellungsbescheids',
+                'FundinguploadsZuwendungsbestaetigungs',
+            ],
+        );
 
         foreach($uploadTypes as $uploadType) {
             $uploadEntity = 'fundinguploads_' . $uploadType . 's';

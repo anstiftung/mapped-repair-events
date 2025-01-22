@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 $button = $this->Html->link(
     'Förderantrag nicht möglich',

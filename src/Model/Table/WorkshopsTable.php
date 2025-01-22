@@ -1,28 +1,26 @@
 <?php
+declare(strict_types=1);
 namespace App\Model\Table;
 
 use App\Model\Traits\SearchExceptionsTrait;
 use Cake\Validation\Validator;
-use Cake\Datasource\FactoryLocator;
 use App\Services\GeoService;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use ArrayObject;
 use App\Controller\Component\StringComponent;
-use Cake\Database\Query;
+use App\Model\Entity\Workshop;
+use Cake\ORM\TableRegistry;
+use Cake\ORM\Query\SelectQuery;
 
 class WorkshopsTable extends AppTable
 {
 
     use SearchExceptionsTrait;
 
-    public const STATISTICS_DISABLED = 0;
-    public const STATISTICS_SHOW_ALL = 1;
-    public const STATISTICS_SHOW_ONLY_CHART = 2;
+    public string $name_de = '';
 
-    public $name_de = '';
-
-    public $allowedBasicHtmlFields = [
+    public array $allowedBasicHtmlFields = [
         'additional_contact',
         'opening_hours',
         'rechtl_vertret',
@@ -75,7 +73,6 @@ class WorkshopsTable extends AppTable
         // necessary to retrieve additional data of relation table (eg. Workshops.apply)
         $this->hasMany('UsersWorkshops', [
             'foreignKey' => 'workshop_uid',
-            'targetForeignKey' => 'user_uid'
         ]);
         $this->belongsToMany('Users', [
             'through' => 'UsersWorkshops',
@@ -92,21 +89,19 @@ class WorkshopsTable extends AppTable
         ]);
     }
 
-    public function beforeMarshal(EventInterface $event, ArrayObject $data, ArrayObject $options)
+    public function beforeMarshal(EventInterface $event, ArrayObject $data, ArrayObject $options): void
     {
         if (isset($data['website'])) {
             $data['website'] = StringComponent::addProtocolToUrl($data['website']);
         }
     }
 
-    public function validationDefault(Validator $validator): \Cake\Validation\Validator
+    public function validationDefault(Validator $validator): Validator
     {
         $validator = $this->validationAdmin($validator);
         $invalidCoordinateMessage = 'Die Adresse wurde nicht gefunden. Bitte ändere sie oder lege die Koordinaten selbst fest.';
         $validator->numeric('lat', $invalidCoordinateMessage);
         $validator->numeric('lng', $invalidCoordinateMessage);
-        $validator->equals(0, $invalidCoordinateMessage);
-        $validator->equals(0, $invalidCoordinateMessage);
         $validator->notEmptyString('city', 'Bitte trage die Stadt ein.');
         $validator->minLength('city', 2, 'Bitte trage die Stadt ein.');
         $validator->notEmptyString('country_code', 'Bitte wähle dein Land aus.');
@@ -122,7 +117,7 @@ class WorkshopsTable extends AppTable
         return $validator;
     }
 
-    public function validationAdmin(Validator $validator)
+    public function validationAdmin(Validator $validator): Validator
     {
         $geoService = new GeoService();
         $validator = $geoService->getGeoCoordinatesValidator($validator);
@@ -137,16 +132,17 @@ class WorkshopsTable extends AppTable
         $validator->inList(
             'show_statistics',
             [
-                self::STATISTICS_DISABLED,
-                self::STATISTICS_SHOW_ALL,
-                self::STATISTICS_SHOW_ONLY_CHART,
+                Workshop::STATISTICS_DISABLED,
+                Workshop::STATISTICS_SHOW_ALL,
+                Workshop::STATISTICS_SHOW_ONLY_CHART,
             ],
             'Dieser Wert ist nicht gültig.',
         );
         return $validator;
     }
 
-    public function getProvinceCounts() {
+    public function getProvinceCounts(): array
+    {
         
         $query = $this->find('all')
         ->select([
@@ -166,12 +162,7 @@ class WorkshopsTable extends AppTable
         return $provincesMap;
     }
 
-    /**
-     *
-     * @param int $userUid
-     * @return array
-     */
-    public function getWorkshopsForAssociatedUser($userUid, $workshopStatus, $additionalContains = [])
+    public function getWorkshopsForAssociatedUser(int $userUid, $workshopStatus, array $additionalContains = []): SelectQuery
     {
         $workshops = $this->getWorkshopsWithUsers($workshopStatus, $additionalContains);
         $workshops->matching('Users', function ($q) use ($userUid) {
@@ -189,7 +180,7 @@ class WorkshopsTable extends AppTable
         return $workshops;
     }
 
-    public function transformForDropdown($workshops)
+    public function transformForDropdown($workshops): array
     {
         $result = [];
         foreach($workshops as $workshop) {
@@ -198,24 +189,25 @@ class WorkshopsTable extends AppTable
         return $result;
     }
 
-    public function getFundingContain() {
+    public function getFundingContain(): array
+    {
         return [
             'WorkshopFundings' => [
                 'OwnerUsers',
                 'Fundingbudgetplans',
                 'FundinguploadsZuwendungsbestaetigungs',
             ],
-            'FundingAllPastEvents' => function (Query $q) {
+            'FundingAllPastEvents' => function (SelectQuery $q) {
                 return $q->select(['workshop_uid', 'count' => $q->func()->count('*')])->groupBy('workshop_uid');
             },
-            'FundingAllFutureEvents' => function (Query $q) {
+            'FundingAllFutureEvents' => function (SelectQuery $q) {
                 return $q->select(['workshop_uid', 'count' => $q->func()->count('*')])->groupBy('workshop_uid');
             },
             'Users.Groups',
         ];
     }
 
-    public function getWorkshopsWithUsers($workshopStatus, $additionalContains = [])
+    public function getWorkshopsWithUsers($workshopStatus, $additionalContains = []): SelectQuery
     {
         $workshops = $this->find('all',
         conditions: [
@@ -237,11 +229,11 @@ class WorkshopsTable extends AppTable
         return $workshops;
     }
 
-    private function addBlockedWorkshopSlugsValidationRule($validator)
+    private function addBlockedWorkshopSlugsValidationRule($validator): Validator
     {
         $validator->add('url', 'addBlockedWorkshopSlugsValidationRule', [
             'rule' => function($value, $context) {
-                $bws = FactoryLocator::get('Table')->get('BlockedWorkshopSlugs');
+                $bws = TableRegistry::getTableLocator()->get('BlockedWorkshopSlugs');
                 $recordCount = $bws->find('all',
                     conditions: [
                         'status' => APP_ON,
@@ -259,17 +251,15 @@ class WorkshopsTable extends AppTable
 
     }
 
-    public function getTeam($workshop)
+    public function getTeam($workshop): array
     {
         return $workshop->users;
     }
 
     /**
      * returns owner and approved users_workshops users with group $orgaTeamGroups
-     * @param $workshop
-     * @return array
      */
-    public function getOrgaTeam($workshop)
+    public function getOrgaTeam($workshop): array
     {
         $orgaTeam = $this->getTeam($workshop);
         if (!empty($orgaTeam)) {
@@ -292,7 +282,7 @@ class WorkshopsTable extends AppTable
         return $orgaTeam;
     }
 
-    public function getWorkshopForIsUserInOrgaTeamCheck($workshopUid)
+    public function getWorkshopForIsUserInOrgaTeamCheck($workshopUid): Workshop
     {
         $usersAssociation = $this->getAssociation('Users');
         $usersAssociation->setConditions([
@@ -310,7 +300,7 @@ class WorkshopsTable extends AppTable
         return $workshop;
     }
 
-    public function isUserInOrgaTeam($user, $workshop)
+    public function isUserInOrgaTeam($user, $workshop): bool
     {
         if ($user === null) {
             return false;
@@ -326,7 +316,8 @@ class WorkshopsTable extends AppTable
         return $userFound;
     }
 
-    public function getKeywordSearchConditions($keyword, $negate) {
+    public function getKeywordSearchConditions(string $keyword, bool $negate): mixed
+    {
 
         $changeableOrConditions = [
             'Workshops.city LIKE' => "%{$keyword}%",
@@ -349,7 +340,8 @@ class WorkshopsTable extends AppTable
         };
     }
 
-    public function getLatestWorkshops() {
+    public function getLatestWorkshops(): SelectQuery
+    {
         $workshops = $this->find('all',
         fields: [
             'Workshops.uid',
@@ -370,12 +362,7 @@ class WorkshopsTable extends AppTable
         return $workshops;
     }
 
-    /**
-     *
-     * @param int $workshopUid
-     * @return boolean
-     */
-    public function isLoggedUserApproved($workshopUid, $userUid)
+    public function isLoggedUserApproved(int $workshopUid, int $userUid): bool
     {
         $usersAssociation = $this->getAssociation('UsersWorkshops');
         $usersAssociation->setConditions([
@@ -391,14 +378,10 @@ class WorkshopsTable extends AppTable
             'UsersWorkshops'
         ])->first();
 
-        if (!empty($workshop->users_workshops)) {
-            return true;
-        } else {
-            return false;
-        }
+        return !empty($workshop->users_workshops);
     }
 
-    public function getForDropdown()
+    public function getForDropdown(): array
     {
         $workshops = $this->find('all',
         conditions: [

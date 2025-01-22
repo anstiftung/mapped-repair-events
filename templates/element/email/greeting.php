@@ -1,3 +1,6 @@
+<?php
+declare(strict_types=1);
+?>
 <tr>
     <td style="font-weight:bold;font-size:18px;padding-bottom:10px;">
         <p>

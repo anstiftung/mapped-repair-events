@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 use App\Model\Entity\Fundingbudgetplan;
 use App\Model\Entity\Funding;

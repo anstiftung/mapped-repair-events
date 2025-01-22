@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Command;
 
@@ -15,7 +16,11 @@ class UpdateCfAndMfCommand extends Command
     {
 
         $categoriesTable = FactoryLocator::get('Table')->get('Categories');
-        $categories = $categoriesTable->find('all')->contain(['ParentCategories'])->toArray();
+        $categories = $categoriesTable->find(
+            contain: [
+                'ParentCategories'
+            ],
+        )->toArray();
 
         $reader = Reader::createFromPath(CONFIG . 'sql' . DS . 'cf-mf-update-2024-09.csv');
         $csvRecords = $reader->getRecords();

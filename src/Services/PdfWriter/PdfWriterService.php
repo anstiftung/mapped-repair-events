@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Services\PdfWriter;
 
@@ -8,19 +9,19 @@ use Cake\View\ViewBuilder;
 abstract class PdfWriterService
 {
 
-    protected $pdfLibrary;
-    protected $data = [];
-    protected $plugin = null;
-    protected $filename = '';
-    public $templateFile = null;
+    protected mixed $pdfLibrary;
+    protected array $data = [];
+    protected ?string $plugin = null;
+    protected string $filename = '';
+    public ?string $templateFile = null;
 
-    public function setPdfLibrary($pdfLibrary): PdfWriterService
+    public function setPdfLibrary($pdfLibrary): static
     {
         $this->pdfLibrary = $pdfLibrary;
         return $this;
     }
 
-    public function setData($data): PdfWriterService
+    public function setData($data): static
     {
         $this->data = array_merge($this->data, $data);
         return $this;
@@ -36,17 +37,18 @@ abstract class PdfWriterService
         return basename($this->filename);
     }
 
-    public function setFilename($filename): PdfWriterService
+    public function setFilename($filename): static
     {
         $this->filename = $filename;
         return $this;
     }
 
-    public function getData() {
+    public function getData(): array
+    {
         return $this->data;
     }
 
-    private function getContent()
+    private function getContent(): void
     {
         $this->data['pdf'] = $this->pdfLibrary;
         $viewBuilder = new ViewBuilder();
@@ -61,19 +63,19 @@ abstract class PdfWriterService
         $viewBuilder->setLayout('ajax')->setVars($this->getData())->setTemplate($this->templateFile)->build()->render();
     }
 
-    public function writeInline()
+    public function writeInline(): string
     {
         $this->getContent();
         return $this->pdfLibrary->Output($this->getFilename(), 'I');
     }
 
-    public function writeAttachment()
+    public function writeAttachment(): string
     {
         $this->getContent();
         return $this->pdfLibrary->Output('', 'S');
     }
 
-    public function writeFile()
+    public function writeFile(): string
     {
         $this->getContent();
 
@@ -90,7 +92,7 @@ abstract class PdfWriterService
         return $this->pdfLibrary->Output($this->getFilename(), 'F');
     }
 
-    public function writeHtml()
+    public function writeHtml(): string
     {
         $this->getContent();
         return $this->pdfLibrary->getHtml();

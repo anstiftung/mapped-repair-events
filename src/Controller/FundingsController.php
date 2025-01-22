@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Controller;
 
@@ -12,11 +13,13 @@ use Cake\I18n\DateTime;
 use App\Services\PdfWriter\FoerderbewilligungPdfWriterService;
 use App\Services\PdfWriter\FoerderantragPdfWriterService;
 use App\Mailer\AppMailer;
+use Cake\Http\Response;
 
 class FundingsController extends AppController
 {
 
-    public function index() {
+    public function index(): void
+    {
 
         $this->set('metaTags', [
             'title' => 'Förderantrag',
@@ -64,7 +67,8 @@ class FundingsController extends AppController
 
     }
 
-    private function getBasicErrorMessages($funding): array {
+    private function getBasicErrorMessages($funding): array
+    {
         $errors = ['Zugriff auf diese Seite nicht möglich.'];
         if (!empty($funding) && $funding->workshop->status == APP_DELETED) {
             $errors[] = 'Die Initiative ist gelöscht.';
@@ -73,7 +77,8 @@ class FundingsController extends AppController
 
     }
 
-    private function createdByOtherOwnerCheck($workshopUid) {
+    private function createdByOtherOwnerCheck($workshopUid): string
+    {
         $fundingsTable = $this->getTableLocator()->get('Fundings');
         $funding = $fundingsTable->find()->where([
             $fundingsTable->aliasField('workshop_uid') => $workshopUid,
@@ -89,7 +94,8 @@ class FundingsController extends AppController
         return '';
     }
 
-    public function edit() {
+    public function edit(): ?Response
+    {
 
         $workshopUid = (int) $this->getRequest()->getParam('uid');
 
@@ -187,10 +193,12 @@ class FundingsController extends AppController
             'title' => 'Förderantrag (UID: ' . $funding->uid . ')',
         ]);
         $this->set('funding', $funding);
+        return null;
 
     }
 
-    private function submitFunding($funding) {
+    private function submitFunding($funding): void
+    {
 
         $timestamp = DateTime::now();
 
@@ -242,7 +250,8 @@ class FundingsController extends AppController
 
     }
 
-    private function handleUpdateNewFundinguploadsWithIds($funding, $associations, $patchedEntity, $uploadTypes) {
+    private function handleUpdateNewFundinguploadsWithIds($funding, $associations, $patchedEntity, $uploadTypes): Funding
+    {
         foreach($uploadTypes as $uploadTypeId => $uploadType) {
             if (!empty($this->request->getData('Fundings.fundinguploads_' . $uploadType))) {
                 // patch id for new fundinguploads
@@ -258,14 +267,15 @@ class FundingsController extends AppController
                         }
                     }
                 }
-                $this->request = $this->request->withData('Fundings.fundinguploads_' . $uploadType ?? [], $updatedFundinguploads);
+                $this->request = $this->request->withData('Fundings.fundinguploads_' . $uploadType, $updatedFundinguploads);
                 $patchedEntity = $this->patchFunding($funding, $associations);
             }
         }
         return $patchedEntity;
     }
 
-    private function handleDeleteFundinguploads($funding, $associations, $patchedEntity, $newFundinguploads, $uploadTypes) {
+    private function handleDeleteFundinguploads($funding, $associations, $patchedEntity, $newFundinguploads, $uploadTypes): void
+    {
 
         foreach($uploadTypes as $uploadTypeId => $uploadType) {
             $deleteFundinguploads = $this->request->getData('Fundings.delete_fundinguploads_' . $uploadType);
@@ -287,7 +297,7 @@ class FundingsController extends AppController
                             return $fundingupload['id'] != $fundinguploadId;
                         });
                     }
-                    $this->request = $this->request->withData('Fundings.fundinguploads_' . $uploadType ?? [], $remainingFundinguploads);
+                    $this->request = $this->request->withData('Fundings.fundinguploads_' . $uploadType, $remainingFundinguploads);
                     $patchedEntity = $this->patchFunding($funding, $associations);
                 }
             }
@@ -303,7 +313,8 @@ class FundingsController extends AppController
 
     }
 
-    private function handleNewFundinguploads($funding, $associations, $patchedEntity, $uploadTypes) {
+    private function handleNewFundinguploads($funding, $associations, $patchedEntity, $uploadTypes): array
+    {
         $newFundinguploads = [];
         foreach($uploadTypes as $uploadTypeId => $uploadType) {
             $filesFundinguploadsErrors = $patchedEntity->getError('files_fundinguploads_' . $uploadType);
@@ -341,7 +352,8 @@ class FundingsController extends AppController
         return $newFundinguploads;
     }
 
-    private function patchFunding($funding, $associations) {
+    private function patchFunding($funding, $associations): Funding
+    {
         $fundingsTable = $this->getTableLocator()->get('Fundings');
         $patchedEntity = $fundingsTable->patchEntity($funding, $this->request->getData(), [
             'associated' => $associations,
@@ -349,14 +361,16 @@ class FundingsController extends AppController
         return $patchedEntity;
     }
 
-    private function updatePrivateFieldsForFieldsThatAreNotRequiredInUserProfile($privateFields) {
+    private function updatePrivateFieldsForFieldsThatAreNotRequiredInUserProfile($privateFields): string
+    {
         $fields = ['street', 'city', 'phone'];
         $existingArray = array_map('trim', explode(',', $privateFields));
         $updatedArray = array_unique(array_merge($existingArray, $fields));
         return implode(',', $updatedArray);
     }
 
-    private function patchFundingStatusIfNewUploadWasUploadedOrDeleted($newFundinguploads, $patchedEntity, $uploadType, $deleteFundinguploads) {
+    private function patchFundingStatusIfNewUploadWasUploadedOrDeleted($newFundinguploads, $patchedEntity, $uploadType, $deleteFundinguploads): Funding
+    {
         if (!empty($newFundinguploads) || !empty($deleteFundinguploads)) {
             $newStatus = Funding::STATUS_PENDING;
             $singularizedUploadType = Inflector::singularize($uploadType);
@@ -372,17 +386,17 @@ class FundingsController extends AppController
         return $patchedEntity;
     }
 
-    private function updateCoordinates($entity, $index, $addressString) {
-        if ($entity->use_custom_coordinates) {
-            return false;
+    private function updateCoordinates($entity, $index, $addressString): void
+    {
+        if (!$entity->use_custom_coordinates) {
+            $geoData = $this->geoService->getGeoDataByAddress($addressString);
+            $this->request = $this->request->withData('Fundings.'.$index.'.lat', $geoData['lat']);
+            $this->request = $this->request->withData('Fundings.'.$index.'.lng', $geoData['lng']);
+            $this->request = $this->request->withData('Fundings.'.$index.'.province_id', $geoData['provinceId'] ?? 0);
         }
-        $geoData = $this->geoService->getGeoDataByAddress($addressString);
-        $this->request = $this->request->withData('Fundings.'.$index.'.lat', $geoData['lat']);
-        $this->request = $this->request->withData('Fundings.'.$index.'.lng', $geoData['lng']);
-        $this->request = $this->request->withData('Fundings.'.$index.'.province_id', $geoData['provinceId'] ?? 0);
     }
 
-    public function delete()
+    public function delete(): void
     {
         $fundingUid = (int) $this->request->getParam('uid');
         $fundingsTable = $this->getTableLocator()->get('Fundings');
@@ -391,7 +405,8 @@ class FundingsController extends AppController
         $this->redirect(Configure::read('AppConfig.htmlHelper')->urlFundings());
     }
 
-    private function getPatchedFundingForValidFields($errors, $workshopUid, $associationsWithoutValidation) {
+    private function getPatchedFundingForValidFields($errors, $workshopUid, $associationsWithoutValidation): Funding
+    {
         $data = $this->request->getData();
         $verifiedFieldsWithErrors = [];
         foreach ($errors as $entity => $fieldErrors) {
@@ -417,24 +432,22 @@ class FundingsController extends AppController
         return $patchedEntity;
     }
 
-    private function removeValidationFromAssociations($associations) {
-
+    private function removeValidationFromAssociations($associations): array
+    {
         $result = array_map(function($association) {
             return ['validate' => false];
         }, array_flip($associations));
-
         // some association's data should not be saved if invalid
         foreach($result as $entity => $value) {
             if (in_array($entity, ['Fundingbudgetplans'])) {
                 $result[$entity] = ['validate' => 'default'];
             }
         }
-
         return $result;
-
     }
 
-    public function uploadZuwendungsbestaetigung() {
+    public function uploadZuwendungsbestaetigung():void
+    {
 
         $fundingsTable = $this->getTableLocator()->get('Fundings');
         $fundingUid = $this->getRequest()->getParam('uid');
@@ -466,7 +479,8 @@ class FundingsController extends AppController
 
     }
 
-    public function download() {
+    public function download(): Response
+    {
 
         $fundingUid = $this->getRequest()->getParam('uid');
         $type = $this->getRequest()->getParam('type');
@@ -501,7 +515,8 @@ class FundingsController extends AppController
 
     }
 
-    public function uploadDetail() {
+    public function uploadDetail(): Response
+    {
 
         $fundinguploadUid = $this->getRequest()->getParam('uid');
         $fundinguploadsTable = $this->getTableLocator()->get('Fundinguploads');

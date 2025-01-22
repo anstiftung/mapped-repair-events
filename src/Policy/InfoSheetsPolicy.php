@@ -5,15 +5,12 @@ namespace App\Policy;
 
 use Cake\Core\Configure;
 use Cake\Http\ServerRequest;
-use Cake\Datasource\FactoryLocator;
 use Authorization\Policy\RequestPolicyInterface;
 use Authorization\Policy\ResultInterface;
+use Cake\ORM\TableRegistry;
 
 class InfoSheetsPolicy implements RequestPolicyInterface
 {
-
-    protected $InfoSheet;
-    protected $Workshop;
 
     public function canAccess($identity, ServerRequest $request): bool|ResultInterface
     {
@@ -36,9 +33,9 @@ class InfoSheetsPolicy implements RequestPolicyInterface
 
             if ($identity->isOrga()) {
                 $workshopUid = (int) $request->getParam('pass')[0];
-                $this->Workshop = FactoryLocator::get('Table')->get('Workshops');
-                $workshop = $this->Workshop->getWorkshopForIsUserInOrgaTeamCheck($workshopUid);
-                if ($this->Workshop->isUserInOrgaTeam($identity, $workshop)) {
+                $workshopsTable = TableRegistry::getTableLocator()->get('Workshops');
+                $workshop = $workshopsTable->getWorkshopForIsUserInOrgaTeamCheck($workshopUid);
+                if ($workshopsTable->isUserInOrgaTeam($identity, $workshop)) {
                     return true;
                 }
             }
@@ -53,12 +50,12 @@ class InfoSheetsPolicy implements RequestPolicyInterface
             }
 
             $infoSheetUid = (int) $request->getParam('pass')[0];
-            $this->InfoSheet = FactoryLocator::get('Table')->get('InfoSheets');
+            $infoSheetsTable = TableRegistry::getTableLocator()->get('InfoSheets');
 
             // orgas are allowed to edit and delete only info sheets of associated workshops
             if ($identity->isOrga()) {
 
-                $infoSheet = $this->InfoSheet->find('all',
+                $infoSheet = $infoSheetsTable->find('all',
                     conditions: [
                         'InfoSheets.uid' => $infoSheetUid,
                         'InfoSheets.status > ' . APP_DELETED,
@@ -69,9 +66,9 @@ class InfoSheetsPolicy implements RequestPolicyInterface
                 )->first();
 
                 $workshopUid = $infoSheet->event->workshop_uid;
-                $this->Workshop = FactoryLocator::get('Table')->get('Workshops');
-                $workshop = $this->Workshop->getWorkshopForIsUserInOrgaTeamCheck($workshopUid);
-                if ($this->Workshop->isUserInOrgaTeam($identity, $workshop)) {
+                $workshopsTable = TableRegistry::getTableLocator()->get('Workshops');
+                $workshop = $workshopsTable->getWorkshopForIsUserInOrgaTeamCheck($workshopUid);
+                if ($workshopsTable->isUserInOrgaTeam($identity, $workshop)) {
                     return true;
                 }
 
@@ -79,7 +76,7 @@ class InfoSheetsPolicy implements RequestPolicyInterface
 
             // repairhelpers are allowed to edit and delete only own info sheets
             if ($identity->isRepairhelper()) {
-                $infoSheet = $this->InfoSheet->find('all',
+                $infoSheet = $infoSheetsTable->find('all',
                     conditions: [
                         'InfoSheets.uid' => $infoSheetUid,
                         'InfoSheets.owner' => $identity !== null ? $identity->uid : 0,

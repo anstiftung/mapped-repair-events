@@ -1,16 +1,24 @@
 <?php
+declare(strict_types=1);
 
 namespace App\View\Helper;
 
 use Cake\View\View;
 use Cake\Core\Configure;
 use Cake\View\Helper\HtmlHelper;
-use Cake\Datasource\FactoryLocator;
 use App\Controller\Component\StringComponent;
+use App\Model\Entity\Workshop;
 
 class MyHtmlHelper extends HtmlHelper {
 
-    public function getHostWithoutProtocol($hostnameWithProtocol)
+    public array $selectedMain = [];
+    public array $selectedSub1 = [];
+    public array $selectedSub2 = [];
+    public array $selectedSub3 = [];
+
+    public bool $selectParentElements = true;
+
+    public function getHostWithoutProtocol($hostnameWithProtocol): false|string
     {
         $parsedHostnameWithProtocol = (parse_url($hostnameWithProtocol));
         if (!empty($parsedHostnameWithProtocol['host'])) {
@@ -19,17 +27,16 @@ class MyHtmlHelper extends HtmlHelper {
         return false;
     }
 
-    public function getWorkshopStatisticTypes()
+    public function getWorkshopStatisticTypes(): array
     {
-        $workshop = FactoryLocator::get('Table')->get('Workshops');
         return [
-            $workshop::STATISTICS_DISABLED => 'Keine Statistik im Profil anzeigen',
-            $workshop::STATISTICS_SHOW_ALL => 'Gesamte Statistik anzeigen',
-            $workshop::STATISTICS_SHOW_ONLY_CHART => 'Nur Zahlenstatistik im Profil anzeigen',
+            Workshop::STATISTICS_DISABLED => 'Keine Statistik im Profil anzeigen',
+            Workshop::STATISTICS_SHOW_ALL => 'Gesamte Statistik anzeigen',
+            Workshop::STATISTICS_SHOW_ONLY_CHART => 'Nur Zahlenstatistik im Profil anzeigen',
         ];
     }
 
-    public function getMenuTypes()
+    public function getMenuTypes(): array
     {
         return [
             'no-menu' => 'In keinem Menü verlinken',
@@ -38,12 +45,12 @@ class MyHtmlHelper extends HtmlHelper {
         ];
     }
 
-    public function getAdditionalBlogCategoryUrl()
+    public function getAdditionalBlogCategoryUrl(): string
     {
         return StringComponent::slugify(Configure::read('AppConfig.additionalBlogCategoryName'));
     }
 
-    public function getHostName()
+    public function getHostName(): string
     {
         $serverName = Configure::read('AppConfig.serverName');
         $parsedServerName = parse_url($serverName)['host'];
@@ -51,7 +58,7 @@ class MyHtmlHelper extends HtmlHelper {
         return $parsedServerName;
     }
 
-    function getCarbonFootprintAsString($carbonFootprintSum)
+    function getCarbonFootprintAsString($carbonFootprintSum): string
     {
 
         $co2AeqPerFlightKilometer = 0.238;
@@ -104,7 +111,7 @@ class MyHtmlHelper extends HtmlHelper {
         return $result;
     }
 
-    public function getMaterialFootprintAsString($materialFootprintSum)
+    public function getMaterialFootprintAsString($materialFootprintSum): string
     {
         $annualConsumptionPerCapitaInKg = 25800;
         $amountPersonsPerYear = round($materialFootprintSum / $annualConsumptionPerCapitaInKg, 1);
@@ -130,16 +137,17 @@ class MyHtmlHelper extends HtmlHelper {
         return $result;
     }
 
-    public function getWorkshopsCountForGlobalStatisticsString($workshopCount)
+    public function getWorkshopsCountForGlobalStatisticsString($workshopCount): string
     {
         return Configure::read('AppConfig.numberHelper')->precision($workshopCount, 0) . ' ' . 'Initiativen haben mit ihren Reparaturdaten zu dieser Statistik beigetragen.';
     }
 
-    function roundUpToAny($n,$x) {
+    function roundUpToAny($n,$x): float
+    {
         return round($n*$x) / $x;
     }
 
-    function getGenders()
+    function getGenders(): array
     {
         return [
             'f' => 'weiblich',
@@ -147,7 +155,7 @@ class MyHtmlHelper extends HtmlHelper {
         ];
     }
 
-    function generateGenericRadioButton($form, $formField)
+    function generateGenericRadioButton($form, $formField): string
     {
         $result = '<div class="required form-fields-checkbox-wrapper dependent-form-field '.$formField->identifier.'">'.
             '<label>'.$formField->name.'</label>'.
@@ -161,17 +169,17 @@ class MyHtmlHelper extends HtmlHelper {
 
     }
 
-    function addClassToFormInputContainer($class)
+    function addClassToFormInputContainer($class): string
     {
         return '<div class="'.$class.' input {{type}}">{{content}}</div>';
     }
 
-    function addClassToFormInputContainerError($class)
+    function addClassToFormInputContainerError($class): string
     {
         return '<div class="'.$class.' input {{type}}{{required}} error">{{content}}{{error}}</div>';
     }
 
-    function getFacebookHint()
+    function getFacebookHint(): string
     {
         $html = '<strong>Facebook</strong>
          <p>Hier können nur Facebook-Seiten eingetragen werden, keine Personenprofile.
@@ -180,7 +188,7 @@ class MyHtmlHelper extends HtmlHelper {
         return $html;
     }
 
-    function getRoleHint($repairhelperInfotext, $orgaInfotext)
+    function getRoleHint($repairhelperInfotext, $orgaInfotext): string
     {
         $html = '<strong>Wichtige Informationen über die verschiedenen Benutzerrollen</strong><br />
                 <a class="open-with-featherlight" href="#repairhelperHelp" id="urlHelpLink">Was ist ein(e) <strong>Reparaturhelfer*in</strong> ?</a>
@@ -199,13 +207,14 @@ class MyHtmlHelper extends HtmlHelper {
         return $html;
     }
 
-    function urlEventDetail($workshopUrl, $eventUid, $eventDatumstart)
+    function urlEventDetail($workshopUrl, $eventUid, $eventDatumstart): string
     {
         return $this->urlWorkshopDetail($workshopUrl) .'?event='.$eventUid.','.$eventDatumstart->i18nFormat(Configure::read('DateFormat.Database')).'#datum';
     }
 
 
-    function urlUsers($categoryName = null, $zip=-1) {
+    function urlUsers($categoryName = null, $zip=-1): string
+    {
         $url = '/aktive';
         if (!is_null($categoryName)) {
             $url .= '/' . StringComponent::slugify($categoryName);
@@ -216,47 +225,58 @@ class MyHtmlHelper extends HtmlHelper {
         return $url;
     }
 
-    function urlUserProfile($userUid) {
+    function urlUserProfile($userUid): string
+    {
         return '/users/profile/'.$userUid;
     }
 
-    function urlUserHome() {
+    function urlUserHome(): string
+    {
         return '/users/welcome';
     }
 
-    function urlFundings() {
+    function urlFundings(): string
+    {
         return '/mein-foerderantrag';
     }
 
-    function urlFundingsEdit($workshopUid) {
+    function urlFundingsEdit($workshopUid): string
+    {
         return $this->urlFundings() . '/edit/' . $workshopUid;
     }
 
-    function urlFundingsUploadZuwendungsbestaetigung($fundingUid) {
+    function urlFundingsUploadZuwendungsbestaetigung($fundingUid): string
+    {
         return $this->urlFundings() . '/uploadZuwendungsbestaetigung/' . $fundingUid;
     }
 
-    function urlFundingsAdminEdit($fundingUid) {
+    function urlFundingsAdminEdit($fundingUid): string
+    {
         return '/admin/fundings/edit/' . $fundingUid;
     }
 
-    function urlFundinguploadDetail($fundinguploadId) {
+    function urlFundinguploadDetail($fundinguploadId): string
+    {
         return $this->urlFundings() . '/uploadDetail/' . $fundinguploadId;
     }
 
-    function urlFundingFoerderantragDownload($fundingUid) {
+    function urlFundingFoerderantragDownload($fundingUid): string
+    {
         return $this->urlFundings() . '/download/foerderantrag/' . $fundingUid;
     }
 
-    function urlFundingFoerderbewilligungDownload($fundingUid) {
+    function urlFundingFoerderbewilligungDownload($fundingUid): string
+    {
         return $this->urlFundings() . '/download/foerderbewilligung/' . $fundingUid;
     }
 
-    function urlFundingsDelete($fundinguploadId) {
+    function urlFundingsDelete($fundinguploadId): string
+    {
         return $this->urlFundings() . '/delete/' . $fundinguploadId;
     }
 
-    function getUserBackendNaviLinks($userUid, $isMyProfile, $isOrga) {
+    function getUserBackendNaviLinks($userUid, $isMyProfile, $isOrga): array
+    {
         $result = [];
         $result[] = ['url' => $this->urlUserHome(), 'name' => 'INFO'];
         $result[] = ['url' => $this->urlUserEdit($userUid, $isMyProfile), 'name' => 'MEIN PROFIL'];
@@ -271,7 +291,7 @@ class MyHtmlHelper extends HtmlHelper {
         return $result;
     }
 
-    function urlMyEvents()
+    function urlMyEvents(): string
     {
         return '/meine-termine';
     }
@@ -279,23 +299,22 @@ class MyHtmlHelper extends HtmlHelper {
     /**
      * for google geocoder
      * eg: Mayrhofstr. 4 => Mayrhofstraße 4 / Test Str. => Test Straße
-     * @param string $string
-     * @return $string
      */
-    function replaceAddressAbbreviations($string) {
+    function replaceAddressAbbreviations(string $string): string
+    {
         $string = preg_replace('/(s)tr\./i', '$1traße', $string);
         return $string;
     }
 
-    function getFacebookUrl($username) {
+    function getFacebookUrl($username): string
+    {
         return 'https://www.facebook.com/' . $username . '/';
     }
 
-    public function trimAndRemoveEmptyTags($html) {
-
+    public function trimAndRemoveEmptyTags($html): string
+    {
         $pattern = "/<[^\/>]*>([\s]?)*<\/[^>]*>/";
         $html = preg_replace($pattern, '', $html);
-
         return trim($html);
     }
 
@@ -306,7 +325,8 @@ class MyHtmlHelper extends HtmlHelper {
         parent::__construct($View, $config);
     }
 
-    function wrapJavascriptBlock($content) {
+    function wrapJavascriptBlock($content): string
+    {
         return "<script>
             //<![CDATA[
                 $(document).ready(function() {
@@ -316,14 +336,8 @@ class MyHtmlHelper extends HtmlHelper {
         </script>";
     }
 
-    public $selectedMain = [];
-    public $selectedSub1 = [];
-    public $selectedSub2 = [];
-    public $selectedSub3 = [];
-
-    public $selectParentElements = true;
-
-    function urlPageDetail($url, $preview=false) {
+    function urlPageDetail($url, $preview=false): string
+    {
         $previewSuffix = '';
         if ($preview == true) {
             $previewSuffix = '/vorschau';
@@ -334,136 +348,180 @@ class MyHtmlHelper extends HtmlHelper {
     /**
      * for admin edit
      */
-    function isUrlEditable($object) {
-        if ($object->status == APP_OFF) return true;
-        return false;
+    function isUrlEditable($object): bool
+    {
+        return $object->status == APP_OFF;
     }
 
-    function urlRegister() {
+    function urlRegister(): string
+    {
         return '/registrierung';
     }
 
-    function urlRegisterRepairhelper() {
+    function urlRegisterRepairhelper(): string
+    {
         return '/registrierung/reparaturhelferin';
     }
-    function urlRegisterOrga() {
+
+    function urlRegisterOrga(): string
+    {
         return '/registrierung/organisatorin';
     }
 
-    function urlLogin($redirect='') {
+    function urlLogin($redirect=''): string
+    {
         $url = '/users/login';
         if ($redirect != '') {
             $url .= '?redirect='.$redirect;
         }
         return $url;
     }
-    function urlLogout() {
+    function urlLogout(): string
+    {
         return '/users/logout';
     }
-    function urlPasswortAendern() {
+
+    function urlPasswortAendern(): string
+    {
         return '/users/passwortAendern';
     }
-    function urlUserWorkshopAdmin() {
+
+    function urlUserWorkshopAdmin(): string
+    {
         return '/initiativen/verwalten';
     }
-    function urlUserWorkshopApplicationUser() {
+
+    function urlUserWorkshopApplicationUser(): string
+    {
         return '/initiativen/mitmachen';
     }
-    function urlUserWorkshopApprove($type, $userUid, $workshopUid) {
+
+    function urlUserWorkshopApprove($type, $userUid, $workshopUid): string
+    {
         return '/initiativen/user/approve/' . $type . '/' . $userUid . '/' . $workshopUid;
     }
-    function urlUserWorkshopResign($type, $userUid, $workshopUid) {
+
+    function urlUserWorkshopResign($type, $userUid, $workshopUid): string
+    {
         return '/initiativen/user/resign/' . $type . '/' . $userUid . '/' . $workshopUid;
     }
-    function urlUserWorkshopRefuse($type, $userUid, $workshopUid) {
+
+    function urlUserWorkshopRefuse($type, $userUid, $workshopUid): string
+    {
         return '/initiativen/user/refuse/' . $type . '/' . $userUid . '/' . $workshopUid;
     }
-    function urlNeuesPasswortAnfordern() {
+
+    function urlNeuesPasswortAnfordern(): string
+    {
         return '/users/neuesPasswortAnfordern';
     }
 
-    function urlCategoryNew() {
+    function urlCategoryNew(): string
+    {
         return '/admin/categories/insert/';
     }
-    function urlCategoryEdit($id) {
+
+    function urlCategoryEdit($id): string
+    {
         return '/admin/categories/edit/' . $id;
     }
-    function urlOrdsCategoryNew() {
+    function urlOrdsCategoryNew(): string
+    {
         return '/admin/ordsCategories/insert/';
     }
-    function urlOrdsCategoryEdit($id) {
+    function urlOrdsCategoryEdit($id): string
+    {
         return '/admin/ordsCategories/edit/' . $id;
     }
-    function urlSkillNew() {
+    function urlSkillNew(): string
+    {
         return '/admin/skills/insert/';
     }
-    function urlSkillEdit($id) {
+    function urlSkillEdit($id): string
+    {
         return '/admin/skills/edit/' . $id;
     }
-    function urlBrandNew() {
+    function urlBrandNew(): string
+    {
         return '/admin/brands/insert/';
     }
-    function urlBrandEdit($id) {
+    function urlBrandEdit($id): string
+    {
         return '/admin/brands/edit/' . $id;
     }
-    function urlEventDelete($uid) {
+    function urlEventDelete($uid): string
+    {
         return '/termine/delete/' . $uid;
     }
-    function urlEventEdit($uid) {
+    function urlEventEdit($uid): string
+    {
         return '/termine/edit/' . $uid;
     }
-    function urlEventDuplicate($uid) {
+    function urlEventDuplicate($uid): string
+    {
         return '/termine/duplicate/' . $uid;
     }
-    function urlEventNew($workshopUid = null) {
+    function urlEventNew($workshopUid = null): string
+    {
         return '/termine/add' . (!is_null($workshopUid) ? '/'.$workshopUid : '');
     }
-    function urlInfoSheetNew($eventUid) {
+    function urlInfoSheetNew($eventUid): string
+    {
         return '/laufzettel/add/' . $eventUid;
     }
-    function urlInfoSheetEdit($infoSheetUid) {
+    function urlInfoSheetEdit($infoSheetUid): string
+    {
         return '/laufzettel/edit/' . $infoSheetUid;
     }
-    function urlInfoSheetDelete($infoSheetUid) {
+    function urlInfoSheetDelete($infoSheetUid): string
+    {
         return '/laufzettel/delete/' . $infoSheetUid;
     }
 
-    function urlFeed() {
+    function urlFeed(): string
+    {
         return '/feed.rss';
     }
 
-    function getThumbs50Image($image, $objectType) {
+    function getThumbs50Image($image, $objectType): string
+    {
         return FILES_DIR . 'uploadify/' . $objectType . '/thumbs-50/' . $image;
     }
 
-    function getThumbs100Image($image, $objectType) {
+    function getThumbs100Image($image, $objectType): string
+    {
         return FILES_DIR . 'uploadify/' . $objectType . '/thumbs-100/' . $image;
     }
 
-    function getThumbs150Image($image, $objectType) {
+    function getThumbs150Image($image, $objectType): string
+    {
         return FILES_DIR . 'uploadify/' . $objectType . '/thumbs-150/' . $image;
     }
 
-    function getThumbs300Image($image, $objectType) {
+    function getThumbs300Image($image, $objectType): string
+    {
         return FILES_DIR . 'uploadify/' . $objectType . '/thumbs-300/' . $image;
     }
 
-    function getOriginalImage($image, $objectType) {
+    function getOriginalImage($image, $objectType): string
+    {
         return FILES_DIR . 'uploadify/' . $objectType . '/' . $image;
     }
 
-    function getThumbs280ImageMultiple($image) {
+    function getThumbs280ImageMultiple($image): string
+    {
         return FILES_DIR . 'multiple/thumbs-280/' . $image;
     }
 
-    function getThumbs800ImageMultiple($image) {
+    function getThumbs800ImageMultiple($image): string
+    {
         return FILES_DIR . 'multiple/thumbs-800/' . $image;
     }
-    function urlSkills()
+    function urlSkills(): string
     {
         return '/kenntnisse';
     }
-    function urlWorkshops($keyword = '')
+    function urlWorkshops($keyword = ''): string
     {
         $url = '/orte';
         if ($keyword != '') {
@@ -471,7 +529,7 @@ class MyHtmlHelper extends HtmlHelper {
         }
         return $url;
     }
-    function urlEvents($keyword = '')
+    function urlEvents($keyword = ''): string
     {
         $url = '/termine';
         if ($keyword != '') {
@@ -479,7 +537,7 @@ class MyHtmlHelper extends HtmlHelper {
         }
         return $url;
     }
-    function urlSkillDetail($id, $name, $zip=-1)
+    function urlSkillDetail($id, $name, $zip=-1): string
     {
         $url = '/aktive/' . $id . '-' . StringComponent::slugify($name);
         if ($zip >= 0) {
@@ -487,60 +545,76 @@ class MyHtmlHelper extends HtmlHelper {
         }
         return $url;
     }
-    function urlBlogDetail($url) {
+    function urlBlogDetail($url): string
+    {
         return '/' . $url;
     }
-    function urlWorkshopNew() {
+    function urlWorkshopNew(): string
+    {
         return '/initiativen/anlegen';
     }
-    function urlWorkshopEdit($uid) {
+    function urlWorkshopEdit($uid): string
+    {
         return '/initiativen/bearbeiten/'.$uid;
     }
-    function urlWorkshopDelete($uid) {
+    function urlWorkshopDelete($uid): string
+    {
         return '/initiativen/loeschen/'.$uid;
     }
 
-    function urlWorkshopDetail($url) {
+    function urlWorkshopDetail($url): string
+    {
         return '/' . $url;
     }
-    function urlPageEdit($uid) {
+    function urlPageEdit($uid): string
+    {
         return '/admin/pages/edit/'.$uid;
     }
-    function urlPageNew() {
+    function urlPageNew(): string
+    {
         return '/admin/pages/insert';
     }
-    function urlPostEdit($uid) {
+    function urlPostEdit($uid): string
+    {
         return '/admin/posts/edit/'.$uid;
     }
-    function urlPostNew($type='') {
+    function urlPostNew($type=''): string
+    {
         return '/admin/posts/insert/'.$type;
     }
-    function urlKnowledgeNew() {
+    function urlKnowledgeNew(): string
+    {
         return '/admin/knowledges/insert';
     }
-    function urlKnowledgeEdit($uid) {
+    function urlKnowledgeEdit($uid): string
+    {
         return '/admin/knowledges/edit/'.$uid;
     }
-    function urlKnowledgeDetail($uid) {
+    function urlKnowledgeDetail($uid): string
+    {
         return $this->urlKnowledges() . '/#' . $uid;
     }
-    function urlKnowledges() {
+    function urlKnowledges(): string
+    {
         return '/reparaturwissen';
     }
-    public function getPostTypesWithPreview() {
+    public function getPostTypesWithPreview(): array
+    {
         return [
             'neuigkeiten',
             Configure::read('AppConfig.htmlHelper')->getAdditionalBlogCategoryUrl()
         ];
     }
-    function urlPostDetail($url, $preview=false) {
+    function urlPostDetail($url, $preview=false): string
+    {
         $previewSuffix = '';
         if ($preview == true) {
             $previewSuffix = '/vorschau';
         }
         return '/post/' . $url . $previewSuffix;
     }
-    function urlUserEdit($uid, $isMyProfile) {
+    function urlUserEdit($uid, $isMyProfile): string
+    {
         $url = '/users/profil';
         if (!$isMyProfile) {
             $url .= '/'.$uid;
@@ -548,7 +622,7 @@ class MyHtmlHelper extends HtmlHelper {
         return $url;
     }
 
-    public function getUserProfileImageSrc($user, $userImage)
+    public function getUserProfileImageSrc($user, $userImage): string
     {
         $userImageSrc = '/files/uploadify/users/thumbs-150/' . $userImage;
         if(empty($userImage)) {
@@ -570,7 +644,7 @@ class MyHtmlHelper extends HtmlHelper {
         return $userImageSrc;
     }
 
-    function getUserProfileImage($user)
+    function getUserProfileImage($user): string
     {
         $userAltText = isset($user->image_alt_text) ? $user->image_alt_text : $user['image_alt_text'];
         $userImage = isset($user->image) ? $user->image : $user['image'];
@@ -579,11 +653,13 @@ class MyHtmlHelper extends HtmlHelper {
         return $imageHtml;
     }
 
-    function urlUserNew() {
+    function urlUserNew(): string
+    {
         return '/users/add';
     }
 
-    function getUserGroupsForRegistration() {
+    function getUserGroupsForRegistration(): array
+    {
         $userGroups = [
             GROUPS_ORGA         => 'Organisator*in',
             GROUPS_REPAIRHELPER => Configure::read('AppConfig.repairHelperName'),
@@ -591,7 +667,8 @@ class MyHtmlHelper extends HtmlHelper {
         return $userGroups;
     }
 
-    function getUserGroupsForWorkshopDetail() {
+    function getUserGroupsForWorkshopDetail(): array
+    {
         $userGroups = [
             GROUPS_ADMIN        => 'Admin',
             GROUPS_ORGA         => 'Organisator*in',
@@ -600,14 +677,16 @@ class MyHtmlHelper extends HtmlHelper {
         return $userGroups;
     }
 
-    function getUserGroups() {
+    function getUserGroups(): array
+    {
         $userGroups = [
             GROUPS_ADMIN       => 'Admin'
         ];
         return $userGroups;
     }
 
-    function getUserGroupsForUserEdit($isAdmin = false) {
+    function getUserGroupsForUserEdit($isAdmin = false): array
+    {
         $userGroups = [];
         if ($isAdmin) {
             $userGroups[GROUPS_ADMIN] = 'Admin';
@@ -617,7 +696,8 @@ class MyHtmlHelper extends HtmlHelper {
         return $userGroups;
     }
 
-    function formatBytes($bytes, $precision = 2) {
+    function formatBytes($bytes, $precision = 2) :string
+    {
         $units = ['B', 'KB', 'MB', 'GB', 'TB'];
 
         $bytes = max($bytes, 0);
@@ -629,7 +709,8 @@ class MyHtmlHelper extends HtmlHelper {
         return number_format($bytes, $precision, ',', '.') . ' ' . $units[$pow];
     }
 
-    function getPhotoDimensions($dimension) {
+    function getPhotoDimensions($dimension): array|false
+    {
         if (!preg_match('/x/', $dimension)) return false;
         return explode('x', $dimension);
     }
@@ -637,7 +718,8 @@ class MyHtmlHelper extends HtmlHelper {
     /**
      * creates navigation with up to 2 sublevels
      */
-    function createMenuEntry($menuElement, $order = null, $mainMenuElement = null) {
+    function createMenuEntry($menuElement, $order = null, $mainMenuElement = null): string
+    {
 
         $element = '';
 

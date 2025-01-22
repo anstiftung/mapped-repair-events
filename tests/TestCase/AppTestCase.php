@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace App\Test\TestCase;
 use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
@@ -45,12 +46,12 @@ class AppTestCase extends TestCase
         'app.WorkshopsCategories',
     ];
 
-    protected function correctServerName($html)
+    protected function correctServerName($html): string
     {
         return preg_replace('/\{\{serverName\}\}/', str_replace('/', '\\\/', Configure::read('AppConfig.serverName')), $html);
     }
 
-    protected function correctExpectedDate($html, $expectedDate)
+    protected function correctExpectedDate($html, $expectedDate): string
     {
         return preg_replace('/\{\{expectedDate\}\}/', str_replace('/', '\\\/', $expectedDate), $html);
     }
@@ -58,15 +59,13 @@ class AppTestCase extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        if (method_exists($this, 'enableSecurityToken')) {
 
-                $this->enableCsrfToken();
+        $this->enableCsrfToken();
 
-                if (!in_array($this->toString(), [
-                    'testAddEventsOk',
-                ])) {
-                    $this->enableSecurityToken();
-                }
+        if (!in_array($this->toString(), [
+            'testAddEventsOk',
+        ])) {
+            $this->enableSecurityToken();
         }
     }
 

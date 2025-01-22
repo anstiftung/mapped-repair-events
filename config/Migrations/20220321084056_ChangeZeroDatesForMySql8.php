@@ -6,7 +6,7 @@ use Migrations\AbstractMigration;
 class ChangeZeroDatesForMySql8 extends AbstractMigration
 {
 
-    public function change()
+    public function change(): void
     {
 
         $tables = [

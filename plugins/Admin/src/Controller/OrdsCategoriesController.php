@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Admin\Controller;
 
 use Cake\Http\Exception\NotFoundException;
@@ -15,7 +16,7 @@ class OrdsCategoriesController extends AdminAppController
         $this->OrdsCategory = $this->getTableLocator()->get('OrdsCategories');
     }
 
-    public function insert()
+    public function insert(): void
     {
         $ordsCategory = [
             'name' => 'Neue ORDS-Kategorie',
@@ -28,7 +29,7 @@ class OrdsCategoriesController extends AdminAppController
         $this->redirect($this->getReferer());
     }
 
-    public function edit($id)
+    public function edit($id): void
     {
 
         if (empty($id)) {
@@ -70,7 +71,7 @@ class OrdsCategoriesController extends AdminAppController
 
     }
 
-    public function index()
+    public function index(): void
     {
         parent::index();
 

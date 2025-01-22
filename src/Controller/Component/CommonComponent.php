@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Controller\Component;
 
@@ -16,11 +17,9 @@ class CommonComponent extends AppComponent {
     /**
      * For this helper the controller has to be passed as reference
      * for manual startup with $disableStartup = true (requires this to be called prior to any other method)
-     *
-     * @param \Cake\Event\Event $event
-     * @return void
      */
-    public function startup(EventInterface $event) {
+    public function startup(EventInterface $event): void
+    {
 
         $request = $this->controller->getRequest();
 
@@ -29,6 +28,7 @@ class CommonComponent extends AppComponent {
         if ($this->controller->getRequest()->getData()) {
             $newData = $this->trimAndSanitizeDeep($request->getData());
             foreach ($newData as $k => $v) {
+                $k = (string) $k;
                 if ($request->getData($k) !== $v) {
                     $request = $request->withData($k, $v);
                 }
@@ -49,22 +49,17 @@ class CommonComponent extends AppComponent {
             }
         }
 
-        if ($request === $this->controller->getRequest()) {
-            return;
+        if ($request !== $this->controller->getRequest()) {
+            $this->controller->setRequest($request);
         }
-
-        $this->controller->setRequest($request);
 
     }
 
     /**
      * Trim and sanitize recursively
-     *
-     * @param string|array|null $value
-     * @param bool $transformNullToString
-     * @return array|string
      */
-    private function trimAndSanitizeDeep($value, $transformNullToString = false) {
+    private function trimAndSanitizeDeep($value, $transformNullToString = false): mixed
+    {
 
         // Laminas\Diactoros\UploadedFile
         if (is_object($value)) {

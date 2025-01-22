@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 if (!empty($_SERVER['REQUEST_URI'])) {
     echo '<b>RequestUri</b>:' .$_SERVER['REQUEST_URI'].'<br /><br />';

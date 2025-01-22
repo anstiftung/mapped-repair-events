@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Controller;
 
@@ -29,7 +30,7 @@ class UsersController extends AppController
         $this->User = $this->getTableLocator()->get('Users');
     }
 
-    public function beforeFilter(EventInterface $event)
+    public function beforeFilter(EventInterface $event): void
     {
         parent::beforeFilter($event);
         $this->Authentication->allowUnauthenticated([
@@ -46,7 +47,7 @@ class UsersController extends AppController
 
     }
 
-    public function all()
+    public function all(): void
     {
 
         // pass[0] can contain "44-tag-name" or "category-name"
@@ -138,7 +139,7 @@ class UsersController extends AppController
         }
 
         $this->Skill = $this->getTableLocator()->get('Skills');
-        $skillsForDropdown = $this->Skill->getForDropdownIncludingCategories(false);
+        $skillsForDropdown = $this->Skill->getForDropdownIncludingCategories();
         $this->set('skillsForDropdown', $skillsForDropdown);
 
         $metaTags = [
@@ -153,7 +154,7 @@ class UsersController extends AppController
         $this->set('overviewLink', $overviewLink);
     }
 
-    public function publicProfile()
+    public function publicProfile(): void
     {
 
         $userUid = $this->request->getParam('id');
@@ -195,7 +196,8 @@ class UsersController extends AppController
 
     }
 
-    public function welcome() {
+    public function welcome(): void
+    {
         $this->Page = $this->getTableLocator()->get('Pages');
         $homepageIntrotext = $this->Page->getPageByName('homepage.introtext');
         $this->set('homepageIntrotext', $homepageIntrotext);
@@ -203,10 +205,9 @@ class UsersController extends AppController
             'title' => 'Herzlich Willkommen'
         ];
         $this->set('metaTags', $metaTags);
-
     }
 
-    public function neuesPasswortAnfordern()
+    public function neuesPasswortAnfordern(): void
     {
         $metaTags = [
             'title' => 'Neues Passwort anfordern'
@@ -262,7 +263,7 @@ class UsersController extends AppController
 
     }
 
-    public function add()
+    public function add(): void
     {
         $user = $this->User->newEntity(
             [
@@ -282,7 +283,7 @@ class UsersController extends AppController
 
     }
 
-    private function _profil($user, $isMyProfile, $isEditMode)
+    private function _profil($user, $isMyProfile, $isEditMode): void
     {
         $this->Category = $this->getTableLocator()->get('Categories');
         $this->set('categories', $this->Category->getForDropdown(APP_ON));
@@ -373,7 +374,7 @@ class UsersController extends AppController
 
     }
 
-    public function profil($userUid=null)
+    public function profil($userUid=null): void
     {
 
         if ($userUid === null && !$this->isLoggedIn()) {
@@ -387,7 +388,7 @@ class UsersController extends AppController
         // own profile
         $isMyProfile = false;
         if ($userUid === null && $this->isLoggedIn()) {
-            $userUid = $this->isLoggedIn() ? $this->loggedUser->uid : 0;
+            $userUid = $this->loggedUser->uid;
             $metaTags = [
                 'title' => 'Mein Profil'
             ];
@@ -429,7 +430,7 @@ class UsersController extends AppController
 
     }
 
-    public function passwortAendern()
+    public function passwortAendern(): void
     {
 
         $metaTags = [
@@ -465,7 +466,7 @@ class UsersController extends AppController
         $this->set('user', $user);
     }
 
-    public function login()
+    public function login(): void
     {
         $metaTags = [
             'title' => 'Anmelden'
@@ -486,7 +487,8 @@ class UsersController extends AppController
         }
     }
 
-    public function delete() {
+    public function delete(): void
+    {
         $metaTags = [
             'title' => 'Profil löschen'
         ];
@@ -509,7 +511,8 @@ class UsersController extends AppController
         }
     }
 
-    public function activate() {
+    public function activate(): void
+    {
 
         if (! isset($this->request->getParam('pass')['0'])) {
             $this->AppFlash->setFlashError(__('Invalid parameters.'));
@@ -567,7 +570,8 @@ class UsersController extends AppController
 
     }
 
-    public function registerRepairhelper() {
+    public function registerRepairhelper(): void
+    {
         $this->register(GROUPS_REPAIRHELPER);
         // assures rendering of success message on redirected page and NOT before and then not showing it
         if (empty($this->request->getData())) {
@@ -575,7 +579,8 @@ class UsersController extends AppController
         }
     }
 
-    public function registerOrga() {
+    public function registerOrga(): void
+    {
         $this->register(GROUPS_ORGA);
         // assures rendering of success message on redirected page and NOT before and then not showing it
         if (empty($this->request->getData())) {
@@ -583,12 +588,12 @@ class UsersController extends AppController
         }
     }
 
-    private function isCalledByTestSuite()
+    private function isCalledByTestSuite(): bool
     {
         return !empty($_SERVER['argv']) && !empty($_SERVER['argv'][0]) && preg_match('`vendor/bin/phpunit`', $_SERVER['argv'][0]);
     }
 
-    public function register($userGroup=GROUPS_REPAIRHELPER)
+    public function register($userGroup=GROUPS_REPAIRHELPER): void
     {
 
         $this->set('isCalledByTestSuite', $this->isCalledByTestSuite());
@@ -693,7 +698,7 @@ class UsersController extends AppController
 
     }
 
-    public function logout()
+    public function logout(): void
     {
         $this->AppFlash->setFlashMessage('Du hast dich erfolgreich ausgeloggt.');
         $this->Authentication->logout();

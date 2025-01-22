@@ -1,17 +1,19 @@
 <?php
+declare(strict_types=1);
 namespace App\Model\Table;
 
 use Cake\Core\Configure;
-use Cake\Datasource\FactoryLocator;
 use Cake\ORM\Table;
+use Cake\ORM\TableRegistry;
 use Cake\Utility\Hash;
 use Cake\Validation\Validator;
+use Cake\ORM\Query\SelectQuery;
 
 class CategoriesTable extends Table
 {
 
-    public $allowedBasicHtmlFields = [];
-    public $name_de = 'Kategorie';
+    public array $allowedBasicHtmlFields = [];
+    public string $name_de = 'Kategorie';
 
     public function initialize(array $config): void
     {
@@ -47,15 +49,15 @@ class CategoriesTable extends Table
         ]);
     }
 
-    public function validationDefault(Validator $validator): \Cake\Validation\Validator
+    public function validationDefault(Validator $validator): Validator
     {
         $validator->notEmptyString('name', 'Bitte trage den Namen ein.');
         return $validator;
     }
 
-    public function getInfoSheetCount($categoryId)
+    public function getInfoSheetCount($categoryId): int
     {
-        $infoSheetTable = FactoryLocator::get('Table')->get('InfoSheets');
+        $infoSheetTable = TableRegistry::getTableLocator()->get('InfoSheets');
         $result = $infoSheetTable->find('all',
             conditions: [
                 $infoSheetTable->aliasField('category_id') => $categoryId,
@@ -65,9 +67,8 @@ class CategoriesTable extends Table
         return $result;
     }
 
-    public function getMaterialFootprintByParentCategoryId($parentCategoryId)
+    public function getMaterialFootprintByParentCategoryId($parentCategoryId): float
     {
-
         $category = $this->find('all', conditions: [
             'Categories.parent_id' => $parentCategoryId
         ])->first();
@@ -77,12 +78,11 @@ class CategoriesTable extends Table
             $result = $category->material_footprint;
         }
 
-        return $result;
+        return (float) $result;
     }
 
-    public function getCarbonFootprintByParentCategoryId($parentCategoryId)
+    public function getCarbonFootprintByParentCategoryId($parentCategoryId): float
     {
-
         $category = $this->find('all', conditions: [
             'Categories.parent_id' => $parentCategoryId
         ])->first();
@@ -92,15 +92,11 @@ class CategoriesTable extends Table
             $result = $category->carbon_footprint;
         }
 
-        return $result;
+        return (float) $result;
     }
 
-    /**
-     * @return array
-     */
-    public function getForSubcategoryDropdown()
+    public function getForSubcategoryDropdown(): array
     {
-
         $categories = $this->find('threaded',
         conditions: [
             'Categories.visible_on_platform' => APP_ON,
@@ -133,19 +129,19 @@ class CategoriesTable extends Table
 
     }
 
-    public function calculateMaterialFootprint($repairedCount, $materialFootprintFactor)
+    public function calculateMaterialFootprint(float $repairedCount, float $materialFootprintFactor): float
     {
         $savedEnergyPart = 0.3;
         return $repairedCount * $materialFootprintFactor * $savedEnergyPart;
     }
 
-    public function calculateCarbonFootprint($repairedCount, $carbonFootprintFactor)
+    public function calculateCarbonFootprint(float $repairedCount, float $carbonFootprintFactor): float
     {
         $savedEnergyPart = 0.3;
         return $repairedCount * $carbonFootprintFactor * $savedEnergyPart;
     }
 
-    public function getCategoriesForStatisticsGlobal()
+    public function getCategoriesForStatisticsGlobal(): array
     {
 
         $categories = [];
@@ -181,7 +177,7 @@ class CategoriesTable extends Table
         return $categories;
     }
 
-    public function getMainCategoriesForFrontend()
+    public function getMainCategoriesForFrontend(): SelectQuery
     {
         $categories = $this->find('all',
         conditions: [
@@ -194,10 +190,7 @@ class CategoriesTable extends Table
         return $categories;
     }
 
-    /**
-     * @return array
-     */
-    public function getForDropdown($visibleOnPlatform)
+    public function getForDropdown($visibleOnPlatform): array
     {
 
         $categories = $this->find('all',

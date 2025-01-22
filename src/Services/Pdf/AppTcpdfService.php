@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace App\Services\Pdf;
 
 use TCPDF;
@@ -6,10 +7,10 @@ use TCPDF;
 abstract class AppTcpdfService extends TCPDF
 {
 
-    public $backgroundImageFile = '';
-    public $fontSizeBig = 12;
-    public $fontSizeDefault = 10;
-    public $fontSizeSmall = 8;
+    public string $backgroundImageFile = '';
+    public int $fontSizeBig = 12;
+    public int $fontSizeDefault = 10;
+    public int $fontSizeSmall = 8;
 
     public function __construct($orientation = 'P', $unit = 'mm', $format = 'A4', $unicode = true, $encoding = 'UTF-8', $diskcache = false, $pdfa = false)
     {
@@ -23,22 +24,22 @@ abstract class AppTcpdfService extends TCPDF
         $this->SetPrintFooter(false);
     }
 
-    public function SetFontSizeBig()
+    public function SetFontSizeBig(): void
     {
         $this->SetFontSize($this->fontSizeBig);
     }
 
-    public function SetFontSizeDefault()
+    public function SetFontSizeDefault(): void
     {
         $this->SetFontSize($this->fontSizeDefault);
     }
 
-    public function SetFontSizeSmall()
+    public function SetFontSizeSmall(): void
     {
         $this->SetFontSize($this->fontSizeSmall);
     }
 
-    public function setDefaults()
+    public function setDefaults(): void
     {
 
         $this->setPrintFooter(false);
@@ -52,7 +53,8 @@ abstract class AppTcpdfService extends TCPDF
 
     }
 
-    public function Header() {
+    public function Header(): void
+    {
         $this->SetMargins(0, 0, 0);
         $this->SetAutoPageBreak(false, 0);
 
@@ -62,7 +64,7 @@ abstract class AppTcpdfService extends TCPDF
         $this->Image($this->backgroundImageFile, 0, 0, $pageWidth, $pageHeight);
     }
 
-    public function getFundingDataAsTable($data, $width = '100%', $widthColumnA = '30%', $widthColumnB = '70%', $alignmentColumnA = 'left', $alignmentColumnB = 'left')
+    public function getFundingDataAsTable($data, $width = '100%', $widthColumnA = '30%', $widthColumnB = '70%', $alignmentColumnA = 'left', $alignmentColumnB = 'left'): string
     {
         $html = '<table width="' . $width . '" border="0" cellpadding="0">';
             foreach($data as $value) {

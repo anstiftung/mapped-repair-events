@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Admin\Controller;
 
 use App\Controller\Component\StringComponent;
@@ -25,7 +26,7 @@ class PostsController extends AdminAppController
         $this->User = $this->getTableLocator()->get('Users');
     }
 
-    public function insert($blogId)
+    public function insert($blogId): void
     {
 
         // admin defaults
@@ -47,7 +48,7 @@ class PostsController extends AdminAppController
 
     }
 
-    public function edit($uid)
+    public function edit($uid): void
     {
 
         if (empty($uid)) {
@@ -100,7 +101,7 @@ class PostsController extends AdminAppController
 
     }
 
-    public function beforeFilter(EventInterface $event)
+    public function beforeFilter(EventInterface $event): void
     {
 
         $this->addSearchOptions([
@@ -132,7 +133,7 @@ class PostsController extends AdminAppController
 
     }
 
-    public function index()
+    public function index(): void
     {
         parent::index();
 

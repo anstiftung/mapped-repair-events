@@ -5,7 +5,7 @@ use Migrations\AbstractMigration;
 
 class RemoveNewsletter extends AbstractMigration
 {
-    public function change()
+    public function change(): void
     {
         $this->execute("DROP table newsletters;");
     }

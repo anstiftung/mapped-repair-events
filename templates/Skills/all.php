@@ -1,5 +1,5 @@
 <?php
-use App\Controller\Component\StringComponent;
+declare(strict_types=1);
 echo $this->element('highlightNavi', ['main' => 'Wissen & Können']);
 ?>
 
@@ -34,7 +34,7 @@ foreach($skills as $letter => $letterSkills) {
                 case ($count > 2):
                     $class = 'skill-20';
                     break;
-                case ($count > 0):
+                default:
                     $class = 'skill-10';
                     break;
             }

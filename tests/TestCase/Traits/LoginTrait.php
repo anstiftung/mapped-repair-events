@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Test\TestCase\Traits;
 
@@ -7,7 +8,7 @@ use Cake\Datasource\FactoryLocator;
 trait LoginTrait
 {
 
-    protected function loginAsOrga()
+    protected function loginAsOrga(): void
     {
         $userEmail = 'johndoe@mailinator.com';
         $usersTable = FactoryLocator::get('Table')->get('Users');
@@ -23,7 +24,7 @@ trait LoginTrait
         $this->session(['Auth' => $user]);
     }
 
-    protected function loginAsAdmin()
+    protected function loginAsAdmin(): void
     {
         $userEmail = 'admin@mailinator.com';
         $usersTable = FactoryLocator::get('Table')->get('Users');
@@ -39,7 +40,7 @@ trait LoginTrait
         $this->session(['Auth' => $user]);
     }
 
-    protected function loginAsRepairhelper()
+    protected function loginAsRepairhelper(): void
     {
         $userEmail = 'maxmuster@mailinator.com';
         $usersTable = FactoryLocator::get('Table')->get('Users');

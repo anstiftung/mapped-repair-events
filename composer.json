@@ -35,9 +35,11 @@
     },
     "require-dev": {
         "cakephp/debug_kit": "5.*",
-        "phpstan/phpstan": "1.*",
+        "phpstan/phpstan": "2.*",
         "phpunit/phpunit": "^11.0",
-        "friendsofcake/fixturize": "^3.0"
+        "friendsofcake/fixturize": "^3.0",
+        "cakedc/cakephp-phpstan": "^4.0",
+        "ergebnis/phpstan-rules": "^2.5"
     },
     "autoload": {
         "psr-4": {

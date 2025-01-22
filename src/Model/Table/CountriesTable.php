@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace App\Model\Table;
 
 use Cake\ORM\Table;
@@ -6,9 +7,13 @@ use Cake\ORM\Table;
 class CountriesTable extends Table
 {
 
-    public $primaryKey = 'code';
+    public function initialize(array $config): void
+    {
+        parent::initialize($config);
+        $this->setPrimaryKey('code');
+    }
 
-    public function getForDropdown()
+    public function getForDropdown(): array
     {
         $countries = $this->find('all', order: [
             'rank' => 'ASC',

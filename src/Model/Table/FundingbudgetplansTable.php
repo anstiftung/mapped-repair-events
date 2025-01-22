@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace App\Model\Table;
 
 use Cake\ORM\Table;
@@ -24,7 +25,7 @@ class FundingbudgetplansTable extends Table
         ]);
     }
 
-    public function beforeMarshal(EventInterface $event, ArrayObject $data, ArrayObject $options)
+    public function beforeMarshal(EventInterface $event, ArrayObject $data, ArrayObject $options): void
     {
         $data = StringComponent::cleanAllStringsInData($data);
     }

@@ -1,37 +1,38 @@
 <?php
+declare(strict_types=1);
 namespace App\Controller;
 
+use App\Controller\Component\CommonComponent;
+use App\Controller\Component\StringComponent;
 use App\Model\Table\RootsTable;
 use Cake\Controller\Controller;
 use Cake\Core\Configure;
-use Cake\Datasource\ConnectionManager;
 use Cake\Event\EventInterface;
-use Cake\Http\Exception\NotFoundException;
-use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
 use Cake\I18n\DateTime;
 use App\Model\Table\PagesTable;
 use App\Services\GeoService;
 use App\Model\Table\WorkshopsTable;
+use App\Test\Mock\GeoServiceMock;
+use Cake\Datasource\EntityInterface;
+use Cake\ORM\Entity;
 
 class AppController extends Controller
 {
 
-    public $modelName;
-    public $loggedUser = null;
-    public $connection;
+    public string $modelName;
+    public mixed $loggedUser = null;
     public RootsTable $Root;
     public WorkshopsTable $Workshop;
-    public $pluralizedModelName;
-    public $Common;
-    public $String;
+    public string $pluralizedModelName;
+    public CommonComponent $Common;
+    public StringComponent $String;
     public PagesTable $Page;
-    public $geoService;
+    public GeoService|GeoServiceMock $geoService;
 
     public function __construct($request = null, $response = null)
     {
         parent::__construct($request, $response);
-        $this->connection = ConnectionManager::get('default');
         $this->Root = $this->getTableLocator()->get('Roots');
         $this->Workshop = $this->getTableLocator()->get('Workshops');
         $this->modelName = Inflector::classify($this->name);
@@ -39,15 +40,6 @@ class AppController extends Controller
         $this->geoService = new GeoService();
     }
 
-    /**
-     * Initialization hook method.
-     *
-     * Use this method to add common initialization code like loading components.
-     *
-     * e.g. `$this->loadComponent('Security');`
-     *
-     * @return void
-     */
     public function initialize(): void
     {
 
@@ -70,7 +62,7 @@ class AppController extends Controller
 
     }
 
-    protected function setNavigation()
+    protected function setNavigation(): void
     {
         $this->Page = $this->getTableLocator()->get('Pages');
         $conditions = [];
@@ -90,11 +82,7 @@ class AppController extends Controller
         $this->set('pagesForFooter', $pagesForFooter);
     }
 
-    /**
-     * @param \Cake\Event\Event $event
-     * @return \Cake\Http\Response|null
-     */
-    public function beforeFilter(EventInterface $event)
+    public function beforeFilter(EventInterface $event): void
     {
         parent::beforeFilter($event);
         $this->loggedUser = $this->request->getAttribute('identity');
@@ -104,7 +92,7 @@ class AppController extends Controller
         $this->set('loggedUser', $this->loggedUser);
     }
 
-    public function beforeRender(EventInterface $event)
+    public function beforeRender(EventInterface $event): void
     {
         if (!$this->request->getSession()->check('isMobile') && $this->request->is('mobile')) {
             $this->request->getSession()->write('isMobile', true);
@@ -135,13 +123,10 @@ class AppController extends Controller
 
     /**
      * checks the url for parameter "preview"
-     * @return boolean preview
      */
-    protected function isPreview()
+    protected function isPreview(): bool
     {
-        if (isset($this->request->getParam('pass')['1']) && $this->request->getParam('pass')['1'] == 'vorschau')
-            return true;
-        return false;
+        return isset($this->request->getParam('pass')['1']) && $this->request->getParam('pass')['1'] == 'vorschau';
     }
 
     /**
@@ -149,11 +134,8 @@ class AppController extends Controller
      * und diese seite aber online ist, redirecten.
      * nur, wenn die seite offline ist, flash message anzeigen, sonst verwirrt es
      * den user
-     *
-     * @param int status of the object
-     * @param string url
      */
-    protected function doPreviewChecks($status, $redirectUrl)
+    protected function doPreviewChecks(int $status, string $redirectUrl): void
     {
         if ($status == APP_ON && $this->isPreview()) {
             $this->redirect($redirectUrl);
@@ -163,14 +145,7 @@ class AppController extends Controller
         }
     }
 
-    /**
-     * überprüft die url auf den parameter /vorschau
-     *
-     * @param string $modelName
-     * @param string url (zum zeitpunkt dieses methoden-aufrufes ist noch keine uid vorhanden, sondern nur die url
-     * @return array $params status for cake-condition
-     */
-    protected function getPreviewConditions($modelName, $url)
+    protected function getPreviewConditions(string $modelName, string $url): array
     {
         $previewConditions = [];
 
@@ -192,7 +167,7 @@ class AppController extends Controller
         return $previewConditions;
     }
 
-    public function setContext($object)
+    public function setContext($object): void
     {
         $className = Inflector::classify($this->name);
         $this->set('context', [
@@ -201,7 +176,7 @@ class AppController extends Controller
         ]);
     }
 
-    public function mergeCustomMetaTags($metaTags, $object)
+    public function mergeCustomMetaTags(array $metaTags, $object): array
     {
         if (!empty($object->metatag) && !empty($object->metatag->title)) {
             $metaTags['title'] = $object->metatag->title;
@@ -215,65 +190,22 @@ class AppController extends Controller
         return $metaTags;
     }
 
-    public function getPreparedReferer()
+    public function getPreparedReferer(): string
     {
         return htmlspecialchars_decode($this->getRequest()->getData('referer'));
     }
 
-    public function setReferer()
+    public function setReferer(): void
     {
         $this->set('referer', $this->getReferer());
     }
 
-    public function getReferer()
+    public function getReferer(): string
     {
         return $this->request->getData('referer') ?? $_SERVER['HTTP_REFERER'] ?? '/';
     }
 
-    /**
-     * checks if detail page is allowed for current user group
-     * currently implemented for pages and votings
-     *
-     * @param array $groups
-     * @throws NotFoundException
-     */
-    protected function doUserGroupAccessCheck($groups)
-    {
-
-        return true;
-
-        $loggedUserGroups = [];
-        if (!empty($this->loggedUser) && !empty($this->loggedUser->groups)) {
-            $loggedUserGroups = Hash::extract($this->loggedUser->groups, '{n}.id');
-        }
-
-        $objectGroups = [];
-        if (! empty($groups)) {
-            $objectGroups = Hash::extract($groups, '{n}.id');
-        }
-
-        if (! $this->isLoggedIn()) {
-            // ausgeloggt und page hat rechte gesetzt => 404
-            if (! empty($objectGroups)) {
-                throw new NotFoundException('user nicht eingeloggt und page verlangt view-rechte');
-            }
-        } else {
-            // eingeloggt und logged user hat keine rechte => 404
-            if (! empty($objectGroups)) {
-                $loggedUserHasRightsToViewPage = false;
-                foreach ($objectGroups as $objectGroup) {
-                    if (in_array($objectGroup, $loggedUserGroups)) {
-                        $loggedUserHasRightsToViewPage = true;
-                    }
-                }
-                if (! $loggedUserHasRightsToViewPage) {
-                    throw new NotFoundException('eingeloggter user besitzt keine view-rechte für diese seite');
-                }
-            }
-        }
-    }
-
-    protected function patchEntityWithCurrentlyUpdatedFields($entity)
+    protected function patchEntityWithCurrentlyUpdatedFields($entity): EntityInterface
     {
         $modelName = $this->modelName;
         $entity = $this->$modelName->patchEntity($entity, [
@@ -283,7 +215,7 @@ class AppController extends Controller
         return $entity;
     }
 
-    protected function stripTagsFromFields($entity, $modelName)
+    protected function stripTagsFromFields($entity, $modelName): EntityInterface
     {
         foreach ($entity->toArray() as $field => $data) {
             if (in_array($field, $this->$modelName->allowedBasicHtmlFields)) {
@@ -308,16 +240,12 @@ class AppController extends Controller
         return $entity;
     }
 
-    public function setIsCurrentlyUpdated($uid)
+    public function setIsCurrentlyUpdated($uid): void
     {
-        $this->set('isCurrentlyUpdated', $this->isCurrentlyUpdated($uid) ? '1' : '0');
+        $this->set('isCurrentlyUpdated', $this->isCurrentlyUpdated((int) $uid) ? '1' : '0');
     }
 
-    /**
-     * @param int $uid
-     * @return boolean $success
-     */
-    protected function isCurrentlyUpdated($uid)
+    protected function isCurrentlyUpdated(int $uid): bool
     {
         $modelName = $this->modelName;
         $data = $this->$modelName->find('all',
@@ -337,7 +265,10 @@ class AppController extends Controller
             $diffInSeconds = time() - $currentlyUpdatedStart;
         }
 
-        if (! empty($data->currently_updated_by_user) && $data->currently_updated_by_user->uid != $this->isLoggedIn() ? $this->loggedUser->uid : 0 && $data->currently_updated_by_user->uid > 0 && $diffInSeconds < 60 * 60) {
+        if (! empty($data->currently_updated_by_user)
+            && $data->currently_updated_by_user->uid != ($this->isLoggedIn() ? $this->loggedUser->uid : 0)
+            && $data->currently_updated_by_user->uid > 0
+            && $diffInSeconds < 60 * 60) {
             $updatingUser = $data->currently_updated_by_user->firstname . ' ' . $data->currently_updated_by_user->lastname;
             $this->AppFlash->setFlashError('<b>Diese Seite ist gesperrt. ' . $updatingUser . ' hat ' . Configure::read('AppConfig.timeHelper')->timeAgoInWords($data->currentlyUpdatedStart) . ' begonnen, sie zu bearbeiten. <a id="unlockEditPageLink" href="javascript:void(0);">Entsperren?</a></b>');
             return true;

@@ -1,11 +1,6 @@
 <?php
-/**
- * @params array sortableFields
- * @param array colums
- * @param Paginator $paginatior
- */
+declare(strict_types=1);
 use Cake\Utility\Inflector;
-
 ?>
 
     <div class="sort">

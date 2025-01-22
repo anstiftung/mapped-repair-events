@@ -1,11 +1,12 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Test\TestCase\Traits;
 
 trait LogFileAssertionsTrait
 {
 
-    public $executeLogFileAssertions = true;
+    public bool $executeLogFileAssertions = true;
 
     public function setUp(): void
     {
@@ -13,7 +14,7 @@ trait LogFileAssertionsTrait
         $this->resetLogs();
     }
 
-    private function getLogFile($name)
+    private function getLogFile($name): string
     {
         return ROOT . DS . 'logs' . DS . $name . '.log';
     }
@@ -32,16 +33,15 @@ trait LogFileAssertionsTrait
         $this->assertLogFilesForErrors();
     }
 
-    protected function assertLogFilesForErrors()
+    protected function assertLogFilesForErrors(): void
     {
-        if (!$this->executeLogFileAssertions) {
-            return;
+        if ($this->executeLogFileAssertions) {
+            $log = file_get_contents($this->getLogFile('debug'));
+            $log .= file_get_contents($this->getLogFile('error'));
+            $log .= file_get_contents($this->getLogFile('cli-debug'));
+            $log .= file_get_contents($this->getLogFile('cli-error'));
+            $this->assertDoesNotMatchRegularExpression('/(Warning|Notice|Error)/', $log);
         }
-        $log = file_get_contents($this->getLogFile('debug'));
-        $log .= file_get_contents($this->getLogFile('error'));
-        $log .= file_get_contents($this->getLogFile('cli-debug'));
-        $log .= file_get_contents($this->getLogFile('cli-error'));
-        $this->assertDoesNotMatchRegularExpression('/(Warning|Notice|Error)/', $log);
     }
 
 }

@@ -1,8 +1,8 @@
 <?php
+declare(strict_types=1);
 namespace App\Controller;
 
 use Cake\Core\Configure;
-use Cake\Datasource\FactoryLocator;
 use Cake\Event\EventInterface;
 use Cake\Http\Exception\NotFoundException;
 use Eluceo\iCal\Domain\Entity\Calendar;
@@ -21,16 +21,17 @@ use Cake\View\JsonView;
 use Cake\I18n\DateTime;
 use App\Model\Entity\Worknews;
 use App\Mailer\AppMailer;
+use App\Model\Table\EventsTable;
 use Cake\Database\Query;
+use Cake\Http\Response;
 
 class EventsController extends AppController
 {
 
-    public $Category;
-    public $Event;
-    public $Worknews;
+    public EventsTable $Event;
 
-    public function beforeFilter(EventInterface $event) {
+    public function beforeFilter(EventInterface $event): void
+    {
 
         parent::beforeFilter($event);
         $this->Event = $this->getTableLocator()->get('Events');
@@ -56,7 +57,7 @@ class EventsController extends AppController
     
     }
 
-    public function ical()
+    public function ical(): Response
     {
 
         if ($this->request->getParam('_ext') != 'ics') {
@@ -73,7 +74,7 @@ class EventsController extends AppController
         }
         $filename .= '.' . $this->request->getParam('_ext');
 
-        $eventTable = FactoryLocator::get('Table')->get('Events');
+        $eventTable = $this->getTableLocator()->get('Events');
         $events = $eventTable->find('all',
             conditions: $conditions,
             contain: [
@@ -159,7 +160,7 @@ class EventsController extends AppController
 
     }
 
-    public function myEvents()
+    public function myEvents(): void
     {
 
         $hasEditEventPermissions = $this->isAdmin() || $this->isOrga();
@@ -181,6 +182,7 @@ class EventsController extends AppController
             }
         ]);
 
+        /* @phpstan-ignore-next-line */
         $this->Workshop->getAssociation('Events')->setConditions(['Events.status > ' . APP_DELETED])
         ->setSort([
             'Events.datumstart' => 'DESC',
@@ -196,6 +198,7 @@ class EventsController extends AppController
             $conditions['InfoSheets.owner'] = $this->isLoggedIn() ? $this->loggedUser->uid : 0;
         }
 
+        /* @phpstan-ignore-next-line */
         $this->Workshop->getAssociation('Events')->getAssociation('InfoSheets')
         ->setConditions($conditions)
         ->setSort([
@@ -206,7 +209,7 @@ class EventsController extends AppController
             'limit' => 100,
         ]);
 
-        $worknewsTable = FactoryLocator::get('Table')->get('Worknews');
+        $worknewsTable = $this->getTableLocator()->get('Worknews');
         foreach($workshops as $workshop) {
             $workshop->infoSheetCount = 0;
             $workshop->worknewsCount = $worknewsTable->getSubscribers($workshop->uid)->count();
@@ -231,7 +234,7 @@ class EventsController extends AppController
 
     }
 
-    public function feed()
+    public function feed(): void
     {
 
         $this->Event = $this->getTableLocator()->get('Events');
@@ -252,7 +255,7 @@ class EventsController extends AppController
 
     }
 
-    public function delete($eventUid)
+    public function delete($eventUid): void
     {
         if ($eventUid === null) {
             throw new NotFoundException;
@@ -286,8 +289,8 @@ class EventsController extends AppController
 
             if ($originalEventStatus && !$event->datumstart->isPast()) {
                 // START notify subscribers
-                $this->Worknews = $this->getTableLocator()->get('Worknews');
-                $subscribers = $this->Worknews->find('all', conditions: [
+                $worknewsTable = $this->getTableLocator()->get('Worknews');
+                $subscribers = $worknewsTable->find('all', conditions: [
                     'Worknews.workshop_uid' => $event->workshop_uid,
                     'Worknews.confirm' => Worknews::STATUS_OK,
                 ]);
@@ -316,7 +319,7 @@ class EventsController extends AppController
 
     }
 
-    public function add($preselectedWorkshopUid)
+    public function add($preselectedWorkshopUid): void
     {
 
         $event = $this->Event->newEntity(
@@ -350,7 +353,8 @@ class EventsController extends AppController
         }
     }
 
-    public function duplicate($eventUid) {
+    public function duplicate($eventUid): void
+    {
         $event = $this->Event->find('all',
             conditions: [
                 'Events.uid' => $eventUid,
@@ -374,7 +378,7 @@ class EventsController extends AppController
         $this->render('edit');
     }
 
-    public function edit($eventUid)
+    public function edit($eventUid): void
     {
 
         if ($eventUid === null) {
@@ -401,7 +405,7 @@ class EventsController extends AppController
         $this->set('editFormUrl', Configure::read('AppConfig.htmlHelper')->urlEventEdit($event->uid));
         $this->set('isDuplicateMode', false);
 
-        $worknewsTable = FactoryLocator::get('Table')->get('Worknews');
+        $worknewsTable = $this->getTableLocator()->get('Worknews');
         $this->set('worknewsCount', $worknewsTable->getSubscribers($event->workshop_uid)->count());
 
         $eventStartInLessThan7Days = $event->datumstart->isWithinNext('7 days');
@@ -418,18 +422,18 @@ class EventsController extends AppController
 
         // notify subscribers
         if (isset($workshop) && $patchedEntity->renotify) {
-            $this->Worknews = $this->getTableLocator()->get('Worknews');
-            $subscribers = $this->Worknews->getSubscribers($patchedEntity->workshop_uid);
+            $worknewsTable = $this->getTableLocator()->get('Worknews');
+            $subscribers = $worknewsTable->getSubscribers($patchedEntity->workshop_uid);
             if (!empty($subscribers)) {
-                $this->Worknews->sendNotifications($subscribers, 'Termin geändert: ' . $workshop->name, 'event_changed', $workshop, $patchedEntity, $patchedEntities['dirtyFields'], $patchedEntities['originalValues']);
+                $worknewsTable->sendNotifications($subscribers, 'Termin geändert: ' . $workshop->name, 'event_changed', $workshop, $patchedEntity, $patchedEntities['dirtyFields'], $patchedEntities['originalValues']);
             }
         }
     }
 
-    private function _edit($events, $isEditMode)
+    private function _edit($events, $isEditMode): array
     {
-        $this->Category = $this->getTableLocator()->get('Categories');
-        $this->set('categories', $this->Category->getForDropdown(APP_ON));
+        $categoriesTable = $this->getTableLocator()->get('Categories');
+        $this->set('categories', $categoriesTable->getForDropdown(APP_ON));
 
         $this->set('uid', $events[0]->uid);
 
@@ -488,7 +492,7 @@ class EventsController extends AppController
             }
 
             if (!$hasErrors) {
-                $eventsTable = FactoryLocator::get('Table')->get('Events');
+                $eventsTable = $this->getTableLocator()->get('Events');
                 if (isset($event)) {
                     $dirtyFields = $event->getDirty();
                     $originalValues = $event->getOriginalValues();
@@ -525,7 +529,7 @@ class EventsController extends AppController
 
     }
 
-    public function ajaxGetAllEventsForMap()
+    public function ajaxGetAllEventsForMap(): void
     {
 
         if (!$this->request->is('ajax')) {
@@ -579,7 +583,7 @@ class EventsController extends AppController
         $this->viewBuilder()->setOption('serialize', ['status', 'message', 'events']);
     }
 
-    public function all()
+    public function all(): void
     {
 
         $metaTags = Configure::read('AppConfig.metaTags.' . $this->request->getParam('controller') . '.' . $this->request->getParam('action'));
@@ -597,7 +601,7 @@ class EventsController extends AppController
         $conditions = $this->Event->getListConditions();
 
         // get count without any filters
-        $eventsTable = FactoryLocator::get('Table')->get('Events');
+        $eventsTable = $this->getTableLocator()->get('Events');
         $allEventsCount = $eventsTable->find('all',
             conditions: $conditions,
             contain:  [
@@ -613,8 +617,8 @@ class EventsController extends AppController
         $isOnlineEvent = (bool) h($isOnlineEvent);
         $this->set('isOnlineEvent', $isOnlineEvent);
 
-        $this->Category = $this->getTableLocator()->get('Categories');
-        $categories = $this->Category->getMainCategoriesForFrontend();
+        $categoriesTable = $this->getTableLocator()->get('Categories');
+        $categories = $categoriesTable->getMainCategoriesForFrontend();
 
         $preparedCategories = [];
         $categoryClass = '';
@@ -764,11 +768,8 @@ class EventsController extends AppController
 
     /**
      * combines multiple events to one marker
-     *
-     * @param array $events
-     * @return array
      */
-    private function combineEventsForMap($events)
+    private function combineEventsForMap($events): array
     {
         $eventsForMap1 = [];
 

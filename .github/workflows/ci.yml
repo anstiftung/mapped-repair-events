@@ -51,6 +51,7 @@ jobs:
         run: docker exec -w /app rep.php bash ./devtools/eslint.sh
 
       - name: PHPUnit Tests
+        if: always()
         run: docker exec -w /app rep.php php ./vendor/bin/phpunit --coverage-clover ./coverage.xml
 
       - name: Codecov

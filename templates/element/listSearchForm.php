@@ -1,5 +1,6 @@
 <?php
-    use Cake\Core\Configure;
+declare(strict_types=1);
+use Cake\Core\Configure;
 ?>
 
 <p style="margin:15px 0 5px 0;"><?php echo $label; ?></p>

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace App\Model\Table;
 
 use Cake\ORM\Table;
@@ -16,7 +17,7 @@ class FundinguploadsTable extends Table
         ]);
     }
 
-    public function beforeSave($event, $entity, $options)
+    public function beforeSave($event, $entity, $options): void
     {
         if ($entity->isNew() && !$entity->id) {
             $entity->id = Text::uuid();

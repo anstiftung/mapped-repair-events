@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Admin\Controller;
 
 use Cake\Event\EventInterface;
@@ -6,7 +7,7 @@ use Cake\Event\EventInterface;
 class WorknewsController extends AdminAppController
 {
 
-    public function beforeFilter(EventInterface $event)
+    public function beforeFilter(EventInterface $event): void
     {
         $this->searchUid = false;
         $this->searchName = false;
@@ -33,7 +34,7 @@ class WorknewsController extends AdminAppController
 
     }
 
-    public function index()
+    public function index(): void
     {
         parent::index();
 

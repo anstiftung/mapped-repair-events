@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace App\Model\Table;
 
 use Cake\ORM\Table;
@@ -6,8 +7,8 @@ use Cake\ORM\Table;
 class BrandsTable extends Table
 {
 
-    public $allowedBasicHtmlFields = [];
-    public $name_de = 'Marke';
+    public array $allowedBasicHtmlFields = [];
+    public string $name_de = 'Marke';
 
     public function initialize(array $config): void
     {

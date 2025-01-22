@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Model\Table;
 
@@ -7,16 +8,15 @@ use Cake\Validation\Validator;
 use App\Model\Traits\SearchExceptionsTrait;
 use App\Services\GeoService;
 use Cake\ORM\Query\SelectQuery;
-use Cake\I18n\DateTime;
 
 class EventsTable extends AppTable
 {
 
     use SearchExceptionsTrait;
 
-    public $name_de = 'Termin';
+    public string $name_de = 'Termin';
 
-    public $allowedBasicHtmlFields = [
+    public array $allowedBasicHtmlFields = [
         'eventbeschreibung'
     ];
 
@@ -39,7 +39,7 @@ class EventsTable extends AppTable
         ]);
     }
 
-    public function validationDefault(Validator $validator): \Cake\Validation\Validator
+    public function validationDefault(Validator $validator): Validator
     {
         $geoService = new GeoService();
         $validator = $geoService->getGeoCoordinatesValidator($validator);
@@ -50,8 +50,6 @@ class EventsTable extends AppTable
         $invalidCoordinateMessage = 'Die Adresse wurde nicht gefunden. Bitte ändere sie oder lege die Koordinaten selbst fest.';
         $validator->numeric('lat', $invalidCoordinateMessage);
         $validator->numeric('lng', $invalidCoordinateMessage);
-        $validator->equals(0, $invalidCoordinateMessage);
-        $validator->equals(0, $invalidCoordinateMessage);
         $validator->notEmptyString('workshop_uid', 'Bitte wähle eine Initiative aus.');
         $validator->notEmptyString('ort', 'Bitte trage die Stadt ein.');
         $validator->minLength('ort', 2, 'Bitte trage die Stadt ein.');
@@ -67,8 +65,8 @@ class EventsTable extends AppTable
         return $validator;
     }
 
-    public function getKeywordSearchConditions($keyword, $negate) {
-
+    public function getKeywordSearchConditions(string $keyword, bool $negate): mixed
+    {
         $changeableOrConditions = [
             'Workshops.name LIKE' => "%{$keyword}%",
             'Events.ort LIKE' => "%{$keyword}%",
@@ -90,7 +88,8 @@ class EventsTable extends AppTable
         };
     }
 
-    public function getProvinceCounts() {
+    public function getProvinceCounts(): array
+    {
         
         $query = $this->find('all')
         ->select([
@@ -109,7 +108,8 @@ class EventsTable extends AppTable
         return $provincesMap;
     }    
 
-    public function getListConditions() {
+    public function getListConditions(): array
+    {
         return [
             'Events.status' => APP_ON,
             'Workshops.status' => APP_ON,
@@ -117,7 +117,8 @@ class EventsTable extends AppTable
         ];
     }
 
-    public function getListFields() {
+    public function getListFields(): array
+    {
         return [
             'Events.uid',
             'Events.lat',
@@ -141,7 +142,8 @@ class EventsTable extends AppTable
         ];
     }
 
-    public function getListOrder() {
+    public function getListOrder(): array
+    {
         return [
             'Events.datumstart' => 'ASC',
             'Events.uhrzeitstart' => 'ASC'

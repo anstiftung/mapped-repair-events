@@ -1,12 +1,13 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Model\Table;
 use Cake\Core\Configure;
-use Cake\Mailer\Mailer;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use App\Model\Entity\Worknews;
 use App\Mailer\AppMailer;
+use Cake\ORM\Query\SelectQuery;
 
 class WorknewsTable extends Table
 {
@@ -21,7 +22,7 @@ class WorknewsTable extends Table
         $this->addBehavior('Timestamp');
     }
 
-    public function validationDefault(Validator $validator): \Cake\Validation\Validator
+    public function validationDefault(Validator $validator): Validator
     {
         $validator->email('email', true, 'Bitte trage eine gültige E-Mail-Adresse ein.');
         $validator->notEmptyString('email', 'Bitte trage deine E-Mail-Adresse ein.');
@@ -33,7 +34,7 @@ class WorknewsTable extends Table
         return $validator;
     }
 
-    public function getSubscribers($workshopUid)
+    public function getSubscribers($workshopUid): SelectQuery
     {
         $subscribers = $this->find('all',
         conditions: [
@@ -46,7 +47,7 @@ class WorknewsTable extends Table
         return $subscribers;
     }
 
-    public function sendNotifications($subscribers, $subject, $template, $workshop, $event, $dirtyFields = [], $originalValues = [])
+    public function sendNotifications($subscribers, $subject, $template, $workshop, $event, $dirtyFields = [], $originalValues = []): void
     {
         $email = new AppMailer();
         $email->viewBuilder()->setTemplate($template);

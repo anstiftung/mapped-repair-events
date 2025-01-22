@@ -1,15 +1,17 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Model\Traits;
 
 trait SearchExceptionsTrait {
 
-    private $searchExceptions = [
+    private array $searchExceptions = [
         'berlin',
         'münchen',
     ];
 
-    public function getChangeableOrConditions($keyword, $changeableOrConditions) {
+    public function getChangeableOrConditions(string $keyword, array $changeableOrConditions): array
+    {
 
         if (!in_array(strtolower($keyword), $this->searchExceptions)) {
             return $changeableOrConditions;

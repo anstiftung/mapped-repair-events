@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 echo '<div class="verification-wrapper ' . $funding->activity_proof_status_css_class . '">';
 echo '<p>' . $funding->activity_proof_status_human_readable . '</p>';

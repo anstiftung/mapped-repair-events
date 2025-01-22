@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace App\Model\Table;
 
 use Cake\Validation\Validator;
@@ -6,7 +7,7 @@ use Cake\Validation\Validator;
 class KnowledgesTable extends AppTable
 {
 
-    public $name_de = 'Reparaturwissens-Beitrag';
+    public string $name_de = 'Reparaturwissens-Beitrag';
 
     public function initialize(array $config): void
     {
@@ -29,7 +30,7 @@ class KnowledgesTable extends AppTable
         ]);
     }
 
-    public function validationAdmin(Validator $validator)
+    public function validationAdmin(Validator $validator): Validator
     {
         $validator->notEmptyString('title', 'Bitte gib einen Titel an.');
         $validator->minLength('title', 2, 'Bitte gib einen gültigen Titel an.');

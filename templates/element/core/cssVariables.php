@@ -1,7 +1,7 @@
 <?php
-    use Cake\Core\Configure;
+declare(strict_types=1);
+use Cake\Core\Configure;
 ?>
-
 <style>
     :root {
         --theme-color-a: <?php echo Configure::read('AppConfig.themeColorA'); ?>;

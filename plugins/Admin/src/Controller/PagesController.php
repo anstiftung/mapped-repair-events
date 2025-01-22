@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Admin\Controller;
 
 use App\Controller\Component\StringComponent;
@@ -16,7 +17,7 @@ class PagesController extends AdminAppController
         $this->Page = $this->getTableLocator()->get('Pages');
     }
 
-    public function insert()
+    public function insert(): void
     {
         $page = [
             'name' => 'Neue Seite von ' . $this->loggedUser->name,
@@ -28,7 +29,7 @@ class PagesController extends AdminAppController
         $this->redirect($this->getReferer());
     }
 
-    public function edit($uid)
+    public function edit($uid): void
     {
 
         if (empty($uid)) {
@@ -68,7 +69,7 @@ class PagesController extends AdminAppController
         $this->set('page', $page);
     }
 
-    public function index()
+    public function index(): void
     {
         parent::index();
         $conditions = [
