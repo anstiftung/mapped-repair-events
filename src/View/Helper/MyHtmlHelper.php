@@ -245,6 +245,11 @@ class MyHtmlHelper extends HtmlHelper {
         return $this->urlFundings() . '/edit/' . $workshopUid;
     }
 
+    function urlFundingsUsageproof($fundingUid): string
+    {
+        return $this->urlFundings() . '/verwendungsnachweis/' . $fundingUid;
+    }
+
     function urlFundingsUploadZuwendungsbestaetigung($fundingUid): string
     {
         return $this->urlFundings() . '/uploadZuwendungsbestaetigung/' . $fundingUid;

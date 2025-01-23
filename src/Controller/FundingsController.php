@@ -14,6 +14,7 @@ use App\Services\PdfWriter\FoerderbewilligungPdfWriterService;
 use App\Services\PdfWriter\FoerderantragPdfWriterService;
 use App\Mailer\AppMailer;
 use Cake\Http\Response;
+use App\Model\Entity\User;
 
 class FundingsController extends AppController
 {
@@ -77,7 +78,7 @@ class FundingsController extends AppController
 
     }
 
-    private function createdByOtherOwnerCheck($workshopUid): string
+    private function createdByOtherOwnerCheck($workshopUid): false|User
     {
         $fundingsTable = $this->getTableLocator()->get('Fundings');
         $funding = $fundingsTable->find()->where([
@@ -89,9 +90,50 @@ class FundingsController extends AppController
         if ($funding->count() > 0) {
             $owner = $funding->first()->owner_user;
             $owner->revertPrivatizeData();
-            return 'Der Förderantrag wurde bereits von einem anderen Nutzer (' . $owner->name . ') erstellt.';
+            return $owner;
         }
-        return '';
+        return false;
+    }
+
+    public function verwendungsnachweis(): ?Response
+    {
+
+        $fundingUid = (int) $this->getRequest()->getParam('uid');
+        
+        $fundingsTable = $this->getTableLocator()->get('Fundings');
+        $funding = $fundingsTable->find()->where([
+            $fundingsTable->aliasField('uid') => $fundingUid,
+        ])->first();
+        
+        $ownerCheckResult = $this->createdByOtherOwnerCheck($funding->workshop_uid);
+        if ($ownerCheckResult !== false) {
+            $this->AppFlash->setFlashError('Der Förderantrag wurde von einem anderen Nutzer (' . $ownerCheckResult->name . ') erstellt, der Verwendungsnachweis kann daher nicht erstellt werden.');
+            return $this->redirect(Configure::read('AppConfig.htmlHelper')->urlFundings());
+        }
+
+        $this->setReferer();
+        $funding = $fundingsTable->findOrCreateUsageproof($fundingUid);
+
+        if (!empty($this->request->getData())) {
+            $associations = ['Fundingusageproofs'];
+            $patchedEntity = $this->patchFunding($funding, $associations);
+
+            $associationsWithoutValidation = $this->removeValidationFromAssociations($associations);
+
+            $patchedEntity = $this->patchFunding($funding, $associationsWithoutValidation);
+            $patchedEntity->modified = DateTime::now();
+            $fundingsTable->save($patchedEntity, ['associated' => $associationsWithoutValidation]);
+
+            $this->AppFlash->setFlashMessage('Der Verwendungsnachweis wurde erfolgreich zwischengespeichert.');
+            $patchedEntity = $this->patchFunding($funding, $associations);
+        }
+
+        $this->set('metaTags', [
+            'title' => 'Verwendungsnachweis für Förderantrag (UID: ' . $funding->uid . ')',
+        ]);
+        $this->set('funding', $funding);
+
+        return null;
     }
 
     public function edit(): ?Response
@@ -99,9 +141,9 @@ class FundingsController extends AppController
 
         $workshopUid = (int) $this->getRequest()->getParam('uid');
 
-        $createdByOtherOwnerCheckMessage = $this->createdByOtherOwnerCheck($workshopUid);
-        if ($createdByOtherOwnerCheckMessage != '') {
-            $this->AppFlash->setFlashError($createdByOtherOwnerCheckMessage);
+        $ownerCheckResult = $this->createdByOtherOwnerCheck($workshopUid);
+        if ($ownerCheckResult !== false) {
+            $this->AppFlash->setFlashError('Der Förderantrag wurde bereits von einem anderen Nutzer (' . $ownerCheckResult->name . ') erstellt.');
             return $this->redirect(Configure::read('AppConfig.htmlHelper')->urlFundings());
         }
 

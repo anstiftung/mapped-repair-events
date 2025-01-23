@@ -58,6 +58,14 @@ class FundingsTable extends AppTable
             ],
             'dependent' => true,
         ]);
+        $this->belongsTo('Fundingusageproofs', [
+            'foreignKey' => 'fundingusageproof_id',
+        ]);
+        $this->hasMany('Fundingreceiptlists', [
+            'foreignKey' => 'funding_uid',
+            'dependent' => true,
+        ]);
+
     }
 
     public function getSchema(): TableSchemaInterface
@@ -181,6 +189,37 @@ class FundingsTable extends AppTable
 
         $filePath = Fundingupload::UPLOAD_PATH . $funding->uid;
         FolderService::deleteFolder($filePath);
+
+    }
+
+    public function findOrCreateUsageproof($fundingUid): Funding
+    {
+        $associations = ['Fundingusageproofs'];
+
+        $funding = $this->find()->where([
+            $this->aliasField('uid') => $fundingUid,
+        ])
+        ->contain($associations)
+        ->first();
+        
+        if (empty($funding->fundingusageproof_id)) {
+            $fundingusageproofsTable = TableRegistry::getTableLocator()->get('Fundingusageproofs');
+            $fundingusageproofEntity = $fundingusageproofsTable->newEmptyEntity();
+            $fundingusageproofEntity->main_description = '';
+            $fundingusageproofEntity->sub_description = '';
+            $fundingusageproofEntity = $fundingusageproofsTable->save($fundingusageproofEntity);
+
+            $funding->fundingusageproof_id = $fundingusageproofEntity->id;
+            $funding = $this->save($funding, ['associated' => $associations]);
+        }
+
+        $funding = $this->find()->where([
+            $this->aliasField('uid') => $fundingUid,
+        ])
+        ->contain($associations)
+        ->first();
+
+        return $funding;
 
     }
 

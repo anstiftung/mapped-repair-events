@@ -137,7 +137,7 @@ return function (RouteBuilder $routes) {
                 'controller' => 'fundings',
                 'action'=> '{action}'
             ])->setPatterns([
-                'action' => 'uploadDetail|uploadZuwendungsbestaetigung|edit|delete',
+                'action' => 'uploadDetail|uploadZuwendungsbestaetigung|edit|delete|verwendungsnachweis',
                 'uid' => '[0-9]+|(' . UUID_REGEX . ')',
             ]);
         }

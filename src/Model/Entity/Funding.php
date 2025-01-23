@@ -5,6 +5,7 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 use App\Model\Table\FundingbudgetplansTable;
 use App\Model\Table\FundingdatasTable;
+use App\Model\Table\FundingusageproofsTable;
 
 class Funding extends Entity
 {
@@ -127,6 +128,11 @@ class Funding extends Entity
         ['name' => 'checkbox_c', 'options' => ['type' => 'checkbox', 'class' => 'no-verify', 'label' => 'Mit der Einreichung erkläre ich mein Einverständnis, dass vorstehende Daten erhoben und elektronisch gespeichert werden, sowie das Einverständnis betroffener Dritter dazu eingeholt zu haben.<br /><i>Die Erhebung, Verarbeitung und Nutzung vorstehender personenbezogener Daten sind nur zulässig, wenn der Betroffene (Antragsteller) eingewilligt hat. Für den Fall, dass hierzu die Einwilligung verweigert wird, kann der Antrag nicht bearbeitet und die beantragte Förderung damit nicht bewilligt werden.</i>', 'escape' => false]],
     ];
 
+    const FIELDS_FUNDINGUSAGEPROOF = [
+        ['name' => 'main_description', 'options' => ['label' =>  FundingusageproofsTable::MAIN_DESCRIPTION_ERROR_MESSAGE, 'type' => 'textarea', 'rows' => 15, 'maxlength' => FundingusageproofsTable::MAIN_DESCRIPTION_MAX_LENGTH, 'minlength' => FundingusageproofsTable::MAIN_DESCRIPTION_MIN_LENGTH, 'class' => 'no-verify']],
+        ['name' => 'sub_description', 'options' => ['label' =>  FundingusageproofsTable::SUB_DESCRIPTION_ERROR_MESSAGE, 'type' => 'textarea', 'rows' => 15, 'maxlength' => FundingusageproofsTable::SUB_DESCRIPTION_MAX_LENGTH, 'minlength' => FundingusageproofsTable::SUB_DESCRIPTION_MIN_LENGTH, 'class' => 'no-verify']],
+    ];
+
     const FIELDS_WORKSHOP_LABEL = 'Stammdaten der Reparatur-Initiative';
     const FIELDS_OWNER_USER_LABEL = 'Personenbezogene Daten Ansprechpartner*in';
     const FIELDS_FUNDINGSUPPORTER_ORGANIZATION_LABEL = 'Stammdaten der Trägerorganisation';
@@ -135,6 +141,7 @@ class Funding extends Entity
     const FIELDS_FUNDINGDATA_DESCRIPTION_LABEL = 'Kurzbeschreibung Vorhaben';
     const FIELDS_FUNDINGBUDGETPLAN_LABEL = 'Kostenplan';
     const FIELDS_FUNDING_DATA_CHECKBOXES_LABEL = 'Einverständniserklärungen';
+    const FIELDS_FUNDINGUSAGEPROOF_LABEL = 'Sachbericht';
     
     public static function getRenderedFields($fields, $entityString, $form, $disabled, $entity = null): string
     {
@@ -291,6 +298,34 @@ class Funding extends Entity
         return '';
     }
 
+    public function _getUsageproofStatus(): int
+    {
+        if (!empty($this->fundingusageproof)) {
+            $length = mb_strlen($this->fundingusageproof->main_description);
+            $isValidMainDescription = isset($this->fundingusageproof->main_description)
+                && $length >= FundingusageproofsTable::MAIN_DESCRIPTION_MIN_LENGTH
+                && $length <= FundingusageproofsTable::MAIN_DESCRIPTION_MAX_LENGTH;
+
+            $length = mb_strlen($this->fundingusageproof->sub_description);
+            $isValidSubDescription = isset($this->fundingusageproof->sub_description)
+                && $length >= FundingusageproofsTable::SUB_DESCRIPTION_MIN_LENGTH
+                && $length <= FundingusageproofsTable::SUB_DESCRIPTION_MAX_LENGTH;
+
+                if ($isValidMainDescription && $isValidSubDescription) {
+                return self::STATUS_DATA_OK;
+            };
+        }
+        return self::STATUS_DESCRIPTION_MISSING;
+    }
+
+    public function _getUsageproofStatusCssClass(): string
+    {
+        if ($this->usageproof_status == self::STATUS_DATA_OK) {
+            return 'is-verified';
+        }
+        return 'is-pending';
+    }
+
     public function _getDescriptionStatus(): int
     {
         $length = mb_strlen($this->fundingdata->description);
@@ -309,6 +344,11 @@ class Funding extends Entity
             return 'is-verified';
         }
         return 'is-pending';
+    }
+
+    public function _getUsageproofStatusHumanReadable(): string
+    {
+        return self::STATUS_MAPPING[$this->usageproof_status];
     }
 
     public function _getDescriptionStatusHumanReadable(): string
