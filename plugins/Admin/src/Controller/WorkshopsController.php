@@ -49,10 +49,9 @@ class WorkshopsController extends AdminAppController
         ];
         $conditions = array_merge($this->conditions, $conditions);
 
-        $this->Workshop = $this->getTableLocator()->get('Workshops');
-        $this->User = $this->getTableLocator()->get('Users');
+        $workshopsTable = $this->getTableLocator()->get('Workshops');
 
-        $query = $this->Workshop->find('all',
+        $query = $workshopsTable->find('all',
         conditions: $conditions,
         contain: [
             'Countries',
@@ -84,7 +83,8 @@ class WorkshopsController extends AdminAppController
 
         $this->set('objects', $objects);
 
-        $this->set('users', $this->User->getForDropdown());
+        $usersTable = $this->getTableLocator()->get('Users');
+        $this->set('users', $usersTable->getForDropdown());
     }
 }
 ?>
