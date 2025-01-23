@@ -261,7 +261,7 @@ class AppController extends Controller
         $data = $data->first();
         $diffInSeconds = 0;
         if ($data->currently_updated_start) {
-            $currentlyUpdatedStart = strtotime($data->currently_updated_start->format('Y-m-d H:i:s'));
+            $currentlyUpdatedStart = $data->currently_updated_start->getTimestamp();
             $diffInSeconds = time() - $currentlyUpdatedStart;
         }
 
@@ -270,7 +270,7 @@ class AppController extends Controller
             && $data->currently_updated_by_user->uid > 0
             && $diffInSeconds < 60 * 60) {
             $updatingUser = $data->currently_updated_by_user->firstname . ' ' . $data->currently_updated_by_user->lastname;
-            $this->AppFlash->setFlashError('<b>Diese Seite ist gesperrt. ' . $updatingUser . ' hat ' . Configure::read('AppConfig.timeHelper')->timeAgoInWords($data->currentlyUpdatedStart) . ' begonnen, sie zu bearbeiten. <a id="unlockEditPageLink" href="javascript:void(0);">Entsperren?</a></b>');
+            $this->AppFlash->setFlashError('<b>Diese Seite ist gesperrt. ' . $updatingUser . ' hat ' . Configure::read('AppConfig.timeHelper')->timeAgoInWords($currentlyUpdatedStart) . ' begonnen, sie zu bearbeiten. <a id="unlockEditPageLink" href="javascript:void(0);">Entsperren?</a></b>');
             return true;
         }
 
