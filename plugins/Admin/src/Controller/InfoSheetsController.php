@@ -12,6 +12,9 @@ class InfoSheetsController extends AdminAppController
     public InfoSheetsTable $InfoSheet;
     public UsersTable $User;
 
+    public bool $searchName = false;
+    public bool $searchText = false;
+
     public function __construct($request = null, $response = null)
     {
         parent::__construct($request, $response);
@@ -20,14 +23,23 @@ class InfoSheetsController extends AdminAppController
 
     public function beforeFilter(EventInterface $event): void
     {
-
-        $this->addSearchOptions(array(
-            'InfoSheets.owner' => array(
+        $this->addSearchOptions([
+            'Brands.name' => [
+                'name' => 'Marke',
+                'searchType' => 'equal'
+            ],
+            'Categories.name' => [
+                'name' => 'Unterkategorie',
+                'searchType' => 'equal'
+            ],
+        ]);
+        $this->addSearchOptions([
+            'InfoSheets.owner' => [
                 'name' => 'InfoSheets.owner',
                 'searchType' => 'equal',
                 'extraDropdown' => true
-            )
-        ));
+            ],
+        ]);
 
         // für optional dropdown
         $this->generateSearchConditions('opt-1');
@@ -77,6 +89,9 @@ class InfoSheetsController extends AdminAppController
             'title' => 'Laufzettel'
         ];
         $this->set('metaTags', $metaTags);
+
+        $usersTable = $this->getTableLocator()->get('Users');
+        $this->set('users', $usersTable->getForDropdown());
 
     }
 
