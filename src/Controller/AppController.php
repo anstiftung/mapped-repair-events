@@ -265,7 +265,7 @@ class AppController extends Controller
             $diffInSeconds = time() - $currentlyUpdatedStart;
         }
 
-        if (! empty($data->currently_updated_by_user)
+        if (!empty($data->currently_updated_by_user && isset($currentlyUpdatedStart))
             && $data->currently_updated_by_user->uid != ($this->isLoggedIn() ? $this->loggedUser->uid : 0)
             && $data->currently_updated_by_user->uid > 0
             && $diffInSeconds < 60 * 60) {
