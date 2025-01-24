@@ -28,6 +28,7 @@ class WidgetsController extends AppController
         $this->Authentication->allowUnauthenticated([
             'events',
             'map',
+            'mapWithFundings',
             'integration',
             'statisticsGlobal',
             'statisticsWorkshop'
