@@ -121,6 +121,37 @@ class HtmlOutputTest extends AppTestCase
         $this->assertResponseContains('<div class="numbers">0 von insgesamt 2 Terminen gefunden</div>');
     }
 
+    public function testAdminPages(): void
+    {
+        $this->loginAsAdmin();
+        $adminPages = [
+            '/admin/brands',
+            '/admin/brands/edit/1',
+            '/admin/categories',
+            '/admin/categories/edit/87',
+            '/admin/fundings',
+            '/admin/events',
+            Configure::read('AppConfig.htmlHelper')->urlEventEdit(6),
+            '/admin/info-sheets',
+            Configure::read('AppConfig.htmlHelper')->urlInfoSheetEdit(7),
+            '/admin/pages',
+            '/admin/pages/edit/5',
+            '/admin/posts',
+            '/admin/posts/edit/4',
+            '/admin/skills',
+            '/admin/skills/edit/1',
+            '/admin/users',
+            Configure::read('AppConfig.htmlHelper')->urlUserProfile(1),
+            '/admin/worknews',
+            '/admin/workshops',
+        ];
+        foreach($adminPages as $adminPage) {
+            $this->get($adminPage);
+            $this->assertResponseOk();
+            $this->doAssertHtmlOutput();
+        }
+    }
+
     private function changeEventDate(): void
     {
         $eventsTable = $this->getTableLocator()->get('Events');

@@ -12,6 +12,7 @@ class CategoriesFixture extends AppFixture
               'name' => 'Elektro Sonstiges',
               'icon' => 'elektro',
               'status' => APP_ON,
+              'parent_id' => 1,
           ],
           [
               'id' => '630',
@@ -19,6 +20,13 @@ class CategoriesFixture extends AppFixture
               'icon' => 'drei-d-reparatur',
               'status' => APP_ON,
           ],
+          [
+              'id' => '1',
+              'name' => 'Elektro',
+              'icon' => 'elektro',
+              'status' => APP_ON,
+              'parent_id' => null,
+          ]
       ];
 
 }
