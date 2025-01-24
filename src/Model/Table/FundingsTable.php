@@ -192,7 +192,7 @@ class FundingsTable extends AppTable
 
     }
 
-    public function findOrCreateUsageproof($fundingUid): Funding
+    public function findWithUsageproofAssociations($fundingUid): Funding
     {
         $associations = ['Fundingusageproofs'];
 
@@ -201,6 +201,15 @@ class FundingsTable extends AppTable
         ])
         ->contain($associations)
         ->first();
+
+        return $funding;
+    }
+
+    public function findOrCreateUsageproof($fundingUid): Funding
+    {
+        $associations = ['Fundingusageproofs'];
+
+        $funding = $this->findWithUsageproofAssociations($fundingUid);
         
         if (empty($funding->fundingusageproof_id)) {
             $fundingusageproofsTable = TableRegistry::getTableLocator()->get('Fundingusageproofs');
@@ -213,12 +222,7 @@ class FundingsTable extends AppTable
             $funding = $this->save($funding, ['associated' => $associations]);
         }
 
-        $funding = $this->find()->where([
-            $this->aliasField('uid') => $fundingUid,
-        ])
-        ->contain($associations)
-        ->first();
-
+        $funding = $this->findWithUsageproofAssociations($fundingUid);
         return $funding;
 
     }

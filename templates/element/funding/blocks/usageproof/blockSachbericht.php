@@ -5,8 +5,8 @@ use App\Model\Entity\Funding;
 
 echo '<fieldset class="full-width">';
     echo '<legend>' . Funding::FIELDS_FUNDINGUSAGEPROOF_LABEL . '</legend>';
-    echo '<div class="verification-wrapper ' . $funding->usageproof_status_css_class . '">';
-        echo '<p>' . $funding->usageproof_status_human_readable . '</p>';
+    echo '<div class="verification-wrapper ' . $funding->usageproof_descriptions_status_css_class . '">';
+        echo '<p>' . $funding->usageproof_descriptions_status_human_readable . '</p>';
     echo '</div>';
     echo '<div>';
         if (!$disabled) {

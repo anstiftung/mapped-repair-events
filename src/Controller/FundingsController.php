@@ -104,6 +104,15 @@ class FundingsController extends AppController
         $funding = $fundingsTable->find()->where([
             $fundingsTable->aliasField('uid') => $fundingUid,
         ])->first();
+
+        if (empty($funding)) {
+            throw new NotFoundException;
+        }
+
+        if (!$funding->is_submitted || !($funding->is_money_transferred)) {
+            $this->AppFlash->setFlashError('Der Förderantrag wurde noch nicht eingereicht oder das Geld wurde noch nicht überwiesen.');
+            return $this->redirect(Configure::read('AppConfig.htmlHelper')->urlFundings());
+        }
         
         $ownerCheckResult = $this->createdByOtherOwnerCheck($funding->workshop_uid);
         if ($ownerCheckResult !== false) {

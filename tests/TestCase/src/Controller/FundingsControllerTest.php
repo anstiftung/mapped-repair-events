@@ -128,13 +128,14 @@ class FundingsControllerTest extends AppTestCase
 
         $fundingsTable = $this->getTableLocator()->get('Fundings');
         $testWorkshopUid = 2;
+        $route = Configure::read('AppConfig.htmlHelper')->urlFundingsEdit($testWorkshopUid);
         $this->loginAsOrga();
         $this->prepareWorkshopForFunding($testWorkshopUid);
 
-        $this->get(Configure::read('AppConfig.htmlHelper')->urlFundingsEdit($testWorkshopUid));
+        $this->get($route);
         $this->assertResponseOk();
 
-        $fundingUid = $fundingsTable->find()->first()->uid;
+        $fundingUid = $fundingsTable->find()->orderByDesc('uid')->first()->uid;
         $funding = $fundingsTable->getUnprivatizedFundingWithAllAssociations($fundingUid);
         $this->assertEquals(FundingsTable::FUNDINGBUDGETPLANS_COUNT, count($funding->fundingbudgetplans));
         $this->assertNotEmpty($funding->fundingsupporter);
@@ -204,7 +205,7 @@ class FundingsControllerTest extends AppTestCase
         copy($uploadTemplateJpgFile, $uploadFileZuwendungsbestaetigung1);
 
         // 1) POST
-        $this->post(Configure::read('AppConfig.htmlHelper')->urlFundingsEdit($testWorkshopUid), [
+        $this->post($route, [
             'referer' => '/',
             'submit_funding' => 1, // must fail
             'Fundings' => [
@@ -314,7 +315,7 @@ class FundingsControllerTest extends AppTestCase
         }
 
         // 2) POST test upload validations
-        $this->post(Configure::read('AppConfig.htmlHelper')->urlFundingsEdit($testWorkshopUid), [
+        $this->post($route, [
             'referer' => '/',
             'Fundings' => [
                 'workshop' => $testWorkshop,
@@ -356,7 +357,7 @@ class FundingsControllerTest extends AppTestCase
         $this->assertCount(1, $funding->fundinguploads_freistellungsbescheids);
 
         // 2) POST test delete uploads
-        $this->post(Configure::read('AppConfig.htmlHelper')->urlFundingsEdit($testWorkshopUid), [
+        $this->post($route, [
             'referer' => '/',
             'Fundings' => [
                 'workshop' => $testWorkshop,
@@ -441,7 +442,7 @@ class FundingsControllerTest extends AppTestCase
             'fundings-fundingsupporter-bic',
         ];
         $validTestWorkshop['website'] = 'https://example.com';
-        $this->post(Configure::read('AppConfig.htmlHelper')->urlFundingsEdit($testWorkshopUid), [
+        $this->post($route, [
             'referer' => '/',
             'submit_funding' => 1,
             'Fundings' => [
@@ -518,16 +519,107 @@ class FundingsControllerTest extends AppTestCase
 
         $funding = $fundingsTable->getUnprivatizedFundingWithAllAssociations($fundingUid);
         $this->assertCount(0, $funding->fundinguploads_zuwendungsbestaetigungs);
-        
 
-        // cleanup everything including file uploads
+        // 7) CLEANUP everything including file uploads
         $fundingsTable = $this->getTableLocator()->get('Fundings');
         $fundingsTable->save($funding);
         $this->expectException(NotFoundException::class);
-        $this->expectExceptionMessage('funding (UID: 14) is submitted and cannot be deleted');
+        $this->expectExceptionMessage('funding (UID: ' . $fundingUid . ') is submitted and cannot be deleted');
         
         $funding->submit_date = null;
         $fundingsTable->deleteCustom($fundingUid);
+
+    }
+
+    public function testVerwendungsnachweisLoggedOut(): void
+    {
+        $testFundingUid = 10;
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlFundingsUsageproof($testFundingUid));
+        $this->assertResponseCode(302);
+    }
+
+    public function testVerwendungsnachweisAsRepairhelper(): void
+    {
+        $testFundingUid = 10;
+        $this->loginAsRepairhelper();
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlFundingsUsageproof($testFundingUid));
+        $this->assertResponseCode(302);
+    }
+
+    public function testVerwendungsnachweisAsWrongOrga(): void
+    {
+        $testFundingUid = 10;
+        $fundingsTable = $this->getTableLocator()->get('Fundings');
+        $funding = $fundingsTable->get($testFundingUid);
+        $funding->owner = 3;
+        $fundingsTable->save($funding);
+        $this->loginAsOrga();
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlFundingsUsageproof($testFundingUid));
+        $this->assertResponseCode(302);
+    }
+
+    public function testVerwendungsnachweisFundingNotYetCompleted(): void
+    {
+        $testFundingUid = 10;
+        $fundingsTable = $this->getTableLocator()->get('Fundings');
+        $funding = $fundingsTable->get($testFundingUid);
+        $funding->submit_date = null;
+        $fundingsTable->save($funding);
+        $this->loginAsOrga();
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlFundingsUsageproof($testFundingUid));
+        $this->assertFlashMessage('Der Förderantrag wurde noch nicht eingereicht oder das Geld wurde noch nicht überwiesen.');
+    }
+
+    public function testCompleteVerwendungsnachweisProcess(): void
+    {
+        $fundingUid = 10;
+        $route = Configure::read('AppConfig.htmlHelper')->urlFundingsUsageproof($fundingUid);
+        $this->loginAsOrga();
+
+        $this->get($route);
+        $this->assertResponseOk();
+
+        $fundingsTable = $this->getTableLocator()->get('Fundings');
+        $funding = $fundingsTable->findWithUsageproofAssociations($fundingUid);
+        $this->assertNotEmpty($funding->fundingusageproof);
+
+        $testFundingusageproofIncomplete = [
+            'main_description' => 'Test Main Description',
+            'sub_description' => 'Test Sub Description',
+        ];
+
+        // 1) POST incomplete data
+        $this->post($route, [
+            'referer' => '/',
+            'Fundings' => [
+                'fundingusageproof' => $testFundingusageproofIncomplete,
+            ],
+        ]);
+
+        $funding = $fundingsTable->findWithUsageproofAssociations($fundingUid);
+        $this->assertEquals($testFundingusageproofIncomplete['main_description'], $funding->fundingusageproof->main_description);
+        $this->assertEquals($testFundingusageproofIncomplete['sub_description'], $funding->fundingusageproof->sub_description);
+        $this->assertEquals(Funding::STATUS_DESCRIPTIONS_MISSING, $funding->usageproof_descriptions_status);
+        $this->assertEquals(Funding::STATUS_MAPPING[Funding::STATUS_DESCRIPTIONS_MISSING], $funding->usageproof_descriptions_status_human_readable);
+
+        $testFundingusageproofComplete = [
+            'main_description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum.',
+            'sub_description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum.',
+        ];
+
+        // 2) POST complete data
+        $this->post($route, [
+            'referer' => '/',
+            'Fundings' => [
+                'fundingusageproof' => $testFundingusageproofComplete,
+            ],
+        ]);
+
+        $funding = $fundingsTable->findWithUsageproofAssociations($fundingUid);
+        $this->assertEquals($testFundingusageproofComplete['main_description'], $funding->fundingusageproof->main_description);
+        $this->assertEquals($testFundingusageproofComplete['sub_description'], $funding->fundingusageproof->sub_description);
+        $this->assertEquals(Funding::STATUS_DATA_OK, $funding->usageproof_descriptions_status);
+        $this->assertEquals(Funding::STATUS_MAPPING[Funding::STATUS_DATA_OK], $funding->usageproof_descriptions_status_human_readable);
 
     }
 

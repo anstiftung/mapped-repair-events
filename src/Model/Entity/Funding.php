@@ -49,6 +49,7 @@ class Funding extends Entity
     const STATUS_CHECKBOXES_MISSING = 70;
     const STATUS_CHECKBOXES_OK = 80;
     const STATUS_UPLOAD_MISSING = 90;
+    const STATUS_DESCRIPTIONS_MISSING = 100;
 
     const MAX_FUNDING_SUM = 3000;
 
@@ -65,6 +66,7 @@ class Funding extends Entity
         self::STATUS_DESCRIPTION_MISSING => 'Die Beschreibung ist nicht vollständig',
         self::STATUS_CHECKBOXES_MISSING => 'Bitte bestätige alle Checkboxen',
         self::STATUS_CHECKBOXES_OK => 'Alle Checkboxen bestätigt',
+        self::STATUS_DESCRIPTIONS_MISSING => 'Die Berichte sind nicht vollständig',
     ];
 
     const FIELDS_WORKSHOP = [
@@ -298,7 +300,7 @@ class Funding extends Entity
         return '';
     }
 
-    public function _getUsageproofStatus(): int
+    public function _getUsageproofDescriptionsStatus(): int
     {
         if (!empty($this->fundingusageproof)) {
             $length = mb_strlen($this->fundingusageproof->main_description);
@@ -315,15 +317,20 @@ class Funding extends Entity
                 return self::STATUS_DATA_OK;
             };
         }
-        return self::STATUS_DESCRIPTION_MISSING;
+        return self::STATUS_DESCRIPTIONS_MISSING;
     }
 
-    public function _getUsageproofStatusCssClass(): string
+    public function _getUsageproofDescriptionsStatusCssClass(): string
     {
-        if ($this->usageproof_status == self::STATUS_DATA_OK) {
+        if ($this->usageproof_descriptions_status == self::STATUS_DATA_OK) {
             return 'is-verified';
         }
         return 'is-pending';
+    }
+
+    public function _getUsageproofDescriptionsStatusHumanReadable(): string
+    {
+        return self::STATUS_MAPPING[$this->usageproof_descriptions_status];
     }
 
     public function _getDescriptionStatus(): int
@@ -335,7 +342,7 @@ class Funding extends Entity
         if ($isValid) {
             return self::STATUS_DATA_OK;
         };
-        return self::STATUS_DESCRIPTION_MISSING;
+        return self::STATUS_DESCRIPTIONS_MISSING;
     }
 
     public function _getDescriptionStatusCssClass(): string
@@ -454,6 +461,10 @@ class Funding extends Entity
 
     public function _getIsSubmitted(): bool {
         return $this->submit_date !== null;
+    }
+
+    public function _getIsMoneyTransferred(): bool {
+        return $this->money_transfer_date !== null;
     }
 
     public function _getSubmitDateFormatted(): string {
