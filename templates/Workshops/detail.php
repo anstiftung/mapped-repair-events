@@ -75,7 +75,7 @@ if (!$this->request->getSession()->read('isMobile')) {
         echo '<div class="sc"></div>';
 
         if ($onlineEventsCount > 0) {
-            echo 'Ich möchte die anstehenden Termine mit meinem digitalen Kalender synchronisieren: <a href="/events/'.$workshop->uid.'.ics">Hier klicken</a>.';
+            echo 'Ich möchte die anstehenden Termine mit meinem digitalen Kalender synchronisieren: <a href="' . $this->Html->urlEventIcal($workshop->uid) . '">Hier klicken</a>.';
         }
 
         ?>

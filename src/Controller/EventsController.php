@@ -66,11 +66,13 @@ class EventsController extends AppController
 
         $this->disableAutoRender();
 
+        $workshopUid = $this->request->getParam('pass')[0] ?? 0;
+
         $filename = 'events';
         $conditions = $this->Event->getListConditions();
-        if ($this->request->getParam('uid') > 0) {
-            $conditions['Workshops.uid'] = $this->request->getParam('uid');
-            $filename = $this->request->getParam('uid');
+        if ($workshopUid > 0) {
+            $conditions['Workshops.uid'] = $workshopUid;
+            $filename = $workshopUid;
         }
         $filename .= '.' . $this->request->getParam('_ext');
 

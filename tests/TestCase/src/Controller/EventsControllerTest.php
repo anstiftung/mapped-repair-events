@@ -253,5 +253,31 @@ class EventsControllerTest extends AppTestCase
 
     }
 
+    public function testIcalForWorkshop(): void
+    {
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlEventIcal(2));
+        $this->assertResponseOk();
+        $this->assertHeaderContains('Content-Type', 'text/calendar');
+        $this->assertHeaderContains('Content-Disposition', 'attachment; filename="2.ics"');
+        $this->assertResponseContains('BEGIN:VCALENDAR');
+        $this->assertResponseContains('PRODID:-//eluceo/ical//2.0/EN');
+        $this->assertResponseContains('VERSION:2.0');
+        $this->assertResponseContains('CALSCALE:GREGORIAN');
+        $this->assertResponseContains('BEGIN:VEVENT');
+        $this->assertResponseContains('SUMMARY:Test Workshop');
+        $this->assertResponseContains('DESCRIPTION:description');
+        $this->assertResponseContains('DTSTART:20250131T090000');
+        $this->assertResponseContains('DTEND:20250131T180000');
+        $this->assertResponseContains('LOCATION:Müllerstraße 123  Berlin Haus Drei');
+    }
+
+    public function testIcalAll(): void
+    {
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlEventIcalAll());
+        $this->assertResponseOk();
+        $this->assertHeaderContains('Content-Type', 'text/calendar');
+        $this->assertHeaderContains('Content-Disposition', 'attachment; filename="events.ics"');
+    }
+
 }
 ?>
