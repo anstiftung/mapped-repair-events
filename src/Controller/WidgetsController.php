@@ -66,8 +66,17 @@ class WidgetsController extends AppController
 
     }
 
+    public function mapWithFundings(): void
+    {
+        $this->map();
+        $this->set('osmMethod', 'search-with-fundings');
+        $this->render('map');
+    }
+
     public function map(): void
     {
+
+        $this->set('osmMethod', 'search');
 
         $this->viewBuilder()->setLayout('widget');
 

@@ -32,6 +32,17 @@ class WorkshopsControllerTest extends AppTestCase
 		$this->_controller->geoService = new GeoServiceMock();
 	}
 
+    public function testAjaxGetAllWorkshopsWithFundingsForMap(): void
+    {
+        $this->configRequest([
+            'headers' => [
+                'X_REQUESTED_WITH' => 'XMLHttpRequest',
+            ]
+        ]);
+        $this->get('/workshops/ajaxGetAllWorkshopsForMap?keyword=workshops-with-fundings');
+        $this->assertResponseOk();
+    }
+
     public function testAjaxGetAllWorkshopsForMap(): void
     {
 
@@ -45,7 +56,7 @@ class WorkshopsControllerTest extends AppTestCase
 
         $this->configRequest([
             'headers' => [
-                'X_REQUESTED_WITH' => 'XMLHttpRequest'
+                'X_REQUESTED_WITH' => 'XMLHttpRequest',
             ]
         ]);
         $expectedResult = file_get_contents(TESTS . 'comparisons' . DS . 'workshops-for-map.json');

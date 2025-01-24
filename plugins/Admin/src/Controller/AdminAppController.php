@@ -123,11 +123,11 @@ class AdminAppController extends AppController
             }
             switch ($searchType) {
                 case 'equal':
-                    $condition = $queryParams['val-' . $searchFieldKey];
+                    $searchValue = $queryParams['val-' . $searchFieldKey];
                     if (strpos($queryParams['key-' . $searchFieldKey], '.uid') !== false) {
-                        $condition = false; // only integers allowed
-                   }
-                    $this->conditions[$queryParams['key-' . $searchFieldKey]] = $condition;
+                        $searchValue = (int) $searchValue;
+                    }
+                    $this->conditions[$queryParams['key-' . $searchFieldKey]] = $searchValue;
                     break;
                 case 'search':
                     $condition = $queryParams['key-' . $searchFieldKey] . " LIKE '%" . $queryParams['val-' . $searchFieldKey] . "%'";
