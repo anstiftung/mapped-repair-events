@@ -629,8 +629,16 @@ class WorkshopsController extends AppController
 
         if (!empty($this->request->getQuery('keyword'))) {
             $keyword = h(strtolower(trim($this->request->getQuery('keyword'))));
-            if ($keyword !== '' && $keyword !== 'null') {
+            if ($keyword !== '' && $keyword !== 'null' && $keyword !== WorkshopsTable::KEYWORD_FOR_WORKSHOPS_WITH_FUNDINGS) {
                 $workshops->where($this->Workshop->getKeywordSearchConditions($keyword, true));
+            }
+            if ($keyword == WorkshopsTable::KEYWORD_FOR_WORKSHOPS_WITH_FUNDINGS) {
+                $workshops->where([
+                    'WorkshopFundings.money_transfer_date IS NOT NULL', 
+                ]);
+                $workshops->contain([
+                    'WorkshopFundings',
+                ]);
             }
         }
 

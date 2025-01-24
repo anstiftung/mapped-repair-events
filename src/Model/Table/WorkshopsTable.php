@@ -18,6 +18,8 @@ class WorkshopsTable extends AppTable
 
     use SearchExceptionsTrait;
 
+    const KEYWORD_FOR_WORKSHOPS_WITH_FUNDINGS = 'workshops-with-fundings';
+
     public string $name_de = '';
 
     public array $allowedBasicHtmlFields = [

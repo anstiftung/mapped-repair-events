@@ -60,6 +60,11 @@ MappedRepairEvents.Map = function(objects, type, isWidget, customCenterCoordinat
         this.singleMarkerZoom = 11;
     }
 
+    if (type == 'search-with-fundings') {
+        MappedRepairEvents.MapObject.loadAllWorkshops('workshops-with-fundings', MappedRepairEvents.MapObject.initSearchMap);
+        this.singleMarkerZoom = 11;
+    }
+
     if (type == 'detail') {
         this.singleMarkerZoom = 11;
         MappedRepairEvents.MapObject.initMarkers();

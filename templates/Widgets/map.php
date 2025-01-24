@@ -3,7 +3,7 @@ declare(strict_types=1);
 use Cake\Core\Configure;
 
 $this->element('addScript', ['script' => "
-    var mapObject = new ".JS_NAMESPACE.".Map([], 'search', true, ".json_encode($customCenterCoordinates).", ".$customZoomLevel.", '".$markerSrc."', '".$foundMarkerSrc."');
+    var mapObject = new ".JS_NAMESPACE.".Map([], '".$osmMethod."', true, ".json_encode($customCenterCoordinates).", ".$customZoomLevel.", '".$markerSrc."', '".$foundMarkerSrc."');
     mapObject.setMapAsFixed($('#content .right').height());"
 ]);
 
