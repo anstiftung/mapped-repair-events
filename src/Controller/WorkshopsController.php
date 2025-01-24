@@ -634,7 +634,7 @@ class WorkshopsController extends AppController
             }
             if ($keyword == WorkshopsTable::KEYWORD_FOR_WORKSHOPS_WITH_FUNDINGS) {
                 $workshops->where([
-                    'WorkshopFundings.money_transfer_date IS NOT NULL', 
+                    'WorkshopFundings.submit_date IS NOT NULL', 
                 ]);
                 $workshops->contain([
                     'WorkshopFundings',
