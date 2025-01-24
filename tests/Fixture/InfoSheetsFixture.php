@@ -10,7 +10,8 @@ class InfoSheetsFixture extends AppFixture
         [
             'uid' => 7,
             'status' => APP_ON,
-            'event_uid' => 6
+            'event_uid' => 6,
+            'category_id' => 87,
         ],
     ];
 }
