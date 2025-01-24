@@ -449,6 +449,14 @@ class MyHtmlHelper extends HtmlHelper {
     {
         return '/admin/brands/edit/' . $id;
     }
+    function urlEventIcal($uid): string
+    {
+        return '/events/ical/' . $uid . '.ics';
+    }
+    function urlEventIcalAll(): string
+    {
+        return '/events.ics';
+    }
     function urlEventDelete($uid): string
     {
         return '/termine/delete/' . $uid;
