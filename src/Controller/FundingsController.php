@@ -35,8 +35,8 @@ class FundingsController extends AppController
         foreach ($workshops as $workshop) {
             $workshop->funding_exists = !empty($workshop->workshop_funding);
             $workshop->funding_created_by_different_owner = $workshop->funding_exists && $workshop->workshop_funding->owner != $this->loggedUser->uid;
-            if (!empty($workshop->owner_user)) {
-                $workshop->owner_user = $workshop->ower_user->revertPrivatizeData();
+            if (!empty($workshop->workshop_funding->owner_user)) {
+                $workshop->workshop_funding->owner_user->revertPrivatizeData();
             }
             $orgaTeam = $workshopsTable->getOrgaTeam($workshop);
             $orgaTeamReverted = [];
