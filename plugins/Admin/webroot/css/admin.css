@@ -87,8 +87,7 @@ div.admin div.list a.active {
     color: #4C4C4C;
 }
 
-div.admin div.list tr.status-offline td
-    {
+div.admin div.list tr.status-inactive td {
     color: gray;
     text-decoration: line-through;
 }

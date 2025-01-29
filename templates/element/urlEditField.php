@@ -52,10 +52,10 @@ if (isset($hidden) && $hidden) {
 
     $title = '<ul>';
     $title .= '<li>Die Url auf unserer Plattform besteht aus ' . Configure::read('AppConfig.serverName') . $urlPrefix . ' und einem frei wählbaren Namenszusatz, dem sogenannten "Slug".</li>
-                      <li><b>Achtung:</b> Der Slug kann nur geändert werden, wenn ' . $type_de . ' auf offline gesetzt ist.</li>
+                      <li><b>Achtung:</b> Der Slug kann nur geändert werden, wenn ' . $type_de . ' auf inaktiv gesetzt ist.</li>
                       <li>Sie sollte nur in Sonderfällen geändert werden, da das Suchmaschinenranking der Seite darunter leidet.</li>';
     if ($type != 'Coach') {
-        $title .= '<li>Der Wert im Feld Slug wird automatisch verändert, sobald das darüberliegende Feld "Name" verändert wird (und '.$type_de.' auf offline gesetzt ist.</li>';
+        $title .= '<li>Der Wert im Feld Slug wird automatisch verändert, sobald das darüberliegende Feld "Name" verändert wird (und '.$type_de.' auf inaktiv gesetzt ist.</li>';
     }
     $title .= '</ul>';
     echo $this->element('helpIcon', array('title' => $title));

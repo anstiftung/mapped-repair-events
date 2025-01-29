@@ -99,13 +99,13 @@ class SkillsTable extends Table
         return $skillsForDropdown;
     }
 
-    public function getForDropdown($includeOffline): array
+    public function getForDropdown($includeInactive): array
     {
 
         $conditions = [
             'Skills.status' => APP_ON,
         ];
-        if ($includeOffline) {
+        if ($includeInactive) {
             $conditions = [
                 'Skills.status >= ' => APP_OFF,
             ];

@@ -173,9 +173,9 @@ if ($showDeleteLink) {
 
             foreach ($objects as $object) {
 
-                $rowStatusClasses = ['status-online'];
+                $rowStatusClasses = ['status-active'];
                 if (isset($object['status']) && $object['status'] == APP_OFF) {
-                    $rowStatusClasses = ['status-offline'];
+                    $rowStatusClasses = ['status-inactive'];
                 }
                 echo '<tr class="' . implode(' ', $rowStatusClasses) . '">';
 

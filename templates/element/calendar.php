@@ -156,7 +156,7 @@ function getEvents() {
                 var ev = workshops[j].Workshop.Events[i];
                 $('td.fc-day[data-date='+ev.datumstart_formatted+']')
                     .addClass('fc-has-event '
-                        + (ev.status == 1 ? 'online' : 'offline')
+                        + (ev.status == 1 ? 'active' : 'inactive')
                         + (ev.is_online_event == 1 ? ' fc-has-online-event' : '')
                     );
 
@@ -164,8 +164,8 @@ function getEvents() {
                     ev,
                     '<?php echo $wuid; ?>',
                     false,
-                    '<?php echo __('This event is online'); ?>',
-                    '<?php echo __('This event is offline'); ?>',
+                    '<?php echo __('This event is active'); ?>',
+                    '<?php echo __('This event is inactive'); ?>',
                     '<?php echo __('Edit this event'); ?>',
                     '<?php echo __('Duplicate this event'); ?>',
                     '<?php echo __('Are you sure you want to delete this event?'); ?>',

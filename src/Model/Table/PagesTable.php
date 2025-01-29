@@ -43,7 +43,7 @@ class PagesTable extends AppTable
         foreach ($array as $item) {
             $statusString = '';
             if (! $item->status) {
-                $statusString = ' ('.__('offline').')';
+                $statusString = ' ('.__('inactive').')';
             }
             $this->flattenedArray[$item->uid] = $separator . $item->name . $statusString;
             if (! empty($item['children'])) {

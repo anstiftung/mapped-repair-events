@@ -25,7 +25,7 @@ if (Configure::read('AppConfig.statisticsEnabled')) {
     <div class="ui-tabs-panel">
         <?php echo $this->element('heading', ['first' => $metaTags['title']]); ?>
 
-        <p><br /><b>Erstelle und verwalte deine Termine.</b><br />Vergangene Termine werden ausgegraut angezeigt, offline Termine sind durchgestrichen.<br /><br /></p>
+        <p><br /><b>Erstelle und verwalte deine Termine.</b><br />Vergangene Termine werden ausgegraut angezeigt, inaktive Termine sind durchgestrichen.<br /><br /></p>
 
         <?php
         $i = 0;
@@ -34,8 +34,8 @@ if (Configure::read('AppConfig.statisticsEnabled')) {
             $workshopRowClass = [];
             $workshopTitleSuffix = '';
             if ($workshop->status == APP_OFF) {
-                $workshopTitleSuffix = ' - Initiative offline';
-                $workshopRowClass[] = 'offline';
+                $workshopTitleSuffix = ' - Initiative inaktiv';
+                $workshopRowClass[] = 'inactive';
             }
             ?>
 
@@ -109,7 +109,7 @@ if (Configure::read('AppConfig.statisticsEnabled')) {
                                     $rowClass[] = 'deactivated';
                                 }
                                 if ($event->status == APP_OFF) {
-                                    $rowClass[] = 'offline';
+                                    $rowClass[] = 'inactive';
                                 }
                             ?>
                             <tr class="<?php echo join(' ', $rowClass); ?>">

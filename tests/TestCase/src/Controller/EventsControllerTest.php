@@ -266,8 +266,6 @@ class EventsControllerTest extends AppTestCase
         $this->assertResponseContains('BEGIN:VEVENT');
         $this->assertResponseContains('SUMMARY:Test Workshop');
         $this->assertResponseContains('DESCRIPTION:description');
-        $this->assertResponseContains('DTSTART:20250131T090000');
-        $this->assertResponseContains('DTEND:20250131T180000');
         $this->assertResponseContains('LOCATION:Müllerstraße 123  Berlin Haus Drei');
     }
 

@@ -131,8 +131,8 @@ class AppController extends Controller
 
     /**
      * wenn über den admin eine seite im preview-mode aufgerufen wird (/vorschau am ende der url)
-     * und diese seite aber online ist, redirecten.
-     * nur, wenn die seite offline ist, flash message anzeigen, sonst verwirrt es
+     * und diese seite aber aktiv ist, redirecten.
+     * nur, wenn die seite inaktiv ist, flash message anzeigen, sonst verwirrt es
      * den user
      */
     protected function doPreviewChecks(int $status, string $redirectUrl): void
@@ -141,7 +141,7 @@ class AppController extends Controller
             $this->redirect($redirectUrl);
         }
         if ($status == APP_OFF && $this->isPreview()) {
-            $this->AppFlash->setFlashError('Diese Seite ist offline und somit nicht öffentlich sichtbar.');
+            $this->AppFlash->setFlashError('Diese Seite ist inaktiv und somit nicht öffentlich sichtbar.');
         }
     }
 
@@ -155,7 +155,7 @@ class AppController extends Controller
             ];
         }
 
-        // admins oder owner dürfen offline-content im preview-mode sehen
+        // admins oder owner dürfen inaktiv-content im preview-mode sehen
         if ($this->isLoggedIn() && !$this->isAdmin() && !$this->loggedUser->isOwnerByModelNameAndUrl($modelName, $url))
             return $previewConditions;
 
