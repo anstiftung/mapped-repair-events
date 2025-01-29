@@ -113,7 +113,7 @@ div#selectedDate {
     background-image: url(/img/gotdatedetail.png) ! important;
 }
 
-#workshop-detail .fc-has-event.offline {
+#workshop-detail .fc-has-event.inactive {
     background-image: url(/img/gotdatedraft.png);
 }
 

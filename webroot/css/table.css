@@ -38,6 +38,6 @@ table.list th.icon {
 table.list tr.deactivated {
     opacity: 0.6;
 }
-table.list tr.offline {
+table.list tr.inactive {
     text-decoration: line-through;
 }

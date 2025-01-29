@@ -59,8 +59,8 @@ declare(strict_types=1);
             'name' => 'val-status',
             'empty' => '---',
             'options' => [
-                APP_ON => 'online',
-                APP_OFF => 'offline',
+                APP_ON => 'aktiv',
+                APP_OFF => 'inaktiv',
             ],
             'value' => $this->request->getQueryParams()['val-status'] ?? '',
             'label' => 'Status',

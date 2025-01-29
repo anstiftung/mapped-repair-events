@@ -633,10 +633,10 @@ MappedRepairEvents.Helper = {
         return '<div title="' + category.name + '" class="skill_icon small ' + category.icon + '"></div>';
     },
 
-    getCalEventHtml : function(ev, wuid, showDate, stringEventIsOnline, stringEventIsOffline, stringEditEvent, stringDuplicateEvent, stringConfirmDeleteEvent, stringDeleteEvent, stringNoCategories) {
+    getCalEventHtml : function(ev, wuid, showDate, stringEventIsActive, stringEventIsInactive, stringEditEvent, stringDuplicateEvent, stringConfirmDeleteEvent, stringDeleteEvent, stringNoCategories) {
 
         var calEvent = '<div itemscope itemtype="http://schema.org/Event" class="calEvent ';
-        calEvent += ev.status == 1 ? 'online' : 'offline';
+        calEvent += ev.status == 1 ? 'active' : 'inactive';
         calEvent += ev.is_online_event == 1 ? ' is-online-event' : '';
         calEvent += '" style="display:none;"';
         calEvent += ' rel="' + [ev.uid, ev.wurl, ev.datumstart_formatted].join(' ');
@@ -644,7 +644,7 @@ MappedRepairEvents.Helper = {
         calEvent += '">';
 
         if (ev.hasModifyPermissions) {
-            calEvent += '<div class="onoffline" style="color:'+( ev.status == 1 ? 'green' : 'red' )+';">' + ( ev.status == 1 ? stringEventIsOnline : stringEventIsOffline) + '</div>';
+            calEvent += '<div class="active-inactive" style="color:'+( ev.status == 1 ? 'green' : 'red' )+';">' + ( ev.status == 1 ? stringEventIsActive : stringEventIsInactive) + '</div>';
         }
 
         var formattedDate = '';
@@ -672,7 +672,7 @@ MappedRepairEvents.Helper = {
             calEvent += '<div class="eventBox" style="display:none;" itemscope itemtype="http://schema.org/Event">';
 
             if (ev.hasModifyPermissions) {
-                calEvent += '<div class="onoffline" style="color:'+( ev.status == 1 ? 'green' : 'red' )+';">' + ( ev.status == 1 ? stringEventIsOnline : stringEventIsOffline) + '</div><br />';
+                calEvent += '<div class="active-inactive" style="color:'+( ev.status == 1 ? 'green' : 'red' )+';">' + ( ev.status == 1 ? stringEventIsActive : stringEventIsInactive) + '</div><br />';
             }
 
             if (ev.hasModifyPermissions) {

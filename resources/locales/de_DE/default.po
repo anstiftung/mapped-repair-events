@@ -16,8 +16,11 @@ msgstr "Bitte aktiviere dein Terminabonnement"
 msgid "Please activate your subscription using the activation link sent to"
 msgstr "Bitte aktiviere dein Abonnement über den Aktivierungs-Link, den du per E-Mail erhalten hast."
 
-msgid "offline"
-msgstr "offline"
+msgid "inactive"
+msgstr "inaktiv"
+
+msgid "active"
+msgstr "aktiv"
 
 msgid "get platform news via E-Mail"
 msgstr "News per E-Mail bekommen"
@@ -118,11 +121,11 @@ msgstr "TEAM"
 msgid "Next Events"
 msgstr "Nächste Termine"
 
-msgid "This event is online"
-msgstr "Termin online"
+msgid "This event is active"
+msgstr "Termin aktiv"
 
-msgid "This event is offline"
-msgstr "Termin offline"
+msgid "This event is inactive"
+msgstr "Termin inaktiv"
 
 msgid "Edit this event"
 msgstr "Termin bearbeiten"

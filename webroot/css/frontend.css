@@ -543,7 +543,7 @@ div.calEvent:hover {
 #workshop-detail .calEvent {
     visibility: hidden;
 }
-#workshop-detail div#calEvents .offline {
+#workshop-detail div#calEvents .inactive {
     background-color: #f2f2f2;
 }
 
@@ -556,10 +556,10 @@ div.calEvent:hover {
 #workshop-detail .fc-has-event.fc-has-online-event {
     background-image: url(/img/gotdatedetail-online.png) ! important;
 }
-#workshop-detail .fc-has-event.offline {
+#workshop-detail .fc-has-event.inactive {
     background-image: url(/img/gotdatedraft.png) ! important;
 }
-#workshop-detail .eventBox .onoffline {
+#workshop-detail .eventBox .active-inactive {
     margin-bottom: 10px;
 }
 body.workshops.detail .calEvent {
@@ -1195,8 +1195,8 @@ body.events.myEvents .info-sheets-year-wrapper .select2-container--default .sele
 body.events.myEvents .info-sheets-year-wrapper .select2-container {
     width: 83px ! important;
 }
-body.events.myEvents h2.offline,
-body.events.myEvents a.toggle-link.offline {
+body.events.myEvents h2.inactive,
+body.events.myEvents a.toggle-link.inactive {
     color: gray;
 }
 body.events.myEvents .add-event {
@@ -1329,7 +1329,7 @@ iframe.eiwsd {
     height: 0px;
     display: none;
 }
-.onoffline {
+.active-inactive {
     float: right;
 }
 #wswidget {
