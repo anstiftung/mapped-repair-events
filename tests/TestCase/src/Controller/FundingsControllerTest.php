@@ -563,7 +563,7 @@ class FundingsControllerTest extends AppTestCase
         $testFundingUid = 10;
         $fundingsTable = $this->getTableLocator()->get('Fundings');
         $funding = $fundingsTable->get($testFundingUid);
-        $funding->submit_date = null;
+        $funding->money_transfer_date = null;
         $fundingsTable->save($funding);
         $this->loginAsOrga();
         $this->get(Configure::read('AppConfig.htmlHelper')->urlFundingsUsageproof($testFundingUid));
