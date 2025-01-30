@@ -128,13 +128,21 @@ class FundingsController extends AppController
         $funding = $fundingsTable->findOrCreateUsageproof($fundingUid);
 
         if (!empty($this->request->getData())) {
-            $associations = ['Fundingusageproofs'];
+            $associations = ['Fundingusageproofs', 'Fundingreceiptlists'];
             $patchedEntity = $this->patchFunding($funding, $associations);
 
             $associationsWithoutValidation = $this->removeValidationFromAssociations($associations);
 
             $patchedEntity = $this->patchFunding($funding, $associationsWithoutValidation);
             $patchedEntity->modified = DateTime::now();
+
+            // remove all invalid fundingreceiplists in order to avoid saving nothing
+            foreach($patchedEntity->fundingreceiptlists as $index => $fundingreceiptlist) {
+                if ($fundingreceiptlist->hasErrors()) {
+                    unset($patchedEntity->fundingreceiptlists[$index]);
+                }
+            }
+
             $fundingsTable->save($patchedEntity, ['associated' => $associationsWithoutValidation]);
 
             $this->AppFlash->setFlashMessage('Der Verwendungsnachweis wurde erfolgreich zwischengespeichert.');
@@ -494,7 +502,7 @@ class FundingsController extends AppController
         }, array_flip($associations));
         // some association's data should not be saved if invalid
         foreach($result as $entity => $value) {
-            if (in_array($entity, ['Fundingbudgetplans'])) {
+            if (in_array($entity, ['Fundingbudgetplans', 'Fundingreceiptlists'])) {
                 $result[$entity] = ['validate' => 'default'];
             }
         }

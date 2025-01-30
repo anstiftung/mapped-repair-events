@@ -19,6 +19,8 @@ class FundingsTable extends AppTable
     const FUNDINGBUDGETPLANS_COUNT_HIDDEN = 10;
     const FUNDINGBUDGETPLANS_COUNT = self::FUNDINGBUDGETPLANS_COUNT_VISIBLE + self::FUNDINGBUDGETPLANS_COUNT_HIDDEN;
 
+    const FUNDINGRECEIPTLISTS_COUNT_INITIAL = 5;
+
     public function initialize(array $config): void {
         parent::initialize($config);
         $this->belongsTo('Workshops', [
@@ -194,7 +196,7 @@ class FundingsTable extends AppTable
 
     public function findWithUsageproofAssociations($fundingUid): Funding
     {
-        $associations = ['Fundingusageproofs'];
+        $associations = ['Fundingusageproofs', 'Fundingreceiptlists'];
 
         $funding = $this->find()->where([
             $this->aliasField('uid') => $fundingUid,
@@ -207,11 +209,10 @@ class FundingsTable extends AppTable
 
     public function findOrCreateUsageproof($fundingUid): Funding
     {
-        $associations = ['Fundingusageproofs'];
-
         $funding = $this->findWithUsageproofAssociations($fundingUid);
         
         if (empty($funding->fundingusageproof_id)) {
+            $associations = ['Fundingusageproofs', 'Fundingreceiptlists'];
             $fundingusageproofsTable = TableRegistry::getTableLocator()->get('Fundingusageproofs');
             $fundingusageproofEntity = $fundingusageproofsTable->newEmptyEntity();
             $fundingusageproofEntity->main_description = '';
@@ -221,6 +222,18 @@ class FundingsTable extends AppTable
             $funding->fundingusageproof_id = $fundingusageproofEntity->id;
             $funding->usageproof_status = Funding::STATUS_PENDING;
             $funding = $this->save($funding, ['associated' => $associations]);
+
+            $fundingreceiptlistsTable = TableRegistry::getTableLocator()->get('Fundingreceiptlists');
+            $i = 0;
+            while($i < self::FUNDINGRECEIPTLISTS_COUNT_INITIAL) {
+                $fundingreceiptlistEntity = $fundingreceiptlistsTable->newEntity([
+                    'funding_uid' => $funding->uid,
+                    'description' => '',
+                ]);
+                $fundingreceiptlistEntity = $fundingreceiptlistsTable->save($fundingreceiptlistEntity);
+                $i++;
+            }
+
         }
 
         $funding = $this->findWithUsageproofAssociations($fundingUid);

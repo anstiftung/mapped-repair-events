@@ -6,6 +6,7 @@ use Cake\ORM\Entity;
 use App\Model\Table\FundingbudgetplansTable;
 use App\Model\Table\FundingdatasTable;
 use App\Model\Table\FundingusageproofsTable;
+use App\Model\Table\FundingreceiptlistsTable;
 
 class Funding extends Entity
 {
@@ -57,6 +58,7 @@ class Funding extends Entity
     const STATUS_UPLOAD_MISSING = 90;
     const STATUS_DESCRIPTIONS_MISSING = 100;
     const STATUS_DATA_MISSING = 110;
+    const STATUS_RECEIPTLIST_DATA_MISSING = 120;
 
     const MAX_FUNDING_SUM = 3000;
 
@@ -75,6 +77,7 @@ class Funding extends Entity
         self::STATUS_CHECKBOXES_MISSING => 'Bitte bestätige alle Checkboxen',
         self::STATUS_CHECKBOXES_OK => 'Alle Checkboxen bestätigt',
         self::STATUS_DESCRIPTIONS_MISSING => 'Die Berichte sind nicht vollständig',
+        self::STATUS_RECEIPTLIST_DATA_MISSING => 'Die Belegliste ist nicht vollständig',
     ];
 
     const FIELDS_WORKSHOP = [
@@ -143,6 +146,13 @@ class Funding extends Entity
         ['name' => 'sub_description', 'options' => ['label' =>  FundingusageproofsTable::SUB_DESCRIPTION_ERROR_MESSAGE, 'type' => 'textarea', 'rows' => 15, 'maxlength' => FundingusageproofsTable::SUB_DESCRIPTION_MAX_LENGTH, 'minlength' => FundingusageproofsTable::SUB_DESCRIPTION_MIN_LENGTH, 'class' => 'no-verify']],
     ];
 
+    const FIELDS_FUNDINGRECEIPTLIST = [
+        ['name' => 'id', 'options' => ['type' => 'hidden']],
+        ['name' => 'type', 'options' => ['type' => 'select', 'options' => Fundingbudgetplan::TYPE_MAP, 'empty' => 'Aufgabenbereich wählen...', 'label' => false, 'class' => 'no-select2']],
+        ['name' => 'description', 'options' => ['label' => false, 'placeholder' => 'Aufgabenbereich (' . FundingreceiptlistsTable::DESCRIPTION_ERROR_MESSAGE . ')', 'class' => 'no-verify', 'maxlength' => FundingreceiptlistsTable::DESCRIPTION_MAX_LENGTH, 'minlength' => FundingreceiptlistsTable::DESCRIPTION_MIN_LENGTH]],
+        ['name' => 'amount', 'options' => ['label' => false, 'placeholder' => 'Kosten in € ', 'type' => 'number', 'step' => '0.01']],
+    ];
+
     const FIELDS_WORKSHOP_LABEL = 'Stammdaten der Reparatur-Initiative';
     const FIELDS_OWNER_USER_LABEL = 'Personenbezogene Daten Ansprechpartner*in';
     const FIELDS_FUNDINGSUPPORTER_ORGANIZATION_LABEL = 'Stammdaten der Trägerorganisation';
@@ -152,6 +162,7 @@ class Funding extends Entity
     const FIELDS_FUNDINGBUDGETPLAN_LABEL = 'Kostenplan';
     const FIELDS_FUNDING_DATA_CHECKBOXES_LABEL = 'Einverständniserklärungen';
     const FIELDS_FUNDINGUSAGEPROOF_LABEL = 'Sachbericht';
+    const FIELDS_FUNDINGRECEIPTLIST_LABEL = 'Belegliste';
     
     public static function getRenderedFields($fields, $entityString, $form, $disabled, $entity = null): string
     {
@@ -350,10 +361,22 @@ class Funding extends Entity
         return self::STATUS_MAPPING[$this->usageproof_descriptions_status];
     }
 
+    public function _getReceiptlistStatusHumanReadable(): string
+    {
+        // TODO add logic here
+        return 'is-pending';
+    }
+
     public function _getReceiptlistStatusCssClass(): string
     {
         // TODO add logic here
         return 'is-pending';
+    }
+
+    public function _getReceiptlistStatus(): int
+    {
+        // TODO add logic here
+        return self::STATUS_RECEIPTLIST_DATA_MISSING;
     }
 
 

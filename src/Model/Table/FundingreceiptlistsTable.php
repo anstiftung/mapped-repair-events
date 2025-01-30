@@ -12,8 +12,8 @@ use ArrayObject;
 class FundingreceiptlistsTable extends Table
 {
 
-    const DESCRIPTION_MIN_LENGTH = 5;
-    const DESCRIPTION_MAX_LENGTH = 100;
+    const DESCRIPTION_MIN_LENGTH = 2;
+    const DESCRIPTION_MAX_LENGTH = 150;
     const DESCRIPTION_ERROR_MESSAGE = self::DESCRIPTION_MIN_LENGTH . ' bis ' . self::DESCRIPTION_MAX_LENGTH . ' Zeichen';
 
     public function initialize(array $config): void
@@ -37,7 +37,7 @@ class FundingreceiptlistsTable extends Table
             ->add('type', 'valid', [
                 'rule' => function ($value, $context) {
                     if (!empty($context['data']['description']) || !empty($context['data']['amount'])) {
-                        return array_key_exists($value, Fundingbudgetplan::TYPE_MAP);
+                        return array_key_exists($value, Fundingbudgetplan::TYPE_MAP); // using budgetplan is ok here
                     }
                     return true;
                 },
