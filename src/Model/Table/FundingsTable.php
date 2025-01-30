@@ -219,6 +219,7 @@ class FundingsTable extends AppTable
             $fundingusageproofEntity = $fundingusageproofsTable->save($fundingusageproofEntity);
 
             $funding->fundingusageproof_id = $fundingusageproofEntity->id;
+            $funding->usageproof_status = Funding::STATUS_PENDING;
             $funding = $this->save($funding, ['associated' => $associations]);
         }
 

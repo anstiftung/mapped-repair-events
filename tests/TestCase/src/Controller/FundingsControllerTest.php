@@ -582,6 +582,7 @@ class FundingsControllerTest extends AppTestCase
         $fundingsTable = $this->getTableLocator()->get('Fundings');
         $funding = $fundingsTable->findWithUsageproofAssociations($fundingUid);
         $this->assertNotEmpty($funding->fundingusageproof);
+        $this->assertEquals(Funding::STATUS_PENDING, $funding->usageproof_status);
 
         $testFundingusageproofIncomplete = [
             'main_description' => 'Test Main Description',

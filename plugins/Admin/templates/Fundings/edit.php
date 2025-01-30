@@ -41,7 +41,7 @@ $this->element('addScript', ['script' =>
             echo '<fieldset>';
                 echo '<legend>Status Aktivitätsnachweis</legend>';
                 echo $this->element('funding/status/activityProofStatus', ['funding' => $funding]);
-                echo $this->Form->control('Fundings.activity_proof_status', ['label' => 'Status', 'options' => Funding::STATUS_MAPPING_UPLOADS, 'disabled' => $funding->is_submitted, 'class' => 'no-verify']);
+                echo $this->Form->control('Fundings.activity_proof_status', ['label' => 'Status', 'options' => Funding::STATUS_MAPPING_CHANGEABLE_BY_ADMIN, 'disabled' => $funding->is_submitted, 'class' => 'no-verify']);
                
                 echo $this->Form->control('Fundings.activity_proof_comment', ['label' => 'Kommentar', 'disabled' => $funding->is_submitted, 'class' => 'no-verify']);
 
@@ -57,7 +57,7 @@ $this->element('addScript', ['script' =>
         echo '<fieldset>';
             echo '<legend>Status Freistellungsbescheid</legend>';
             echo $this->element('funding/status/freistellungsbescheidStatus', ['funding' => $funding]);
-            echo $this->Form->control('Fundings.freistellungsbescheid_status', ['label' => 'Status', 'options' => Funding::STATUS_MAPPING_UPLOADS, 'disabled' => $funding->is_submitted, 'class' => 'no-verify']);
+            echo $this->Form->control('Fundings.freistellungsbescheid_status', ['label' => 'Status', 'options' => Funding::STATUS_MAPPING_CHANGEABLE_BY_ADMIN, 'disabled' => $funding->is_submitted, 'class' => 'no-verify']);
             echo $this->Form->control('Fundings.freistellungsbescheid_comment', ['label' => 'Kommentar', 'disabled' => $funding->is_submitted, 'class' => 'no-verify']);
         echo '</fieldset>';
 
@@ -127,7 +127,7 @@ $this->element('addScript', ['script' =>
             echo '<fieldset>';
                 echo '<legend>Status Zuwendungsbestätigung</legend>';
                 echo $this->element('funding/status/zuwendungsbestaetigungStatus', ['funding' => $funding, 'additionalTextBefore' => '']);
-                echo $this->Form->control('Fundings.zuwendungsbestaetigung_status', ['label' => 'Status', 'options' => Funding::STATUS_MAPPING_UPLOADS, 'class' => 'no-verify']);
+                echo $this->Form->control('Fundings.zuwendungsbestaetigung_status', ['label' => 'Status', 'options' => Funding::STATUS_MAPPING_CHANGEABLE_BY_ADMIN, 'class' => 'no-verify']);
                 echo $this->Form->control('Fundings.zuwendungsbestaetigung_comment', ['label' => 'Kommentar', 'class' => 'no-verify']);
             echo '</fieldset>';
         }

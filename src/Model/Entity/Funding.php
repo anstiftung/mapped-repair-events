@@ -12,8 +12,8 @@ class Funding extends Entity
 
     public static function getAdminFilterOptions(): array {
         return [
-            'to-be-verified-by-admins' => 'Uploads: ' . self::STATUS_MAPPING_UPLOADS[self::STATUS_PENDING],
-            'rejected-by-admins' => 'Uploads: ' . self::STATUS_MAPPING_UPLOADS[self::STATUS_REJECTED_BY_ADMIN],
+            'to-be-verified-by-admins' => 'Uploads: ' . self::STATUS_MAPPING_CHANGEABLE_BY_ADMIN[self::STATUS_PENDING],
+            'rejected-by-admins' => 'Uploads: ' . self::STATUS_MAPPING_CHANGEABLE_BY_ADMIN[self::STATUS_REJECTED_BY_ADMIN],
             'no-data-verified' => 'Noch keine Felder bestätigt',
             'not-submitted' => 'Förderantrag nicht eingereicht',
             'submitted' => 'Förderantrag eingereicht und noch nicht überwiesen',
@@ -54,8 +54,9 @@ class Funding extends Entity
 
     const MAX_FUNDING_SUM = 3000;
 
-    const STATUS_MAPPING_UPLOADS = [
+    const STATUS_MAPPING_CHANGEABLE_BY_ADMIN = [
         self::STATUS_UPLOAD_MISSING => 'wurde noch nicht hochgeladen',
+        self::STATUS_DATA_MISSING => 'wurde noch nicht erstellt',
         self::STATUS_PENDING => 'Bestätigung von Admin ausstehend',
         self::STATUS_VERIFIED_BY_ADMIN => 'von Admin bestätigt',
         self::STATUS_REJECTED_BY_ADMIN => 'von Admin beanstandet',
@@ -68,7 +69,6 @@ class Funding extends Entity
         self::STATUS_CHECKBOXES_MISSING => 'Bitte bestätige alle Checkboxen',
         self::STATUS_CHECKBOXES_OK => 'Alle Checkboxen bestätigt',
         self::STATUS_DESCRIPTIONS_MISSING => 'Die Berichte sind nicht vollständig',
-        self::STATUS_DATA_MISSING => 'wurde noch nicht erstellt',
     ];
 
     const FIELDS_WORKSHOP = [
@@ -366,7 +366,7 @@ class Funding extends Entity
 
     public function _getUsageproofStatusHumanReadable(): string
     {
-        return self::STATUS_MAPPING[$this->usageproof_status];
+        return self::STATUS_MAPPING_CHANGEABLE_BY_ADMIN[$this->usageproof_status];
     }
 
     public function _getDescriptionStatusHumanReadable(): string
@@ -376,17 +376,17 @@ class Funding extends Entity
 
     public function _getActivityProofStatusHumanReadable(): string
     {
-        return self::STATUS_MAPPING_UPLOADS[$this->activity_proof_status];
+        return self::STATUS_MAPPING_CHANGEABLE_BY_ADMIN[$this->activity_proof_status];
     }
 
     public function _getFreistellungsbescheidStatusHumanReadable(): string
     {
-        return self::STATUS_MAPPING_UPLOADS[$this->freistellungsbescheid_status];
+        return self::STATUS_MAPPING_CHANGEABLE_BY_ADMIN[$this->freistellungsbescheid_status];
     }
 
     public function _getZuwendungsbestaetigungStatusHumanReadable(): string
     {
-        return self::STATUS_MAPPING_UPLOADS[$this->zuwendungsbestaetigung_status];
+        return self::STATUS_MAPPING_CHANGEABLE_BY_ADMIN[$this->zuwendungsbestaetigung_status];
     }
 
     public static function getFieldsCount(): int
