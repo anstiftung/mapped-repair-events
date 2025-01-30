@@ -12,8 +12,8 @@ class Funding extends Entity
 
     public static function getAdminFilterOptions(): array {
         return [
-            'to-be-verified-by-admins' => 'Uploads: ' . self::STATUS_MAPPING_CHANGEABLE_BY_ADMIN[self::STATUS_PENDING],
-            'rejected-by-admins' => 'Uploads: ' . self::STATUS_MAPPING_CHANGEABLE_BY_ADMIN[self::STATUS_REJECTED_BY_ADMIN],
+            'to-be-verified-by-admins' =>  self::STATUS_MAPPING_CHANGEABLE_BY_ADMIN[self::STATUS_PENDING],
+            'rejected-by-admins' => self::STATUS_MAPPING_CHANGEABLE_BY_ADMIN[self::STATUS_REJECTED_BY_ADMIN],
             'no-data-verified' => 'Noch keine Felder bestätigt',
             'not-submitted' => 'Förderantrag nicht eingereicht',
             'submitted' => 'Förderantrag eingereicht und noch nicht überwiesen',
@@ -25,8 +25,14 @@ class Funding extends Entity
 
     public static function getAdminFilterConditions(): array {
         return [
-            'to-be-verified-by-admins' => 'Fundings.activity_proof_status = ' . self::STATUS_PENDING . ' OR Fundings.freistellungsbescheid_status = ' . self::STATUS_PENDING . ' OR (Fundings.submit_date IS NOT NULL AND Fundings.zuwendungsbestaetigung_status = ' . self::STATUS_PENDING . ')',  
-            'rejected-by-admins' => 'Fundings.activity_proof_status = ' . self::STATUS_REJECTED_BY_ADMIN . ' OR Fundings.freistellungsbescheid_status = ' . self::STATUS_REJECTED_BY_ADMIN . ' OR (Fundings.submit_date IS NOT NULL AND Fundings.zuwendungsbestaetigung_status = ' . self::STATUS_REJECTED_BY_ADMIN . ')',
+            'to-be-verified-by-admins' => 'Fundings.activity_proof_status = ' . self::STATUS_PENDING . 
+                                            ' OR Fundings.freistellungsbescheid_status = ' . self::STATUS_PENDING . 
+                                            ' OR (Fundings.submit_date IS NOT NULL AND Fundings.zuwendungsbestaetigung_status = ' . self::STATUS_PENDING . ') '.
+                                            ' OR Fundings.usageproof_status = ' . self::STATUS_PENDING,
+            'rejected-by-admins' => 'Fundings.activity_proof_status = ' . self::STATUS_REJECTED_BY_ADMIN . 
+                                    ' OR Fundings.freistellungsbescheid_status = ' . self::STATUS_REJECTED_BY_ADMIN . 
+                                    ' OR (Fundings.submit_date IS NOT NULL AND Fundings.zuwendungsbestaetigung_status = ' . self::STATUS_REJECTED_BY_ADMIN . ') ' . 
+                                    ' OR Fundings.usageproof_status = ' . self::STATUS_REJECTED_BY_ADMIN,
             'no-data-verified' => 'Fundings.verified_fields IS NULL',
             'not-submitted' => 'Fundings.submit_date IS NULL',
             'submitted' => 'Fundings.submit_date IS NOT NULL AND Fundings.money_transfer_date IS NULL',
