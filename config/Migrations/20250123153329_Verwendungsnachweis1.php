@@ -28,7 +28,7 @@ class Verwendungsnachweis1 extends AbstractMigration
             `id` int UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
             `funding_uid` int UNSIGNED DEFAULT NULL,
             `type` int(10) DEFAULT 0,
-            `description` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+            `description` varchar(150) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
             `amount` decimal(10,2) UNSIGNED NULL DEFAULT NULL,
             `created` datetime DEFAULT CURRENT_TIMESTAMP,
             `modified` datetime DEFAULT CURRENT_TIMESTAMP
