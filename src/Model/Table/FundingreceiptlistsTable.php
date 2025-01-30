@@ -36,10 +36,7 @@ class FundingreceiptlistsTable extends Table
         $validator
             ->add('type', 'valid', [
                 'rule' => function ($value, $context) {
-                    if (!empty($context['data']['description']) || !empty($context['data']['amount'])) {
-                        return array_key_exists($value, Fundingbudgetplan::TYPE_MAP); // using budgetplan is ok here
-                    }
-                    return true;
+                    return array_key_exists($value, Fundingbudgetplan::TYPE_MAP); // using budgetplan is ok here
                 },
                 'message' => 'Förderbereich auswählen',
             ]);
@@ -49,15 +46,6 @@ class FundingreceiptlistsTable extends Table
                 'rule' => function ($value, $context) {
                     $descriptionLength = strlen($value);
                     $mainCheck = $descriptionLength >= self::DESCRIPTION_MIN_LENGTH && $descriptionLength <= self::DESCRIPTION_MAX_LENGTH;
-
-                    $typeIsEmpty = empty($context['data']['type']);
-                    if ($typeIsEmpty) {
-                        if ($value == '') {
-                            return true;
-                        }
-                        return $mainCheck;
-                    }
-
                     return $mainCheck;
                 },
                 'message' => self::DESCRIPTION_ERROR_MESSAGE,
@@ -66,17 +54,7 @@ class FundingreceiptlistsTable extends Table
         $validator
             ->add('amount', 'valid', [
                 'rule' => function ($value, $context) {
-                    $mainCheck = $value > 0;
-                    
-                    $typeIsEmpty = empty($context['data']['type']);
-                    if ($typeIsEmpty) {
-                        if ($value == '') {
-                            return true;
-                        }
-                        return $mainCheck;
-                    }
-
-                    return $mainCheck;
+                    return $value > 0;
                 },
                 'message' => 'Betrag muss größer als 0 sein',
             ]);

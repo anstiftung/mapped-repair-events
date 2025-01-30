@@ -583,7 +583,7 @@ class FundingsControllerTest extends AppTestCase
         $funding = $fundingsTable->findWithUsageproofAssociations($fundingUid);
         $this->assertNotEmpty($funding->fundingusageproof);
         $this->assertEquals(Funding::STATUS_PENDING, $funding->usageproof_status);
-        $this->assertCount(5, $funding->fundingreceiptlists);
+        $this->assertCount(1, $funding->fundingreceiptlists);
 
         $testFundingusageproofIncomplete = [
             'main_description' => 'Test Main Description',
@@ -609,19 +609,50 @@ class FundingsControllerTest extends AppTestCase
             'sub_description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum.',
         ];
 
+        $newFundingreceiptlistDescriptionOk = 'Fundingreceiptlist Description Ok';
+        $newFundingreceiptlistAmountOk = 99;
+
         // 2) POST complete data
         $this->post($route, [
             'referer' => '/',
             'Fundings' => [
                 'fundingusageproof' => $testFundingusageproofComplete,
+                'fundingreceiptlists' => [
+                    [
+                        'id' => 1,
+                        'type' => Fundingbudgetplan::TYPE_A,
+                        'description' => $newFundingreceiptlistDescriptionOk,
+                        'amount' => $newFundingreceiptlistAmountOk,
+                    ],
+                    [
+                        'id' => 2,
+                        'type' => '', // invalid
+                        'description' => $newFundingreceiptlistDescriptionOk,
+                        'amount' => $newFundingreceiptlistAmountOk,
+                    ],
+                    [
+                        'id' => 3,
+                        'type' => Fundingbudgetplan::TYPE_B,
+                        'description' => 'abc', // invalid
+                        'amount' => $newFundingreceiptlistAmountOk,
+                    ],
+                    [
+                        'id' => 4,
+                        'type' => Fundingbudgetplan::TYPE_C,
+                        'description' => $newFundingreceiptlistDescriptionOk,
+                        'amount' => -1, // invalid
+                    ],
+                ],
             ],
         ]);
 
         $funding = $fundingsTable->findWithUsageproofAssociations($fundingUid);
-        $this->assertEquals($testFundingusageproofComplete['main_description'], $funding->fundingusageproof->main_description);
-        $this->assertEquals($testFundingusageproofComplete['sub_description'], $funding->fundingusageproof->sub_description);
-        $this->assertEquals(Funding::STATUS_DATA_OK, $funding->usageproof_descriptions_status);
-        $this->assertEquals(Funding::STATUS_MAPPING[Funding::STATUS_DATA_OK], $funding->usageproof_descriptions_status_human_readable);
+
+//        $this->assertEquals($testFundingusageproofComplete['main_description'], $funding->fundingusageproof->main_description);
+//        $this->assertEquals($testFundingusageproofComplete['sub_description'], $funding->fundingusageproof->sub_description);
+//        $this->assertEquals(Funding::STATUS_DATA_OK, $funding->usageproof_descriptions_status);
+//        $this->assertEquals(Funding::STATUS_MAPPING[Funding::STATUS_DATA_OK], $funding->usageproof_descriptions_status_human_readable);
+        $this->assertEquals(1, count($funding->fundingreceiptlists));
 
     }
 

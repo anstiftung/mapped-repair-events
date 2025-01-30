@@ -19,7 +19,7 @@ class FundingsTable extends AppTable
     const FUNDINGBUDGETPLANS_COUNT_HIDDEN = 10;
     const FUNDINGBUDGETPLANS_COUNT = self::FUNDINGBUDGETPLANS_COUNT_VISIBLE + self::FUNDINGBUDGETPLANS_COUNT_HIDDEN;
 
-    const FUNDINGRECEIPTLISTS_COUNT_INITIAL = 5;
+    const FUNDINGRECEIPTLISTS_COUNT_INITIAL = 1;
 
     public function initialize(array $config): void {
         parent::initialize($config);
@@ -229,8 +229,8 @@ class FundingsTable extends AppTable
                 $fundingreceiptlistEntity = $fundingreceiptlistsTable->newEntity([
                     'funding_uid' => $funding->uid,
                     'description' => '',
-                ]);
-                $fundingreceiptlistEntity = $fundingreceiptlistsTable->save($fundingreceiptlistEntity);
+                ], ['validate' => false]);
+                $fundingreceiptlistEntity = $fundingreceiptlistsTable->save($fundingreceiptlistEntity, ['validate' => false]);
                 $i++;
             }
 

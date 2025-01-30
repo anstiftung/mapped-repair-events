@@ -47,14 +47,17 @@ trait VerwendungsnachweisTrait {
             $patchedEntity = $this->patchFunding($funding, $associationsWithoutValidation);
             $patchedEntity->modified = DateTime::now();
 
-            // remove all invalid fundingreceiplists in order to avoid saving nothing
+            // remove $fundingreceiptlist if checkbox is set
+            $fundingreceiptlistsTable = $this->getTableLocator()->get('Fundingreceiptlists');
             foreach($patchedEntity->fundingreceiptlists as $index => $fundingreceiptlist) {
-                if ($fundingreceiptlist->hasErrors()) {
+                if ($fundingreceiptlist->delete) {
+                    $fundingreceiptlistsTable->delete($fundingreceiptlist);
                     unset($patchedEntity->fundingreceiptlists[$index]);
+                    $this->request = $this->request->withoutData('Fundings.fundingreceiptlists.' . $index);
                 }
             }
 
-            $fundingsTable->save($patchedEntity, ['associated' => $associationsWithoutValidation]);
+            $fundingsTable->save($patchedEntity, ['associated' => $associationsWithoutValidation, 'atomic' => true]);
 
             $this->AppFlash->setFlashMessage('Der Verwendungsnachweis wurde erfolgreich zwischengespeichert.');
             $patchedEntity = $this->patchFunding($funding, $associations);
