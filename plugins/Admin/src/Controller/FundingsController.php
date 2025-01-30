@@ -289,6 +289,7 @@ class FundingsController extends AdminAppController
             'FundinguploadsFreistellungsbescheids',
             'FundinguploadsZuwendungsbestaetigungs',
             'Fundingbudgetplans',
+            'Fundingusageproofs',
         ]);
 
         $uids = [];
