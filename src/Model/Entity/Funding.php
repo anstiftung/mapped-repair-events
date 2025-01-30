@@ -344,6 +344,13 @@ class Funding extends Entity
         return self::STATUS_MAPPING[$this->usageproof_descriptions_status];
     }
 
+    public function _getReceiptlistStatusCssClass(): string
+    {
+        // TODO add logic here
+        return 'is-pending';
+    }
+
+
     public function _getDescriptionStatus(): int
     {
         $length = mb_strlen($this->fundingdata->description);
