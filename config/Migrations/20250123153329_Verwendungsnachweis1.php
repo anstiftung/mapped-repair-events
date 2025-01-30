@@ -2,13 +2,14 @@
 declare(strict_types=1);
 
 use Migrations\AbstractMigration;
+use App\Model\Entity\Funding;
 
 class Verwendungsnachweis1 extends AbstractMigration
 {
     public function change(): void
     {
 
-        $sql = "ALTER TABLE `fundings` ADD `usageproof_status` int(10) DEFAULT 10 AFTER `zuwendungsbestaetigung_comment`,
+        $sql = "ALTER TABLE `fundings` ADD `usageproof_status` int(10) DEFAULT " . Funding::STATUS_DATA_MISSING . " AFTER `zuwendungsbestaetigung_comment`,
                 ADD `usageproof_comment` text AFTER `usageproof_status`,
                 ADD `fundingusageproof_id` int UNSIGNED DEFAULT NULL AFTER `fundingdata_id`;
         ";

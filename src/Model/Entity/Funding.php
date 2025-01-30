@@ -50,6 +50,7 @@ class Funding extends Entity
     const STATUS_CHECKBOXES_OK = 80;
     const STATUS_UPLOAD_MISSING = 90;
     const STATUS_DESCRIPTIONS_MISSING = 100;
+    const STATUS_DATA_MISSING = 110;
 
     const MAX_FUNDING_SUM = 3000;
 
@@ -67,6 +68,7 @@ class Funding extends Entity
         self::STATUS_CHECKBOXES_MISSING => 'Bitte bestätige alle Checkboxen',
         self::STATUS_CHECKBOXES_OK => 'Alle Checkboxen bestätigt',
         self::STATUS_DESCRIPTIONS_MISSING => 'Die Berichte sind nicht vollständig',
+        self::STATUS_DATA_MISSING => 'wurde noch nicht erstellt',
     ];
 
     const FIELDS_WORKSHOP = [
@@ -266,11 +268,15 @@ class Funding extends Entity
 
     public function _getActivityProofStatusCssClass(): string
     {
-
         if (!empty($this->workshop) && !$this->workshop->funding_activity_proof_required) {
             return '';
         }
         return $this->getAdminStatusCssClass('activity_proof_status');
+    }
+
+    public function _getUsageproofStatusCssClass(): string
+    {
+        return $this->getAdminStatusCssClass('usageproof_status');
     }
 
     public function _getFreistellungsbescheidStatusCssClass(): string
@@ -285,7 +291,7 @@ class Funding extends Entity
 
     private function getAdminStatusCssClass($statusField): string
     {
-        if ($this->$statusField == self::STATUS_UPLOAD_MISSING) {
+        if ($this->$statusField == self::STATUS_UPLOAD_MISSING || $this->$statusField == self::STATUS_DATA_MISSING) {
             return 'is-missing';
         }
         if ($this->$statusField == self::STATUS_PENDING) {
@@ -298,6 +304,11 @@ class Funding extends Entity
             return 'is-rejected';
         }
         return '';
+    }
+
+    public function _getUsageproofExists(): bool
+    {
+        return $this->fundingusageproof_id !== null;
     }
 
     public function _getUsageproofDescriptionsStatus(): int

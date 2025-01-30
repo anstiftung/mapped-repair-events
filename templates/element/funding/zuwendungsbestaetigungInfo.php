@@ -39,12 +39,12 @@ echo '</div>';
 
 if ($funding->zuwendungsbestaetigung_status != Funding::STATUS_VERIFIED_BY_ADMIN) {
     echo '<div style="margin-top:10px;margin-left:10px;">';
-            echo $this->Html->link(
-                'Upload Zuwendungsbestätigung',
-                $this->Html->urlFundingsUploadZuwendungsbestaetigung($funding->uid),
-                [
-                    'class' => 'button',
-                ],
-            );
+        echo $this->Html->link(
+            'Upload Zuwendungsbestätigung',
+            $this->Html->urlFundingsUploadZuwendungsbestaetigung($funding->uid),
+            [
+                'class' => 'button',
+            ],
+        );
    echo '</div>';
 }

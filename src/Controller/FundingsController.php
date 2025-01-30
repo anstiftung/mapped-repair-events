@@ -22,7 +22,7 @@ class FundingsController extends AppController
     public function index(): void
     {
 
-        if (Configure::read('debug')) {
+        if (Configure::read('debug') && $this->isAdmin()) {
             ini_set('memory_limit', '712M');
         }
 
