@@ -22,6 +22,10 @@ class FundingsController extends AppController
     public function index(): void
     {
 
+        if (Configure::read('debug')) {
+            ini_set('memory_limit', '712M');
+        }
+
         $this->set('metaTags', [
             'title' => 'Förderantrag',
         ]);
