@@ -68,6 +68,7 @@ body.fundings .verification-wrapper p.comment {
     margin-top: 10px;
     border: 1px solid #fff;
     border-radius: 3px;
+    line-height: 17px;
 }
 #fundingForm .upload-form-wrapper {
     display: grid;
