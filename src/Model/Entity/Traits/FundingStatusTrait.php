@@ -29,11 +29,11 @@ trait FundingStatusTrait {
     const STATUS_MAPPING = [
         self::STATUS_BUDGETPLAN_DATA_MISSING => 'Du musst mindestens eine investive Maßnahme hinzufügen',
         self::STATUS_DATA_OK => 'Die eingegebenen Daten sind ok',
-        self::STATUS_DESCRIPTION_MISSING => 'Die Beschreibung ist nicht vollständig',
+        self::STATUS_DESCRIPTION_MISSING => 'Die Beschreibung ist unvollständig',
         self::STATUS_CHECKBOXES_MISSING => 'Bitte bestätige alle Checkboxen',
         self::STATUS_CHECKBOXES_OK => 'Alle Checkboxen bestätigt',
-        self::STATUS_DESCRIPTIONS_MISSING => 'Die Berichte sind nicht vollständig',
-        self::STATUS_RECEIPTLIST_DATA_MISSING => 'Die Belegliste ist nicht vollständig, die unten rechts angeführte Differenz muss 0 sein',
+        self::STATUS_DESCRIPTIONS_MISSING => 'Die Berichte sind unvollständig',
+        self::STATUS_RECEIPTLIST_DATA_MISSING => 'Die Belegliste ist unvollständig, die unten rechts angeführte Differenz muss 0 ergeben',
     ];
     
 }
