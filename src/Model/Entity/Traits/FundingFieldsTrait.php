@@ -98,7 +98,7 @@ trait FundingFieldsTrait {
     ];
 
     const FIELDS_FUNDINGRECEIPTLIST_DIFFERENCE_CHECKBOX = [
-        ['name' => 'difference_refund_ok', 'options' => ['type' => 'checkbox', 'label' => 'Restbetrag bleibt, hiermit bestätige ich, den Restbetrag auf das Konto xxx zu überweisen', 'escape' => false]],
+        ['name' => 'difference_refund_ok', 'options' => ['type' => 'checkbox', 'label' => 'Hiermit bestätige ich, den Restbetrag auf das Konto xxx zu überweisen', 'escape' => false]],
     ];
 
 

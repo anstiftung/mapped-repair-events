@@ -259,6 +259,15 @@ body.fundings.edit div.admin.edit {
     width: 100%;
     text-align: right;
 }
+#fundingForm fieldset.fundinglist .total-wrapper .input.checkbox {
+    width: 100%;
+}
+#fundingForm fieldset.fundinglist .total-wrapper .input.checkbox input {
+    width: 25px ! important;
+}
+#fundingForm fieldset.fundinglist .total-wrapper .input.checkbox label {
+    float: right;
+}
 #fundingForm .upload-form-field-wrapper {
     padding: 10px;
 }
