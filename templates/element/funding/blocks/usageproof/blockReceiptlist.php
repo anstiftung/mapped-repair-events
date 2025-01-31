@@ -25,12 +25,13 @@ echo '<fieldset class="fundinglist fundingreceiptlist full-width">';
     echo '<div class="add-receiptlist-button-wrapper">';
         echo $this->Form->button('Beleg hinzufügen und zwischenspeichern', [
             'type' => 'button',
-            'id' => 'add-receiptlist-button-' . $funding->uid,
+            'id' => 'add-receiptlist-button',
             'class' => 'rounded',
             'escape' => false,
         ]);
         $this->element('addScript', ['script' =>
-            JS_NAMESPACE.".Funding.bindAddReceiptlistButton(".$funding->uid.");"
+            JS_NAMESPACE.".Funding.bindAddReceiptlistButton(".$funding->uid.");".
+            JS_NAMESPACE.".Funding.bindDeleteReceiptlistCheckboxClickHandler();"
         ]);
     echo '</div>';
 

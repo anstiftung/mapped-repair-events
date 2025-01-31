@@ -94,7 +94,8 @@ trait FundingFieldsTrait {
         ['name' => 'type', 'options' => ['type' => 'select', 'options' => Fundingbudgetplan::TYPE_MAP, 'empty' => 'Aufgabenbereich wählen...', 'label' => false, 'class' => 'no-select2']],
         ['name' => 'description', 'options' => ['label' => false, 'placeholder' => 'Aufgabenbereich (' . FundingreceiptlistsTable::DESCRIPTION_ERROR_MESSAGE . ')', 'class' => 'no-verify', 'maxlength' => FundingreceiptlistsTable::DESCRIPTION_MAX_LENGTH, 'minlength' => FundingreceiptlistsTable::DESCRIPTION_MIN_LENGTH]],
         ['name' => 'amount', 'options' => ['label' => false, 'placeholder' => 'Kosten in € ', 'type' => 'number', 'step' => '0.01']],
-        ['name' => 'delete', 'options' => ['type' => 'checkbox', 'label' => 'löschen?']],
+        ['name' => 'delete', 'options' => ['type' => 'checkbox', 'label' => 'löschen?', 'class' => 'receiptlist-delete-checkbox']],
+    
     ];
 
 }

@@ -12,6 +12,27 @@ MappedRepairEvents.Funding = {
         });
     },
 
+
+    bindDeleteReceiptlistCheckboxClickHandler: () => {
+        $('#fundingForm .receiptlist-delete-checkbox').on('change', function() {
+            MappedRepairEvents.Funding.onClickHandlerDeleteReceiptlistCheckbox();
+        });
+    },
+
+    onClickHandlerDeleteReceiptlistCheckbox: (checked) => {
+        const anyChecked = $('#fundingForm .receiptlist-delete-checkbox').is(':checked');
+        const submitButton = $('#fundingForm').find('button[type="submit"]');
+        const addButton = $('#fundingForm').find('#add-receiptlist-button');
+        addButton.prop('disabled', anyChecked);
+        if (anyChecked) {
+            submitButton.text('Zwischenspeichern und Beleg(e) löschen');
+            submitButton.addClass('red');
+        } else {
+            submitButton.text('Zwischenspeichern');
+            submitButton.removeClass('red');
+        }
+    },
+
     initIsMissing: () => {
         $('#fundingForm fieldset:not(.fundinglist) .input.required').find('input, textarea').each(function() {
             if ($(this).val() === '') {
