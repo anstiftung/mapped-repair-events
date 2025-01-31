@@ -31,7 +31,7 @@ echo $this->element('jqueryTabsWithoutAjax', [
 
                 echo '<div class="flexbox">';
                     echo $this->element('funding/blocks/usageproof/blockSachbericht', ['funding' => $funding, 'disabled' => false]);
-                    echo $this->element('funding/blocks/usageproof/blockReceiptlist', ['funding' => $funding]);
+                    echo $this->element('funding/blocks/usageproof/blockReceiptlist', ['funding' => $funding, 'disabled' => false]);
                 echo '</div>';
 
 

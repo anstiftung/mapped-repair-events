@@ -246,16 +246,16 @@ body.fundings.edit div.admin.edit {
 #fundingForm .flexbox .full-width {
     flex-basis: 100%;
 }
-#fundingForm .flexbox fieldset.fundinglist .fundingbudgets-total-wrapper {
+#fundingForm .flexbox fieldset.fundinglist .total-wrapper {
     display: flex;
     margin: 10px 0;
     flex-wrap: wrap;
     gap: 5px;
 }
-#fundingForm .flexbox fieldset.fundinglist .fundingbudgets-total-wrapper p.total {
+#fundingForm .flexbox fieldset.fundinglist .total-wrapper p.total {
     font-size: 1.3em;
 }
-#fundingForm .flexbox fieldset.fundinglist .fundingbudgets-total-wrapper p {
+#fundingForm .flexbox fieldset.fundinglist .total-wrapper p {
     width: 100%;
     text-align: right;
 }

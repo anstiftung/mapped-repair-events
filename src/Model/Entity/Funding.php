@@ -83,6 +83,11 @@ class Funding extends Entity
         return $this->budgetplan_total_with_limit - $this->receiptlist_total;
     }
 
+    public function _getReceiptlistReceiptTotalIsLessThanBudgetplanTotal(): bool
+    {
+        return $this->receiptlist_difference > 0;
+    }
+
     public function _getGroupedValidBudgetplansTotals(): array
     {
         $result = [];
@@ -246,6 +251,9 @@ class Funding extends Entity
 
     public function _getReceiptlistStatus(): int
     {
+        if ($this->receiptlist_receipt_total_is_less_than_budgetplan_total && $this->fundingusageproof->difference_refund_ok) {
+            return self::STATUS_DATA_OK;
+        }
         if ($this->receiptlist_difference == 0) {
             return self::STATUS_DATA_OK;
         }

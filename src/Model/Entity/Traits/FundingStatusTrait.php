@@ -33,7 +33,7 @@ trait FundingStatusTrait {
         self::STATUS_CHECKBOXES_MISSING => 'Bitte bestätige alle Checkboxen',
         self::STATUS_CHECKBOXES_OK => 'Alle Checkboxen bestätigt',
         self::STATUS_DESCRIPTIONS_MISSING => 'Die Berichte sind unvollständig',
-        self::STATUS_RECEIPTLIST_DATA_MISSING => 'Die Belegliste ist unvollständig, die unten rechts angeführte Differenz muss 0 ergeben',
+        self::STATUS_RECEIPTLIST_DATA_MISSING => 'Die Belegliste ist unvollständig<br />* Fördersumme minus Belegsumme muss entweder <b>genau 0</b> ergeben<br />* oder die Belegsumme ist <b>kleiner</b> als die Fördersumme und das Häkchen bei "Rücküberweisung Restbetrag" muss gesetzt werden<br />* Wenn die Belegsumme größer als die Fördersumme ist, kann der Verwendungsnachweis so nicht eingereicht werden (Belege anpassen)',
     ];
     
 }

@@ -19,6 +19,7 @@ class Verwendungsnachweis1 extends AbstractMigration
             `id` int UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
             `main_description` text,
             `sub_description` text,
+            `difference_refund_ok` TINYINT UNSIGNED NOT NULL DEFAULT '0',
             `created` datetime DEFAULT CURRENT_TIMESTAMP,
             `modified` datetime DEFAULT CURRENT_TIMESTAMP
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
