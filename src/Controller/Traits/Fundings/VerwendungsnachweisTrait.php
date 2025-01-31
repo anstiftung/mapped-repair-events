@@ -47,8 +47,9 @@ trait VerwendungsnachweisTrait {
             $patchedEntity = $this->patchFunding($funding, $associationsWithoutValidation);
             $patchedEntity->modified = DateTime::now();
 
-            // remove $fundingreceiptlist if checkbox is set
             $fundingreceiptlistsTable = $this->getTableLocator()->get('Fundingreceiptlists');
+
+            // DELETE fundingreceiptlist
             foreach($patchedEntity->fundingreceiptlists as $index => $fundingreceiptlist) {
                 if ($fundingreceiptlist->delete) {
                     $fundingreceiptlistsTable->delete($fundingreceiptlist);
@@ -57,6 +58,14 @@ trait VerwendungsnachweisTrait {
                 }
             }
             $fundingreceiptlistsTable->saveMany($patchedEntity->fundingreceiptlists);
+
+            // ADD fundingreceiptlist
+            if (!empty($this->request->getData('add_receipt'))) {
+                $newFundingreceiptlistEntity = $fundingreceiptlistsTable->createNewUnvalidatedEmptyEntity($funding->uid);
+                $fundingreceiptlistsTable->save($newFundingreceiptlistEntity);
+                $fundingreceiptlistsCount = $fundingreceiptlistsTable->getCountForFunding($funding->uid);
+                $this->request = $this->request->withData('Fundings.fundingreceiptlists.' . ($fundingreceiptlistsCount -1), $newFundingreceiptlistEntity->toArray());
+            }
 
             $fundingusageproofsTable = $this->getTableLocator()->get('Fundingusageproofs');
             $fundingusageproofsTable->save($patchedEntity->fundingusageproof);

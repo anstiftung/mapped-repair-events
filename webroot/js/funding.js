@@ -1,5 +1,17 @@
 MappedRepairEvents.Funding = {
 
+    bindAddReceiptlistButton: (fundingUid) => {
+        $('#add-receiptlist-button-' + fundingUid).on('click', function() {
+            const form = document.getElementById('fundingForm');
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'add_receipt';
+            input.value = 1;
+            form.appendChild(input);
+            form.submit();
+        });
+    },
+
     initIsMissing: () => {
         $('#fundingForm fieldset:not(.fundingbudgetplan) .input.required').find('input, textarea').each(function() {
             if ($(this).val() === '') {

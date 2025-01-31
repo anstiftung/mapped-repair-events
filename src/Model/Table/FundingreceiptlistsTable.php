@@ -8,6 +8,7 @@ use App\Model\Entity\Fundingbudgetplan;
 use App\Controller\Component\StringComponent;
 use Cake\Event\EventInterface;
 use ArrayObject;
+use App\Model\Entity\Fundingreceiptlist;
 
 class FundingreceiptlistsTable extends Table
 {
@@ -60,7 +61,23 @@ class FundingreceiptlistsTable extends Table
             ]);
 
         return $validator;
-    }    
+    }
+
+    public function getCountForFunding($fundingUid): int
+    {
+        return $this->find()->where([
+            'funding_uid' => $fundingUid,
+        ])->count();
+    }
+
+    public function createNewUnvalidatedEmptyEntity($fundingUid): Fundingreceiptlist
+    {
+        $newReceiptlistData = [
+            'funding_uid' => $fundingUid,
+            'description' => '',
+        ];
+        return $this->newEntity($newReceiptlistData, ['validate' => false]);
+    }
 
 }
 

@@ -27,6 +27,7 @@ echo $this->element('jqueryTabsWithoutAjax', [
 
                 echo $this->Form->hidden('referer', ['value' => $referer]);
                 $this->Form->unlockField('referer');
+                $this->Form->unlockField('add_receipt');
 
                 echo '<div class="flexbox">';
                     echo $this->element('funding/blocks/usageproof/blockSachbericht', ['funding' => $funding, 'disabled' => false]);

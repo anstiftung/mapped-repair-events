@@ -22,7 +22,18 @@ echo '<fieldset class="fundingbudgetplan full-width">';
         }
     echo '</div>';
 
-echo '</fieldset>';
+    echo '<div class="add-receiptlist-button-wrapper">';
+        echo $this->Form->button('Beleg hinzufügen', [
+            'type' => 'button',
+            'id' => 'add-receiptlist-button-' . $funding->uid,
+            'class' => 'rounded',
+        ]);
+        $this->element('addScript', ['script' =>
+            JS_NAMESPACE.".Funding.bindAddReceiptlistButton(".$funding->uid.");"
+        ]);
+    echo '</div>';
+
+    echo '</fieldset>';
 
 
 ?>

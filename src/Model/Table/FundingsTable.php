@@ -226,11 +226,8 @@ class FundingsTable extends AppTable
             $fundingreceiptlistsTable = TableRegistry::getTableLocator()->get('Fundingreceiptlists');
             $i = 0;
             while($i < self::FUNDINGRECEIPTLISTS_COUNT_INITIAL) {
-                $fundingreceiptlistEntity = $fundingreceiptlistsTable->newEntity([
-                    'funding_uid' => $funding->uid,
-                    'description' => '',
-                ], ['validate' => false]);
-                $fundingreceiptlistEntity = $fundingreceiptlistsTable->save($fundingreceiptlistEntity, ['validate' => false]);
+                $fundingreceiptlistEntity = $fundingreceiptlistsTable->createNewUnvalidatedEmptyEntity($fundingUid);
+                $fundingreceiptlistEntity = $fundingreceiptlistsTable->save($fundingreceiptlistEntity);
                 $i++;
             }
 
