@@ -233,19 +233,22 @@ class Funding extends Entity
 
     public function _getReceiptlistStatusHumanReadable(): string
     {
-        // TODO add logic here
-        return 'is-pending';
+        return self::STATUS_MAPPING[$this->receiptlist_status];
     }
 
     public function _getReceiptlistStatusCssClass(): string
     {
-        // TODO add logic here
+        if ($this->receiptlist_status == self::STATUS_DATA_OK) {
+            return 'is-verified';
+        }
         return 'is-pending';
     }
 
     public function _getReceiptlistStatus(): int
     {
-        // TODO add logic here
+        if ($this->receiptlist_difference == 0) {
+            return self::STATUS_DATA_OK;
+        }
         return self::STATUS_RECEIPTLIST_DATA_MISSING;
     }
 

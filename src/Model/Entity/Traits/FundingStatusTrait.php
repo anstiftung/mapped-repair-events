@@ -33,7 +33,7 @@ trait FundingStatusTrait {
         self::STATUS_CHECKBOXES_MISSING => 'Bitte bestätige alle Checkboxen',
         self::STATUS_CHECKBOXES_OK => 'Alle Checkboxen bestätigt',
         self::STATUS_DESCRIPTIONS_MISSING => 'Die Berichte sind nicht vollständig',
-        self::STATUS_RECEIPTLIST_DATA_MISSING => 'Die Belegliste ist nicht vollständig',
+        self::STATUS_RECEIPTLIST_DATA_MISSING => 'Die Belegliste ist nicht vollständig, die unten rechts angeführte Differenz muss 0 sein',
     ];
     
 }
