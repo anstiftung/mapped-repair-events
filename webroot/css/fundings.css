@@ -94,7 +94,7 @@ body.fundings .upload-button-wrapper {
 body.fundings.edit div.admin.edit {
     padding: 20px;
 }
-#fundingForm fieldset:not(.fundingbudgetplan) div.input:not(.file):not(.checkbox) {
+#fundingForm fieldset:not(.fundinglist) div.input:not(.file):not(.checkbox) {
     display: grid;
     grid-template-columns: 165px auto 100px;
     grid-template-rows: auto auto;
@@ -104,7 +104,7 @@ body.fundings.edit div.admin.edit {
     margin-top: 1px;
     border-radius: 3px;
 }
-#fundingForm fieldset.fundingbudgetplan div.row {
+#fundingForm fieldset.fundinglist div.row {
     display: grid;
     grid-template-columns: 180px auto 100px;
     gap: 5px;
@@ -112,8 +112,21 @@ body.fundings.edit div.admin.edit {
     padding: 5px 0px 5px 0px;
     border-radius: 3px;
 }
-#fundingForm fieldset.fundingbudgetplan select,
-#fundingForm fieldset.fundingbudgetplan input {
+#fundingForm fieldset.fundingreceiptlist div.row {
+    grid-template-columns: 180px auto 100px 90px;
+}
+#fundingForm fieldset.fundingreceiptlist div.row .input.checkbox input {
+    width: 25px ! important;
+    margin-right: 0px;
+}
+#fundingForm fieldset.fundingreceiptlist div.row .input.checkbox {
+    margin-bottom: 0px;
+}
+#fundingForm fieldset.fundingreceiptlist .add-receiptlist-button-wrapper {
+    margin-top: 10px;
+}
+#fundingForm fieldset.fundinglist select,
+#fundingForm fieldset.fundinglist input {
     width: 100% ! important; /* fallback */
     width: -webkit-fill-available ! important;
 }
@@ -230,16 +243,16 @@ body.fundings.edit div.admin.edit {
 #fundingForm .flexbox .full-width {
     flex-basis: 100%;
 }
-#fundingForm .flexbox fieldset.fundingbudgetplan .fundingbudgets-total-wrapper {
+#fundingForm .flexbox fieldset.fundinglist .fundingbudgets-total-wrapper {
     display: flex;
     margin: 10px 0;
     flex-wrap: wrap;
     gap: 5px;
 }
-#fundingForm .flexbox fieldset.fundingbudgetplan .fundingbudgets-total-wrapper p.total {
+#fundingForm .flexbox fieldset.fundinglist .fundingbudgets-total-wrapper p.total {
     font-size: 1.3em;
 }
-#fundingForm .flexbox fieldset.fundingbudgetplan .fundingbudgets-total-wrapper p {
+#fundingForm .flexbox fieldset.fundinglist .fundingbudgets-total-wrapper p {
     width: 100%;
     text-align: right;
 }
@@ -314,30 +327,30 @@ body.fundings.uploadZuwendungsbestaetigung h1 {
 }
 @media (max-width: 767px) {
 
-    #fundingForm fieldset:not(.fundingbudgetplan) div.input:not(.file) {
+    #fundingForm fieldset:not(.fundinglist) div.input:not(.file) {
         padding-left: 5px ! important;
     }
-    #fundingForm fieldset:not(.fundingbudgetplan) div.input {
+    #fundingForm fieldset:not(.fundinglist) div.input {
         grid-template-columns: 1fr;
         grid-template-rows: auto auto auto auto;
         padding-bottom: 0;
     }
-    #fundingForm fieldset:not(.fundingbudgetplan) div.input label {
+    #fundingForm fieldset:not(.fundinglist) div.input label {
         padding-left: 5px;
     }
-    #fundingForm fieldset:not(.fundingbudgetplan) div.input input,
-    #fundingForm fieldset:not(.fundingbudgetplan) div.input textarea {
+    #fundingForm fieldset:not(.fundinglist) div.input input,
+    #fundingForm fieldset:not(.fundinglist) div.input textarea {
         grid-column: 1 / span 3;
         grid-row: 2;
     }
-    #fundingForm fieldset:not(.fundingbudgetplan) div.input label.verified,
-    #fundingForm fieldset:not(.fundingbudgetplan) div.input label.delete-upload {
+    #fundingForm fieldset:not(.fundinglist) div.input label.verified,
+    #fundingForm fieldset:not(.fundinglist) div.input label.delete-upload {
         grid-column: 1 / span 3;
         grid-row: 4;
         justify-self: end;
         padding-right: 5px;
     }
-    #fundingForm fieldset:not(.fundingbudgetplan) div.input .error-message {
+    #fundingForm fieldset:not(.fundinglist) div.input .error-message {
         grid-column: 1 / span 3;
         grid-row: 3;
         padding-left: 5px;
@@ -355,10 +368,10 @@ body.fundings.uploadZuwendungsbestaetigung h1 {
         margin-left: 0;
         margin-top: 10px;
     }
-    #fundingForm fieldset.fundingbudgetplan div.row {
+    #fundingForm fieldset.fundinglist div.row {
         grid-template-columns: auto;
     }
-    #fundingForm fieldset.fundingbudgetplan div.row select {
+    #fundingForm fieldset.fundinglist div.row select {
         max-width: 100%;
     }
     #fundingForm .flexbox > fieldset {
@@ -381,7 +394,7 @@ body.fundings.edit .admin .download-links {
     padding-left: 10px;
 }
 
-body.fundings.edit .admin #fundingForm fieldset:not(.fundingbudgetplan) div.input:not(.file) {
+body.fundings.edit .admin #fundingForm fieldset:not(.fundinglist) div.input:not(.file) {
     grid-template-columns: 185px auto;
 }
 body.fundings.edit div.admin.edit #cancel-button {

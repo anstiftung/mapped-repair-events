@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 use App\Model\Entity\Funding;
 
-echo '<fieldset class="fundingbudgetplan full-width">';
+echo '<fieldset class="fundinglist fundingreceiptlist full-width">';
     echo '<legend>' . Funding::FIELDS_FUNDINGRECEIPTLIST_LABEL . '</legend>';
 
     echo '<div class="verification-wrapper ' . $funding->receiptlist_status_css_class . '">';
@@ -23,10 +23,11 @@ echo '<fieldset class="fundingbudgetplan full-width">';
     echo '</div>';
 
     echo '<div class="add-receiptlist-button-wrapper">';
-        echo $this->Form->button('Beleg hinzufügen', [
+        echo $this->Form->button('+ Beleg hinzufügen', [
             'type' => 'button',
             'id' => 'add-receiptlist-button-' . $funding->uid,
             'class' => 'rounded',
+            'escape' => false,
         ]);
         $this->element('addScript', ['script' =>
             JS_NAMESPACE.".Funding.bindAddReceiptlistButton(".$funding->uid.");"

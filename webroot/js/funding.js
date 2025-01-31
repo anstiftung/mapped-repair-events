@@ -13,7 +13,7 @@ MappedRepairEvents.Funding = {
     },
 
     initIsMissing: () => {
-        $('#fundingForm fieldset:not(.fundingbudgetplan) .input.required').find('input, textarea').each(function() {
+        $('#fundingForm fieldset:not(.fundinglist) .input.required').find('input, textarea').each(function() {
             if ($(this).val() === '') {
                 $(this).closest('.input').addClass('is-missing');
             }

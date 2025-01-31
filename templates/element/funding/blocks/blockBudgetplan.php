@@ -4,7 +4,7 @@ declare(strict_types=1);
 use App\Model\Table\FundingsTable;
 use App\Model\Entity\Funding;
 
-echo '<fieldset class="fundingbudgetplan full-width">';
+echo '<fieldset class="fundinglist fundingbudgetplan full-width">';
     echo '<legend>' . Funding::FIELDS_FUNDINGBUDGETPLAN_LABEL . '</legend>';
 
     echo '<div class="verification-wrapper ' . $funding->budgetplan_status_css_class . '">';
