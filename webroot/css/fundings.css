@@ -346,6 +346,9 @@ body.fundings.uploadZuwendungsbestaetigung h1 {
         grid-column: 1 / span 3;
         grid-row: 2;
     }
+    #fundingForm fieldset:not(.fundinglist) div.input.textarea label {
+        grid-column: 1 / span 2;
+    }
     #fundingForm fieldset:not(.fundinglist) div.input label.verified,
     #fundingForm fieldset:not(.fundinglist) div.input label.delete-upload {
         grid-column: 1 / span 3;
