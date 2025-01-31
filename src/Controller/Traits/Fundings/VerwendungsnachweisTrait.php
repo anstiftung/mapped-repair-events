@@ -79,7 +79,7 @@ trait VerwendungsnachweisTrait {
             }
 
             // ADD fundingreceiptlist
-            if (!empty($this->request->getData('add_receipt'))) {
+            if (!empty($this->request->getData('add_receiptlist'))) {
                 $newFundingreceiptlistEntity = $fundingreceiptlistsTable->createNewUnvalidatedEmptyEntity($funding->uid);
                 $fundingreceiptlistsTable->save($newFundingreceiptlistEntity);
                 $flashMessages[] = 'Ein Beleg wurde erfolgreich hinzugefügt.';

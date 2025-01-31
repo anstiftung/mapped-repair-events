@@ -5,7 +5,7 @@ MappedRepairEvents.Funding = {
             const form = document.getElementById('fundingForm');
             const input = document.createElement('input');
             input.type = 'hidden';
-            input.name = 'add_receipt';
+            input.name = 'add_receiptlist';
             input.value = 1;
             form.appendChild(input);
             form.submit();

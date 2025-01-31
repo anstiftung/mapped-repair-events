@@ -612,18 +612,20 @@ class FundingsControllerTest extends AppTestCase
         $newFundingreceiptlistDescriptionOk = 'Fundingreceiptlist Description Ok';
         $newFundingreceiptlistAmountOk = 99;
 
+        $validFundingreceiptlist = [
+            'id' => 1,
+            'type' => Fundingbudgetplan::TYPE_A,
+            'description' => $newFundingreceiptlistDescriptionOk,
+            'amount' => $newFundingreceiptlistAmountOk,
+        ];
+
         // 2) POST complete data
         $this->post($route, [
             'referer' => '/',
             'Fundings' => [
                 'fundingusageproof' => $testFundingusageproofComplete,
                 'fundingreceiptlists' => [
-                    [
-                        'id' => 1,
-                        'type' => Fundingbudgetplan::TYPE_A,
-                        'description' => $newFundingreceiptlistDescriptionOk,
-                        'amount' => $newFundingreceiptlistAmountOk,
-                    ],
+                    $validFundingreceiptlist,
                     [
                         'id' => 2,
                         'type' => '', // invalid
@@ -653,6 +655,33 @@ class FundingsControllerTest extends AppTestCase
         $this->assertEquals(Funding::STATUS_DATA_OK, $funding->usageproof_descriptions_status);
         $this->assertEquals(Funding::STATUS_MAPPING[Funding::STATUS_DATA_OK], $funding->usageproof_descriptions_status_human_readable);
         $this->assertEquals(1, count($funding->fundingreceiptlists));
+
+        // 3) DELETE fundingreceiptlist
+        $this->post($route, [
+            'referer' => '/',
+            'Fundings' => [
+                'fundingusageproof' => $testFundingusageproofComplete,
+                'fundingreceiptlists' => [
+                    [...$validFundingreceiptlist, 'delete' => 1],
+                ],
+            ],
+        ]);
+        $funding = $fundingsTable->findWithUsageproofAssociations($fundingUid);
+        $this->assertEmpty($funding->fundingreceiptlists);
+
+        // 4) ADD fundingreceiptlist
+        $this->post($route, [
+            'referer' => '/',
+            'Fundings' => [
+                'fundingusageproof' => $testFundingusageproofComplete,
+                'fundingreceiptlists' => [
+                    $validFundingreceiptlist,
+                ],
+            ],
+            'add_receiptlist' => 1,
+        ]);
+        $funding = $fundingsTable->findWithUsageproofAssociations($fundingUid);
+        $this->assertEquals(2, count($funding->fundingreceiptlists));
 
     }
 
