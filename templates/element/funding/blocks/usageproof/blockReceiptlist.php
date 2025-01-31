@@ -11,7 +11,7 @@ echo '<fieldset class="fundinglist fundingreceiptlist full-width">';
     echo '</div>';
 
     echo '<div style="margin-bottom:5px;padding:10px;">';
-        echo '<p>Ein Beleg wird nur dann zwischengespeichert, wenn alle Felder gültig sind</p>';
+        echo '<p>Eine Beleg-Zeile wird nur dann permanent gespeichert, wenn nach Klicken auf "Zwischenspeichern" alle Felder gültig (nicht rot) sind. Bei Fehlern bleiben die zuletzt gültigen Werte gespeichert.</p>';
     echo '</div>';
 
     echo '<div class="row-wrapper">';
