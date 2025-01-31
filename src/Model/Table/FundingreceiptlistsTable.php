@@ -39,7 +39,7 @@ class FundingreceiptlistsTable extends Table
                 'rule' => function ($value, $context) {
                     return array_key_exists($value, Fundingbudgetplan::TYPE_MAP); // using budgetplan is ok here
                 },
-                'message' => 'Förderbereich auswählen',
+                'message' => 'Aufgabenbereich auswählen',
             ]);
 
         $validator
@@ -75,6 +75,8 @@ class FundingreceiptlistsTable extends Table
         $newReceiptlistData = [
             'funding_uid' => $fundingUid,
             'description' => '',
+            'amount' => null,
+            'type' => 0,
         ];
         return $this->newEntity($newReceiptlistData, ['validate' => false]);
     }

@@ -11,7 +11,7 @@ echo '<fieldset class="fundinglist fundingreceiptlist full-width">';
     echo '</div>';
 
     echo '<div style="margin-bottom:5px;padding:10px;">';
-        echo '<p>Hilfetext Belegliste.</p>';
+        echo '<p>Belege werden nur dann zwischengespeichert, wenn alle Felder pro Zeile gültig sind</p>';
     echo '</div>';
 
     echo '<div class="row-wrapper">';
@@ -23,7 +23,7 @@ echo '<fieldset class="fundinglist fundingreceiptlist full-width">';
     echo '</div>';
 
     echo '<div class="add-receiptlist-button-wrapper">';
-        echo $this->Form->button('+ Beleg hinzufügen', [
+        echo $this->Form->button('Beleg hinzufügen und zwischenspeichern', [
             'type' => 'button',
             'id' => 'add-receiptlist-button-' . $funding->uid,
             'class' => 'rounded',

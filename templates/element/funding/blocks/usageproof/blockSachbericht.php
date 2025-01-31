@@ -11,7 +11,7 @@ echo '<fieldset class="full-width">';
     echo '<div>';
         if (!$disabled) {
             echo '<p style="margin-bottom:10px;padding:5px;">';
-                echo 'Hilfetext Sachbericht';
+                echo 'Beide Felder werden auch dann zwischengespeichert, wenn die Länge ungültig ist.';
             echo '</p>';
         }
         echo Funding::getRenderedFields(Funding::FIELDS_FUNDINGUSAGEPROOF, 'fundingusageproof', $this->Form, $disabled);

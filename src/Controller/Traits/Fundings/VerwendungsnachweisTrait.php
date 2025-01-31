@@ -52,7 +52,7 @@ trait VerwendungsnachweisTrait {
 
             $fundingreceiptlistsTable = $this->getTableLocator()->get('Fundingreceiptlists');
 
-            // DELETE fundingreceiptlist
+            // DELETE fundingreceiptlists
             $flashMessages = ['Der Verwendungsnachweis wurde erfolgreich zwischengespeichert.'];
             $deletedCount = 0;
             foreach($patchedEntity->fundingreceiptlists as $index => $fundingreceiptlist) {
@@ -63,22 +63,32 @@ trait VerwendungsnachweisTrait {
                     $this->request = $this->request->withoutData('Fundings.fundingreceiptlists.' . $index);
                 }
             }
-            if ($deletedCount > 0) {
-                $flashMessages[] = $deletedCount . ' Beleg(e) wurde(n) erfolgreich gelöscht.';
+
+            // remove all invalid fundingreceiptlists in order to avoid saving nothing
+            foreach($patchedEntity->fundingreceiptlists as $index => $fundingreceiptlist) {
+                if ($fundingreceiptlist->hasErrors()) {
+                    unset($patchedEntity->fundingreceiptlists[$index]);
+                }
             }
             $fundingreceiptlistsTable->saveMany($patchedEntity->fundingreceiptlists);
+
+            if ($deletedCount > 0) {
+                $flashMessages[] = $deletedCount . ' Beleg(e) wurde(n) erfolgreich gelöscht.';
+                $this->AppFlash->setFlashMessage(join('<br />', $flashMessages));
+                return $this->redirect(Configure::read('AppConfig.htmlHelper')->urlFundingsUsageproof($funding->uid));
+            }
 
             // ADD fundingreceiptlist
             if (!empty($this->request->getData('add_receipt'))) {
                 $newFundingreceiptlistEntity = $fundingreceiptlistsTable->createNewUnvalidatedEmptyEntity($funding->uid);
                 $fundingreceiptlistsTable->save($newFundingreceiptlistEntity);
-                $fundingreceiptlistsCount = $fundingreceiptlistsTable->getCountForFunding($funding->uid);
-                $this->request = $this->request->withData('Fundings.fundingreceiptlists.' . ($fundingreceiptlistsCount -1), $newFundingreceiptlistEntity->toArray());
-                $flashMessages[] = 'Ein neuer Beleg wurde erstellt.';
+                $flashMessages[] = 'Ein Beleg wurde erfolgreich hinzugefügt.';
+                $this->AppFlash->setFlashMessage(join('<br />', $flashMessages));
+                return $this->redirect(Configure::read('AppConfig.htmlHelper')->urlFundingsUsageproof($funding->uid));
             }
 
             $this->AppFlash->setFlashMessage(join('<br />', $flashMessages));
-            $patchedEntity = $this->patchFunding($funding, $associations);
+            $funding = $this->patchFunding($funding, $associations);
         }
 
         $this->set('metaTags', [
