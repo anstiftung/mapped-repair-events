@@ -11,7 +11,7 @@ echo '<fieldset class="fundinglist fundingreceiptlist full-width">';
     echo '</div>';
 
     echo '<div style="margin-bottom:5px;padding:10px;">';
-        echo '<p>Belege werden nur dann zwischengespeichert, wenn alle Felder pro Zeile gültig sind</p>';
+        echo '<p>Ein Beleg wird nur dann zwischengespeichert, wenn alle Felder gültig sind</p>';
     echo '</div>';
 
     echo '<div class="row-wrapper">';
@@ -30,7 +30,7 @@ echo '<fieldset class="fundinglist fundingreceiptlist full-width">';
             'escape' => false,
         ]);
         $this->element('addScript', ['script' =>
-            JS_NAMESPACE.".Funding.bindAddReceiptlistButton(".$funding->uid.");".
+            JS_NAMESPACE.".Funding.bindAddReceiptlistButton();".
             JS_NAMESPACE.".Funding.bindDeleteReceiptlistCheckboxClickHandler();"
         ]);
     echo '</div>';

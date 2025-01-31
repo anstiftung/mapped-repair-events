@@ -1,7 +1,7 @@
 MappedRepairEvents.Funding = {
 
-    bindAddReceiptlistButton: (fundingUid) => {
-        $('#add-receiptlist-button-' + fundingUid).on('click', function() {
+    bindAddReceiptlistButton: () => {
+        $('#add-receiptlist-button').on('click', function() {
             const form = document.getElementById('fundingForm');
             const input = document.createElement('input');
             input.type = 'hidden';
@@ -11,7 +11,6 @@ MappedRepairEvents.Funding = {
             form.submit();
         });
     },
-
 
     bindDeleteReceiptlistCheckboxClickHandler: () => {
         $('#fundingForm .receiptlist-delete-checkbox').on('change', function() {

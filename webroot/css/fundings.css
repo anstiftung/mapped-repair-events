@@ -113,7 +113,7 @@ body.fundings.edit div.admin.edit {
     border-radius: 3px;
 }
 #fundingForm fieldset.fundingreceiptlist div.row {
-    grid-template-columns: 180px auto 100px 90px;
+    grid-template-columns: 180px auto 100px 85px;
 }
 #fundingForm fieldset.fundingreceiptlist div.row .input.checkbox input {
     width: 25px ! important;
@@ -121,6 +121,9 @@ body.fundings.edit div.admin.edit {
 }
 #fundingForm fieldset.fundingreceiptlist div.row .input.checkbox {
     margin-bottom: 0px;
+}
+#fundingForm fieldset.fundingreceiptlist div.row .input.checkbox label {
+    margin-left: 0;
 }
 #fundingForm fieldset.fundingreceiptlist .add-receiptlist-button-wrapper {
     margin-top: 10px;
