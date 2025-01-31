@@ -85,8 +85,8 @@ trait FundingFieldsTrait {
     ];
 
     const FIELDS_FUNDINGUSAGEPROOF = [
-        ['name' => 'main_description', 'options' => ['label' =>  FundingusageproofsTable::MAIN_DESCRIPTION_ERROR_MESSAGE, 'type' => 'textarea', 'rows' => 15, 'maxlength' => FundingusageproofsTable::MAIN_DESCRIPTION_MAX_LENGTH, 'minlength' => FundingusageproofsTable::MAIN_DESCRIPTION_MIN_LENGTH, 'class' => 'no-verify']],
-        ['name' => 'sub_description', 'options' => ['label' =>  FundingusageproofsTable::SUB_DESCRIPTION_ERROR_MESSAGE, 'type' => 'textarea', 'rows' => 15, 'maxlength' => FundingusageproofsTable::SUB_DESCRIPTION_MAX_LENGTH, 'minlength' => FundingusageproofsTable::SUB_DESCRIPTION_MIN_LENGTH, 'class' => 'no-verify']],
+        ['name' => 'main_description', 'options' => ['label' =>  FundingusageproofsTable::MAIN_DESCRIPTION_ERROR_MESSAGE, 'type' => 'textarea', 'rows' => 13, 'maxlength' => FundingusageproofsTable::MAIN_DESCRIPTION_MAX_LENGTH, 'minlength' => FundingusageproofsTable::MAIN_DESCRIPTION_MIN_LENGTH, 'class' => 'no-verify']],
+        ['name' => 'sub_description', 'options' => ['label' =>  FundingusageproofsTable::SUB_DESCRIPTION_ERROR_MESSAGE, 'type' => 'textarea', 'rows' => 3, 'maxlength' => FundingusageproofsTable::SUB_DESCRIPTION_MAX_LENGTH, 'minlength' => FundingusageproofsTable::SUB_DESCRIPTION_MIN_LENGTH, 'class' => 'no-verify']],
     ];
 
     const FIELDS_FUNDINGRECEIPTLIST = [
