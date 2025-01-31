@@ -32,11 +32,22 @@ class FundingusageproofsTable extends Table
 
     public function validationDefault(Validator $validator): Validator
     {
-        $validator->minLength('main_description', self::MAIN_DESCRIPTION_MIN_LENGTH, self::MAIN_DESCRIPTION_ERROR_MESSAGE);
-        $validator->maxLength('main_description', self::MAIN_DESCRIPTION_MAX_LENGTH, self::MAIN_DESCRIPTION_ERROR_MESSAGE);
-
-        $validator->minLength('sub_description', self::SUB_DESCRIPTION_MIN_LENGTH, self::SUB_DESCRIPTION_ERROR_MESSAGE);
-        $validator->maxLength('sub_description', self::SUB_DESCRIPTION_MAX_LENGTH, self::SUB_DESCRIPTION_ERROR_MESSAGE);
+        $validator->lengthBetween(
+            'main_description',
+            [
+                self::MAIN_DESCRIPTION_MIN_LENGTH,
+                self::MAIN_DESCRIPTION_MAX_LENGTH,
+            ],
+            self::MAIN_DESCRIPTION_ERROR_MESSAGE,
+        );
+        $validator->lengthBetween(
+            'sub_description',
+            [
+                self::SUB_DESCRIPTION_MIN_LENGTH,
+                self::SUB_DESCRIPTION_MAX_LENGTH,
+            ],
+            self::SUB_DESCRIPTION_ERROR_MESSAGE,
+        );
 
         return $validator;
     }

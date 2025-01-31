@@ -648,10 +648,10 @@ class FundingsControllerTest extends AppTestCase
 
         $funding = $fundingsTable->findWithUsageproofAssociations($fundingUid);
 
-//        $this->assertEquals($testFundingusageproofComplete['main_description'], $funding->fundingusageproof->main_description);
-//        $this->assertEquals($testFundingusageproofComplete['sub_description'], $funding->fundingusageproof->sub_description);
-//        $this->assertEquals(Funding::STATUS_DATA_OK, $funding->usageproof_descriptions_status);
-//        $this->assertEquals(Funding::STATUS_MAPPING[Funding::STATUS_DATA_OK], $funding->usageproof_descriptions_status_human_readable);
+        $this->assertEquals($testFundingusageproofComplete['main_description'], $funding->fundingusageproof->main_description);
+        $this->assertEquals($testFundingusageproofComplete['sub_description'], $funding->fundingusageproof->sub_description);
+        $this->assertEquals(Funding::STATUS_DATA_OK, $funding->usageproof_descriptions_status);
+        $this->assertEquals(Funding::STATUS_MAPPING[Funding::STATUS_DATA_OK], $funding->usageproof_descriptions_status_human_readable);
         $this->assertEquals(1, count($funding->fundingreceiptlists));
 
     }
