@@ -40,12 +40,15 @@ trait VerwendungsnachweisTrait {
 
         if (!empty($this->request->getData())) {
             $associations = ['Fundingusageproofs', 'Fundingreceiptlists'];
-            $patchedEntity = $this->patchFunding($funding, $associations);
 
             $associationsWithoutValidation = $this->removeValidationFromAssociations($associations);
-
             $patchedEntity = $this->patchFunding($funding, $associationsWithoutValidation);
             $patchedEntity->modified = DateTime::now();
+
+            $fundingsTable->save($patchedEntity);
+
+            $fundingusageproofsTable = $this->getTableLocator()->get('Fundingusageproofs');
+            $fundingusageproofsTable->save($patchedEntity->fundingusageproof);
 
             $fundingreceiptlistsTable = $this->getTableLocator()->get('Fundingreceiptlists');
 
@@ -73,9 +76,6 @@ trait VerwendungsnachweisTrait {
                 $this->request = $this->request->withData('Fundings.fundingreceiptlists.' . ($fundingreceiptlistsCount -1), $newFundingreceiptlistEntity->toArray());
                 $flashMessages[] = 'Ein neuer Beleg wurde erstellt.';
             }
-
-            $fundingusageproofsTable = $this->getTableLocator()->get('Fundingusageproofs');
-            $fundingusageproofsTable->save($patchedEntity->fundingusageproof);
 
             $this->AppFlash->setFlashMessage(join('<br />', $flashMessages));
             $patchedEntity = $this->patchFunding($funding, $associations);

@@ -587,7 +587,7 @@ class FundingsControllerTest extends AppTestCase
 
         $testFundingusageproofIncomplete = [
             'main_description' => 'Test Main Description',
-            'sub_description' => 'Test Sub Description',
+            'sub_description' => '',
         ];
 
         // 1) POST incomplete data
