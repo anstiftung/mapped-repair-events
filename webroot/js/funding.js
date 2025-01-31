@@ -24,7 +24,7 @@ MappedRepairEvents.Funding = {
         const addButton = $('#fundingForm').find('#add-receiptlist-button');
         addButton.prop('disabled', anyChecked);
         if (anyChecked) {
-            submitButton.text('Zwischenspeichern und Beleg(e) löschen');
+            submitButton.text('Zwischenspeichern und ausgewählte Beleg(e) löschen');
             submitButton.addClass('red');
         } else {
             submitButton.text('Zwischenspeichern');
