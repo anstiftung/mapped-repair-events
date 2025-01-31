@@ -56,8 +56,10 @@ trait VerwendungsnachweisTrait {
                     $this->request = $this->request->withoutData('Fundings.fundingreceiptlists.' . $index);
                 }
             }
+            $fundingreceiptlistsTable->saveMany($patchedEntity->fundingreceiptlists);
 
-            $fundingsTable->save($patchedEntity, ['associated' => $associationsWithoutValidation, 'atomic' => true]);
+            $fundingusageproofsTable = $this->getTableLocator()->get('Fundingusageproofs');
+            $fundingusageproofsTable->save($patchedEntity->fundingusageproof);
 
             $this->AppFlash->setFlashMessage('Der Verwendungsnachweis wurde erfolgreich zwischengespeichert.');
             $patchedEntity = $this->patchFunding($funding, $associations);
