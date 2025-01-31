@@ -67,6 +67,22 @@ class Funding extends Entity
         return $result;
     }
 
+    public function _getReceiptlistTotal(): float
+    {
+        $total = 0;
+        foreach($this->fundingreceiptlists as $fundingreceiptlist) {
+            if ($fundingreceiptlist->is_valid) {
+                $total += $fundingreceiptlist->amount;
+            }
+        }
+        return $total;
+    }
+
+    public function _getReceiptlistDifference(): float
+    {
+        return $this->budgetplan_total_with_limit - $this->receiptlist_total;
+    }
+
     public function _getGroupedValidBudgetplansTotals(): array
     {
         $result = [];

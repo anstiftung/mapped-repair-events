@@ -196,7 +196,7 @@ class FundingsTable extends AppTable
 
     public function findWithUsageproofAssociations($fundingUid): Funding
     {
-        $associations = ['Fundingusageproofs', 'Fundingreceiptlists'];
+        $associations = ['Fundingusageproofs', 'Fundingreceiptlists', 'Fundingbudgetplans'] ;
 
         $funding = $this->find()->where([
             $this->aliasField('uid') => $fundingUid,

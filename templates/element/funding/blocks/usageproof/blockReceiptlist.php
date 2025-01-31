@@ -34,6 +34,13 @@ echo '<fieldset class="fundinglist fundingreceiptlist full-width">';
         ]);
     echo '</div>';
 
+    echo '<div class="fundingbudgets-total-wrapper">';
+        echo '<p class="total">Fördersumme: ' . $this->MyNumber->formatAsDecimal($funding->budgetplan_total_with_limit) . ' €</p>';
+        echo '<p class="total">Gültige Belege: ' . $this->MyNumber->formatAsDecimal($funding->receiptlist_total * -1) . ' €</p>';
+        echo '<p class="total">Differenz: <b>' . $this->MyNumber->formatAsDecimal($funding->receiptlist_difference) . ' €</b></p>';
+    echo '</div>';
+
+
     echo '</fieldset>';
 
 
