@@ -251,7 +251,9 @@ class Funding extends Entity
 
     public function _getReceiptlistStatus(): int
     {
-        if ($this->receiptlist_receipt_total_is_less_than_budgetplan_total && $this->fundingusageproof->difference_refund_ok) {
+        if ($this->receiptlist_receipt_total_is_less_than_budgetplan_total
+            && !empty($this->fundingusageproof)
+            && $this->fundingusageproof->difference_refund_ok) {
             return self::STATUS_DATA_OK;
         }
         if ($this->receiptlist_difference == 0) {
