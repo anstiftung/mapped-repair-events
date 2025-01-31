@@ -50,12 +50,18 @@ trait VerwendungsnachweisTrait {
             $fundingreceiptlistsTable = $this->getTableLocator()->get('Fundingreceiptlists');
 
             // DELETE fundingreceiptlist
+            $flashMessages = ['Der Verwendungsnachweis wurde erfolgreich zwischengespeichert.'];
+            $deletedCount = 0;
             foreach($patchedEntity->fundingreceiptlists as $index => $fundingreceiptlist) {
                 if ($fundingreceiptlist->delete) {
+                    $deletedCount++;
                     $fundingreceiptlistsTable->delete($fundingreceiptlist);
                     unset($patchedEntity->fundingreceiptlists[$index]);
                     $this->request = $this->request->withoutData('Fundings.fundingreceiptlists.' . $index);
                 }
+            }
+            if ($deletedCount > 0) {
+                $flashMessages[] = $deletedCount . ' Beleg(e) wurde(n) erfolgreich gelöscht.';
             }
             $fundingreceiptlistsTable->saveMany($patchedEntity->fundingreceiptlists);
 
@@ -65,12 +71,13 @@ trait VerwendungsnachweisTrait {
                 $fundingreceiptlistsTable->save($newFundingreceiptlistEntity);
                 $fundingreceiptlistsCount = $fundingreceiptlistsTable->getCountForFunding($funding->uid);
                 $this->request = $this->request->withData('Fundings.fundingreceiptlists.' . ($fundingreceiptlistsCount -1), $newFundingreceiptlistEntity->toArray());
+                $flashMessages[] = 'Ein neuer Beleg wurde erstellt.';
             }
 
             $fundingusageproofsTable = $this->getTableLocator()->get('Fundingusageproofs');
             $fundingusageproofsTable->save($patchedEntity->fundingusageproof);
 
-            $this->AppFlash->setFlashMessage('Der Verwendungsnachweis wurde erfolgreich zwischengespeichert.');
+            $this->AppFlash->setFlashMessage(join('<br />', $flashMessages));
             $patchedEntity = $this->patchFunding($funding, $associations);
         }
 
