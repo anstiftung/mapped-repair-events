@@ -36,7 +36,7 @@ echo $this->element('jqueryTabsWithoutAjax', [
 
 
                 echo $this->element('cancelAndSaveButton', [
-                    'saveLabel' => 'Verwendungsnachweis zwischenspeichern',
+                    'saveLabel' => 'Zwischenspeichern',
                 ]);
     
             echo $this->Form->end();
