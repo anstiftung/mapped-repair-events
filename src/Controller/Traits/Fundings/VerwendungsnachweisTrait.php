@@ -7,6 +7,7 @@ use Cake\I18n\DateTime;
 use Cake\Core\Configure;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Http\Response;
+use App\Model\Entity\Funding;
 
 trait VerwendungsnachweisTrait {
 
@@ -44,7 +45,7 @@ trait VerwendungsnachweisTrait {
             $associationsWithoutValidation = $this->removeValidationFromAssociations($associations);
             $patchedEntity = $this->patchFunding($funding, $associationsWithoutValidation);
             $patchedEntity->modified = DateTime::now();
-
+            $patchedEntity->usageproof_status = Funding::STATUS_PENDING;
             $fundingsTable->save($patchedEntity);
 
             $fundingusageproofsTable = $this->getTableLocator()->get('Fundingusageproofs');
