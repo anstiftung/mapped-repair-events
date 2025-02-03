@@ -601,8 +601,8 @@ class FundingsControllerTest extends AppTestCase
         $funding = $fundingsTable->findWithUsageproofAssociations($fundingUid);
         $this->assertEquals($testFundingusageproofIncomplete['main_description'], $funding->fundingusageproof->main_description);
         $this->assertEquals($testFundingusageproofIncomplete['sub_description'], $funding->fundingusageproof->sub_description);
-        $this->assertEquals(Funding::STATUS_DESCRIPTIONS_MISSING, $funding->usageproof_descriptions_status);
-        $this->assertEquals(Funding::STATUS_MAPPING[Funding::STATUS_DESCRIPTIONS_MISSING], $funding->usageproof_descriptions_status_human_readable);
+        $this->assertEquals(Funding::STATUS_DESCRIPTIONS_PENDING, $funding->usageproof_descriptions_status);
+        $this->assertEquals(Funding::STATUS_MAPPING[Funding::STATUS_DESCRIPTIONS_PENDING], $funding->usageproof_descriptions_status_human_readable);
 
         $testFundingusageproofComplete = [
             'main_description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum.',
