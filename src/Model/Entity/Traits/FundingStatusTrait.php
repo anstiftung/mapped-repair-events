@@ -14,9 +14,11 @@ trait FundingStatusTrait {
     const STATUS_CHECKBOXES_MISSING = 70;
     const STATUS_CHECKBOXES_OK = 80;
     const STATUS_UPLOAD_MISSING = 90;
-    const STATUS_DESCRIPTIONS_MISSING = 100;
+    const STATUS_DESCRIPTIONS_PENDING = 100;
+    const STATUS_DESCRIPTIONS_MISSING = 105;
     const STATUS_DATA_MISSING = 110;
     const STATUS_RECEIPTLIST_DATA_MISSING = 120;
+    const STATUS_RECEIPTLIST_DATA_PENDING = 130;
 
     const STATUS_MAPPING_CHANGEABLE_BY_ADMIN = [
         self::STATUS_UPLOAD_MISSING => 'wurde noch nicht hochgeladen',
@@ -32,8 +34,10 @@ trait FundingStatusTrait {
         self::STATUS_DESCRIPTION_MISSING => 'Die Beschreibung ist unvollständig',
         self::STATUS_CHECKBOXES_MISSING => 'Bitte bestätige alle Checkboxen',
         self::STATUS_CHECKBOXES_OK => 'Alle Checkboxen bestätigt',
-        self::STATUS_DESCRIPTIONS_MISSING => 'Die Berichte sind unvollständig',
-        self::STATUS_RECEIPTLIST_DATA_MISSING => 'Die Belegliste ist unvollständig<br />* Fördersumme minus Belegsumme muss entweder <b>genau 0</b> ergeben<br />* oder die Belegsumme ist <b>kleiner</b> als die Fördersumme und das Häkchen bei "Rücküberweisung Restbetrag" muss gesetzt werden<br />* Wenn die Belegsumme größer als die Fördersumme ist, kann der Verwendungsnachweis so nicht eingereicht werden (Belege anpassen)',
+        self::STATUS_DESCRIPTIONS_PENDING => 'Die Berichte sind unvollständig',
+        self::STATUS_DESCRIPTIONS_MISSING => 'Die Berichte wurden noch nicht erstellt',
+        self::STATUS_RECEIPTLIST_DATA_MISSING => 'Die Belegliste wurde noch nicht erstellt',
+        self::STATUS_RECEIPTLIST_DATA_PENDING => 'Die Belegliste ist unvollständig',
     ];
     
 }

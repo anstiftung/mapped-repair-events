@@ -206,21 +206,25 @@ class Funding extends Entity
     public function _getUsageproofDescriptionsStatus(): int
     {
         if (!empty($this->fundingusageproof)) {
-            $length = mb_strlen($this->fundingusageproof->main_description);
+            $lengthMainDescription = mb_strlen($this->fundingusageproof->main_description);
             $isValidMainDescription = isset($this->fundingusageproof->main_description)
-                && $length >= FundingusageproofsTable::MAIN_DESCRIPTION_MIN_LENGTH
-                && $length <= FundingusageproofsTable::MAIN_DESCRIPTION_MAX_LENGTH;
+                && $lengthMainDescription >= FundingusageproofsTable::MAIN_DESCRIPTION_MIN_LENGTH
+                && $lengthMainDescription <= FundingusageproofsTable::MAIN_DESCRIPTION_MAX_LENGTH;
 
-            $length = mb_strlen($this->fundingusageproof->sub_description);
+            $lengthSubDescription = mb_strlen($this->fundingusageproof->sub_description);
             $isValidSubDescription = isset($this->fundingusageproof->sub_description)
-                && $length >= FundingusageproofsTable::SUB_DESCRIPTION_MIN_LENGTH
-                && $length <= FundingusageproofsTable::SUB_DESCRIPTION_MAX_LENGTH;
+                && $lengthSubDescription >= FundingusageproofsTable::SUB_DESCRIPTION_MIN_LENGTH
+                && $lengthSubDescription <= FundingusageproofsTable::SUB_DESCRIPTION_MAX_LENGTH;
 
-                if ($isValidMainDescription && $isValidSubDescription) {
+            if ($lengthMainDescription == 0 && $lengthSubDescription == 0) {
+                return self::STATUS_DESCRIPTIONS_MISSING;
+            }
+            
+            if ($isValidMainDescription && $isValidSubDescription) {
                 return self::STATUS_DATA_OK;
             };
         }
-        return self::STATUS_DESCRIPTIONS_MISSING;
+        return self::STATUS_DESCRIPTIONS_PENDING;
     }
 
     public function _getUsageproofDescriptionsStatusCssClass(): string
@@ -228,6 +232,11 @@ class Funding extends Entity
         if ($this->usageproof_descriptions_status == self::STATUS_DATA_OK) {
             return 'is-verified';
         }
+
+        if ($this->usageproof_descriptions_status == self::STATUS_DESCRIPTIONS_MISSING) {
+            return 'is-missing';
+        }
+
         return 'is-pending';
     }
 
@@ -246,11 +255,21 @@ class Funding extends Entity
         if ($this->receiptlist_status == self::STATUS_DATA_OK) {
             return 'is-verified';
         }
+
+        if ($this->receiptlist_status == self::STATUS_RECEIPTLIST_DATA_MISSING) {
+            return 'is-missing';
+        }
+
         return 'is-pending';
     }
 
     public function _getReceiptlistStatus(): int
     {
+
+        if ($this->receiptlist_total == 0) {
+            return self::STATUS_RECEIPTLIST_DATA_MISSING;
+        }
+
         if ($this->receiptlist_receipt_total_is_less_than_budgetplan_total
             && !empty($this->fundingusageproof)
             && $this->fundingusageproof->difference_refund_ok) {
@@ -259,7 +278,7 @@ class Funding extends Entity
         if ($this->receiptlist_difference == 0) {
             return self::STATUS_DATA_OK;
         }
-        return self::STATUS_RECEIPTLIST_DATA_MISSING;
+        return self::STATUS_RECEIPTLIST_DATA_PENDING;
     }
 
 
