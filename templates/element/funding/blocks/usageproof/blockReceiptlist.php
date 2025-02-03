@@ -8,15 +8,16 @@ echo '<fieldset class="fundinglist fundingreceiptlist full-width">';
 
     echo '<div class="verification-wrapper ' . $funding->receiptlist_status_css_class . '">';
         echo '<p>' . $funding->receiptlist_status_human_readable . '</p>';
-        echo '<p>* Fördersumme minus Belegsumme muss entweder <b>genau 0</b> ergeben<br />
-                * oder die Belegsumme ist <b>kleiner</b> als die Fördersumme und das Häkchen bei "Rücküberweisung Restbetrag" muss gesetzt werden<br />
-                * Wenn die Belegsumme größer als die Fördersumme ist, kann der Verwendungsnachweis so nicht eingereicht werden (Belege anpassen)
-        </p>';
     echo '</div>';
 
     echo '<div style="margin-bottom:5px;padding:10px;">';
-        echo '<p>Eine Beleg-Zeile wird nur dann permanent gespeichert, wenn nach Klicken auf "Zwischenspeichern" alle Felder gültig (nicht rot) sind.<br />
-                Bei Fehlern bleiben die zuletzt gültigen Werte gespeichert.</p>';
+        echo '<ul style="list-style-type:disc;margin-left:10px;">
+            <li>Eine Beleg-Zeile wird nur dann permanent gespeichert, wenn nach Klicken auf "Zwischenspeichern" alle Felder gültig (nicht rot) sind</li>
+            <li>Bei Fehlern bleiben die zuletzt gültigen Werte gespeichert</li>
+            <li>Fördersumme minus Belegsumme muss entweder <b>genau 0</b> ergeben</li>
+            <li>oder die Belegsumme ist <b>kleiner</b> als die Fördersumme und das Häkchen bei "Rücküberweisung Restbetrag" muss gesetzt werden</li>
+            <li>Wenn die Belegsumme größer als die Fördersumme ist, kann der Verwendungsnachweis so nicht eingereicht werden (Belege anpassen)</li>
+        </ul>';
     echo '</div>';
 
     echo '<div class="row-wrapper">';
