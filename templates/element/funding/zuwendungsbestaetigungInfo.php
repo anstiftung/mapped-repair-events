@@ -14,26 +14,25 @@ echo '<div class="download-links">';
 
     if ($funding->zuwendungsbestaetigung_status == Funding::STATUS_VERIFIED_BY_ADMIN) {
         echo $this->Html->link('Zuwendungsbestätigung', $this->Html->urlFundinguploadDetail($funding->fundinguploads_zuwendungsbestaetigungs[0]->id), ['target' => '_blank']);
+    } else {
+        echo $this->Html->link(
+            'Formular-Vorlage Zuwendungsbestätigung',
+            'https://anstiftung.de/images/vorlage_zuwendungsbestaetigung_geldzuwendung.pdf',
+            [
+                'target' => '_blank',
+            ],
+        );
+        
         echo ' / ';
+
+        echo $this->Html->link(
+            'Ausfüllhilfe Zuwendungsbestätigung',
+            'https://anstiftung.de/images/vorlage_zuwendungsbestaetigung_geldzuwendung_ausfuellhilfe.pdf',
+            [
+                'target' => '_blank',
+            ],
+        );
     }
-
-    echo $this->Html->link(
-        'Formular-Vorlage Zuwendungsbestätigung',
-        'https://anstiftung.de/images/vorlage_zuwendungsbestaetigung_geldzuwendung.pdf',
-        [
-            'target' => '_blank',
-        ],
-    );
-    
-    echo ' / ';
-
-    echo $this->Html->link(
-        'Ausfüllhilfe Zuwendungsbestätigung',
-        'https://anstiftung.de/images/vorlage_zuwendungsbestaetigung_geldzuwendung_ausfuellhilfe.pdf',
-        [
-            'target' => '_blank',
-        ],
-    );
 
 echo '</div>';
 
