@@ -32,6 +32,8 @@ class FileAndEmailLog extends FileLog
             preg_quote('{"results":[{"address_components"', '/'),
             'Form tampering protection token validation failed',
             preg_quote('`FormProtector` instance has not been created.', '/'),
+            'Recipient address rejected',
+            'Domain does not exist',
         ];
         if (preg_match('/' . join('|', $ignoredExceptionsRegex) . '/', $message)) {
             return false;

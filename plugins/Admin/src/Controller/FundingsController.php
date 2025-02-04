@@ -186,13 +186,13 @@ class FundingsController extends AdminAppController
             'Fundingbudgetplans',
             'Fundingsupporters',
             'FundinguploadsActivityProofs' => function($q) {
-                return $q->order(['FundinguploadsActivityProofs.created' => 'DESC']);
+                return $q->orderBy(['FundinguploadsActivityProofs.created' => 'DESC']);
             },
             'FundinguploadsFreistellungsbescheids' => function($q) {
-                return $q->order(['FundinguploadsFreistellungsbescheids.created' => 'DESC']);
+                return $q->orderBy(['FundinguploadsFreistellungsbescheids.created' => 'DESC']);
             },
             'FundinguploadsZuwendungsbestaetigungs' => function($q) {
-                return $q->order(['FundinguploadsZuwendungsbestaetigungs.created' => 'DESC']);
+                return $q->orderBy(['FundinguploadsZuwendungsbestaetigungs.created' => 'DESC']);
             },
         ])->first();
 
