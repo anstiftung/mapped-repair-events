@@ -168,6 +168,50 @@ class FundingsController extends AdminAppController
 
     public function usageproofEdit($uid): void
     {
+
+        if (empty($uid)) {
+            throw new NotFoundException;
+        }
+
+        $fundingsTable = $this->getTableLocator()->get('Fundings');
+        $workshopsTable = $this->getTableLocator()->get('Workshops');
+        $funding = $fundingsTable->find('all',
+        conditions: [
+            $fundingsTable->aliasField('uid') => $uid,
+        ],
+        contain: [
+            'Workshops' => $workshopsTable->getFundingContain(),
+            'Fundingusageproofs',
+            'Fundingreceiptlists',
+        ])->first();
+
+        if (empty($funding)) {
+            throw new NotFoundException;
+        }
+
+        $this->set('uid', $funding->uid);
+
+        $this->setReferer();
+
+        if (!empty($this->request->getData())) {
+
+            $patchedEntity = $fundingsTable->patchEntity($funding, $this->request->getData());
+            if (!($patchedEntity->hasErrors())) {
+
+                $this->sendEmails($patchedEntity);
+
+                $fundingsTable->save($patchedEntity);
+                $this->redirect($this->getReferer());
+            } else {
+                $funding = $patchedEntity;
+            }
+        }
+
+        $this->set('funding', $funding);
+    }    
+
+    public function edit($uid): void
+    {
         if (empty($uid)) {
             throw new NotFoundException;
         }
@@ -228,50 +272,6 @@ class FundingsController extends AdminAppController
 
         $this->set('funding', $funding);
     
-    }
-    
-    public function edit($uid): void
-    {
-
-        if (empty($uid)) {
-            throw new NotFoundException;
-        }
-
-        $fundingsTable = $this->getTableLocator()->get('Fundings');
-        $workshopsTable = $this->getTableLocator()->get('Workshops');
-        $funding = $fundingsTable->find('all',
-        conditions: [
-            $fundingsTable->aliasField('uid') => $uid,
-        ],
-        contain: [
-            'Workshops' => $workshopsTable->getFundingContain(),
-            'Fundingusageproofs',
-            'Fundingreceiptlists',
-        ])->first();
-
-        if (empty($funding)) {
-            throw new NotFoundException;
-        }
-
-        $this->set('uid', $funding->uid);
-
-        $this->setReferer();
-
-        if (!empty($this->request->getData())) {
-
-            $patchedEntity = $fundingsTable->patchEntity($funding, $this->request->getData());
-            if (!($patchedEntity->hasErrors())) {
-
-                $this->sendEmails($patchedEntity);
-
-                $fundingsTable->save($patchedEntity);
-                $this->redirect($this->getReferer());
-            } else {
-                $funding = $patchedEntity;
-            }
-        }
-
-        $this->set('funding', $funding);
     }
 
     private function sendEmails($funding): void

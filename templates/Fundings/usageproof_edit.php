@@ -23,6 +23,8 @@ $this->element('addScript', ['script' =>
 
     echo '<div class="flexbox">';
 
+        echo $this->element('funding/blocks/usageproof/blockSachbericht', ['funding' => $funding, 'disabled' => true]);
+
         echo '<fieldset>';
             echo '<legend>Status Verwendungsnachweis</legend>';
             echo $this->element('funding/status/usageproofStatus', ['funding' => $funding, 'additionalTextBefore' => '']);

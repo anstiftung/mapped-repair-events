@@ -34,7 +34,6 @@ echo $this->element('jqueryTabsWithoutAjax', [
                     echo $this->element('funding/blocks/usageproof/blockReceiptlist', ['funding' => $funding, 'disabled' => false]);
                 echo '</div>';
 
-
                 echo $this->element('cancelAndSaveButton', [
                     'saveLabel' => 'Zwischenspeichern',
                 ]);
