@@ -165,10 +165,9 @@ class FundingsController extends AdminAppController
             'Leistungsdatum',
         ];
     }
-    
-    public function edit($uid): void
-    {
 
+    public function usageproofEdit($uid): void
+    {
         if (empty($uid)) {
             throw new NotFoundException;
         }
@@ -228,6 +227,51 @@ class FundingsController extends AdminAppController
         }
 
         $this->set('funding', $funding);
+    
+    }
+    
+    public function edit($uid): void
+    {
+
+        if (empty($uid)) {
+            throw new NotFoundException;
+        }
+
+        $fundingsTable = $this->getTableLocator()->get('Fundings');
+        $workshopsTable = $this->getTableLocator()->get('Workshops');
+        $funding = $fundingsTable->find('all',
+        conditions: [
+            $fundingsTable->aliasField('uid') => $uid,
+        ],
+        contain: [
+            'Workshops' => $workshopsTable->getFundingContain(),
+            'Fundingusageproofs',
+            'Fundingreceiptlists',
+        ])->first();
+
+        if (empty($funding)) {
+            throw new NotFoundException;
+        }
+
+        $this->set('uid', $funding->uid);
+
+        $this->setReferer();
+
+        if (!empty($this->request->getData())) {
+
+            $patchedEntity = $fundingsTable->patchEntity($funding, $this->request->getData());
+            if (!($patchedEntity->hasErrors())) {
+
+                $this->sendEmails($patchedEntity);
+
+                $fundingsTable->save($patchedEntity);
+                $this->redirect($this->getReferer());
+            } else {
+                $funding = $patchedEntity;
+            }
+        }
+
+        $this->set('funding', $funding);
     }
 
     private function sendEmails($funding): void
@@ -258,6 +302,17 @@ class FundingsController extends AdminAppController
         if ($funding->isDirty('zuwendungsbestaetigung_status')) {
             $email->viewBuilder()->setTemplate('fundings/zuwendungsbestaetigung_status_changed');
             $email->setSubject('Der Status deiner Zuwendungsbestätigung wurde geändert')
+            ->setTo($funding->owner_user->email)
+            ->setViewVars([
+                'funding' => $funding,
+                'data' => $funding->owner_user,
+            ]);
+            $email->addToQueue();
+        }
+
+        if ($funding->isDirty('usageproof_status')) {
+            $email->viewBuilder()->setTemplate('fundings/usageproof_status_changed');
+            $email->setSubject('Der Status deines Verwendungsnachweises wurde geändert')
             ->setTo($funding->owner_user->email)
             ->setViewVars([
                 'funding' => $funding,

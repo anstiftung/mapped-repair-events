@@ -19,7 +19,7 @@ echo '<div style="width:95px;">';
         echo 'B';
     echo '</div>';
 
-    echo $this->Html->link('<i class="far fa-edit fa-border"></i>', "javascript:alert('noch nicht fertig');", [
+    echo $this->Html->link('<i class="far fa-edit fa-border"></i>', "/admin/fundings/usageproofEdit/" . $object->uid, [
         'escape' => false,
         'style' => 'float:left;margin-left:5px;',
         'title' => 'Verwendungsnachweis bearbeiten',

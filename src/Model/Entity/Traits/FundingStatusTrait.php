@@ -28,6 +28,12 @@ trait FundingStatusTrait {
         self::STATUS_REJECTED_BY_ADMIN => 'von Admin beanstandet',
     ];
 
+    const STATUS_MAPPING_FOR_ADMIN_DROPDOWN = [
+        self::STATUS_PENDING => 'Bestätigung von Admin ausstehend',
+        self::STATUS_VERIFIED_BY_ADMIN => 'von Admin bestätigt',
+        self::STATUS_REJECTED_BY_ADMIN => 'von Admin beanstandet',
+    ];
+
     const STATUS_MAPPING = [
         self::STATUS_BUDGETPLAN_DATA_MISSING => 'Du musst mindestens eine investive Maßnahme hinzufügen',
         self::STATUS_DATA_OK => 'Die eingegebenen Daten sind ok',
