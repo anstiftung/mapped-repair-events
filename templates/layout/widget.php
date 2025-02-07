@@ -1,11 +1,12 @@
 <?php
 declare(strict_types=1);
-    use Cake\Core\Configure;
+use Cake\Core\Configure;
 ?>
 <!DOCTYPE html>
 <html lang="de">
 <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 
     <script type="text/javascript">
         if(!window.<?php echo JS_NAMESPACE; ?>) { <?php echo JS_NAMESPACE; ?> = window.<?php echo JS_NAMESPACE; ?> = {}; }
