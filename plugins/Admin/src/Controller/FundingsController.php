@@ -276,8 +276,8 @@ class FundingsController extends AdminAppController
 
     private function sendEmails($funding): void
     {
-        $email = new AppMailer();
         if ($funding->isDirty('freistellungsbescheid_status')) {
+            $email = new AppMailer();
             $email->viewBuilder()->setTemplate('fundings/freistellungsbescheid_status_changed');
             $email->setSubject('Der Status deines Freistellungsbescheides wurde geändert')
             ->setTo($funding->owner_user->email)
@@ -289,6 +289,7 @@ class FundingsController extends AdminAppController
         }
 
         if ($funding->isDirty('activity_proof_status')) {
+            $email = new AppMailer();
             $email->viewBuilder()->setTemplate('fundings/activity_proof_status_changed');
             $email->setSubject('Der Status deines Aktivitätsnachweises wurde geändert')
             ->setTo($funding->owner_user->email)
@@ -300,6 +301,7 @@ class FundingsController extends AdminAppController
         }
 
         if ($funding->isDirty('zuwendungsbestaetigung_status')) {
+            $email = new AppMailer();
             $email->viewBuilder()->setTemplate('fundings/zuwendungsbestaetigung_status_changed');
             $email->setSubject('Der Status deiner Zuwendungsbestätigung wurde geändert')
             ->setTo($funding->owner_user->email)
@@ -311,6 +313,7 @@ class FundingsController extends AdminAppController
         }
 
         if ($funding->isDirty('usageproof_status')) {
+            $email = new AppMailer();
             $email->viewBuilder()->setTemplate('fundings/usageproof_status_changed');
             $email->setSubject('Der Status deines Verwendungsnachweises wurde geändert')
             ->setTo($funding->owner_user->email)
