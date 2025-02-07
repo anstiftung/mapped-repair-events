@@ -181,9 +181,15 @@ class FundingsController extends AdminAppController
         ],
         contain: [
             'Workshops' => $workshopsTable->getFundingContain(),
+            'OwnerUsers',
             'Fundingusageproofs',
             'Fundingreceiptlists',
+            'Fundingbudgetplans',
         ])->first();
+
+        if ($funding->owner_user) {
+            $funding->owner_user->revertPrivatizeData();
+        }
 
         if (empty($funding)) {
             throw new NotFoundException;

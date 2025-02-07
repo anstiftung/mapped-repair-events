@@ -116,7 +116,6 @@ $this->element('addScript', ['script' =>
 
         echo $this->element('funding/blocks/blockCheckboxes', ['funding' => $funding, 'disabled' => true]);
 
-
         if ($funding->is_submitted) {
             echo $this->element('funding/fundingUploadsForm', [
                 'fundinguploads' => $funding->fundinguploads_zuwendungsbestaetigungs,

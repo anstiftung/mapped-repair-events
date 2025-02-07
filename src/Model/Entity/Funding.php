@@ -67,6 +67,17 @@ class Funding extends Entity
         return $result;
     }
 
+    public function _getGroupedValidReceiptlists(): array
+    {
+        $result = [];
+        foreach($this->fundingreceiptlists as $fundingreceiptlist) {
+            if ($fundingreceiptlist->is_valid) {
+                $result[$fundingreceiptlist->type][] = $fundingreceiptlist;
+            }
+        }
+        return $result;
+    }
+
     public function _getReceiptlistTotal(): float
     {
         $total = 0;
@@ -95,6 +106,19 @@ class Funding extends Entity
             $total = 0;
             foreach($fundingbudgetplans as $fundingbudgetplan) {
                 $total += $fundingbudgetplan->amount;
+            }
+            $result[$typeId] = $total;
+        }
+        return $result;
+    }
+
+    public function _getGroupedValidReceiptlistsTotals(): array
+    {
+        $result = [];
+        foreach($this->grouped_valid_receiptlists as $typeId => $fundingreceiptlists) {
+            $total = 0;
+            foreach($fundingreceiptlists as $fundingreceiptlist) {
+                $total += $fundingreceiptlist->amount;
             }
             $result[$typeId] = $total;
         }
