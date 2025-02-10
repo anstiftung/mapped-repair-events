@@ -39,7 +39,7 @@ class FundingreceiptlistsTable extends Table
                 'rule' => function ($value, $context) {
                     return array_key_exists($value, Fundingbudgetplan::TYPE_MAP); // using budgetplan is ok here
                 },
-                'message' => 'Aufgabenbereich auswählen',
+                'message' => 'Ausgabenbereich auswählen',
             ]);
 
         $validator
