@@ -37,7 +37,14 @@ echo $this->element('jqueryTabsWithoutAjax', [
                 echo $this->element('cancelAndSaveButton', [
                     'saveLabel' => 'Zwischenspeichern',
                 ]);
-    
+
+                echo '<div class="flexbox" style="margin-top:20px;">';
+                    echo '<fieldset>';
+                        echo '<legend>Kostenplan</legend>';
+                        echo $this->element('funding/blocks/blockBudgetplanGrouped', ['funding' => $funding]);
+                    echo '</fieldset>';
+                echo '</div>';
+
             echo $this->Form->end();
 
         ?>
