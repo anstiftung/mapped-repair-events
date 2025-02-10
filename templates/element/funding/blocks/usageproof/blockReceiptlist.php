@@ -29,7 +29,7 @@ echo '<fieldset class="fundinglist fundingreceiptlist full-width">';
     echo '</div>';
 
     echo '<div class="add-receiptlist-button-wrapper">';
-        echo $this->Form->button('Zwischenspeichern und Beleg hinzufügen', [
+        echo $this->Form->button('Belegliste zwischenspeichern und Zeile hinzufügen', [
             'type' => 'button',
             'id' => 'add-receiptlist-button',
             'class' => 'rounded',
