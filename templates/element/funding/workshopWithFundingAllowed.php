@@ -15,7 +15,8 @@ echo '<div class="workshop-wrapper">';
         if (!$workshop->funding_exists || !$isSubmitted) {
             $classes = ['button'];
             $buttonHref = $this->Html->urlFundingsEdit($workshop->uid);
-            if ($workshop->funding_created_by_different_owner) {
+            $fundingFinished = $this->Time->isFundingFinished();
+            if ($workshop->funding_created_by_different_owner || $fundingFinished) {
                 $classes[] = 'disabled';
                 $buttonHref = 'javascript:void(0);';
             }
