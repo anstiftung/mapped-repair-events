@@ -26,3 +26,4 @@ $migrations->migrate(['connection' => 'test']);
 $_SERVER['PHP_SELF'] = '/';
 
 Configure::write('AppConfig.adminUserUid', 8);
+Configure::write('AppConfig.fundingsEndDateNTime', '2050-02-24 23:59:59');

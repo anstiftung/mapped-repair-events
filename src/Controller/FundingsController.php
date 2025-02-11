@@ -25,6 +25,10 @@ class FundingsController extends AppController
             'title' => 'Förderantrag',
         ]);
 
+        if (Configure::read('debug') && $this->isAdmin()) {
+            ini_set('memory_limit', '712M');
+        }
+
         $workshopsTable = $this->getTableLocator()->get('Workshops');
         if ($this->isAdmin()) {
             $workshops = $workshopsTable->getWorkshopsWithUsers(APP_OFF, $workshopsTable->getFundingContain());
@@ -98,6 +102,12 @@ class FundingsController extends AppController
     {
 
         $workshopUid = (int) $this->getRequest()->getParam('uid');
+
+        $fundingFinished = Configure::read('AppConfig.timeHelper')->isFundingFinished();
+        if ($fundingFinished) {
+            $this->AppFlash->setFlashError('Die Antragstellung ist nicht mehr möglich.');
+            return $this->redirect(Configure::read('AppConfig.htmlHelper')->urlFundings());
+        }
 
         $createdByOtherOwnerCheckMessage = $this->createdByOtherOwnerCheck($workshopUid);
         if ($createdByOtherOwnerCheckMessage != '') {

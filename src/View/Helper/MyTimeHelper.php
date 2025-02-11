@@ -4,10 +4,15 @@ declare(strict_types=1);
 namespace App\View\Helper;
 
 use Cake\View\Helper\TimeHelper;
+use Cake\Core\Configure;
 use DateTime;
 
 class MyTimeHelper extends TimeHelper {
 
+
+    public function isFundingFinished() {
+        return strtotime(Configure::read('AppConfig.fundingsEndDateNTime')) < time();
+    }
 
     public function getAllYearsUntilThisYear($thisYear, $firstYear): array
     {
