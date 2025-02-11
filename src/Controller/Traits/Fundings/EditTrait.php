@@ -21,6 +21,12 @@ trait EditTrait {
 
         $workshopUid = (int) $this->getRequest()->getParam('uid');
 
+        $fundingFinished = Configure::read('AppConfig.timeHelper')->isFundingFinished();
+        if ($fundingFinished) {
+            $this->AppFlash->setFlashError('Die Antragstellung ist nicht mehr möglich.');
+            return $this->redirect(Configure::read('AppConfig.htmlHelper')->urlFundings());
+        }
+
         $ownerCheckResult = $this->createdByOtherOwnerCheck($workshopUid);
         if ($ownerCheckResult !== false) {
             $this->AppFlash->setFlashError('Der Förderantrag wurde bereits von einem anderen Nutzer (' . $ownerCheckResult->name . ') erstellt.');

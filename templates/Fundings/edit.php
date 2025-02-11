@@ -12,6 +12,9 @@ echo $this->element('jqueryTabsWithoutAjax', [
     'links' => $this->Html->getUserBackendNaviLinks($loggedUser->uid, true, $loggedUser->isOrga()),
     'selected' => $this->Html->urlFundings(),
 ]);
+
+echo $this->element('funding/fundingEndDateNTimeNotice');
+
 ?>
 
 <div class="profile ui-tabs custom-ui-tabs ui-widget-content">
