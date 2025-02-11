@@ -40,8 +40,8 @@ trait FundingStatusTrait {
         self::STATUS_DESCRIPTION_MISSING => 'Die Beschreibung ist unvollständig',
         self::STATUS_CHECKBOXES_MISSING => 'Bitte bestätige alle Checkboxen',
         self::STATUS_CHECKBOXES_OK => 'Alle Checkboxen bestätigt',
-        self::STATUS_DESCRIPTIONS_PENDING => 'Die Berichte sind unvollständig',
-        self::STATUS_DESCRIPTIONS_MISSING => 'Die Berichte wurden noch nicht erstellt',
+        self::STATUS_DESCRIPTIONS_PENDING => 'Der Sachbericht ist unvollständig',
+        self::STATUS_DESCRIPTIONS_MISSING => 'Der Sachbericht wurde noch nicht erstellt',
         self::STATUS_RECEIPTLIST_DATA_MISSING => 'Die Belegliste wurde noch nicht erstellt',
         self::STATUS_RECEIPTLIST_DATA_PENDING => 'Die Belegliste ist unvollständig',
     ];

@@ -117,7 +117,8 @@ body.fundings.edit div.admin.edit {
     grid-template-columns: 150px auto 150px 150px 110px 110px 85px 85px;
 }
 #fundingForm fieldset.fundingreceiptlist div.row-header:not(.row-readonly) {
-    padding: 10px 5px;
+    padding-top: 5px;
+    padding-bottom: 10px;
 }
 #fundingForm fieldset.fundingreceiptlist div.row-header span {
     text-decoration: underline;
