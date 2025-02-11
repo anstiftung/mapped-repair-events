@@ -14,10 +14,7 @@ echo '<fieldset class="fundinglist fundingreceiptlist full-width">';
 
     echo '<div style="margin-bottom:5px;padding:10px;">';
         echo '<ul style="list-style-type:disc;margin-left:10px;">
-            <li>Eine Beleg-Zeile wird nur dann permanent gespeichert, wenn nach Klicken auf "Zwischenspeichern" alle Felder gültig (nicht rot) sind</li>
-            <li>Bei Fehlern bleiben die zuletzt gültigen Werte gespeichert</li>
-            <li>oder die belegte Gesamtsumme ist <b>kleiner</b> als die Fördersumme und das Häkchen bei "Rücküberweisung Restbetrag" muss gesetzt werden</li>
-            <li>Wenn die belegte Gesamtsumme größer als die Fördersumme ist, kann der Verwendungsnachweis so nicht eingereicht werden (Belege anpassen)</li>
+            <li>Eine Beleg-Zeile wird nur dann permanent gespeichert, wenn nach Klicken auf "Zwischenspeichern" alle Felder gültig (= nicht rot) sind. Bei Fehlern bleiben die zuletzt gültigen Werte gespeichert</li>
         </ul>';
     echo '</div>';
 

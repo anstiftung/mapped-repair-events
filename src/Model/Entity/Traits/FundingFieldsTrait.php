@@ -91,7 +91,7 @@ trait FundingFieldsTrait {
 
     const FIELDS_FUNDINGRECEIPTLIST = [
         ['name' => 'id', 'options' => ['type' => 'hidden'], 'hideInHeading' => true],
-        ['name' => 'type', 'options' => ['type' => 'select', 'options' => Fundingbudgetplan::TYPE_MAP, 'empty' => 'Ausgabenbereich wählen...', 'label' => false, 'class' => 'no-select2']],
+        ['name' => 'type', 'options' => ['type' => 'select', 'placeholder' => 'Ausgabenbereich', 'options' => Fundingbudgetplan::TYPE_MAP, 'empty' => 'Ausgabenbereich wählen...', 'label' => false, 'class' => 'no-select2']],
         ['name' => 'description', 'options' => ['label' => false, 'placeholder' => 'Zahlungsgrund/Gegenstand/Maßnahme', 'maxlength' => FundingreceiptlistsTable::DESCRIPTION_MAX_LENGTH, 'minlength' => FundingreceiptlistsTable::DESCRIPTION_MIN_LENGTH]],
         ['name' => 'recipient', 'options' => ['label' => false, 'placeholder' => 'Zahlungsempfänger*in', 'maxlength' => FundingreceiptlistsTable::RECIPIENT_MAX_LENGTH, 'minlength' => FundingreceiptlistsTable::RECIPIENT_MIN_LENGTH]],
         ['name' => 'receipt_type', 'options' => ['label' => false, 'placeholder' => 'Belegart', 'maxlength' => FundingreceiptlistsTable::RECEIPT_TYPE_MAX_LENGTH, 'minlength' => FundingreceiptlistsTable::RECEIPT_TYPE_MIN_LENGTH]],
