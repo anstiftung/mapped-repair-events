@@ -10,7 +10,8 @@ use DateTime;
 class MyTimeHelper extends TimeHelper {
 
 
-    public function isFundingFinished() {
+    public function isFundingFinished(): bool
+    {
         return strtotime(Configure::read('AppConfig.fundingsEndDateNTime')) < time();
     }
 
