@@ -30,6 +30,10 @@ class Verwendungsnachweis1 extends AbstractMigration
             `funding_uid` int UNSIGNED DEFAULT NULL,
             `type` int(10) DEFAULT 0,
             `description` varchar(150) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+            `recipient` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+            `receipt_type` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+            `payment_date` DATE NULL DEFAULT NULL,
+            `receipt_number` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
             `amount` decimal(10,2) UNSIGNED NULL DEFAULT NULL,
             `created` datetime DEFAULT CURRENT_TIMESTAMP,
             `modified` datetime DEFAULT CURRENT_TIMESTAMP

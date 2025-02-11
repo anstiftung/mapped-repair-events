@@ -38,14 +38,35 @@ $this->element('addScript', ['script' =>
 
                     echo '<div class="full-width""><b>' . Fundingbudgetplan::TYPE_MAP[$typeId] . '</b></div>';
 
+                    echo '<div class="row row-readonly row-header full-width">';
+                        foreach(Funding::FIELDS_FUNDINGRECEIPTLIST as $field) {
+                            if (isset($field['hideInHeading']) || $field['name'] == 'type') {
+                                continue;
+                            }
+                            echo '<span>' . ($field['options']['placeholder'] ?? '') . '</span>';
+                        }
+                    echo '</div>';
+
                     foreach($fundingreceiptlists as $fundingreceiptlist) {
-                        echo '<div class="flexbox full-width">';
-                            echo '<div style="flex-grow:1;">';
+                        echo '<div class="row row-readonly full-width">';
+                            echo '<span>';
                                 echo $fundingreceiptlist->description;
-                            echo '</div>';
-                            echo '<div style="align-self:flex-end;">';
+                            echo '</span>';
+                            echo '<span>';
+                                echo $fundingreceiptlist->recipient;
+                            echo '</span>';
+                            echo '<span>';
+                                echo $fundingreceiptlist->receipt_type;
+                            echo '</span>';
+                            echo '<span>';
+                                echo $fundingreceiptlist->payment_date->format('d.m.Y');
+                            echo '</span>';
+                            echo '<span>';
+                                echo $fundingreceiptlist->receipt_number;
+                            echo '</span>';
+                            echo '<span style="text-align:right;">';
                                 echo $this->MyNumber->formatAsDecimal($fundingreceiptlist->amount) . ' €';
-                            echo '</div>';
+                            echo '</span>';
                         echo '</div>';
                     }
 

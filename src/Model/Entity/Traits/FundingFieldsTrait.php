@@ -90,11 +90,15 @@ trait FundingFieldsTrait {
     ];
 
     const FIELDS_FUNDINGRECEIPTLIST = [
-        ['name' => 'id', 'options' => ['type' => 'hidden']],
+        ['name' => 'id', 'options' => ['type' => 'hidden'], 'hideInHeading' => true],
         ['name' => 'type', 'options' => ['type' => 'select', 'options' => Fundingbudgetplan::TYPE_MAP, 'empty' => 'Ausgabenbereich wählen...', 'label' => false, 'class' => 'no-select2']],
-        ['name' => 'description', 'options' => ['label' => false, 'placeholder' => 'Zahlungsgrund/Gegenstand/Maßnahme (' . FundingreceiptlistsTable::DESCRIPTION_ERROR_MESSAGE . ')', 'class' => 'no-verify', 'maxlength' => FundingreceiptlistsTable::DESCRIPTION_MAX_LENGTH, 'minlength' => FundingreceiptlistsTable::DESCRIPTION_MIN_LENGTH]],
-        ['name' => 'amount', 'options' => ['label' => false, 'placeholder' => 'Kosten in € ', 'type' => 'number', 'step' => '0.01']],
-        ['name' => 'delete', 'options' => ['type' => 'checkbox', 'label' => 'löschen?', 'class' => 'receiptlist-delete-checkbox']],
+        ['name' => 'description', 'options' => ['label' => false, 'placeholder' => 'Zahlungsgrund/Gegenstand/Maßnahme', 'maxlength' => FundingreceiptlistsTable::DESCRIPTION_MAX_LENGTH, 'minlength' => FundingreceiptlistsTable::DESCRIPTION_MIN_LENGTH]],
+        ['name' => 'recipient', 'options' => ['label' => false, 'placeholder' => 'Zahlungsempfänger*in', 'maxlength' => FundingreceiptlistsTable::RECIPIENT_MAX_LENGTH, 'minlength' => FundingreceiptlistsTable::RECIPIENT_MIN_LENGTH]],
+        ['name' => 'receipt_type', 'options' => ['label' => false, 'placeholder' => 'Belegart', 'maxlength' => FundingreceiptlistsTable::RECEIPT_TYPE_MAX_LENGTH, 'minlength' => FundingreceiptlistsTable::RECEIPT_TYPE_MIN_LENGTH]],
+        ['name' => 'payment_date', 'options' => ['label' => false, 'placeholder' => 'Zahlungsdatum', 'type' => 'text', 'class' => 'datepicker-input']],
+        ['name' => 'receipt_number', 'options' => ['label' => false, 'placeholder' => 'Belegnummer', 'maxlength' => FundingreceiptlistsTable::RECEIPT_NUMBER_MAX_LENGTH, 'minlength' => FundingreceiptlistsTable::RECEIPT_NUMBER_MIN_LENGTH]],
+        ['name' => 'amount', 'options' => ['label' => false, 'placeholder' => 'Summe ', 'type' => 'number', 'step' => '0.01']],
+        ['name' => 'delete', 'options' => ['type' => 'checkbox', 'label' => 'löschen?', 'class' => 'receiptlist-delete-checkbox'], 'hideInHeading' => true],
     ];
 
     const FIELDS_FUNDINGRECEIPTLIST_DIFFERENCE_CHECKBOX = [

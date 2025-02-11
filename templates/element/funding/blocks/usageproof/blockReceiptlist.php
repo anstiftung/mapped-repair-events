@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 use App\Model\Entity\Funding;
 
+echo $this->element('datepicker');
+
 echo '<fieldset class="fundinglist fundingreceiptlist full-width">';
     echo '<legend>' . Funding::FIELDS_FUNDINGRECEIPTLIST_LABEL . '</legend>';
 
@@ -14,13 +16,20 @@ echo '<fieldset class="fundinglist fundingreceiptlist full-width">';
         echo '<ul style="list-style-type:disc;margin-left:10px;">
             <li>Eine Beleg-Zeile wird nur dann permanent gespeichert, wenn nach Klicken auf "Zwischenspeichern" alle Felder gültig (nicht rot) sind</li>
             <li>Bei Fehlern bleiben die zuletzt gültigen Werte gespeichert</li>
-            <li>Fördersumme minus Belegsumme muss entweder <b>genau 0</b> ergeben</li>
-            <li>oder die Belegsumme ist <b>kleiner</b> als die Fördersumme und das Häkchen bei "Rücküberweisung Restbetrag" muss gesetzt werden</li>
-            <li>Wenn die Belegsumme größer als die Fördersumme ist, kann der Verwendungsnachweis so nicht eingereicht werden (Belege anpassen)</li>
+            <li>oder die belegte Gesamtsumme ist <b>kleiner</b> als die Fördersumme und das Häkchen bei "Rücküberweisung Restbetrag" muss gesetzt werden</li>
+            <li>Wenn die belegte Gesamtsumme größer als die Fördersumme ist, kann der Verwendungsnachweis so nicht eingereicht werden (Belege anpassen)</li>
         </ul>';
     echo '</div>';
 
     echo '<div class="row-wrapper">';
+        echo '<div class="row row-header">';
+            foreach(Funding::FIELDS_FUNDINGRECEIPTLIST as $field) {
+                if (isset($field['hideInHeading'])) {
+                    continue;
+                }
+                echo '<span>' . ($field['options']['placeholder'] ?? '') . '</span>';
+            }
+        echo '</div>';
         foreach($funding->fundingreceiptlists as $fundingreceiptlistIndex => $fundingreceiptlist) {
             echo '<div class="row">';
                 echo Funding::getRenderedFields(Funding::FIELDS_FUNDINGRECEIPTLIST, 'fundingreceiptlists.'.$fundingreceiptlistIndex, $this->Form, false, $fundingreceiptlist);

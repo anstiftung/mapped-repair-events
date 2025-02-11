@@ -29,6 +29,12 @@ class Funding extends Entity
                     $field['options']['value'] = number_format((float) $value, 2, '.', '');
                 }
             }
+            if (isset($field['options']['class']) && preg_match('/datepicker-input/', $field['options']['class'])) {
+                $value = $entity[$field['name']];
+                if ($value !== null) {
+                    $field['options']['value'] = $value->format('d.m.Y');
+                }
+            }
             $field['options']['disabled'] = $disabled;
             $preparedEntityString = 'Fundings.' . $entityString . '.' . $field['name'];
             $renderedFields .= $form->control($preparedEntityString, $field['options']);

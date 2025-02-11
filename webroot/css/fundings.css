@@ -110,11 +110,20 @@ body.fundings.edit div.admin.edit {
     grid-template-columns: 180px auto 100px;
     gap: 5px;
     align-items: baseline;
-    padding: 5px 0px 5px 0px;
+    padding: 0px 0px 5px 0px;
     border-radius: 3px;
 }
 #fundingForm fieldset.fundingreceiptlist div.row {
-    grid-template-columns: 180px auto 100px 85px;
+    grid-template-columns: 150px auto 150px 150px 110px 110px 85px 85px;
+}
+#fundingForm fieldset.fundingreceiptlist div.row-header span {
+    text-decoration: underline;
+}
+.admin.edit #fundingForm fieldset.fundingreceiptlist div.row-header span:last-child {
+    text-align: right;
+}
+#fundingForm fieldset.fundingreceiptlist div.row-readonly {
+    grid-template-columns: auto 150px 150px 110px 110px 85px;
 }
 #fundingForm fieldset.fundingreceiptlist div.row .input.checkbox input {
     width: 25px ! important;
@@ -339,6 +348,10 @@ body.fundings.uploadZuwendungsbestaetigung h1 {
     margin-bottom: 20px;
 }
 @media (max-width: 767px) {
+
+    #fundingForm fieldset.fundingreceiptlist div.row-header {
+        display: none;
+    }
 
     #fundingForm fieldset:not(.fundinglist) div.input:not(.file) {
         padding-left: 5px ! important;

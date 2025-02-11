@@ -9,6 +9,7 @@ use App\Controller\Component\StringComponent;
 use Cake\Event\EventInterface;
 use ArrayObject;
 use App\Model\Entity\Fundingreceiptlist;
+use Cake\I18n\Date;
 
 class FundingreceiptlistsTable extends Table
 {
@@ -16,6 +17,18 @@ class FundingreceiptlistsTable extends Table
     const DESCRIPTION_MIN_LENGTH = 2;
     const DESCRIPTION_MAX_LENGTH = 150;
     const DESCRIPTION_ERROR_MESSAGE = self::DESCRIPTION_MIN_LENGTH . ' bis ' . self::DESCRIPTION_MAX_LENGTH . ' Zeichen';
+
+    const RECIPIENT_MIN_LENGTH = 5;
+    const RECIPIENT_MAX_LENGTH = 100;
+    const RECIPIENT_ERROR_MESSAGE = self::RECIPIENT_MIN_LENGTH . ' bis ' . self::RECIPIENT_MAX_LENGTH . ' Zeichen';
+
+    const RECEIPT_TYPE_MIN_LENGTH = 5;
+    const RECEIPT_TYPE_MAX_LENGTH = 100;
+    const RECEIPT_TYPE_ERROR_MESSAGE = self::RECEIPT_TYPE_MIN_LENGTH . ' bis ' . self::RECEIPT_TYPE_MAX_LENGTH . ' Zeichen';
+
+    const RECEIPT_NUMBER_MIN_LENGTH = 1;
+    const RECEIPT_NUMBER_MAX_LENGTH = 30;
+    const RECEIPT_NUMBER_ERROR_MESSAGE = self::RECEIPT_NUMBER_MIN_LENGTH . ' bis ' . self::RECEIPT_NUMBER_MAX_LENGTH . ' Zeichen';
 
     public function initialize(array $config): void
     {
@@ -29,6 +42,15 @@ class FundingreceiptlistsTable extends Table
     public function beforeMarshal(EventInterface $event, ArrayObject $data, ArrayObject $options): void
     {
         $data = StringComponent::cleanAllStringsInData($data);
+        foreach($data as $key => $value) {
+            if ($key == 'payment_date' && $value != '') {
+                try {
+                    $data[$key] = new Date($value);
+                } catch (\Exception $e) {
+                    $data[$key] = $value;
+                }
+            }
+        }
     }
 
     public function validationDefault(Validator $validator): Validator
@@ -45,11 +67,50 @@ class FundingreceiptlistsTable extends Table
         $validator
             ->add('description', 'valid', [
                 'rule' => function ($value, $context) {
-                    $descriptionLength = strlen($value);
-                    $mainCheck = $descriptionLength >= self::DESCRIPTION_MIN_LENGTH && $descriptionLength <= self::DESCRIPTION_MAX_LENGTH;
-                    return $mainCheck;
+                    $length = strlen($value);
+                    return $length >= self::DESCRIPTION_MIN_LENGTH && $length <= self::DESCRIPTION_MAX_LENGTH;
                 },
                 'message' => self::DESCRIPTION_ERROR_MESSAGE,
+            ]);
+
+        $validator
+            ->add('recipient', 'valid', [
+                'rule' => function ($value, $context) {
+                    $length = strlen($value);
+                    return $length >= self::RECIPIENT_MIN_LENGTH && $length <= self::RECIPIENT_MAX_LENGTH;
+                },
+                'message' => self::RECIPIENT_ERROR_MESSAGE,
+            ]);
+
+        $validator
+            ->add('receipt_type', 'valid', [
+                'rule' => function ($value, $context) {
+                    $length = strlen($value);
+                    return $length >= self::RECEIPT_TYPE_MIN_LENGTH && $length <= self::RECEIPT_TYPE_MAX_LENGTH;
+                },
+                'message' => self::RECEIPT_TYPE_ERROR_MESSAGE,
+            ]);
+
+        $validator->date('payment_date', ['dmy'], 'Bitte gib ein gültiges Datum (TT.MM.JJJJ) ein');
+
+        $validator
+            ->add('payment_date', 'range', [
+                'rule' => function ($value, $context) {
+                    if ($value != '') {
+                        return $value->format('Y-m-d') < '2026-03-01';
+                    }
+                    return true;
+                },
+                'message' => 'Das Zahlungsdatum muss vor dem 01.03.2026 liegen.',
+            ]);
+
+        $validator
+            ->add('receipt_number', 'valid', [
+                'rule' => function ($value, $context) {
+                    $length = strlen($value);
+                    return $length >= self::RECEIPT_NUMBER_MIN_LENGTH && $length <= self::RECEIPT_NUMBER_MAX_LENGTH;
+                },
+                'message' => self::RECEIPT_NUMBER_ERROR_MESSAGE,
             ]);
 
         $validator
