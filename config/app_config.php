@@ -163,7 +163,7 @@ return [
             'DateLong' =>  'dd. MMMM y',
             'DateLong2' => 'dd.MM.yyyy',
             'DateLong2WithWeekday' => 'EEEE, dd.MM.yyyy',
-            'DateLongNTimeWithWeekday' => 'EEEE, dd.MM.yyyy HH:mm:ss',
+            'DateLongNTimeWithWeekday' => 'EEEE, dd.MM.yyyy HH:mm',
             'DateNTimeShort' => 'dd.MM.y HH:mm',
             'DateNTimeShortWithSeconds' => 'dd.MM.y HH:mm:ss',
             'DateNTimeLongWithSeconds' => 'dd.MM.yy HH:mm:ss',
