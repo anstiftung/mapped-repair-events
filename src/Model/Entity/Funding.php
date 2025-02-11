@@ -247,8 +247,11 @@ class Funding extends Entity
             if ($isValidMainDescription && $isValidSubDescription) {
                 return self::STATUS_DATA_OK;
             };
+
+            return self::STATUS_DESCRIPTIONS_PENDING;
         }
-        return self::STATUS_DESCRIPTIONS_PENDING;
+
+        return self::STATUS_DESCRIPTIONS_MISSING;
     }
 
     public function _getUsageproofDescriptionsStatusCssClass(): string
