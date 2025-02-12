@@ -95,7 +95,8 @@ body.fundings .upload-button-wrapper {
 body.fundings.edit div.admin.edit {
     padding: 20px;
 }
-#fundingForm fieldset:not(.fundinglist) div.input:not(.file):not(.checkbox) {
+#fundingForm fieldset:not(.fundinglist) div.input:not(.file):not(.checkbox),
+#fundingForm fieldset.fundinglist div.inner-wrapper div.input:not(.checkbox) {
     display: grid;
     grid-template-columns: 165px auto 100px;
     grid-template-rows: auto auto;

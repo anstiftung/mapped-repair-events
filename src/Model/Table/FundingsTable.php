@@ -216,7 +216,7 @@ class FundingsTable extends AppTable
             $fundingusageproofsTable = TableRegistry::getTableLocator()->get('Fundingusageproofs');
             $fundingusageproofEntity = $fundingusageproofsTable->newEmptyEntity();
             $fundingusageproofEntity->main_description = '';
-            $fundingusageproofEntity->sub_description = '';
+            $fundingusageproofEntity->difference_declaration = '';
             $fundingusageproofEntity = $fundingusageproofsTable->save($fundingusageproofEntity);
 
             $funding->fundingusageproof_id = $fundingusageproofEntity->id;

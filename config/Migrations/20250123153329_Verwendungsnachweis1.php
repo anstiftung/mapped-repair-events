@@ -18,8 +18,11 @@ class Verwendungsnachweis1 extends AbstractMigration
         $query = "CREATE TABLE `fundingusageproofs` (
             `id` int UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
             `main_description` text,
-            `sub_description` text,
-            `difference_refund_ok` TINYINT UNSIGNED NOT NULL DEFAULT '0',
+            `difference_declaration` text,
+            `payback_ok` TINYINT UNSIGNED NOT NULL DEFAULT '0',
+            `checkbox_a` TINYINT UNSIGNED NOT NULL DEFAULT '0',
+            `checkbox_b` TINYINT UNSIGNED NOT NULL DEFAULT '0',
+            `checkbox_c` TINYINT UNSIGNED NOT NULL DEFAULT '0',
             `created` datetime DEFAULT CURRENT_TIMESTAMP,
             `modified` datetime DEFAULT CURRENT_TIMESTAMP
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";

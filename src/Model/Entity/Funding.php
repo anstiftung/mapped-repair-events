@@ -233,6 +233,38 @@ class Funding extends Entity
         return $this->fundingusageproof_id !== null;
     }
 
+    public function _getUsageproofCheckboxesStatus(): int
+    {
+
+        $checkboxes = array_map(function($checkbox) {
+            return $checkbox['name'];
+        }, self::FIELDS_USAGEPROOF_CHECKBOXES);
+
+        foreach($checkboxes as $checkbox) {
+            if (!$this->fundingusageproof->$checkbox) {
+                return self::STATUS_CHECKBOXES_MISSING;
+            }
+        }
+        return self::STATUS_CHECKBOXES_OK;
+
+    }
+
+    public function _getUsageproofCheckboxesStatusCssClass(): string
+    {
+        if ($this->usageproof_checkboxes_status == self::STATUS_CHECKBOXES_MISSING) {
+            return 'is-pending';
+        }
+        if ($this->usageproof_checkboxes_status == self::STATUS_CHECKBOXES_OK) {
+            return 'is-verified';
+        }
+        return '';
+    }
+
+    public function _getUsageproofCheckboxesStatusHumanReadable(): string
+    {
+        return self::STATUS_MAPPING[$this->usageproof_checkboxes_status];
+    }    
+
     public function _getUsageproofDescriptionsStatus(): int
     {
         if (!empty($this->fundingusageproof)) {
@@ -241,16 +273,11 @@ class Funding extends Entity
                 && $lengthMainDescription >= FundingusageproofsTable::MAIN_DESCRIPTION_MIN_LENGTH
                 && $lengthMainDescription <= FundingusageproofsTable::MAIN_DESCRIPTION_MAX_LENGTH;
 
-            $lengthSubDescription = mb_strlen($this->fundingusageproof->sub_description);
-            $isValidSubDescription = isset($this->fundingusageproof->sub_description)
-                && $lengthSubDescription >= FundingusageproofsTable::SUB_DESCRIPTION_MIN_LENGTH
-                && $lengthSubDescription <= FundingusageproofsTable::SUB_DESCRIPTION_MAX_LENGTH;
-
-            if ($lengthMainDescription == 0 && $lengthSubDescription == 0) {
+            if ($lengthMainDescription == 0) {
                 return self::STATUS_DESCRIPTIONS_MISSING;
             }
             
-            if ($isValidMainDescription && $isValidSubDescription) {
+            if ($isValidMainDescription) {
                 return self::STATUS_DATA_OK;
             };
 
@@ -303,9 +330,16 @@ class Funding extends Entity
             return self::STATUS_RECEIPTLIST_DATA_MISSING;
         }
 
+        if ($this->fundingusageproof->checkbox_a && (
+            $this->fundingusageproof->difference_declaration < FundingusageproofsTable::DIFFERENCE_DECLARATION_MIN_LENGTH ||
+            $this->fundingusageproof->difference_declaration > FundingusageproofsTable::DIFFERENCE_DECLARATION_MAX_LENGTH)
+        ) {
+            return self::STATUS_RECEIPTLIST_DATA_PENDING;
+        }
+
         if ($this->receiptlist_receipt_total_is_less_than_budgetplan_total
             && !empty($this->fundingusageproof)
-            && $this->fundingusageproof->difference_refund_ok) {
+            && $this->fundingusageproof->payback_ok) {
             return self::STATUS_DATA_OK;
         }
         if ($this->receiptlist_difference == 0) {

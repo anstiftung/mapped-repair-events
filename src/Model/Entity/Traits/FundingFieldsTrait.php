@@ -22,6 +22,7 @@ trait FundingFieldsTrait {
     const FIELDS_FUNDING_DATA_CHECKBOXES_LABEL = 'Einverständniserklärungen';
     const FIELDS_FUNDINGUSAGEPROOF_LABEL = 'Sachbericht';
     const FIELDS_FUNDINGRECEIPTLIST_LABEL = 'Belegliste';
+    const FIELDS_USAGEPROOF_CHECKBOXES_LABEL = 'Bestätigungen';
 
     const FIELDS_WORKSHOP = [
         ['name' => 'name', 'options' => ['label' => 'Name der Initiative']],
@@ -86,7 +87,6 @@ trait FundingFieldsTrait {
 
     const FIELDS_FUNDINGUSAGEPROOF = [
         ['name' => 'main_description', 'options' => ['label' =>  'Sachbericht' . '<br />' . FundingusageproofsTable::MAIN_DESCRIPTION_ERROR_MESSAGE, 'type' => 'textarea', 'rows' => 13, 'maxlength' => FundingusageproofsTable::MAIN_DESCRIPTION_MAX_LENGTH, 'minlength' => FundingusageproofsTable::MAIN_DESCRIPTION_MIN_LENGTH, 'class' => 'no-verify', 'escape' => false]],
-        ['name' => 'sub_description', 'options' => ['label' =>  'Zusammenfassung' . '<br />' . FundingusageproofsTable::SUB_DESCRIPTION_ERROR_MESSAGE, 'type' => 'textarea', 'rows' => 3, 'maxlength' => FundingusageproofsTable::SUB_DESCRIPTION_MAX_LENGTH, 'minlength' => FundingusageproofsTable::SUB_DESCRIPTION_MIN_LENGTH, 'class' => 'no-verify', 'escape' => false]],
     ];
 
     const FIELDS_FUNDINGRECEIPTLIST = [
@@ -101,9 +101,15 @@ trait FundingFieldsTrait {
         ['name' => 'delete', 'options' => ['type' => 'checkbox', 'label' => 'löschen?', 'class' => 'receiptlist-delete-checkbox'], 'hideInHeading' => true],
     ];
 
-    const FIELDS_FUNDINGRECEIPTLIST_DIFFERENCE_CHECKBOX = [
-        ['name' => 'difference_refund_ok', 'options' => ['type' => 'checkbox', 'label' => 'Hiermit bestätige ich, den Restbetrag auf das Konto xxx zu überweisen', 'escape' => false]],
+    const FIELDS_FUNDINGRECEIPTLIST_PAYBACK_CHECKBOX = [
+        ['name' => 'payback_ok', 'options' => ['type' => 'checkbox', 'label' => 'Hiermit bestätige ich, den Restbetrag von xxxx Euro mit dem Verwendungsnachweis UID: {UID} innerhalb von 14 Tagen auf auf das Konto {KONTONUMMER} zurück zu überweisen', 'escape' => false]],
+        ['name' => 'checkbox_a', 'options' => ['type' => 'checkbox', 'label' => 'Weichen die tatsächlich angefallenen Ausgaben signifikant vom Kostenplan des eingereichten Förderantrags ab?', 'escape' => false]],
+        ['name' => 'difference_declaration', 'options' => ['label' =>  'Erklärung zu Abweichung der Belegliste' . '<br />' . FundingusageproofsTable::DIFFERENCE_DECLARATION_ERROR_MESSAGE, 'type' => 'textarea', 'rows' => 3, 'maxlength' => FundingusageproofsTable::DIFFERENCE_DECLARATION_MAX_LENGTH, 'minlength' => FundingusageproofsTable::DIFFERENCE_DECLARATION_MIN_LENGTH, 'class' => 'no-verify', 'escape' => false]],
     ];
 
+    const FIELDS_USAGEPROOF_CHECKBOXES = [
+        ['name' => 'checkbox_b', 'options' => ['type' => 'checkbox', 'label' => 'Hiermit bestätige ich die Richtigkeit der oben gemachten Angaben.', 'escape' => false]],
+        ['name' => 'checkbox_c', 'options' => ['type' => 'checkbox', 'label' => 'Hiermit bestätige ich, dass sämtliche Belege zur oben erstellten digitalen Liste in der genannten Nummerierung geordnet vorliegen und auf Verlangen gesammelt vorgelegt werden können.', 'escape' => false]],
+    ];
 
 }

@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+use App\Model\Entity\Funding;
+
 $this->element('addScript', ['script' =>
     JS_NAMESPACE.".Helper.bindCancelButton();".
     JS_NAMESPACE.".Funding.initIsMissing();".
@@ -40,6 +42,7 @@ echo $this->element('jqueryTabsWithoutAjax', [
 
                 echo '<div class="flexbox">';
                     echo $this->element('funding/blocks/usageproof/blockReceiptlist', ['funding' => $funding, 'disabled' => false]);
+                    echo $this->element('funding/blocks/usageproof/blockCheckboxes', ['funding' => $funding, 'disabled' => false]);
                 echo '</div>';
 
                 echo $this->element('cancelAndSaveButton', [

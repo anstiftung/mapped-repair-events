@@ -15,9 +15,9 @@ class FundingusageproofsTable extends Table
     const MAIN_DESCRIPTION_MAX_LENGTH = 1500;
     const MAIN_DESCRIPTION_ERROR_MESSAGE = self::MAIN_DESCRIPTION_MIN_LENGTH . ' bis ' . self::MAIN_DESCRIPTION_MAX_LENGTH . ' Zeichen';
 
-    const SUB_DESCRIPTION_MIN_LENGTH = 50;
-    const SUB_DESCRIPTION_MAX_LENGTH = 250;
-    const SUB_DESCRIPTION_ERROR_MESSAGE = self::SUB_DESCRIPTION_MIN_LENGTH . ' bis ' . self::SUB_DESCRIPTION_MAX_LENGTH . ' Zeichen';
+    const DIFFERENCE_DECLARATION_MIN_LENGTH = 140;
+    const DIFFERENCE_DECLARATION_MAX_LENGTH = 1000;
+    const DIFFERENCE_DECLARATION_ERROR_MESSAGE = self::DIFFERENCE_DECLARATION_MIN_LENGTH . ' bis ' . self::DIFFERENCE_DECLARATION_MAX_LENGTH . ' Zeichen';
 
     public function initialize(array $config): void
     {
@@ -41,12 +41,12 @@ class FundingusageproofsTable extends Table
             self::MAIN_DESCRIPTION_ERROR_MESSAGE,
         );
         $validator->lengthBetween(
-            'sub_description',
+            'difference_declaration',
             [
-                self::SUB_DESCRIPTION_MIN_LENGTH,
-                self::SUB_DESCRIPTION_MAX_LENGTH,
+                self::DIFFERENCE_DECLARATION_MIN_LENGTH,
+                self::DIFFERENCE_DECLARATION_MAX_LENGTH,
             ],
-            self::SUB_DESCRIPTION_ERROR_MESSAGE,
+            self::DIFFERENCE_DECLARATION_ERROR_MESSAGE,
         );
 
         return $validator;

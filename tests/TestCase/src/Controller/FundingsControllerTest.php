@@ -589,7 +589,7 @@ class FundingsControllerTest extends AppTestCase
 
         $testFundingusageproofIncomplete = [
             'main_description' => 'Test Main Description',
-            'sub_description' => '',
+            'difference_declaration' => '',
         ];
 
         // 1) POST incomplete data
@@ -603,13 +603,13 @@ class FundingsControllerTest extends AppTestCase
         $funding = $fundingsTable->findWithUsageproofAssociations($fundingUid);
         $this->assertEquals(Funding::STATUS_PENDING, $funding->usageproof_status);
         $this->assertEquals($testFundingusageproofIncomplete['main_description'], $funding->fundingusageproof->main_description);
-        $this->assertEquals($testFundingusageproofIncomplete['sub_description'], $funding->fundingusageproof->sub_description);
+        $this->assertEquals($testFundingusageproofIncomplete['difference_declaration'], $funding->fundingusageproof->difference_declaration);
         $this->assertEquals(Funding::STATUS_DESCRIPTIONS_PENDING, $funding->usageproof_descriptions_status);
         $this->assertEquals(Funding::STATUS_RECEIPTLIST_DATA_MISSING, $funding->receiptlist_status);
 
         $testFundingusageproofComplete = [
             'main_description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum.',
-            'sub_description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum.',
+            'difference_declaration' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum.',
         ];
 
         $newFundingreceiptlistDescriptionOk = 'Fundingreceiptlist Description Ok';
@@ -666,7 +666,7 @@ class FundingsControllerTest extends AppTestCase
         $funding = $fundingsTable->findWithUsageproofAssociations($fundingUid);
         $this->assertEquals(Funding::STATUS_PENDING, $funding->usageproof_status);
         $this->assertEquals($testFundingusageproofComplete['main_description'], $funding->fundingusageproof->main_description);
-        $this->assertEquals($testFundingusageproofComplete['sub_description'], $funding->fundingusageproof->sub_description);
+        $this->assertEquals($testFundingusageproofComplete['difference_declaration'], $funding->fundingusageproof->difference_declaration);
         $this->assertEquals(Funding::STATUS_DATA_OK, $funding->usageproof_descriptions_status);
         $this->assertEquals(Funding::STATUS_RECEIPTLIST_DATA_PENDING, $funding->receiptlist_status);
         $this->assertEquals(1, count($funding->fundingreceiptlists));
