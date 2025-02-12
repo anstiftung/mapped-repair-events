@@ -619,6 +619,10 @@ class FundingsControllerTest extends AppTestCase
             'id' => 1,
             'type' => Fundingbudgetplan::TYPE_A,
             'description' => $newFundingreceiptlistDescriptionOk,
+            'recipient' => 'Test Empfänger',
+            'receipt_type' => 'Beleg',
+            'payment_date' => '2020-01-01',
+            'receipt_number' => '232343',
             'amount' => $newFundingreceiptlistAmountOk,
         ];
 
@@ -634,12 +638,20 @@ class FundingsControllerTest extends AppTestCase
                         'type' => '', // invalid
                         'description' => $newFundingreceiptlistDescriptionOk,
                         'amount' => $newFundingreceiptlistAmountOk,
-                    ],
+                        'recipient' => '',
+                        'receipt_type' => '',
+                        'payment_date' => '',
+                        'receipt_number' => '',
+                    ],  
                     [
                         'id' => 3,
                         'type' => Fundingbudgetplan::TYPE_B,
                         'description' => 'abc', // invalid
                         'amount' => $newFundingreceiptlistAmountOk,
+                        'recipient' => '',
+                        'receipt_type' => '',
+                        'payment_date' => '2030-01-01',
+                        'receipt_number' => '',
                     ],
                     [
                         'id' => 4,
@@ -658,6 +670,21 @@ class FundingsControllerTest extends AppTestCase
         $this->assertEquals(Funding::STATUS_DATA_OK, $funding->usageproof_descriptions_status);
         $this->assertEquals(Funding::STATUS_RECEIPTLIST_DATA_PENDING, $funding->receiptlist_status);
         $this->assertEquals(1, count($funding->fundingreceiptlists));
+
+        $this->assertEquals($validFundingreceiptlist['description'], $funding->fundingreceiptlists[0]->description);
+        $this->assertEquals($validFundingreceiptlist['amount'], $funding->fundingreceiptlists[0]->amount);
+        $this->assertEquals($validFundingreceiptlist['recipient'], $funding->fundingreceiptlists[0]->recipient);
+        $this->assertEquals($validFundingreceiptlist['receipt_type'], $funding->fundingreceiptlists[0]->receipt_type);
+        $this->assertEquals($validFundingreceiptlist['payment_date'], $funding->fundingreceiptlists[0]->payment_date->format('Y-m-d'));
+        $this->assertEquals($validFundingreceiptlist['receipt_number'], $funding->fundingreceiptlists[0]->receipt_number);
+
+        $this->assertResponseContains('Bitte gib ein gültiges Datum (TT.MM.JJJJ) ein');
+        $this->assertResponseContains('Ausgabenbereich auswählen');
+        $this->assertResponseContains('Betrag muss größer als 0 sein');
+        $this->assertResponseContains('Das Zahlungsdatum muss vor dem 01.03.2026 liegen.');
+        $this->assertResponseContains('id="fundings-fundingreceiptlists-2-recipient-error"');
+        $this->assertResponseContains('id="fundings-fundingreceiptlists-2-payment-date-error"');
+        $this->assertResponseContains('id="fundings-fundingreceiptlists-2-receipt-number-error"');
 
         // 3) DELETE fundingreceiptlist
         $this->post($route, [
