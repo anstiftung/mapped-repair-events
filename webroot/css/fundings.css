@@ -356,6 +356,9 @@ body.fundings.uploadZuwendungsbestaetigung h1 {
     #fundingForm fieldset.fundingreceiptlist div.row-header {
         display: none;
     }
+    #fundingForm div.input.number input {
+        text-align: left;
+    }
 
     #fundingForm fieldset:not(.fundinglist) div.input:not(.file) {
         padding-left: 5px ! important;
