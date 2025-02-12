@@ -1,10 +1,5 @@
 <?php
 declare(strict_types=1);
-
-echo $this->element('funding/status/usageproofStatus', [
-    'funding' => $funding,
-    'additionalTextBefore' => '',
-]);
 ?>
 
 <p style="margin-bottom:20px;">
