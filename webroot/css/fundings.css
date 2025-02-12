@@ -122,6 +122,8 @@ body.fundings.edit div.admin.edit {
 }
 #fundingForm fieldset.fundingreceiptlist div.row-header span {
     text-decoration: underline;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .admin.edit #fundingForm fieldset.fundingreceiptlist div.row-header span:last-child {
     text-align: right;
