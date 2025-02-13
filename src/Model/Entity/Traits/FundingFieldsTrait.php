@@ -19,6 +19,7 @@ trait FundingFieldsTrait {
     const FIELDS_FUNDINGSUPPORTER_BANK_LABEL = 'Bankverbindung der Trägerorganisation';
     const FIELDS_FUNDINGDATA_DESCRIPTION_LABEL = 'Kurzbeschreibung Vorhaben';
     const FIELDS_FUNDINGBUDGETPLAN_LABEL = 'Kostenplan';
+    const FIELDS_FUNDINGBUDGETPLAN_GROUPED_LABEL = 'Eingereichter Kostenplan';
     const FIELDS_FUNDING_DATA_CHECKBOXES_LABEL = 'Einverständniserklärungen';
     const FIELDS_FUNDINGUSAGEPROOF_LABEL = 'Sachbericht';
     const FIELDS_FUNDINGRECEIPTLIST_LABEL = 'Belegliste';

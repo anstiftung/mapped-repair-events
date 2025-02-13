@@ -51,7 +51,7 @@ echo $this->element('jqueryTabsWithoutAjax', [
 
                 echo '<div class="flexbox" style="margin-top:20px;">';
                     echo '<fieldset>';
-                        echo '<legend>Kostenplan</legend>';
+                        echo '<legend>'.Funding::FIELDS_FUNDINGBUDGETPLAN_GROUPED_LABEL.'</legend>';
                         echo $this->element('funding/blocks/blockBudgetplanGrouped', ['funding' => $funding]);
                     echo '</fieldset>';
                 echo '</div>';

@@ -68,7 +68,7 @@ $this->element('addScript', ['script' =>
         echo $this->element('funding/blocks/blockDescription', ['funding' => $funding, 'disabled' => true]);
 
         echo '<fieldset>';
-            echo '<legend>Kostenplan</legend>';
+            echo '<legend>'.Funding::FIELDS_FUNDINGBUDGETPLAN_GROUPED_LABEL.'</legend>';
 
             echo '<div class="verification-wrapper ' . $funding->budgetplan_status_css_class . '">';
                 echo '<p>' . $funding->budgetplan_status_human_readable . '</p>';
