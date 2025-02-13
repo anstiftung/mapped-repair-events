@@ -41,11 +41,6 @@ echo $this->element('jqueryTabsWithoutAjax', [
                 ]);
                 echo '<div class="sc" style="margin-bottom:10px;"></div>';
 
-                echo $this->element('funding/status/usageproofStatus', [
-                    'funding' => $funding,
-                    'additionalTextBefore' => 'Admin-Status: ',
-                ]);
-
                 echo '<div class="flexbox">';
                     echo $this->element('funding/blocks/usageproof/blockReceiptlist', ['funding' => $funding, 'disabled' => false]);
                 echo '</div>';
@@ -70,6 +65,22 @@ echo $this->element('jqueryTabsWithoutAjax', [
                         echo $this->element('funding/blocks/blockBudgetplanGrouped', ['funding' => $funding]);
                     echo '</fieldset>';
                 echo '</div>';
+
+                echo '<div class="extra-submit-button-wrapper">';
+                    echo $this->Form->button('Verwendungsnachweis einreichen', [
+                        'type' => 'button',
+                        'id' => 'submit-usageproof-button-' . $funding->uid,
+                        'class' => 'rounded red ' . (!$funding->usageproof_is_submittable ? 'disabled' : ''),
+                        'disabled' => !$funding->usageproof_is_submittable,
+                    ]);
+                    if ($funding->usageproof_is_submittable) {
+                        $this->element('addScript', ['script' =>
+                            JS_NAMESPACE.".Funding.bindSubmitUsageproofButton(".$funding->uid.");"
+                        ]);
+                    }
+
+                echo '</div>';
+
 
             echo $this->Form->end();
 

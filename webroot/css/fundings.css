@@ -77,12 +77,12 @@ body.fundings .verification-wrapper p.comment {
     gap: 10px;
     margin-top: 10px;
 }
-#fundingForm .submit-funding-button-wrapper {
+#fundingForm .extra-submit-button-wrapper {
     display: flex;
     justify-content: center;
     margin-top: 20px;
 }
-#fundingForm .submit-funding-button-wrapper button {
+#fundingForm .extra-submit-button-wrapper button {
     text-transform: uppercase;
     letter-spacing: 2px;
     padding: 10px 15px;

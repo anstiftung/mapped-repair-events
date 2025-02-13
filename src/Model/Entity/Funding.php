@@ -223,6 +223,12 @@ class Funding extends Entity
         return '';
     }
 
+    public function _getUsageproofIsSubmittable(): bool {
+        return $this->usageproof_descriptions_status == self::STATUS_DATA_OK && 
+            $this->receiptlist_status == self::STATUS_DATA_OK &&
+            $this->usageproof_checkboxes_status == self::STATUS_CHECKBOXES_OK;
+    }
+
     public function _getUsageproofExists(): bool
     {
         return $this->fundingusageproof_id !== null;

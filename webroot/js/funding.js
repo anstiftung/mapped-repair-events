@@ -1,5 +1,33 @@
 MappedRepairEvents.Funding = {
 
+    bindSubmitUsageproofButton: (uid) => {
+        $('#submit-usageproof-button-' + uid).on('click', function() {
+            $.prompt('Diese Funktion ist in Kürze verfügbar.',
+                {
+                    buttons: {'Ok': false},
+                }
+            );
+            /*
+            $.prompt('Möchtest du den Verwendungsnachweis wirklich einreichen?',
+                {
+                    buttons: {'Ja, jetzt einreichen': true, Abbrechen: false},
+                    submit: function(v,m,f) {
+                        if(m) {
+                            const form = document.getElementById('fundingForm');
+                            const input = document.createElement('input');
+                            input.type = 'hidden';
+                            input.name = 'submit_usageproof';
+                            input.value = 1;
+                            form.appendChild(input);
+                            form.submit();
+                        }
+                    }
+                }
+            );
+            */
+        });
+    },
+
     bindReceiptlistCheckboxPaybackOk: (receiptlistDifference) => {
         $('#fundingForm #fundings-fundingusageproof-payback-ok').on('change', function() {
             const showCheckbox = receiptlistDifference > 0;
