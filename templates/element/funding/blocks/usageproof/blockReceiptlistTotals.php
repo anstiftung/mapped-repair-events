@@ -3,6 +3,11 @@ declare(strict_types=1);
 
 use App\Model\Entity\Funding;
 
+$this->element('addScript', ['script' =>
+    JS_NAMESPACE.".Funding.bindReceiptlistCheckboxA();".
+    JS_NAMESPACE.".Funding.bindReceiptlistCheckboxPaybackOk(" . $funding->receiptlist_difference . ");"
+]);
+
 echo '<div class="total-wrapper">';
     echo '<p class="total">Fördersumme: ' . $this->MyNumber->formatAsDecimal($funding->budgetplan_total_with_limit) . ' €</p>';
     echo '<p class="total">Belegte Gesamtsumme: ' . $this->MyNumber->formatAsDecimal($funding->receiptlist_total) . ' €</p>';

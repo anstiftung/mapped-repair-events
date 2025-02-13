@@ -45,9 +45,7 @@ echo '<fieldset class="fundinglist fundingreceiptlist full-width">';
         ]);
         $this->element('addScript', ['script' =>
             JS_NAMESPACE.".Funding.bindAddReceiptlistButton();".
-            JS_NAMESPACE.".Funding.bindDeleteReceiptlistCheckboxClickHandler();".
-            JS_NAMESPACE.".Funding.bindReceiptlistCheckboxA();".
-            JS_NAMESPACE.".Funding.bindReceiptlistCheckboxPaybackOk(" . $funding->receiptlist_difference . ");"
+            JS_NAMESPACE.".Funding.bindDeleteReceiptlistCheckboxClickHandler();"
         ]);
     echo '</div>';
 
