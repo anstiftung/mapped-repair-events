@@ -86,12 +86,14 @@ $this->element('addScript', ['script' =>
 
         echo '</fieldset>';
 
+        /*
         echo '<fieldset>';
             echo '<legend>Status Verwendungsnachweis</legend>';
             echo $this->element('funding/status/usageproofStatus', ['funding' => $funding, 'additionalTextBefore' => '']);
             echo $this->Form->control('Fundings.usageproof_status', ['label' => 'Status', 'options' => Funding::STATUS_MAPPING_FOR_ADMIN_DROPDOWN, 'class' => 'no-verify']);
             echo $this->Form->control('Fundings.usageproof_comment', ['label' => 'Kommentar', 'class' => 'no-verify']);
         echo '</fieldset>';
+        */
 
     echo '</div>';
 
