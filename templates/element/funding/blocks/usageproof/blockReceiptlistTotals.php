@@ -12,5 +12,8 @@ echo '<div class="total-wrapper">';
 echo '</div>';
 
 echo '<div class="inner-wrapper">';
-    echo Funding::getRenderedFields(Funding::FIELDS_FUNDINGRECEIPTLIST_PAYBACK_CHECKBOX, 'fundingusageproof', $this->Form, $disabled);
+    $renderedFields = Funding::getRenderedFields(Funding::FIELDS_FUNDINGRECEIPTLIST_PAYBACK_CHECKBOX, 'fundingusageproof', $this->Form, $disabled);
+    $renderedFields = str_replace('{RESTBETRAG}', (string) $this->MyNumber->formatAsDecimal($funding->receiptlist_difference), $renderedFields);
+    $renderedFields = str_replace('{UID}', (string) $funding->uid, $renderedFields);
+    echo $renderedFields;
 echo '</div>';
