@@ -194,6 +194,13 @@ class UsersController extends AppController
         ];
         $this->set('metaTags', $metaTags);
 
+        if ($this->loggedUser !== null) {
+            $hasModifyPermissions = $this->loggedUser->isAdmin() || $this->loggedUser->uid == $user->uid;
+            $this->set('hasModifyPermissions', $hasModifyPermissions);
+            $isMyProfile = $this->loggedUser->uid == $user->uid;
+            $this->set('isMyProfile', $isMyProfile);
+        }
+
     }
 
     public function welcome(): void
