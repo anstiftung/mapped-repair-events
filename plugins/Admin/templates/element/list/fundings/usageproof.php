@@ -5,7 +5,7 @@ if ($object->money_transfer_date === null) {
     return;
 }
 
-echo '<div style="width:95px;">';
+echo '<div style="width:117px;">';
 
     echo '<div title="Status Admin" style="float:left;width:9px;padding:5px;border-radius:3px;" class="'. $object->usageproof_status_css_class .'">';
         echo 'A';
@@ -17,6 +17,10 @@ echo '<div style="width:95px;">';
 
     echo '<div title="Status Belegliste" style="float:left;width:9px;padding:5px;border-radius:3px;margin-left:3px;" class="'. $object->receiptlist_status_css_class .'">';
         echo 'B';
+    echo '</div>';
+
+    echo '<div title="Status Checkboxen" style="float:left;width:9px;padding:5px;border-radius:3px;margin-left:3px;" class="'. $object->usageproof_checkboxes_status_css_class .'">';
+        echo 'C';
     echo '</div>';
 
     echo $this->Html->link('<i class="far fa-edit fa-border"></i>', "/admin/fundings/usageproofEdit/" . $object->uid, [

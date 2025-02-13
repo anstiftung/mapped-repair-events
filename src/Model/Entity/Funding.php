@@ -231,6 +231,10 @@ class Funding extends Entity
     public function _getUsageproofCheckboxesStatus(): int
     {
 
+        if (!isset($this->fundingusageproof)) {
+            return self::STATUS_CHECKBOXES_MISSING;
+        }
+
         $checkboxes = array_map(function($checkbox) {
             return $checkbox['name'];
         }, self::FIELDS_USAGEPROOF_CHECKBOXES);
@@ -247,7 +251,7 @@ class Funding extends Entity
     public function _getUsageproofCheckboxesStatusCssClass(): string
     {
         if ($this->usageproof_checkboxes_status == self::STATUS_CHECKBOXES_MISSING) {
-            return 'is-pending';
+            return 'is-missing';
         }
         if ($this->usageproof_checkboxes_status == self::STATUS_CHECKBOXES_OK) {
             return 'is-verified';

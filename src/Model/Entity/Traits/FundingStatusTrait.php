@@ -12,6 +12,7 @@ trait FundingStatusTrait {
     const STATUS_DATA_OK = 50;
     const STATUS_DESCRIPTION_MISSING = 60;
     const STATUS_CHECKBOXES_MISSING = 70;
+    const STATUS_CHECKBOXES_PENDING = 75;
     const STATUS_CHECKBOXES_OK = 80;
     const STATUS_UPLOAD_MISSING = 90;
     const STATUS_DESCRIPTIONS_PENDING = 100;
@@ -39,6 +40,7 @@ trait FundingStatusTrait {
         self::STATUS_DATA_OK => 'Die eingegebenen Daten sind ok',
         self::STATUS_DESCRIPTION_MISSING => 'Die Beschreibung ist unvollständig',
         self::STATUS_CHECKBOXES_MISSING => 'Bitte bestätige alle Checkboxen',
+        self::STATUS_CHECKBOXES_PENDING => 'Bitte bestätige alle Checkboxen',
         self::STATUS_CHECKBOXES_OK => 'Alle Checkboxen bestätigt',
         self::STATUS_DESCRIPTIONS_PENDING => 'Der Sachbericht ist unvollständig',
         self::STATUS_DESCRIPTIONS_MISSING => 'Der Sachbericht wurde noch nicht erstellt',
