@@ -63,6 +63,13 @@ if ($linkToProfile) {
             }
             echo $addressString;
         echo '</span>';
+
+        if (isset($hasModifyPermissions) && $hasModifyPermissions) {
+            echo '<a class="btn edit" href="'.$this->Html->urlUserEdit($user->uid, $isMyProfile).'">';
+                echo '<button class="btn" type="submit">Userprofil bearbeiten</button>';
+            echo '</a>';
+        }
+
     ?>
 </span>
 <?php
