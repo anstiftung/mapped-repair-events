@@ -19,7 +19,6 @@ echo $this->element('jqueryTabsWithoutAjax', [
         <?php
             echo $this->element('heading', ['first' => $metaTags['title']]);
             echo $this->element('funding/blocks/usageproof/blockMainInfo');
-            echo $this->element('funding/blocks/blockColorCodes');
 
             echo $this->Form->create($funding, [
                 'novalidate' => 'novalidate',
