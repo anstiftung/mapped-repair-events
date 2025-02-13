@@ -302,7 +302,7 @@ body.fundings.edit div.admin.edit {
     padding: 0;
 }
 #fundingForm .checkbox:not(.verified) {
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 #fundingForm textarea {
     width: auto;
