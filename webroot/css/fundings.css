@@ -128,6 +128,7 @@ body.fundings.edit div.admin.edit {
     text-decoration: underline;
     overflow: hidden;
     text-overflow: ellipsis;
+    min-height: 16px;
 }
 .admin.edit #fundingForm fieldset.fundingreceiptlist div.row-header span:last-child {
     text-align: right;
