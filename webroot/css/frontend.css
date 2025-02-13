@@ -501,7 +501,7 @@ body.workshops.detail .widget-link {
     font-size: 11px;
 }
 body.workshops.detail .widget-link.events {
-    margin: 6px -8px 0px 20px;
+    margin: 6px 0px 0px 20px;
 }
 body.workshops.detail .widget-link.statistics {
     margin-right: -20px;

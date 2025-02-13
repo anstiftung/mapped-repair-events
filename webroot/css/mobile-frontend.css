@@ -132,6 +132,10 @@
     body.workshops.detail .widget-link.events {
        float: left;
        margin: 0;
+       width: 100%;
+    }
+    body.workshops.detail .widget-link.statistics {
+        margin-right: 0;
     }
     body.workshops.detail .events-on-your-website-link {
         margin: 0;
