@@ -35,6 +35,12 @@ echo $this->element('jqueryTabsWithoutAjax', [
                     echo $this->element('funding/blocks/usageproof/blockSachbericht', ['funding' => $funding, 'disabled' => false]);
                 echo '</div>';
 
+                echo $this->element('cancelAndSaveButton', [
+                    'saveLabel' => 'Zwischenspeichern',
+                    'hideCancelButton' => true,
+                ]);
+                echo '<div class="sc" style="margin-bottom:10px;"></div>';
+
                 echo $this->element('funding/status/usageproofStatus', [
                     'funding' => $funding,
                     'additionalTextBefore' => 'Admin-Status: ',
@@ -42,6 +48,15 @@ echo $this->element('jqueryTabsWithoutAjax', [
 
                 echo '<div class="flexbox">';
                     echo $this->element('funding/blocks/usageproof/blockReceiptlist', ['funding' => $funding, 'disabled' => false]);
+                echo '</div>';
+
+                echo $this->element('cancelAndSaveButton', [
+                    'saveLabel' => 'Zwischenspeichern',
+                    'hideCancelButton' => true,
+                ]);
+                echo '<div class="sc" style="margin-bottom:10px;"></div>';
+
+                echo '<div class="flexbox">';
                     echo $this->element('funding/blocks/usageproof/blockCheckboxes', ['funding' => $funding, 'disabled' => false]);
                 echo '</div>';
 
