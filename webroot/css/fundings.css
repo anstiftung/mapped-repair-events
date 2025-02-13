@@ -106,6 +106,9 @@ body.fundings.edit div.admin.edit {
     margin-top: 1px;
     border-radius: 3px;
 }
+#fundingForm fieldset.fundinglist div.inner-wrapper input {
+    width: 20px ! important;
+}
 #fundingForm fieldset.fundinglist div.row {
     display: grid;
     grid-template-columns: 180px auto 100px;
