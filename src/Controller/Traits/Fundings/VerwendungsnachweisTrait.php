@@ -43,6 +43,11 @@ trait VerwendungsnachweisTrait {
             $associations = ['Fundingusageproofs', 'Fundingreceiptlists'];
 
             $associationsWithoutValidation = $this->removeValidationFromAssociations($associations);
+
+            if ($this->request->getData('Fundings.fundingusageproof.checkbox_a') == 0) {
+                $this->request = $this->request->withData('Fundings.fundingusageproof.difference_declaration', '');
+            }
+
             $patchedEntity = $this->patchFunding($funding, $associationsWithoutValidation);
             $patchedEntity->modified = DateTime::now();
             $patchedEntity->usageproof_status = Funding::STATUS_PENDING;

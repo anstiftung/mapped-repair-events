@@ -100,11 +100,6 @@ class Funding extends Entity
         return $this->budgetplan_total_with_limit - $this->receiptlist_total;
     }
 
-    public function _getReceiptlistReceiptTotalIsLessThanBudgetplanTotal(): bool
-    {
-        return $this->receiptlist_difference > 0;
-    }
-
     public function _getGroupedValidBudgetplansTotals(): array
     {
         $result = [];
@@ -330,24 +325,23 @@ class Funding extends Entity
             return self::STATUS_RECEIPTLIST_DATA_MISSING;
         }
 
-        if ($this->fundingusageproof->checkbox_a && (
-            $this->fundingusageproof->difference_declaration < FundingusageproofsTable::DIFFERENCE_DECLARATION_MIN_LENGTH ||
-            $this->fundingusageproof->difference_declaration > FundingusageproofsTable::DIFFERENCE_DECLARATION_MAX_LENGTH)
+        $differenceDeclarationLength = mb_strlen($this->fundingusageproof->difference_declaration);
+        if ($this->fundingusageproof->checkbox_a == 1 && (
+            $differenceDeclarationLength < FundingusageproofsTable::DIFFERENCE_DECLARATION_MIN_LENGTH ||
+            $differenceDeclarationLength > FundingusageproofsTable::DIFFERENCE_DECLARATION_MAX_LENGTH)
         ) {
             return self::STATUS_RECEIPTLIST_DATA_PENDING;
         }
 
-        if ($this->receiptlist_receipt_total_is_less_than_budgetplan_total
-            && !empty($this->fundingusageproof)
-            && $this->fundingusageproof->payback_ok) {
-            return self::STATUS_DATA_OK;
+        if ($this->receiptlist_difference > 0) {
+            if (!empty($this->fundingusageproof) && $this->fundingusageproof->payback_ok) {
+                return self::STATUS_DATA_OK;
+            }
+            return self::STATUS_RECEIPTLIST_DATA_PENDING;
         }
-        if ($this->receiptlist_difference == 0) {
-            return self::STATUS_DATA_OK;
-        }
-        return self::STATUS_RECEIPTLIST_DATA_PENDING;
-    }
 
+        return self::STATUS_DATA_OK;
+    }
 
     public function _getDescriptionStatus(): int
     {

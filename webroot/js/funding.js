@@ -1,5 +1,37 @@
 MappedRepairEvents.Funding = {
 
+    bindReceiptlistCheckboxPaybackOk: (receiptlistDifference) => {
+        $('#fundingForm #fundings-fundingusageproof-payback-ok').on('change', function() {
+            const showCheckbox = receiptlistDifference > 0;
+            MappedRepairEvents.Funding.onClickHandlerReceiptlistCheckboxPaybackOk($(this), showCheckbox);
+        }).trigger('change');
+    },
+
+    onClickHandlerReceiptlistCheckboxPaybackOk: (checkbox, showCheckbox) => {
+        const checkboxWrapper = checkbox.closest('.input');
+        if (showCheckbox) {
+            checkboxWrapper.show();
+        } else {
+            checkboxWrapper.hide();
+        }
+    },
+
+    bindReceiptlistCheckboxA: () => {
+        $('#fundingForm #fundings-fundingusageproof-checkbox-a').on('change', function() {
+            MappedRepairEvents.Funding.onClickHandlerReceiptlistCheckboxA($(this));
+        }).trigger('change');
+    },
+
+    onClickHandlerReceiptlistCheckboxA: (checkbox) => {
+        const isChecked = checkbox.is(':checked');
+        const textarea = checkbox.closest('.inner-wrapper').find('.input.textarea');
+        if (isChecked) {
+            textarea.show();
+        } else {
+            textarea.hide();
+        }
+    },
+
     bindAddReceiptlistButton: () => {
         $('#add-receiptlist-button').on('click', function() {
             const form = document.getElementById('fundingForm');
@@ -18,7 +50,7 @@ MappedRepairEvents.Funding = {
         });
     },
 
-    onClickHandlerDeleteReceiptlistCheckbox: (checked) => {
+    onClickHandlerDeleteReceiptlistCheckbox: () => {
         const anyChecked = $('#fundingForm .receiptlist-delete-checkbox').is(':checked');
         const submitButton = $('#fundingForm').find('button[type="submit"]');
         const addButton = $('#fundingForm').find('#add-receiptlist-button');

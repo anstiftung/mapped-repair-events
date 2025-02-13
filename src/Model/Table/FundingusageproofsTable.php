@@ -40,14 +40,19 @@ class FundingusageproofsTable extends Table
             ],
             self::MAIN_DESCRIPTION_ERROR_MESSAGE,
         );
-        $validator->lengthBetween(
-            'difference_declaration',
-            [
-                self::DIFFERENCE_DECLARATION_MIN_LENGTH,
-                self::DIFFERENCE_DECLARATION_MAX_LENGTH,
-            ],
-            self::DIFFERENCE_DECLARATION_ERROR_MESSAGE,
-        );
+
+
+        $validator
+            ->add('difference_declaration', 'valid', [
+                'rule' => function ($value, $context) {
+                    if ($context['data']['checkbox_a'] == 0) {
+                        return true;
+                    }
+                    $descriptionLength = mb_strlen($value);
+                    return $descriptionLength >= self::DIFFERENCE_DECLARATION_MIN_LENGTH && $descriptionLength <= self::DIFFERENCE_DECLARATION_MAX_LENGTH;
+                },
+                'message' => self::DIFFERENCE_DECLARATION_ERROR_MESSAGE,
+            ]);
 
         return $validator;
     }

@@ -67,7 +67,7 @@ class FundingreceiptlistsTable extends Table
         $validator
             ->add('description', 'valid', [
                 'rule' => function ($value, $context) {
-                    $length = strlen($value);
+                    $length = mb_strlen($value);
                     return $length >= self::DESCRIPTION_MIN_LENGTH && $length <= self::DESCRIPTION_MAX_LENGTH;
                 },
                 'message' => self::DESCRIPTION_ERROR_MESSAGE,
@@ -76,7 +76,7 @@ class FundingreceiptlistsTable extends Table
         $validator
             ->add('recipient', 'valid', [
                 'rule' => function ($value, $context) {
-                    $length = strlen($value);
+                    $length = mb_strlen($value);
                     return $length >= self::RECIPIENT_MIN_LENGTH && $length <= self::RECIPIENT_MAX_LENGTH;
                 },
                 'message' => self::RECIPIENT_ERROR_MESSAGE,
@@ -85,7 +85,7 @@ class FundingreceiptlistsTable extends Table
         $validator
             ->add('receipt_type', 'valid', [
                 'rule' => function ($value, $context) {
-                    $length = strlen($value);
+                    $length = mb_strlen($value);
                     return $length >= self::RECEIPT_TYPE_MIN_LENGTH && $length <= self::RECEIPT_TYPE_MAX_LENGTH;
                 },
                 'message' => self::RECEIPT_TYPE_ERROR_MESSAGE,
@@ -107,7 +107,7 @@ class FundingreceiptlistsTable extends Table
         $validator
             ->add('receipt_number', 'valid', [
                 'rule' => function ($value, $context) {
-                    $length = strlen($value);
+                    $length = mb_strlen($value);
                     return $length >= self::RECEIPT_NUMBER_MIN_LENGTH && $length <= self::RECEIPT_NUMBER_MAX_LENGTH;
                 },
                 'message' => self::RECEIPT_NUMBER_ERROR_MESSAGE,
