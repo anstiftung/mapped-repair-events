@@ -130,7 +130,7 @@ return function (RouteBuilder $routes) {
                 'controller'=>'fundings',
                 'action'=>'download'
             ])->setPatterns([
-                'type' => 'foerderantrag|foerderbewilligung',
+                'type' => 'foerderantrag|foerderbewilligung|verwendungsnachweis',
                 'uid' => '[0-9]+'
             ]);
             $routes->connect('/mein-foerderantrag/{action}/{uid}', [

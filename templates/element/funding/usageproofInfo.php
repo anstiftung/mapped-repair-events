@@ -36,12 +36,13 @@ if ($funding->usageproof_status == Funding::STATUS_VERIFIED_BY_ADMIN) {
 
         echo $this->Html->link(
             'Verwendungsnachweis',
-            'javascript:void(0);',
+            $this->Html->urlFundingVerwendungsnachweisDownload($funding->uid),
             [
                 'target' => '_blank',
             ],
         );
-    echo '</div>';
+    
+        echo '</div>';
 }
 
 if ($funding->usageproof_status == Funding::STATUS_REJECTED_BY_ADMIN) {

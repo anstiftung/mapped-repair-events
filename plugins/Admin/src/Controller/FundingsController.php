@@ -11,6 +11,7 @@ use App\Services\PdfWriter\FoerderantragPdfWriterService;
 use League\Csv\Writer;
 use App\Model\Entity\Funding;
 use Cake\Http\Response;
+use App\Services\PdfWriter\VerwendungsnachweisPdfWriterService;
 
 class FundingsController extends AdminAppController
 {
@@ -47,6 +48,13 @@ class FundingsController extends AdminAppController
     public function foerderantragPdf($fundingUid): void
     {
         $pdfWriterService = new FoerderantragPdfWriterService();
+        $pdfWriterService->prepareAndSetData($fundingUid, DateTime::now());
+        die($pdfWriterService->writeInline());
+    }
+
+    public function verwendungsnachweisPdf($fundingUid): void
+    {
+        $pdfWriterService = new VerwendungsnachweisPdfWriterService();
         $pdfWriterService->prepareAndSetData($fundingUid, DateTime::now());
         die($pdfWriterService->writeInline());
     }
@@ -183,6 +191,7 @@ class FundingsController extends AdminAppController
             'Workshops' => $workshopsTable->getFundingContain(),
             'OwnerUsers',
             'Fundingusageproofs',
+            'Fundingsupporters',
             'Fundingreceiptlists',
             'Fundingbudgetplans',
         ])->first();
@@ -204,12 +213,41 @@ class FundingsController extends AdminAppController
             $patchedEntity = $fundingsTable->patchEntity($funding, $this->request->getData());
             if (!($patchedEntity->hasErrors())) {
 
-                $this->sendEmails($patchedEntity);
-
                 if ($patchedEntity->isDirty('usageproof_status')) {
                     if ($patchedEntity->usageproof_status == Funding::STATUS_VERIFIED_BY_ADMIN) {
-                        $this->AppFlash->setFlashMessage('Der Verwendungsnachweis wurde bestätigt und die Bestätigungs-Email wurde versendet.');
+
+                        try {
+                
+                            $email = new AppMailer();
+                            $email->viewBuilder()->setTemplate('fundings/usageproof_verified');
+                            $email->setTo([
+                                $funding->owner_user->email,
+                                $funding->fundingsupporter->contact_email,
+                            ]);
+                            $email->setSubject('Verwendungsnachweis von Admin bestätigt (UID: ' . $funding->uid . ')');
+                            $email->setViewVars([
+                                'data' => $funding->owner_user,
+                            ]);
+                    
+                            $pdfWriterServiceA = new VerwendungsnachweisPdfWriterService();
+                            $pdfWriterServiceA->prepareAndSetData($funding->uid, $funding->usageproof_submit_date);
+                            $pdfWriterServiceA->writeFile();
+                            $email->addAttachments([$pdfWriterServiceA->getFilenameWithoutPath() => [
+                                'data' => file_get_contents($pdfWriterServiceA->getFilename()),
+                                'mimetype' => 'application/pdf',
+                            ]]);
+                    
+                            $email->addToQueue();
+                    
+                        } catch (\Exception $e) {
+                            $this->AppFlash->setFlashError('Fehler beim Versenden der E-Mail.');
+                        }
+
+                        $this->AppFlash->setFlashMessage('Der Verwendungsnachweis wurde erfolgreich bestätigt.');
+
                     } else {
+
+                        $this->sendEmails($patchedEntity);
                         $patchedEntity->usageproof_submit_date = null;
                     }
                 }

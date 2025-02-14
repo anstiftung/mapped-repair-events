@@ -16,6 +16,7 @@ use App\Services\PdfWriter\FoerderbewilligungPdfWriterService;
 use App\Services\PdfWriter\FoerderantragPdfWriterService;
 use Cake\Http\Response;
 use App\Model\Entity\User;
+use App\Services\PdfWriter\VerwendungsnachweisPdfWriterService;
 
 class FundingsController extends AppController
 {
@@ -196,13 +197,18 @@ class FundingsController extends AppController
 
         if ($type == 'foerderantrag') {
             $pdfWriterService = new FoerderantragPdfWriterService();
+            $filename = $pdfWriterService->getFilenameCustom($funding, $funding->submit_date);
         }
         if ($type == 'foerderbewilligung') {
             $pdfWriterService = new FoerderbewilligungPdfWriterService();
+            $filename = $pdfWriterService->getFilenameCustom($funding, $funding->submit_date);
+        }
+        if ($type == 'verwendungsnachweis') {
+            $pdfWriterService = new VerwendungsnachweisPdfWriterService();
+            $filename = $pdfWriterService->getFilenameCustom($funding, $funding->usageproof_submit_date);
         }
 
         if (isset($pdfWriterService)) {
-            $filename = $pdfWriterService->getFilenameCustom($funding, $funding->submit_date);
             $filenameWithPath = $pdfWriterService->getUploadPath($funding->uid) . $filename;
 
             $response = $this->response->withFile($filenameWithPath);

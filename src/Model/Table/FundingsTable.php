@@ -158,6 +158,8 @@ class FundingsTable extends AppTable
             'FundinguploadsActivityProofs',
             'FundinguploadsFreistellungsbescheids',
             'FundinguploadsZuwendungsbestaetigungs',
+            'Fundingusageproofs',
+            'Fundingreceiptlists',
         ])->where([
             $this->aliasField('uid') => $fundingUid,
         ])->first();

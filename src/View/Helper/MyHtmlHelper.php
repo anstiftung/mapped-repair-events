@@ -275,6 +275,11 @@ class MyHtmlHelper extends HtmlHelper {
         return $this->urlFundings() . '/download/foerderbewilligung/' . $fundingUid;
     }
 
+    function urlFundingVerwendungsnachweisDownload($fundingUid): string
+    {
+        return $this->urlFundings() . '/download/verwendungsnachweis/' . $fundingUid;
+    }
+
     function urlFundingsDelete($fundinguploadId): string
     {
         return $this->urlFundings() . '/delete/' . $fundinguploadId;

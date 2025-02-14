@@ -64,6 +64,61 @@ abstract class AppTcpdfService extends TCPDF
         $this->Image($this->backgroundImageFile, 0, 0, $pageWidth, $pageHeight);
     }
 
+    public function getFundingReceiptlistAsTable(
+        $data,
+        $width = '100%',
+        $widthColumnA = '20%',
+        $widthColumnB = '20%',
+        $widthColumnC = '20%',
+        $widthColumnD = '20%',
+        $widthColumnE = '20%',
+        $widthColumnF = '20%',
+        $alignmentColumnA = 'left',
+        $alignmentColumnB = 'left',
+        $alignmentColumnC = 'left',
+        $alignmentColumnD = 'left',
+        $alignmentColumnE = 'left',
+        $alignmentColumnF = 'right',
+        ): string
+    {
+
+        $html = '<table width="' . $width . '" border="0" cellpadding="1">';
+            $i = 0;
+            foreach($data as $value) {
+                $style = '';
+                if ($i == 0) {
+                    $style = 'text-decoration:underline;margin-bottom:10px;';
+                }
+                if ($i % 2 == 1) {
+                    $style .= 'background-color:#f0f0f0;';
+                }
+
+                $html .= '<tr>';
+                    $html .= '<td style="' . $style . '" width="'.$widthColumnA.'" align="' . $alignmentColumnA . '">';
+                        $html .= $value['columnA'];
+                    $html .= '</td>';
+                    $html .= '<td style="' . $style . '" width="'.$widthColumnB.'" align="' . $alignmentColumnB . '">';
+                        $html .= $value['columnB'];
+                    $html .= '</td>';
+                    $html .= '<td style="' . $style . '" width="'.$widthColumnC.'" align="' . $alignmentColumnC . '">';
+                        $html .= $value['columnC'];
+                    $html .= '</td>';
+                    $html .= '<td style="' . $style . '" width="'.$widthColumnD.'" align="' . $alignmentColumnD . '">';
+                        $html .= $value['columnD'];
+                    $html .= '</td>';
+                    $html .= '<td style="' . $style . '" width="'.$widthColumnE.'" align="' . $alignmentColumnE . '">';
+                        $html .= $value['columnE'];
+                    $html .= '</td>';
+                    $html .= '<td style="' . $style . '" width="'.$widthColumnF.'" align="' . $alignmentColumnF . '">';
+                        $html .= $value['columnF'];
+                    $html .= '</td>';
+                $html .= '</tr>';
+                $i++;
+            }
+        $html .= '</table>';
+        return $html;
+    }
+    
     public function getFundingDataAsTable($data, $width = '100%', $widthColumnA = '30%', $widthColumnB = '70%', $alignmentColumnA = 'left', $alignmentColumnB = 'left'): string
     {
         $html = '<table width="' . $width . '" border="0" cellpadding="0">';
