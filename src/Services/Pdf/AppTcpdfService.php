@@ -53,6 +53,11 @@ abstract class AppTcpdfService extends TCPDF
 
     }
 
+    public function drawLine(): void
+    {
+        $this->Line(0, $this->y, $this->w, $this->y);
+    }
+
     public function Header(): void
     {
         $this->SetMargins(0, 0, 0);

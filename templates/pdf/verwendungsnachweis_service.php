@@ -18,9 +18,14 @@ $html = '<b>' . Funding::FIELDS_FUNDINGUSAGEPROOF_LABEL . '</b>';
 $pdf->writeHTML($html, true, false, true, false, '');
 $pdf->Ln(3);
 
-$html = '<p>' . $description['main_description']['value'] . '</p>';
+$pdf->SetFontSizeSmall();
+$html = '<p>"' . $sachbericht['main_description']['value'] . '"</p>';
 $pdf->writeHTML($html, true, false, true, false, '');
-$pdf->Ln(10);
+$pdf->SetFontSizeDefault();
+
+$pdf->Ln(5);
+$pdf->drawLine();
+$pdf->Ln(5);
 
 $html = '<b>' . Funding::FIELDS_FUNDINGRECEIPTLIST_LABEL . '</b>';
 $pdf->writeHTML($html, true, false, true, false, '');
@@ -65,9 +70,12 @@ foreach($funding->grouped_valid_receiptlists as $typeId => $fundingreceiptlists)
     $html .= $pdf->getFundingReceiptlistAsTable($preparedSumDataForTable, ...$receiptlistTableArgs);
 }
 $pdf->writeHTML($html, true, false, true, false, '');
-$pdf->SetFontSizeDefault();
 
 $preparedSumDataForTable = [
+    [
+        'label' => '<b>Fördersumme</b>',
+        'value' => '<b>' . $this->MyNumber->formatAsDecimal($funding->budgetplan_total_with_limit) . ' €</b>',
+    ],
     [
         'label' => '<b>Belegte Gesamtsumme</b>',
         'value' => '<b>' . $this->MyNumber->formatAsDecimal($funding->receiptlist_total) . ' €</b>',
@@ -78,12 +86,56 @@ $tableArgs = ['100%', '85%', '15%', 'left', 'right'];
 $html = $pdf->getFundingDataAsTable($preparedSumDataForTable, ...$tableArgs);
 $pdf->writeHTML($html, true, false, true, false, '');
 
-
 $pdf->Ln(5);
+$pdf->drawLine();
+$pdf->Ln(5);
+
+$receiptlistChecboxConditionA = $funding->receiptlist_difference > 0;
+$receiptlistChecboxConditionB = $funding->fundingusageproof->checkbox_a == 1;
+
+if ($receiptlistChecboxConditionA || $receiptlistChecboxConditionB) {
+
+    $pdf->SetFontSizeDefault();
+    $html = '<b>' . Funding::FIELDS_FUNDINGRECEIPTLIST_CHECKBOXES_LABEL . '</b>';
+    $pdf->writeHTML($html, true, false, true, false, '');
+    $pdf->Ln(3);
+
+    $pdf->SetFontSizeSmall();
+
+    $html = '';
+    if ($receiptlistChecboxConditionA) {
+        if ($funding->fundingusageproof->payback_ok == 1) {
+            $html .= 'Bestätigt';
+        } else {
+            $html .= 'Nicht bestätigt';
+        }
+        $html .= ': "'  . $this->Html->replaceFundingCheckboxPlaceholders(Funding::FIELDS_FUNDINGRECEIPTLIST_PAYBACK_CHECKBOX[0]['options']['label'], $funding) . '"<br />';
+        $pdf->writeHTML($html, true, false, true, false, '');
+    }
+
+    $html = '';
+    if ($receiptlistChecboxConditionB) {
+        $html .= 'Bestätigt: "'  . Funding::FIELDS_FUNDINGRECEIPTLIST_PAYBACK_CHECKBOX[1]['options']['label'] . '"<br />';
+        $pdf->writeHTML($html, true, false, true, false, '');
+
+        $html = '<p><b>' . 'Erklärung zu Abweichung der Belegliste' . '</b><br />';
+        $html .= '"' . $funding->fundingusageproof->difference_declaration . '"';
+        $pdf->writeHTML($html, true, false, true, false, '');
+    }
+
+    $pdf->Ln(5);
+    $pdf->drawLine();
+    $pdf->Ln(5);
+
+}
+
+$pdf->SetFontSizeDefault();
+
 $html = '<b>' . Funding::FIELDS_USAGEPROOF_CHECKBOXES_LABEL . '</b>';
 $pdf->writeHTML($html, true, false, true, false, '');
 $pdf->Ln(3);
 
+$pdf->SetFontSizeSmall();
 $html = '';
 foreach($checkboxes as $checkbox) {
     if ($funding->fundingdata[$checkbox['name']] == 1) {
@@ -91,8 +143,7 @@ foreach($checkboxes as $checkbox) {
     } else {
         $html .= 'Nicht bestätigt';
     }
-    $html .= ': "' .$checkbox['label'] . '"<br /><br />';
+    $html .= ': "' . $checkbox['label'] . '"<br /><br />';
 }
 
-$pdf->SetFontSizeDefault();
 $pdf->writeHTML($html, true, false, true, false, '');
