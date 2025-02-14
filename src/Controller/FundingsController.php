@@ -185,28 +185,30 @@ class FundingsController extends AppController
         $fundingUid = $this->getRequest()->getParam('uid');
         $type = $this->getRequest()->getParam('type');
 
+        if ($type == 'foerderantrag') {
+            $pdfWriterService = new FoerderantragPdfWriterService();
+            $databaseField = 'submit_date';
+        }
+        if ($type == 'foerderbewilligung') {
+            $pdfWriterService = new FoerderbewilligungPdfWriterService();
+            $databaseField = 'submit_date';
+        }
+        if ($type == 'verwendungsnachweis') {
+            $pdfWriterService = new VerwendungsnachweisPdfWriterService();
+            $databaseField = 'usageproof_submit_date';
+        }
+
         $fundingsTable = $this->getTableLocator()->get('Fundings');
         $funding = $fundingsTable->find()->where([
             $fundingsTable->aliasField('uid') => $fundingUid,
-            $fundingsTable->aliasField('submit_date IS NOT NULL'),
+            $fundingsTable->aliasField($databaseField . ' IS NOT NULL'),
         ])->first();
 
         if (empty($funding)) {
             throw new NotFoundException;
         }
 
-        if ($type == 'foerderantrag') {
-            $pdfWriterService = new FoerderantragPdfWriterService();
-            $filename = $pdfWriterService->getFilenameCustom($funding, $funding->submit_date);
-        }
-        if ($type == 'foerderbewilligung') {
-            $pdfWriterService = new FoerderbewilligungPdfWriterService();
-            $filename = $pdfWriterService->getFilenameCustom($funding, $funding->submit_date);
-        }
-        if ($type == 'verwendungsnachweis') {
-            $pdfWriterService = new VerwendungsnachweisPdfWriterService();
-            $filename = $pdfWriterService->getFilenameCustom($funding, $funding->usageproof_submit_date);
-        }
+        $filename = $pdfWriterService->getFilenameCustom($funding, $funding->{$databaseField});
 
         if (isset($pdfWriterService)) {
             $filenameWithPath = $pdfWriterService->getUploadPath($funding->uid) . $filename;
