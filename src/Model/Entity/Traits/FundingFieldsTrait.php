@@ -104,7 +104,7 @@ trait FundingFieldsTrait {
 
     const FIELDS_FUNDINGRECEIPTLIST_PAYBACK_CHECKBOX = [
         ['name' => 'payback_ok', 'options' => ['type' => 'checkbox', 'label' => 'Hiermit bestätige ich, den <b>Restbetrag von {RESTBETRAG} €</b> mit dem <b>Verwendungsnachweis UID: {UID}</b> innerhalb von 14 Tagen auf auf das Konto <b>{KONTONUMMER}</b> zurück zu überweisen', 'escape' => false]],
-        ['name' => 'checkbox_a', 'options' => ['type' => 'checkbox', 'label' => 'Weichen die tatsächlich angefallenen Ausgaben signifikant vom Kostenplan des eingereichten Förderantrags ab?', 'escape' => false]],
+        ['name' => 'checkbox_a', 'options' => ['type' => 'checkbox', 'label' => 'Ja, die tatsächlich angefallenen Ausgaben weichen signifikant vom Kostenplan des eingereichten Förderantrags ab.', 'escape' => false]],
         ['name' => 'difference_declaration', 'options' => ['label' =>  'Erklärung zu Abweichung der Belegliste' . '<br />' . FundingusageproofsTable::DIFFERENCE_DECLARATION_ERROR_MESSAGE, 'type' => 'textarea', 'rows' => 3, 'maxlength' => FundingusageproofsTable::DIFFERENCE_DECLARATION_MAX_LENGTH, 'minlength' => FundingusageproofsTable::DIFFERENCE_DECLARATION_MIN_LENGTH, 'class' => 'no-verify', 'escape' => false]],
     ];
 
