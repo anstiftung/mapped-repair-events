@@ -6,13 +6,13 @@ use App\Model\Entity\Funding;
 use Cake\Core\Configure;
 
 $pdf->setDefaults();
-$pdf->Ln(30);
+$pdf->Ln(35);
 
 $pdf->SetFontSizeBig();
 $html = '<b>Verwendungsnachweis vom ' . $timestamp->i18nFormat(Configure::read('DateFormat.de.DateNTimeLongWithSeconds')) . ' - UID: ' . $funding->uid . '</b>';
 $pdf->writeHTML($html, true, false, true, false, '');
 $pdf->SetFontSizeDefault();
-$pdf->Ln(5);
+$pdf->Ln(10);
 
 $html = '<b>' . Funding::FIELDS_FUNDINGUSAGEPROOF_LABEL . '</b>';
 $pdf->writeHTML($html, true, false, true, false, '');
