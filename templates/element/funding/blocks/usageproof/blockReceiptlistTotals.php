@@ -20,5 +20,6 @@ echo '<div class="inner-wrapper">';
     $renderedFields = Funding::getRenderedFields(Funding::FIELDS_FUNDINGRECEIPTLIST_PAYBACK_CHECKBOX, 'fundingusageproof', $this->Form, $disabled);
     $renderedFields = str_replace('{RESTBETRAG}', (string) $this->MyNumber->formatAsDecimal($funding->receiptlist_difference), $renderedFields);
     $renderedFields = str_replace('{UID}', (string) $funding->uid, $renderedFields);
+    $renderedFields = str_replace('{KONTONUMMER}', 'DE75430609671082980800, GENODEM1GLS', $renderedFields);
     echo $renderedFields;
 echo '</div>';
