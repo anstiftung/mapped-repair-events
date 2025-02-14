@@ -20,7 +20,7 @@ $pdf->Ln(3);
 
 $html = '<p>' . $description['main_description']['value'] . '</p>';
 $pdf->writeHTML($html, true, false, true, false, '');
-$pdf->Ln(5);
+$pdf->Ln(10);
 
 $html = '<b>' . Funding::FIELDS_FUNDINGRECEIPTLIST_LABEL . '</b>';
 $pdf->writeHTML($html, true, false, true, false, '');
