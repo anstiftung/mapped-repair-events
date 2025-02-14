@@ -48,7 +48,14 @@ echo $this->element('jqueryTabsWithoutAjax', [
                     'saveLabel' => 'Zwischenspeichern',
                     'hideCancelButton' => true,
                 ]);
-                echo '<div class="sc" style="margin-bottom:10px;"></div>';
+                echo '<div class="sc"></div>';
+
+                echo '<div class="flexbox" style="margin-top:10px;">';
+                    echo '<fieldset>';
+                        echo '<legend>'.Funding::FIELDS_FUNDINGBUDGETPLAN_GROUPED_LABEL.'</legend>';
+                        echo $this->element('funding/blocks/blockBudgetplanGrouped', ['funding' => $funding]);
+                    echo '</fieldset>';
+                echo '</div>';
 
                 echo '<div class="flexbox">';
                     echo $this->element('funding/blocks/usageproof/blockCheckboxes', ['funding' => $funding, 'disabled' => false]);
@@ -57,13 +64,6 @@ echo $this->element('jqueryTabsWithoutAjax', [
                 echo $this->element('cancelAndSaveButton', [
                     'saveLabel' => 'Zwischenspeichern',
                 ]);
-
-                echo '<div class="flexbox" style="margin-top:20px;">';
-                    echo '<fieldset>';
-                        echo '<legend>'.Funding::FIELDS_FUNDINGBUDGETPLAN_GROUPED_LABEL.'</legend>';
-                        echo $this->element('funding/blocks/blockBudgetplanGrouped', ['funding' => $funding]);
-                    echo '</fieldset>';
-                echo '</div>';
 
                 echo '<div class="extra-submit-button-wrapper">';
                     echo $this->Form->button('Verwendungsnachweis einreichen', [
