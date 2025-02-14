@@ -39,6 +39,11 @@ trait VerwendungsnachweisTrait {
         $this->setReferer();
         $funding = $fundingsTable->findOrCreateUsageproof($fundingUid);
 
+        if ($funding->usageproof_is_submitted) {
+            $this->AppFlash->setFlashError('Der Verwendungsnachweis wurde bereits eingereicht und kann nicht mehr bearbeitet werden.');
+            return $this->redirect(Configure::read('AppConfig.htmlHelper')->urlFundings());
+        }
+
         if (!empty($this->request->getData())) {
             $associations = ['Fundingusageproofs', 'Fundingreceiptlists'];
 
@@ -95,6 +100,13 @@ trait VerwendungsnachweisTrait {
 
             $this->AppFlash->setFlashMessage(join('<br />', $flashMessages));
             $funding = $this->patchFunding($funding, $associations);
+
+            if ($funding->usageproof_is_submittable && !empty($this->request->getData('submit_usageproof'))) {
+                $this->submitUsageproof($funding);
+                $this->AppFlash->setFlashMessage('Der Verwendungsnachweis wurde erfolgreich eingereicht und bewilligt.');
+                return $this->redirect(Configure::read('AppConfig.htmlHelper')->urlFundings());
+            }
+
         }
 
         $this->set('metaTags', [
@@ -105,4 +117,12 @@ trait VerwendungsnachweisTrait {
         return null;
     }
 
+    private function submitUsageproof($funding): void
+    {
+        $timestamp = DateTime::now();
+        $fundingsTable = $this->getTableLocator()->get('Fundings');
+        $funding->usageproof_submit_date = $timestamp;;
+        $funding->usageproof_status = Funding::STATUS_PENDING;
+        $fundingsTable->save($funding);
+    }
 }

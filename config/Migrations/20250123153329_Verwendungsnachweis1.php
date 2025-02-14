@@ -43,5 +43,8 @@ class Verwendungsnachweis1 extends AbstractMigration
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
         $this->execute($query);
 
+        $sql = "ALTER TABLE `fundings` ADD `usageproof_submit_date` DATETIME NULL DEFAULT NULL AFTER `money_transfer_date`;";
+        $this->execute($sql);
+
     }
 }

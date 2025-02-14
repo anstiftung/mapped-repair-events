@@ -229,6 +229,10 @@ class Funding extends Entity
             $this->usageproof_checkboxes_status == self::STATUS_CHECKBOXES_OK;
     }
 
+    public function _getUsageproofIsSubmitted(): bool {
+        return $this->usageproof_submit_date !== null;
+    }
+
     public function _getUsageproofExists(): bool
     {
         return $this->fundingusageproof_id !== null;

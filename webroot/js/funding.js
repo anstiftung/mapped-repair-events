@@ -2,12 +2,6 @@ MappedRepairEvents.Funding = {
 
     bindSubmitUsageproofButton: (uid) => {
         $('#submit-usageproof-button-' + uid).on('click', function() {
-            $.prompt('Diese Funktion ist in Kürze verfügbar.',
-                {
-                    buttons: {'Ok': false},
-                }
-            );
-            /*
             $.prompt('Möchtest du den Verwendungsnachweis wirklich einreichen?',
                 {
                     buttons: {'Ja, jetzt einreichen': true, Abbrechen: false},
@@ -24,7 +18,6 @@ MappedRepairEvents.Funding = {
                     }
                 }
             );
-            */
         });
     },
 

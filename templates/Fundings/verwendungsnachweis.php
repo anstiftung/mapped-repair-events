@@ -28,6 +28,7 @@ echo $this->element('jqueryTabsWithoutAjax', [
                 echo $this->Form->hidden('referer', ['value' => $referer]);
                 $this->Form->unlockField('referer');
                 $this->Form->unlockField('add_receiptlist');
+                $this->Form->unlockField('submit_usageproof');
 
                 echo $this->element('funding/blocks/usageproof/blockMainInfo');
                 echo $this->element('funding/blocks/usageproof/blockColorCodes');
