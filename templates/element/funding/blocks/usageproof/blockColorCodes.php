@@ -12,6 +12,6 @@ declare(strict_types=1);
         fehlt
     </div>
     <div class="is-rejected">
-        durch Admin beanstandet
+        von Admin beanstandet
     </div>
 </div>

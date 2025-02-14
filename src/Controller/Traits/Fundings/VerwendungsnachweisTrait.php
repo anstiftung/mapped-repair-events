@@ -103,7 +103,7 @@ trait VerwendungsnachweisTrait {
 
             if ($funding->usageproof_is_submittable && !empty($this->request->getData('submit_usageproof'))) {
                 $this->submitUsageproof($funding);
-                $this->AppFlash->setFlashMessage('Der Verwendungsnachweis wurde erfolgreich eingereicht und bewilligt.');
+                $this->AppFlash->setFlashMessage('Der Verwendungsnachweis wurde erfolgreich eingereicht und bewilligt. Die Bestätigung eines Admins ist noch ausstehend.');
                 return $this->redirect(Configure::read('AppConfig.htmlHelper')->urlFundings());
             }
 

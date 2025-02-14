@@ -21,6 +21,13 @@ trait FundingStatusTrait {
     const STATUS_RECEIPTLIST_DATA_MISSING = 120;
     const STATUS_RECEIPTLIST_DATA_PENDING = 130;
 
+    const STATUS_MAPPING_FOR_USAGEPROOF = [
+        self::STATUS_DATA_MISSING => 'wurde noch nicht eingereicht',
+        self::STATUS_PENDING => 'Bestätigung von Admin ausstehend',
+        self::STATUS_VERIFIED_BY_ADMIN => 'von Admin bestätigt',
+        self::STATUS_REJECTED_BY_ADMIN => 'von Admin beanstandet',
+    ];
+    
     const STATUS_MAPPING_CHANGEABLE_BY_ADMIN = [
         self::STATUS_UPLOAD_MISSING => 'wurde noch nicht hochgeladen',
         self::STATUS_DATA_MISSING => 'wurde noch nicht erstellt',

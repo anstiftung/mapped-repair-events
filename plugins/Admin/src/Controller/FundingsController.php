@@ -206,6 +206,14 @@ class FundingsController extends AdminAppController
 
                 $this->sendEmails($patchedEntity);
 
+                if ($patchedEntity->isDirty('usageproof_status')) {
+                    if ($patchedEntity->usageproof_status == Funding::STATUS_VERIFIED_BY_ADMIN) {
+                        $this->AppFlash->setFlashMessage('Der Verwendungsnachweis wurde bestätigt und die Bestätigungs-Email wurde versendet.');
+                    } else {
+                        $patchedEntity->usageproof_submit_date = null;
+                    }
+                }
+
                 $fundingsTable->save($patchedEntity);
                 $this->redirect($this->getReferer());
             } else {

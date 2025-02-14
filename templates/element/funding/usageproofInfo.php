@@ -7,13 +7,15 @@ if ($funding->money_transfer_date === null) {
     return;
 }
 
+$submitInfo = '';
+if ($funding->usageproof_submit_date !== null) {
+    $submitInfo = ' eingereicht und bewilligt am ' . $funding->usageproof_submit_date->format('d.m.Y H:i');
+}
 
 echo $this->element('funding/status/usageproofStatus', [
     'funding' => $funding,
-    'additionalTextBefore' => 'Verwendungsnachweis: ',
+    'additionalTextBefore' => 'Verwendungsnachweis ' . $submitInfo. ': ',
 ]);
-
-
 
 if ($funding->usageproof_status == Funding::STATUS_DATA_MISSING) {
     echo '<div style="margin-top:10px;margin-left:10px;">';
@@ -42,7 +44,7 @@ if ($funding->usageproof_status == Funding::STATUS_VERIFIED_BY_ADMIN) {
     echo '</div>';
 }
 
-if ($funding->usageproof_status == Funding::STATUS_REJECTED_BY_ADMIN || $funding->usageproof_status == Funding::STATUS_PENDING) {
+if ($funding->usageproof_status == Funding::STATUS_REJECTED_BY_ADMIN) {
     echo '<div style="margin-top:10px;margin-right:5px;margin-left:10px;"><i class="fa-solid fa-arrow-turn-up fa-rotate-90"></i>';
         echo $this->Html->link(
             'Verwendungsnachweis bearbeiten',

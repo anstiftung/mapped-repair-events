@@ -32,6 +32,10 @@ echo $this->element('jqueryTabsWithoutAjax', [
 
                 echo $this->element('funding/blocks/usageproof/blockMainInfo');
                 echo $this->element('funding/blocks/usageproof/blockColorCodes');
+                echo $this->element('funding/status/usageproofStatus', [
+                    'funding' => $funding,
+                    'additionalTextBefore' => '',
+                ]);
 
                 echo '<div class="flexbox">';
                     echo $this->element('funding/blocks/usageproof/blockSachbericht', ['funding' => $funding, 'disabled' => false]);

@@ -379,7 +379,7 @@ class Funding extends Entity
 
     public function _getUsageproofStatusHumanReadable(): string
     {
-        return self::STATUS_MAPPING_CHANGEABLE_BY_ADMIN[$this->usageproof_status];
+        return self::STATUS_MAPPING_FOR_USAGEPROOF[$this->usageproof_status];
     }
 
     public function _getDescriptionStatusHumanReadable(): string
