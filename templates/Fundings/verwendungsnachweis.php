@@ -18,8 +18,6 @@ echo $this->element('jqueryTabsWithoutAjax', [
     <div class="ui-tabs-panel">
         <?php
             echo $this->element('heading', ['first' => $metaTags['title']]);
-            echo $this->element('funding/blocks/usageproof/blockMainInfo');
-            echo $this->element('funding/blocks/usageproof/blockColorCodes');
 
             echo $this->Form->create($funding, [
                 'novalidate' => 'novalidate',
@@ -30,6 +28,9 @@ echo $this->element('jqueryTabsWithoutAjax', [
                 echo $this->Form->hidden('referer', ['value' => $referer]);
                 $this->Form->unlockField('referer');
                 $this->Form->unlockField('add_receiptlist');
+
+                echo $this->element('funding/blocks/usageproof/blockMainInfo');
+                echo $this->element('funding/blocks/usageproof/blockColorCodes');
 
                 echo '<div class="flexbox">';
                     echo $this->element('funding/blocks/usageproof/blockSachbericht', ['funding' => $funding, 'disabled' => false]);
