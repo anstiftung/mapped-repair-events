@@ -623,7 +623,7 @@ class FundingsControllerTest extends AppTestCase
             'description' => $newFundingreceiptlistDescriptionOk,
             'recipient' => 'Test Empfänger',
             'receipt_type' => 'Beleg',
-            'payment_date' => '2020-01-01',
+            'payment_date' => '2025-01-10',
             'receipt_number' => '232343',
             'amount' => $newFundingreceiptlistAmountOk,
         ];
@@ -683,7 +683,7 @@ class FundingsControllerTest extends AppTestCase
         $this->assertResponseContains('Bitte gib ein gültiges Datum (TT.MM.JJJJ) ein');
         $this->assertResponseContains('Ausgabenbereich auswählen');
         $this->assertResponseContains('Betrag muss größer als 0 sein');
-        $this->assertResponseContains('Das Zahlungsdatum muss vor dem 01.03.2026 liegen.');
+        $this->assertResponseContains('Das Datum muss zwischen 09.01.2025 und 28.02.2026 liegen.');
         $this->assertResponseContains('id="fundings-fundingreceiptlists-2-recipient-error"');
         $this->assertResponseContains('id="fundings-fundingreceiptlists-2-payment-date-error"');
         $this->assertResponseContains('id="fundings-fundingreceiptlists-2-receipt-number-error"');

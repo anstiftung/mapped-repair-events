@@ -97,11 +97,12 @@ class FundingreceiptlistsTable extends Table
             ->add('payment_date', 'range', [
                 'rule' => function ($value, $context) {
                     if ($value != '') {
-                        return $value->format('Y-m-d') < '2026-03-01';
+                        $formattedValue = $value->format('Y-m-d');
+                        return $formattedValue >= '2025-01-09' && $formattedValue <= '2026-02-28';
                     }
                     return true;
                 },
-                'message' => 'Das Zahlungsdatum muss vor dem 01.03.2026 liegen.',
+                'message' => 'Das Datum muss zwischen 09.01.2025 und 28.02.2026 liegen.',
             ]);
 
         $validator
