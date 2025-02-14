@@ -110,7 +110,7 @@ trait FundingFieldsTrait {
 
     const FIELDS_USAGEPROOF_CHECKBOXES = [
         ['name' => 'checkbox_b', 'options' => ['type' => 'checkbox', 'label' => 'Hiermit bestätige ich die Richtigkeit der oben gemachten Angaben.', 'escape' => false]],
-        ['name' => 'checkbox_c', 'options' => ['type' => 'checkbox', 'label' => 'Hiermit bestätige ich, dass sämtliche Belege zur oben erstellten digitalen Liste in der genannten Nummerierung geordnet vorliegen und auf Verlangen gesammelt vorgelegt werden können.', 'escape' => false]],
+        ['name' => 'checkbox_c', 'options' => ['type' => 'checkbox', 'label' => 'Hiermit bestätige ich, dass alle Belege als Papierdokumente vorhanden sind und ihre Nummerierung der digitalen Liste entspricht, sowie auf Anfrage vollständig und zeitnah vorgelegt werden.', 'escape' => false]],
     ];
 
 }
