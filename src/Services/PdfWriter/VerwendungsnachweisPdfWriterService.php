@@ -14,7 +14,9 @@ class VerwendungsnachweisPdfWriterService extends PdfWriterService
 
     public function __construct()
     {
-        $this->setPdfLibrary(new ReparaturInitiativenTcpdfService());
+        $pdfLibrary = new ReparaturInitiativenTcpdfService();
+        $pdfLibrary->showPageNumbers = true;
+        $this->setPdfLibrary($pdfLibrary);
     }
 
     public function getFilenameCustom($funding, $timestamp): string

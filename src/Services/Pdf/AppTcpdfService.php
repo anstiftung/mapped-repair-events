@@ -11,6 +11,7 @@ abstract class AppTcpdfService extends TCPDF
     public int $fontSizeBig = 12;
     public int $fontSizeDefault = 10;
     public int $fontSizeSmall = 8;
+    public bool $showPageNumbers = false;
 
     public function __construct($orientation = 'P', $unit = 'mm', $format = 'A4', $unicode = true, $encoding = 'UTF-8', $diskcache = false, $pdfa = false)
     {
@@ -21,7 +22,9 @@ abstract class AppTcpdfService extends TCPDF
         $this->SetCreator('anstiftung');
         $this->SetAuthor('anstiftung');
         $this->SetPrintHeader(true);
-        $this->SetPrintFooter(false);
+        $this->SetPrintFooter(true);
+        $this->SetLeftMargin(18);
+        $this->SetRightMargin(18);
     }
 
     public function SetFontSizeBig(): void
@@ -41,21 +44,15 @@ abstract class AppTcpdfService extends TCPDF
 
     public function setDefaults(): void
     {
-
-        $this->setPrintFooter(false);
-
         $this->AddPage();
-
-        $this->SetLeftMargin(18);
-        $this->SetRightMargin(18);
-
-        $this->SetAutoPageBreak(true, 0);
-
+        $this->SetAutoPageBreak(true, 20);
     }
 
     public function drawLine(): void
     {
-        $this->Line(0, $this->y, $this->w, $this->y);
+        $x1 = $this->getMargins()['left'];
+        $x2 = $this->getPageWidth() - $this->getMargins()['right'];
+        $this->Line($x1, $this->y, $x2, $this->y);
     }
 
     public function Header(): void
@@ -67,7 +64,23 @@ abstract class AppTcpdfService extends TCPDF
         $pageHeight = $this->getPageHeight();
 
         $this->Image($this->backgroundImageFile, 0, 0, $pageWidth, $pageHeight);
+
+        if ($this->GetPage() > 1) {
+            $this->SetTopMargin(30);
+        }
     }
+
+    public function Footer(): void
+    {
+        if ($this->showPageNumbers && $this->getAliasNbPages() > 1) {
+            $this->SetFont('verdana');
+            $this->SetFontSizeSmall();
+            $this->SetY(-15);
+            $this->Cell(0, 10, 'Seite ' . $this->getAliasNumPage() . ' von ' . $this->getAliasNbPages());
+            $this->SetFontSizeDefault();
+        }
+    }
+
 
     public function getFundingReceiptlistAsTable(
         $data,
