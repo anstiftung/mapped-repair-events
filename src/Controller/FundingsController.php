@@ -185,13 +185,12 @@ class FundingsController extends AppController
         $fundingUid = $this->getRequest()->getParam('uid');
         $type = $this->getRequest()->getParam('type');
 
+        $databaseField = 'submit_date';
         if ($type == 'foerderantrag') {
             $pdfWriterService = new FoerderantragPdfWriterService();
-            $databaseField = 'submit_date';
         }
         if ($type == 'foerderbewilligung') {
             $pdfWriterService = new FoerderbewilligungPdfWriterService();
-            $databaseField = 'submit_date';
         }
         if ($type == 'verwendungsnachweis') {
             $pdfWriterService = new VerwendungsnachweisPdfWriterService();
@@ -208,9 +207,8 @@ class FundingsController extends AppController
             throw new NotFoundException;
         }
 
-        $filename = $pdfWriterService->getFilenameCustom($funding, $funding->{$databaseField});
-
         if (isset($pdfWriterService)) {
+            $filename = $pdfWriterService->getFilenameCustom($funding, $funding->{$databaseField});
             $filenameWithPath = $pdfWriterService->getUploadPath($funding->uid) . $filename;
 
             $response = $this->response->withFile($filenameWithPath);
