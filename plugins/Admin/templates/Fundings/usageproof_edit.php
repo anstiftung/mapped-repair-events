@@ -86,6 +86,9 @@ $this->element('addScript', ['script' =>
 
         echo '</fieldset>';
 
+        echo $this->element('funding/blocks/usageproof/blockCheckboxes', ['funding' => $funding, 'disabled' => true]);
+
+
         echo '<fieldset>';
             echo '<legend>Status Verwendungsnachweis</legend>';
             echo $this->element('funding/status/usageproofStatus', ['funding' => $funding, 'additionalTextBefore' => '']);
