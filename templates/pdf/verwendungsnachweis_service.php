@@ -35,17 +35,22 @@ $pdf->SetFontSizeSmall();
 $html = '';
 $receiptlistTableArgs = ['100%', '34%', '20%', '10%', '14%', '12%', '10%', 'left', 'left', 'left', 'left', 'left', 'right'];
 
+$preparedDataForTable = [];
+$preparedDataForTable[] = [
+    'columnA' => Funding::FIELDS_FUNDINGRECEIPTLIST[2]['options']['placeholder'],
+    'columnB' => Funding::FIELDS_FUNDINGRECEIPTLIST[3]['options']['placeholder'],
+    'columnC' => Funding::FIELDS_FUNDINGRECEIPTLIST[4]['options']['placeholder'],
+    'columnD' => Funding::FIELDS_FUNDINGRECEIPTLIST[5]['options']['placeholder'],
+    'columnE' => Funding::FIELDS_FUNDINGRECEIPTLIST[6]['options']['placeholder'],
+    'columnF' => Funding::FIELDS_FUNDINGRECEIPTLIST[7]['options']['placeholder'],
+];
+$html = $pdf->getFundingReceiptlistAsTable($preparedDataForTable, ...$receiptlistTableArgs);
+$pdf->writeHTML($html, true, false, true, false, '');
+
+$html = '';
 foreach($funding->grouped_valid_receiptlists as $typeId => $fundingreceiptlists) {
-    $html .= '<b>' . Fundingbudgetplan::TYPE_MAP[$typeId] . '</b><br />';
     $preparedDataForTable = [];
-    $preparedDataForTable[] = [
-        'columnA' => Funding::FIELDS_FUNDINGRECEIPTLIST[2]['options']['placeholder'],
-        'columnB' => Funding::FIELDS_FUNDINGRECEIPTLIST[3]['options']['placeholder'],
-        'columnC' => Funding::FIELDS_FUNDINGRECEIPTLIST[4]['options']['placeholder'],
-        'columnD' => Funding::FIELDS_FUNDINGRECEIPTLIST[5]['options']['placeholder'],
-        'columnE' => Funding::FIELDS_FUNDINGRECEIPTLIST[6]['options']['placeholder'],
-        'columnF' => Funding::FIELDS_FUNDINGRECEIPTLIST[7]['options']['placeholder'],
-    ];
+    $html .= '<b>' . Fundingbudgetplan::TYPE_MAP[$typeId] . '</b><br />';
     foreach($fundingreceiptlists as $fundingreceiptlist) {
         $preparedDataForTable[] = [
             'columnA' => $fundingreceiptlist->description,

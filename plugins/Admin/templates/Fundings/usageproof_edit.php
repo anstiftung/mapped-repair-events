@@ -33,19 +33,19 @@ $this->element('addScript', ['script' =>
                 echo '<p>' . $funding->receiptlist_status_human_readable . '</p>';
             echo '</div>';
     
+            echo '<div class="row row-readonly row-header full-width" style="margin-bottom:5px;">';
+                foreach(Funding::FIELDS_FUNDINGRECEIPTLIST as $field) {
+                    if (isset($field['hideInHeading']) || $field['name'] == 'type') {
+                        continue;
+                    }
+                    echo '<span>' . ($field['options']['placeholder'] ?? '') . '</span>';
+                }
+            echo '</div>';
+
             foreach($funding->grouped_valid_receiptlists as $typeId => $fundingreceiptlists) {
                 echo '<div class="fundingreceiptlists flexbox full-width" style="gap:5px;">';
 
                     echo '<div class="full-width""><b>' . Fundingbudgetplan::TYPE_MAP[$typeId] . '</b></div>';
-
-                    echo '<div class="row row-readonly row-header full-width">';
-                        foreach(Funding::FIELDS_FUNDINGRECEIPTLIST as $field) {
-                            if (isset($field['hideInHeading']) || $field['name'] == 'type') {
-                                continue;
-                            }
-                            echo '<span>' . ($field['options']['placeholder'] ?? '') . '</span>';
-                        }
-                    echo '</div>';
 
                     foreach($fundingreceiptlists as $fundingreceiptlist) {
                         echo '<div class="row row-readonly full-width">';

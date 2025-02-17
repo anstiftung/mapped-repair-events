@@ -104,9 +104,6 @@ abstract class AppTcpdfService extends TCPDF
             $i = 0;
             foreach($data as $value) {
                 $style = '';
-                if ($i == 0) {
-                    $style = 'text-decoration:underline;margin-bottom:10px;';
-                }
                 if ($i % 2 == 1) {
                     $style .= 'background-color:#f0f0f0;';
                 }
