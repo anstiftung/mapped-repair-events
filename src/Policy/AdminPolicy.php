@@ -45,12 +45,6 @@ class AdminPolicy implements RequestPolicyInterface
                 return $identity->isAdmin() || $identity->isOrga();
             }
 
-            if (in_array($request->getParam('action'), [
-                'ajaxChangeAppObjectStatus',
-                'ajaxDeleteObject',
-            ])) {
-                return $identity->isAdmin();
-            }
         }
 
         return false;
