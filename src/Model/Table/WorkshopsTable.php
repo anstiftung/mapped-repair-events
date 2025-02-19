@@ -41,6 +41,7 @@ class WorkshopsTable extends AppTable
         $this->belongsTo('Provinces', [
             'foreignKey' => 'province_id',
         ]);
+
         $this->hasOne('WorkshopFundings', [
             'className' => 'Fundings',
             'foreignKey' => 'workshop_uid',

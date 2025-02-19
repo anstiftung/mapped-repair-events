@@ -415,6 +415,13 @@ class InternController extends AdminAppController
                 return null;
             }
         }
+        if ($objectType == 'workshops' && $statusType == 'status' && $value == APP_DELETED) {
+            $worknews = $this->getTableLocator()->get('Worknews');
+            $worknews->deleteAll([
+                'workshop_uid' => $uid,
+            ]);
+        }
+
         $entity = $this->{$objectClass}->patchEntity(
             $entity, [
                 $statusType => $value

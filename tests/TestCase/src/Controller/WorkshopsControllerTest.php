@@ -287,6 +287,35 @@ class WorkshopsControllerTest extends AppTestCase
         $workshopsTable = $this->getTableLocator()->get('Workshops');
         $workshops = $workshopsTable->get(2);
         $this->assertEquals(APP_DELETED, $workshops->status);
+
+        // get all worknews and check if they were deleted correctly
+        $worknewsTable = $this->getTableLocator()->get('Worknews');
+        $worknews = $worknewsTable->find()->all();
+        $this->assertEquals(1, count($worknews));
+    }
+
+    public function testSetWorkshopToOffline(): void
+    {
+        $this->loginAsAdmin();
+        $this->configRequest([
+            'headers' => [
+                'X_REQUESTED_WITH' => 'XMLHttpRequest',
+            ]
+        ]);
+        $this->post('/admin/intern/ajaxChangeAppObjectStatus', [
+            'id' => 2,
+            'object_type' => 'workshops',
+            'status_type' => 'status',
+            'value' => APP_OFF,
+        ]);
+        $workshopsTable = $this->getTableLocator()->get('Workshops');
+        $workshops = $workshopsTable->get(2);
+        $this->assertEquals(APP_OFF, $workshops->status);
+
+        // no worknews should be deleted
+        $worknewsTable = $this->getTableLocator()->get('Worknews');
+        $worknews = $worknewsTable->find()->all();
+        $this->assertEquals(3, count($worknews));
     }
 
 }
