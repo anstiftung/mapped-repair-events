@@ -95,8 +95,8 @@ body.fundings .upload-button-wrapper {
 body.fundings.edit div.admin.edit {
     padding: 20px;
 }
-#fundingForm fieldset:not(.fundinglist) div.input:not(.file):not(.checkbox),
-#fundingForm fieldset.fundinglist div.inner-wrapper div.input:not(.checkbox) {
+#fundingForm fieldset:not(.fundinglist) div.input:not(.file):not(.checkbox):not(.radio),
+#fundingForm fieldset.fundinglist div.inner-wrapper div.input:not(.checkbox):not(.radio) {
     display: grid;
     grid-template-columns: 165px auto 100px;
     grid-template-rows: auto auto;
@@ -106,6 +106,33 @@ body.fundings.edit div.admin.edit {
     margin-top: 1px;
     border-radius: 3px;
 }
+#fundingForm .flexbox.questions div.input label:first-of-type {
+    font-weight: bold;
+}
+#fundingForm .flexbox.questions div.input label:not(:first-of-type) {
+    position: relative;
+    margin-left: 45px;
+}
+#fundingForm .flexbox.questions div.input.radio label input {
+    position: absolute;
+    left: -30px;
+    top: -5px;
+}
+#fundingForm .flexbox.questions div.input {
+    margin-bottom: 20px;
+}
+#fundingForm .flexbox.questions div.input.radio {
+    padding: 10px 5px 5px 10px;
+}
+#fundingForm .flexbox.questions div.input.textarea {
+    grid-template-columns: auto ! important;
+    grid-template-rows: auto ! important;
+}
+#fundingForm .flexbox.questions div.input.textarea textarea {
+    grid-column: auto;
+    grid-row: auto;
+}
+
 #fundingForm fieldset.fundinglist div.inner-wrapper input {
     width: 20px ! important;
 }

@@ -19,6 +19,13 @@ class FundingusageproofsTable extends Table
     const DIFFERENCE_DECLARATION_MAX_LENGTH = 1000;
     const DIFFERENCE_DECLARATION_ERROR_MESSAGE = self::DIFFERENCE_DECLARATION_MIN_LENGTH . ' bis ' . self::DIFFERENCE_DECLARATION_MAX_LENGTH . ' Zeichen';
 
+    const QUESTION_TEXT_A_MIN_LENGTH = 50;
+    const QUESTION_TEXT_A_MAX_LENGTH = 500;
+    const QUESTION_TEXT_A_ERROR_MESSAGE = self::QUESTION_TEXT_A_MIN_LENGTH . ' bis ' . self::QUESTION_TEXT_A_MAX_LENGTH . ' Zeichen';
+
+    const QUESTION_TEXT_B_MAX_LENGTH = 500;
+    const QUESTION_TEXT_B_ERROR_MESSAGE = ' max. ' . self::QUESTION_TEXT_B_MAX_LENGTH . ' Zeichen';
+
     public function initialize(array $config): void
     {
         parent::initialize($config);

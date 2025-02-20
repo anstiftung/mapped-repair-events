@@ -25,6 +25,7 @@ trait FundingFieldsTrait {
     const FIELDS_FUNDINGRECEIPTLIST_LABEL = 'Belegliste';
     const FIELDS_USAGEPROOF_CHECKBOXES_LABEL = 'Bestätigungen';
     const FIELDS_FUNDINGRECEIPTLIST_CHECKBOXES_LABEL = 'Bestätigungen Belegliste';
+    const FIELDS_USAGEPROOF_QUESTIONS_LABEL = 'Mini-Fragebogen';
 
     const FIELDS_WORKSHOP = [
         ['name' => 'name', 'options' => ['label' => 'Name der Initiative']],
@@ -106,11 +107,30 @@ trait FundingFieldsTrait {
     const FIELDS_FUNDINGRECEIPTLIST_PAYBACK_CHECKBOX = [
         ['name' => 'payback_ok', 'options' => ['type' => 'checkbox', 'label' => 'Hiermit bestätige ich, den <b>Restbetrag von {RESTBETRAG} €</b> mit dem <b>Verwendungsnachweis UID: {UID}</b> innerhalb von 14 Tagen auf auf das Konto <b>{KONTONUMMER}</b> zurück zu überweisen', 'escape' => false]],
         ['name' => 'checkbox_a', 'options' => ['type' => 'checkbox', 'label' => 'Ja, die tatsächlich angefallenen Ausgaben weichen signifikant vom Kostenplan des eingereichten Förderantrags ab.', 'escape' => false]],
-        ['name' => 'difference_declaration', 'options' => ['label' =>  'Erklärung zu Abweichung der Belegliste' . '<br />' . FundingusageproofsTable::DIFFERENCE_DECLARATION_ERROR_MESSAGE, 'type' => 'textarea', 'rows' => 10, 'maxlength' => FundingusageproofsTable::DIFFERENCE_DECLARATION_MAX_LENGTH, 'minlength' => FundingusageproofsTable::DIFFERENCE_DECLARATION_MIN_LENGTH, 'class' => 'no-verify', 'escape' => false]],
+        ['name' => 'difference_declaration', 'options' => ['label' =>  'Erklärung zu Abweichung der Belegliste' . '<br />' . FundingusageproofsTable::DIFFERENCE_DECLARATION_ERROR_MESSAGE, 'type' => 'textarea', 'rows' => 10, 'maxlength' => FundingusageproofsTable::DIFFERENCE_DECLARATION_MAX_LENGTH, 'minlength' => FundingusageproofsTable::DIFFERENCE_DECLARATION_MIN_LENGTH, 'escape' => false]],
+    ];
+
+    const USAGEPROOF_QUESTION_OPTIONS = [
+        0 => 'trifft voll zu',
+        1 => 'trifft eher zu',
+        2 => 'trifft eher nicht zu',
+        3 => 'trifft überhaupt nicht zu',
+        4 => 'keine Angabe',
+    ];
+
+    const FIELDS_USAGEPROOF_QUESTIONS = [
+        ['name' => 'question_radio_a', 'options' => ['type' => 'radio', 'options' => self::USAGEPROOF_QUESTION_OPTIONS, 'label' => 'Durch die Förderung können/konnten wir Anschaffungen tätigen, die unser Spektrum an Reparier-Angeboten erweitern<br /><br />', 'escape' => false]],
+        ['name' => 'question_radio_b', 'options' => ['type' => 'radio', 'options' => self::USAGEPROOF_QUESTION_OPTIONS, 'label' => 'Durch die Förderung können/konnten wir Fähigkeiten und Kompetenzen erwerben oder ausbauen, die unser Spektrum an Reparier-Angeboten erweitern<br /><br />', 'escape' => false]],
+        ['name' => 'question_radio_c', 'options' => ['type' => 'radio', 'options' => self::USAGEPROOF_QUESTION_OPTIONS, 'label' => 'Durch die Förderung können/konnten wir mehr Veranstaltungen verwirklichen<br /><br />', 'escape' => false]],
+        ['name' => 'question_radio_d', 'options' => ['type' => 'radio', 'options' => self::USAGEPROOF_QUESTION_OPTIONS, 'label' => 'Es kommen seitdem mehr Menschen zu den Veranstaltungen<br /><br />', 'escape' => false]],
+        ['name' => 'question_radio_e', 'options' => ['type' => 'radio', 'options' => self::USAGEPROOF_QUESTION_OPTIONS, 'label' => 'Die Förderung trägt dazu bei, unsere Reparatur-Initiative/Selbsthilfewerkstatt zu sichern/zu verstetigen<br /><br />', 'escape' => false]],
+        ['name' => 'question_text_a', 'options' => ['label' =>  'Welche Reparaturen können jetzt begleitet werden, die früher nicht möglich waren, z.B. nach Qualifikationen, Fortbildungen oder durch neue Geräte? Nenne bitte  Beispiele und ordne sie nach Fachbereichen (wie Tischlerei, Elektronik, Schneiderhandwerk, Leder oder IT) oder nach speziellen Tätigkeiten<br /><br />' . FundingusageproofsTable::QUESTION_TEXT_A_ERROR_MESSAGE, 'type' => 'textarea', 'rows' => 10, 'maxlength' => FundingusageproofsTable::QUESTION_TEXT_A_MAX_LENGTH, 'minlength' => FundingusageproofsTable::QUESTION_TEXT_A_MIN_LENGTH, 'escape' => false]],
+        ['name' => 'question_radio_f', 'options' => ['type' => 'radio', 'options' => self::USAGEPROOF_QUESTION_OPTIONS, 'label' => 'Wie zufrieden wart ihr mit der Durchführung des Förderprogramms?<br /><br />', 'escape' => false]],
+        ['name' => 'question_text_b', 'options' => ['label' =>  'Wenn du uns noch etwas mitteilen möchtest...<br />' . FundingusageproofsTable::QUESTION_TEXT_B_ERROR_MESSAGE, 'type' => 'textarea', 'rows' => 10, 'maxlength' => FundingusageproofsTable::QUESTION_TEXT_B_MAX_LENGTH, 'escape' => false]],
     ];
 
     const FIELDS_USAGEPROOF_CHECKBOXES = [
-        ['name' => 'checkbox_b', 'options' => ['type' => 'checkbox', 'label' => 'Hiermit bestätige ich die Richtigkeit der oben gemachten Angaben.', 'escape' => false]],
+        ['name' => 'checkbox_b', 'options' => ['type' => 'checkbox', 'label' => '', 'escape' => false]],
         ['name' => 'checkbox_c', 'options' => ['type' => 'checkbox', 'label' => 'Hiermit bestätige ich, dass alle Belege als Papierdokumente vorhanden sind und ihre Nummerierung der digitalen Liste entspricht, sowie auf Anfrage vollständig und zeitnah vorgelegt werden.', 'escape' => false]],
     ];
 

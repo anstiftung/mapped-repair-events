@@ -46,5 +46,16 @@ class Verwendungsnachweis1 extends AbstractMigration
         $sql = "ALTER TABLE `fundings` ADD `usageproof_submit_date` DATETIME NULL DEFAULT NULL AFTER `money_transfer_date`;";
         $this->execute($sql);
 
+        $sql = "ALTER TABLE `fundingusageproofs`
+            ADD `question_radio_a` int UNSIGNED DEFAULT NULL AFTER `checkbox_c`,
+            ADD `question_radio_b` int UNSIGNED DEFAULT NULL AFTER `question_radio_a`,
+            ADD `question_radio_c` int UNSIGNED DEFAULT NULL AFTER `question_radio_b`,
+            ADD `question_radio_d` int UNSIGNED DEFAULT NULL AFTER `question_radio_c`,
+            ADD `question_radio_e` int UNSIGNED DEFAULT NULL AFTER `question_radio_d`,
+            ADD `question_radio_f` int UNSIGNED DEFAULT NULL AFTER `question_radio_e`,
+            ADD `question_text_a` text AFTER `question_radio_f`,
+            ADD `question_text_b` text AFTER `question_text_a`;
+            ";
+
     }
 }
