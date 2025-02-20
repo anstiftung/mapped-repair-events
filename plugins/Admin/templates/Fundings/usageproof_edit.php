@@ -86,6 +86,10 @@ $this->element('addScript', ['script' =>
 
         echo '</fieldset>';
 
+        echo '<div class="flexbox questions">';
+            echo $this->element('funding/blocks/usageproof/blockQuestions', ['funding' => $funding, 'disabled' => true]);
+        echo '</div>';
+
         echo $this->element('funding/blocks/usageproof/blockCheckboxes', ['funding' => $funding, 'disabled' => true]);
 
 

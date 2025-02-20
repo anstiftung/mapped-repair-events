@@ -48,6 +48,21 @@ class FundingusageproofsTable extends Table
             self::MAIN_DESCRIPTION_ERROR_MESSAGE,
         );
 
+        $validator->lengthBetween(
+            'question_text_a',
+            [
+                self::QUESTION_TEXT_A_MIN_LENGTH,
+                self::QUESTION_TEXT_A_MAX_LENGTH,
+            ],
+            self::QUESTION_TEXT_A_ERROR_MESSAGE,
+        );
+        
+        $validator->allowEmptyString('question_text_b');
+        $validator->maxLength(
+            'question_text_b',
+            self::QUESTION_TEXT_B_MAX_LENGTH,
+            self::QUESTION_TEXT_A_ERROR_MESSAGE,
+        );
 
         $validator
             ->add('difference_declaration', 'valid', [

@@ -226,6 +226,7 @@ class Funding extends Entity
     public function _getUsageproofIsSubmittable(): bool {
         return $this->usageproof_descriptions_status == self::STATUS_DATA_OK && 
             $this->receiptlist_status == self::STATUS_DATA_OK &&
+            $this->usageproof_questions_status == self::STATUS_QUESTIONS_OK &&
             $this->usageproof_checkboxes_status == self::STATUS_CHECKBOXES_OK;
     }
 
@@ -238,6 +239,61 @@ class Funding extends Entity
         return $this->fundingusageproof_id !== null;
     }
 
+    public function _getUsageproofQuestionsStatus(): int
+    {
+
+        if (!isset($this->fundingusageproof)) {
+            return self::STATUS_QUESTIONS_MISSING;
+        }
+
+        $radiobuttons = array_map(function($radiobutton) {
+            if ($radiobutton['options']['type'] == 'radio') {
+                return $radiobutton['name'];
+            }
+            return null;
+        }, self::FIELDS_USAGEPROOF_QUESTIONS);
+        $radiobuttons = array_filter($radiobuttons);
+        $radiobuttonsCount = count($radiobuttons);
+
+        $missingRadiobuttonsCount = 0;
+        foreach($radiobuttons as $radiobutton) {
+            if ($this->fundingusageproof->$radiobutton === null) {
+                $missingRadiobuttonsCount++;
+            }
+        }
+
+        if ($missingRadiobuttonsCount == $radiobuttonsCount && $this->fundingusageproof->question_text_a == '' && $this->fundingusageproof->question_text_b == '') {
+            return self::STATUS_QUESTIONS_MISSING;
+        }
+
+        $lengthTextA = mb_strlen($this->fundingusageproof->question_text_a ?? '');
+        if ($missingRadiobuttonsCount > 0 || ($lengthTextA > 0 && $lengthTextA < FundingusageproofsTable::QUESTION_TEXT_A_MIN_LENGTH)) {
+            return self::STATUS_QUESTIONS_PENDING;
+        }
+
+        return self::STATUS_QUESTIONS_OK;
+
+    }
+
+    public function _getUsageproofQuestionsStatusCssClass(): string
+    {
+        if ($this->usageproof_questions_status == self::STATUS_QUESTIONS_MISSING) {
+            return 'is-missing';
+        }
+        if ($this->usageproof_questions_status == self::STATUS_QUESTIONS_PENDING) {
+            return 'is-pending';
+        }
+        if ($this->usageproof_questions_status == self::STATUS_QUESTIONS_OK) {
+            return 'is-verified';
+        }
+        return '';
+    }
+
+    public function _getUsageproofQuestionsStatusHumanReadable(): string
+    {
+        return self::STATUS_MAPPING[$this->usageproof_questions_status];
+    }
+    
     public function _getUsageproofCheckboxesStatus(): int
     {
 

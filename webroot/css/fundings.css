@@ -106,9 +106,6 @@ body.fundings.edit div.admin.edit {
     margin-top: 1px;
     border-radius: 3px;
 }
-#fundingForm .flexbox.questions div.input label:first-of-type {
-    font-weight: bold;
-}
 #fundingForm .flexbox.questions div.input label:not(:first-of-type) {
     position: relative;
     margin-left: 45px;
@@ -128,7 +125,8 @@ body.fundings.edit div.admin.edit {
     grid-template-columns: auto ! important;
     grid-template-rows: auto ! important;
 }
-#fundingForm .flexbox.questions div.input.textarea textarea {
+#fundingForm .flexbox.questions div.input.textarea textarea,
+#fundingForm .flexbox.questions div.input .error-message {
     grid-column: auto;
     grid-row: auto;
 }

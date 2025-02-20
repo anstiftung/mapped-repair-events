@@ -20,6 +20,9 @@ trait FundingStatusTrait {
     const STATUS_DATA_MISSING = 110;
     const STATUS_RECEIPTLIST_DATA_MISSING = 120;
     const STATUS_RECEIPTLIST_DATA_PENDING = 130;
+    const STATUS_QUESTIONS_MISSING = 140;
+    const STATUS_QUESTIONS_PENDING = 150;
+    const STATUS_QUESTIONS_OK = 160;
 
     const STATUS_MAPPING_FOR_USAGEPROOF = [
         self::STATUS_DATA_MISSING => 'wurde noch nicht eingereicht',
@@ -53,6 +56,9 @@ trait FundingStatusTrait {
         self::STATUS_DESCRIPTIONS_MISSING => 'Der Sachbericht wurde noch nicht erstellt',
         self::STATUS_RECEIPTLIST_DATA_MISSING => 'Die Belegliste wurde noch nicht erstellt',
         self::STATUS_RECEIPTLIST_DATA_PENDING => 'Die Belegliste ist unvollständig',
+        self::STATUS_QUESTIONS_MISSING => 'Der Mini-Fragebogen wurde noch nicht beantwortet',
+        self::STATUS_QUESTIONS_PENDING => 'Der Mini-Fragebogen ist noch nicht vollständig beantwortet',
+        self::STATUS_QUESTIONS_OK => 'Der Mini-Fragebogen wurde vollständig beantwortet',
     ];
     
 }
