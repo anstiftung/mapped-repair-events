@@ -399,6 +399,7 @@ class FundingsController extends AdminAppController
             'FundinguploadsActivityProofs',
             'FundinguploadsFreistellungsbescheids',
             'FundinguploadsZuwendungsbestaetigungs',
+            'FundinguploadsPrMaterials',
             'Fundingbudgetplans',
             'Fundingusageproofs',
             'Fundingreceiptlists',

@@ -22,6 +22,7 @@ echo $this->element('jqueryTabsWithoutAjax', [
             echo $this->Form->create($funding, [
                 'novalidate' => 'novalidate',
                 'url' => $this->Html->urlFundingsUsageproof($funding->uid),
+                'type' => 'file',
                 'id' => 'fundingForm',
             ]);
 
@@ -67,6 +68,8 @@ echo $this->element('jqueryTabsWithoutAjax', [
                 echo '<div class="flexbox questions">';
                     echo $this->element('funding/blocks/usageproof/blockQuestions', ['funding' => $funding, 'disabled' => false]);
                 echo '</div>';
+
+                echo $this->element('funding/blocks/usageproof/blockPrMaterial', ['funding' => $funding]);
 
                 echo '<div class="flexbox">';
                     echo $this->element('funding/blocks/usageproof/blockCheckboxes', ['funding' => $funding, 'disabled' => false]);

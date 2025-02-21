@@ -60,6 +60,14 @@ class FundingsTable extends AppTable
             ],
             'dependent' => true,
         ]);
+        $this->hasMany('FundinguploadsPrMaterials', [
+            'className' => 'Fundinguploads',
+            'foreignKey' => 'funding_uid',
+            'conditions' => [
+                'FundinguploadsPrMaterials.type' => Fundingupload::TYPE_PR_MATERIAL,
+            ],
+            'dependent' => true,
+        ]);
         $this->belongsTo('Fundingusageproofs', [
             'foreignKey' => 'fundingusageproof_id',
         ]);
@@ -105,6 +113,15 @@ class FundingsTable extends AppTable
             },
         ]);
 
+        $validator->add('fundinguploads_pr_materials', 'fileCount', [
+            'rule' => function ($value, $context) {
+                if (count($value) > 5) {
+                    return 'Insgesamt sind maximal 5 Dateien erlaubt.';
+                }
+                return true;
+            },
+        ]);
+
         $validator->add('files_fundinguploads_activity_proofs', 'fileTypeAndSize', [
             'rule' => [$this, 'validateFileTypeAndSize'],
         ]);
@@ -112,6 +129,9 @@ class FundingsTable extends AppTable
             'rule' => [$this, 'validateFileTypeAndSize'],
         ]);
         $validator->add('files_fundinguploads_zuwendungsbestaetigungs', 'fileTypeAndSize', [
+            'rule' => [$this, 'validateFileTypeAndSize'],
+        ]);
+        $validator->add('files_fundinguploads_pr_materials', 'fileTypeAndSize', [
             'rule' => [$this, 'validateFileTypeAndSize'],
         ]);
         return $validator;
@@ -158,6 +178,7 @@ class FundingsTable extends AppTable
             'FundinguploadsActivityProofs',
             'FundinguploadsFreistellungsbescheids',
             'FundinguploadsZuwendungsbestaetigungs',
+            'FundinguploadsPrMaterials',
             'Fundingusageproofs',
             'Fundingreceiptlists',
         ])->where([
@@ -198,7 +219,12 @@ class FundingsTable extends AppTable
 
     public function findWithUsageproofAssociations($fundingUid): Funding
     {
-        $associations = ['Fundingusageproofs', 'Fundingreceiptlists', 'Fundingbudgetplans'] ;
+        $associations = [
+            'Fundingusageproofs',
+            'Fundingreceiptlists',
+            'Fundingbudgetplans',
+            'FundinguploadsPrMaterials',
+        ];
 
         $funding = $this->find()->where([
             $this->aliasField('uid') => $fundingUid,

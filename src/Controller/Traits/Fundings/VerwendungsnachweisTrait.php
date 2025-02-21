@@ -8,6 +8,7 @@ use Cake\Core\Configure;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Http\Response;
 use App\Model\Entity\Funding;
+use App\Model\Entity\Fundingupload;
 
 trait VerwendungsnachweisTrait {
 
@@ -45,13 +46,23 @@ trait VerwendungsnachweisTrait {
         }
 
         if (!empty($this->request->getData())) {
-            $associations = ['Fundingusageproofs', 'Fundingreceiptlists'];
+            $associations = ['Fundingusageproofs', 'Fundingreceiptlists', 'FundinguploadsPrMaterials'];
 
             $associationsWithoutValidation = $this->removeValidationFromAssociations($associations);
 
             if ($this->request->getData('Fundings.fundingusageproof.checkbox_a') == 0) {
                 $this->request = $this->request->withData('Fundings.fundingusageproof.difference_declaration', '');
             }
+
+            // START handle uploads
+            /*
+            $patchedEntity = $this->patchFunding($funding, $associations);
+            $newFundinguploads = $this->handleNewFundinguploads($funding, $associations, $patchedEntity, Fundingupload::TYPE_MAP_STEP_3);
+            $this->handleDeleteFundinguploads($funding, $associations, $patchedEntity, $newFundinguploads, Fundingupload::TYPE_MAP_STEP_3);
+            $patchedEntity = $this->handleUpdateNewFundinguploadsWithIds($funding, $associations, $patchedEntity, Fundingupload::TYPE_MAP_STEP_2);
+            $fundingsTable->save($patchedEntity);
+            */
+            // END handle uploads
 
             $patchedEntity = $this->patchFunding($funding, $associationsWithoutValidation);
             $patchedEntity->modified = DateTime::now();
@@ -60,6 +71,7 @@ trait VerwendungsnachweisTrait {
 
             $fundingusageproofsTable = $this->getTableLocator()->get('Fundingusageproofs');
             $fundingusageproofsTable->save($patchedEntity->fundingusageproof);
+
 
             $fundingreceiptlistsTable = $this->getTableLocator()->get('Fundingreceiptlists');
 
