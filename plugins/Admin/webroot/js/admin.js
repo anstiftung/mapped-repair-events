@@ -31,9 +31,7 @@ MappedRepairEvents.Admin = {
             deleteMethod,
             {
                 id: id,
-                status_type: 'status',
                 object_type: objectType,
-                value: -1,
             },
             {
                 onOk : function(data) {

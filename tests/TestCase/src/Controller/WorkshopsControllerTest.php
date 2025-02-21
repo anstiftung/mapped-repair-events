@@ -270,5 +270,27 @@ class WorkshopsControllerTest extends AppTestCase
         $this->assertResponseCode(400);
     }
 
+    public function testDeleteWorkshop(): void
+    {
+        $this->loginAsAdmin();
+        $this->configRequest([
+            'headers' => [
+                'X_REQUESTED_WITH' => 'XMLHttpRequest',
+            ]
+        ]);
+        $this->post('/admin/intern/ajaxSetObjectStatusToDeleted', [
+            'id' => 2,
+            'object_type' => 'workshops',
+        ]);
+        $workshopsTable = $this->getTableLocator()->get('Workshops');
+        $workshops = $workshopsTable->get(2);
+        $this->assertEquals(APP_DELETED, $workshops->status);
+
+        // get all worknews and check if they were deleted correctly
+        $worknewsTable = $this->getTableLocator()->get('Worknews');
+        $worknews = $worknewsTable->find()->all();
+        $this->assertEquals(1, count($worknews));
+    }
+
 }
 ?>

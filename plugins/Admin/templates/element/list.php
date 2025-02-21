@@ -32,7 +32,7 @@ foreach($fields as $field) {
 if ($showDeleteLink) {
     if (!isset($deleteMethod)) {
         if ($hasUid) {
-            $deleteMethod = '/admin/intern/ajaxChangeAppObjectStatus';
+            $deleteMethod = '/admin/intern/ajaxSetObjectStatusToDeleted';
         } else {
             $deleteMethod = '/admin/intern/ajaxDeleteObject';
         }

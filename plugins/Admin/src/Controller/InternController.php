@@ -385,13 +385,11 @@ class InternController extends AdminAppController
         $this->viewBuilder()->setOption('serialize', ['status', 'msg']);
 
     }    
-    public function ajaxChangeAppObjectStatus(): null
+    public function ajaxSetObjectStatusToDeleted(): null
     {
         $this->request = $this->request->withParam('_ext', 'json');
 
         $uid = $this->request->getData('id');
-        $value = $this->request->getData('value');
-        $statusType = $this->request->getData('status_type');
 
         $objectType = $this->Root->getType($uid);
         $objectClass = Inflector::classify($objectType);
@@ -415,15 +413,11 @@ class InternController extends AdminAppController
                 return null;
             }
         }
-        $entity = $this->{$objectClass}->patchEntity(
-            $entity, [
-                $statusType => $value
-            ],
-            [
-                'validate' => false,
-            ]
-        );
+        if ($objectType == 'workshops') {
+            $this->handleWorkshopBeforeDelete($uid);
+        }
 
+        $entity->status = APP_DELETED;
         if ($this->{$objectClass}->save($entity)) {
             $this->set([
                 'status' => 0,
@@ -440,6 +434,13 @@ class InternController extends AdminAppController
             $this->viewBuilder()->setOption('serialize', ['status', 'msg']);
             return null;
         }
+    }
+    private function handleWorkshopBeforeDelete($uid): void
+    {
+        $worknews = $this->getTableLocator()->get('Worknews');
+        $worknews->deleteAll([
+            'workshop_uid' => $uid,
+        ]);
     }
 
     public function ajaxCancelAdminEditPage(): null

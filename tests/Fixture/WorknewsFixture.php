@@ -21,6 +21,12 @@ class WorknewsFixture extends AppFixture
             'unsub' => '200f32888238b687f4b2232c3e124fd8',
             'created' => '2021-08-01 00:00:00',
         ],
+        [
+            'workshop_uid' => 100, // sic! does not exist
+            'email' => 'worknews-test@mailinator.com',
+            'confirm' => Worknews::STATUS_OK,
+        ],
+
     ];
 
 }

@@ -9,47 +9,47 @@ class RootsFixture extends AppFixture
     public array $records = [
         [
             'uid' => 1,
-            'type' => 'users',
+            'object_type' => 'users'
         ],
         [
             'uid' => 2,
-            'type' => 'workshops',
+            'object_type' => 'workshops'
         ],
         [
             'uid' => 3,
-            'type' => 'users',
+            'object_type' => 'users'
         ],
         [
             'uid' => 4,
-            'type' => 'posts',
+            'object_type' => 'posts'
         ],
         [
             'uid' => 5,
-            'type' => 'pages',
+            'object_type' => 'pages'
         ],
         [
             'uid' => 6,
-            'type' => 'events',
+            'object_type' => 'events'
         ],
         [
             'uid' => 7,
-            'type' => 'info_sheets',
+            'object_type' => 'info_sheets',
         ],
         [
             'uid' => 8,
-            'type' => 'users',
+            'object_type' => 'users',
         ],
         [
             'uid' => 9,
-            'type' => 'events',
+            'object_type' => 'events',
         ],
         [
             'uid' => 10,
-            'type' => 'fundings',
+            'object_type' => 'fundings',
         ],
         [
             'uid' => 11,
-            'type' => 'workshops',
+            'object_type' => 'workshops',
         ],
     ];
 }

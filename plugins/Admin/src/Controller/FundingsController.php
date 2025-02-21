@@ -69,7 +69,7 @@ class FundingsController extends AdminAppController
             conditions: [
                 $fundingsTable->aliasField('submit_date IS NOT NULL'),
                 $fundingsTable->aliasField('money_transfer_date IS NULL'),
-                $fundingsTable->aliasField('owner NOT IN') => [1824,1825],
+                $fundingsTable->aliasField('owner NOT IN') => [1824,1825,4722], // exclude admins
             ],
             contain: [
                 'OwnerUsers',
