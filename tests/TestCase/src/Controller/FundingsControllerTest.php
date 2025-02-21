@@ -607,11 +607,22 @@ class FundingsControllerTest extends AppTestCase
         $this->assertEquals($testFundingusageproofIncomplete['difference_declaration'], $funding->fundingusageproof->difference_declaration);
         $this->assertEquals(Funding::STATUS_DESCRIPTIONS_PENDING, $funding->usageproof_descriptions_status);
         $this->assertEquals(Funding::STATUS_RECEIPTLIST_DATA_MISSING, $funding->receiptlist_status);
+        $this->assertEquals(false, $funding->usageproof_is_submittable);
 
         $testFundingusageproofComplete = [
             'main_description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum.',
             'difference_declaration' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum.',
             'checkbox_a' => 1,
+            'checkbox_b' => 1,
+            'checkbox_c' => 1,
+            'question_radio_a' => 1,
+            'question_radio_b' => 1,
+            'question_radio_c' => 1,
+            'question_radio_d' => 1,
+            'question_radio_e' => 1,
+            'question_radio_f' => 1,
+            'question_text_a' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum.',
+            'question_text_b' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum.',
         ];
 
         $newFundingreceiptlistDescriptionOk = 'Fundingreceiptlist Description Ok';
@@ -671,6 +682,9 @@ class FundingsControllerTest extends AppTestCase
         $this->assertEquals($testFundingusageproofComplete['difference_declaration'], $funding->fundingusageproof->difference_declaration);
         $this->assertEquals(Funding::STATUS_DATA_OK, $funding->usageproof_descriptions_status);
         $this->assertEquals(Funding::STATUS_DATA_OK, $funding->receiptlist_status);
+        $this->assertEquals(Funding::STATUS_CHECKBOXES_OK, $funding->usageproof_checkboxes_status);
+        $this->assertEquals(Funding::STATUS_QUESTIONS_OK, $funding->usageproof_questions_status);
+        $this->assertEquals(true, $funding->usageproof_is_submittable);
         $this->assertEquals(1, count($funding->fundingreceiptlists));
 
         $this->assertEquals($validFundingreceiptlist['description'], $funding->fundingreceiptlists[0]->description);

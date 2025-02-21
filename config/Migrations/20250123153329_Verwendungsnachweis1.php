@@ -56,6 +56,7 @@ class Verwendungsnachweis1 extends AbstractMigration
             ADD `question_text_a` text AFTER `question_radio_f`,
             ADD `question_text_b` text AFTER `question_text_a`;
             ";
+        $this->execute($sql);
 
     }
 }
