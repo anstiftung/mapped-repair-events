@@ -143,7 +143,7 @@ $pdf->Ln(3);
 $pdf->SetFontSizeSmall();
 $html = '';
 foreach($checkboxes as $checkbox) {
-    if ($funding->fundingdata[$checkbox['name']] == 1) {
+    if ($funding->fundingusageproof[$checkbox['name']] == 1) {
         $html .= 'Bestätigt';
     } else {
         $html .= 'Nicht bestätigt';

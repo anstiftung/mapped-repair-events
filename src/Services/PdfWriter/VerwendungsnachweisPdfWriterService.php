@@ -41,7 +41,7 @@ class VerwendungsnachweisPdfWriterService extends PdfWriterService
         
         $this->setData([
             'sachbericht' => $this->getPreparedFields(Funding::FIELDS_FUNDINGUSAGEPROOF, $funding->fundingusageproof),
-            'checkboxes' => $this->getPreparedFields(Funding::FIELDS_USAGEPROOF_CHECKBOXES, $funding->fundingdata),
+            'checkboxes' => $this->getPreparedFields(Funding::FIELDS_USAGEPROOF_CHECKBOXES, $funding->fundingusageproof),
             'timestamp' => $timestamp,
             'funding' => $funding,
         ]);
