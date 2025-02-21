@@ -38,10 +38,15 @@ class AdminPolicy implements RequestPolicyInterface
             }
 
             if (in_array($request->getParam('action'), [
-                'ajaxChangeAppObjectStatus',
+                'ajaxSetObjectStatusToDeleted',
                 'ajaxDeleteObject',
+                ])) {
+                return $identity->isAdmin();
+            }
+
+            if (in_array($request->getParam('action'), [
                 'ajaxDeleteFunding',
-            ])) {
+                ])) {
                 return $identity->isAdmin() || $identity->isOrga();
             }
 
