@@ -396,7 +396,7 @@ class Funding extends Entity
         }
 
         $differenceDeclarationLength = mb_strlen($this->fundingusageproof->difference_declaration ?? '');
-        if ($this->fundingusageproof->checkbox_a == 1 && (
+        if (!empty($this->fundingusageproof) && $this->fundingusageproof->checkbox_a == 1 && (
             $differenceDeclarationLength < FundingusageproofsTable::DIFFERENCE_DECLARATION_MIN_LENGTH ||
             $differenceDeclarationLength > FundingusageproofsTable::DIFFERENCE_DECLARATION_MAX_LENGTH)
         ) {
