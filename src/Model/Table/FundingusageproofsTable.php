@@ -23,7 +23,7 @@ class FundingusageproofsTable extends Table
     const QUESTION_TEXT_A_MAX_LENGTH = 500;
     const QUESTION_TEXT_A_ERROR_MESSAGE = self::QUESTION_TEXT_A_MIN_LENGTH . ' bis ' . self::QUESTION_TEXT_A_MAX_LENGTH . ' Zeichen';
 
-    const QUESTION_TEXT_B_MAX_LENGTH = 500;
+    const QUESTION_TEXT_B_MAX_LENGTH = 1500;
     const QUESTION_TEXT_B_ERROR_MESSAGE = ' max. ' . self::QUESTION_TEXT_B_MAX_LENGTH . ' Zeichen';
 
     public function initialize(array $config): void
