@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 use App\Model\Entity\Fundingupload;
 
-echo '<fieldset>';
+echo '<fieldset class="fundinguploads">';
 
     echo '<legend>PR-Material hochladen (optional)</legend>';
 

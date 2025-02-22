@@ -115,6 +115,10 @@ body.fundings.edit div.admin.edit {
     left: -30px;
     top: -5px;
 }
+#fundingForm fieldset.fundinguploads div.input {
+    padding-bottom: 0 ! important;
+    margin-bottom: -15px ! important;
+}
 #fundingForm .flexbox.questions div.input {
     margin-bottom: 20px;
 }
