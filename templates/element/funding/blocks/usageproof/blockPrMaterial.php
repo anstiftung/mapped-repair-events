@@ -7,7 +7,7 @@ echo '<fieldset>';
 
     echo '<legend>PR-Material hochladen (optional)</legend>';
 
-    echo '<div style="margin-bottom:10px;padding:10px;">';
+    echo '<div style="padding:10px;">';
         echo '<p>';
             echo 'Hier kannst du zusätzliches PR-Material hochladen. Maximal fünf Dateien können hochgeladen werden.';
         echo '</p>';

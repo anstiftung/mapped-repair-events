@@ -54,16 +54,6 @@ trait VerwendungsnachweisTrait {
                 $this->request = $this->request->withData('Fundings.fundingusageproof.difference_declaration', '');
             }
 
-            // START handle uploads
-            /*
-            $patchedEntity = $this->patchFunding($funding, $associations);
-            $newFundinguploads = $this->handleNewFundinguploads($funding, $associations, $patchedEntity, Fundingupload::TYPE_MAP_STEP_3);
-            $this->handleDeleteFundinguploads($funding, $associations, $patchedEntity, $newFundinguploads, Fundingupload::TYPE_MAP_STEP_3);
-            $patchedEntity = $this->handleUpdateNewFundinguploadsWithIds($funding, $associations, $patchedEntity, Fundingupload::TYPE_MAP_STEP_2);
-            $fundingsTable->save($patchedEntity);
-            */
-            // END handle uploads
-
             $patchedEntity = $this->patchFunding($funding, $associationsWithoutValidation);
             $patchedEntity->modified = DateTime::now();
             $patchedEntity->usageproof_status = Funding::STATUS_PENDING;
@@ -71,7 +61,6 @@ trait VerwendungsnachweisTrait {
 
             $fundingusageproofsTable = $this->getTableLocator()->get('Fundingusageproofs');
             $fundingusageproofsTable->save($patchedEntity->fundingusageproof);
-
 
             $fundingreceiptlistsTable = $this->getTableLocator()->get('Fundingreceiptlists');
 
@@ -109,6 +98,14 @@ trait VerwendungsnachweisTrait {
                 $this->AppFlash->setFlashMessage(join('<br />', $flashMessages));
                 return $this->redirect(Configure::read('AppConfig.htmlHelper')->urlFundingsUsageproof($funding->uid));
             }
+
+            // START uploads
+            $patchedEntity = $this->patchFunding($funding, $associations);
+            $newFundinguploads = $this->handleNewFundinguploads($funding, $associations, $patchedEntity, Fundingupload::TYPE_MAP_STEP_3);
+            $this->handleDeleteFundinguploads($funding, $associations, $patchedEntity, $newFundinguploads, Fundingupload::TYPE_MAP_STEP_3);
+            $fundingsTable->save($patchedEntity, ['associated' => ['FundinguploadsPrMaterials']]);
+            $patchedEntity = $this->handleUpdateNewFundinguploadsWithIds($funding, $associations, $patchedEntity, Fundingupload::TYPE_MAP_STEP_3);
+            // END uploads
 
             $this->AppFlash->setFlashMessage(join('<br />', $flashMessages));
             $funding = $this->patchFunding($funding, $associations);
