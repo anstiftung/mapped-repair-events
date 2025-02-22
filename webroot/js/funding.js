@@ -1,5 +1,13 @@
 MappedRepairEvents.Funding = {
 
+    useDisabledRadioButtonsWorkaround: () => {
+        document.querySelector('form').addEventListener('submit', function() {
+            document.querySelectorAll('input[type="radio"][disabled]').forEach(el => {
+                el.removeAttribute('disabled');
+            });
+        });
+    },
+
     bindSubmitUsageproofButton: (uid) => {
         $('#submit-usageproof-button-' + uid).on('click', function() {
             $.prompt('Möchtest du den Verwendungsnachweis wirklich einreichen?',
