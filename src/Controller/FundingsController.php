@@ -10,6 +10,7 @@ use App\Model\Entity\Fundingupload;
 use Cake\Http\Exception\NotFoundException;
 use App\Controller\Traits\Fundings\EditTrait;
 use App\Controller\Traits\Fundings\IndexTrait;
+use App\Controller\Traits\Fundings\UploadsTrait;
 use App\Controller\Traits\Fundings\VerwendungsnachweisTrait;
 use Cake\I18n\DateTime;
 use App\Services\PdfWriter\FoerderbewilligungPdfWriterService;
@@ -23,6 +24,7 @@ class FundingsController extends AppController
 
     use EditTrait;
     use IndexTrait;
+    use UploadsTrait;
     use VerwendungsnachweisTrait;
 
     private function getBasicErrorMessages($funding): array
