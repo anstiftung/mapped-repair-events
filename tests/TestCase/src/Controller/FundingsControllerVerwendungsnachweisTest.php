@@ -15,6 +15,7 @@ use App\Test\TestCase\Traits\QueueTrait;
 use Cake\TestSuite\EmailTrait;
 use App\Services\PdfWriter\VerwendungsnachweisPdfWriterService;
 use App\Services\FolderService;
+use Cake\TestSuite\TestEmailTransport;
 use Laminas\Diactoros\UploadedFile;
 
 class FundingsControllerVerwendungsnachweisTest extends AppTestCase
@@ -268,7 +269,35 @@ class FundingsControllerVerwendungsnachweisTest extends AppTestCase
         $this->assertFlashMessage('Der Verwendungsnachweis wurde bereits eingereicht und kann nicht mehr bearbeitet werden.');
         $this->assertRedirect(Configure::read('AppConfig.htmlHelper')->urlFundings());
 
-        // 6) VERIFY and trigger email with pdf
+        // 6) REJECT by admin
+        $this->loginAsAdmin();
+        $this->post('/admin/fundings/usageproofEdit/' . $fundingUid, [
+            'referer' => '/',
+            'Fundings' => [
+                'usageproof_status' => Funding::STATUS_REJECTED_BY_ADMIN,
+            ],
+        ]);
+
+        $this->runAndAssertQueue();
+        $this->assertMailCount(1);
+        $this->assertMailSentToAt(0, $funding->owner_user->email);
+        $this->assertMailSubjectContainsAt(0, 'Der Status deines Verwendungsnachweises wurde geändert');
+
+        // 7) submit again
+        $this->loginAsOrga();
+        $this->post($route, [
+            'referer' => '/',
+            'submit_usageproof' => 1,
+            'Fundings' => [
+                'fundingusageproof' => $testFundingusageproofComplete,
+                'fundingreceiptlists' => [
+                    $validFundingreceiptlist,
+                ],
+            ],
+        ]);
+        $funding = $fundingsTable->getUnprivatizedFundingWithAllAssociations($fundingUid);
+
+        // 6) VERIFY by admin and trigger email with pdf
         $this->loginAsAdmin();
         $this->post('/admin/fundings/usageproofEdit/' . $fundingUid, [
             'referer' => '/',
@@ -281,7 +310,9 @@ class FundingsControllerVerwendungsnachweisTest extends AppTestCase
         $verwendungsnachweisPdfFilename = $verwendungsnachweisPdfWriterService->getFilenameCustom($funding, $funding->usageproof_submit_date);
         $this->assertFileExists($verwendungsnachweisPdfWriterService->getUploadPath($fundingUid) . $verwendungsnachweisPdfFilename);
 
+        TestEmailTransport::clearMessages();
         $this->runAndAssertQueue();
+
         $this->assertMailCount(1);
         $this->assertMailSentToAt(0, $funding->owner_user->email);
         $this->assertMailSentToAt(0, $funding->fundingsupporter->contact_email);
@@ -292,7 +323,8 @@ class FundingsControllerVerwendungsnachweisTest extends AppTestCase
         $this->assertResponseOk();
         $this->assertContentType('application/pdf');
 
-        // 7) CLEANUP files
+
+        // 9) CLEANUP files
         $filePath = Fundingupload::UPLOAD_PATH . $funding->uid;
         FolderService::deleteFolder($filePath);
 
