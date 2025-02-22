@@ -216,7 +216,8 @@ trait EditTrait {
                         $fundinguploadsTable->aliasField('id') => $fundinguploadId,
                         $fundinguploadsTable->aliasField('funding_uid') => $funding->uid,
                         $fundinguploadsTable->aliasField('owner') => $this->loggedUser->uid,
-                        ])->first();
+                        $fundinguploadsTable->aliasField('type') => $uploadTypeId,
+                    ])->first();
                     if (!empty($fundingupload)) {
                         $fundinguploadsTable->delete($fundingupload);
                         if (file_exists($fundingupload->full_path)) {
@@ -245,6 +246,7 @@ trait EditTrait {
     private function handleNewFundinguploads($funding, $associations, $patchedEntity, $uploadTypes): array
     {
         $newFundinguploads = [];
+        $fundinguploadsTable = $this->getTableLocator()->get('Fundinguploads');
         foreach($uploadTypes as $uploadTypeId => $uploadType) {
             $filesFundinguploadsErrors = $patchedEntity->getError('files_fundinguploads_' . $uploadType);
             if (!empty($filesFundinguploadsErrors)) {
@@ -252,10 +254,32 @@ trait EditTrait {
             } else {
                 $filesFileuploads = $this->request->getData('Fundings.files_fundinguploads_' . $uploadType);
                 if (!empty($filesFileuploads)) {
+                    $savedFundinguploads = $fundinguploadsTable->find()->where([
+                        $fundinguploadsTable->aliasField('funding_uid') => $funding->uid,
+                        $fundinguploadsTable->aliasField('owner') => $this->loggedUser->uid,
+                        $fundinguploadsTable->aliasField('type') => $uploadTypeId,
+                    ]);
                     foreach ($filesFileuploads as $fileupload) {
                         if ($fileupload->getError() !== UPLOAD_ERR_OK) {
                             continue;
                         }
+
+                        // page reload bug fix
+                        // if F5 is pressed, uploads would be saved again
+                        $alreadyUploaded = false;
+                        foreach($savedFundinguploads as $savedFundingupload) {
+                            $hashedContentCurrentUpload = md5(file_get_contents($fileupload->getStream()->getMetadata('uri')));
+                            $hashedContentSavedFundingupload = md5(file_get_contents(Fundingupload::UPLOAD_PATH . $funding->uid . DS . $savedFundingupload->filename));
+                            if ($hashedContentCurrentUpload === $hashedContentSavedFundingupload) {
+                                $alreadyUploaded = true;
+                                continue;
+                            }
+                        }
+
+                        if ($alreadyUploaded) {
+                            continue;
+                        }
+
                         $filename = $fileupload->getClientFilename();
                         $filename =  StringComponent::slugifyAndKeepCase(pathinfo($filename, PATHINFO_FILENAME)) . '_' . bin2hex(random_bytes(5)) . '.' . pathinfo($filename, PATHINFO_EXTENSION);
                         $newFundinguploads[$uploadType][] = [
@@ -264,6 +288,7 @@ trait EditTrait {
                             'type' => $uploadTypeId,
                             'owner' => $this->loggedUser->uid,
                         ];
+    
                         $filePath = Fundingupload::UPLOAD_PATH . $funding->uid . DS . $filename;
                         if (!is_dir(dirname($filePath))) {
                             mkdir(dirname($filePath), 0777, true);

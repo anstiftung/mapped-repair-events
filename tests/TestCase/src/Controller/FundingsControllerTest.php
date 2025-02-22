@@ -193,18 +193,19 @@ class FundingsControllerTest extends AppTestCase
         ];
 
 
-        $uploadTemplateJpgFile = TESTS . 'files/test.jpg';
+        $uploadTemplate1JpgFile = TESTS . 'files/test.jpg';
+        $uploadTemplate2JpgFile = TESTS . 'files/test2.jpg';
         $uploadTemplateTxtFile = TESTS . 'files/test.txt';
         $uploadFileActivityProof1 = TESTS . 'files/uploadActivityProof1.jpg';
         $uploadFileActivityProof2 = TESTS . 'files/uploadActivityProof2.txt';
         $uploadFileFreistellungsbescheid1 = TESTS . 'files/uploadTFreistellungsbescheid1.jpg';
         $uploadFileFreistellungsbescheid2 = TESTS . 'files/uploadFreistellungsbescheid2.jpg';
         $uploadFileZuwendungsbestaetigung1 = TESTS . 'files/uploadZuwendungsbestaetigung1.jpg';
-        copy($uploadTemplateJpgFile, $uploadFileActivityProof1);
+        copy($uploadTemplate1JpgFile, $uploadFileActivityProof1);
         copy($uploadTemplateTxtFile, $uploadFileActivityProof2);
-        copy($uploadTemplateJpgFile, $uploadFileFreistellungsbescheid1);
-        copy($uploadTemplateJpgFile, $uploadFileFreistellungsbescheid2);
-        copy($uploadTemplateJpgFile, $uploadFileZuwendungsbestaetigung1);
+        copy($uploadTemplate1JpgFile, $uploadFileFreistellungsbescheid1);
+        copy($uploadTemplate2JpgFile, $uploadFileFreistellungsbescheid2);
+        copy($uploadTemplate1JpgFile, $uploadFileZuwendungsbestaetigung1);
 
         // 1) POST
         $this->post($route, [
