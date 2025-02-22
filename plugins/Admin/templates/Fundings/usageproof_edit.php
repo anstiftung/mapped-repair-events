@@ -21,7 +21,6 @@ $this->element('addScript', ['script' =>
     echo $this->element('heading', ['first' => 'Verwendungsnachweis (UID: ' . $funding->uid . ') ' . $funding->workshop->name]);
 
     echo $this->Form->hidden('referer', ['value' => $referer]);
-    $this->Form->unlockField('referer');
 
     echo '<div class="flexbox">';
 

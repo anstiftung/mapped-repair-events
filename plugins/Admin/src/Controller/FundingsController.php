@@ -36,6 +36,11 @@ class FundingsController extends AdminAppController
         ]);
         $this->generateSearchConditions('opt-1');
         parent::beforeFilter($event);
+
+        if ($this->request->getParam('action') === 'usageproofEdit') {
+            $this->FormProtection->setConfig('validate', false);
+        }
+
     }
 
     public function foerderbewilligungPdf($fundingUid): void
