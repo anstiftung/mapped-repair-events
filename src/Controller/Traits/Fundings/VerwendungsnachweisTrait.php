@@ -103,7 +103,8 @@ trait VerwendungsnachweisTrait {
             $patchedEntity = $this->patchFunding($funding, $associations);
             $newFundinguploads = $this->handleNewFundinguploads($funding, $associations, $patchedEntity, Fundingupload::TYPE_MAP_STEP_3);
             $this->handleDeleteFundinguploads($funding, $associations, $patchedEntity, $newFundinguploads, Fundingupload::TYPE_MAP_STEP_3);
-            $fundingsTable->save($patchedEntity, ['associated' => ['FundinguploadsPrMaterials']]);
+            $fundinguploadsTable = $this->getTableLocator()->get('Fundinguploads');
+            $fundinguploadsTable->saveMany($patchedEntity->fundinguploads_pr_materials);
             $patchedEntity = $this->handleUpdateNewFundinguploadsWithIds($funding, $associations, $patchedEntity, Fundingupload::TYPE_MAP_STEP_3);
             // END uploads
 

@@ -16,7 +16,7 @@ echo '<fieldset>';
     echo $this->element('funding/blocks/upload/listUploadsAndUploadForm', [
         'uploadType' => Fundingupload::TYPE_MAP_STEP_3[Fundingupload::TYPE_PR_MATERIAL],
         'fundinguploads' => $funding->fundinguploads_pr_materials,
-        'showUploadForm' => true,
+        'showUploadForm' => !$disabled,
         'validationMessage' => 'Nur PDF, JPG und PNG-Dateien sind erlaubt. Jede Datei muss kleiner als 5 MB sein.',
         'multiple' => 'multiple',
     ]);

@@ -15,6 +15,7 @@ use App\Test\TestCase\Traits\QueueTrait;
 use Cake\TestSuite\EmailTrait;
 use App\Services\PdfWriter\VerwendungsnachweisPdfWriterService;
 use App\Services\FolderService;
+use Laminas\Diactoros\UploadedFile;
 
 class FundingsControllerVerwendungsnachweisTest extends AppTestCase
 {
@@ -134,6 +135,10 @@ class FundingsControllerVerwendungsnachweisTest extends AppTestCase
             'amount' => $newFundingreceiptlistAmountOk,
         ];
 
+        $uploadTemplateJpgFile = TESTS . 'files/test.jpg';
+        $uploadFilePrMaterial1 = TESTS . 'files/uploadPrMaterial1.jpg';
+        copy($uploadTemplateJpgFile, $uploadFilePrMaterial1);
+
         // 2) POST complete data
         $this->post($route, [
             'referer' => '/',
@@ -168,8 +173,19 @@ class FundingsControllerVerwendungsnachweisTest extends AppTestCase
                         'amount' => -1, // invalid
                     ],
                 ],
+                'files_fundinguploads_pr_materials' => [
+                    new UploadedFile(
+                        $uploadFilePrMaterial1,
+                        filesize($uploadFilePrMaterial1),
+                        UPLOAD_ERR_OK,
+                        'test.jpg',
+                        'image/jpeg',
+                    ),
+                ],
+
             ],
         ]);
+        //echo $this->_response->getBody()->__toString();
 
         $funding = $fundingsTable->findWithUsageproofAssociations($fundingUid);
         $this->assertEquals(Funding::STATUS_PENDING, $funding->usageproof_status);
@@ -196,6 +212,14 @@ class FundingsControllerVerwendungsnachweisTest extends AppTestCase
         $this->assertResponseContains('id="fundings-fundingreceiptlists-2-recipient-error"');
         $this->assertResponseContains('id="fundings-fundingreceiptlists-2-payment-date-error"');
         $this->assertResponseContains('id="fundings-fundingreceiptlists-2-receipt-number-error"');
+
+        $this->assertCount(1, $funding->fundinguploads_pr_materials);
+        foreach($funding->fundinguploads_pr_materials as $fundingupload) {
+            $this->assertEquals(Fundingupload::TYPE_PR_MATERIAL, $fundingupload->type);
+            $this->assertFileExists($fundingupload->full_path);
+            $this->get(Configure::read('AppConfig.htmlHelper')->urlFundinguploadDetail($fundingupload->id));
+            $this->assertResponseOk();
+        }
 
         // 3) DELETE fundingreceiptlist
         $this->post($route, [

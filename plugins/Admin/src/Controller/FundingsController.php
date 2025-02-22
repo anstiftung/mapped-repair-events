@@ -195,6 +195,7 @@ class FundingsController extends AdminAppController
             'Fundingsupporters',
             'Fundingreceiptlists',
             'Fundingbudgetplans',
+            'FundinguploadsPrMaterials',
         ])->first();
 
         if ($funding->owner_user) {
