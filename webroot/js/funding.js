@@ -37,6 +37,15 @@ MappedRepairEvents.Funding = {
         }
     },
 
+    showOrHideCheckboxD: (show) => {
+        const checkboxWrapper = $('#fundingForm #fundings-fundingusageproof-checkbox-d').closest('.input');
+        if (show) {
+            checkboxWrapper.show();
+        } else {
+            checkboxWrapper.hide();
+        }
+    },
+
     bindReceiptlistCheckboxA: () => {
         $('#fundingForm #fundings-fundingusageproof-checkbox-a').on('change', function() {
             MappedRepairEvents.Funding.onClickHandlerReceiptlistCheckboxA($(this));

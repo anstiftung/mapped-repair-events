@@ -23,6 +23,7 @@ class Verwendungsnachweis1 extends AbstractMigration
             `checkbox_a` TINYINT UNSIGNED NOT NULL DEFAULT '0',
             `checkbox_b` TINYINT UNSIGNED NOT NULL DEFAULT '0',
             `checkbox_c` TINYINT UNSIGNED NOT NULL DEFAULT '0',
+            `checkbox_d` TINYINT UNSIGNED NOT NULL DEFAULT '0',
             `created` datetime DEFAULT CURRENT_TIMESTAMP,
             `modified` datetime DEFAULT CURRENT_TIMESTAMP
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";

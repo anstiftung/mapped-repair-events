@@ -306,6 +306,9 @@ class Funding extends Entity
         }, self::FIELDS_USAGEPROOF_CHECKBOXES);
 
         foreach($checkboxes as $checkbox) {
+            if (count($this->fundinguploads_pr_materials) == 0 && $checkbox == 'checkbox_d') {
+                continue;
+            }
             if (!$this->fundingusageproof->$checkbox) {
                 return self::STATUS_CHECKBOXES_MISSING;
             }
