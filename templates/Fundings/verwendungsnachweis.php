@@ -69,7 +69,7 @@ echo $this->element('jqueryTabsWithoutAjax', [
                     echo $this->element('funding/blocks/usageproof/blockQuestions', ['funding' => $funding, 'disabled' => false]);
                 echo '</div>';
 
-                echo $this->element('funding/blocks/usageproof/blockPrMaterial', ['funding' => $funding, 'disabled' => false]);
+                //echo $this->element('funding/blocks/usageproof/blockPrMaterial', ['funding' => $funding, 'disabled' => false]);
 
                 echo '<div class="flexbox">';
                     echo $this->element('funding/blocks/usageproof/blockCheckboxes', ['funding' => $funding, 'disabled' => false]);

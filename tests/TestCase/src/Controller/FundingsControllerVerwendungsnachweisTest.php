@@ -112,7 +112,7 @@ class FundingsControllerVerwendungsnachweisTest extends AppTestCase
             'checkbox_a' => 1,
             'checkbox_b' => 1,
             'checkbox_c' => 1,
-            'checkbox_d' => 1,
+            //'checkbox_d' => 1,
             'question_radio_a' => 1,
             'question_radio_b' => 1,
             'question_radio_c' => 1,
