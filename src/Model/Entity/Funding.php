@@ -70,6 +70,7 @@ class Funding extends Entity
                 $result[$fundingbudgetplan->type][] = $fundingbudgetplan;
             }
         }
+        ksort($result);
         return $result;
     }
 
@@ -81,6 +82,7 @@ class Funding extends Entity
                 $result[$fundingreceiptlist->type][] = $fundingreceiptlist;
             }
         }
+        ksort($result);
         return $result;
     }
 
