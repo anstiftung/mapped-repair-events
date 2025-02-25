@@ -1,7 +1,6 @@
 <?php
 declare(strict_types=1);
 
-
 echo $this->element('jqueryTabsWithoutAjax', [
     'links' => $this->Html->getUserBackendNaviLinks($loggedUser->uid, true, $loggedUser->isOrga())
 ]);

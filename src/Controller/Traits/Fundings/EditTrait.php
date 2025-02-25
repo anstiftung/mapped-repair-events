@@ -19,8 +19,12 @@ trait EditTrait {
     {
 
         $workshopUid = (int) $this->getRequest()->getParam('uid');
+        $fundingsTable = $this->getTableLocator()->get('Fundings');
 
-        $fundingFinished = Configure::read('AppConfig.timeHelper')->isFundingFinished();
+        $fundingUidForFinishedCheck = $fundingsTable->find()->where([
+            'workshop_uid' => $workshopUid,
+        ])->first()->uid ?? null;
+        $fundingFinished = Configure::read('AppConfig.timeHelper')->isFundingFinished($fundingUidForFinishedCheck);
         if ($fundingFinished) {
             $this->AppFlash->setFlashError('Die Antragstellung ist nicht mehr möglich.');
             return $this->redirect(Configure::read('AppConfig.htmlHelper')->urlFundings());
@@ -32,7 +36,6 @@ trait EditTrait {
             return $this->redirect(Configure::read('AppConfig.htmlHelper')->urlFundings());
         }
 
-        $fundingsTable = $this->getTableLocator()->get('Fundings');
         $funding = $fundingsTable->findOrCreateCustom($workshopUid);
 
         if ($funding->is_submitted) {

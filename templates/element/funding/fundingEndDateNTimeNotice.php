@@ -4,7 +4,7 @@ declare(strict_types=1);
 use Cake\Core\Configure;
 use Cake\I18n\DateTime;
 
-$fundingFinished = $this->Time->isFundingFinished();
+$fundingFinished = $this->Time->isFundingFinished(null);
 $classes = [
     'verification-wrapper',
     $fundingFinished ? 'is-missing' : 'is-verified',
