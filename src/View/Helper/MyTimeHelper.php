@@ -12,7 +12,7 @@ class MyTimeHelper extends TimeHelper {
 
     public function isFundingFinished(?int $fundingUid): bool
     {
-        if (!is_null($fundingUid) && in_array($fundingUid, [96920,95419,91816,91274,95916,92782])) {
+        if (!is_null($fundingUid) && in_array($fundingUid, [96920,95419,91816,91274,95916,92782,94764])) {
             return false;
         }
         return strtotime(Configure::read('AppConfig.fundingsEndDateNTime')) < time();
