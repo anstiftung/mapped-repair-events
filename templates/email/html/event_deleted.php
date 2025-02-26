@@ -7,7 +7,7 @@ use Cake\Core\Configure;
         <tr>
             <td>
                 <p>
-                    Die von dir abonnierte Initiative <b><?php echo $event->workshop->name; ?></b> hat folgenden Termin gelöscht: <b><?php echo $event->datumstart->i18nFormat(Configure::read('DateFormat.de.DateLong2WithWeekday')); ?></b>.
+                    Die von dir abonnierte Initiative <b><?php echo $event->workshop->name; ?></b> hat folgende Veranstaltung gelöscht: <b><?php echo $event->datumstart->i18nFormat(Configure::read('DateFormat.de.DateLong2WithWeekday')); ?></b>.
                 </p>
                 <p>
                     Hier kommst du <a href="<?php echo Configure::read('AppConfig.serverName') . $this->MyHtml->urlWorkshopDetail($event->workshop->url);?>">zum Profil von <?php echo $event->workshop->name; ?></a>.

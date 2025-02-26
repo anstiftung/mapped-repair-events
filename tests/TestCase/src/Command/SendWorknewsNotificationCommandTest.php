@@ -21,7 +21,7 @@ class SendWorknewsNotificationCommandTest extends AppTestCase
         $this->runAndAssertQueue();
         $this->assertMailCount(1);
         $this->assertMailSentToAt(0, 'worknews-test@mailinator.com');
-        $this->assertMailContainsAt(0, 'Die von dir abonnierte Initiative </b>Test Workshop</b> hat nächste Woche einen Termin:');
+        $this->assertMailContainsAt(0, 'Die von dir abonnierte Initiative </b>Test Workshop</b> hat nächste Woche eine Veranstaltung:');
         $this->assertMailContainsAt(0, 'Veranstaltungsort: Berlin, Müllerstraße 123 (Haus Drei)');
     }
 

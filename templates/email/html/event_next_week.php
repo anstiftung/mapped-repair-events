@@ -7,7 +7,7 @@ use Cake\Core\Configure;
         <tr>
             <td>
                 <p>
-                    Die von dir abonnierte Initiative </b><?php echo $workshop->name; ?></b> hat nächste Woche einen Termin:<br />
+                    Die von dir abonnierte Initiative </b><?php echo $workshop->name; ?></b> hat nächste Woche eine Veranstaltung:<br />
                 </p>
                 <p>
                     Datum: <b><?php echo $event->datumstart->i18nFormat(Configure::read('DateFormat.de.DateLong2WithWeekday')); ?></b><br />
@@ -17,9 +17,13 @@ use Cake\Core\Configure;
 
                 <?php
                     if ($event->is_online_event) {
-                        echo '<p><b>Der Termin findet online statt.</b></p>';
+                        echo '<p><b>Die Veranstaltung findet online statt.</b></p>';
                     }
                 ?>
+
+                <p>
+                    <a href="<?php echo Configure::read('AppConfig.serverName') . $this->MyHtml->urlWorkshopDetail($workshop->url);?>">Hier</a> kannst du dich informieren, ob eine Terminvereinbarung nötig ist oder du einfach vorbeikommen kannst.
+                </p>
 
                 <p>
                     Um deine E-Mail-Adresse aus der Abonnementliste für diese Initiative zu entfernen, klicke <?php echo $this->MyHtml->link('hier', Configure::read('AppConfig.serverName').'/initiativen/newsunsub/' . $unsub);?>.

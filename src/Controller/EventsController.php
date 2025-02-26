@@ -302,7 +302,8 @@ class EventsController extends AppController
                     $email->viewBuilder()->setTemplate('event_deleted');
                     foreach ($subscribers as $subscriber) {
                         $email->setTo($subscriber->email)
-                        ->setSubject('Termin gelöscht')
+                        ->setSubject('Veranstaltung gelöscht')
+                        ->setReplyTo($event->workshop->email)
                         ->setViewVars([
                             'unsub' => $subscriber->unsub,
                             'event' => $event,
@@ -427,7 +428,7 @@ class EventsController extends AppController
             $worknewsTable = $this->getTableLocator()->get('Worknews');
             $subscribers = $worknewsTable->getSubscribers($patchedEntity->workshop_uid);
             if (!empty($subscribers)) {
-                $worknewsTable->sendNotifications($subscribers, 'Termin geändert: ' . $workshop->name, 'event_changed', $workshop, $patchedEntity, $patchedEntities['dirtyFields'], $patchedEntities['originalValues']);
+                $worknewsTable->sendNotifications($subscribers, 'Veranstaltung geändert: ' . $workshop->name, 'event_changed', $workshop, $patchedEntity, $patchedEntities['dirtyFields'], $patchedEntities['originalValues']);
             }
         }
     }

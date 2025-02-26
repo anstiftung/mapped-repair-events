@@ -34,7 +34,7 @@ class SendWorknewsNotificationCommand extends Command
             $subscribers = $worknewsTable->getSubscribers($event->workshop_uid);
             if (!empty($subscribers)) {
                 if (!empty($event->workshop)) {
-                    $worknewsTable->sendNotifications($subscribers, 'Reparatur-Termin nächste Woche: ' . $event->workshop->name, 'event_next_week', $event->workshop, $event);
+                    $worknewsTable->sendNotifications($subscribers, 'Veranstaltung nächste Woche: ' . $event->workshop->name, 'event_next_week', $event->workshop, $event);
                 }
             }
         }

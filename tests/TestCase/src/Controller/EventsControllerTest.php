@@ -185,11 +185,11 @@ class EventsControllerTest extends AppTestCase
 
         $this->assertMailCount(1);
         $this->assertMailSentToAt(0, 'worknews-test@mailinator.com');
-        $this->assertMailContainsAt(0, '- Der Termin wurde deaktiviert.');
-        $this->assertMailContainsAt(0, '- Das Datum des Termins wurde von Sonntag, 01.01.2040 auf <b>Mittwoch, 02.01.2030</b> geändert.');
+        $this->assertMailContainsAt(0, '- Die Veranstaltung wurde deaktiviert.');
+        $this->assertMailContainsAt(0, '- Das Datum der Veranstaltung wurde von Sonntag, 01.01.2040 auf <b>Mittwoch, 02.01.2030</b> geändert.');
         $this->assertMailContainsAt(0, '- Neue Uhrzeit: <b>10:00 - 11:00 Uhr</b>');
         $this->assertMailContainsAt(0, '- Neuer Veranstaltungsort: <b>testort, new street</b>');
-        $this->assertMailContainsAt(0, '- Der Termin findet jetzt als <b>Online-Termin</b> statt.');
+        $this->assertMailContainsAt(0, '- Die Veranstaltung findet jetzt als <b>Online-Veranstaltung</b> statt.');
     }
 
     public function testAjaxGetAllEventsForMap(): void
@@ -220,7 +220,7 @@ class EventsControllerTest extends AppTestCase
         $this->assertEquals($event->status, APP_DELETED);
         $this->assertMailCount(1);
         $this->assertMailSentToAt(0, 'worknews-test@mailinator.com');
-        $this->assertMailContainsAt(0, 'Die von dir abonnierte Initiative <b>Test Workshop</b> hat folgenden Termin gelöscht: <b>Sonntag, 01.01.2040</b>.');
+        $this->assertMailContainsAt(0, 'Die von dir abonnierte Initiative <b>Test Workshop</b> hat folgende Veranstaltung gelöscht: <b>Sonntag, 01.01.2040</b>.');
     }
 
     private function doTestEditForm($data): void
