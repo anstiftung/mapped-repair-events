@@ -3112,7 +3112,8 @@ ALTER TABLE `third_party_statistics`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`_id`),
-  ADD UNIQUE KEY `email` (`email`);
+  ADD UNIQUE KEY `email` (`email`),
+  ADD UNIQUE(`uid`);
 
 --
 -- Indizes für die Tabelle `users_categories`
