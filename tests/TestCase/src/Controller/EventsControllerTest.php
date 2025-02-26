@@ -207,20 +207,36 @@ class EventsControllerTest extends AppTestCase
         $this->assertResponseOk();
     }
 
-    public function testDeleteEvent(): void
+    public function testDeleteEventWithInfoMail(): void
+    {
+
+        $eventsTable = $this->getTableLocator()->get('Events');
+        $eventUid = 6;
+        $event = $eventsTable->get($eventUid);
+        $event->datumstart = Date::now()->addDays(5);
+        $eventsTable->save($event);
+
+        $this->loginAsOrga();
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlEventDelete(6));
+        $this->runAndAssertQueue();
+
+        $event = $eventsTable->get($eventUid);
+        $this->assertEquals($event->status, APP_DELETED);
+        $this->assertMailCount(1);
+        $this->assertMailSentToAt(0, 'worknews-test@mailinator.com');
+        $this->assertMailContainsAt(0, 'Die von dir abonnierte Initiative <b>Test Workshop</b> hat folgende Veranstaltung gelöscht');
+    }
+
+    public function testDeleteEventWithoutInfoMail(): void
     {
         $this->loginAsOrga();
         $this->get(Configure::read('AppConfig.htmlHelper')->urlEventDelete(6));
         $this->runAndAssertQueue();
 
         $eventsTable = $this->getTableLocator()->get('Events');
-        $event = $eventsTable->find('all', conditions: [
-            'Events.uid' => 6
-        ])->first();
+        $event = $eventsTable->get(6);
         $this->assertEquals($event->status, APP_DELETED);
-        $this->assertMailCount(1);
-        $this->assertMailSentToAt(0, 'worknews-test@mailinator.com');
-        $this->assertMailContainsAt(0, 'Die von dir abonnierte Initiative <b>Test Workshop</b> hat folgende Veranstaltung gelöscht: <b>Sonntag, 01.01.2040</b>.');
+        $this->assertMailCount(0);
     }
 
     private function doTestEditForm($data): void
