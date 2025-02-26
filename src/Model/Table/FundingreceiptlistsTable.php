@@ -91,12 +91,13 @@ class FundingreceiptlistsTable extends Table
                 'message' => self::RECEIPT_TYPE_ERROR_MESSAGE,
             ]);
 
-        $validator->date('payment_date', ['dmy'], 'Bitte gib ein gültiges Datum (TT.MM.JJJJ) ein');
+        $validator->date('payment_date', ['dmy'], 'Bitte gib ein gültiges Datum (TT.MM.JJJJ) ein', );
 
         $validator
             ->add('payment_date', 'range', [
+                'last' => true,
                 'rule' => function ($value, $context) {
-                    if ($value != '') {
+                    if ($value != '' && !is_string($value)) {
                         $formattedValue = $value->format('Y-m-d');
                         return $formattedValue >= '2025-01-09' && $formattedValue <= '2026-02-28';
                     }
