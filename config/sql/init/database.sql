@@ -2175,7 +2175,6 @@ CREATE TABLE `events` (
   `updated_by` int UNSIGNED DEFAULT NULL,
   `currently_updated_by` int UNSIGNED DEFAULT NULL,
   `currently_updated_start` datetime DEFAULT NULL,
-  `lang` varchar(3) DEFAULT NULL,
   `workshop_uid` int UNSIGNED DEFAULT NULL,
   `is_online_event` tinyint UNSIGNED NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
