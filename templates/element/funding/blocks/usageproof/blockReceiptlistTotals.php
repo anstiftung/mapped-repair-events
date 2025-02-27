@@ -6,7 +6,7 @@ use App\Model\Entity\Fundingbudgetplan;
 
 $this->element('addScript', ['script' =>
     JS_NAMESPACE.".Funding.bindReceiptlistCheckboxA();".
-    JS_NAMESPACE.".Funding.bindReceiptlistCheckboxPaybackOk(" . $funding->receiptlist_difference . ");"
+    JS_NAMESPACE.".Funding.bindReceiptlistCheckboxPaybackOk(" . ($funding->receiptlist_difference_is_significant ? '1' : '0') . ");"
 ]);
 
 echo '<div class="total-wrapper">';

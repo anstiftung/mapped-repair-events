@@ -29,10 +29,10 @@ MappedRepairEvents.Funding = {
         });
     },
 
-    bindReceiptlistCheckboxPaybackOk: (receiptlistDifference) => {
+    bindReceiptlistCheckboxPaybackOk: (receiptlistIsSignificant) => {
+        console.log(receiptlistIsSignificant);
         $('#fundingForm #fundings-fundingusageproof-payback-ok').on('change', function() {
-            const showCheckbox = receiptlistDifference > 0;
-            MappedRepairEvents.Funding.onClickHandlerReceiptlistCheckboxPaybackOk($(this), showCheckbox);
+            MappedRepairEvents.Funding.onClickHandlerReceiptlistCheckboxPaybackOk($(this), receiptlistIsSignificant);
         }).trigger('change');
     },
 

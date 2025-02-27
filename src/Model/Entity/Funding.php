@@ -410,7 +410,7 @@ class Funding extends Entity
             return self::STATUS_RECEIPTLIST_DATA_PENDING;
         }
 
-        if ($this->receiptlist_difference > 0) {
+        if ($this->receiptlist_difference_is_significant) {
             if (!empty($this->fundingusageproof) && $this->fundingusageproof->payback_ok) {
                 return self::STATUS_DATA_OK;
             }
@@ -418,6 +418,10 @@ class Funding extends Entity
         }
 
         return self::STATUS_DATA_OK;
+    }
+
+    public function _getReceiptlistDifferenceIsSignificant() {
+        return $this->receiptlist_difference > 500;
     }
 
     public function _getDescriptionStatus(): int
