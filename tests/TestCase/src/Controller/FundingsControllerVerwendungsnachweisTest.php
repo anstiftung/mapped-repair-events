@@ -99,7 +99,7 @@ class FundingsControllerVerwendungsnachweisTest extends AppTestCase
         ]);
 
         $funding = $fundingsTable->findWithUsageproofAssociations($fundingUid);
-        $this->assertEquals(Funding::STATUS_PENDING, $funding->usageproof_status);
+        $this->assertEquals(Funding::STATUS_DATA_MISSING, $funding->usageproof_status);
         $this->assertEquals($testFundingusageproofIncomplete['main_description'], $funding->fundingusageproof->main_description);
         $this->assertEquals($testFundingusageproofIncomplete['difference_declaration'], $funding->fundingusageproof->difference_declaration);
         $this->assertEquals(Funding::STATUS_DESCRIPTIONS_PENDING, $funding->usageproof_descriptions_status);

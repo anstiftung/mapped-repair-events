@@ -56,7 +56,6 @@ trait VerwendungsnachweisTrait {
 
             $patchedEntity = $this->patchFunding($funding, $associationsWithoutValidation);
             $patchedEntity->modified = DateTime::now();
-            $patchedEntity->usageproof_status = Funding::STATUS_PENDING;
             $fundingsTable->save($patchedEntity);
 
             $fundingusageproofsTable = $this->getTableLocator()->get('Fundingusageproofs');
