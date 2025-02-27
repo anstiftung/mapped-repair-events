@@ -420,7 +420,7 @@ class Funding extends Entity
         return self::STATUS_DATA_OK;
     }
 
-    public function _getReceiptlistDifferenceIsSignificant() {
+    public function _getReceiptlistDifferenceIsSignificant(): bool {
         return $this->receiptlist_difference > 500;
     }
 
