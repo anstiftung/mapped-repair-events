@@ -30,7 +30,6 @@ MappedRepairEvents.Funding = {
     },
 
     bindReceiptlistCheckboxPaybackOk: (receiptlistIsSignificant) => {
-        console.log(receiptlistIsSignificant);
         $('#fundingForm #fundings-fundingusageproof-payback-ok').on('change', function() {
             MappedRepairEvents.Funding.onClickHandlerReceiptlistCheckboxPaybackOk($(this), receiptlistIsSignificant);
         }).trigger('change');
