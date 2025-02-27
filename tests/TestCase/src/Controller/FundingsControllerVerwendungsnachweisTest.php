@@ -187,10 +187,9 @@ class FundingsControllerVerwendungsnachweisTest extends AppTestCase
 
             ],
         ]);
-        //echo $this->_response->getBody()->__toString();
 
         $funding = $fundingsTable->findWithUsageproofAssociations($fundingUid);
-        $this->assertEquals(Funding::STATUS_PENDING, $funding->usageproof_status);
+        $this->assertEquals(Funding::STATUS_DATA_MISSING, $funding->usageproof_status);
         $this->assertEquals($testFundingusageproofComplete['main_description'], $funding->fundingusageproof->main_description);
         $this->assertEquals($testFundingusageproofComplete['difference_declaration'], $funding->fundingusageproof->difference_declaration);
         $this->assertEquals(Funding::STATUS_DATA_OK, $funding->usageproof_descriptions_status);
@@ -234,7 +233,7 @@ class FundingsControllerVerwendungsnachweisTest extends AppTestCase
             ],
         ]);
         $funding = $fundingsTable->findWithUsageproofAssociations($fundingUid);
-        $this->assertEquals(Funding::STATUS_PENDING, $funding->usageproof_status);
+        $this->assertEquals(Funding::STATUS_DATA_MISSING, $funding->usageproof_status);
         $this->assertEmpty($funding->fundingreceiptlists);
 
         // 4) ADD fundingreceiptlist
@@ -249,7 +248,7 @@ class FundingsControllerVerwendungsnachweisTest extends AppTestCase
             'add_receiptlist' => 1,
         ]);
         $funding = $fundingsTable->findWithUsageproofAssociations($fundingUid);
-        $this->assertEquals(Funding::STATUS_PENDING, $funding->usageproof_status);
+        $this->assertEquals(Funding::STATUS_DATA_MISSING, $funding->usageproof_status);
         $this->assertEquals(2, count($funding->fundingreceiptlists));
 
         // 5) SUBMIT
@@ -264,6 +263,7 @@ class FundingsControllerVerwendungsnachweisTest extends AppTestCase
             ],
         ]);
         $funding = $fundingsTable->getUnprivatizedFundingWithAllAssociations($fundingUid);
+        $this->assertEquals(Funding::STATUS_PENDING, $funding->usageproof_status);
         $this->assertNotNull($funding->usageproof_submit_date);
         $this->get($route);
         $this->assertFlashMessage('Der Verwendungsnachweis wurde bereits eingereicht und kann nicht mehr bearbeitet werden.');
