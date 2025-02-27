@@ -11,7 +11,7 @@ trait IndexTrait {
     {
 
         if (Configure::read('debug') && $this->isAdmin()) {
-            ini_set('memory_limit', '712M');
+            ini_set('memory_limit', '1024M');
         }
 
         $this->set('metaTags', [
