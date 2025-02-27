@@ -95,7 +95,6 @@ class FundingreceiptlistsTable extends Table
 
         $validator
             ->add('payment_date', 'range', [
-                'last' => true,
                 'rule' => function ($value, $context) {
                     if ($value != '' && !is_string($value)) {
                         $formattedValue = $value->format('Y-m-d');
