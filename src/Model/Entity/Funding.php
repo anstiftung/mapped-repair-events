@@ -421,7 +421,7 @@ class Funding extends Entity
     }
 
     public function _getReceiptlistDifferenceIsSignificant(): bool {
-        return $this->receiptlist_difference > 500;
+        return $this->receiptlist_difference > 0;
     }
 
     public function _getDescriptionStatus(): int
