@@ -18,6 +18,18 @@ class WorkshopsController extends AdminAppController
     {
 
         $this->addSearchOptions([
+            'Workshops.zip' => [
+                'name' => 'PLZ',
+                'searchType' => 'search'
+            ],
+            'Workshops.city' => [
+                'name' => 'Stadt',
+                'searchType' => 'search'
+            ],
+            'Workshops.street' => [
+                'name' => 'Straße + Hausnummer',
+                'searchType' => 'search'
+            ],
             'Workshops.owner' => [
                 'name' => 'Workshops.owner',
                 'searchType' => 'equal',

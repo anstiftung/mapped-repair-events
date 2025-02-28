@@ -33,15 +33,23 @@ class UsersController extends AdminAppController
 
         $this->addSearchOptions([
             'Users.firstname' => [
-                'name' => 'Users.firstname',
+                'name' => 'Vorname',
                 'searchType' => 'search'
             ],
             'Users.lastname' => [
-                'name' => 'Users.lastname',
+                'name' => 'Nachname',
                 'searchType' => 'search'
             ],
             'Users.email' => [
-                'name' => 'Users.email',
+                'name' => 'E-Mail',
+                'searchType' => 'search'
+            ],
+            'Users.zip' => [
+                'name' => 'PLZ',
+                'searchType' => 'search'
+            ],
+            'Users.city' => [
+                'name' => 'Ort',
                 'searchType' => 'search'
             ],
             'UsersGroups.group_id' => [

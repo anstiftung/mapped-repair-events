@@ -1,8 +1,6 @@
 <?php
 declare(strict_types=1);
 
-use Cake\Core\Configure;
-
 echo $this->element('list'
         ,[
             'objects' => $objects,
@@ -21,12 +19,8 @@ echo $this->element('list'
             ],
             'fields' => [
                 ['name' => 'uid', 'label' => 'UID'],
-                ['name' => 'nick', 'label' => 'Nick'],
-                ['name' => 'firstname', 'label' => 'Vorname'],
-                ['name' => 'lastname', 'label' => 'Nachname'],
-                ['name' => 'city', 'label' => 'Stadt'],
-                ['name' => 'province.name', 'label' => 'Bundesland'],
-                ['name' => 'country_code', 'label' => 'Land'],
+                ['label' => 'Name', 'template' => 'list/users/name'],
+                ['label' => 'Adresse', 'template' => 'list/users/address'],
                 ['name' => 'Groups.name', 'type' => 'habtm', 'label' => 'Gruppen'],
                 ['name' => 'owner_workshops.name', 'type' => 'habtm', 'label' => 'Initiative (Owner)'],
                 ['name' => 'workshops.name', 'type' => 'habtm', 'label' => 'Initiative (Mitarbeiter)'],

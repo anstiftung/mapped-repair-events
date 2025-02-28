@@ -53,20 +53,20 @@ class AdminAppController extends AppController
 
         if ($this->searchText) {
             $this->searchOptions[$this->pluralizedModelName . '.text'] = [
-                'name' => $this->pluralizedModelName . '.text',
+                'name' => 'Text',
+                'searchType' => 'search'
+            ];
+        }
+        if ($this->searchName) {
+            $this->searchOptions[$this->pluralizedModelName . '.name'] = [
+                'name' => 'Name',
                 'searchType' => 'search'
             ];
         }
         if ($this->searchUid) {
             $this->searchOptions[$this->pluralizedModelName . '.uid'] = [
-                'name' => $this->pluralizedModelName . '.uid',
+                'name' => 'UID',
                 'searchType' => 'equal'
-            ];
-        }
-        if ($this->searchName) {
-            $this->searchOptions[$this->pluralizedModelName . '.name'] = [
-                'name' => $this->pluralizedModelName . '.name',
-                'searchType' => 'search'
             ];
         }
 
