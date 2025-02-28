@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 echo $object->zip . ' ' . $object->city . ', ' . $object->street;
 if (!empty($object->province)) {
