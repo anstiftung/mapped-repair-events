@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Test\Fixture;
 
-class EventsCategoriesFixture extends AppFixture
+class EventCategoriesFixture extends AppFixture
 {
 
     public function init(): void

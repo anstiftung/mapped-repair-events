@@ -93,9 +93,11 @@ $this->element('addScript', ['script' =>
 
             foreach($preparedCategories as $preparedCategory) {
                 $categoryClass = 'not-selected';
-                foreach($event->categories as $category) {
-                    if ($category->id == $preparedCategory['id']) {
-                        $categoryClass = 'selected';
+                if (!is_null($event->event_categories)) {
+                    foreach($event->event_categories as $category) {
+                        if ($category->category_id == $preparedCategory['id']) {
+                            $categoryClass = 'selected';
+                        }
                     }
                 }
                 echo '<div

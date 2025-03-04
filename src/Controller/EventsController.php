@@ -621,11 +621,14 @@ class EventsController extends AppController
         $this->set('isOnlineEvent', $isOnlineEvent);
 
         $categoriesTable = $this->getTableLocator()->get('Categories');
-        $categories = $categoriesTable->getMainCategoriesForFrontend();
+        $categoriesMap = $categoriesTable->getMainCategoriesForFrontend()->formatResults(function ($results) {
+            return $results->indexBy('id');
+        })->toArray();
+        $this->set('categoriesMap', $categoriesMap);
 
         $preparedCategories = [];
         $categoryClass = '';
-        foreach ($categories as $category) {
+        foreach ($categoriesMap as $category) {
 
             // category is selected
             if (count($selectedCategories) > 0) {
@@ -721,13 +724,12 @@ class EventsController extends AppController
             $query->where([$eventsTable->aliasField('province_id') => $provinceId]);
         }
 
-
         if (!empty($this->request->getQuery('categories'))) {
             $categories = explode(',', h($this->request->getQuery('categories')));
             if (!empty($categories)) {
-                $query->matching('Categories', function(Query $q) use ($categories) {
+                $query->innerJoinWith('EventCategories', function ($q) use ($categories) {
                     return $q->where([
-                        'Categories.id IN' => $categories
+                        'EventCategories.category_id IN' => $categories,
                     ]);
                 });
             }
@@ -737,15 +739,12 @@ class EventsController extends AppController
             $query->where(['Events.is_online_event' => 1]);
         }
 
-        $query->distinct($eventsTable->getListFields());
-        $query->select($eventsTable->getListFields());
         $query->orderBy($eventsTable->getListOrder());
         $query->contain([
             'Workshops',
-            'Categories'
+            'EventCategories',
         ]);
         $events = $this->paginate($query);
-
         $this->set('events', $events);
 
         // $events needs to be cloned, because unset($e['workshop']); in combineEventsForMap would also remove it from $events

@@ -17,7 +17,7 @@ class AppTestCase extends TestCase
         'app.Categories',
         'app.Countries',
         'app.Events',
-        'app.EventsCategories',
+        'app.EventCategories',
         'app.FormFields',
         'app.FormFieldOptions',
         'app.Fundings',
