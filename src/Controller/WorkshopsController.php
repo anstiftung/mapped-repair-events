@@ -550,7 +550,7 @@ class WorkshopsController extends AppController
             'Workshops.zip',
             'Workshops.city',
             'Workshops.owner',
-            'Countries.name_de'
+            'Workshops.country_code',
         ];
 
         $addCategories = false;
@@ -600,7 +600,6 @@ class WorkshopsController extends AppController
             'Workshops.name' => 'ASC'
         ],
         contain: [
-            'Countries',
             'Events' => function ($q) use ($eventFields) {
                 $q->select($eventFields);
                 return $q;
@@ -646,6 +645,9 @@ class WorkshopsController extends AppController
 
         $this->Category = $this->getTableLocator()->get('Categories');
         $categories = $this->Category->getMainCategoriesForFrontend();
+
+        $countriesTable = $this->getTableLocator()->get('Countries');
+        $countriesMap = $countriesTable->getForDropdown();
 
         $preparedWorkshops = [];
 
@@ -695,6 +697,10 @@ class WorkshopsController extends AppController
             $preparedWorkshop = [];
 
             $workshop['events'] = array_values($workshop['events']); // reindex array
+            $workshop['country'] = [
+                'name_de' => $countriesMap[$workshop->country_code] ?? '',
+            ];
+            unset($workshop->country_code);
 
             $tmpEvents = $workshop['events'];
             unset($workshop['events']);
