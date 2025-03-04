@@ -1288,6 +1288,10 @@ class WorkshopsController extends AppController
     public function all(): void
     {
 
+        if (Configure::read('debug') && $this->isAdmin()) {
+            ini_set('memory_limit', '1024M');
+        }
+
         $metaTags = Configure::read('AppConfig.metaTags.' . $this->request->getParam('controller') . '.' . $this->request->getParam('action'));
         $metaTags['keywords'] = Configure::read('AppConfig.platformName') . ', ' . $metaTags['keywords'];
         $this->set('metaTags', $metaTags);
@@ -1300,8 +1304,7 @@ class WorkshopsController extends AppController
         $query = $workshopsTable->find('all',
         conditions: $conditions,
         contain: [
-            'Countries',
-            'Events'
+            'Events',
         ]);
 
         $keyword = '';
