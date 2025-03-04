@@ -583,9 +583,7 @@ class EventsController extends AppController
         }
 
         $categoriesTable = $this->getTableLocator()->get('Categories');
-        $categoriesMap = $categoriesTable->getMainCategoriesForFrontend()->formatResults(function ($results) {
-            return $results->indexBy('id');
-        })->toArray();
+        $categoriesMap = $categoriesTable->getMainCategoriesForFrontendIndexedById();
         $this->set('categoriesMap', $categoriesMap);
 
         foreach($events as $event) {
@@ -642,9 +640,7 @@ class EventsController extends AppController
         $this->set('isOnlineEvent', $isOnlineEvent);
 
         $categoriesTable = $this->getTableLocator()->get('Categories');
-        $categoriesMap = $categoriesTable->getMainCategoriesForFrontend()->formatResults(function ($results) {
-            return $results->indexBy('id');
-        })->toArray();
+        $categoriesMap = $categoriesTable->getMainCategoriesForFrontendIndexedById();
         $this->set('categoriesMap', $categoriesMap);
 
         $preparedCategories = [];
@@ -760,6 +756,7 @@ class EventsController extends AppController
             $query->where(['Events.is_online_event' => 1]);
         }
 
+        $query->select($eventsTable->getListFields());
         $query->orderBy($eventsTable->getListOrder());
         $query->contain([
             'Workshops',

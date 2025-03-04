@@ -177,6 +177,13 @@ class CategoriesTable extends Table
         return $categories;
     }
 
+    public function getMainCategoriesForFrontendIndexedById(): array
+    {
+        return $this->getMainCategoriesForFrontend()->formatResults(function ($results) {
+            return $results->indexBy('id');
+        })->toArray();
+    }
+
     public function getMainCategoriesForFrontend(): SelectQuery
     {
         $categories = $this->find('all',
