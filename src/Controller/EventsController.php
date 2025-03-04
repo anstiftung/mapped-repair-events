@@ -22,7 +22,6 @@ use Cake\I18n\DateTime;
 use App\Model\Entity\Worknews;
 use App\Mailer\AppMailer;
 use App\Model\Table\EventsTable;
-use Cake\Database\Query;
 use Cake\Http\Response;
 
 class EventsController extends AppController
