@@ -33,7 +33,7 @@ class EventsTable extends AppTable
             'foreignKey' => 'event_uid',
         ]);
         $this->belongsToMany('Categories', [
-            'through' => 'EventCategories',
+            'joinTable' => 'events_categories',
             'foreignKey' => 'event_uid',
             'targetForeignKey' => 'category_id'
         ]);
