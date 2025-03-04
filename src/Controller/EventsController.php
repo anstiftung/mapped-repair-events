@@ -534,6 +534,10 @@ class EventsController extends AppController
     public function ajaxGetAllEventsForMap(): void
     {
 
+        if (Configure::read('debug') && $this->isAdmin()) {
+            ini_set('memory_limit', '1024M');
+        }
+
         if (!$this->request->is('ajax')) {
             throw new NotFoundException();
         }
@@ -551,8 +555,8 @@ class EventsController extends AppController
             order:  $this->Event->getListOrder(),
             contain:  [
                 'Workshops',
-                'Categories'
-            ]
+                'EventCategories',
+            ],
         );
         $events->distinct($this->Event->getListFields());
 
@@ -570,13 +574,31 @@ class EventsController extends AppController
         if (!empty($this->request->getQuery('categories'))) {
             $categories = explode(',', h($this->request->getQuery('categories')));
             if (!empty($categories)) {
-                $events->notMatching('Categories', function(\Cake\ORM\Query $q) use ($categories) {
+                $events->innerJoinWith('EventCategories', function ($q) use ($categories) {
                     return $q->where([
-                        'Categories.id IN' => $categories
+                        'EventCategories.category_id NOT IN' => $categories,
                     ]);
                 });
             }
         }
+
+        $categoriesTable = $this->getTableLocator()->get('Categories');
+        $categoriesMap = $categoriesTable->getMainCategoriesForFrontend()->formatResults(function ($results) {
+            return $results->indexBy('id');
+        })->toArray();
+        $this->set('categoriesMap', $categoriesMap);
+
+        foreach($events as $event) {
+            $event->categories = [];
+            foreach($event->event_categories as $category) {
+                if (!isset($categoriesMap[$category->category_id])) {
+                    continue;
+                }
+                $event->categories[] = $categoriesMap[$category->category_id];
+            }
+            unset($event->event_categories);
+        }
+
         $this->set([
             'status' => 1,
             'message' => 'ok',

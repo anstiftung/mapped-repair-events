@@ -18,31 +18,10 @@
                 "is_online_event": 0,
                 "uniquePlace": "190641f793aea9f4fe7bc9b440d0c6be",
                 "directurl": "test-workshop?event=6,2040-01-01",
-                "categories": [
-                    {
-                        "id": 87,
-                        "name": "Elektro Sonstiges",
-                        "icon": "elektro",
-                        "visible_on_platform": 1,
-                        "carbon_footprint": "0.00",
-                        "material_footprint": "0.00",
-                        "parent_id": 1,
-                        "ords_category_id": null,
-                        "lft": null,
-                        "rght": null,
-                        "status": 1,
-                        "owner": null,
-                        "created": null,
-                        "modified": null,
-                        "_joinData": {
-                            "event_uid": 6,
-                            "category_id": 87
-                        }
-                    }
-                ],
                 "datumstart_formatted": "2040-01-01",
                 "uhrzeitstart_formatted": "09:00",
-                "uhrzeitend_formatted": "18:00"
+                "uhrzeitend_formatted": "18:00",
+                "categories": []
             },
             "Workshop": {
                 "name": "Test Workshop",
@@ -65,10 +44,10 @@
                     "is_online_event": 0,
                     "uniquePlace": "190641f793aea9f4fe7bc9b440d0c6be",
                     "directurl": "test-workshop?event=9,{{expectedDate}}",
-                    "categories": [],
                     "datumstart_formatted": "{{expectedDate}}",
                     "uhrzeitstart_formatted": "09:00",
-                    "uhrzeitend_formatted": "18:00"
+                    "uhrzeitend_formatted": "18:00",
+                    "categories": []
                 },
                 {
                     "uid": 6,
@@ -85,31 +64,10 @@
                     "is_online_event": 0,
                     "uniquePlace": "190641f793aea9f4fe7bc9b440d0c6be",
                     "directurl": "test-workshop?event=6,2040-01-01",
-                    "categories": [
-                        {
-                            "id": 87,
-                            "name": "Elektro Sonstiges",
-                            "icon": "elektro",
-                            "visible_on_platform": 1,
-                            "carbon_footprint": "0.00",
-                            "material_footprint": "0.00",
-                            "parent_id": 1,
-                            "ords_category_id": null,
-                            "lft": null,
-                            "rght": null,
-                            "status": 1,
-                            "owner": null,
-                            "created": null,
-                            "modified": null,
-                            "_joinData": {
-                                "event_uid": 6,
-                                "category_id": 87
-                            }
-                        }
-                    ],
                     "datumstart_formatted": "2040-01-01",
                     "uhrzeitstart_formatted": "09:00",
-                    "uhrzeitend_formatted": "18:00"
+                    "uhrzeitend_formatted": "18:00",
+                    "categories": []
                 }
             ]
         }
