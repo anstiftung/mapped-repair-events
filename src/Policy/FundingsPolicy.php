@@ -112,6 +112,16 @@ class FundingsPolicy implements RequestPolicyInterface
 
             // only approved orgas are allowed to edit fundings
             $workshopsTable = TableRegistry::getTableLocator()->get('Workshops');
+            $workshop = $this->find('all',
+            conditions: [
+                'Workshops.uid' => $workshopUid,
+                'Workshops.status >= ' . APP_OFF
+            ]
+            )->first();
+            if (empty($workshop)) {
+                return false;
+            }
+    
             $workshop = $workshopsTable->getWorkshopForIsUserInOrgaTeamCheck($workshopUid);
             if ($workshopsTable->isUserInOrgaTeam($identity, $workshop)) {
                 return true;
