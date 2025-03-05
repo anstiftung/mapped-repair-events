@@ -112,7 +112,7 @@ class FundingsPolicy implements RequestPolicyInterface
 
             // only approved orgas are allowed to edit fundings
             $workshopsTable = TableRegistry::getTableLocator()->get('Workshops');
-            $workshop = $this->find('all',
+            $workshop = $workshopsTable->find('all',
             conditions: [
                 'Workshops.uid' => $workshopUid,
                 'Workshops.status >= ' . APP_OFF
