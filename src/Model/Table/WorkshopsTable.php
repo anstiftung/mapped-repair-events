@@ -285,7 +285,7 @@ class WorkshopsTable extends AppTable
         return $orgaTeam;
     }
 
-    public function getWorkshopForIsUserInOrgaTeamCheck($workshopUid): Workshop
+    public function getWorkshopForIsUserInOrgaTeamCheck($workshopUid): ?Workshop
     {
         $usersAssociation = $this->getAssociation('Users');
         $usersAssociation->setConditions([
