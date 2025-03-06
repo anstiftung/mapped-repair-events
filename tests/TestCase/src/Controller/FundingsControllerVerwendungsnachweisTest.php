@@ -209,7 +209,7 @@ class FundingsControllerVerwendungsnachweisTest extends AppTestCase
         $this->assertResponseContains('Bitte gib ein gültiges Datum (TT.MM.JJJJ) ein');
         $this->assertResponseContains('Ausgabenbereich auswählen');
         $this->assertResponseContains('Betrag muss größer als 0 sein');
-        $this->assertResponseContains('Das Datum muss zwischen 09.01.2025 und 28.02.2026 liegen.');
+        $this->assertResponseContains('Das Datum muss zwischen 03.12.2024 und 28.02.2026 liegen.');
         $this->assertResponseContains('id="fundings-fundingreceiptlists-2-recipient-error"');
         $this->assertResponseContains('id="fundings-fundingreceiptlists-2-payment-date-error"');
         $this->assertResponseContains('id="fundings-fundingreceiptlists-2-receipt-number-error"');

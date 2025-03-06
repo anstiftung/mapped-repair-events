@@ -98,11 +98,11 @@ class FundingreceiptlistsTable extends Table
                 'rule' => function ($value, $context) {
                     if ($value != '' && !is_string($value)) {
                         $formattedValue = $value->format('Y-m-d');
-                        return $formattedValue >= '2025-01-09' && $formattedValue <= '2026-02-28';
+                        return $formattedValue >= '2024-12-03' && $formattedValue <= '2026-02-28';
                     }
                     return true;
                 },
-                'message' => 'Das Datum muss zwischen 09.01.2025 und 28.02.2026 liegen.',
+                'message' => 'Das Datum muss zwischen 03.12.2024 und 28.02.2026 liegen.',
             ]);
 
         $validator
