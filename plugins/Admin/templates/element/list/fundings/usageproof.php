@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-if ($object->money_transfer_date === null) {
+if ($object->money_transfer_date === null || $object->fundingusageproof === null) {
     return;
 }
 
