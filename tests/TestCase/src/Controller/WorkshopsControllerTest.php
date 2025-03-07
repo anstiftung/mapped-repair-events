@@ -43,7 +43,7 @@ class WorkshopsControllerTest extends AppTestCase
         $this->assertResponseOk();
     }
 
-    public function testAjaxGetAllWorkshopsForMap(): void
+    public function testDifferentAjaxRequests(): void
     {
 
         $expectedResult = file_get_contents(TESTS . 'comparisons' . DS . 'rest-workshops-berlin.json');
@@ -65,6 +65,19 @@ class WorkshopsControllerTest extends AppTestCase
         $this->get('/workshops/ajaxGetAllWorkshopsForMap');
         $this->assertResponseContains($expectedResult);
         $this->assertResponseOk();
+
+        $this->configRequest([
+            'headers' => [
+                'X_REQUESTED_WITH' => 'XMLHttpRequest',
+            ]
+        ]);
+        $expectedResult = file_get_contents(TESTS . 'comparisons' . DS . 'workshops-for-map-workshop-uid-2.json');
+        $expectedNextEventDate = Date::now()->addDays(7)->format('Y-m-d');
+        $expectedResult = $this->correctExpectedDate($expectedResult, $expectedNextEventDate);
+        $this->get('/workshops/ajaxGetAllWorkshopsForMap?workshopUid=2');
+        $this->assertResponseContains($expectedResult);
+        $this->assertResponseOk();
+
     }
 
     public function testWorkshopDetail(): void

@@ -22,7 +22,6 @@ use Cake\I18n\DateTime;
 use App\Model\Entity\Worknews;
 use App\Mailer\AppMailer;
 use App\Model\Table\EventsTable;
-use Cake\Database\Query;
 use Cake\Http\Response;
 
 class EventsController extends AppController
@@ -535,6 +534,10 @@ class EventsController extends AppController
     public function ajaxGetAllEventsForMap(): void
     {
 
+        if (Configure::read('debug') && $this->isAdmin()) {
+            ini_set('memory_limit', '1024M');
+        }
+
         if (!$this->request->is('ajax')) {
             throw new NotFoundException();
         }
@@ -552,8 +555,8 @@ class EventsController extends AppController
             order:  $this->Event->getListOrder(),
             contain:  [
                 'Workshops',
-                'Categories'
-            ]
+                'EventCategories',
+            ],
         );
         $events->distinct($this->Event->getListFields());
 
@@ -571,13 +574,29 @@ class EventsController extends AppController
         if (!empty($this->request->getQuery('categories'))) {
             $categories = explode(',', h($this->request->getQuery('categories')));
             if (!empty($categories)) {
-                $events->notMatching('Categories', function(\Cake\ORM\Query $q) use ($categories) {
+                $events->innerJoinWith('EventCategories', function ($q) use ($categories) {
                     return $q->where([
-                        'Categories.id IN' => $categories
+                        'EventCategories.category_id NOT IN' => $categories,
                     ]);
                 });
             }
         }
+
+        $categoriesTable = $this->getTableLocator()->get('Categories');
+        $categoriesMap = $categoriesTable->getMainCategoriesForFrontendIndexedById();
+        $this->set('categoriesMap', $categoriesMap);
+
+        foreach($events as $event) {
+            $event->categories = [];
+            foreach($event->event_categories as $category) {
+                if (!isset($categoriesMap[$category->category_id])) {
+                    continue;
+                }
+                $event->categories[] = $categoriesMap[$category->category_id];
+            }
+            unset($event->event_categories);
+        }
+
         $this->set([
             'status' => 1,
             'message' => 'ok',
@@ -621,11 +640,12 @@ class EventsController extends AppController
         $this->set('isOnlineEvent', $isOnlineEvent);
 
         $categoriesTable = $this->getTableLocator()->get('Categories');
-        $categories = $categoriesTable->getMainCategoriesForFrontend();
+        $categoriesMap = $categoriesTable->getMainCategoriesForFrontendIndexedById();
+        $this->set('categoriesMap', $categoriesMap);
 
         $preparedCategories = [];
         $categoryClass = '';
-        foreach ($categories as $category) {
+        foreach ($categoriesMap as $category) {
 
             // category is selected
             if (count($selectedCategories) > 0) {
@@ -721,13 +741,12 @@ class EventsController extends AppController
             $query->where([$eventsTable->aliasField('province_id') => $provinceId]);
         }
 
-
         if (!empty($this->request->getQuery('categories'))) {
             $categories = explode(',', h($this->request->getQuery('categories')));
             if (!empty($categories)) {
-                $query->matching('Categories', function(Query $q) use ($categories) {
+                $query->innerJoinWith('EventCategories', function ($q) use ($categories) {
                     return $q->where([
-                        'Categories.id IN' => $categories
+                        'EventCategories.category_id IN' => $categories,
                     ]);
                 });
             }
@@ -737,15 +756,13 @@ class EventsController extends AppController
             $query->where(['Events.is_online_event' => 1]);
         }
 
-        $query->distinct($eventsTable->getListFields());
         $query->select($eventsTable->getListFields());
         $query->orderBy($eventsTable->getListOrder());
         $query->contain([
             'Workshops',
-            'Categories'
+            'EventCategories',
         ]);
         $events = $this->paginate($query);
-
         $this->set('events', $events);
 
         // $events needs to be cloned, because unset($e['workshop']); in combineEventsForMap would also remove it from $events

@@ -527,16 +527,6 @@ MappedRepairEvents.Map.prototype = {
         this.pruneCluster.RemoveMarkers();
     },
 
-    doFilterByCategories : function(objects, categoryId) {
-        var foundObjects = [];
-        for(var i=0;i<objects.length;i++) {
-            if ($.inArray(categoryId, objects[i].Workshop.categories) > -1) {
-                foundObjects.push(objects[i]);
-            }
-        }
-        return foundObjects;
-    },
-
     updateCalendar : function() {
 
         var

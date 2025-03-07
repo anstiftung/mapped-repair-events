@@ -535,6 +535,11 @@ class WorkshopsController extends AppController
 
         $this->request = $this->request->withParam('_ext', 'json');
 
+        $isWorkshopFilterSet = false;
+        if (!empty($this->request->getQuery('workshopUid'))) {
+            $isWorkshopFilterSet = true;
+        }
+
         $keyword = '';
         $conditions = [
             'Workshops.status' => APP_ON
@@ -550,10 +555,9 @@ class WorkshopsController extends AppController
             'Workshops.zip',
             'Workshops.city',
             'Workshops.owner',
-            'Countries.name_de'
+            'Workshops.country_code',
         ];
 
-        $addCategories = false;
         $eventFields = [
             'Events.workshop_uid',
             'Events.uid',
@@ -567,9 +571,7 @@ class WorkshopsController extends AppController
             'Events.is_online_event',
         ];
 
-        if (!empty($this->request->getQuery('workshopUid'))) {
-            $conditions['Workshops.uid'] = (int) $this->request->getQuery('workshopUid');
-            $fields[] = 'Workshops.text';
+        if ($isWorkshopFilterSet) {
             $eventFields = array_merge(
                 $eventFields,
                 [
@@ -581,7 +583,45 @@ class WorkshopsController extends AppController
                     'Events.image',
                 ]);
             $eventFields['isPast'] = 'DATE_FORMAT(Events.datumstart, \'%Y-%m-%d\') < DATE_FORMAT(NOW(), \'%Y-%m-%d\')';
-            $addCategories = true;
+        }
+
+        $contain = [
+            'Events' => function ($q) use ($eventFields) {
+                $q->select($eventFields);
+                return $q;
+            },
+        ];
+
+        if ($this->isLoggedIn()) {
+            $contain = array_merge($contain, [
+                'Users' => [
+                    'fields' => [
+                        'UsersWorkshops.workshop_uid',
+                        'Users.uid' // necessary to retrieve Users.Groups
+                    ],
+                ],
+                'Users.Groups' => [
+                    'fields' => [
+                        'UsersGroups.user_uid',
+                        'Groups.id'
+                    ],
+                ],
+            ]);
+        }
+
+        if ($isWorkshopFilterSet) {
+            $conditions['Workshops.uid'] = (int) $this->request->getQuery('workshopUid');
+            $fields[] = 'Workshops.text';
+            $contain = array_merge($contain, [
+                'Events.Categories' => [
+                    'fields' => [
+                        'EventsCategories.event_uid',
+                        'Categories.id',
+                        'Categories.name',
+                        'Categories.icon'
+                    ],
+                ],
+            ]);
         }
 
         $eventsAssociation = $this->Workshop->getAssociation('Events');
@@ -599,33 +639,8 @@ class WorkshopsController extends AppController
         order: [
             'Workshops.name' => 'ASC'
         ],
-        contain: [
-            'Countries',
-            'Events' => function ($q) use ($eventFields) {
-                $q->select($eventFields);
-                return $q;
-            },
-            'Events.Categories' => [
-                'fields' => [
-                    'EventsCategories.event_uid',
-                    'Categories.id',
-                    'Categories.name',
-                    'Categories.icon'
-                ]
-            ],
-            'Users' => [
-                'fields' => [
-                    'UsersWorkshops.workshop_uid',
-                    'Users.uid' // necessary to retrieve Users.Groups
-                ]
-            ],
-            'Users.Groups' => [
-                'fields' => [
-                    'UsersGroups.user_uid',
-                    'Groups.id'
-                ]
-            ]
-        ]);
+        contain: $contain,
+        );
 
         if (!empty($this->request->getQuery('keyword'))) {
             $keyword = h(strtolower(trim($this->request->getQuery('keyword'))));
@@ -644,14 +659,17 @@ class WorkshopsController extends AppController
 
         $workshops = $workshops->toArray();
 
-        $this->Category = $this->getTableLocator()->get('Categories');
-        $categories = $this->Category->getMainCategoriesForFrontend();
+        $categoriesTable = $this->getTableLocator()->get('Categories');
+        $categories = $categoriesTable->getMainCategoriesForFrontend();
+
+        $countriesTable = $this->getTableLocator()->get('Countries');
+        $countriesMap = $countriesTable->getForDropdown();
 
         $preparedWorkshops = [];
 
         foreach ($workshops as &$workshop) {
 
-            $hasModifyPermissions = $this->isAdmin() || $this->Workshop->isUserInOrgaTeam($this->loggedUser, $workshop);
+            $hasModifyPermissions = $this->isLoggedIn() && ($this->isAdmin() || $this->Workshop->isUserInOrgaTeam($this->loggedUser, $workshop));
             $i = 0;
 
             foreach ($workshop->events as &$event) {
@@ -667,7 +685,7 @@ class WorkshopsController extends AppController
                 $event->directurl = Configure::read('AppConfig.htmlHelper')->urlEventDetail($workshop->url, $event->uid, $event->datumstart);
 
                 // add category icons
-                if ($addCategories) {
+                if ($isWorkshopFilterSet) {
                     $preparedEventCategories = [];
                     foreach($categories as $category) {
                         foreach($event->categories as $eventCategory) {
@@ -686,6 +704,7 @@ class WorkshopsController extends AppController
                 unset($event->datumstart);
                 unset($event->uhrzeitstart);
                 unset($event->uhrzeitend);
+                unset($workshop->users);
 
                 $i++;
 
@@ -695,6 +714,10 @@ class WorkshopsController extends AppController
             $preparedWorkshop = [];
 
             $workshop['events'] = array_values($workshop['events']); // reindex array
+            $workshop['country'] = [
+                'name_de' => $countriesMap[$workshop->country_code] ?? '',
+            ];
+            unset($workshop->country_code);
 
             $tmpEvents = $workshop['events'];
             unset($workshop['events']);
@@ -707,7 +730,7 @@ class WorkshopsController extends AppController
         $this->set([
             'status' => 1,
             'message' => 'ok',
-            'workshops' => $preparedWorkshops
+            'workshops' => $preparedWorkshops,
         ]);
         $this->viewBuilder()->setOption('serialize', ['status', 'message', 'workshops']);
 
@@ -1288,6 +1311,10 @@ class WorkshopsController extends AppController
     public function all(): void
     {
 
+        if (Configure::read('debug') && $this->isAdmin()) {
+            ini_set('memory_limit', '1024M');
+        }
+
         $metaTags = Configure::read('AppConfig.metaTags.' . $this->request->getParam('controller') . '.' . $this->request->getParam('action'));
         $metaTags['keywords'] = Configure::read('AppConfig.platformName') . ', ' . $metaTags['keywords'];
         $this->set('metaTags', $metaTags);
@@ -1300,8 +1327,7 @@ class WorkshopsController extends AppController
         $query = $workshopsTable->find('all',
         conditions: $conditions,
         contain: [
-            'Countries',
-            'Events'
+            'Events',
         ]);
 
         $keyword = '';

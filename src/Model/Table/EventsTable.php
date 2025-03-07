@@ -37,6 +37,10 @@ class EventsTable extends AppTable
             'foreignKey' => 'event_uid',
             'targetForeignKey' => 'category_id'
         ]);
+		$this->hasMany('EventCategories', [
+			'foreignKey' => 'event_uid',
+			'dependent'  => true,
+		]);
     }
 
     public function validationDefault(Validator $validator): Validator
@@ -138,7 +142,7 @@ class EventsTable extends AppTable
             'Workshops.url',
             'Workshops.image',
             'uniquePlace' => 'MD5(Events.lat * Events.lng)', // create unique lat/lng based field for combining events with same place
-            'directurl' => "CONCAT(Workshops.url, '?event=', Events.uid, ',', Events.datumstart)"
+            'directurl' => "CONCAT(Workshops.url, '?event=', Events.uid, ',', Events.datumstart)",
         ];
     }
 
