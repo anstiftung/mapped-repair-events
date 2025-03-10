@@ -414,6 +414,18 @@ class InternController extends AdminAppController
             }
         }
         if ($objectType == 'workshops') {
+            $fundingsTable = $this->getTableLocator()->get('Fundings');
+            $funding = $fundingsTable->find('all', conditions: [
+                $fundingsTable->aliasField('workshop_uid') => $uid,
+            ])->first();
+            if (!empty($funding) && $funding->is_submitted) {
+                $this->set([
+                    'status' => 1,
+                    'msg' => 'Löschen nicht möglich, es existiert ein eingereichter Förderantrag (UID: ' . $funding->uid .  ') zu dieser Initiative.',
+                ]);
+                $this->viewBuilder()->setOption('serialize', ['status', 'msg']);
+                return null;
+            }
             $this->handleWorkshopBeforeDelete($uid);
         }
 
