@@ -12,7 +12,7 @@ table.list tr {
     vertical-align: top;
 }
 table.list tr:not(.subtable-container):hover td {
-    background-color: #efefef ! important;
+    background-color: #efefef;
     color: var(--default-font-color) ! important;
 }
 table.list th,
@@ -42,7 +42,7 @@ table.list tr.inactive {
     text-decoration: line-through;
 }
 table.list tr.selected td {
-    background-color: var(--theme-color-a);
+    background-color: var(--theme-color-a) ! important;
     color: white ! important;
 }
 table.list tr.selected td:not(.icon) a {
