@@ -34,10 +34,11 @@ a {
 #flashMessage {
     position: absolute;
     top: -54px;
-    left: 14%;
+    left: 25%;
     z-index: 330000;
-    width: 70%;
+    width: 50%;
     padding: 5px 10px;
+    font-weight: normal;
 }
 #header {
     background: white;
