@@ -6,9 +6,12 @@ use App\Controller\Component\StringComponent;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use Cake\ORM\TableRegistry;
+use App\Model\Traits\ApproveMultipleTrait;
 
 class SkillsTable extends Table
 {
+
+    use ApproveMultipleTrait;
 
     public array $allowedBasicHtmlFields = [];
     public string $name_de = 'Kenntnis';

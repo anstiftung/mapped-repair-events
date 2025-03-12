@@ -5,6 +5,7 @@ echo $this->element('list',
         'objects' => $objects,
         'heading' => 'E-Mails',
         'hideDeleteLink' => true,
+        'selectable' => false,
         'fields' => [
             ['name' => 'id', 'label' => 'ID'],
             ['label' => 'An', 'template' => 'list/queuedJobs/to'],

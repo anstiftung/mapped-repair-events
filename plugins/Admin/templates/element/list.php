@@ -68,7 +68,23 @@ if ($showDeleteLink) {
         echo $this->element('adminFilter', ['optionalSearchForms' => $optionalSearchForms]);
         ?>
 
+        <div class="top-right-wrapper">
+        
         <?php
+        if (isset($selectableActions)) {
+            foreach($selectableActions as $selectableAction) {
+                echo $this->Html->link(
+                    $selectableAction['label'],
+                    'javascript:void(0);',
+                    [
+                        'class' => 'button selectable-action disabled',
+                        'disabled' => 'disabled',
+                        'data-url' => $selectableAction['url'],
+                    ],
+                );
+            }
+        }
+
         if (isset($newMethod)) {
             $newMethodUrl = $newMethod['url'];
             $newMethodCall = $this->Html->$newMethodUrl();
@@ -77,28 +93,26 @@ if ($showDeleteLink) {
             }
             echo $this->Html->link( '<i class="fas fa-plus fa-border"></i>', $newMethodCall, [
                 'title' => 'Neu',
-                'class' => 'new-link',
                 'escape' => false
             ]);
         }
-        ?>
 
-    <?php
-    $objects = $objects->toArray();
-    if (isset($emailFields) && isset($objects[0])) {
-        foreach($emailFields as $emailField) {
-            $rawEmails = Hash::extract($objects, '{n}.'.$emailField['field']);
-            $rawEmails = array_filter($rawEmails);
-            $emails = [];
-            foreach($rawEmails as $email) {
-              $emails[] = $email;
-            }
-            if (!empty($emails)) {
-                echo $this->Html->link($emailField['label'] .  ' (' . count($emails) . 'x) <i class="far fa-envelope fa-border"></i>', 'mailto:'.join(';', $emails), ['escape' => false, 'title' => 'E-Mail an alle in Liste versenden', 'class' => 'email-link']);
+        $objects = $objects->toArray();
+        if (isset($emailFields) && isset($objects[0])) {
+            foreach($emailFields as $emailField) {
+                $rawEmails = Hash::extract($objects, '{n}.'.$emailField['field']);
+                $rawEmails = array_filter($rawEmails);
+                $emails = [];
+                foreach($rawEmails as $email) {
+                $emails[] = $email;
+                }
+                if (!empty($emails)) {
+                    echo $this->Html->link($emailField['label'] .  ' (' . count($emails) . 'x) <i class="far fa-envelope fa-border"></i>', 'mailto:'.join(';', $emails), ['escape' => false, 'title' => 'E-Mail an alle in Liste versenden']);
+                }
             }
         }
-    }
     ?>
+    </div>
 
     <?php
     if (count($objects) == 0) {
@@ -109,6 +123,11 @@ if ($showDeleteLink) {
 
         <table class="list">
             <?php
+            if ($selectable) {
+                echo $this->element('rowMarker/rowMarkerAll', [
+                    'enabled' => true,
+                ]);
+            }
             foreach ($fields as $field) {
 
                 if (isset($field['template'])) {
@@ -179,6 +198,12 @@ if ($showDeleteLink) {
                 }
                 echo '<tr class="' . implode(' ', $rowStatusClasses) . '">';
 
+                if ($selectable) {
+                    echo $this->element('rowMarker/rowMarker', [
+                        'show' => true,
+                    ]);
+                }
+
                 foreach ($fields as $field) {
 
                     if (isset($field['template'])) {
@@ -232,7 +257,12 @@ if ($showDeleteLink) {
                         }
                     }
 
-                    echo '<td>';
+                    $idName = ($hasUid ? 'uid' : 'id');
+                    $tdClass = [];
+                    if ($field['name'] === $idName) {
+                        $tdClass[] = 'id';
+                    }
+                    echo '<td class="' . join(' ', $tdClass) . '">';
 
                     if (! empty($field['link'])) {
                         $linkUrlMethod = $field['link']['urlMethod'];

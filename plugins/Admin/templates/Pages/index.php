@@ -7,6 +7,7 @@ declare(strict_types=1);
       'newMethod' => ['url' => 'urlPageNew'],
       'editMethod' => ['url' => 'urlPageEdit'],
       'showMethod' => ['url' => 'urlPageDetail'],
+      'selectable' => false,
       'fields' => [
           ['name' => 'uid', 'label' => 'UID'],
           ['name' => 'name', 'label' => 'Name'],

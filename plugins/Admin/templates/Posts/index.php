@@ -8,29 +8,29 @@ declare(strict_types=1);
       $blogUrl = $this->request->getQuery()['val-opt-2'];
   }
 
-    echo $this->element('list'
-        ,[
-       'objects' => $objects
-      ,'heading' => $heading
-      ,'newMethod' => ['url' => 'urlPostNew', 'param' => $blogUrl]
-      ,'editMethod' => ['url' => 'urlPostEdit']
-      ,'showMethod' => ['url' => 'urlPostDetail']
-      ,'optionalSearchForms' => [
+    echo $this->element('list', [
+      'objects' => $objects,
+      'heading' => $heading,
+      'newMethod' => ['url' => 'urlPostNew', 'param' => $blogUrl],
+      'editMethod' => ['url' => 'urlPostEdit'],
+      'showMethod' => ['url' => 'urlPostDetail'],
+      'selectable' => false,
+      'optionalSearchForms' => [
          ['options' => $users, 'value' => 'Posts.owner', 'label' => 'Owner'],
-         ['options' => $blogs, 'value' => 'Posts.blog_id', 'label' => 'Blog']
+         ['options' => $blogs, 'value' => 'Posts.blog_id', 'label' => 'Blog'],
+      ],
+      'fields' => [
+          ['name' => 'uid', 'label' => 'UID'],
+          ['name' => 'image', 'label' => 'Bild'],
+          ['name' => 'name', 'label' => 'Titel'],
+          ['name' => 'blog.name', 'label' => 'Blog'],
+          ['name' => 'city', 'label' => 'Ort'],
+          ['name' => 'publish', 'type' => 'datetime', 'label' => 'veröffentlicht ab'],
+          ['name' => 'author', 'label' => 'Autor'],
+          ['name' => 'owner_user.name', 'label' => 'Owner'],
+          ['name' => 'created', 'type' => 'datetime', 'label' => 'erstellt'],
+          ['name' => 'updated', 'type' => 'datetime', 'label' => 'geändert'],
+        ],
       ]
-    ,'fields' => [
-         ['name' => 'uid', 'label' => 'UID']
-        ,['name' => 'image', 'label' => 'Bild']
-        ,['name' => 'name', 'label' => 'Titel']
-        ,['name' => 'blog.name', 'label' => 'Blog']
-        ,['name' => 'city', 'label' => 'Ort']
-        ,['name' => 'publish', 'type' => 'datetime', 'label' => 'veröffentlicht ab']
-        ,['name' => 'author', 'label' => 'Autor']
-        ,['name' => 'owner_user.name', 'label' => 'Owner']
-        ,['name' => 'created', 'type' => 'datetime', 'label' => 'erstellt']
-        ,['name' => 'updated', 'type' => 'datetime', 'label' => 'geändert']
-        ]
-        ]
     );
 ?>

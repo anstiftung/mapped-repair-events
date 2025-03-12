@@ -8,14 +8,6 @@ use App\Model\Table\BrandsTable;
 class BrandsController extends AdminAppController
 {
 
-    public BrandsTable $Brand;
-    
-    public function __construct($request = null, $response = null)
-    {
-        parent::__construct($request, $response);
-        $this->Brand = $this->getTableLocator()->get('Brands');
-    }
-
     public function insert(): void
     {
         $brand = [
@@ -23,12 +15,22 @@ class BrandsController extends AdminAppController
             'owner' => $this->isLoggedIn() ? $this->loggedUser->uid : 0,
             'status' => APP_OFF
         ];
-        $entity = $this->Brand->newEntity($brand);
-        $brand = $this->Brand->save($entity);
+        $brandsTable = $this->getTableLocator()->get('Brands');
+        $entity = $brandsTable->newEntity($brand);
+        $brand = $brandsTable->save($entity);
         $this->AppFlash->setFlashMessage('Marke erfolgreich erstellt.');
         $this->redirect($this->getReferer());
     }
 
+    public function setApprovedMultiple(): void {
+        $selectedIds = $this->request->getQuery('selectedIds', '');
+        $selectedIds = explode(',', $selectedIds);
+        $brandsTable = $this->getTableLocator()->get('Brands');
+        $brandsTable->setApprovedMultiple($selectedIds);
+        $this->AppFlash->setFlashMessage(count($selectedIds) . ' Marken erfolgreich bestätigt.');
+        $this->redirect($this->getReferer());
+    }
+    
     public function edit($id): void
     {
 
@@ -36,7 +38,8 @@ class BrandsController extends AdminAppController
             throw new NotFoundException;
         }
 
-        $brand = $this->Brand->find('all', conditions: [
+        $brandsTable = $this->getTableLocator()->get('Brands');
+        $brand = $brandsTable->find('all', conditions: [
             'Brands.id' => $id,
             'Brands.status >= ' . APP_DELETED
         ])->first();
@@ -51,7 +54,7 @@ class BrandsController extends AdminAppController
 
         if (!empty($this->request->getData())) {
 
-            $patchedEntity = $this->Brand->patchEntity(
+            $patchedEntity = $brandsTable->patchEntity(
                 $brand,
                 $this->request->getData(),
                 ['validate' => true]
@@ -80,7 +83,8 @@ class BrandsController extends AdminAppController
         ];
         $conditions = array_merge($this->conditions, $conditions);
 
-        $query = $this->Brand->find('all',
+        $brandsTable = $this->getTableLocator()->get('Brands');
+        $query = $brandsTable->find('all',
         conditions: $conditions,
         contain: [
             'OwnerUsers'

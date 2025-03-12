@@ -4,6 +4,7 @@ echo $this->element('list',
     [
         'objects' => $objects,
         'heading' => 'Abos',
+        'selectable' => false,
         'fields' => [
             ['name' => 'id', 'label' => 'ID'],
             ['name' => 'email', 'type' => 'unchanged', 'label' => 'E-Mail'],

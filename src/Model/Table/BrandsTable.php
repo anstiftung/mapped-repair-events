@@ -3,9 +3,12 @@ declare(strict_types=1);
 namespace App\Model\Table;
 
 use Cake\ORM\Table;
+use App\Model\Traits\ApproveMultipleTrait;
 
 class BrandsTable extends Table
 {
+
+    use ApproveMultipleTrait;
 
     public array $allowedBasicHtmlFields = [];
     public string $name_de = 'Marke';
@@ -20,10 +23,7 @@ class BrandsTable extends Table
         ]);
     }
 
-    /**
-     * @return array
-     */
-    public function getForDropdown()
+    public function getForDropdown(): array
     {
 
         $brands = $this->find('all',
