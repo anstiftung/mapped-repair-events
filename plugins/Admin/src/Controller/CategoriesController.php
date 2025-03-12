@@ -15,6 +15,15 @@ class CategoriesController extends AdminAppController
         parent::beforeFilter($event);
     }
 
+    public function setApproved(): void {
+        $selectedIds = $this->request->getQuery('selectedIds', '');
+        $selectedIds = explode(',', $selectedIds);
+        $categoriesTable = $this->getTableLocator()->get('Categories');
+        $categoriesTable->setApprovedMultiple($selectedIds);
+        $this->AppFlash->setFlashMessage(count($selectedIds) . ' Kategorien erfolgreich bestätigt.');
+        $this->redirect($this->getReferer());
+    }
+
     public function insert(): void
     {
         $category = [

@@ -177,6 +177,17 @@ class CategoriesTable extends Table
         return $categories;
     }
 
+    public function setApprovedMultiple(array $categoryIds): void
+    {
+        if (empty($categoryIds)) {
+            return;
+        }
+        $this->updateAll(
+            ['status' => APP_OFF],
+            ['id IN' => $categoryIds]
+        );
+    }
+
     public function getMainCategoriesForFrontendIndexedById(): array
     {
         return $this->getMainCategoriesForFrontend()->formatResults(function ($results) {

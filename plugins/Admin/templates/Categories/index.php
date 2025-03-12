@@ -8,6 +8,9 @@ echo $this->element('list',
         'editMethod' => ['url' => 'urlCategoryEdit'],
         'hideDeleteLink' => true,
         'selectable' => true,
+        'selectableActions' => [
+            'approve' => ['url' => '/admin/categories/setApproved', 'label' => 'Alle Bestätigen'],
+        ],
         'fields' => [
             ['name' => 'id', 'label' => 'ID'],
             ['name' => 'parent_category.name', 'label' => 'Oberkategorie'],

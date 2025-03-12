@@ -27,6 +27,32 @@ MappedRepairEvents.RowMarker = {
                 row.addClass('selected');
             }
         });
+
+        $('.selectable-action').on('click', function () {
+
+            const selectedRows = $('table.list').find(rowMarkerCheckboxSelector + ':checked').closest('tr');
+            const selectedIds = selectedRows.map(function () {
+                return $(this).find('td.id').text();
+            }).get(); 
+            if (selectedIds.length === 0) {
+                alert('Bitte zuerst eine oder mehrere Zeilen auswählen.');
+                return;
+            }
+            let newUrl = $(this).data('url') + '?selectedIds=' + selectedIds.join(',');
+
+            $.prompt(
+                'Möchtest du die Aktion <b>' + $(this).text() + '</b> wirklich ausführen?<br />Ausgewählte Zeilen: ' + selectedIds.length,
+                {
+                    buttons: {Ja: true, Abbrechen: false},
+                    submit: function(v,m,f) {
+                        if(m) {
+                            window.location.href = newUrl;
+                        }
+                    }
+                }
+            );
+            
+        });
     
     },
 
