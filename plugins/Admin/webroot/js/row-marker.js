@@ -2,6 +2,7 @@ class RowMarker {
     constructor() {
         this.rowMarkerCheckboxSelector = 'input.row-marker[type="checkbox"]';
         this.rowMarkerAllCheckboxSelector = 'input#row-marker-all';
+        this.originalButtonLabels = new Map(); // Store original button labels
         this.init();
     }
 
@@ -21,6 +22,11 @@ class RowMarker {
 
         // Handle action button clicks
         $('.selectable-action').on('click', (e) => this.handleActionButtonClick(e));
+        
+        // Store original button labels
+        $('.selectable-action').each((_, btn) => {
+            this.originalButtonLabels.set($(btn).attr('id') || $(btn).index(), $(btn).text().trim());
+        });
     }
 
     handleSelectAllClick(checkbox) {
@@ -60,7 +66,7 @@ class RowMarker {
 
         // Display confirmation prompt
         $.prompt(
-            `Möchtest du die Aktion <b>${button.text()}</b> wirklich ausführen?<br />Ausgewählte Zeilen: ${selectedIds.length}`,
+            `Möchtest du die Aktion <b>${this.getOriginalButtonLabel(button)}</b> wirklich ausführen?<br />Ausgewählte Zeilen: ${selectedIds.length}`,
             {
                 buttons: {Ja: true, Abbrechen: false},
                 submit: (confirmed) => {
@@ -77,15 +83,36 @@ class RowMarker {
      */
     updateObjectSelectionActionButtons() {
         const buttons = $('.selectable-action');
-        const anySelected = $('table.list').find(this.rowMarkerCheckboxSelector + ':checked').length > 0;
+        const selectedCount = $('table.list').find(this.rowMarkerCheckboxSelector + ':checked').length;
+        const anySelected = selectedCount > 0;
 
-        buttons.each(function() {
-            const button = $(this);
+        buttons.each((_, element) => {
+            const button = $(element);
+            const buttonId = button.attr('id') || button.index();
+            const originalLabel = this.originalButtonLabels.get(buttonId);
+            
             if (anySelected) {
                 MappedRepairEvents.Helper.enableButton(button);
+                // Update label with selected count
+                button.text(`${originalLabel} (${selectedCount})`);
             } else {
                 MappedRepairEvents.Helper.disableButton(button);
+                // Reset to original label
+                button.text(originalLabel);
             }
         });
     }
+    
+    /**
+     * Gets the original button label without the count suffix
+     */
+    getOriginalButtonLabel(button) {
+        const buttonId = button.attr('id') || button.index();
+        return this.originalButtonLabels.get(buttonId) || button.text().replace(/ \(\d+\)$/, '');
+    }
 };
+
+// Initialize when document is ready
+$(document).ready(() => {
+    window.rowMarker = new RowMarker();
+});
