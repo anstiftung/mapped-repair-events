@@ -11,7 +11,7 @@ table.list tr th:first-child {
 table.list tr {
     vertical-align: top;
 }
-table.list tr:not(.subtable-container):hover {
+table.list tr:not(.subtable-container):hover td {
     background-color: #efefef ! important;
     color: var(--default-font-color) ! important;
 }
@@ -40,4 +40,11 @@ table.list tr.deactivated {
 }
 table.list tr.inactive {
     text-decoration: line-through;
+}
+table.list tr.selected td {
+    background-color: var(--theme-color-a);
+    color: white ! important;
+}
+table.list tr.selected td:not(.icon) a {
+    color: white ! important;
 }
