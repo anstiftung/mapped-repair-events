@@ -17,7 +17,7 @@ trait ApproveMultipleTrait
             ],
             [
                 'status <' => APP_ON,
-                'id IN' => $ids,
+                $this->getPrimaryKey() . ' IN' => $ids,
             ]
         );
 
