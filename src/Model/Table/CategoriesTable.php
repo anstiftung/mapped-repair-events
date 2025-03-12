@@ -8,9 +8,12 @@ use Cake\ORM\TableRegistry;
 use Cake\Utility\Hash;
 use Cake\Validation\Validator;
 use Cake\ORM\Query\SelectQuery;
+use App\Model\Traits\ApproveMultipleTrait;
 
 class CategoriesTable extends Table
 {
+
+    use ApproveMultipleTrait;
 
     public array $allowedBasicHtmlFields = [];
     public string $name_de = 'Kategorie';
@@ -175,17 +178,6 @@ class CategoriesTable extends Table
         $categories = Hash::sort($categories, '{n}.name');
 
         return $categories;
-    }
-
-    public function setApprovedMultiple(array $categoryIds): void
-    {
-        if (empty($categoryIds)) {
-            return;
-        }
-        $this->updateAll(
-            ['status' => APP_ON],
-            ['id IN' => $categoryIds]
-        );
     }
 
     public function getMainCategoriesForFrontendIndexedById(): array

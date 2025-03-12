@@ -24,6 +24,15 @@ class SkillsController extends AdminAppController
         $this->Skill = $this->getTableLocator()->get('Skills');
     }
 
+    public function setApprovedMultiple(): void {
+        $selectedIds = $this->request->getQuery('selectedIds', '');
+        $selectedIds = explode(',', $selectedIds);
+        $skillsTable = $this->getTableLocator()->get('Skills');
+        $skillsTable->setApprovedMultiple($selectedIds);
+        $this->AppFlash->setFlashMessage(count($selectedIds) . ' Kenntnisse erfolgreich bestätigt.');
+        $this->redirect($this->getReferer());
+    }    
+
     public function insert(): void
     {
         $skill = [

@@ -7,8 +7,11 @@ echo $this->element('list',
         'newMethod' => ['url' => 'urlSkillNew'],
         'editMethod' => ['url' => 'urlSkillEdit'],
         'hideDeleteLink' => true,
-        'selectable' => false,
-        'fields' => [
+        'selectable' => true,
+        'selectableActions' => [
+            'approve' => ['url' => '/admin/skills/setApprovedMultiple', 'label' => 'Alle Bestätigen'],
+        ],
+         'fields' => [
             ['name' => 'id', 'label' => 'ID'],
             ['name' => 'name', 'label' => 'Name'],
             ['name' => 'owner_user.name', 'label' => 'Owner'],

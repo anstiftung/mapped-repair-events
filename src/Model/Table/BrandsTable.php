@@ -3,9 +3,12 @@ declare(strict_types=1);
 namespace App\Model\Table;
 
 use Cake\ORM\Table;
+use App\Model\Traits\ApproveMultipleTrait;
 
 class BrandsTable extends Table
 {
+
+    use ApproveMultipleTrait;
 
     public array $allowedBasicHtmlFields = [];
     public string $name_de = 'Marke';
@@ -18,17 +21,6 @@ class BrandsTable extends Table
             'className' => 'Users',
             'foreignKey' => 'owner'
         ]);
-    }
-
-    public function setApprovedMultiple(array $brandIds): void
-    {
-        if (empty($brandIds)) {
-            return;
-        }
-        $this->updateAll(
-            ['status' => APP_ON],
-            ['id IN' => $brandIds]
-        );
     }
 
     public function getForDropdown()

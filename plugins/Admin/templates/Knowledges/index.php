@@ -8,7 +8,7 @@ declare(strict_types=1);
        'editMethod' => ['url' => 'urlKnowledgeEdit'],
        'showMethod' => ['url' => 'urlKnowledgeDetail'],
        'selectable' => false,
-       'fields' => [
+      'fields' => [
             ['name' => 'uid', 'label' => 'UID'],
             ['name' => 'title', 'label' => 'Titel'],
             ['name' => 'Categories.name', 'type' => 'habtm', 'label' => 'Kategorien'],
