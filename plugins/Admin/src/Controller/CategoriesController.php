@@ -15,7 +15,7 @@ class CategoriesController extends AdminAppController
         parent::beforeFilter($event);
     }
 
-    public function setApproved(): void {
+    public function setApprovedMultiple(): void {
         $selectedIds = $this->request->getQuery('selectedIds', '');
         $selectedIds = explode(',', $selectedIds);
         $categoriesTable = $this->getTableLocator()->get('Categories');

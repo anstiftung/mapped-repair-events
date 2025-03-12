@@ -8,6 +8,9 @@ echo $this->element('list',
         'editMethod' => ['url' => 'urlBrandEdit'],
         'hideDeleteLink' => true,
         'selectable' => true,
+        'selectableActions' => [
+            'approve' => ['url' => '/admin/brands/setApprovedMultiple', 'label' => 'Alle Bestätigen'],
+        ],
         'fields' => [
             ['name' => 'id', 'label' => 'ID'],
             ['name' => 'name', 'label' => 'Marke'],

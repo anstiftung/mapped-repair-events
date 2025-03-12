@@ -183,7 +183,7 @@ class CategoriesTable extends Table
             return;
         }
         $this->updateAll(
-            ['status' => APP_OFF],
+            ['status' => APP_ON],
             ['id IN' => $categoryIds]
         );
     }

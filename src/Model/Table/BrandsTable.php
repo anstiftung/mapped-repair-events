@@ -20,9 +20,17 @@ class BrandsTable extends Table
         ]);
     }
 
-    /**
-     * @return array
-     */
+    public function setApprovedMultiple(array $brandIds): void
+    {
+        if (empty($brandIds)) {
+            return;
+        }
+        $this->updateAll(
+            ['status' => APP_ON],
+            ['id IN' => $brandIds]
+        );
+    }
+
     public function getForDropdown()
     {
 

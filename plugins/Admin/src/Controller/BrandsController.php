@@ -22,6 +22,15 @@ class BrandsController extends AdminAppController
         $this->redirect($this->getReferer());
     }
 
+    public function setApprovedMultiple(): void {
+        $selectedIds = $this->request->getQuery('selectedIds', '');
+        $selectedIds = explode(',', $selectedIds);
+        $brandsTable = $this->getTableLocator()->get('Brands');
+        $brandsTable->setApprovedMultiple($selectedIds);
+        $this->AppFlash->setFlashMessage(count($selectedIds) . ' Marken erfolgreich bestätigt.');
+        $this->redirect($this->getReferer());
+    }
+    
     public function edit($id): void
     {
 

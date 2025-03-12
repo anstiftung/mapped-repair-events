@@ -9,7 +9,7 @@ echo $this->element('list',
         'hideDeleteLink' => true,
         'selectable' => true,
         'selectableActions' => [
-            'approve' => ['url' => '/admin/categories/setApproved', 'label' => 'Alle Bestätigen'],
+            'approve' => ['url' => '/admin/categories/setApprovedMultiple', 'label' => 'Alle Bestätigen'],
         ],
         'fields' => [
             ['name' => 'id', 'label' => 'ID'],
