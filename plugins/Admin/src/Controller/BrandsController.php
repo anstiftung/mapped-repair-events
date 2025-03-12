@@ -26,8 +26,8 @@ class BrandsController extends AdminAppController
         $selectedIds = $this->request->getQuery('selectedIds', '');
         $selectedIds = explode(',', $selectedIds);
         $brandsTable = $this->getTableLocator()->get('Brands');
-        $brandsTable->setApprovedMultiple($selectedIds);
-        $this->AppFlash->setFlashMessage(count($selectedIds) . ' Marken erfolgreich bestätigt.');
+        $affectedCount = $brandsTable->setApprovedMultiple($selectedIds);
+        $this->AppFlash->setFlashMessage($affectedCount . ' Marken erfolgreich bestätigt.');
         $this->redirect($this->getReferer());
     }
     

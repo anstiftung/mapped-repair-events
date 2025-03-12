@@ -19,8 +19,8 @@ class CategoriesController extends AdminAppController
         $selectedIds = $this->request->getQuery('selectedIds', '');
         $selectedIds = explode(',', $selectedIds);
         $categoriesTable = $this->getTableLocator()->get('Categories');
-        $categoriesTable->setApprovedMultiple($selectedIds);
-        $this->AppFlash->setFlashMessage(count($selectedIds) . ' Kategorien erfolgreich bestätigt.');
+        $affectedCount = $categoriesTable->setApprovedMultiple($selectedIds);
+        $this->AppFlash->setFlashMessage($affectedCount . ' Kategorien erfolgreich bestätigt.');
         $this->redirect($this->getReferer());
     }
 
