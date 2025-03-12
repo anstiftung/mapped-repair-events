@@ -32,8 +32,9 @@ MappedRepairEvents.RowMarker = {
 
             const selectedRows = $('table.list').find(rowMarkerCheckboxSelector + ':checked').closest('tr');
             const selectedIds = selectedRows.map(function () {
-                return $(this).find('td.id').text();
-            }).get(); 
+                return parseInt($(this).find('td.id').text());
+            }).get();
+
             if (selectedIds.length === 0) {
                 alert('Bitte zuerst eine oder mehrere Zeilen auswählen.');
                 return;
