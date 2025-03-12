@@ -3,27 +3,16 @@ declare(strict_types=1);
 namespace Admin\Controller;
 
 use Cake\Http\Exception\NotFoundException;
-use App\Model\Table\CategoriesTable;
-use App\Model\Table\OrdsCategoriesTable;
 use Cake\Event\EventInterface;
 
 class CategoriesController extends AdminAppController
 {
-
-    public CategoriesTable $Category;
-    public OrdsCategoriesTable $OrdsCategory;
 
     public function beforeFilter(EventInterface $event): void
     {
         $this->searchUid = false;
         $this->searchText = false;
         parent::beforeFilter($event);
-    }
-
-    public function __construct($request = null, $response = null)
-    {
-        parent::__construct($request, $response);
-        $this->Category = $this->getTableLocator()->get('Categories');
     }
 
     public function insert(): void
@@ -33,8 +22,9 @@ class CategoriesController extends AdminAppController
             'owner' => $this->isLoggedIn() ? $this->loggedUser->uid : 0,
             'status' => APP_OFF
         ];
-        $entity = $this->Category->newEntity($category);
-        $category = $this->Category->save($entity);
+        $categoriesTable = $this->getTableLocator()->get('Categories');
+        $entity = $categoriesTable->newEntity($category);
+        $category = $categoriesTable->save($entity);
         $this->AppFlash->setFlashMessage('Kategorie erfolgreich erstellt.');
         $this->redirect($this->getReferer());
     }
@@ -46,7 +36,8 @@ class CategoriesController extends AdminAppController
             throw new NotFoundException;
         }
 
-        $category = $this->Category->find('all', conditions: [
+        $categoriesTable = $this->getTableLocator()->get('Categories');
+        $category = $categoriesTable->find('all', conditions: [
             'Categories.id' => $id,
             'Categories.status >= ' . APP_DELETED
         ])->first();
@@ -64,7 +55,8 @@ class CategoriesController extends AdminAppController
             $this->request = $this->request->withData('Categories.carbon_footprint', str_replace(',', '.', $this->request->getData('Categories.carbon_footprint')));
             $this->request = $this->request->withData('Categories.material_footprint', str_replace(',', '.', $this->request->getData('Categories.material_footprint')));
 
-            $patchedEntity = $this->Category->patchEntity(
+            $categoriesTable = $this->getTableLocator()->get('Categories');
+            $patchedEntity = $categoriesTable->patchEntity(
                 $category,
                 $this->request->getData(),
                 ['validate' => true]
@@ -82,9 +74,9 @@ class CategoriesController extends AdminAppController
         $metaTags = ['title' => 'Kategorie bearbeiten'];
         $this->set('metaTags', $metaTags);
 
-        $this->OrdsCategory = $this->getTableLocator()->get('OrdsCategories');
-        $this->set('ordsCategories', $this->OrdsCategory->getForDropdown());
-        $this->set('mainCategories', $this->Category->getForDropdown([APP_ON, APP_OFF]));
+        $ordsCategoriesTable = $this->getTableLocator()->get('OrdsCategories');
+        $this->set('ordsCategories', $ordsCategoriesTable->getForDropdown());
+        $this->set('mainCategories', $categoriesTable->getForDropdown([APP_ON, APP_OFF]));
 
     }
 
@@ -97,7 +89,8 @@ class CategoriesController extends AdminAppController
         ];
         $conditions = array_merge($this->conditions, $conditions);
 
-        $query = $this->Category->find('all',
+        $categoriesTable = $this->getTableLocator()->get('Categories');
+        $query = $categoriesTable->find('all',
         conditions: $conditions,
         contain: [
             'OwnerUsers',
@@ -115,7 +108,7 @@ class CategoriesController extends AdminAppController
             if ($object->owner_user) {
                 $object->owner_user->revertPrivatizeData();
             }
-            $object->info_sheet_count = $this->Category->getInfoSheetCount($object->id);
+            $object->info_sheet_count = $categoriesTable->getInfoSheetCount($object->id);
         }
         $this->set('objects', $objects);
 
