@@ -5,6 +5,7 @@ declare(strict_types=1);
       'heading' => 'Laufzettel',
       'editMethod' => ['url' => 'urlInfoSheetEdit'],
       'showMethod' => ['url' => 'urlWorkshopDetail'],
+      'selectable' => false,
       'optionalSearchForms' => [
            ['options' => $users, 'value' => 'InfoSheets.owner', 'label' => 'Owner'],
       ],

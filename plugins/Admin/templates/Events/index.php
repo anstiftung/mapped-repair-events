@@ -6,6 +6,7 @@ declare(strict_types=1);
       'heading' => 'Termine',
       'editMethod' => ['url' => 'urlEventEdit'],
       'showMethod' => ['url' => 'urlEventDetail'],
+      'selectable' => false,
       'fields' => [
           ['name' => 'uid', 'label' => 'UID'],
           ['name' => 'image', 'label' => 'Bild'],

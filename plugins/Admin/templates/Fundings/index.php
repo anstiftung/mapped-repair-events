@@ -6,6 +6,7 @@ echo $this->element('list',
         'heading' => 'Förderanträge',
         'editMethod' => ['url' => 'urlFundingsAdminEdit'],
         'deleteMethod' => '/admin/intern/ajaxDeleteFunding',
+        'selectable' => false,
         'optionalSearchForms' => [
             ['options' => $fundingStatus, 'value' => 'FundingStatus', 'label' => 'Status'],
         ],

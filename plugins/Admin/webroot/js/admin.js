@@ -5,6 +5,7 @@ MappedRepairEvents.Admin = {
         MappedRepairEvents.Helper.highlightFormFields();
         MappedRepairEvents.Helper.bindFlashMessageCancelButton();
         MappedRepairEvents.Helper.beautifyDropdowns();
+        MappedRepairEvents.RowMarker.init();
     },
 
     bindDelete: function(deleteMethod) {

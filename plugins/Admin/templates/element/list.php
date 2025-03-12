@@ -109,6 +109,11 @@ if ($showDeleteLink) {
 
         <table class="list">
             <?php
+            if ($selectable) {
+                echo $this->element('rowMarker/rowMarkerAll', [
+                    'enabled' => true,
+                ]);
+            }
             foreach ($fields as $field) {
 
                 if (isset($field['template'])) {
@@ -178,6 +183,12 @@ if ($showDeleteLink) {
                     $rowStatusClasses = ['status-inactive'];
                 }
                 echo '<tr class="' . implode(' ', $rowStatusClasses) . '">';
+
+                if ($selectable) {
+                    echo $this->element('rowMarker/rowMarker', [
+                        'show' => true,
+                    ]);
+                }
 
                 foreach ($fields as $field) {
 

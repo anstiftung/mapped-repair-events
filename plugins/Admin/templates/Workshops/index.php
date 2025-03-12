@@ -8,6 +8,7 @@ echo $this->element('list', [
       'newMethod' => ['url' => 'urlWorkshopNew'],
       'editMethod' => ['url' => 'urlWorkshopEdit'],
       'showMethod' => ['url' => 'urlWorkshopDetail'],
+      'selectable' => false,
       'optionalSearchForms' => [
           ['options' => $users, 'value' => 'Workshops.owner', 'label' => 'Owner'],
           ['options' => $users, 'value' => 'UsersWorkshops.user_uid', 'label' => 'Mitarbeiter']

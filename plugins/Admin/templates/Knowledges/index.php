@@ -7,6 +7,7 @@ declare(strict_types=1);
        'newMethod' => ['url' => 'urlKnowledgeNew'],
        'editMethod' => ['url' => 'urlKnowledgeEdit'],
        'showMethod' => ['url' => 'urlKnowledgeDetail'],
+       'selectable' => false,
        'fields' => [
             ['name' => 'uid', 'label' => 'UID'],
             ['name' => 'title', 'label' => 'Titel'],
