@@ -1,78 +1,91 @@
-MappedRepairEvents.RowMarker = {
+class RowMarker {
+    constructor() {
+        this.rowMarkerCheckboxSelector = 'input.row-marker[type="checkbox"]';
+        this.rowMarkerAllCheckboxSelector = 'input#row-marker-all';
+        this.init();
+    }
 
-    init: () => {
-        const rowMarkerCheckboxSelector = 'input.row-marker[type="checkbox"]';
-        const constRowMarkerAllCheckboxSelector = 'input#row-marker-all';
+    init() {
+        // Handle "select all" checkbox
+        $(this.rowMarkerAllCheckboxSelector).on('click', (e) => this.handleSelectAllClick(e.target));
 
-        $(constRowMarkerAllCheckboxSelector).on('click', function () {
-            let row;
-            if (this.checked) {
-                row = $(rowMarkerCheckboxSelector + ':not(:checked):not(:disabled)');
-                if (row.closest('tr').css('display') != 'none') {
-                    row.prop('checked', true);
-                    row.closest('tr').addClass('selected');
+        // Handle individual row checkbox clicks
+        $('table.list').find(this.rowMarkerCheckboxSelector).on('click', (e) => {
+            const row = $(e.target).closest('tr');
+            row.toggleClass('selected');
+        });
+
+        // Update action buttons on any checkbox change
+        $([this.rowMarkerCheckboxSelector, this.rowMarkerAllCheckboxSelector].join(',')).on('click', 
+            () => this.updateObjectSelectionActionButtons());
+
+        // Handle action button clicks
+        $('.selectable-action').on('click', (e) => this.handleActionButtonClick(e));
+    }
+
+    handleSelectAllClick(checkbox) {
+        if (checkbox.checked) {
+            // Select all visible and enabled checkboxes
+            const rows = $(this.rowMarkerCheckboxSelector + ':not(:checked):not(:disabled)');
+            rows.each((_, row) => {
+                if ($(row).closest('tr').css('display') !== 'none') {
+                    $(row).prop('checked', true);
+                    $(row).closest('tr').addClass('selected');
                 }
-            } else {
-                row = $(rowMarkerCheckboxSelector + ':checked');
-                row.prop('checked', false);
-                row.closest('tr').removeClass('selected');
-            }
-        });
+            });
+        } else {
+            // Deselect all checked checkboxes
+            const rows = $(this.rowMarkerCheckboxSelector + ':checked');
+            rows.prop('checked', false);
+            rows.closest('tr').removeClass('selected');
+        }
+    }
 
-        // change color of row on click of checkbox
-        $('table.list').find(rowMarkerCheckboxSelector).on('click', function () {
-            const row = $(this).closest('tr');
-            if (row.hasClass('selected')) {
-                row.removeClass('selected');
-            } else {
-                row.addClass('selected');
-            }
-        });
+    handleActionButtonClick(event) {
+        const button = $(event.target);
+        
+        // Skip if button is disabled
+        if (button.hasClass('disabled')) {
+            return;
+        }
 
-        $([rowMarkerCheckboxSelector,constRowMarkerAllCheckboxSelector].join(',')).on('click', function () {
-            MappedRepairEvents.RowMarker.updateObjectSelectionActionButtons();
-        });
+        // Get selected row IDs
+        const selectedRows = $('table.list').find(this.rowMarkerCheckboxSelector + ':checked').closest('tr');
+        const selectedIds = selectedRows.map(function() {
+            return parseInt($(this).find('td.id').text());
+        }).get();
 
-        $('.selectable-action').on('click', function () {
+        // Build action URL with selected IDs
+        const newUrl = button.data('url') + '?selectedIds=' + selectedIds.join(',');
 
-            if ($(this).hasClass('disabled')) {
-                return;
-            }
-
-            const selectedRows = $('table.list').find(rowMarkerCheckboxSelector + ':checked').closest('tr');
-            const selectedIds = selectedRows.map(function () {
-                return parseInt($(this).find('td.id').text());
-            }).get();
-
-            let newUrl = $(this).data('url') + '?selectedIds=' + selectedIds.join(',');
-
-            $.prompt(
-                'Möchtest du die Aktion <b>' + $(this).text() + '</b> wirklich ausführen?<br />Ausgewählte Zeilen: ' + selectedIds.length,
-                {
-                    buttons: {Ja: true, Abbrechen: false},
-                    submit: function(v,m,f) {
-                        if(m) {
-                            window.location.href = newUrl;
-                        }
+        // Display confirmation prompt
+        $.prompt(
+            `Möchtest du die Aktion <b>${button.text()}</b> wirklich ausführen?<br />Ausgewählte Zeilen: ${selectedIds.length}`,
+            {
+                buttons: {Ja: true, Abbrechen: false},
+                submit: (confirmed) => {
+                    if (confirmed) {
+                        window.location.href = newUrl;
                     }
                 }
-            );
-            
-        });
-    
-    },
+            }
+        );
+    }
 
-    updateObjectSelectionActionButtons: () => {
+    /**
+     * Updates action buttons based on selection state
+     */
+    updateObjectSelectionActionButtons() {
         const buttons = $('.selectable-action');
-        const anySelected = $('table.list').find('input.row-marker[type="checkbox"]:checked').length > 0;
+        const anySelected = $('table.list').find(this.rowMarkerCheckboxSelector + ':checked').length > 0;
 
-        buttons.each(function () {
+        buttons.each(function() {
             const button = $(this);
-            MappedRepairEvents.Helper.disableButton(button);
             if (anySelected) {
                 MappedRepairEvents.Helper.enableButton(button);
+            } else {
+                MappedRepairEvents.Helper.disableButton(button);
             }
         });
-    },
-
+    }
 };
