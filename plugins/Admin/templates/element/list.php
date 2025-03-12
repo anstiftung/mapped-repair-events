@@ -77,7 +77,8 @@ if ($showDeleteLink) {
                     $selectableAction['label'],
                     'javascript:void(0);',
                     [
-                        'class' => 'button selectable-action',
+                        'class' => 'button selectable-action disabled',
+                        'disabled' => 'disabled',
                         'data-url' => $selectableAction['url'],
                     ],
                 );

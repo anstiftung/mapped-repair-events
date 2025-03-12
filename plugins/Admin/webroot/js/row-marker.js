@@ -2,8 +2,9 @@ MappedRepairEvents.RowMarker = {
 
     init: () => {
         const rowMarkerCheckboxSelector = 'input.row-marker[type="checkbox"]';
+        const constRowMarkerAllCheckboxSelector = 'input#row-marker-all';
 
-        $('input#row-marker-all').on('click', function () {
+        $(constRowMarkerAllCheckboxSelector).on('click', function () {
             let row;
             if (this.checked) {
                 row = $(rowMarkerCheckboxSelector + ':not(:checked):not(:disabled)');
@@ -28,17 +29,21 @@ MappedRepairEvents.RowMarker = {
             }
         });
 
+        $([rowMarkerCheckboxSelector,constRowMarkerAllCheckboxSelector].join(',')).on('click', function () {
+            MappedRepairEvents.RowMarker.updateObjectSelectionActionButtons();
+        });
+
         $('.selectable-action').on('click', function () {
+
+            if ($(this).hasClass('disabled')) {
+                return;
+            }
 
             const selectedRows = $('table.list').find(rowMarkerCheckboxSelector + ':checked').closest('tr');
             const selectedIds = selectedRows.map(function () {
                 return parseInt($(this).find('td.id').text());
             }).get();
 
-            if (selectedIds.length === 0) {
-                alert('Bitte zuerst eine oder mehrere Zeilen auswählen.');
-                return;
-            }
             let newUrl = $(this).data('url') + '?selectedIds=' + selectedIds.join(',');
 
             $.prompt(
@@ -55,6 +60,19 @@ MappedRepairEvents.RowMarker = {
             
         });
     
+    },
+
+    updateObjectSelectionActionButtons: () => {
+        const buttons = $('.selectable-action');
+        const anySelected = $('table.list').find('input.row-marker[type="checkbox"]:checked').length > 0;
+
+        buttons.each(function () {
+            const button = $(this);
+            MappedRepairEvents.Helper.disableButton(button);
+            if (anySelected) {
+                MappedRepairEvents.Helper.enableButton(button);
+            }
+        });
     },
 
 };
