@@ -8,20 +8,12 @@ use Cake\Event\EventInterface;
 
 class SkillsController extends AdminAppController
 {
-
-    public SkillsTable $Skill;
     
     public function beforeFilter(EventInterface $event): void
     {
         $this->searchUid = false;
         $this->searchText = false;
         parent::beforeFilter($event);
-    }
-
-    public function __construct($request = null, $response = null)
-    {
-        parent::__construct($request, $response);
-        $this->Skill = $this->getTableLocator()->get('Skills');
     }
 
     public function setApprovedMultiple(): void {
@@ -40,8 +32,9 @@ class SkillsController extends AdminAppController
             'owner' => $this->isLoggedIn() ? $this->loggedUser->uid : 0,
             'status' => APP_OFF
         ];
-        $entity = $this->Skill->newEntity($skill);
-        $skill = $this->Skill->save($entity);
+        $skillsTable = $this->getTableLocator()->get('Skills');
+        $entity = $skillsTable->newEntity($skill);
+        $skill = $skillsTable->save($entity);
         $this->AppFlash->setFlashMessage('Kenntnis erfolgreich erstellt.');
         $this->redirect($this->getReferer());
     }
@@ -53,7 +46,8 @@ class SkillsController extends AdminAppController
             throw new NotFoundException;
         }
 
-        $skill = $this->Skill->find('all', conditions: [
+        $skillsTable = $this->getTableLocator()->get('Skills');
+        $skill = $skillsTable->find('all', conditions: [
             'Skills.id' => $id,
             'Skills.status >= ' . APP_DELETED
         ])->first();
@@ -68,7 +62,7 @@ class SkillsController extends AdminAppController
 
         if (!empty($this->request->getData())) {
 
-            $patchedEntity = $this->Skill->patchEntity(
+            $patchedEntity = $skillsTable->patchEntity(
                 $skill,
                 $this->request->getData(),
                 ['validate' => true]
@@ -97,7 +91,8 @@ class SkillsController extends AdminAppController
         ];
         $conditions = array_merge($this->conditions, $conditions);
 
-        $query = $this->Skill->find('all',
+        $skillsTable = $this->getTableLocator()->get('Skills');
+        $query = $skillsTable->find('all',
         conditions: $conditions,
         contain: [
             'OwnerUsers',
