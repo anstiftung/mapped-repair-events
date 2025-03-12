@@ -3,7 +3,6 @@ class RowMarker {
         this.rowMarkerCheckboxSelector = 'input.row-marker[type="checkbox"]';
         this.rowMarkerAllCheckboxSelector = 'input#row-marker-all';
         this.originalButtonLabels = new Map(); // Store original button labels
-        this.init();
     }
 
     init() {
@@ -69,8 +68,8 @@ class RowMarker {
             `Möchtest du die Aktion <b>${this.getOriginalButtonLabel(button)}</b> wirklich ausführen?<br />Ausgewählte Zeilen: ${selectedIds.length}`,
             {
                 buttons: {Ja: true, Abbrechen: false},
-                submit: (confirmed) => {
-                    if (confirmed) {
+                submit: function(v,m,f) {
+                    if(m) {
                         window.location.href = newUrl;
                     }
                 }
