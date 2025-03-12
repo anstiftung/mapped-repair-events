@@ -23,7 +23,7 @@ class BrandsTable extends Table
         ]);
     }
 
-    public function getForDropdown()
+    public function getForDropdown(): array
     {
 
         $brands = $this->find('all',
