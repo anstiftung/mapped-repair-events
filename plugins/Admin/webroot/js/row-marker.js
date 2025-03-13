@@ -2,7 +2,6 @@ class RowMarker {
     constructor() {
         this.rowMarkerCheckboxSelector = 'input.row-marker[type="checkbox"]';
         this.rowMarkerAllCheckboxSelector = 'input#row-marker-all';
-        this.originalButtonLabels = new Map(); // Store original button labels
     }
 
     init() {
@@ -22,9 +21,9 @@ class RowMarker {
         // Handle action button clicks
         $('.selectable-action').on('click', (e) => this.handleActionButtonClick(e));
         
-        // Store original button labels
+        // Store original button labels as data attributes
         $('.selectable-action').each((_, btn) => {
-            this.originalButtonLabels.set($(btn).attr('id') || $(btn).index(), $(btn).text().trim());
+            $(btn).data('original-label', $(btn).text().trim());
         });
     }
 
@@ -87,17 +86,15 @@ class RowMarker {
 
         buttons.each((_, element) => {
             const button = $(element);
-            const buttonId = button.attr('id') || button.index();
-            const originalLabel = this.originalButtonLabels.get(buttonId);
             
             if (anySelected) {
                 MappedRepairEvents.Helper.enableButton(button);
                 // Update label with selected count
-                button.text(`${originalLabel} (${selectedCount})`);
+                button.text(`${this.getOriginalButtonLabel(button)} (${selectedCount})`);
             } else {
                 MappedRepairEvents.Helper.disableButton(button);
                 // Reset to original label
-                button.text(originalLabel);
+                button.text(this.getOriginalButtonLabel(button));
             }
         });
     }
@@ -106,8 +103,7 @@ class RowMarker {
      * Gets the original button label without the count suffix
      */
     getOriginalButtonLabel(button) {
-        const buttonId = button.attr('id') || button.index();
-        return this.originalButtonLabels.get(buttonId) || button.text().replace(/ \(\d+\)$/, '');
+        return $(button).data('original-label') || button.text().replace(/ \(\d+\)$/, '');
     }
 };
 
