@@ -4,9 +4,19 @@ namespace Admin\Controller;
 
 use Cake\Http\Exception\NotFoundException;
 use Cake\Event\EventInterface;
+use App\Model\Table\CategoriesTable;
 
 class CategoriesController extends AdminAppController
 {
+
+    public CategoriesTable $Category;
+
+    public function __construct($request = null, $response = null)
+    {
+        parent::__construct($request, $response);
+        // keep that because of AppController::stripTagsFromFields()
+        $this->Category = $this->getTableLocator()->get('Categories');
+    }
 
     public function beforeFilter(EventInterface $event): void
     {

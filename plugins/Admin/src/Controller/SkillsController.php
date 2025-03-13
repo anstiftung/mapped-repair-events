@@ -9,6 +9,15 @@ use Cake\Event\EventInterface;
 class SkillsController extends AdminAppController
 {
     
+    public SkillsTable $Skill;
+
+    public function __construct($request = null, $response = null)
+    {
+        parent::__construct($request, $response);
+        // keep that because of AppController::stripTagsFromFields()
+        $this->Skill = $this->getTableLocator()->get('Skills');
+    }
+
     public function beforeFilter(EventInterface $event): void
     {
         $this->searchUid = false;

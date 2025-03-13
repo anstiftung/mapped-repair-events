@@ -8,6 +8,15 @@ use App\Model\Table\BrandsTable;
 class BrandsController extends AdminAppController
 {
 
+    public BrandsTable $Brand;
+
+    public function __construct($request = null, $response = null)
+    {
+        parent::__construct($request, $response);
+        // keep that because of AppController::stripTagsFromFields()
+        $this->Brand = $this->getTableLocator()->get('Brands');
+    }
+    
     public function insert(): void
     {
         $brand = [
