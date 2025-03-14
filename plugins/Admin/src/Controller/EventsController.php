@@ -37,6 +37,10 @@ class EventsController extends AdminAppController
                 'name' => 'Events.author',
                 'searchType' => 'search'
             ],
+            'Events.workshop_uid' => [
+                'name' => 'Events.workshop_uid',
+                'searchType' => 'equal'
+            ],
             'Events.owner' => [
                 'name' => 'Events.owner',
                 'searchType' => 'equal',
