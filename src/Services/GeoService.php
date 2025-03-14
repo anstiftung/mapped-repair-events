@@ -77,9 +77,11 @@ class GeoService {
                         'OR' =>
                             [
                                 $provincesTable->aliasField('name') => $addressComponent->long_name,
-                                $provincesTable->aliasField('alternative_names LIKE') => '%' . $addressComponent->long_name . '%',
+                                'FIND_IN_SET(:long_name, alternative_names) =' => true,
                             ],
-                    ])->first();
+                    ])
+                    ->bind(':long_name', $addressComponent->long_name, 'string')
+                    ->first();
                     continue;
                 }
             }
