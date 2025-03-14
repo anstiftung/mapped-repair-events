@@ -73,6 +73,7 @@ class GeoService {
             $provincesTable = FactoryLocator::get('Table')->get('Provinces');
             foreach($output->results[0]->address_components as $addressComponent) {
                 if ($addressComponent->types[0] == 'administrative_area_level_1') {
+                    // @phpstan-ignore-next-line
                     $province = $provincesTable->find()->where([
                         'OR' =>
                             [
