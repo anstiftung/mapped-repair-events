@@ -12,12 +12,10 @@ if ($funding->usageproof_submit_date !== null) {
     $submitInfo = ' eingereicht am ' . $funding->usageproof_submit_date->format('d.m.Y H:i');
 }
 
-if ($funding->usageproof_exists) {
-    echo $this->element('funding/status/usageproofStatus', [
-        'funding' => $funding,
-        'additionalTextBefore' => 'Verwendungsnachweis' . $submitInfo. ': ',
-    ]);
-}
+echo $this->element('funding/status/usageproofStatus', [
+    'funding' => $funding,
+    'additionalTextBefore' => 'Verwendungsnachweis' . $submitInfo. ': ',
+]);
 
 if ($funding->usageproof_status == Funding::STATUS_DATA_MISSING) {
     echo '<div style="margin-top:10px;margin-left:10px;">';
