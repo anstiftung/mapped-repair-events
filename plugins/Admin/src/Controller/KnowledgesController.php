@@ -18,7 +18,7 @@ class KnowledgesController extends AdminAppController
     {
         parent::__construct($request, $response);
         // keep that because of AppController::stripTagsFromFields()
-        $this->Knowledge = $this->getTableLocator()->get('Skills');
+        $this->Knowledge = $this->getTableLocator()->get('Knowledges');
     }
 
 
