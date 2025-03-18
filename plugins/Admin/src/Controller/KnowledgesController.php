@@ -12,6 +12,15 @@ class KnowledgesController extends AdminAppController
 
     public CategoriesTable $Category;
     public SkillsTable $Skill;
+    public KnowledgesTable $Knowledge;
+
+    public function __construct($request = null, $response = null)
+    {
+        parent::__construct($request, $response);
+        // keep that because of AppController::stripTagsFromFields()
+        $this->Knowledge = $this->getTableLocator()->get('Skills');
+    }
+
 
     public function insert(): void
     {
