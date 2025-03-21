@@ -7,11 +7,12 @@ use Cake\Http\ServerRequest;
 use Authorization\Policy\RequestPolicyInterface;
 use Authorization\Policy\ResultInterface;
 use Cake\Core\Configure;
+use Authorization\IdentityInterface;
 
 class AdminPolicy implements RequestPolicyInterface
 {
 
-    public function canAccess($identity, ServerRequest $request): bool|ResultInterface
+    public function canAccess(?IdentityInterface $identity, ServerRequest $request): bool|ResultInterface
     {
 
         if ($request->getParam('controller') == 'Fundings') {
