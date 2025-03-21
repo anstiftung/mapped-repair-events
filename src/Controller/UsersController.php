@@ -24,9 +24,9 @@ class UsersController extends AppController
     public SkillsTable $Skill;
     public UsersTable $User;
 
-    public function __construct($request = null, $response = null)
+    public function initialize(): void
     {
-        parent::__construct($request, $response);
+        parent::initialize();
         $this->User = $this->getTableLocator()->get('Users');
     }
 
@@ -290,7 +290,7 @@ class UsersController extends AppController
 
     }
 
-    private function _profil($user, $isMyProfile, $isEditMode): void
+    private function _profil(User $user, bool $isMyProfile, bool $isEditMode): void
     {
         $this->Category = $this->getTableLocator()->get('Categories');
         $this->set('categories', $this->Category->getForDropdown(APP_ON));
@@ -381,7 +381,7 @@ class UsersController extends AppController
 
     }
 
-    public function profil($userUid=null): void
+    public function profil(?int $userUid=null): void
     {
 
         if ($userUid === null && !$this->isLoggedIn()) {
@@ -600,7 +600,7 @@ class UsersController extends AppController
         return !empty($_SERVER['argv']) && !empty($_SERVER['argv'][0]) && preg_match('`vendor/bin/phpunit`', $_SERVER['argv'][0]);
     }
 
-    public function register($userGroup=GROUPS_REPAIRHELPER): void
+    public function register(int $userGroup=GROUPS_REPAIRHELPER): void
     {
 
         $this->set('isCalledByTestSuite', $this->isCalledByTestSuite());

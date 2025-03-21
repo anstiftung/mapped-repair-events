@@ -12,6 +12,7 @@ use Cake\Utility\Inflector;
 use App\Mailer\AppMailer;
 use App\Services\PdfWriter\FoerderbewilligungPdfWriterService;
 use App\Services\PdfWriter\FoerderantragPdfWriterService;
+use App\Model\Entity\Funding;
 
 trait EditTrait {
 
@@ -128,7 +129,7 @@ trait EditTrait {
     }
 
 
-    private function submitFunding($funding): void
+    private function submitFunding(Funding $funding): void
     {
 
         $timestamp = DateTime::now();

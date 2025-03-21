@@ -18,6 +18,7 @@ use App\Services\PdfWriter\FoerderantragPdfWriterService;
 use Cake\Http\Response;
 use App\Model\Entity\User;
 use App\Services\PdfWriter\VerwendungsnachweisPdfWriterService;
+use Cake\Datasource\EntityInterface;
 
 class FundingsController extends AppController
 {
@@ -27,7 +28,7 @@ class FundingsController extends AppController
     use UploadsTrait;
     use VerwendungsnachweisTrait;
 
-    private function getBasicErrorMessages($funding): array
+    private function getBasicErrorMessages(Funding $funding): array
     {
         $errors = ['Zugriff auf diese Seite nicht möglich.'];
         if (!empty($funding) && $funding->workshop->status == APP_DELETED) {
@@ -37,7 +38,7 @@ class FundingsController extends AppController
 
     }
 
-    private function createdByOtherOwnerCheck($workshopUid): false|User
+    private function createdByOtherOwnerCheck(int $workshopUid): false|User
     {
         $fundingsTable = $this->getTableLocator()->get('Fundings');
         $funding = $fundingsTable->find()->where([
@@ -54,7 +55,7 @@ class FundingsController extends AppController
         return false;
     }
 
-    private function patchFunding($funding, $associations): Funding
+    private function patchFunding(Funding $funding, array $associations): Funding
     {
         $fundingsTable = $this->getTableLocator()->get('Fundings');
         $patchedEntity = $fundingsTable->patchEntity($funding, $this->request->getData(), [
@@ -63,7 +64,7 @@ class FundingsController extends AppController
         return $patchedEntity;
     }
 
-    private function updatePrivateFieldsForFieldsThatAreNotRequiredInUserProfile($privateFields): string
+    private function updatePrivateFieldsForFieldsThatAreNotRequiredInUserProfile(string $privateFields): string
     {
         $fields = ['street', 'city', 'phone'];
         $existingArray = array_map('trim', explode(',', $privateFields));
@@ -71,7 +72,7 @@ class FundingsController extends AppController
         return implode(',', $updatedArray);
     }
 
-    private function patchFundingStatusIfNewUploadWasUploadedOrDeleted($newFundinguploads, $patchedEntity, $uploadType, $deleteFundinguploads): Funding
+    private function patchFundingStatusIfNewUploadWasUploadedOrDeleted(array $newFundinguploads, Funding $patchedEntity, string $uploadType, ?array $deleteFundinguploads): Funding
     {
         if (!empty($newFundinguploads) || !empty($deleteFundinguploads)) {
             $newStatus = Funding::STATUS_PENDING;
@@ -88,7 +89,7 @@ class FundingsController extends AppController
         return $patchedEntity;
     }
 
-    private function updateCoordinates($entity, $index, $addressString): void
+    private function updateCoordinates(EntityInterface $entity, string $index, string $addressString): void
     {
         if (!$entity->use_custom_coordinates) {
             $geoData = $this->geoService->getGeoDataByAddress($addressString);
@@ -107,7 +108,7 @@ class FundingsController extends AppController
         $this->redirect(Configure::read('AppConfig.htmlHelper')->urlFundings());
     }
 
-    private function getPatchedFundingForValidFields($errors, $workshopUid, $associationsWithoutValidation): Funding
+    private function getPatchedFundingForValidFields(array $errors, int $workshopUid, array $associationsWithoutValidation): Funding
     {
         $data = $this->request->getData();
         $verifiedFieldsWithErrors = [];
@@ -134,7 +135,7 @@ class FundingsController extends AppController
         return $patchedEntity;
     }
 
-    private function removeValidationFromAssociations($associations): array
+    private function removeValidationFromAssociations(array $associations): array
     {
         $result = array_map(function($association) {
             return ['validate' => false];

@@ -222,7 +222,7 @@ class WidgetsController extends AppController
 
     }
 
-    public function statisticsWorkshop($workshopUid): void
+    public function statisticsWorkshop(int $workshopUid): void
     {
 
         $this->parseStatisticsParams();
@@ -277,15 +277,15 @@ class WidgetsController extends AppController
     }
 
     private function statisticsWorkshopCategories(
-        $workshopUid,
-        $dateFrom,
-        $dateTo,
-        $backgroundColorOk,
-        $backgroundColorRepairable,
-        $backgroundColorNotOk,
-        $borderColorOk,
-        $borderColorRepairable,
-        $borderColorNotOk
+        int $workshopUid,
+        string $dateFrom,
+        string $dateTo,
+        string $backgroundColorOk,
+        string $backgroundColorRepairable,
+        string $backgroundColorNotOk,
+        string $borderColorOk,
+        string $borderColorRepairable,
+        string $borderColorNotOk,
         ): void
     {
 
@@ -352,15 +352,15 @@ class WidgetsController extends AppController
     }
 
     private function statisticsWorkshopRepaired(
-        $workshopUid,
-        $dateFrom,
-        $dateTo,
-        $backgroundColorOk,
-        $backgroundColorRepairable,
-        $backgroundColorNotOk,
-        $borderColorOk,
-        $borderColorRepairable,
-        $borderColorNotOk
+        int $workshopUid,
+        string $dateFrom,
+        string $dateTo,
+        string $backgroundColorOk,
+        string $backgroundColorRepairable,
+        string $backgroundColorNotOk,
+        string $borderColorOk,
+        string $borderColorRepairable,
+        string $borderColorNotOk,
         ): void
     {
 
@@ -515,7 +515,7 @@ class WidgetsController extends AppController
 
     }
 
-    private function getDateFromByMonthAndYear($month, $year): array
+    private function getDateFromByMonthAndYear(string|array $month, string|array $year): array
     {
         $yearTo = $year;
         if (is_array($year) && isset($year['year'])) {
@@ -543,15 +543,15 @@ class WidgetsController extends AppController
     }
 
     private function statisticsGlobalCategories(
-        $month,
-        $year,
-        $backgroundColorOk,
-        $backgroundColorRepairable,
-        $backgroundColorNotOk,
-        $borderColorOk,
-        $borderColorRepairable,
-        $borderColorNotOk,
-        $dataSource
+        string $month,
+        string $year,
+        string $backgroundColorOk,
+        string $backgroundColorRepairable,
+        string $backgroundColorNotOk,
+        string $borderColorOk,
+        string $borderColorRepairable,
+        string $borderColorNotOk,
+        string $dataSource,
         ): void
     {
 
@@ -679,14 +679,14 @@ class WidgetsController extends AppController
     }
 
     private function statisticsGlobalRepaired(
-        $month,
-        $year,
-        $backgroundColorOk,
-        $backgroundColorRepairable,
-        $backgroundColorNotOk,
-        $borderColorOk,
-        $borderColorRepairable,
-        $borderColorNotOk
+        string $month,
+        string $year,
+        string $backgroundColorOk,
+        string $backgroundColorRepairable,
+        string $backgroundColorNotOk,
+        string $borderColorOk,
+        string $borderColorRepairable,
+        string $borderColorNotOk,
         ): void
     {
 
@@ -718,20 +718,20 @@ class WidgetsController extends AppController
 
     }
 
-    private function setDonutChartHasData($statisticsData): void
+    private function setDonutChartHasData(array $statisticsData): void
     {
         $this->set('chartHasData', $statisticsData['data'][0] > 0 || $statisticsData['data'][1] > 0);
     }
 
-    private function setBarChartHasData($statisticsData): void
+    private function setBarChartHasData(array $statisticsData): void
     {
         $this->set('chartHasData', !empty($statisticsData['datasets'][0]['data']) || !empty($statisticsData['datasets'][1]['data']));
     }
 
-    private function validateHtmlColor($color): false|string
+    private function validateHtmlColor(string $color): false|string
     {
 
-        $namedColors = array('aliceblue', 'antiquewhite', 'aqua', 'aquamarine', 'azure', 'beige', 'bisque', 'black', 'blanchedalmond', 'blue', 'blueviolet', 'brown', 'burlywood', 'cadetblue', 'chartreuse', 'chocolate', 'coral', 'cornflowerblue', 'cornsilk', 'crimson', 'cyan', 'darkblue', 'darkcyan', 'darkgoldenrod', 'darkgray', 'darkgreen', 'darkkhaki', 'darkmagenta', 'darkolivegreen', 'darkorange', 'darkorchid', 'darkred', 'darksalmon', 'darkseagreen', 'darkslateblue', 'darkslategray', 'darkturquoise', 'darkviolet', 'deeppink', 'deepskyblue', 'dimgray', 'dodgerblue', 'firebrick', 'floralwhite', 'forestgreen', 'fuchsia', 'gainsboro', 'ghostwhite', 'gold', 'goldenrod', 'gray', 'green', 'greenyellow', 'honeydew', 'hotpink', 'indianred', 'indigo', 'ivory', 'khaki', 'lavender', 'lavenderblush', 'lawngreen', 'lemonchiffon', 'lightblue', 'lightcoral', 'lightcyan', 'lightgoldenrodyellow', 'lightgreen', 'lightgrey', 'lightpink', 'lightsalmon', 'lightseagreen', 'lightskyblue', 'lightslategray', 'lightsteelblue', 'lightyellow', 'lime', 'limegreen', 'linen', 'magenta', 'maroon', 'mediumaquamarine', 'mediumblue', 'mediumorchid', 'mediumpurple', 'mediumseagreen', 'mediumslateblue', 'mediumspringgreen', 'mediumturquoise', 'mediumvioletred', 'midnightblue', 'mintcream', 'mistyrose', 'moccasin', 'navajowhite', 'navy', 'oldlace', 'olive', 'olivedrab', 'orange', 'orangered', 'orchid', 'palegoldenrod', 'palegreen', 'paleturquoise', 'palevioletred', 'papayawhip', 'peachpuff', 'peru', 'pink', 'plum', 'powderblue', 'purple', 'red', 'rosybrown', 'royalblue', 'saddlebrown', 'salmon', 'sandybrown', 'seagreen', 'seashell', 'sienna', 'silver', 'skyblue', 'slateblue', 'slategray', 'snow', 'springgreen', 'steelblue', 'tan', 'teal', 'thistle', 'tomato', 'turquoise', 'violet', 'wheat', 'white', 'whitesmoke', 'yellow', 'yellowgreen');
+        $namedColors = ['aliceblue', 'antiquewhite', 'aqua', 'aquamarine', 'azure', 'beige', 'bisque', 'black', 'blanchedalmond', 'blue', 'blueviolet', 'brown', 'burlywood', 'cadetblue', 'chartreuse', 'chocolate', 'coral', 'cornflowerblue', 'cornsilk', 'crimson', 'cyan', 'darkblue', 'darkcyan', 'darkgoldenrod', 'darkgray', 'darkgreen', 'darkkhaki', 'darkmagenta', 'darkolivegreen', 'darkorange', 'darkorchid', 'darkred', 'darksalmon', 'darkseagreen', 'darkslateblue', 'darkslategray', 'darkturquoise', 'darkviolet', 'deeppink', 'deepskyblue', 'dimgray', 'dodgerblue', 'firebrick', 'floralwhite', 'forestgreen', 'fuchsia', 'gainsboro', 'ghostwhite', 'gold', 'goldenrod', 'gray', 'green', 'greenyellow', 'honeydew', 'hotpink', 'indianred', 'indigo', 'ivory', 'khaki', 'lavender', 'lavenderblush', 'lawngreen', 'lemonchiffon', 'lightblue', 'lightcoral', 'lightcyan', 'lightgoldenrodyellow', 'lightgreen', 'lightgrey', 'lightpink', 'lightsalmon', 'lightseagreen', 'lightskyblue', 'lightslategray', 'lightsteelblue', 'lightyellow', 'lime', 'limegreen', 'linen', 'magenta', 'maroon', 'mediumaquamarine', 'mediumblue', 'mediumorchid', 'mediumpurple', 'mediumseagreen', 'mediumslateblue', 'mediumspringgreen', 'mediumturquoise', 'mediumvioletred', 'midnightblue', 'mintcream', 'mistyrose', 'moccasin', 'navajowhite', 'navy', 'oldlace', 'olive', 'olivedrab', 'orange', 'orangered', 'orchid', 'palegoldenrod', 'palegreen', 'paleturquoise', 'palevioletred', 'papayawhip', 'peachpuff', 'peru', 'pink', 'plum', 'powderblue', 'purple', 'red', 'rosybrown', 'royalblue', 'saddlebrown', 'salmon', 'sandybrown', 'seagreen', 'seashell', 'sienna', 'silver', 'skyblue', 'slateblue', 'slategray', 'snow', 'springgreen', 'steelblue', 'tan', 'teal', 'thistle', 'tomato', 'turquoise', 'violet', 'wheat', 'white', 'whitesmoke', 'yellow', 'yellowgreen'];
         if (in_array($color, $namedColors)) {
             return $color;
         }

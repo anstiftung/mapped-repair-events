@@ -96,7 +96,7 @@ class WorkshopsController extends AppController
 
     }
 
-    private function _edit($workshop, $isEditMode): void
+    private function _edit(Workshop $workshop, bool $isEditMode): void
     {
 
         $this->User = $this->getTableLocator()->get('Users');
@@ -199,7 +199,7 @@ class WorkshopsController extends AppController
         }
     }
 
-    private function getPreparedCategoryIcons($categories): array
+    private function getPreparedCategoryIcons(array $categories): array
     {
         $preparedCategories = [];
         $i = 0;
@@ -748,7 +748,7 @@ class WorkshopsController extends AppController
 
     }
 
-    private function processWorknewsAddForm($workshop): null
+    private function processWorknewsAddForm(Workshop $workshop): null
     {
 
         if (!empty($this->getRequest()->getData()) && ($this->getRequest()->getData('botEwX482') == '' || $this->getRequest()->getData('botEwX482') < 1)) {
@@ -978,25 +978,19 @@ class WorkshopsController extends AppController
 
     }
 
-    private function checkType($type): array
+    private function checkType(string $type): array
     {
-        if (! in_array($type, [
-            'user',
-        ])) {
+        if ($type != 'user') {
             throw new NotFoundException('wrong type');
         }
 
-        $preparedType = [
+        return [
             'pluralized' => Inflector::pluralize($type),
-            'upperPluralized' => ucfirst(Inflector::pluralize($type))
+            'upperPluralized' => ucfirst(Inflector::pluralize($type)),
+            'resignMessage' => 'Du bist aus der Initiative ausgetreten.',
+            'refuseMessage' => '%name% wurde erfolgreich als Mitarbeiter abgelehnt.',
+            'approveMessage' => '%name% wurde erfolgreich als Mitarbeiter bestätigt und per E-Mail benachrichtigt.',
         ];
-        if ($type == 'user') {
-            $preparedType['resignMessage'] = 'Du bist aus der Initiative ausgetreten.';
-            $preparedType['refuseMessage'] = '%name% wurde erfolgreich als Mitarbeiter abgelehnt.';
-            $preparedType['approveMessage'] = '%name% wurde erfolgreich als Mitarbeiter bestätigt und per E-Mail benachrichtigt.';
-        }
-
-        return $preparedType;
     }
 
     private function prepareUserWorkshopActions(): Workshop
@@ -1101,7 +1095,7 @@ class WorkshopsController extends AppController
         $this->redirect($this->referer());
     }
 
-    public function userDelete($type): Workshop
+    public function userDelete(string $type): Workshop
     {
         $preparedType = $this->checkType($type);
         $workshop = $this->prepareUserWorkshopActions();
@@ -1115,12 +1109,12 @@ class WorkshopsController extends AppController
         return $workshop;
     }
 
-    private function getUserEntity($workshop): User
+    private function getUserEntity(Workshop $workshop): User
     {
         return $workshop->users[0];
     }
 
-    public function apply($relationTable, $foreignKey, $model, $userUid): void
+    public function apply(string $relationTable, string $foreignKey, string $model, int $userUid): void
     {
         if (! empty($this->request->getData())) {
 
@@ -1274,7 +1268,7 @@ class WorkshopsController extends AppController
 
     }
 
-    public function ajaxGetWorkshopDetail($workshopUid): void
+    public function ajaxGetWorkshopDetail(int $workshopUid): void
     {
 
         if (!$this->request->is('ajax')) {

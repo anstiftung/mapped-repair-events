@@ -9,6 +9,7 @@ use Cake\Event\EventInterface;
 use Cake\ORM\Table;
 use Cake\Routing\Router;
 use Cake\Validation\Validator;
+use ArrayObject;
 
 abstract class AppTable extends Table
 {
@@ -78,7 +79,7 @@ abstract class AppTable extends Table
         return $validator;
     }
 
-    public function getNumberRangeValidator(Validator $validator, $field, $min, $max): Validator
+    public function getNumberRangeValidator(Validator $validator, string $field, int $min, int $max): Validator
     {
         $message = 'Die Eingabe muss eine Zahl zwischen ' . $min . ' und ' . $max . ' sein.';
         $validator->lessThanOrEqual($field, $max, $message);
@@ -87,7 +88,7 @@ abstract class AppTable extends Table
         return $validator;
     }
 
-    public function getPatchedEntityForAdminEdit($entity, $data): EntityInterface
+    public function getPatchedEntityForAdminEdit(EntityInterface $entity, array $data): EntityInterface
     {
         $isAdmin = Router::getRequest()?->getAttribute('identity')?->isAdmin();
         $patchedEntity = $this->patchEntity(
@@ -98,9 +99,8 @@ abstract class AppTable extends Table
         return $patchedEntity;
     }
 
-    public function beforeSave(EventInterface $event, $entity, $options): void
+    public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options): void
     {
-
         $this->loggedUserUid = Router::getRequest()?->getAttribute('identity')?->uid;
 
         if ($entity->isNew()) {

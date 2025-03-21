@@ -2,8 +2,11 @@
 declare(strict_types=1);
 namespace App\Model\Table;
 
+use Cake\Datasource\EntityInterface;
+use Cake\Event\EventInterface;
 use Cake\ORM\Table;
 use Cake\Utility\Text;
+use ArrayObject;
 
 class FundinguploadsTable extends Table
 {
@@ -17,7 +20,7 @@ class FundinguploadsTable extends Table
         ]);
     }
 
-    public function beforeSave($event, $entity, $options): void
+    public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options): void
     {
         if ($entity->isNew() && !$entity->id) {
             $entity->id = Text::uuid();

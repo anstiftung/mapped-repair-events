@@ -9,7 +9,7 @@ use App\Controller\Component\StringComponent;
 
 trait UploadsTrait {
 
-    private function handleUpdateNewFundinguploadsWithIds($funding, $associations, $patchedEntity, $uploadTypes): Funding
+    private function handleUpdateNewFundinguploadsWithIds(Funding $funding, array $associations, Funding $patchedEntity, array $uploadTypes): Funding
     {
         foreach($uploadTypes as $uploadTypeId => $uploadType) {
             if (!empty($this->request->getData('Fundings.fundinguploads_' . $uploadType))) {
@@ -33,7 +33,7 @@ trait UploadsTrait {
         return $patchedEntity;
     }
 
-    private function handleDeleteFundinguploads($funding, $associations, $patchedEntity, $newFundinguploads, $uploadTypes): void
+    private function handleDeleteFundinguploads(Funding $funding, array $associations, Funding $patchedEntity, array $newFundinguploads, array $uploadTypes): void
     {
 
         foreach($uploadTypes as $uploadTypeId => $uploadType) {
@@ -73,7 +73,7 @@ trait UploadsTrait {
 
     }
 
-    private function handleNewFundinguploads($funding, $associations, $patchedEntity, $uploadTypes): array
+    private function handleNewFundinguploads(Funding $funding, array $associations, Funding $patchedEntity, array $uploadTypes): array
     {
         $newFundinguploads = [];
         $fundinguploadsTable = $this->getTableLocator()->get('Fundinguploads');
