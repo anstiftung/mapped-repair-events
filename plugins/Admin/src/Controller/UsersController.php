@@ -19,9 +19,9 @@ class UsersController extends AdminAppController
     public bool $searchName = false;
     public bool $searchText = false;
 
-    public function __construct($request = null, $response = null)
+    public function initialize(): void
     {
-        parent::__construct($request, $response);
+        parent::initialize();
         $this->User = $this->getTableLocator()->get('Users');
         $this->Workshop = $this->getTableLocator()->get('Workshops');
         $this->Country = $this->getTableLocator()->get('Countries');

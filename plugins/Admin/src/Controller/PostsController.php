@@ -18,28 +18,24 @@ class PostsController extends AdminAppController
     public BlogsTable $Blog;
     public UsersTable $User;
 
-    public function __construct($request = null, $response = null)
+    public function initialize(): void
     {
-        parent::__construct($request, $response);
+        parent::initialize();
+        // keep that because of AppController::stripTagsFromFields()
         $this->Post = $this->getTableLocator()->get('Posts');
         $this->Blog = $this->getTableLocator()->get('Blogs');
         $this->User = $this->getTableLocator()->get('Users');
     }
 
-    public function insert($blogId): void
+    public function insert(int $blogId): void
     {
-
-        // admin defaults
         $post = [
             'name' => 'Neuer Post von ' . $this->loggedUser->name,
             'publish' => date('Y-m-d'),
-            'url' => StringComponent::createRandomString(6)
+            'url' => StringComponent::createRandomString(6),
+            'blog_id' => $blogId,
         ];
 
-
-        if ($blogId != '') {
-            $post['blog_id'] = $blogId;
-        }
         $entity = $this->Post->newEntity($post);
         $post = $this->Post->save($entity);
 
@@ -48,13 +44,8 @@ class PostsController extends AdminAppController
 
     }
 
-    public function edit($uid): void
+    public function edit(int $uid): void
     {
-
-        if (empty($uid)) {
-            throw new NotFoundException;
-        }
-
         $post = $this->Post->find('all',
         conditions: [
             'Posts.uid' => $uid,

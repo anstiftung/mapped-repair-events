@@ -7,6 +7,8 @@ use Cake\Event\EventInterface;
 use Cake\ORM\Query;
 use Cake\ORM\Query\SelectQuery;
 use Cake\Utility\Inflector;
+use Cake\ORM\Entity;
+use Cake\Datasource\EntityInterface;
 
 class AdminAppController extends AppController
 {
@@ -99,7 +101,7 @@ class AdminAppController extends AppController
         $this->set('searchStatus', $this->searchStatus);
     }
 
-    protected function generateSearchConditions($searchFieldKey): null
+    protected function generateSearchConditions(string $searchFieldKey): null
     {
         $queryParams = $this->request->getQueryParams();
 
@@ -158,7 +160,7 @@ class AdminAppController extends AppController
         return null;
     }
 
-    protected function addMatchingsToQuery($query): SelectQuery
+    protected function addMatchingsToQuery(SelectQuery $query): SelectQuery
     {
 
         foreach($this->matchings as $matching) {
@@ -169,7 +171,7 @@ class AdminAppController extends AppController
         return $query;
     }
 
-    protected function saveObject($entity): void
+    protected function saveObject(EntityInterface $entity): void
     {
         $modelName = $this->modelName;
         $entity = $this->stripTagsFromFields($entity, $modelName);
@@ -181,7 +183,7 @@ class AdminAppController extends AppController
         }
     }
 
-    protected function addSearchOptions($searchOptions): void
+    protected function addSearchOptions(array $searchOptions): void
     {
         $searchOptions = array_reverse($searchOptions);
         if (empty($this->searchOptions)) {

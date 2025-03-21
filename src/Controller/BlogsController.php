@@ -8,6 +8,7 @@ use Feed\View\RssView;
 use Cake\Core\Configure;
 use App\Model\Table\BlogsTable;
 use App\Model\Table\PostsTable;
+use Cake\ORM\Query\SelectQuery;
 
 class BlogsController extends AppController
 {
@@ -89,7 +90,7 @@ class BlogsController extends AppController
 
     }
 
-    private function preparePostsForFeed($posts): array
+    private function preparePostsForFeed(SelectQuery $posts): array
     {
         $items = [];
         foreach ($posts as $post) {

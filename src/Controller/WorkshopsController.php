@@ -75,13 +75,8 @@ class WorkshopsController extends AppController
         }
     }
 
-    public function edit($uid): void
+    public function edit(int $uid): void
     {
-
-        if ($uid === null) {
-            throw new NotFoundException;
-        }
-
         $workshop = $this->Workshop->find('all',
         conditions: [
             'Workshops.uid' => $uid,

@@ -7,23 +7,23 @@ use Cake\Controller\Component\FlashComponent;
 class AppFlashComponent extends FlashComponent
 {
 
-    public function setFlashMessage($message): void
+    public function setFlashMessage(string $message): void
     {
         $this->set($message, [
             'element' => 'default',
             'params' => [
-                'class' => 'success'
-            ]
+                'class' => 'success',
+            ],
         ]);
     }
 
-    public function setFlashError($message): void
+    public function setFlashError(string $message): void
     {
         $this->set($message, [
             'element' => 'default',
             'params' => [
-                'class' => 'error'
-            ]
+                'class' => 'error',
+            ],
         ]);
     }
 }

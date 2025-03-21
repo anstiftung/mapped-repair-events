@@ -15,9 +15,10 @@ class InfoSheetsController extends AdminAppController
     public bool $searchName = false;
     public bool $searchText = false;
 
-    public function __construct($request = null, $response = null)
+    public function initialize(): void
     {
-        parent::__construct($request, $response);
+        parent::initialize();
+        // keep that because of AppController::stripTagsFromFields()
         $this->InfoSheet = $this->getTableLocator()->get('InfoSheets');
     }
 

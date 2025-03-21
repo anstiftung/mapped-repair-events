@@ -14,9 +14,9 @@ class KnowledgesController extends AdminAppController
     public SkillsTable $Skill;
     public KnowledgesTable $Knowledge;
 
-    public function __construct($request = null, $response = null)
+    public function initialize(): void
     {
-        parent::__construct($request, $response);
+        parent::initialize();
         // keep that because of AppController::stripTagsFromFields()
         $this->Knowledge = $this->getTableLocator()->get('Knowledges');
     }
@@ -34,13 +34,8 @@ class KnowledgesController extends AdminAppController
         $this->redirect($this->getReferer());
     }
 
-    public function edit($uid): void
+    public function edit(int $uid): void
     {
-
-        if (empty($uid)) {
-            throw new NotFoundException;
-        }
-
         $knowledgesTable = $this->getTableLocator()->get('Knowledges');
         $knowledge = $knowledgesTable->find('all',
         conditions: [

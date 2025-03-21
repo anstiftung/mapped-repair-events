@@ -8,6 +8,9 @@ use App\Services\PdfWriter\PdfWriterService;
 use App\Model\Entity\Fundingupload;
 use App\Services\Pdf\ReparaturInitiativenTcpdfService;
 use Cake\ORM\TableRegistry;
+use Cake\I18n\DateTime;
+use App\Model\Entity\Fundingdata;
+use Cake\Datasource\EntityInterface;
 
 class FoerderantragPdfWriterService extends PdfWriterService
 {
@@ -17,7 +20,7 @@ class FoerderantragPdfWriterService extends PdfWriterService
         $this->setPdfLibrary(new ReparaturInitiativenTcpdfService());
     }
 
-    public function getFilenameCustom($funding, $timestamp): string
+    public function getFilenameCustom(Funding $funding, DateTime $timestamp): string
     {
         return 'Foerderantrag_anstiftung_bmuv_' . $funding->uid . '_' . $timestamp->i18nFormat('yyyyMMdd_HHmmss') . '.pdf';
     }
@@ -27,7 +30,7 @@ class FoerderantragPdfWriterService extends PdfWriterService
         return Fundingupload::UPLOAD_PATH . $fundingUid . DS . 'attachments' . DS;
     }
 
-    public function prepareAndSetData($fundingUid, $timestamp): void
+    public function prepareAndSetData(int $fundingUid, DateTime $timestamp): void
     {
 
         $fundingsTable = TableRegistry::getTableLocator()->get('Fundings');
@@ -69,7 +72,7 @@ class FoerderantragPdfWriterService extends PdfWriterService
 
     }
 
-    private function getPreparedFields($definedFields, $entity): array
+    private function getPreparedFields(array $definedFields, EntityInterface $entity): array
     {
         $preparedFields = [];
         foreach($definedFields as $workshopField) {

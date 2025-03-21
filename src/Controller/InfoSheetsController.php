@@ -189,13 +189,8 @@ class InfoSheetsController extends AppController
         }
     }
 
-    public function edit($infoSheetUid): void
+    public function edit(int $infoSheetUid): void
     {
-
-        if ($infoSheetUid === null) {
-            throw new NotFoundException;
-        }
-
         $infoSheet = $this->InfoSheet->find('all',
         conditions: [
             'InfoSheets.uid' => $infoSheetUid,

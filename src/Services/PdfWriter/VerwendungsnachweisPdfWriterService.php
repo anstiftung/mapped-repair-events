@@ -6,8 +6,10 @@ namespace App\Services\PdfWriter;
 use App\Model\Entity\Funding;
 use App\Services\PdfWriter\PdfWriterService;
 use App\Model\Entity\Fundingupload;
+use App\Model\Entity\Fundingusageproof;
 use Cake\ORM\TableRegistry;
 use App\Services\Pdf\ReparaturInitiativenTcpdfService;
+use Cake\I18n\DateTime;
 
 class VerwendungsnachweisPdfWriterService extends PdfWriterService
 {
@@ -19,17 +21,17 @@ class VerwendungsnachweisPdfWriterService extends PdfWriterService
         $this->setPdfLibrary($pdfLibrary);
     }
 
-    public function getFilenameCustom($funding, $timestamp): string
+    public function getFilenameCustom(Funding $funding, DateTime $timestamp): string
     {
         return 'Verwendungsnachweis_anstiftung_bmuv_' . $funding->uid . '_' . $timestamp->i18nFormat('yyyyMMdd_HHmmss') . '.pdf';
     }
 
-    public function getUploadPath($fundingUid): string
+    public function getUploadPath(int $fundingUid): string
     {
         return Fundingupload::UPLOAD_PATH . $fundingUid . DS . 'attachments' . DS;
     }
 
-    public function prepareAndSetData($fundingUid, $timestamp): void
+    public function prepareAndSetData(int $fundingUid, DateTime $timestamp): void
     {
 
         $fundingsTable = TableRegistry::getTableLocator()->get('Fundings');
@@ -48,7 +50,7 @@ class VerwendungsnachweisPdfWriterService extends PdfWriterService
 
     }
 
-    private function getPreparedFields($definedFields, $entity): array
+    private function getPreparedFields(array $definedFields, Fundingusageproof $fundingusageproof): array
     {
         $preparedFields = [];
         foreach($definedFields as $workshopField) {
@@ -56,7 +58,7 @@ class VerwendungsnachweisPdfWriterService extends PdfWriterService
             $preparedFields[$workshopFieldName] = [
                 'name' => $workshopFieldName,
                 'label' => $workshopField['options']['label'],
-                'value' => $entity[$workshopFieldName],
+                'value' => $fundingusageproof[$workshopFieldName],
             ];
         }
         return $preparedFields;

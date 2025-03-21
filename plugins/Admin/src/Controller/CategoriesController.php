@@ -11,9 +11,9 @@ class CategoriesController extends AdminAppController
 
     public CategoriesTable $Category;
 
-    public function __construct($request = null, $response = null)
+    public function initialize(): void
     {
-        parent::__construct($request, $response);
+        parent::initialize();
         // keep that because of AppController::stripTagsFromFields()
         $this->Category = $this->getTableLocator()->get('Categories');
     }
@@ -48,13 +48,8 @@ class CategoriesController extends AdminAppController
         $this->redirect($this->getReferer());
     }
 
-    public function edit($id): void
+    public function edit(int $id): void
     {
-
-        if (empty($id)) {
-            throw new NotFoundException;
-        }
-
         $categoriesTable = $this->getTableLocator()->get('Categories');
         $category = $categoriesTable->find('all', conditions: [
             'Categories.id' => $id,

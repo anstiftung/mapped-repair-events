@@ -45,7 +45,7 @@ class InternController extends AdminAppController
         $this->addViewClasses([JsonView::class]);
     }
 
-    public function addCategory($name): void
+    public function addCategory(string $name): void
     {
         $categories = $this->getTableLocator()->get('Categories');
         $c = $categories->save($categories->newEntity(['name' => $name, 'icon' => StringComponent::slugify($name)]));
@@ -53,7 +53,7 @@ class InternController extends AdminAppController
         exit;
     }
 
-    public function addSubCategory($name, $parentId): void
+    public function addSubCategory(string $name, int $parentId): void
     {
         $categories = $this->getTableLocator()->get('Categories');
         $c = $categories->save($categories->newEntity([
@@ -65,7 +65,7 @@ class InternController extends AdminAppController
         exit;
     }
 
-    private function getExtension($mimeType): string
+    private function getExtension(string $mimeType): string
     {
         $extensions = [
             'image/jpeg' => 'jpg',
@@ -305,7 +305,7 @@ class InternController extends AdminAppController
     /**
      * deletes both db entries and physical files (thumbs)
      */
-    public function ajaxMiniUploadFormDeleteImage($uid): void
+    public function ajaxMiniUploadFormDeleteImage(int $uid): void
     {
         $uid = (int) $uid;
 
@@ -389,7 +389,7 @@ class InternController extends AdminAppController
     {
         $this->request = $this->request->withParam('_ext', 'json');
 
-        $uid = $this->request->getData('id');
+        $uid = (int) $this->request->getData('id');
 
         $objectType = $this->Root->getType($uid);
         $objectClass = Inflector::classify($objectType);
@@ -397,7 +397,7 @@ class InternController extends AdminAppController
         $this->{$objectClass} = $this->getTableLocator()->get($pluralizedClass);
 
         $entity = $this->{$objectClass}->get($uid, conditions: [
-            $pluralizedClass.'.status >= ' . APP_DELETED
+            $pluralizedClass.'.status >= ' . APP_DELETED,
         ]
         );
         if ($objectType == 'users') {
@@ -447,7 +447,7 @@ class InternController extends AdminAppController
             return null;
         }
     }
-    private function handleWorkshopBeforeDelete($uid): void
+    private function handleWorkshopBeforeDelete(int $uid): void
     {
         $worknews = $this->getTableLocator()->get('Worknews');
         $worknews->deleteAll([
