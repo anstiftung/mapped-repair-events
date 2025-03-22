@@ -14,7 +14,7 @@ trait LogFileAssertionsTrait
         $this->resetLogs();
     }
 
-    private function getLogFile($name): string
+    private function getLogFile(string $name): string
     {
         return ROOT . DS . 'logs' . DS . $name . '.log';
     }

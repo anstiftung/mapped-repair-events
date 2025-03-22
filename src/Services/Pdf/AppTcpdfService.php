@@ -83,20 +83,20 @@ abstract class AppTcpdfService extends TCPDF
 
 
     public function getFundingReceiptlistAsTable(
-        $data,
-        $width = '100%',
-        $widthColumnA = '20%',
-        $widthColumnB = '20%',
-        $widthColumnC = '20%',
-        $widthColumnD = '20%',
-        $widthColumnE = '20%',
-        $widthColumnF = '20%',
-        $alignmentColumnA = 'left',
-        $alignmentColumnB = 'left',
-        $alignmentColumnC = 'left',
-        $alignmentColumnD = 'left',
-        $alignmentColumnE = 'left',
-        $alignmentColumnF = 'right',
+        array $data,
+        string $width = '100%',
+        string $widthColumnA = '20%',
+        string $widthColumnB = '20%',
+        string $widthColumnC = '20%',
+        string $widthColumnD = '20%',
+        string $widthColumnE = '20%',
+        string $widthColumnF = '20%',
+        string $alignmentColumnA = 'left',
+        string $alignmentColumnB = 'left',
+        string $alignmentColumnC = 'left',
+        string $alignmentColumnD = 'left',
+        string $alignmentColumnE = 'left',
+        string $alignmentColumnF = 'right',
         ): string
     {
 
@@ -134,7 +134,7 @@ abstract class AppTcpdfService extends TCPDF
         return $html;
     }
     
-    public function getFundingDataAsTable($data, $width = '100%', $widthColumnA = '30%', $widthColumnB = '70%', $alignmentColumnA = 'left', $alignmentColumnB = 'left'): string
+    public function getFundingDataAsTable(array $data, string $width = '100%', string $widthColumnA = '30%', string $widthColumnB = '70%', string $alignmentColumnA = 'left', string $alignmentColumnB = 'left'): string
     {
         $html = '<table width="' . $width . '" border="0" cellpadding="0">';
             foreach($data as $value) {

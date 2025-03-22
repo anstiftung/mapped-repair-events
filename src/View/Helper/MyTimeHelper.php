@@ -18,7 +18,7 @@ class MyTimeHelper extends TimeHelper {
         return strtotime(Configure::read('AppConfig.fundingsEndDateNTime')) < time();
     }
 
-    public function getAllYearsUntilThisYear($thisYear, $firstYear): array
+    public function getAllYearsUntilThisYear(int $thisYear, int $firstYear): array
     {
         $years = [];
         while($thisYear >= $firstYear) {
@@ -47,13 +47,13 @@ class MyTimeHelper extends TimeHelper {
         return $months;
     }
 
-    public function getLastDayOfGivenMonth($date): string
+    public function getLastDayOfGivenMonth(string $date): string
     {
         return date('t', strtotime($date));
     }
 
 
-    function validateDate($date, $format = 'd.m.Y'): bool
+    function validateDate(string $date, string $format = 'd.m.Y'): bool
     {
         $d = DateTime::createFromFormat($format, $date);
         return $d && $d->format($format) == $date;

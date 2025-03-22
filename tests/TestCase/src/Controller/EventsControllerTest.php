@@ -239,7 +239,7 @@ class EventsControllerTest extends AppTestCase
         $this->assertMailCount(0);
     }
 
-    private function doTestEditForm($data): void
+    private function doTestEditForm(array $data): void
     {
         $eventsTable = $this->getTableLocator()->get('Events');
         $event = $eventsTable->find('all', conditions: [
