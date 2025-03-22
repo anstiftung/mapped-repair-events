@@ -15,7 +15,6 @@ parameters:
         - message: '#Access to an undefined property .*#'
         - message: '#Cannot access property .*#'
         - message: '#Call to an undefined method Authorization\\IdentityInterface::is*.#'
-        # - message: '#Method .* has parameter .* with no type specified.#'
         - message: '#Method .* has parameter .* with no value type specified in iterable type array.#'
         - message: '#Method .* return type has no value type specified in iterable type array.#'
         - message: '#Property .* type has no value type specified in iterable type array.#'
