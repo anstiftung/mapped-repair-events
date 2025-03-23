@@ -152,7 +152,7 @@ class UsersTable extends AppTable
         }
     }
 
-    private function addGroupsValidation($validator, $groups, $multiple): Validator
+    private function addGroupsValidation(Validator $validator, array $groups, bool $multiple): Validator
     {
         $validator->add('groups', 'checkForAllowedGroups', [
             'rule' => function($value, $context) use ($groups, $multiple) {
@@ -171,7 +171,7 @@ class UsersTable extends AppTable
         return $validator;
     }
 
-    private function addLastOrgaValidation($validator): Validator
+    private function addLastOrgaValidation(Validator $validator): Validator
     {
         $validator->add('groups', 'checkLastOrga', [
             'rule' => function($value, $context) {
@@ -211,7 +211,7 @@ class UsersTable extends AppTable
         return $validator;
     }
 
-    public function getWorkshopsWhereUserIsLastOrgaUser($workshops): array
+    public function getWorkshopsWhereUserIsLastOrgaUser(SelectQuery $workshops): array
     {
         $lastOrgaWorkshops = [];
         foreach($workshops as $workshop) {
@@ -233,7 +233,7 @@ class UsersTable extends AppTable
         return $lastOrgaWorkshops;
     }
 
-    private function getLastOrgaValidationErrorMessage($workshops): string
+    private function getLastOrgaValidationErrorMessage(array $workshops): string
     {
         $workshopLinks = [];
         $workshopNames = [];
@@ -404,12 +404,12 @@ class UsersTable extends AppTable
         return $validator;
     }
 
-    public function newPasswordEqualsValidator($value, $context): bool
+    public function newPasswordEqualsValidator(string $value, array $context): bool
     {
         return $context['data']['password_new_1'] == $context['data']['password_new_2'];
     }
 
-    public function newPasswordDiffersToOldValidator($value, $context): bool
+    public function newPasswordDiffersToOldValidator(string $value, array $context): bool
     {
         return $context['data']['password_new_1'] != $context['data']['password'];
     }
@@ -462,14 +462,14 @@ class UsersTable extends AppTable
     /**
      * check if the given string is the password of the logged in user
      */
-    public function isUserPassword($uid, $hashedPassword): bool
+    public function isUserPassword(int $uid, string $hashedPassword): bool
     {
         $user = $this->find('all',
         conditions: [
-            'Users.uid' => $uid
+            'Users.uid' => $uid,
         ],
         fields: [
-            'Users.password'
+            'Users.password',
         ])->first();
 
         return $hashedPassword == $user->password;

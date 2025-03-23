@@ -25,7 +25,7 @@ class FoerderantragPdfWriterService extends PdfWriterService
         return 'Foerderantrag_anstiftung_bmuv_' . $funding->uid . '_' . $timestamp->i18nFormat('yyyyMMdd_HHmmss') . '.pdf';
     }
 
-    public function getUploadPath($fundingUid): string
+    public function getUploadPath(int $fundingUid): string
     {
         return Fundingupload::UPLOAD_PATH . $fundingUid . DS . 'attachments' . DS;
     }

@@ -23,12 +23,12 @@ class GeoService {
 
     const ERROR_OUT_OF_BOUNDING_BOX = 'Die Geo-Koordinaten liegen nicht in Europa, vielleicht hast du Breite (Lat) und Länge (Long) vertauscht?';
 
-    public function isPointInBoundingBox($lat, $lng): bool
+    public function isPointInBoundingBox(float $lat, float $lng): bool
     {
         return $lat >= self::VALID_BOUNDING_BOX['lat']['min'] && $lat <= self::VALID_BOUNDING_BOX['lat']['max'] && $lng >= self::VALID_BOUNDING_BOX['lng']['min'] && $lng <= self::VALID_BOUNDING_BOX['lng']['max'];
     }
 
-    public function getGeoDataByCoordinates($lat, $lng): array
+    public function getGeoDataByCoordinates(string $lat, string $lng): array
     {
         $requestUrl = 'https://maps.googleapis.com/maps/api/geocode/json?key='.Configure::read('googleMapApiKey').'&latlng=' . $lat . ',' . $lng;
         $output = $this->getDecodedOutput($requestUrl);
@@ -36,7 +36,7 @@ class GeoService {
         return ['provinceId' => $provinceId];
     }
 
-    public function getGeoDataByAddress($addressString): array
+    public function getGeoDataByAddress(string $addressString): array
     {
 
         $lat = 'ungültig';
@@ -64,7 +64,7 @@ class GeoService {
         return $output;
     }
 
-    private function getProvinceIdByGeocodeResult($output): int
+    private function getProvinceIdByGeocodeResult(object $output): int
     {
 
         $provinceId = 0;
@@ -102,7 +102,7 @@ class GeoService {
             $validator->add($geoField, 'geoCoordinatesInBoundingBox', [
                 'rule' => function ($value, $context) {
                     if ($context['data']['use_custom_coordinates']) {
-                        if (!$this->isPointInBoundingBox($context['data']['lat'], $context['data']['lng'])) {
+                        if (!$this->isPointInBoundingBox((float) $context['data']['lat'], (float) $context['data']['lng'])) {
                             Log::error('Geo coordinates out of bounding box: lat: ' . json_encode($context['data']['lat']) . ' / lng: ' . json_encode($context['data']['lng']));
                             return false;
                         }

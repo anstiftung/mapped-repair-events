@@ -125,14 +125,14 @@ class FundingreceiptlistsTable extends Table
         return $validator;
     }
 
-    public function getCountForFunding($fundingUid): int
+    public function getCountForFunding(int $fundingUid): int
     {
         return $this->find()->where([
             'funding_uid' => $fundingUid,
         ])->count();
     }
 
-    public function createNewUnvalidatedEmptyEntity($fundingUid): Fundingreceiptlist
+    public function createNewUnvalidatedEmptyEntity(int $fundingUid): Fundingreceiptlist
     {
         $newReceiptlistData = [
             'funding_uid' => $fundingUid,

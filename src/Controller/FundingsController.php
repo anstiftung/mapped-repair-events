@@ -153,7 +153,7 @@ class FundingsController extends AppController
     {
 
         $fundingsTable = $this->getTableLocator()->get('Fundings');
-        $fundingUid = $this->getRequest()->getParam('uid');
+        $fundingUid = (int) $this->getRequest()->getParam('uid');
         $funding = $fundingsTable->getUnprivatizedFundingWithAllAssociations($fundingUid);
 
         if (!$funding->is_submitted) {

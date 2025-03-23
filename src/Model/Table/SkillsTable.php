@@ -40,9 +40,9 @@ class SkillsTable extends Table
         return $validator;
     }
 
-    public function getNewSkillsFromRequest($associatedSkills): array
+    public function getNewSkillsFromRequest(?array $associatedSkills): array
     {
-        if (!is_array($associatedSkills)) {
+        if ($associatedSkills === null) {
             return [];
         }
         $skills = array_filter($associatedSkills, function($value) {
@@ -51,9 +51,9 @@ class SkillsTable extends Table
         return $skills;
     }
 
-    public function getExistingSkillsFromRequest($associatedSkills): array
+    public function getExistingSkillsFromRequest(?array $associatedSkills): array
     {
-        if (!is_array($associatedSkills)) {
+        if ($associatedSkills === null) {
             return [];
         }
         $skills = array_filter($associatedSkills, function($value) {
@@ -62,7 +62,7 @@ class SkillsTable extends Table
         return $skills;
     }
 
-    public function addSkills($newSkills, $isAdmin, $userUid): array
+    public function addSkills(array $newSkills, bool $isAdmin, int $userUid): array
     {
 
         $skillsToAdd = [];
@@ -102,7 +102,7 @@ class SkillsTable extends Table
         return $skillsForDropdown;
     }
 
-    public function getForDropdown($includeInactive): array
+    public function getForDropdown(bool $includeInactive): array
     {
 
         $conditions = [

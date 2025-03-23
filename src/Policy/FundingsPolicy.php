@@ -14,7 +14,7 @@ use Authorization\IdentityInterface;
 class FundingsPolicy implements RequestPolicyInterface
 {
 
-    private function getOwnerEntity($fundingUid, $identity): ?Funding
+    private function getOwnerEntity(int $fundingUid, ?IdentityInterface $identity): ?Funding
     {
         $fundingsTable = TableRegistry::getTableLocator()->get('Fundings');
         $entity = $fundingsTable->find()->where([
