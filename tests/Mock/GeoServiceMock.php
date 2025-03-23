@@ -4,14 +4,14 @@ namespace App\Test\Mock;
 
 class GeoServiceMock {
 
-    public function getGeoDataByCoordinates($lat, $lng): array
+    public function getGeoDataByCoordinates(string $lat, string $lng): array
     {
         return [
             'provinceId' => 1,
         ];
     }
 
-    public function getGeoDataByAddress($address): array
+    public function getGeoDataByAddress(string $address): array
     {
         return [
             'lat' => 52.520008,

@@ -8,6 +8,8 @@ use App\Model\Entity\Traits\FundingStatusTrait;
 use Cake\ORM\Entity;
 use App\Model\Table\FundingdatasTable;
 use App\Model\Table\FundingusageproofsTable;
+use Cake\Datasource\EntityInterface;
+use Cake\View\Helper\FormHelper;
 
 class Funding extends Entity
 {
@@ -18,7 +20,7 @@ class Funding extends Entity
 
     const MAX_FUNDING_SUM = 3000;
     
-    public static function getRenderedFields($fields, $entityString, $form, $disabled, $entity = null): string
+    public static function getRenderedFields(array $fields, string $entityName, FormHelper $formHelper, bool $disabled, ? EntityInterface $entity = null): string
     {
         $renderedFields = '';
         $fieldsToBeFormattedWithToDigits = ['amount'];
@@ -36,8 +38,8 @@ class Funding extends Entity
                 }
             }
             $field['options']['disabled'] = $disabled;
-            $preparedEntityString = 'Fundings.' . $entityString . '.' . $field['name'];
-            $renderedFields .= $form->control($preparedEntityString, $field['options']);
+            $preparedEntityString = 'Fundings.' . $entityName . '.' . $field['name'];
+            $renderedFields .= $formHelper->control($preparedEntityString, $field['options']);
         }
         return $renderedFields;
     }
@@ -208,7 +210,7 @@ class Funding extends Entity
         return $this->getAdminStatusCssClass('zuwendungsbestaetigung_status');
     }
 
-    private function getAdminStatusCssClass($statusField): string
+    private function getAdminStatusCssClass(string $statusField): string
     {
         if ($this->$statusField == self::STATUS_UPLOAD_MISSING || $this->$statusField == self::STATUS_DATA_MISSING) {
             return 'is-missing';

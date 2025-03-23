@@ -12,9 +12,10 @@ class EventsController extends AdminAppController
     public EventsTable $Event;
     public UsersTable $User;
 
-    public function __construct($request = null, $response = null)
+    public function initialize(): void
     {
-        parent::__construct($request, $response);
+        parent::initialize();
+        // keep that because of AppController::stripTagsFromFields()
         $this->Event = $this->getTableLocator()->get('Events');
     }
 

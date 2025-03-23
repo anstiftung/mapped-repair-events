@@ -58,7 +58,7 @@ class CommonComponent extends AppComponent {
     /**
      * Trim and sanitize recursively
      */
-    private function trimAndSanitizeDeep($value, $transformNullToString = false): mixed
+    private function trimAndSanitizeDeep(mixed $value, bool $transformNullToString = false): mixed
     {
 
         // Laminas\Diactoros\UploadedFile

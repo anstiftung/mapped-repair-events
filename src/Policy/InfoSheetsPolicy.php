@@ -8,11 +8,12 @@ use Cake\Http\ServerRequest;
 use Authorization\Policy\RequestPolicyInterface;
 use Authorization\Policy\ResultInterface;
 use Cake\ORM\TableRegistry;
+use Authorization\IdentityInterface;
 
 class InfoSheetsPolicy implements RequestPolicyInterface
 {
 
-    public function canAccess($identity, ServerRequest $request): bool|ResultInterface
+    public function canAccess(?IdentityInterface $identity, ServerRequest $request): bool|ResultInterface
     {
 
         if (!Configure::read('AppConfig.statisticsEnabled')) {

@@ -9,11 +9,12 @@ use Authorization\Policy\ResultInterface;
 use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
 use App\Model\Entity\Funding;
+use Authorization\IdentityInterface;
 
 class FundingsPolicy implements RequestPolicyInterface
 {
 
-    private function getOwnerEntity($fundingUid, $identity): ?Funding
+    private function getOwnerEntity(int $fundingUid, ?IdentityInterface $identity): ?Funding
     {
         $fundingsTable = TableRegistry::getTableLocator()->get('Fundings');
         $entity = $fundingsTable->find()->where([
@@ -23,7 +24,7 @@ class FundingsPolicy implements RequestPolicyInterface
         return $entity;
     }
 
-    public function canAccess($identity, ServerRequest $request): bool|ResultInterface
+    public function canAccess(?IdentityInterface $identity, ServerRequest $request): bool|ResultInterface
     {
 
         if (Configure::read('AppConfig.fundingsEnabled') === false) {

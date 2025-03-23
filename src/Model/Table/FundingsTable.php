@@ -137,7 +137,7 @@ class FundingsTable extends AppTable
         return $validator;
     }
 
-    public function validateFileTypeAndSize($value, $context): true|string
+    public function validateFileTypeAndSize(array $value, array $context): true|string
     {
         $allowedMimeTypes = ['application/pdf', 'image/jpeg', 'image/png'];
         $maxSize = 5 * 1024 * 1024; // 5 MB in bytes
@@ -167,7 +167,7 @@ class FundingsTable extends AppTable
         return true;
     }
 
-    public function getUnprivatizedFundingWithAllAssociations($fundingUid): Funding
+    public function getUnprivatizedFundingWithAllAssociations(int $fundingUid): Funding
     {
         $funding = $this->find(contain: [
             'Workshops',
@@ -188,7 +188,7 @@ class FundingsTable extends AppTable
         return $funding;
     }
 
-    public function deleteCustom($fundingUid): void
+    public function deleteCustom(int $fundingUid): void
     {
 
         $funding = $this->find()->where([
@@ -217,7 +217,7 @@ class FundingsTable extends AppTable
 
     }
 
-    public function findWithUsageproofAssociations($fundingUid): Funding
+    public function findWithUsageproofAssociations(int $fundingUid): Funding
     {
         $associations = [
             'Fundingusageproofs',
@@ -235,7 +235,7 @@ class FundingsTable extends AppTable
         return $funding;
     }
 
-    public function findOrCreateUsageproof($fundingUid): Funding
+    public function findOrCreateUsageproof(int $fundingUid): Funding
     {
         $funding = $this->findWithUsageproofAssociations($fundingUid);
         
@@ -265,7 +265,7 @@ class FundingsTable extends AppTable
 
     }
 
-    public function findOrCreateCustom($workshopUid): Funding
+    public function findOrCreateCustom(int $workshopUid): Funding
     {
 
         $funding = $this->find()->where([

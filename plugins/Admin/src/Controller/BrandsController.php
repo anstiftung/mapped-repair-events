@@ -10,9 +10,9 @@ class BrandsController extends AdminAppController
 
     public BrandsTable $Brand;
 
-    public function __construct($request = null, $response = null)
+    public function initialize(): void
     {
-        parent::__construct($request, $response);
+        parent::initialize();
         // keep that because of AppController::stripTagsFromFields()
         $this->Brand = $this->getTableLocator()->get('Brands');
     }
@@ -40,13 +40,8 @@ class BrandsController extends AdminAppController
         $this->redirect($this->getReferer());
     }
     
-    public function edit($id): void
+    public function edit(int $id): void
     {
-
-        if (empty($id)) {
-            throw new NotFoundException;
-        }
-
         $brandsTable = $this->getTableLocator()->get('Brands');
         $brand = $brandsTable->find('all', conditions: [
             'Brands.id' => $id,

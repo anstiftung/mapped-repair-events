@@ -8,6 +8,8 @@ use Cake\Validation\Validator;
 use App\Model\Entity\Worknews;
 use App\Mailer\AppMailer;
 use Cake\ORM\Query\SelectQuery;
+use App\Model\Entity\Workshop;
+use App\Model\Entity\Event;
 
 class WorknewsTable extends Table
 {
@@ -34,7 +36,7 @@ class WorknewsTable extends Table
         return $validator;
     }
 
-    public function getSubscribers($workshopUid): SelectQuery
+    public function getSubscribers(int $workshopUid): SelectQuery
     {
         $subscribers = $this->find('all',
         conditions: [
@@ -47,7 +49,7 @@ class WorknewsTable extends Table
         return $subscribers;
     }
 
-    public function sendNotifications($subscribers, $subject, $template, $workshop, $event, $dirtyFields = [], $originalValues = []): void
+    public function sendNotifications(SelectQuery $subscribers, string $subject, string $template, Workshop $workshop, Event $event, array $dirtyFields = [], array $originalValues = []): void
     {
         $email = new AppMailer();
         $email->viewBuilder()->setTemplate($template);

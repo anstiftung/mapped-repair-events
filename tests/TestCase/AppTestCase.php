@@ -48,12 +48,12 @@ class AppTestCase extends TestCase
         'app.WorkshopsCategories',
     ];
 
-    protected function correctServerName($html): string
+    protected function correctServerName(string $html): string
     {
         return preg_replace('/\{\{serverName\}\}/', str_replace('/', '\\\/', Configure::read('AppConfig.serverName')), $html);
     }
 
-    protected function correctExpectedDate($html, $expectedDate): string
+    protected function correctExpectedDate(string $html, string $expectedDate): string
     {
         return preg_replace('/\{\{expectedDate\}\}/', str_replace('/', '\\\/', $expectedDate), $html);
     }

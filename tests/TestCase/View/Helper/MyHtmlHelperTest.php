@@ -58,7 +58,7 @@ class MyHtmlHelperTest extends \PHPUnit\Framework\TestCase
         $this->assertGetCarbonFootprintAsString(4, '4 kg CO2 bzw. 17 km mit dem Flugzeug');
     }
 
-    private function assertGetCarbonFootprintAsString($carbonFootprintSum, $expected): void
+    private function assertGetCarbonFootprintAsString(float $carbonFootprintSum, string $expected): void
     {
         $result = $this->MyHtmlHelper->getCarbonFootprintAsString($carbonFootprintSum);
         $this->assertEquals($expected, $result);

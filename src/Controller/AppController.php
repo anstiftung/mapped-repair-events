@@ -15,7 +15,6 @@ use App\Services\GeoService;
 use App\Model\Table\WorkshopsTable;
 use App\Test\Mock\GeoServiceMock;
 use Cake\Datasource\EntityInterface;
-use Cake\ORM\Entity;
 
 class AppController extends Controller
 {
@@ -30,26 +29,22 @@ class AppController extends Controller
     public PagesTable $Page;
     public GeoService|GeoServiceMock $geoService;
 
-    public function __construct($request = null, $response = null)
+    public function initialize(): void
     {
-        parent::__construct($request, $response);
+        parent::initialize();
+
         $this->Root = $this->getTableLocator()->get('Roots');
         $this->Workshop = $this->getTableLocator()->get('Workshops');
         $this->modelName = Inflector::classify($this->name);
         $this->pluralizedModelName = Inflector::pluralize($this->modelName);
         $this->geoService = new GeoService();
-    }
 
-    public function initialize(): void
-    {
-
-        parent::initialize();
 
         $this->loadComponent('Authentication.Authentication');
         $this->loadComponent('Common');
         $this->loadComponent('String');
         $this->loadComponent('AppFlash', [
-            'clear' => true
+            'clear' => true,
         ]);
         if (!$this->getRequest()->is('json') && !in_array($this->name, ['Events'])) {
             $this->loadComponent('FormProtection');
@@ -57,7 +52,7 @@ class AppController extends Controller
 
         $this->paginate = [
             'limit' => 100000,
-            'maxLimit' => 100000
+            'maxLimit' => 100000,
         ];
 
     }
@@ -167,16 +162,16 @@ class AppController extends Controller
         return $previewConditions;
     }
 
-    public function setContext($object): void
+    public function setContext(EntityInterface $object): void
     {
         $className = Inflector::classify($this->name);
         $this->set('context', [
             'object' => $object,
-            'className' => $className
+            'className' => $className,
         ]);
     }
 
-    public function mergeCustomMetaTags(array $metaTags, $object): array
+    public function mergeCustomMetaTags(array $metaTags, EntityInterface $object): array
     {
         if (!empty($object->metatag) && !empty($object->metatag->title)) {
             $metaTags['title'] = $object->metatag->title;
@@ -205,7 +200,7 @@ class AppController extends Controller
         return $this->request->getData('referer') ?? $_SERVER['HTTP_REFERER'] ?? '/';
     }
 
-    protected function patchEntityWithCurrentlyUpdatedFields($entity): EntityInterface
+    protected function patchEntityWithCurrentlyUpdatedFields(EntityInterface $entity): EntityInterface
     {
         $modelName = $this->modelName;
         $entity = $this->$modelName->patchEntity($entity, [
@@ -215,7 +210,7 @@ class AppController extends Controller
         return $entity;
     }
 
-    protected function stripTagsFromFields($entity, $modelName): EntityInterface
+    protected function stripTagsFromFields(EntityInterface $entity, string $modelName): EntityInterface
     {
         foreach ($entity->toArray() as $field => $data) {
             if (in_array($field, $this->$modelName->allowedBasicHtmlFields)) {
@@ -240,7 +235,7 @@ class AppController extends Controller
         return $entity;
     }
 
-    public function setIsCurrentlyUpdated($uid): void
+    public function setIsCurrentlyUpdated(int $uid): void
     {
         $this->set('isCurrentlyUpdated', $this->isCurrentlyUpdated((int) $uid) ? '1' : '0');
     }

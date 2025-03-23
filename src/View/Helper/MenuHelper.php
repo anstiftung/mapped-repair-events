@@ -9,14 +9,14 @@ use Cake\View\Helper;
 class MenuHelper extends Helper
 {
 
-    public function render($array, $options): string
+    public function render(array $items, array $options): string
     {
         $tmpMenu = '<ul id="'.$options['id'].'" class="'.$options['class'].'">';
         if (!empty($options['header'])) {
             $tmpMenu .= '<li class="header">'.$options['header'].'</li>';
         }
-        foreach ($array as $index => $item) {
-            $tmpMenu .= $this->buildMenuItem($item, $index);
+        foreach ($items as $index => $item) {
+            $tmpMenu .= $this->buildMenuItem($item);
         }
         if (!empty($options['footer'])) {
             $tmpMenu .= '<li class="footer">'.$options['footer'].'</li>';
@@ -25,7 +25,7 @@ class MenuHelper extends Helper
         return $tmpMenu;
     }
 
-    public function buildPageMenu($pages): array
+    public function buildPageMenu(array $pages): array
     {
 
         $menu = [];
@@ -58,7 +58,7 @@ class MenuHelper extends Helper
         return $menu;
     }
 
-    private function buildMenuItem($item, $index): string
+    private function buildMenuItem(array $item): string
     {
 
         $liClass = [];
@@ -79,7 +79,7 @@ class MenuHelper extends Helper
         if (!empty($item['children'])) {
             $tmpMenuItem .= '<ul class="submenu">';
             foreach ($item['children'] as $index => $child) {
-                $tmpMenuItem .= $this->buildMenuItem($child, $index);
+                $tmpMenuItem .= $this->buildMenuItem($child);
             }
             $tmpMenuItem .= '</ul>';
         }
@@ -89,7 +89,7 @@ class MenuHelper extends Helper
         return $tmpMenuItem;
     }
 
-    private function renderMenuElement($slug, $name, $style = '', $class = [], $target = ''): string
+    private function renderMenuElement(string $slug, string $name, string $style = '', array $class = [], string $target = ''): string
     {
 
         if ($style != '') {

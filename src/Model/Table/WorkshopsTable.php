@@ -12,6 +12,8 @@ use App\Controller\Component\StringComponent;
 use App\Model\Entity\Workshop;
 use Cake\ORM\TableRegistry;
 use Cake\ORM\Query\SelectQuery;
+use App\Model\Entity\User;
+use Authorization\IdentityInterface;
 
 class WorkshopsTable extends AppTable
 {
@@ -165,7 +167,7 @@ class WorkshopsTable extends AppTable
         return $provincesMap;
     }
 
-    public function getWorkshopsForAssociatedUser(int $userUid, $workshopStatus, array $additionalContains = []): SelectQuery
+    public function getWorkshopsForAssociatedUser(int $userUid, int $workshopStatus, array $additionalContains = []): SelectQuery
     {
         $workshops = $this->getWorkshopsWithUsers($workshopStatus, $additionalContains);
         $workshops->matching('Users', function ($q) use ($userUid) {
@@ -183,7 +185,7 @@ class WorkshopsTable extends AppTable
         return $workshops;
     }
 
-    public function transformForDropdown($workshops): array
+    public function transformForDropdown(SelectQuery $workshops): array
     {
         $result = [];
         foreach($workshops as $workshop) {
@@ -210,11 +212,11 @@ class WorkshopsTable extends AppTable
         ];
     }
 
-    public function getWorkshopsWithUsers($workshopStatus, $additionalContains = []): SelectQuery
+    public function getWorkshopsWithUsers(int $workshopStatus, array $additionalContains = []): SelectQuery
     {
         $workshops = $this->find('all',
         conditions: [
-            'Workshops.status > ' . $workshopStatus
+            'Workshops.status > ' . $workshopStatus,
         ],
         contain: [
             'Users',
@@ -232,7 +234,7 @@ class WorkshopsTable extends AppTable
         return $workshops;
     }
 
-    private function addBlockedWorkshopSlugsValidationRule($validator): Validator
+    private function addBlockedWorkshopSlugsValidationRule(Validator $validator): Validator
     {
         $validator->add('url', 'addBlockedWorkshopSlugsValidationRule', [
             'rule' => function($value, $context) {
@@ -254,7 +256,7 @@ class WorkshopsTable extends AppTable
 
     }
 
-    public function getTeam($workshop): array
+    public function getTeam(Workshop $workshop): array
     {
         return $workshop->users;
     }
@@ -262,7 +264,7 @@ class WorkshopsTable extends AppTable
     /**
      * returns owner and approved users_workshops users with group $orgaTeamGroups
      */
-    public function getOrgaTeam($workshop): array
+    public function getOrgaTeam(Workshop $workshop): array
     {
         $orgaTeam = $this->getTeam($workshop);
         if (!empty($orgaTeam)) {
@@ -285,7 +287,7 @@ class WorkshopsTable extends AppTable
         return $orgaTeam;
     }
 
-    public function getWorkshopForIsUserInOrgaTeamCheck($workshopUid): ?Workshop
+    public function getWorkshopForIsUserInOrgaTeamCheck(int $workshopUid): ?Workshop
     {
         $usersAssociation = $this->getAssociation('Users');
         $usersAssociation->setConditions([
@@ -303,15 +305,15 @@ class WorkshopsTable extends AppTable
         return $workshop;
     }
 
-    public function isUserInOrgaTeam($user, $workshop): bool
+    public function isUserInOrgaTeam(?IdentityInterface $identity, Workshop $workshop): bool
     {
-        if ($user === null) {
+        if ($identity === null) {
             return false;
         }
         $orgaTeam = $this->getOrgaTeam($workshop);
         $userFound = false;
         foreach($orgaTeam as $orgaTeamUser) {
-            if ($user->uid == $orgaTeamUser->uid) {
+            if ($identity->uid == $orgaTeamUser->uid) {
                 $userFound = true;
                 break;
             }

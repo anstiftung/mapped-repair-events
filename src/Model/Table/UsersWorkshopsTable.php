@@ -22,7 +22,7 @@ class UsersWorkshopsTable extends Table
         ]);
     }
 
-    public function addApprovedUser($workshopUid, $userUid): void
+    public function addApprovedUser(int $workshopUid, int $userUid): void
     {
         $query = 'REPLACE INTO ' . $this->getTable() . ' (user_uid, workshop_uid, created, approved) VALUES(:userUid, :workshopUid, NOW(), NOW());';
         $params = [

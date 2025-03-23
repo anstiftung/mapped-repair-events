@@ -5,7 +5,7 @@ namespace App\Services;
 
 class FolderService {
 
-    public static function deleteFolder($folder): bool
+    public static function deleteFolder(string $folder): bool
     {
         if (!is_dir($folder)) {
             return false;

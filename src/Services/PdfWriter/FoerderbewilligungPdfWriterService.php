@@ -6,7 +6,9 @@ namespace App\Services\PdfWriter;
 use App\Services\PdfWriter\PdfWriterService;
 use App\Model\Entity\Fundingupload;
 use App\Services\Pdf\AnstiftungTcpdfService;
+use Cake\I18n\DateTime;
 use Cake\ORM\TableRegistry;
+use App\Model\Entity\Funding;
 
 class FoerderbewilligungPdfWriterService extends PdfWriterService
 {
@@ -16,17 +18,17 @@ class FoerderbewilligungPdfWriterService extends PdfWriterService
         $this->setPdfLibrary(new AnstiftungTcpdfService());
     }
 
-    public function getFilenameCustom($funding, $timestamp): string
+    public function getFilenameCustom(Funding $funding, DateTime $timestamp): string
     {
         return 'Foerderbewilligung_anstiftung_bmuv_' . $funding->uid . '_' . $timestamp->i18nFormat('yyyyMMdd_HHmmss') . '.pdf';
     }
 
-    public function getUploadPath($fundingUid): string
+    public function getUploadPath(int $fundingUid): string
     {
         return Fundingupload::UPLOAD_PATH . $fundingUid . DS . 'attachments' . DS;
     }
 
-    public function prepareAndSetData($fundingUid, $timestamp): void
+    public function prepareAndSetData(int $fundingUid, DateTime $timestamp): void
     {
 
         $fundingsTable = TableRegistry::getTableLocator()->get('Fundings');

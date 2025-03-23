@@ -22,7 +22,7 @@ class PagesTable extends AppTable
         $this->addBehavior('Tree');
     }
 
-    public function getPageByName($name): ?Page
+    public function getPageByName(string $name): ?Page
     {
         $page = $this->find('all', conditions: [
             'Pages.name' => $name,
@@ -38,9 +38,9 @@ class PagesTable extends AppTable
         return $validator;
     }
 
-    private function flattenNestedArrayWithChildren($array, $separator = ''): array
+    private function flattenNestedArrayWithChildren(SelectQuery $items, string $separator = ''): array
     {
-        foreach ($array as $item) {
+        foreach ($items as $item) {
             $statusString = '';
             if (! $item->status) {
                 $statusString = ' ('.__('inactive').')';
@@ -57,7 +57,7 @@ class PagesTable extends AppTable
         return $this->flattenedArray;
     }
 
-    public function getThreaded($conditions = []): SelectQuery
+    public function getThreaded(array $conditions = []): SelectQuery
     {
         $pages = $this->find('threaded',
         parentField: 'parent_uid',
@@ -70,7 +70,7 @@ class PagesTable extends AppTable
         return $pages;
     }
 
-    public function getForSelect($excludePageId = null): array
+    public function getForSelect(?int $excludePageId = null): array
     {
         $conditions = [];
         $conditions[] = 'Pages.status > ' . APP_DELETED;

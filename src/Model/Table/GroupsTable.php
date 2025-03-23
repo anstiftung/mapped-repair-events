@@ -3,11 +3,12 @@ declare(strict_types=1);
 namespace App\Model\Table;
 
 use Cake\ORM\Table;
+use App\Model\Entity\User;
 
 class GroupsTable extends Table
 {
 
-    public function isAdmin($user): bool
+    public function isAdmin(User $user): bool
     {
         if (empty($user['groups']))
             return false;
@@ -19,7 +20,7 @@ class GroupsTable extends Table
         return false;
     }
 
-    public function isOrga($user): bool
+    public function isOrga(User $user): bool
     {
         if (empty($user['groups']))
             return false;
@@ -31,7 +32,7 @@ class GroupsTable extends Table
         return false;
     }
 
-    public function isRepairhelper($user): bool
+    public function isRepairhelper(User $user): bool
     {
         if (empty($user['groups']))
             return false;
@@ -43,13 +44,12 @@ class GroupsTable extends Table
             return false;
     }
 
-    public function isInGroup($user, $groupNames): bool
+    public function isInGroup(User $user, array $groupNames): bool
     {
         if (empty($user['groups'])) {
             return false;
         }
         
-        $groupNames = (array) $groupNames;
         foreach( $user['groups'] as $group ) {
             foreach ( $groupNames as $groupName ) {
                 if ($group['name'] == $groupName) {

@@ -11,9 +11,9 @@ class SkillsController extends AdminAppController
     
     public SkillsTable $Skill;
 
-    public function __construct($request = null, $response = null)
+    public function initialize(): void
     {
-        parent::__construct($request, $response);
+        parent::initialize();
         // keep that because of AppController::stripTagsFromFields()
         $this->Skill = $this->getTableLocator()->get('Skills');
     }
@@ -48,13 +48,8 @@ class SkillsController extends AdminAppController
         $this->redirect($this->getReferer());
     }
 
-    public function edit($id): void
+    public function edit(int $id): void
     {
-
-        if (empty($id)) {
-            throw new NotFoundException;
-        }
-
         $skillsTable = $this->getTableLocator()->get('Skills');
         $skill = $skillsTable->find('all', conditions: [
             'Skills.id' => $id,

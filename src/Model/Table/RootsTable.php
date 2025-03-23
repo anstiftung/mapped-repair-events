@@ -14,7 +14,7 @@ class RootsTable extends Table
         $this->setPrimaryKey('uid');
     }
 
-    public function getType($uid): string
+    public function getType(int $uid): string
     {
         $data = $this->get($uid);
         return $data->object_type;

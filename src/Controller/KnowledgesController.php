@@ -5,7 +5,6 @@ namespace App\Controller;
 
 use App\Controller\Component\StringComponent;
 use App\Model\Table\KnowledgesTable;
-use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use Cake\Utility\Hash;
 
@@ -14,9 +13,9 @@ class KnowledgesController extends AppController
 
     public KnowledgesTable $Knowledge;
 
-    public function __construct($request = null, $response = null)
+    public function initialize(): void
     {
-        parent::__construct($request, $response);
+        parent::initialize();
         $this->Knowledge = $this->getTableLocator()->get('Knowledges');
     }
 

@@ -7,11 +7,12 @@ use Cake\Http\ServerRequest;
 use Authorization\Policy\RequestPolicyInterface;
 use Authorization\Policy\ResultInterface;
 use Cake\ORM\TableRegistry;
+use Authorization\IdentityInterface;
 
 class WorkshopsPolicy implements RequestPolicyInterface
 {
 
-    public function canAccess($identity, ServerRequest $request): bool|ResultInterface
+    public function canAccess(?IdentityInterface $identity, ServerRequest $request): bool|ResultInterface
     {
 
         if ($request->getParam('action') == 'verwalten') {

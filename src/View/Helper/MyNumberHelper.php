@@ -9,7 +9,7 @@ use Cake\View\Helper\NumberHelper;
 class MyNumberHelper extends NumberHelper
 {
 
-    public function formatAsDecimal(string|float|int $amount, $decimals = 2, $removeTrailingZeros = false, $minDecimals = null): string
+    public function formatAsDecimal(string|float|int $amount, int $decimals = 2, bool $removeTrailingZeros = false, ?int $minDecimals = null): string
     {
         $options = [
             'locale' => I18n::getLocale()

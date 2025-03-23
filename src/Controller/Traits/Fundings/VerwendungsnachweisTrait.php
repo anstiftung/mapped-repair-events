@@ -126,7 +126,7 @@ trait VerwendungsnachweisTrait {
         return null;
     }
 
-    private function submitUsageproof($funding): void
+    private function submitUsageproof(Funding $funding): void
     {
         $timestamp = DateTime::now();
         $fundingsTable = $this->getTableLocator()->get('Fundings');

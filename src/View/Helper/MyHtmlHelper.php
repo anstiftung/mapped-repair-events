@@ -9,6 +9,10 @@ use Cake\View\Helper\HtmlHelper;
 use App\Controller\Component\StringComponent;
 use App\Model\Entity\Workshop;
 use App\Model\Entity\Funding;
+use Cake\Datasource\EntityInterface;
+use Cake\View\Helper\FormHelper;
+use App\Model\Entity\User;
+use Cake\I18n\Date;
 
 class MyHtmlHelper extends HtmlHelper {
 
@@ -28,7 +32,7 @@ class MyHtmlHelper extends HtmlHelper {
         return $html;
     }
 
-    public function getHostWithoutProtocol($hostnameWithProtocol): false|string
+    public function getHostWithoutProtocol(string $hostnameWithProtocol): false|string
     {
         $parsedHostnameWithProtocol = (parse_url($hostnameWithProtocol));
         if (!empty($parsedHostnameWithProtocol['host'])) {
@@ -68,7 +72,7 @@ class MyHtmlHelper extends HtmlHelper {
         return $parsedServerName;
     }
 
-    function getCarbonFootprintAsString($carbonFootprintSum): string
+    function getCarbonFootprintAsString(float $carbonFootprintSum): string
     {
 
         $co2AeqPerFlightKilometer = 0.238;
@@ -121,7 +125,7 @@ class MyHtmlHelper extends HtmlHelper {
         return $result;
     }
 
-    public function getMaterialFootprintAsString($materialFootprintSum): string
+    public function getMaterialFootprintAsString(float $materialFootprintSum): string
     {
         $annualConsumptionPerCapitaInKg = 25800;
         $amountPersonsPerYear = round($materialFootprintSum / $annualConsumptionPerCapitaInKg, 1);
@@ -147,14 +151,14 @@ class MyHtmlHelper extends HtmlHelper {
         return $result;
     }
 
-    public function getWorkshopsCountForGlobalStatisticsString($workshopCount): string
+    public function getWorkshopsCountForGlobalStatisticsString(int $workshopCount): string
     {
         return Configure::read('AppConfig.numberHelper')->precision($workshopCount, 0) . ' ' . 'Initiativen haben mit ihren Reparaturdaten zu dieser Statistik beigetragen.';
     }
 
-    function roundUpToAny($n,$x): float
+    function roundUpToAny(float $n, float $x): float
     {
-        return round($n*$x) / $x;
+        return round($n * $x) / $x;
     }
 
     function getGenders(): array
@@ -165,7 +169,7 @@ class MyHtmlHelper extends HtmlHelper {
         ];
     }
 
-    function generateGenericRadioButton($form, $formField): string
+    function generateGenericRadioButton(FormHelper $form, EntityInterface $formField): string
     {
         $result = '<div class="required form-fields-checkbox-wrapper dependent-form-field '.$formField->identifier.'">'.
             '<label>'.$formField->name.'</label>'.
@@ -179,12 +183,12 @@ class MyHtmlHelper extends HtmlHelper {
 
     }
 
-    function addClassToFormInputContainer($class): string
+    function addClassToFormInputContainer(string $class): string
     {
         return '<div class="'.$class.' input {{type}}">{{content}}</div>';
     }
 
-    function addClassToFormInputContainerError($class): string
+    function addClassToFormInputContainerError(string $class): string
     {
         return '<div class="'.$class.' input {{type}}{{required}} error">{{content}}{{error}}</div>';
     }
@@ -198,7 +202,7 @@ class MyHtmlHelper extends HtmlHelper {
         return $html;
     }
 
-    function getRoleHint($repairhelperInfotext, $orgaInfotext): string
+    function getRoleHint(string $repairhelperInfotext, string $orgaInfotext): string
     {
         $html = '<strong>Wichtige Informationen über die verschiedenen Benutzerrollen</strong><br />
                 <a class="open-with-featherlight" href="#repairhelperHelp" id="urlHelpLink">Was ist ein(e) <strong>Reparaturhelfer*in</strong> ?</a>
@@ -217,13 +221,13 @@ class MyHtmlHelper extends HtmlHelper {
         return $html;
     }
 
-    function urlEventDetail($workshopUrl, $eventUid, $eventDatumstart): string
+    function urlEventDetail(string $workshopUrl, int $eventUid, Date $eventDatumstart): string
     {
         return $this->urlWorkshopDetail($workshopUrl) .'?event='.$eventUid.','.$eventDatumstart->i18nFormat(Configure::read('DateFormat.Database')).'#datum';
     }
 
 
-    function urlUsers($categoryName = null, $zip=-1): string
+    function urlUsers(?string $categoryName = null, string|int $zip=-1): string
     {
         $url = '/aktive';
         if (!is_null($categoryName)) {
@@ -235,7 +239,7 @@ class MyHtmlHelper extends HtmlHelper {
         return $url;
     }
 
-    function urlUserProfile($userUid): string
+    function urlUserProfile(int $userUid): string
     {
         return '/users/profile/'.$userUid;
     }
@@ -250,52 +254,52 @@ class MyHtmlHelper extends HtmlHelper {
         return '/mein-foerderantrag';
     }
 
-    function urlFundingsEdit($workshopUid): string
+    function urlFundingsEdit(int $workshopUid): string
     {
         return $this->urlFundings() . '/edit/' . $workshopUid;
     }
 
-    function urlFundingsUsageproof($fundingUid): string
+    function urlFundingsUsageproof(int $fundingUid): string
     {
         return $this->urlFundings() . '/verwendungsnachweis/' . $fundingUid;
     }
 
-    function urlFundingsUploadZuwendungsbestaetigung($fundingUid): string
+    function urlFundingsUploadZuwendungsbestaetigung(int $fundingUid): string
     {
         return $this->urlFundings() . '/uploadZuwendungsbestaetigung/' . $fundingUid;
     }
 
-    function urlFundingsAdminEdit($fundingUid): string
+    function urlFundingsAdminEdit(int $fundingUid): string
     {
         return '/admin/fundings/edit/' . $fundingUid;
     }
 
-    function urlFundinguploadDetail($fundinguploadId): string
+    function urlFundinguploadDetail(string $fundinguploadId): string
     {
         return $this->urlFundings() . '/uploadDetail/' . $fundinguploadId;
     }
 
-    function urlFundingFoerderantragDownload($fundingUid): string
+    function urlFundingFoerderantragDownload(int $fundingUid): string
     {
         return $this->urlFundings() . '/download/foerderantrag/' . $fundingUid;
     }
 
-    function urlFundingFoerderbewilligungDownload($fundingUid): string
+    function urlFundingFoerderbewilligungDownload(int $fundingUid): string
     {
         return $this->urlFundings() . '/download/foerderbewilligung/' . $fundingUid;
     }
 
-    function urlFundingVerwendungsnachweisDownload($fundingUid): string
+    function urlFundingVerwendungsnachweisDownload(int $fundingUid): string
     {
         return $this->urlFundings() . '/download/verwendungsnachweis/' . $fundingUid;
     }
 
-    function urlFundingsDelete($fundinguploadId): string
+    function urlFundingsDelete(int $fundingId): string
     {
-        return $this->urlFundings() . '/delete/' . $fundinguploadId;
+        return $this->urlFundings() . '/delete/' . $fundingId;
     }
 
-    function getUserBackendNaviLinks($userUid, $isMyProfile, $isOrga): array
+    function getUserBackendNaviLinks(int $userUid, bool $isMyProfile, bool $isOrga): array
     {
         $result = [];
         $result[] = ['url' => $this->urlUserHome(), 'name' => 'INFO'];
@@ -326,12 +330,12 @@ class MyHtmlHelper extends HtmlHelper {
         return $string;
     }
 
-    function getFacebookUrl($username): string
+    function getFacebookUrl(string $username): string
     {
         return 'https://www.facebook.com/' . $username . '/';
     }
 
-    public function trimAndRemoveEmptyTags($html): string
+    public function trimAndRemoveEmptyTags(string $html): string
     {
         $pattern = "/<[^\/>]*>([\s]?)*<\/[^>]*>/";
         $html = preg_replace($pattern, '', $html);
@@ -345,7 +349,7 @@ class MyHtmlHelper extends HtmlHelper {
         parent::__construct($View, $config);
     }
 
-    function wrapJavascriptBlock($content): string
+    function wrapJavascriptBlock(string $content): string
     {
         return "<script>
             //<![CDATA[
@@ -356,7 +360,7 @@ class MyHtmlHelper extends HtmlHelper {
         </script>";
     }
 
-    function urlPageDetail($url, $preview=false): string
+    function urlPageDetail(string $url, bool $preview=false): string
     {
         $previewSuffix = '';
         if ($preview == true) {
@@ -368,7 +372,7 @@ class MyHtmlHelper extends HtmlHelper {
     /**
      * for admin edit
      */
-    function isUrlEditable($object): bool
+    function isUrlEditable(EntityInterface $object): bool
     {
         return $object->status == APP_OFF;
     }
@@ -388,7 +392,7 @@ class MyHtmlHelper extends HtmlHelper {
         return '/registrierung/organisatorin';
     }
 
-    function urlLogin($redirect=''): string
+    function urlLogin(?string $redirect=''): string
     {
         $url = '/users/login';
         if ($redirect != '') {
@@ -416,17 +420,17 @@ class MyHtmlHelper extends HtmlHelper {
         return '/initiativen/mitmachen';
     }
 
-    function urlUserWorkshopApprove($type, $userUid, $workshopUid): string
+    function urlUserWorkshopApprove(string $type, int $userUid, int $workshopUid): string
     {
         return '/initiativen/user/approve/' . $type . '/' . $userUid . '/' . $workshopUid;
     }
 
-    function urlUserWorkshopResign($type, $userUid, $workshopUid): string
+    function urlUserWorkshopResign(string $type, int $userUid, int $workshopUid): string
     {
         return '/initiativen/user/resign/' . $type . '/' . $userUid . '/' . $workshopUid;
     }
 
-    function urlUserWorkshopRefuse($type, $userUid, $workshopUid): string
+    function urlUserWorkshopRefuse(string $type, int $userUid, int $workshopUid): string
     {
         return '/initiativen/user/refuse/' . $type . '/' . $userUid . '/' . $workshopUid;
     }
@@ -441,7 +445,7 @@ class MyHtmlHelper extends HtmlHelper {
         return '/admin/categories/insert/';
     }
 
-    function urlCategoryEdit($id): string
+    function urlCategoryEdit(int $id): string
     {
         return '/admin/categories/edit/' . $id;
     }
@@ -449,7 +453,7 @@ class MyHtmlHelper extends HtmlHelper {
     {
         return '/admin/ordsCategories/insert/';
     }
-    function urlOrdsCategoryEdit($id): string
+    function urlOrdsCategoryEdit(int $id): string
     {
         return '/admin/ordsCategories/edit/' . $id;
     }
@@ -457,7 +461,7 @@ class MyHtmlHelper extends HtmlHelper {
     {
         return '/admin/skills/insert/';
     }
-    function urlSkillEdit($id): string
+    function urlSkillEdit(int $id): string
     {
         return '/admin/skills/edit/' . $id;
     }
@@ -465,11 +469,11 @@ class MyHtmlHelper extends HtmlHelper {
     {
         return '/admin/brands/insert/';
     }
-    function urlBrandEdit($id): string
+    function urlBrandEdit(int $id): string
     {
         return '/admin/brands/edit/' . $id;
     }
-    function urlEventIcal($uid): string
+    function urlEventIcal(int $uid): string
     {
         return '/events/ical/' . $uid . '.ics';
     }
@@ -477,31 +481,31 @@ class MyHtmlHelper extends HtmlHelper {
     {
         return '/events.ics';
     }
-    function urlEventDelete($uid): string
+    function urlEventDelete(int $uid): string
     {
         return '/termine/delete/' . $uid;
     }
-    function urlEventEdit($uid): string
+    function urlEventEdit(int $uid): string
     {
         return '/termine/edit/' . $uid;
     }
-    function urlEventDuplicate($uid): string
+    function urlEventDuplicate(int $uid): string
     {
         return '/termine/duplicate/' . $uid;
     }
-    function urlEventNew($workshopUid = null): string
+    function urlEventNew(?int $workshopUid = null): string
     {
         return '/termine/add' . (!is_null($workshopUid) ? '/'.$workshopUid : '');
     }
-    function urlInfoSheetNew($eventUid): string
+    function urlInfoSheetNew(int $eventUid): string
     {
         return '/laufzettel/add/' . $eventUid;
     }
-    function urlInfoSheetEdit($infoSheetUid): string
+    function urlInfoSheetEdit(int $infoSheetUid): string
     {
         return '/laufzettel/edit/' . $infoSheetUid;
     }
-    function urlInfoSheetDelete($infoSheetUid): string
+    function urlInfoSheetDelete(int $infoSheetUid): string
     {
         return '/laufzettel/delete/' . $infoSheetUid;
     }
@@ -511,37 +515,37 @@ class MyHtmlHelper extends HtmlHelper {
         return '/feed.rss';
     }
 
-    function getThumbs50Image($image, $objectType): string
+    function getThumbs50Image(string $image, string $objectType): string
     {
         return FILES_DIR . 'uploadify/' . $objectType . '/thumbs-50/' . $image;
     }
 
-    function getThumbs100Image($image, $objectType): string
+    function getThumbs100Image(string $image, string $objectType): string
     {
         return FILES_DIR . 'uploadify/' . $objectType . '/thumbs-100/' . $image;
     }
 
-    function getThumbs150Image($image, $objectType): string
+    function getThumbs150Image(string $image, string $objectType): string
     {
         return FILES_DIR . 'uploadify/' . $objectType . '/thumbs-150/' . $image;
     }
 
-    function getThumbs300Image($image, $objectType): string
+    function getThumbs300Image(string $image, string $objectType): string
     {
         return FILES_DIR . 'uploadify/' . $objectType . '/thumbs-300/' . $image;
     }
 
-    function getOriginalImage($image, $objectType): string
+    function getOriginalImage(string $image, string $objectType): string
     {
         return FILES_DIR . 'uploadify/' . $objectType . '/' . $image;
     }
 
-    function getThumbs280ImageMultiple($image): string
+    function getThumbs280ImageMultiple(string $image): string
     {
         return FILES_DIR . 'multiple/thumbs-280/' . $image;
     }
 
-    function getThumbs800ImageMultiple($image): string
+    function getThumbs800ImageMultiple(string $image): string
     {
         return FILES_DIR . 'multiple/thumbs-800/' . $image;
     }
@@ -549,7 +553,7 @@ class MyHtmlHelper extends HtmlHelper {
     {
         return '/kenntnisse';
     }
-    function urlWorkshops($keyword = ''): string
+    function urlWorkshops(?string $keyword = ''): string
     {
         $url = '/orte';
         if ($keyword != '') {
@@ -557,7 +561,7 @@ class MyHtmlHelper extends HtmlHelper {
         }
         return $url;
     }
-    function urlEvents($keyword = ''): string
+    function urlEvents(?string $keyword = ''): string
     {
         $url = '/termine';
         if ($keyword != '') {
@@ -565,7 +569,7 @@ class MyHtmlHelper extends HtmlHelper {
         }
         return $url;
     }
-    function urlSkillDetail($id, $name, $zip=-1): string
+    function urlSkillDetail(int $id, string $name, string|int $zip=-1): string
     {
         $url = '/aktive/' . $id . '-' . StringComponent::slugify($name);
         if ($zip >= 0) {
@@ -573,7 +577,7 @@ class MyHtmlHelper extends HtmlHelper {
         }
         return $url;
     }
-    function urlBlogDetail($url): string
+    function urlBlogDetail(string $url): string
     {
         return '/' . $url;
     }
@@ -581,20 +585,20 @@ class MyHtmlHelper extends HtmlHelper {
     {
         return '/initiativen/anlegen';
     }
-    function urlWorkshopEdit($uid): string
+    function urlWorkshopEdit(int $uid): string
     {
         return '/initiativen/bearbeiten/'.$uid;
     }
-    function urlWorkshopDelete($uid): string
+    function urlWorkshopDelete(int $uid): string
     {
         return '/initiativen/loeschen/'.$uid;
     }
 
-    function urlWorkshopDetail($url): string
+    function urlWorkshopDetail(?string $url): string
     {
         return '/' . $url;
     }
-    function urlPageEdit($uid): string
+    function urlPageEdit(int $uid): string
     {
         return '/admin/pages/edit/'.$uid;
     }
@@ -602,11 +606,11 @@ class MyHtmlHelper extends HtmlHelper {
     {
         return '/admin/pages/insert';
     }
-    function urlPostEdit($uid): string
+    function urlPostEdit(int $uid): string
     {
         return '/admin/posts/edit/'.$uid;
     }
-    function urlPostNew($type=''): string
+    function urlPostNew(?string $type=''): string
     {
         return '/admin/posts/insert/'.$type;
     }
@@ -614,11 +618,11 @@ class MyHtmlHelper extends HtmlHelper {
     {
         return '/admin/knowledges/insert';
     }
-    function urlKnowledgeEdit($uid): string
+    function urlKnowledgeEdit(int $uid): string
     {
         return '/admin/knowledges/edit/'.$uid;
     }
-    function urlKnowledgeDetail($uid): string
+    function urlKnowledgeDetail(int $uid): string
     {
         return $this->urlKnowledges() . '/#' . $uid;
     }
@@ -633,7 +637,7 @@ class MyHtmlHelper extends HtmlHelper {
             Configure::read('AppConfig.htmlHelper')->getAdditionalBlogCategoryUrl()
         ];
     }
-    function urlPostDetail($url, $preview=false): string
+    function urlPostDetail(string $url, bool $preview=false): string
     {
         $previewSuffix = '';
         if ($preview == true) {
@@ -641,7 +645,7 @@ class MyHtmlHelper extends HtmlHelper {
         }
         return '/post/' . $url . $previewSuffix;
     }
-    function urlUserEdit($uid, $isMyProfile): string
+    function urlUserEdit(int $uid, bool|string $isMyProfile): string
     {
         $url = '/users/profil';
         if (!$isMyProfile) {
@@ -650,7 +654,7 @@ class MyHtmlHelper extends HtmlHelper {
         return $url;
     }
 
-    public function getUserProfileImageSrc($user, $userImage): string
+    public function getUserProfileImageSrc(User $user, ?string $userImage): string
     {
         $userImageSrc = '/files/uploadify/users/thumbs-150/' . $userImage;
         if(empty($userImage)) {
@@ -672,7 +676,7 @@ class MyHtmlHelper extends HtmlHelper {
         return $userImageSrc;
     }
 
-    function getUserProfileImage($user): string
+    function getUserProfileImage(User $user): string
     {
         $userAltText = isset($user->image_alt_text) ? $user->image_alt_text : $user['image_alt_text'];
         $userImage = isset($user->image) ? $user->image : $user['image'];
@@ -713,7 +717,7 @@ class MyHtmlHelper extends HtmlHelper {
         return $userGroups;
     }
 
-    function getUserGroupsForUserEdit($isAdmin = false): array
+    function getUserGroupsForUserEdit(bool $isAdmin = false): array
     {
         $userGroups = [];
         if ($isAdmin) {
@@ -724,7 +728,7 @@ class MyHtmlHelper extends HtmlHelper {
         return $userGroups;
     }
 
-    function formatBytes($bytes, $precision = 2) :string
+    function formatBytes(int $bytes, int $precision = 2) :string
     {
         $units = ['B', 'KB', 'MB', 'GB', 'TB'];
 
@@ -737,7 +741,7 @@ class MyHtmlHelper extends HtmlHelper {
         return number_format($bytes, $precision, ',', '.') . ' ' . $units[$pow];
     }
 
-    function getPhotoDimensions($dimension): array|false
+    function getPhotoDimensions(string $dimension): array|false
     {
         if (!preg_match('/x/', $dimension)) return false;
         return explode('x', $dimension);
@@ -746,7 +750,7 @@ class MyHtmlHelper extends HtmlHelper {
     /**
      * creates navigation with up to 2 sublevels
      */
-    function createMenuEntry($menuElement, $order = null, $mainMenuElement = null): string
+    function createMenuEntry(array $menuElement, ?array $mainMenuElement = null): string
     {
 
         $element = '';
@@ -816,7 +820,7 @@ class MyHtmlHelper extends HtmlHelper {
             $i = 0;
             $element .= '<ul class="submenu">';
             foreach ($menuElement['sub'] as $subMenuElement) {
-                $element .= $this->createMenuEntry($subMenuElement, $i, $menuElement);
+                $element .= $this->createMenuEntry($subMenuElement, $menuElement);
                 $i++;
             }
             $element .= '</ul>';

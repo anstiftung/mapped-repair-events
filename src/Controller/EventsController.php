@@ -22,7 +22,9 @@ use Cake\I18n\DateTime;
 use App\Model\Entity\Worknews;
 use App\Mailer\AppMailer;
 use App\Model\Table\EventsTable;
+use Cake\Datasource\Paging\PaginatedInterface;
 use Cake\Http\Response;
+use Cake\ORM\Query\SelectQuery;
 
 class EventsController extends AppController
 {
@@ -256,12 +258,8 @@ class EventsController extends AppController
 
     }
 
-    public function delete($eventUid): void
+    public function delete(int $eventUid): void
     {
-        if ($eventUid === null) {
-            throw new NotFoundException;
-        }
-
         $event = $this->Event->find('all',
             conditions: [
                 'Events.uid' => $eventUid,
@@ -321,13 +319,13 @@ class EventsController extends AppController
 
     }
 
-    public function add($preselectedWorkshopUid): void
+    public function add(int $preselectedWorkshopUid): void
     {
 
         $event = $this->Event->newEntity(
             [
                 'status' => APP_ON,
-                'workshop_uid' => $preselectedWorkshopUid
+                'workshop_uid' => $preselectedWorkshopUid,
             ],
             ['validate' => false]
         );
@@ -355,7 +353,7 @@ class EventsController extends AppController
         }
     }
 
-    public function duplicate($eventUid): void
+    public function duplicate(int $eventUid): void
     {
         $event = $this->Event->find('all',
             conditions: [
@@ -380,13 +378,8 @@ class EventsController extends AppController
         $this->render('edit');
     }
 
-    public function edit($eventUid): void
+    public function edit(int $eventUid): void
     {
-
-        if ($eventUid === null) {
-            throw new NotFoundException;
-        }
-
         $event = $this->Event->find('all',
             conditions: [
                 'Events.uid' => $eventUid,
@@ -432,7 +425,7 @@ class EventsController extends AppController
         }
     }
 
-    private function _edit($events, $isEditMode): array
+    private function _edit(SelectQuery|array $events, bool $isEditMode): array
     {
         $categoriesTable = $this->getTableLocator()->get('Categories');
         $this->set('categories', $categoriesTable->getForDropdown(APP_ON));
@@ -789,7 +782,7 @@ class EventsController extends AppController
     /**
      * combines multiple events to one marker
      */
-    private function combineEventsForMap($events): array
+    private function combineEventsForMap(PaginatedInterface|SelectQuery $events): array
     {
         $eventsForMap1 = [];
 

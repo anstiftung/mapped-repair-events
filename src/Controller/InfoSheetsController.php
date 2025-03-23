@@ -14,6 +14,7 @@ use Cake\Event\EventInterface;
 use Cake\Http\Exception\NotFoundException;
 use League\Csv\Writer;
 use Cake\Http\Response;
+use App\Model\Entity\InfoSheet;
 
 class InfoSheetsController extends AppController
 {
@@ -27,18 +28,17 @@ class InfoSheetsController extends AppController
     
     public function beforeFilter(EventInterface $event): void
     {
-
         parent::beforeFilter($event);
         $this->InfoSheet = $this->getTableLocator()->get('InfoSheets');
     }
 
-    public function fullDownload($date=null): Response
+    public function fullDownload(string $date=''): Response
     {
 
         $query = file_get_contents(ROOT . DS . 'config' . DS. 'sql' . DS . 'info-sheets-full-download.sql');
         $params = [];
         $filename = 'repair-data-export';
-        if (!is_null($date)) {
+        if ($date != '') {
             $query = preg_replace('/WHERE 1/', 'WHERE 1 AND e.datumstart <= :date', $query);
             $params['date'] = $date;
             $filename .= '-until-' . $date;
@@ -71,7 +71,7 @@ class InfoSheetsController extends AppController
 
     }
 
-    public function download($workshopUid, $year=null): Response
+    public function download(int $workshopUid, string $year=''): Response
     {
 
         $this->Workshop = $this->getTableLocator()->get('Workshops');
@@ -88,7 +88,7 @@ class InfoSheetsController extends AppController
             'workshopUid' => $workshopUid
         ];
         $filename = 'Laufzettel-Download-' . StringComponent::slugifyAndKeepCase($workshop->name);
-        if (in_array($year, Configure::read('AppConfig.timeHelper')->getAllYearsUntilThisYear(date('Y'), 2010))) {
+        if (in_array($year, Configure::read('AppConfig.timeHelper')->getAllYearsUntilThisYear((int) date('Y'), 2010))) {
             $query = preg_replace('/WHERE 1/', 'WHERE 1 AND DATE_FORMAT(e.datumstart, \'%Y\') = :year', $query);
             $params['year'] = $year;
             $filename .= '-' . $year;
@@ -119,12 +119,8 @@ class InfoSheetsController extends AppController
         return $response;
     }
 
-    public function delete($infoSheetUid): void
+    public function delete(int $infoSheetUid): void
     {
-        if ($infoSheetUid === null) {
-            throw new NotFoundException;
-        }
-
         $infoSheet = $this->InfoSheet->find('all', conditions: [
             'InfoSheets.uid' => $infoSheetUid,
             'InfoSheets.status >= ' . APP_DELETED
@@ -149,13 +145,8 @@ class InfoSheetsController extends AppController
 
     }
 
-    public function add($eventUid): void
+    public function add(int $eventUid): void
     {
-
-        if ($eventUid === null) {
-            throw new NotFoundException;
-        }
-
         $this->Event = $this->getTableLocator()->get('Events');
 
         $this->Event->getAssociation('Workshops')->setConditions(['Workshops.status > ' . APP_DELETED]);
@@ -189,13 +180,8 @@ class InfoSheetsController extends AppController
         }
     }
 
-    public function edit($infoSheetUid): void
+    public function edit(int $infoSheetUid): void
     {
-
-        if ($infoSheetUid === null) {
-            throw new NotFoundException;
-        }
-
         $infoSheet = $this->InfoSheet->find('all',
         conditions: [
             'InfoSheets.uid' => $infoSheetUid,
@@ -235,7 +221,7 @@ class InfoSheetsController extends AppController
         $this->_edit($infoSheet, true);
     }
 
-    private function _edit($infoSheet, $isEditMode): void
+    private function _edit(InfoSheet $infoSheet, bool $isEditMode): void
     {
 
         $this->set('uid', $infoSheet->uid);

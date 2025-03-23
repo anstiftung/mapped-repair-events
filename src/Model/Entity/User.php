@@ -51,7 +51,7 @@ class User extends Entity implements IdentityInterface
         return $groupsTable->isRepairhelper($this);
     }
 
-    public function IsInGroup($groups): bool
+    public function IsInGroup(array $groups): bool
     {
         $groupsTable = TableRegistry::getTableLocator()->get('Groups');
         return $groupsTable->isInGroup($this, $groups);
@@ -115,7 +115,7 @@ class User extends Entity implements IdentityInterface
         }
     }
 
-    public function privatizeData(&$user): void
+    public function privatizeData(User &$user): void
     {
         if (!is_null($user->private)) {
             $privateFields = explode(',',  $user->private);
@@ -140,7 +140,7 @@ class User extends Entity implements IdentityInterface
         return join(' ', $names);
     }
 
-    protected function _setPassword($password): string
+    protected function _setPassword(string $password): string
     {
         if (strlen($password) > 0) {
             return (new DefaultPasswordHasher)->hash($password);

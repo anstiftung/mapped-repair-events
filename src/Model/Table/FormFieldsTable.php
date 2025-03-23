@@ -16,7 +16,7 @@ class FormFieldsTable extends Table
         ]);
     }
 
-    public function getForForm($formFieldId): FormField
+    public function getForForm(int $formFieldId): FormField
     {
         $formField = $this->find('all',
         conditions: [

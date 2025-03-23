@@ -58,7 +58,7 @@ class CategoriesTable extends Table
         return $validator;
     }
 
-    public function getInfoSheetCount($categoryId): int
+    public function getInfoSheetCount(int $categoryId): int
     {
         $infoSheetTable = TableRegistry::getTableLocator()->get('InfoSheets');
         $result = $infoSheetTable->find('all',
@@ -70,10 +70,10 @@ class CategoriesTable extends Table
         return $result;
     }
 
-    public function getMaterialFootprintByParentCategoryId($parentCategoryId): float
+    public function getMaterialFootprintByParentCategoryId(int $parentCategoryId): float
     {
         $category = $this->find('all', conditions: [
-            'Categories.parent_id' => $parentCategoryId
+            'Categories.parent_id' => $parentCategoryId,
         ])->first();
 
         $result = 0;
@@ -84,10 +84,10 @@ class CategoriesTable extends Table
         return (float) $result;
     }
 
-    public function getCarbonFootprintByParentCategoryId($parentCategoryId): float
+    public function getCarbonFootprintByParentCategoryId(int $parentCategoryId): float
     {
         $category = $this->find('all', conditions: [
-            'Categories.parent_id' => $parentCategoryId
+            'Categories.parent_id' => $parentCategoryId,
         ])->first();
 
         $result = 0;
@@ -200,20 +200,20 @@ class CategoriesTable extends Table
         return $categories;
     }
 
-    public function getForDropdown($visibleOnPlatform): array
+    public function getForDropdown(int|array $visibleOnPlatform): array
     {
 
         $categories = $this->find('all',
         conditions: [
             'Categories.parent_id IS NULL',
-            'Categories.visible_on_platform IN' => $visibleOnPlatform
+            'Categories.visible_on_platform IN' => $visibleOnPlatform,
         ],
         fields: [
             'Categories.id',
-            'Categories.name'
+            'Categories.name',
         ],
         order: [
-            'LOWER(Categories.name)' => 'ASC'
+            'LOWER(Categories.name)' => 'ASC',
         ]);
 
         $preparedCategories = [];

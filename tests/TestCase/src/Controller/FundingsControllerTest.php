@@ -108,7 +108,7 @@ class FundingsControllerTest extends AppTestCase
         $this->assertRedirectContains(Configure::read('AppConfig.htmlHelper')->urlFundings());
     }
 
-    private function prepareWorkshopForFunding($workshopUid): void
+    private function prepareWorkshopForFunding(int $workshopUid): void
     {
         // add 4 events for 2025 (required for funding)
         $eventsTable = $this->getTableLocator()->get('Events');

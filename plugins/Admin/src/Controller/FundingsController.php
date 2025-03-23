@@ -43,21 +43,21 @@ class FundingsController extends AdminAppController
 
     }
 
-    public function foerderbewilligungPdf($fundingUid): void
+    public function foerderbewilligungPdf(int $fundingUid): void
     {
         $pdfWriterService = new FoerderbewilligungPdfWriterService();
         $pdfWriterService->prepareAndSetData($fundingUid, DateTime::now());
         die($pdfWriterService->writeInline());
     }
 
-    public function foerderantragPdf($fundingUid): void
+    public function foerderantragPdf(int $fundingUid): void
     {
         $pdfWriterService = new FoerderantragPdfWriterService();
         $pdfWriterService->prepareAndSetData($fundingUid, DateTime::now());
         die($pdfWriterService->writeInline());
     }
 
-    public function verwendungsnachweisPdf($fundingUid): void
+    public function verwendungsnachweisPdf(int $fundingUid): void
     {
         $pdfWriterService = new VerwendungsnachweisPdfWriterService();
         $pdfWriterService->prepareAndSetData($fundingUid, DateTime::now());
@@ -180,7 +180,7 @@ class FundingsController extends AdminAppController
         ];
     }
 
-    public function usageproofEdit($uid): void
+    public function usageproofEdit(int $uid): void
     {
 
         if (empty($uid)) {
@@ -269,12 +269,8 @@ class FundingsController extends AdminAppController
         $this->set('funding', $funding);
     }    
 
-    public function edit($uid): void
+    public function edit(int $uid): void
     {
-        if (empty($uid)) {
-            throw new NotFoundException;
-        }
-
         $fundingsTable = $this->getTableLocator()->get('Fundings');
         $workshopsTable = $this->getTableLocator()->get('Workshops');
         $funding = $fundingsTable->find('all',
@@ -333,7 +329,7 @@ class FundingsController extends AdminAppController
     
     }
 
-    private function sendEmails($funding): void
+    private function sendEmails(Funding $funding): void
     {
         if ($funding->isDirty('freistellungsbescheid_status')) {
             $email = new AppMailer();

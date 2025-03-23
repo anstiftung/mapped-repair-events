@@ -8,11 +8,12 @@ use Cake\Log\Engine\FileLog;
 use Cake\Network\Exception\SocketException;
 use Cake\Routing\Router;
 use Cake\Utility\Text;
+use Stringable;
 
 class FileAndEmailLog extends FileLog
 {
 
-    public function log($level, $message, array $context = []): void
+    public function log($level, Stringable|string $message, array $context = []): void
     {
         parent::log($level, $message, $context);
         if (Configure::read('emailErrorLoggingEnabled')) {
@@ -20,7 +21,7 @@ class FileAndEmailLog extends FileLog
         }
     }
 
-    private function sendEmailWithErrorInformation($message): bool
+    private function sendEmailWithErrorInformation(string $message): bool
     {
 
         $ignoredExceptionsRegex = [
