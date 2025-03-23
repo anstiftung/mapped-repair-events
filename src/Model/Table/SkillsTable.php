@@ -40,9 +40,9 @@ class SkillsTable extends Table
         return $validator;
     }
 
-    public function getNewSkillsFromRequest(?array $associatedSkills): array
+    public function getNewSkillsFromRequest(array|string|null $associatedSkills): array
     {
-        if ($associatedSkills === null) {
+        if (!is_array($associatedSkills)) {
             return [];
         }
         $skills = array_filter($associatedSkills, function($value) {
@@ -51,9 +51,9 @@ class SkillsTable extends Table
         return $skills;
     }
 
-    public function getExistingSkillsFromRequest(?array $associatedSkills): array
+    public function getExistingSkillsFromRequest(array|string|null $associatedSkills): array
     {
-        if ($associatedSkills === null) {
+        if (!is_array($associatedSkills)) {
             return [];
         }
         $skills = array_filter($associatedSkills, function($value) {
