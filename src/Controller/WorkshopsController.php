@@ -199,7 +199,7 @@ class WorkshopsController extends AppController
         }
     }
 
-    private function getPreparedCategoryIcons(array $categories): array
+    private function getPreparedCategoryIcons(?array $categories): array
     {
         $preparedCategories = [];
         $i = 0;
