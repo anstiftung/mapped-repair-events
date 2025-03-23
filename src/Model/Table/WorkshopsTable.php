@@ -305,7 +305,7 @@ class WorkshopsTable extends AppTable
         return $workshop;
     }
 
-    public function isUserInOrgaTeam(?IdentityInterface $identity, Workshop $workshop): bool
+    public function isUserInOrgaTeam(IdentityInterface|User|null $identity, Workshop $workshop): bool
     {
         if ($identity === null) {
             return false;
