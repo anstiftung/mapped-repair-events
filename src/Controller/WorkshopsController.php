@@ -1230,7 +1230,7 @@ class WorkshopsController extends AppController
         // admins can apply in the name of another user
         $userUid = $this->isLoggedIn() ? $this->loggedUser->uid : 0;
         if ($this->isAdmin() && $this->request->getData('users_workshops.user_uid') > 0) {
-            $userUid = $this->request->getData('users_workshops.user_uid');
+            $userUid = (int) $this->request->getData('users_workshops.user_uid');
         }
 
         $this->apply('users_workshops', 'user_uid', 'Users', $userUid);
