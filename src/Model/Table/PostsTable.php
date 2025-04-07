@@ -57,7 +57,6 @@ class PostsTable extends AppTable
         order: ['Posts.publish' => 'DESC'],
         conditions: [
             'Posts.status' => APP_ON,
-            'Posts.image != ' => ''
         ]);
         return $posts;
     }
