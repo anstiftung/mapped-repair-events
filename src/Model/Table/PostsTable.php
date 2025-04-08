@@ -30,7 +30,6 @@ class PostsTable extends AppTable
     {
         $validator = $this->validationAdmin($validator);
         $validator->minLength('city', 2, 'Bitte trage einen Ort ein.');
-        $validator->minLength('city', 1, 'Bitte gib einen Author an.');
         return $validator;
     }
 
