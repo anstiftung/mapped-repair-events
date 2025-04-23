@@ -64,8 +64,10 @@ class Application extends BaseApplication
         $this->addPlugin('Authorization');
 
         if (Configure::read('debug')) {
-            Configure::write('DebugKit.ignoreAuthorization', true);
-            $this->addPlugin('DebugKit', ['bootstrap' => true]);
+            if (!(PHP_SAPI == 'cli' && $_SERVER['argv'][0] && preg_match('/phpunit|pest/', $_SERVER['argv'][0]))) {
+                Configure::write('DebugKit.ignoreAuthorization', true);
+                $this->addPlugin('DebugKit', ['bootstrap' => true]);
+            }
         }
 
         $this->addPlugin('Migrations');
