@@ -9,7 +9,8 @@
         },
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true,
-            "cakephp/plugin-installer": true
+            "cakephp/plugin-installer": true,
+            "pestphp/pest-plugin": true
         }
     },
     "require": {
@@ -36,10 +37,11 @@
     "require-dev": {
         "cakephp/debug_kit": "5.*",
         "phpstan/phpstan": "2.*",
-        "phpunit/phpunit": "^12.0",
+        "phpunit/phpunit": "^11.0",
         "friendsofcake/fixturize": "^3.0",
         "cakedc/cakephp-phpstan": "^4.0",
-        "ergebnis/phpstan-rules": "^2.5"
+        "ergebnis/phpstan-rules": "^2.5",
+        "pestphp/pest": "^3.8"
     },
     "autoload": {
         "psr-4": {

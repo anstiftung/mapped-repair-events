@@ -52,7 +52,7 @@ jobs:
 
       - name: PHPUnit Tests
         if: always()
-        run: docker exec -w /app rep.php php ./vendor/bin/phpunit --coverage-clover ./coverage.xml
+        run: docker exec -w /app rep.php php ./vendor/bin/pest --coverage-clover ./coverage.xml
 
       - name: Codecov
         uses: codecov/codecov-action@v4
