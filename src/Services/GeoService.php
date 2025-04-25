@@ -100,7 +100,7 @@ class GeoService {
         $geoFields = ['lat', 'lng'];
         foreach($geoFields as $geoField) {
             $validator->add($geoField, 'geoCoordinatesInBoundingBox', [
-                'rule' => function ($value, $context) {
+                'rule' => function ($value, array $context): bool {
                     if ($context['data']['use_custom_coordinates']) {
                         if (!$this->isPointInBoundingBox((float) $context['data']['lat'], (float) $context['data']['lng'])) {
                             Log::error('Geo coordinates out of bounding box: lat: ' . json_encode($context['data']['lat']) . ' / lng: ' . json_encode($context['data']['lng']));

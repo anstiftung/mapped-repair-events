@@ -363,14 +363,14 @@ class UsersController extends AppController
 
         $orgaInfotextEntity = $this->Page->getPageByName('Was.ist.ein.Organisator');
         $orgaInfotext = '';
-        if (!empty($orgaInfotextEntity)) {
+        if ($orgaInfotextEntity instanceof \App\Model\Entity\Page) {
             $orgaInfotext = $orgaInfotextEntity->text;
         }
         $this->set('orgaInfotext', $orgaInfotext);
 
         $repairhelperInfotextEntity = $this->Page->getPageByName('Was.ist.ein.Reparateur');
         $repairhelperInfotext = '';
-        if (!empty($repairhelperInfotextEntity)) {
+        if ($repairhelperInfotextEntity instanceof \App\Model\Entity\Page) {
             $repairhelperInfotext = $repairhelperInfotextEntity->text;
         }
         $this->set('repairhelperInfotext', $repairhelperInfotext);

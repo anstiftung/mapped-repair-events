@@ -59,7 +59,7 @@ abstract class AppTable extends Table
             'message' => 'Dieser Slug wird bereits verwendet.'
         ]);
         $validator->add('url', 'alphaNumericDash', [
-            'rule' => function ($value, $context) {
+            'rule' => function ($value, $context): bool {
                 return (boolean) preg_match('`^[0-9a-zA-Z-]*$`', $value);
             },
             'message' => 'Bitte nur a-z, Zahlen und das Zeichen - verwenden.'

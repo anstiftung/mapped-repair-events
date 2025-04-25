@@ -142,7 +142,7 @@ class Funding extends Entity
 
     public function _getCheckboxesStatus(): int
     {
-        $checkboxes = array_map(function($checkbox) {
+        $checkboxes = array_map(function(array $checkbox): string {
             return $checkbox['name'];
         }, self::FIELDS_FUNDING_DATA_CHECKBOXES);
 
@@ -250,7 +250,7 @@ class Funding extends Entity
             return self::STATUS_QUESTIONS_MISSING;
         }
 
-        $radiobuttons = array_map(function($radiobutton) {
+        $radiobuttons = array_map(function(array $radiobutton): ?string {
             if ($radiobutton['options']['type'] == 'radio') {
                 return $radiobutton['name'];
             }
@@ -305,7 +305,7 @@ class Funding extends Entity
             return self::STATUS_CHECKBOXES_MISSING;
         }
 
-        $checkboxes = array_map(function($checkbox) {
+        $checkboxes = array_map(function(array $checkbox): string {
             return $checkbox['name'];
         }, self::FIELDS_USAGEPROOF_CHECKBOXES);
 

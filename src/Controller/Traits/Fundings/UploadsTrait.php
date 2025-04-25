@@ -53,7 +53,7 @@ trait UploadsTrait {
                         if (file_exists($fundingupload->full_path)) {
                             unlink($fundingupload->full_path);
                         }
-                        $remainingFundinguploads = array_filter($remainingFundinguploads, function($fundingupload) use ($fundinguploadId) {
+                        $remainingFundinguploads = array_filter($remainingFundinguploads, function(array $fundingupload) use ($fundinguploadId): bool {
                             return $fundingupload['id'] != $fundinguploadId;
                         });
                     }

@@ -58,7 +58,7 @@ class FundingreceiptlistsTable extends Table
 
         $validator
             ->add('type', 'valid', [
-                'rule' => function ($value, $context) {
+                'rule' => function ($value, $context): bool {
                     return array_key_exists($value, Fundingbudgetplan::TYPE_MAP); // using budgetplan is ok here
                 },
                 'message' => 'Ausgabenbereich auswählen',
@@ -66,7 +66,7 @@ class FundingreceiptlistsTable extends Table
 
         $validator
             ->add('description', 'valid', [
-                'rule' => function ($value, $context) {
+                'rule' => function ($value, $context): bool {
                     $length = mb_strlen($value);
                     return $length >= self::DESCRIPTION_MIN_LENGTH && $length <= self::DESCRIPTION_MAX_LENGTH;
                 },
@@ -75,7 +75,7 @@ class FundingreceiptlistsTable extends Table
 
         $validator
             ->add('recipient', 'valid', [
-                'rule' => function ($value, $context) {
+                'rule' => function ($value, $context): bool {
                     $length = mb_strlen($value);
                     return $length >= self::RECIPIENT_MIN_LENGTH && $length <= self::RECIPIENT_MAX_LENGTH;
                 },
@@ -84,7 +84,7 @@ class FundingreceiptlistsTable extends Table
 
         $validator
             ->add('receipt_type', 'valid', [
-                'rule' => function ($value, $context) {
+                'rule' => function ($value, $context): bool {
                     $length = mb_strlen($value);
                     return $length >= self::RECEIPT_TYPE_MIN_LENGTH && $length <= self::RECEIPT_TYPE_MAX_LENGTH;
                 },
@@ -95,7 +95,7 @@ class FundingreceiptlistsTable extends Table
 
         $validator
             ->add('payment_date', 'range', [
-                'rule' => function ($value, $context) {
+                'rule' => function ($value, $context): bool {
                     if ($value != '' && !is_string($value)) {
                         $formattedValue = $value->format('Y-m-d');
                         return $formattedValue >= '2024-12-03' && $formattedValue <= '2026-02-28';
@@ -107,7 +107,7 @@ class FundingreceiptlistsTable extends Table
 
         $validator
             ->add('receipt_number', 'valid', [
-                'rule' => function ($value, $context) {
+                'rule' => function ($value, $context): bool {
                     $length = mb_strlen($value);
                     return $length >= self::RECEIPT_NUMBER_MIN_LENGTH && $length <= self::RECEIPT_NUMBER_MAX_LENGTH;
                 },
@@ -116,7 +116,7 @@ class FundingreceiptlistsTable extends Table
 
         $validator
             ->add('amount', 'valid', [
-                'rule' => function ($value, $context) {
+                'rule' => function ($value, $context): bool {
                     return $value > 0;
                 },
                 'message' => 'Betrag muss größer als 0 sein',

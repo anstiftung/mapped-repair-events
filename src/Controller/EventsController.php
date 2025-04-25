@@ -492,7 +492,7 @@ class EventsController extends AppController
                     $dirtyFields = $event->getDirty();
                     $originalValues = $event->getOriginalValues();
                 }
-                $eventsTable->getConnection()->transactional(function () use ($eventsTable, $events) {
+                $eventsTable->getConnection()->transactional(function () use ($eventsTable, $events): void {
                     foreach ($events as $e) {
                         $eventsTable->save($e, ['atomic' => true]);
                     }

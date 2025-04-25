@@ -45,7 +45,7 @@ class SkillsTable extends Table
         if (!is_array($associatedSkills)) {
             return [];
         }
-        $skills = array_filter($associatedSkills, function($value) {
+        $skills = array_filter($associatedSkills, function($value): bool {
             return !is_numeric($value);
         });
         return $skills;
@@ -56,7 +56,7 @@ class SkillsTable extends Table
         if (!is_array($associatedSkills)) {
             return [];
         }
-        $skills = array_filter($associatedSkills, function($value) {
+        $skills = array_filter($associatedSkills, function($value): bool {
             return is_numeric($value);
         });
         return $skills;

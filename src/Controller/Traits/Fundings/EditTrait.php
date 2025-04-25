@@ -60,7 +60,7 @@ trait EditTrait {
 
             $associations = ['Workshops', 'OwnerUsers', 'Fundingdatas', 'Fundingsupporters', 'FundinguploadsActivityProofs', 'FundinguploadsFreistellungsbescheids', 'Fundingbudgetplans'];
             $associationsWithoutValidation = $this->removeValidationFromAssociations($associations);
-            $singularizedAssociations = array_map(function($association) {
+            $singularizedAssociations = array_map(function($association): string {
                 return Inflector::singularize(Inflector::tableize($association));
             }, $associations);
             $associations['OwnerUsers'] = ['validate' => 'funding'];

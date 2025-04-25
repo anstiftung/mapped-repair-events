@@ -155,7 +155,7 @@ class UsersTable extends AppTable
     private function addGroupsValidation(Validator $validator, array $groups, bool $multiple): Validator
     {
         $validator->add('groups', 'checkForAllowedGroups', [
-            'rule' => function($value, $context) use ($groups, $multiple) {
+            'rule' => function($value, $context) use ($groups, $multiple): bool {
                 $result = false;
                 if (!is_array($value['_ids'])) {
                     return false;
@@ -174,7 +174,7 @@ class UsersTable extends AppTable
     private function addLastOrgaValidation(Validator $validator): Validator
     {
         $validator->add('groups', 'checkLastOrga', [
-            'rule' => function($value, $context) {
+            'rule' => function($value, array $context): true|string {
 
                 // never check on creating a user
                 if (!isset($context['data']['uid'])) {
@@ -337,7 +337,7 @@ class UsersTable extends AppTable
         $validator->notEmptyString('email', 'Bitte trage deine E-Mail-Adresse ein.');
         $validator->email('email', false, 'Die E-Mail-Adresse ist ungültig.');
         $validator->add('email', 'userWithEmailExists', [
-            'rule' => function ($value, $context) {
+            'rule' => function ($value, $context): bool {
                 $user = $this->find('all', conditions: [
                     'Users.email' => $value
                 ])
@@ -353,7 +353,7 @@ class UsersTable extends AppTable
     public function validationChangePassword(Validator $validator): Validator
     {
         $validator->add('password', 'oldPasswordCheck', [
-            'rule' => function ($value, $context) {
+            'rule' => function ($value, $context): bool {
                 $loggedUserUid = Router::getRequest()?->getAttribute('identity')?->uid;
                 $loggedUser = $this->find('all', conditions: [
                     'Users.uid' => $loggedUserUid,
@@ -364,7 +364,7 @@ class UsersTable extends AppTable
         ]);
 
         $validator->add('password_new_1', 'newPasswordRegexCheck', [
-            'rule' => function ($value, $context) {
+            'rule' => function ($value, $context): bool {
                 return (bool) preg_match(PASSWORD_REGEX, $value);
             },
             'message' => '10 - 32 Zeichen bitte.'
