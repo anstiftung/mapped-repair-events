@@ -43,7 +43,7 @@ class GeoService {
         $lng = 'ungültig';
 
         $addressString = Configure::read('AppConfig.htmlHelper')->replaceAddressAbbreviations($addressString);
-        $addressString = trim($addressString);
+        $addressString = trim((string) $addressString);
         $requestUrl = 'https://maps.googleapis.com/maps/api/geocode/json?key='.Configure::read('googleMapApiKey').'&address=' . urlencode($addressString);
         $output = $this->getDecodedOutput($requestUrl);
 
@@ -100,7 +100,7 @@ class GeoService {
         $geoFields = ['lat', 'lng'];
         foreach($geoFields as $geoField) {
             $validator->add($geoField, 'geoCoordinatesInBoundingBox', [
-                'rule' => function ($value, $context) {
+                'rule' => function ($value, array $context): bool {
                     if ($context['data']['use_custom_coordinates']) {
                         if (!$this->isPointInBoundingBox((float) $context['data']['lat'], (float) $context['data']['lng'])) {
                             Log::error('Geo coordinates out of bounding box: lat: ' . json_encode($context['data']['lat']) . ' / lng: ' . json_encode($context['data']['lng']));

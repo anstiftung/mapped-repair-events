@@ -15,6 +15,7 @@ use Cake\ORM\Query;
 use Gregwar\Captcha\CaptchaBuilder;
 use App\Model\Entity\User;
 use App\Mailer\AppMailer;
+use App\Model\Entity\Page;
 
 class UsersController extends AppController
 {
@@ -363,14 +364,14 @@ class UsersController extends AppController
 
         $orgaInfotextEntity = $this->Page->getPageByName('Was.ist.ein.Organisator');
         $orgaInfotext = '';
-        if (!empty($orgaInfotextEntity)) {
+        if ($orgaInfotextEntity instanceof Page) {
             $orgaInfotext = $orgaInfotextEntity->text;
         }
         $this->set('orgaInfotext', $orgaInfotext);
 
         $repairhelperInfotextEntity = $this->Page->getPageByName('Was.ist.ein.Reparateur');
         $repairhelperInfotext = '';
-        if (!empty($repairhelperInfotextEntity)) {
+        if ($repairhelperInfotextEntity instanceof Page) {
             $repairhelperInfotext = $repairhelperInfotextEntity->text;
         }
         $this->set('repairhelperInfotext', $repairhelperInfotext);
@@ -597,7 +598,7 @@ class UsersController extends AppController
 
     private function isCalledByTestSuite(): bool
     {
-        return !empty($_SERVER['argv']) && !empty($_SERVER['argv'][0]) && preg_match('`vendor/bin/phpunit`', $_SERVER['argv'][0]);
+        return !empty($_SERVER['argv']) && !empty($_SERVER['argv'][0]) && preg_match('`vendor/bin/phpunit`', (string) $_SERVER['argv'][0]);
     }
 
     public function register(int $userGroup=GROUPS_REPAIRHELPER): void

@@ -145,7 +145,7 @@ class Application extends BaseApplication
     {
         try {
             $this->addPlugin('Bake');
-        } catch (MissingPluginException $e) {
+        } catch (MissingPluginException) {
             // Do not halt if the plugin is missing
         }
 

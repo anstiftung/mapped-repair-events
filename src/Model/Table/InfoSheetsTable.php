@@ -45,25 +45,25 @@ class InfoSheetsTable extends AppTable
         $validator->allowEmptyString('visitor_age');
 
         // add subcategories
-        $validator->notEmptyString('new_subcategory_parent_id', 'Bitte wähle die Oberkategorie aus.', function($context) {
+        $validator->notEmptyString('new_subcategory_parent_id', 'Bitte wähle die Oberkategorie aus.', function($context): bool {
             return $this->isSubcategoryCreateModeEnabled($context);
         });
-        $validator->notEmptyString('new_subcategory_name', 'Bitte gib den Namen der Unterkategorie an.', function($context) {
+        $validator->notEmptyString('new_subcategory_name', 'Bitte gib den Namen der Unterkategorie an.', function($context): bool {
             return $this->isSubcategoryCreateModeEnabled($context);
         });
-        $validator->minLength('new_subcategory_name', 3, 'Mindestens 3 Zeichen bitte.', function($context) {
+        $validator->minLength('new_subcategory_name', 3, 'Mindestens 3 Zeichen bitte.', function($context): bool {
             return $this->isSubcategoryCreateModeEnabled($context);
         });
 
         // add brands
-        $validator->notEmptyString('new_brand_name', 'Bitte gib den Namen der Marke an.', function($context) {
+        $validator->notEmptyString('new_brand_name', 'Bitte gib den Namen der Marke an.', function($context): bool {
             return $this->isBrandCreateModeEnabled($context);
         });
-        $validator->minLength('new_brand_name', 3, 'Mindestens 3 Zeichen bitte.', function($context) {
+        $validator->minLength('new_brand_name', 3, 'Mindestens 3 Zeichen bitte.', function($context): bool {
             return $this->isBrandCreateModeEnabled($context);
         });
 
-        $validator->notEmptyString('defect_description', 'Bitte gib die Fehlerbeschreibung an (maximal 1.000 Zeichen).', function($context) {
+        $validator->notEmptyString('defect_description', 'Bitte gib die Fehlerbeschreibung an (maximal 1.000 Zeichen).', function($context): bool {
             return $this->isDefectFound($context);
         });
         $validator->maxLength('defect_description', 1000, 'Maximal 1.000 Zeichen bitte.');
@@ -71,15 +71,15 @@ class InfoSheetsTable extends AppTable
         $validator->allowEmptyString('no_repair_reason_text');
         $validator->maxLength('no_repair_reason_text', 200, 'Maximal 200 Zeichen bitte.');
 
-        $validator->notEmptyString('defect_found_reason', 'Bitte gib Details zur Reparatur an.', function($context) {
+        $validator->notEmptyString('defect_found_reason', 'Bitte gib Details zur Reparatur an.', function($context): bool {
             return $this->isDefectFound($context);
         });
 
-        $validator->notEmptyString('repair_postponed_reason', 'Bitte gib an, warum die Reparatur vertagt wurde.', function($context) {
+        $validator->notEmptyString('repair_postponed_reason', 'Bitte gib an, warum die Reparatur vertagt wurde.', function($context): bool {
             return $this->isRepairPostponed($context);
         });
 
-        $validator->notEmptyString('no_repair_reason', 'Bitte gib an, warum nicht repariert wurde.', function($context) {
+        $validator->notEmptyString('no_repair_reason', 'Bitte gib an, warum nicht repariert wurde.', function($context): bool {
             return $this->isNoRepair($context);
         });
 

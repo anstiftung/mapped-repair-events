@@ -33,10 +33,10 @@ trait FundingAdminFilterTrait {
             'not-submitted' => 'Fundings.submit_date IS NULL',
             'submitted' => 'Fundings.submit_date IS NOT NULL AND Fundings.money_transfer_date IS NULL',
             'submitted-and-money-transferred' => 'Fundings.submit_date IS NOT NULL AND Fundings.money_transfer_date IS NOT NULL',
-            'submittable-but-not-submitted' => function($funding) {
+            'submittable-but-not-submitted' => function($funding): bool {
                 return $funding->is_submittable && !$funding->is_submitted;
             },
-            'at-least-one-verfied-by-admin-and-not-all-fields-verified' => function($funding) {
+            'at-least-one-verfied-by-admin-and-not-all-fields-verified' => function($funding): bool {
                 return $funding->admin_fields_verified_count > 0 && $funding->user_fields_verified_count < $funding->user_fields_count;
             },
         ];

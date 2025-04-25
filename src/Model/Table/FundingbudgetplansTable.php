@@ -35,7 +35,7 @@ class FundingbudgetplansTable extends Table
 
         $validator
             ->add('type', 'valid', [
-                'rule' => function ($value, $context) {
+                'rule' => function ($value, array $context): bool {
                     if (!empty($context['data']['description']) || !empty($context['data']['amount'])) {
                         return array_key_exists($value, Fundingbudgetplan::TYPE_MAP);
                     }
@@ -46,7 +46,7 @@ class FundingbudgetplansTable extends Table
 
         $validator
             ->add('description', 'valid', [
-                'rule' => function ($value, $context) {
+                'rule' => function ($value, array $context): bool {
                     $descriptionLength = mb_strlen($value);
                     $mainCheck = $descriptionLength >= self::DESCRIPTION_MIN_LENGTH && $descriptionLength <= self::DESCRIPTION_MAX_LENGTH;
 
@@ -65,7 +65,7 @@ class FundingbudgetplansTable extends Table
 
         $validator
             ->add('amount', 'valid', [
-                'rule' => function ($value, $context) {
+                'rule' => function ($value, array $context): bool {
                     $mainCheck = $value > 0;
                     
                     $typeIsEmpty = empty($context['data']['type']);

@@ -237,7 +237,7 @@ class WorkshopsTable extends AppTable
     private function addBlockedWorkshopSlugsValidationRule(Validator $validator): Validator
     {
         $validator->add('url', 'addBlockedWorkshopSlugsValidationRule', [
-            'rule' => function($value, $context) {
+            'rule' => function($value, $context): bool {
                 $bws = TableRegistry::getTableLocator()->get('BlockedWorkshopSlugs');
                 $recordCount = $bws->find('all',
                     conditions: [

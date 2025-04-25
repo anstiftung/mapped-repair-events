@@ -60,7 +60,7 @@ trait EditTrait {
 
             $associations = ['Workshops', 'OwnerUsers', 'Fundingdatas', 'Fundingsupporters', 'FundinguploadsActivityProofs', 'FundinguploadsFreistellungsbescheids', 'Fundingbudgetplans'];
             $associationsWithoutValidation = $this->removeValidationFromAssociations($associations);
-            $singularizedAssociations = array_map(function($association) {
+            $singularizedAssociations = array_map(function($association): string {
                 return Inflector::singularize(Inflector::tableize($association));
             }, $associations);
             $associations['OwnerUsers'] = ['validate' => 'funding'];
@@ -70,7 +70,7 @@ trait EditTrait {
                 if (in_array($dataKey, ['Fundings.workshop', 'Fundings.owner_user'])) {
                     // cleaning cannot be done in entity because of allowedBasicHtmlFields
                     foreach ($this->request->getData($dataKey) as $field => $value) {
-                        $cleanedValue = strip_tags($value);
+                        $cleanedValue = strip_tags((string) $value);
                         $cleanedValue = StringComponent::removeEmojis($cleanedValue);
                         $this->request = $this->request->withData($dataKey . '.' . $field, $cleanedValue);
                     }
@@ -172,7 +172,7 @@ trait EditTrait {
     
             $email->addToQueue();
     
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             $this->AppFlash->setFlashError('Fehler beim Versenden der E-Mail.');
         }
 

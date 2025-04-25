@@ -53,7 +53,7 @@ trait UploadsTrait {
                         if (file_exists($fundingupload->full_path)) {
                             unlink($fundingupload->full_path);
                         }
-                        $remainingFundinguploads = array_filter($remainingFundinguploads, function($fundingupload) use ($fundinguploadId) {
+                        $remainingFundinguploads = array_filter($remainingFundinguploads, function(array $fundingupload) use ($fundinguploadId): bool {
                             return $fundingupload['id'] != $fundinguploadId;
                         });
                     }
@@ -111,7 +111,7 @@ trait UploadsTrait {
                         }
 
                         $filename = $fileupload->getClientFilename();
-                        $filename =  StringComponent::slugifyAndKeepCase(pathinfo($filename, PATHINFO_FILENAME)) . '_' . bin2hex(random_bytes(5)) . '.' . pathinfo($filename, PATHINFO_EXTENSION);
+                        $filename =  StringComponent::slugifyAndKeepCase(pathinfo((string) $filename, PATHINFO_FILENAME)) . '_' . bin2hex(random_bytes(5)) . '.' . pathinfo((string) $filename, PATHINFO_EXTENSION);
                         $newFundinguploads[$uploadType][] = [
                             'filename' => $filename,
                             'funding_uid' => $funding->uid,

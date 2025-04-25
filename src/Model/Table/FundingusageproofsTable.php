@@ -66,7 +66,7 @@ class FundingusageproofsTable extends Table
 
         $validator
             ->add('difference_declaration', 'valid', [
-                'rule' => function ($value, $context) {
+                'rule' => function ($value, array $context): bool {
                     if ($context['data']['checkbox_a'] == 0) {
                         return true;
                     }

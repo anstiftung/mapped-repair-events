@@ -142,7 +142,7 @@ class Funding extends Entity
 
     public function _getCheckboxesStatus(): int
     {
-        $checkboxes = array_map(function($checkbox) {
+        $checkboxes = array_map(function(array $checkbox): string {
             return $checkbox['name'];
         }, self::FIELDS_FUNDING_DATA_CHECKBOXES);
 
@@ -250,7 +250,7 @@ class Funding extends Entity
             return self::STATUS_QUESTIONS_MISSING;
         }
 
-        $radiobuttons = array_map(function($radiobutton) {
+        $radiobuttons = array_map(function(array $radiobutton): ?string {
             if ($radiobutton['options']['type'] == 'radio') {
                 return $radiobutton['name'];
             }
@@ -305,7 +305,7 @@ class Funding extends Entity
             return self::STATUS_CHECKBOXES_MISSING;
         }
 
-        $checkboxes = array_map(function($checkbox) {
+        $checkboxes = array_map(function(array $checkbox): string {
             return $checkbox['name'];
         }, self::FIELDS_USAGEPROOF_CHECKBOXES);
 
@@ -342,7 +342,7 @@ class Funding extends Entity
     public function _getUsageproofDescriptionsStatus(): int
     {
         if (!empty($this->fundingusageproof)) {
-            $lengthMainDescription = mb_strlen($this->fundingusageproof->main_description);
+            $lengthMainDescription = mb_strlen((string) $this->fundingusageproof->main_description);
             $isValidMainDescription = isset($this->fundingusageproof->main_description)
                 && $lengthMainDescription >= FundingusageproofsTable::MAIN_DESCRIPTION_MIN_LENGTH
                 && $lengthMainDescription <= FundingusageproofsTable::MAIN_DESCRIPTION_MAX_LENGTH;
@@ -428,7 +428,7 @@ class Funding extends Entity
 
     public function _getDescriptionStatus(): int
     {
-        $length = mb_strlen($this->fundingdata->description);
+        $length = mb_strlen((string) $this->fundingdata->description);
         $isValid = isset($this->fundingdata->description)
             && $length >= FundingdatasTable::DESCRIPTION_MIN_LENGTH
             && $length <= FundingdatasTable::DESCRIPTION_MAX_LENGTH;

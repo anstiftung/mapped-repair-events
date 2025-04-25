@@ -87,7 +87,7 @@ class FundingsTable extends AppTable
     {
 
         $validator->add('fundinguploads_activity_proofs', 'fileCount', [
-            'rule' => function ($value, $context) {
+            'rule' => function ($value, $context): string|true {
                 if (count($value) > 5) {
                     return 'Insgesamt sind maximal 5 Dateien erlaubt.';
                 }
@@ -96,7 +96,7 @@ class FundingsTable extends AppTable
         ]);
 
         $validator->add('fundinguploads_freistellungsbescheids', 'fileCount', [
-            'rule' => function ($value, $context) {
+            'rule' => function ($value, $context): string|true {
                 if (count($value) > 1) {
                     return 'Es ist nur eine Datei erlaubt.';
                 }
@@ -105,7 +105,7 @@ class FundingsTable extends AppTable
         ]);
 
         $validator->add('fundinguploads_zuwendungsbestaetigungs', 'fileCount', [
-            'rule' => function ($value, $context) {
+            'rule' => function ($value, $context): string|true {
                 if (count($value) > 1) {
                     return 'Es ist nur eine Datei erlaubt.';
                 }
@@ -114,7 +114,7 @@ class FundingsTable extends AppTable
         ]);
 
         $validator->add('fundinguploads_pr_materials', 'fileCount', [
-            'rule' => function ($value, $context) {
+            'rule' => function ($value, $context): string|true {
                 if (count($value) > 5) {
                     return 'Insgesamt sind maximal 5 Dateien erlaubt.';
                 }
@@ -123,16 +123,16 @@ class FundingsTable extends AppTable
         ]);
 
         $validator->add('files_fundinguploads_activity_proofs', 'fileTypeAndSize', [
-            'rule' => [$this, 'validateFileTypeAndSize'],
+            'rule' => $this->validateFileTypeAndSize(...),
         ]);
         $validator->add('files_fundinguploads_freistellungsbescheids', 'fileTypeAndSize', [
-            'rule' => [$this, 'validateFileTypeAndSize'],
+            'rule' => $this->validateFileTypeAndSize(...),
         ]);
         $validator->add('files_fundinguploads_zuwendungsbestaetigungs', 'fileTypeAndSize', [
-            'rule' => [$this, 'validateFileTypeAndSize'],
+            'rule' => $this->validateFileTypeAndSize(...),
         ]);
         $validator->add('files_fundinguploads_pr_materials', 'fileTypeAndSize', [
-            'rule' => [$this, 'validateFileTypeAndSize'],
+            'rule' => $this->validateFileTypeAndSize(...),
         ]);
         return $validator;
     }

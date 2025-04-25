@@ -95,7 +95,7 @@ class MenuHelper extends Helper
         if ($style != '') {
             $style = ' style="'.$style.'"';
         }
-        if ($slug != '/' && isset($_SERVER['REQUEST_URI']) && preg_match('`' . preg_quote($slug, '`') . '`', $_SERVER['REQUEST_URI'])) {
+        if ($slug != '/' && isset($_SERVER['REQUEST_URI']) && preg_match('`' . preg_quote($slug, '`') . '`', (string) $_SERVER['REQUEST_URI'])) {
             $class[] = 'active';
         }
 

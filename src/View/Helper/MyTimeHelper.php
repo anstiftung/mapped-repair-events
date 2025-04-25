@@ -15,7 +15,7 @@ class MyTimeHelper extends TimeHelper {
         if (!is_null($fundingUid) && in_array($fundingUid, [97445])) {
             return false;
         }
-        return strtotime(Configure::read('AppConfig.fundingsEndDateNTime')) < time();
+        return strtotime((string) Configure::read('AppConfig.fundingsEndDateNTime')) < time();
     }
 
     public function getAllYearsUntilThisYear(int $thisYear, int $firstYear): array

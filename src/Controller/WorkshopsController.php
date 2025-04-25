@@ -413,7 +413,7 @@ class WorkshopsController extends AppController
         $this->request = $this->request->withParam('_ext', 'json');
 
         $city = $this->request->getQuery('city');
-        if ($city === null || strlen($city) < 3) {
+        if ($city === null || strlen((string) $city) < 3) {
             return $this->response->withStatus(400)->withType('json')->withStringBody(json_encode('city not passed or invalid (min 3 chars)'));
         }
 
@@ -447,7 +447,7 @@ class WorkshopsController extends AppController
             foreach($workshop->categories as $category) {
                 $preparedCategories[] = [
                     'id' => $category->id,
-                    'label' => html_entity_decode($category->name),
+                    'label' => html_entity_decode((string) $category->name),
                     'iconUrl' => Configure::read('AppConfig.serverName') . '/img/icon-skills/' . $category->icon . '.png',
                 ];
             }
@@ -459,11 +459,11 @@ class WorkshopsController extends AppController
 
             $preparedWorkshops[] = [
                 'id' => $workshop->uid,
-                'name' => html_entity_decode($workshop->name),
+                'name' => html_entity_decode((string) $workshop->name),
                 'city' => $workshop->city,
                 'postalCode' => $workshop->zip,
-                'street' => html_entity_decode($workshop->street),
-                'street2' => html_entity_decode($workshop->adresszusatz),
+                'street' => html_entity_decode((string) $workshop->street),
+                'street2' => html_entity_decode((string) $workshop->adresszusatz),
                 'coordinates' => [
                     'lat' => $workshop->lat,
                     'lng' => $workshop->lng,
@@ -638,7 +638,7 @@ class WorkshopsController extends AppController
         );
 
         if (!empty($this->request->getQuery('keyword'))) {
-            $keyword = h(strtolower(trim($this->request->getQuery('keyword'))));
+            $keyword = h(strtolower(trim((string) $this->request->getQuery('keyword'))));
             if ($keyword !== '' && $keyword !== 'null' && $keyword !== WorkshopsTable::KEYWORD_FOR_WORKSHOPS_WITH_FUNDINGS) {
                 $workshops->where($this->Workshop->getKeywordSearchConditions($keyword, true));
             }
@@ -961,7 +961,7 @@ class WorkshopsController extends AppController
 
         $event = false;
         if (!empty($_GET['event'])) {
-            $event = explode(',', $_GET['event']);
+            $event = explode(',', (string) $_GET['event']);
             $event = count($event) == 2 ? $event : false;
         }
         $this->set('event', $event);
@@ -1321,7 +1321,7 @@ class WorkshopsController extends AppController
 
         $keyword = '';
         if (!empty($this->request->getQuery('keyword'))) {
-            $keyword = h(strtolower(trim($this->request->getQuery('keyword'))));
+            $keyword = h(strtolower(trim((string) $this->request->getQuery('keyword'))));
             $query->where($workshopsTable->getKeywordSearchConditions($keyword, false));
         }
         $this->set('keyword', $keyword);

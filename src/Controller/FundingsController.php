@@ -137,7 +137,7 @@ class FundingsController extends AppController
 
     private function removeValidationFromAssociations(array $associations): array
     {
-        $result = array_map(function($association) {
+        $result = array_map(function($association): array {
             return ['validate' => false];
         }, array_flip($associations));
         // some association's data should not be saved if invalid

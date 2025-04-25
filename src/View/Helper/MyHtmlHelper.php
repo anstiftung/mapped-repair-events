@@ -67,7 +67,7 @@ class MyHtmlHelper extends HtmlHelper {
     public function getHostName(): string
     {
         $serverName = Configure::read('AppConfig.serverName');
-        $parsedServerName = parse_url($serverName)['host'];
+        $parsedServerName = parse_url((string) $serverName)['host'];
         $parsedServerName = str_replace('www.', '', $parsedServerName);
         return $parsedServerName;
     }
@@ -339,7 +339,7 @@ class MyHtmlHelper extends HtmlHelper {
     {
         $pattern = "/<[^\/>]*>([\s]?)*<\/[^>]*>/";
         $html = preg_replace($pattern, '', $html);
-        return trim($html);
+        return trim((string) $html);
     }
 
     public function __construct(View $View, array $config = [])
@@ -659,7 +659,7 @@ class MyHtmlHelper extends HtmlHelper {
         $userImageSrc = '/files/uploadify/users/thumbs-150/' . $userImage;
         if(empty($userImage)) {
             if (!empty($user->categories)) {
-                $categoryIdForUserProfileImage = $user->categories[rand(0, count($user->categories) - 1)]->id;
+                $categoryIdForUserProfileImage = $user->categories[random_int(0, count($user->categories) - 1)]->id;
             } else {
                 $path = WWW_ROOT . '/img/user-profile';
                 $dir = new \DirectoryIterator($path);
@@ -669,7 +669,7 @@ class MyHtmlHelper extends HtmlHelper {
                         $files[] = $fileinfo->getFilename();
                     }
                 }
-                $categoryIdForUserProfileImage = preg_replace('/[^0-9]/', '', $files[rand(0, count($files) - 1)]);
+                $categoryIdForUserProfileImage = preg_replace('/[^0-9]/', '', $files[random_int(0, count($files) - 1)]);
             }
             $userImageSrc = '/img/user-profile/user-profile-image-'.$categoryIdForUserProfileImage.'.png';
         }
@@ -678,8 +678,8 @@ class MyHtmlHelper extends HtmlHelper {
 
     function getUserProfileImage(User $user): string
     {
-        $userAltText = isset($user->image_alt_text) ? $user->image_alt_text : $user['image_alt_text'];
-        $userImage = isset($user->image) ? $user->image : $user['image'];
+        $userAltText = $user->image_alt_text ?? $user['image_alt_text'];
+        $userImage = $user->image ?? $user['image'];
         $userImageSrc = $this->getUserProfileImageSrc($user, $userImage);
         $imageHtml = '<img alt="'.$userAltText.'"  class="rounded" src="'.$userImageSrc.'" >';
         return $imageHtml;
@@ -736,7 +736,7 @@ class MyHtmlHelper extends HtmlHelper {
         $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
         $pow = min($pow, count($units) - 1);
 
-        $bytes /= pow(1024, $pow);
+        $bytes /= 1024 ** $pow;
 
         return number_format($bytes, $precision, ',', '.') . ' ' . $units[$pow];
     }

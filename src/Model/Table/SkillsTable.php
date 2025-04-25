@@ -45,7 +45,7 @@ class SkillsTable extends Table
         if (!is_array($associatedSkills)) {
             return [];
         }
-        $skills = array_filter($associatedSkills, function($value) {
+        $skills = array_filter($associatedSkills, function($value): bool {
             return !is_numeric($value);
         });
         return $skills;
@@ -56,7 +56,7 @@ class SkillsTable extends Table
         if (!is_array($associatedSkills)) {
             return [];
         }
-        $skills = array_filter($associatedSkills, function($value) {
+        $skills = array_filter($associatedSkills, function($value): bool {
             return is_numeric($value);
         });
         return $skills;
@@ -67,7 +67,7 @@ class SkillsTable extends Table
 
         $skillsToAdd = [];
         foreach($newSkills as $skill) {
-            $preparedSkill = strip_tags($skill);
+            $preparedSkill = strip_tags((string) $skill);
             $skillsToAdd[] = $this->newEntity([
                 'name' => $preparedSkill,
                 'status' => $isAdmin ? APP_ON : APP_OFF,
