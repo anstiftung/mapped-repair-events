@@ -15,6 +15,7 @@ use Cake\ORM\Query;
 use Gregwar\Captcha\CaptchaBuilder;
 use App\Model\Entity\User;
 use App\Mailer\AppMailer;
+use App\Model\Entity\Page;
 
 class UsersController extends AppController
 {
@@ -363,14 +364,14 @@ class UsersController extends AppController
 
         $orgaInfotextEntity = $this->Page->getPageByName('Was.ist.ein.Organisator');
         $orgaInfotext = '';
-        if ($orgaInfotextEntity instanceof \App\Model\Entity\Page) {
+        if ($orgaInfotextEntity instanceof Page) {
             $orgaInfotext = $orgaInfotextEntity->text;
         }
         $this->set('orgaInfotext', $orgaInfotext);
 
         $repairhelperInfotextEntity = $this->Page->getPageByName('Was.ist.ein.Reparateur');
         $repairhelperInfotext = '';
-        if ($repairhelperInfotextEntity instanceof \App\Model\Entity\Page) {
+        if ($repairhelperInfotextEntity instanceof Page) {
             $repairhelperInfotext = $repairhelperInfotextEntity->text;
         }
         $this->set('repairhelperInfotext', $repairhelperInfotext);

@@ -44,7 +44,7 @@ class FundingsPolicy implements RequestPolicyInterface
             
             $fundingUid = (int) $request->getParam('uid');
             $entity = $this->getOwnerEntity($fundingUid, $identity);
-            if (!$entity instanceof \App\Model\Entity\Funding) {
+            if (!$entity instanceof Funding) {
                 return false;
             }
 
@@ -60,7 +60,7 @@ class FundingsPolicy implements RequestPolicyInterface
             
             $fundingUid = (int) $request->getParam('uid');
             $entity = $this->getOwnerEntity($fundingUid, $identity);
-            if (!$entity instanceof \App\Model\Entity\Funding) {
+            if (!$entity instanceof Funding) {
                 return false;
             }
 
@@ -85,7 +85,7 @@ class FundingsPolicy implements RequestPolicyInterface
             }
             
             $entity = $this->getOwnerEntity($fundinguploadEntity->funding_uid, $identity);
-            if (!$entity instanceof \App\Model\Entity\Funding) {
+            if (!$entity instanceof Funding) {
                 return false;
             }
 
@@ -96,7 +96,7 @@ class FundingsPolicy implements RequestPolicyInterface
         if (in_array($request->getParam('action'), ['delete'])) {
             $fundingUid = (int) $request->getParam('uid');
             $entity = $this->getOwnerEntity($fundingUid, $identity);
-            if (!$entity instanceof \App\Model\Entity\Funding) {
+            if (!$entity instanceof Funding) {
                 return false;
             }
 
