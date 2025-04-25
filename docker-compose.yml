@@ -12,7 +12,8 @@ services:
     volumes:
       - ./:/app
     depends_on:
-      - mysql-test
+      - mysql-test-1
+      - mysql-test-2
     environment:
       WEB_DOCUMENT_ROOT: /app/webroot
     ports:
@@ -33,9 +34,9 @@ services:
     networks:
       - nginx-frontproxy
 
-  mysql-test:
+  mysql-test-1:
     image: mysql:8.0
-    container_name: rep.mysql.test
+    container_name: rep.mysql.1.test
     restart: always
     tmpfs: /var/lib/mysql:exec,size=1G #smaller size (eg. 256M) lead to failing tests
     ports:
@@ -44,6 +45,20 @@ services:
       - mysql.env
     environment:
       MYSQL_TCP_PORT: 3331
+    networks:
+      - nginx-frontproxy
+
+  mysql-test-2:
+    image: mysql:8.0
+    container_name: rep.mysql.2.test
+    restart: always
+    tmpfs: /var/lib/mysql:exec,size=1G #smaller size (eg. 256M) lead to failing tests
+    ports:
+      - '3332:3306'
+    env_file:
+      - mysql.env
+    environment:
+      MYSQL_TCP_PORT: 3332
     networks:
       - nginx-frontproxy
 
@@ -66,14 +81,14 @@ services:
 
   phpmyadmin-test:
     depends_on:
-     - mysql-test
+     - mysql-test-1
     image: phpmyadmin/phpmyadmin
     container_name: rep.phpmyadmin-test
     restart: always
     ports:
      - '8123:80'
     environment:
-      PMA_HOST: mysql-test
+      PMA_HOST: mysql-test-1
       PMA_USER: my_user
       PMA_PASSWORD: password
       PMA_PORT: 3331

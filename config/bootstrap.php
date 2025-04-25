@@ -126,6 +126,15 @@ if (!$fullBaseUrl) {
 
 Cache::setConfig(Configure::consume('Cache'));
 ConnectionManager::setConfig(Configure::consume('Datasources'));
+
+/*
+// uncomment above line to enable paratest
+ConnectionManager::setConfig(['default' => Configure::read('Datasources.default')]);
+$paratestConnectionConfigKey = array_rand(Configure::read('ParatestDatasources'));
+$testConnectionConfig = ['test' => array_merge(Configure::read('Datasources.test'), Configure::read('ParatestDatasources.' . $paratestConnectionConfigKey))];
+ConnectionManager::setConfig($testConnectionConfig);
+*/
+
 TransportFactory::setConfig(Configure::consume('EmailTransport'));
 Mailer::setConfig(Configure::consume('Email'));
 Log::setConfig(Configure::consume('Log'));
