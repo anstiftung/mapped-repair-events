@@ -65,7 +65,7 @@ class EventsTable extends AppTable
         $validator->decimal('lat', null, 'Bitte gib eine Zahl ein.');
         $validator->decimal('lng', null, 'Bitte gib eine Zahl ein.');
         $validator->add('zip', 'validFormat', [
-            'rule' => array('custom', ZIP_REGEX),
+            'rule' => ['custom', ZIP_REGEX],
             'message' => 'Die PLZ ist nicht gültig.'
         ]);
         return $validator;

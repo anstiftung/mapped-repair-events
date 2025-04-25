@@ -187,7 +187,7 @@ class AppController extends Controller
 
     public function getPreparedReferer(): string
     {
-        return htmlspecialchars_decode($this->getRequest()->getData('referer'));
+        return htmlspecialchars_decode((string) $this->getRequest()->getData('referer'));
     }
 
     public function setReferer(): void

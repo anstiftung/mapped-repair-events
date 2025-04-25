@@ -311,7 +311,7 @@ class UsersTable extends AppTable
         $validator->requirePresence('zip', true, 'Bitte trage deine PLZ ein.');
         $validator->notEmptyString('zip', 'Bitte trage deine PLZ ein.');
         $validator->add('zip', 'validFormat', [
-            'rule' => array('custom', ZIP_REGEX),
+            'rule' => ['custom', ZIP_REGEX],
             'message' => 'Die PLZ ist nicht gültig.'
         ]);
 

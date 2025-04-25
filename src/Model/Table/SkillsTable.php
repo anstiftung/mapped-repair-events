@@ -67,7 +67,7 @@ class SkillsTable extends Table
 
         $skillsToAdd = [];
         foreach($newSkills as $skill) {
-            $preparedSkill = strip_tags($skill);
+            $preparedSkill = strip_tags((string) $skill);
             $skillsToAdd[] = $this->newEntity([
                 'name' => $preparedSkill,
                 'status' => $isAdmin ? APP_ON : APP_OFF,

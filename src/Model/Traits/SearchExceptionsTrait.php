@@ -19,7 +19,7 @@ trait SearchExceptionsTrait {
 
         // search only from the beginning of the string for the defined exceptions
         foreach($changeableOrConditions as $key => &$value) {
-            $value = preg_replace('/%/', '', $value, 1);
+            $value = preg_replace('/%/', '', (string) $value, 1);
         }
 
         return $changeableOrConditions;

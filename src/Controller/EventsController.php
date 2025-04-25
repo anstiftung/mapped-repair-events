@@ -554,7 +554,7 @@ class EventsController extends AppController
         $events->distinct($this->Event->getListFields());
 
         if (!empty($this->request->getQuery('keyword'))) {
-            $keyword = h(strtolower(trim($this->request->getQuery('keyword'))));
+            $keyword = h(strtolower(trim((string) $this->request->getQuery('keyword'))));
             if ($keyword !== '' && $keyword !== 'null') {
                 $events->where($this->Event->getKeywordSearchConditions($keyword, false));
             }
@@ -704,7 +704,7 @@ class EventsController extends AppController
         
         $keyword = '';
         if (!empty($this->request->getQuery('keyword'))) {
-            $keyword = h(strtolower(trim($this->request->getQuery('keyword'))));
+            $keyword = h(strtolower(trim((string) $this->request->getQuery('keyword'))));
             $query->where($this->Event->getKeywordSearchConditions($keyword, false));
         }
         $this->set('keyword', $keyword);

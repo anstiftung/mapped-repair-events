@@ -74,7 +74,7 @@ class SkillsController extends AppController
         foreach($categories as $category) {
             if (count($category->users) > 0) {
                 $category->url = Configure::read('AppConfig.htmlHelper')->urlUsers($category->name);
-                $preparedSkills[strtoupper(substr($category->name, 0, 1))][] = $category;
+                $preparedSkills[strtoupper(substr((string) $category->name, 0, 1))][] = $category;
                 $skillCount++;
             }
         }
@@ -82,7 +82,7 @@ class SkillsController extends AppController
         foreach($skills as $skill) {
             if (count($skill->users) > 0) {
                 $skill->url = Configure::read('AppConfig.htmlHelper')->urlSkillDetail($skill->id, StringComponent::slugify($skill->name));
-                $preparedSkills[strtoupper(substr($skill->name, 0, 1))][] = $skill;
+                $preparedSkills[strtoupper(substr((string) $skill->name, 0, 1))][] = $skill;
                 $skillCount++;
             }
         }

@@ -22,7 +22,7 @@ class RequestPolicy implements RequestPolicyInterface
         }
 
         $policy = match($plugin) {
-            'Admin' => 'App\\Policy\\AdminPolicy',
+            'Admin' => \App\Policy\AdminPolicy::class,
             default => 'App\\Policy\\' . $controller . 'Policy',
         };
 

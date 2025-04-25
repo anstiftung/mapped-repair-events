@@ -98,7 +98,7 @@ class BlogsController extends AppController
         
             $body = $post->publish->i18nFormat(Configure::read('DateFormat.de.DateLong2'));
             $body .= ' // ' . $post->name;
-            $body .= '<br />' . h(strip_tags($post->text));
+            $body .= '<br />' . h(strip_tags((string) $post->text));
         
             $body = Configure::read('AppConfig.textHelper')->truncate($body, 400, [
                 'ending' => '...',

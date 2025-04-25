@@ -136,7 +136,7 @@ class StringComponent extends Component
         $characters = "abcdefghijkmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         $randomString = '';
         for ($i = 0; $i < $n; $i++) {
-            $index = rand(0, strlen($characters) - 1);
+            $index = random_int(0, strlen($characters) - 1);
             $randomString .= $characters[$index];
         }
         return $randomString;
@@ -162,8 +162,8 @@ class StringComponent extends Component
         }
         $string = str_replace(array_keys($special_cases), array_values($special_cases), $string);
         $string = preg_replace($accents_regex, '$1', htmlentities($string, ENT_QUOTES, 'UTF-8'));
-        $string = preg_replace("/[^a-zA-Z0-9]/u", "$separator", $string);
-        $string = preg_replace("/[$separator]+/u", "$separator", $string);
+        $string = preg_replace("/[^a-zA-Z0-9]/u", "$separator", (string) $string);
+        $string = preg_replace("/[$separator]+/u", "$separator", (string) $string);
         return $string;
     }
 
@@ -177,13 +177,13 @@ class StringComponent extends Component
 
         if ($considerHtml) {
             // if the plain text is shorter than the maximum length, return the whole text
-            if (strlen(preg_replace('/<.*?>/', '', $text)) <= $length) {
+            if (strlen((string) preg_replace('/<.*?>/', '', $text)) <= $length) {
                 return $text;
             }
             // splits all html-tags to scanable lines
             preg_match_all('/(<.+?>)?([^<>]*)/s', $text, $lines, PREG_SET_ORDER);
             $total_length = strlen($ending);
-            $open_tags = array();
+            $open_tags = [];
             $truncate = '';
             foreach ($lines as $line_matchings) {
                 // if there is any html-tag in this line, handle it and add it (uncounted) to the output
@@ -207,7 +207,7 @@ class StringComponent extends Component
                     $truncate .= $line_matchings[1];
                 }
                 // calculate the length of the plain text part of the line; handle entities as one character
-                $content_length = strlen(preg_replace('/&[0-9a-z]{2,8};|&#[0-9]{1,7};|[0-9a-f]{1,6};/i', ' ', $line_matchings[2]));
+                $content_length = strlen((string) preg_replace('/&[0-9a-z]{2,8};|&#[0-9]{1,7};|[0-9a-f]{1,6};/i', ' ', $line_matchings[2]));
                 if ($total_length+$content_length> $length) {
                     // the number of characters which are left
                     $left = $length - $total_length;
@@ -285,7 +285,7 @@ class StringComponent extends Component
         $character_set = '+-.0123456789@ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz';
         $key = str_shuffle($character_set);
         $cipher_text = '';
-        $id = 'e' . rand(1, 999999999);
+        $id = 'e' . random_int(1, 999999999);
         if ($renderAsLink) {
             $tag = '<a ' . $classHtml . 'href=\\"mailto:"+d+"\\">"+d+"</a>';
         } else {

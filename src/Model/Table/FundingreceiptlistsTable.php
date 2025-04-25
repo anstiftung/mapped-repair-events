@@ -46,7 +46,7 @@ class FundingreceiptlistsTable extends Table
             if ($key == 'payment_date' && $value != '') {
                 try {
                     $data[$key] = new Date($value);
-                } catch (\Exception $e) {
+                } catch (\Exception) {
                     $data[$key] = $value;
                 }
             }

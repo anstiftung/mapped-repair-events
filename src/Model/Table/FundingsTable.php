@@ -123,16 +123,16 @@ class FundingsTable extends AppTable
         ]);
 
         $validator->add('files_fundinguploads_activity_proofs', 'fileTypeAndSize', [
-            'rule' => [$this, 'validateFileTypeAndSize'],
+            'rule' => $this->validateFileTypeAndSize(...),
         ]);
         $validator->add('files_fundinguploads_freistellungsbescheids', 'fileTypeAndSize', [
-            'rule' => [$this, 'validateFileTypeAndSize'],
+            'rule' => $this->validateFileTypeAndSize(...),
         ]);
         $validator->add('files_fundinguploads_zuwendungsbestaetigungs', 'fileTypeAndSize', [
-            'rule' => [$this, 'validateFileTypeAndSize'],
+            'rule' => $this->validateFileTypeAndSize(...),
         ]);
         $validator->add('files_fundinguploads_pr_materials', 'fileTypeAndSize', [
-            'rule' => [$this, 'validateFileTypeAndSize'],
+            'rule' => $this->validateFileTypeAndSize(...),
         ]);
         return $validator;
     }

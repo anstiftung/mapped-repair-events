@@ -43,7 +43,7 @@ class GeoService {
         $lng = 'ungültig';
 
         $addressString = Configure::read('AppConfig.htmlHelper')->replaceAddressAbbreviations($addressString);
-        $addressString = trim($addressString);
+        $addressString = trim((string) $addressString);
         $requestUrl = 'https://maps.googleapis.com/maps/api/geocode/json?key='.Configure::read('googleMapApiKey').'&address=' . urlencode($addressString);
         $output = $this->getDecodedOutput($requestUrl);
 

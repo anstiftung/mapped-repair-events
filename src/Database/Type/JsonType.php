@@ -19,7 +19,7 @@ class JsonType extends BaseType
             return null;
         }
 
-        return json_decode($value, true);
+        return json_decode((string) $value, true);
     }
 
     public function marshal(mixed $value): mixed
@@ -28,7 +28,7 @@ class JsonType extends BaseType
             return $value;
         }
 
-        return json_decode($value, true);
+        return json_decode((string) $value, true);
     }
 
     public function toDatabase(mixed $value, Driver $driver): mixed

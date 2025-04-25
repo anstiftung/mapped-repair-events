@@ -111,7 +111,7 @@ trait UploadsTrait {
                         }
 
                         $filename = $fileupload->getClientFilename();
-                        $filename =  StringComponent::slugifyAndKeepCase(pathinfo($filename, PATHINFO_FILENAME)) . '_' . bin2hex(random_bytes(5)) . '.' . pathinfo($filename, PATHINFO_EXTENSION);
+                        $filename =  StringComponent::slugifyAndKeepCase(pathinfo((string) $filename, PATHINFO_FILENAME)) . '_' . bin2hex(random_bytes(5)) . '.' . pathinfo((string) $filename, PATHINFO_EXTENSION);
                         $newFundinguploads[$uploadType][] = [
                             'filename' => $filename,
                             'funding_uid' => $funding->uid,
