@@ -861,9 +861,13 @@ class WorkshopsController extends AppController
             'Countries',
             'Metatags',
             'OwnerUsers',
-            'Users',
             'Events',
-            'Users.Groups'
+            'Users' => function($q) {
+                return $q->where([
+                    'Users.status' => APP_ON,
+                ]);
+            },
+            'Users.Groups',
         ];
 
         // mobile version does not include calendar and only shows bound events
