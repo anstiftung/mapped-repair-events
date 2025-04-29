@@ -86,6 +86,13 @@ $this->element('addScript', ['script' =>
 
         echo '</fieldset>';
 
+        echo '<div class="flexbox">';
+            echo '<fieldset>';
+                echo '<legend>'.Funding::FIELDS_FUNDINGBUDGETPLAN_GROUPED_LABEL.'</legend>';
+                echo $this->element('funding/blocks/blockBudgetplanGrouped', ['funding' => $funding]);
+            echo '</fieldset>';
+        echo '</div>';
+
         echo '<div class="flexbox questions">';
             echo $this->element('funding/blocks/usageproof/blockQuestions', ['funding' => $funding, 'disabled' => true]);
         echo '</div>';
