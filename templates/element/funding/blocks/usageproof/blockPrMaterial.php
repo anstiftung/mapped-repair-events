@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+//return false;
+
 use App\Model\Entity\Fundingupload;
 
 echo '<fieldset class="fundinguploads">';

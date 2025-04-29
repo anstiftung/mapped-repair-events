@@ -90,7 +90,7 @@ $this->element('addScript', ['script' =>
             echo $this->element('funding/blocks/usageproof/blockQuestions', ['funding' => $funding, 'disabled' => true]);
         echo '</div>';
 
-        echo $this->element('funding/blocks/usageproof/blockPrMaterial', ['funding' => $funding, 'disabled' => true]);
+        //echo $this->element('funding/blocks/usageproof/blockPrMaterial', ['funding' => $funding, 'disabled' => true]);
 
         echo $this->element('funding/blocks/usageproof/blockCheckboxes', ['funding' => $funding, 'disabled' => true]);
 
