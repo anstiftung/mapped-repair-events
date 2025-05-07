@@ -6,7 +6,7 @@ trait ApproveMultipleTrait
 {
 
     /**
-     * @param array<int> $ids
+     * @param array<int|string> $ids
      */
     public function setApprovedMultiple(array $ids): false|int
     {

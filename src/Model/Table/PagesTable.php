@@ -61,7 +61,7 @@ class PagesTable extends AppTable
     }
 
     /**
-     * @param array<string|int, string> $conditions
+     * @param array<string|int, string|int> $conditions
      */
     public function getThreaded(array $conditions = []): SelectQuery
     {
