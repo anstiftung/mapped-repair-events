@@ -14,6 +14,9 @@ class ProvincesTable extends Table
         ]);
     }
 
+    /**
+     * @param array<int, int> $provinceCountsMap
+     */
     public function getForDropdown(array $provinceCountsMap): array
     {
         $provinces = $this->find('all',

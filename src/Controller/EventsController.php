@@ -427,8 +427,9 @@ class EventsController extends AppController
 
     private function _edit(SelectQuery|array $events, bool $isEditMode): array
     {
+
         $categoriesTable = $this->getTableLocator()->get('Categories');
-        $this->set('categories', $categoriesTable->getForDropdown(APP_ON));
+        $this->set('categories', $categoriesTable->getForDropdown([APP_ON]));
 
         $this->set('uid', $events[0]->uid);
 

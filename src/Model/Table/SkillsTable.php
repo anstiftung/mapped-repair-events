@@ -40,28 +40,37 @@ class SkillsTable extends Table
         return $validator;
     }
 
-    public function getNewSkillsFromRequest(array|string|null $associatedSkills): array
+    /**
+     * @param array<int|string>|string|null $associatedSkillIds
+     */
+    public function getNewSkillsFromRequest(array|string|null $associatedSkillIds): array
     {
-        if (!is_array($associatedSkills)) {
+        if (!is_array($associatedSkillIds)) {
             return [];
         }
-        $skills = array_filter($associatedSkills, function($value): bool {
+        $skills = array_filter($associatedSkillIds, function($value): bool {
             return !is_numeric($value);
         });
         return $skills;
     }
 
-    public function getExistingSkillsFromRequest(array|string|null $associatedSkills): array
+    /**
+     * @param array<int|string>|string|null $associatedSkillIds
+     */
+    public function getExistingSkillsFromRequest(array|string|null $associatedSkillIds): array
     {
-        if (!is_array($associatedSkills)) {
+        if (!is_array($associatedSkillIds)) {
             return [];
         }
-        $skills = array_filter($associatedSkills, function($value): bool {
+        $skills = array_filter($associatedSkillIds, function($value): bool {
             return is_numeric($value);
         });
         return $skills;
     }
 
+    /**
+     * @param array<int|string> $newSkills
+     */   
     public function addSkills(array $newSkills, bool $isAdmin, int $userUid): array
     {
 

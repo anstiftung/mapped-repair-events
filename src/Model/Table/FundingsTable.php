@@ -137,6 +137,10 @@ class FundingsTable extends AppTable
         return $validator;
     }
 
+    /**
+     * @param array<string, mixed> $value
+     * @param array<string, mixed> $context
+     */
     public function validateFileTypeAndSize(array $value, array $context): true|string
     {
         $allowedMimeTypes = ['application/pdf', 'image/jpeg', 'image/png'];

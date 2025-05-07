@@ -49,6 +49,10 @@ class WorknewsTable extends Table
         return $subscribers;
     }
 
+    /**
+     * @param array<string> $dirtyFields
+     * @param array<string> $originalValues
+     */
     public function sendNotifications(SelectQuery $subscribers, string $subject, string $template, Workshop $workshop, Event $event, array $dirtyFields = [], array $originalValues = []): void
     {
         $email = new AppMailer();

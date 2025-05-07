@@ -14,19 +14,6 @@ use Cake\I18n\Date;
 class PostsController extends AdminAppController
 {
 
-    public PostsTable $Post;
-    public BlogsTable $Blog;
-    public UsersTable $User;
-
-    public function initialize(): void
-    {
-        parent::initialize();
-        // keep that because of AppController::stripTagsFromFields()
-        $this->Post = $this->getTableLocator()->get('Posts');
-        $this->Blog = $this->getTableLocator()->get('Blogs');
-        $this->User = $this->getTableLocator()->get('Users');
-    }
-
     public function insert(int $blogId): void
     {
         $post = [
@@ -36,8 +23,10 @@ class PostsController extends AdminAppController
             'blog_id' => $blogId,
         ];
 
-        $entity = $this->Post->newEntity($post);
-        $post = $this->Post->save($entity);
+        /** @var \App\Model\Table\PostsTable */
+        $postsTable = $this->getTableLocator()->get('Posts');
+        $entity = $postsTable->newEntity($post);
+        $post = $postsTable->save($entity);
 
         $this->AppFlash->setFlashMessage('Post erfolgreich erstellt. UID: ' . $post->uid); // uid for fixture
         $this->redirect($this->getReferer());
@@ -46,7 +35,9 @@ class PostsController extends AdminAppController
 
     public function edit(int $uid): void
     {
-        $post = $this->Post->find('all',
+        /** @var \App\Model\Table\PostsTable */
+        $postsTable = $this->getTableLocator()->get('Posts');
+        $post = $postsTable->find('all',
         conditions: [
             'Posts.uid' => $uid,
             'Posts.status >= ' . APP_DELETED
@@ -77,7 +68,7 @@ class PostsController extends AdminAppController
             if ($this->request->getData('Posts.publish')) {
                 $this->request = $this->request->withData('Posts.publish', new Date($this->request->getData('Posts.publish')));
             }
-            $patchedEntity = $this->Post->getPatchedEntityForAdminEdit($post, $this->request->getData());
+            $patchedEntity = $postsTable->getPatchedEntityForAdminEdit($post, $this->request->getData());
 
             if (!($patchedEntity->hasErrors())) {
                 $patchedEntity = $this->patchEntityWithCurrentlyUpdatedFields($patchedEntity);
@@ -88,7 +79,10 @@ class PostsController extends AdminAppController
         }
 
         $this->set('post', $post);
-        $this->set('blogs', $this->Blog->getForDropdown());
+
+        /** @var \App\Model\Table\BlogsTable */
+        $blogsTable = $this->getTableLocator()->get('Blogs');
+        $this->set('blogs', $blogsTable->getForDropdown());
 
     }
 
@@ -135,7 +129,9 @@ class PostsController extends AdminAppController
 
         $conditions = array_merge($this->conditions, $conditions);
 
-        $query = $this->Post->find('all',
+        /** @var \App\Model\Table\PostsTable */
+        $postsTable = $this->getTableLocator()->get('Posts');
+        $query = $postsTable->find('all',
         conditions: $conditions,
         contain: [
             'OwnerUsers',
@@ -153,7 +149,13 @@ class PostsController extends AdminAppController
             }
         }
         $this->set('objects', $objects);
-        $this->set('blogs', $this->Blog->getForDropdown());
-        $this->set('users', $this->User->getForDropdown());
+
+        /** @var \App\Model\Table\BlogsTable */
+        $blogsTable = $this->getTableLocator()->get('Blogs');
+        $this->set('blogs', $blogsTable->getForDropdown());
+
+        /** @var \App\Model\Table\UsersTable */
+        $usersTable = $this->getTableLocator()->get('Users');
+        $this->set('users', $usersTable->getForDropdown());
     }
 }

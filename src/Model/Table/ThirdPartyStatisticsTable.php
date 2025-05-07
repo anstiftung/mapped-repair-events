@@ -33,6 +33,9 @@ class ThirdPartyStatisticsTable extends Table
 
     }
 
+    /**
+     * @param \App\Model\Entity\Category[] $sums
+     */
     public function sumUpForMainCategory(array $sums): array
     {
         $preparedSums = [];
@@ -58,6 +61,9 @@ class ThirdPartyStatisticsTable extends Table
         return $preparedSums;
     }
 
+    /**
+     * @param array<int, float> $sums
+     */
     public function bindCategoryDataToSums(array $sums): array
     {
         $preparedSums = [];
@@ -71,28 +77,10 @@ class ThirdPartyStatisticsTable extends Table
             $preparedSums[] = [
                 'name' => $category->name,
                 'id' => $category->id,
-                'repaired' => $sum
+                'repaired' => $sum,
             ];
         }
         return $preparedSums;
-    }
-
-    public function getCategoryNames(array $sums): array
-    {
-        $result = [];
-        foreach($sums as $sum) {
-            $result[] = $sum['name'];
-        }
-        return $result;
-    }
-
-    public function getSumsRepaired(array $sums): array
-    {
-        $result = [];
-        foreach($sums as $sum) {
-            $result[] = $sum['repaired'];
-        }
-        return $result;
     }
 
 }

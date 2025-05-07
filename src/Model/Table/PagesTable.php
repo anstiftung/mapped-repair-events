@@ -38,6 +38,9 @@ class PagesTable extends AppTable
         return $validator;
     }
 
+    /**
+     * @param \App\Model\Entity\Page[] $items
+     */
     private function flattenNestedArrayWithChildren(SelectQuery|array $items, string $separator = ''): array
     {
         foreach ($items as $item) {
@@ -57,6 +60,9 @@ class PagesTable extends AppTable
         return $this->flattenedArray;
     }
 
+    /**
+     * @param array<string|int, string> $conditions
+     */
     public function getThreaded(array $conditions = []): SelectQuery
     {
         $pages = $this->find('threaded',

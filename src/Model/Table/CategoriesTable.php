@@ -200,7 +200,10 @@ class CategoriesTable extends Table
         return $categories;
     }
 
-    public function getForDropdown(int|array $visibleOnPlatform): array
+    /**
+     * @param array<int> $visibleOnPlatform
+     */
+    public function getForDropdown(array $visibleOnPlatform): array
     {
 
         $categories = $this->find('all',

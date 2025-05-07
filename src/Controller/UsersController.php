@@ -4,10 +4,6 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Controller\Component\StringComponent;
-use App\Model\Table\CategoriesTable;
-use App\Model\Table\CountriesTable;
-use App\Model\Table\SkillsTable;
-use App\Model\Table\UsersTable;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use Cake\Http\Exception\NotFoundException;
@@ -19,17 +15,6 @@ use App\Model\Entity\Page;
 
 class UsersController extends AppController
 {
-
-    public CategoriesTable $Category;
-    public CountriesTable $Country;
-    public SkillsTable $Skill;
-    public UsersTable $User;
-
-    public function initialize(): void
-    {
-        parent::initialize();
-        $this->User = $this->getTableLocator()->get('Users');
-    }
 
     public function beforeFilter(EventInterface $event): void
     {
@@ -54,8 +39,9 @@ class UsersController extends AppController
         // pass[0] can contain "44-tag-name" or "category-name"
         $filteredCategory = null;
         if (isset($this->getRequest()->getParam('pass')[0])) {
-            $this->Category = $this->getTableLocator()->get('Categories');
-            $categories = $this->Category->getMainCategoriesForFrontend();
+            /** @var \App\Model\Table\CategoriesTable */
+            $categoriesTable = $this->getTableLocator()->get('Categories');
+            $categories = $categoriesTable->getMainCategoriesForFrontend();
             $categorySlug = $this->getRequest()->getParam('pass')[0];
             foreach($categories as $category) {
                 if (StringComponent::slugify($category->name) == $categorySlug) {
@@ -69,10 +55,11 @@ class UsersController extends AppController
         $skillId = 0;
         if (is_null($filteredCategory) && isset($this->getRequest()->getParam('pass')[0])) {
             $skillId = (int) $this->getRequest()->getParam('pass')[0];
-            $this->Skill = $this->getTableLocator()->get('Skills');
-            $skill = $this->Skill->find('all', conditions: [
+            /** @var \App\Model\Table\SkillsTable */
+            $skillsTable = $this->getTableLocator()->get('Skills');
+            $skill = $skillsTable->find('all', conditions: [
                 'Skills.id' => $skillId,
-                'Skills.status' => APP_ON
+                'Skills.status' => APP_ON,
             ])->first();
 
             if (empty($skill)) {
@@ -98,7 +85,9 @@ class UsersController extends AppController
             $conditions['FIND_IN_SET("categories", private) = '] = 0; // Users.private would be converted to users.private on prod so leave it out!
         }
 
-        $users = $this->User->find('all',
+        /** @var \App\Model\Table\UsersTable */
+        $usersTable = $this->getTableLocator()->get('Users');
+        $users = $usersTable->find('all',
         conditions: $conditions,
         contain: [
             'Skills' => function(Query $q) {
@@ -139,8 +128,9 @@ class UsersController extends AppController
             }
         }
 
-        $this->Skill = $this->getTableLocator()->get('Skills');
-        $skillsForDropdown = $this->Skill->getForDropdownIncludingCategories();
+        /** @var \App\Model\Table\SkillsTable */
+        $skillsTable = $this->getTableLocator()->get('Skills');
+        $skillsForDropdown = $skillsTable->getForDropdownIncludingCategories();
         $this->set('skillsForDropdown', $skillsForDropdown);
 
         $metaTags = [
@@ -160,12 +150,14 @@ class UsersController extends AppController
 
         $userUid = $this->request->getParam('id');
 
-        $workshopsAssociation = $this->User->getAssociation('Workshops');
+        /** @var \App\Model\Table\UsersTable */
+        $usersTable = $this->getTableLocator()->get('Users');
+        $workshopsAssociation = $usersTable->getAssociation('Workshops');
         $workshopsAssociation->setConditions([
             'UsersWorkshops.approved <> \'1970-01-01 00:00:00\'',
             'Workshops.status' => APP_ON,
         ]);
-        $user = $this->User->find('all',
+        $user = $usersTable->find('all',
         conditions: [
             'Users.uid' => $userUid,
             'Users.status' => APP_ON,
@@ -206,8 +198,9 @@ class UsersController extends AppController
 
     public function welcome(): void
     {
-        $this->Page = $this->getTableLocator()->get('Pages');
-        $homepageIntrotext = $this->Page->getPageByName('homepage.introtext');
+        /** @var \App\Model\Table\PagesTable */
+        $pagesTable = $this->getTableLocator()->get('Pages');
+        $homepageIntrotext = $pagesTable->getPageByName('homepage.introtext');
         $this->set('homepageIntrotext', $homepageIntrotext);
         $metaTags = [
             'title' => 'Herzlich Willkommen'
@@ -222,24 +215,26 @@ class UsersController extends AppController
         ];
         $this->set('metaTags', $metaTags);
 
-        $user = $this->User->newEntity([], [
+        /** @var \App\Model\Table\UsersTable */
+        $usersTable = $this->getTableLocator()->get('Users');
+        $user = $usersTable->newEntity([], [
             'validate' => false,
         ]);
 
         if (! empty($this->request->getData())) {
 
-            $user = $this->User->newEntity($this->request->getData(), [
+            $user = $usersTable->newEntity($this->request->getData(), [
                 'validate' => 'RequestPassword'
             ]);
 
             if (!($user->hasErrors())) {
 
-                $user = $this->User->find('all', conditions: [
+                $user = $usersTable->find('all', conditions: [
                     'Users.email' => $this->request->getData('Users.email')
                 ]) ->first();
                 $user->revertPrivatizeData();
 
-                $newPassword = $this->User->setNewPassword($user->uid);
+                $newPassword = $usersTable->setNewPassword($user->uid);
 
                 // send email
                 $email = new AppMailer();
@@ -273,9 +268,12 @@ class UsersController extends AppController
 
     public function add(): void
     {
-        $user = $this->User->newEntity(
+
+        /** @var \App\Model\Table\UsersTable */
+        $usersTable = $this->getTableLocator()->get('Users');
+        $user = $usersTable->newEntity(
             [
-                'private' => $this->User->getDefaultPrivateFields()
+                'private' => $usersTable->getDefaultPrivateFields()
             ],
             ['validate' => false]
         );
@@ -293,11 +291,13 @@ class UsersController extends AppController
 
     private function _profil(User $user, bool $isMyProfile, bool $isEditMode): void
     {
-        $this->Category = $this->getTableLocator()->get('Categories');
-        $this->set('categories', $this->Category->getForDropdown(APP_ON));
+        /** @var \App\Model\Table\CategoriesTable */
+        $categoriesTable = $this->getTableLocator()->get('Categories');
+        $this->set('categories', $categoriesTable->getForDropdown([APP_ON]));
 
-        $this->Country = $this->getTableLocator()->get('Countries');
-        $this->set('countries', $this->Country->getForDropdown());
+        /** @var \App\Model\Table\CountriesTable */
+        $countriesTable = $this->getTableLocator()->get('Countries');
+        $this->set('countries', $countriesTable->getForDropdown());
 
         $this->set('groups', Configure::read('AppConfig.htmlHelper')->getUserGroupsForUserEdit($this->isAdmin()));
 
@@ -308,9 +308,11 @@ class UsersController extends AppController
             $this->request->getSession()->delete('newSkillsProfile');
         } else {
 
+            /** @var \App\Model\Table\SkillsTable */
+            $skillsTable = $this->getTableLocator()->get('Skills');
             $associatedSkills = $this->request->getData('Users.skills._ids');
-            $newSkills = $this->Skill->getNewSkillsFromRequest($associatedSkills);
-            $existingSkills = $this->Skill->getExistingSkillsFromRequest($associatedSkills);
+            $newSkills = $skillsTable->getNewSkillsFromRequest($associatedSkills);
+            $existingSkills = $skillsTable->getExistingSkillsFromRequest($associatedSkills);
             $this->request->getSession()->write('newSkillsProfile', $newSkills);
             $this->request = $this->request->withData('Users.skills._ids', $existingSkills);
 
@@ -327,9 +329,12 @@ class UsersController extends AppController
             }
             $this->request = $this->request->withData('Users.private', $private);
 
-            $user = $this->User->patchEntity($user, $this->request->getData(), ['validate' => 'UserEdit' . ($this->isAdmin() ? 'Admin' : 'User')]);
+            /** @var \App\Model\Table\UsersTable */
+            $usersTable = $this->getTableLocator()->get('Users');
+
+            $user = $usersTable->patchEntity($user, $this->request->getData(), ['validate' => 'UserEdit' . ($this->isAdmin() ? 'Admin' : 'User')]);
             if (!$user->hasErrors()) {
-                $this->User->save($user);
+                $usersTable->save($user);
 
                 // update own profile
                 if ($isMyProfile) {
@@ -339,11 +344,11 @@ class UsersController extends AppController
                 $newSkills = $this->request->getSession()->read('newSkillsProfile');
                 if (!empty($newSkills)) {
                     // save new skills
-                    $addedSkillIds = $this->Skill->addSkills($newSkills, $this->loggedUser->isAdmin(), $this->loggedUser->uid);
+                    $addedSkillIds = $skillsTable->addSkills($newSkills, $this->loggedUser->isAdmin(), $this->loggedUser->uid);
                     // save id associations to user
                     $this->request = $this->request->withData('Users.skills._ids', array_merge($this->request->getData('Users.skills._ids'), $addedSkillIds));
-                    $user = $this->User->patchEntity($user, $this->request->getData());
-                    $this->User->save($user);
+                    $user = $usersTable->patchEntity($user, $this->request->getData());
+                    $usersTable->save($user);
                     $this->request->getSession()->delete('newSkillsProfile');
                 }
 
@@ -360,16 +365,17 @@ class UsersController extends AppController
         }
         $this->set('user', $user);
 
-        $this->Page = $this->getTableLocator()->get('Pages');
 
-        $orgaInfotextEntity = $this->Page->getPageByName('Was.ist.ein.Organisator');
+        /** @var \App\Model\Table\PagesTable */
+        $pagesTable = $this->getTableLocator()->get('Pages');
+        $orgaInfotextEntity = $pagesTable->getPageByName('Was.ist.ein.Organisator');
         $orgaInfotext = '';
         if ($orgaInfotextEntity instanceof Page) {
             $orgaInfotext = $orgaInfotextEntity->text;
         }
         $this->set('orgaInfotext', $orgaInfotext);
 
-        $repairhelperInfotextEntity = $this->Page->getPageByName('Was.ist.ein.Reparateur');
+        $repairhelperInfotextEntity = $pagesTable->getPageByName('Was.ist.ein.Reparateur');
         $repairhelperInfotext = '';
         if ($repairhelperInfotextEntity instanceof Page) {
             $repairhelperInfotext = $repairhelperInfotextEntity->text;
@@ -403,24 +409,26 @@ class UsersController extends AppController
             $isMyProfile = true;
         }
 
-        $user = $this->User->find('all',
-        conditions: [
-            'Users.uid' => $userUid,
-            'Users.status > ' . APP_DELETED
-        ],
-        contain: [
-            'Groups',
-            'Categories',
-            'Skills',
-        ])->first();
+        /** @var \App\Model\Table\UsersTable */
+        $usersTable = $this->getTableLocator()->get('Users');
+        $user = $usersTable->find('all',
+            conditions: [
+                'Users.uid' => $userUid,
+                'Users.status > ' . APP_DELETED
+            ],
+            contain: [
+                'Groups',
+                'Categories',
+                'Skills',
+            ])->first();
         $user->revertPrivatizeData();
 
         if (empty($user)) {
             throw new NotFoundException('user not found');
         }
-
-        $this->Skill = $this->getTableLocator()->get('Skills');
-        $skillsForDropdown = $this->Skill->getForDropdown(true);
+        /** @var \App\Model\Table\SkillsTable */
+        $skillsTable = $this->getTableLocator()->get('Skills');
+        $skillsForDropdown = $skillsTable->getForDropdown(true);
         $this->set('skillsForDropdown', $skillsForDropdown);
 
         $this->_profil($user, $isMyProfile, true);
@@ -446,28 +454,30 @@ class UsersController extends AppController
         ];
         $this->set('metaTags', $metaTags);
 
-        $user = $this->User->newEntity([]);
+        /** @var \App\Model\Table\UsersTable */
+        $usersTable = $this->getTableLocator()->get('Users');
+        $user = $usersTable->newEntity([]);
         $this->set('user', $user);
 
         if (empty($this->request->getData())) {
             return;
         }
 
-        $user = $this->User->newEntity([]);
+        $user = $usersTable->newEntity([]);
         $this->set('user', $user);
 
-        $user = $this->User->newEntity($this->request->getData(), [
+        $user = $usersTable->newEntity($this->request->getData(), [
             'validate' => 'ChangePassword'
         ]);
 
         if (!($user->hasErrors())) {
-            $user = $this->User->get($this->isLoggedIn() ? $this->loggedUser->uid : 0);
+            $user = $usersTable->get($this->isLoggedIn() ? $this->loggedUser->uid : 0);
             $user->revertPrivatizeData();
             $user2save = [
                 'password' => $this->request->getData('Users.password_new_1')
             ];
-            $entity = $this->User->patchEntity($user, $user2save, ['validate' => false]);
-            $this->User->save($entity);
+            $entity = $usersTable->patchEntity($user, $user2save, ['validate' => false]);
+            $usersTable->save($entity);
             $this->AppFlash->setFlashMessage('Dein Passwort wurde erfolgreich geändert.');
             $this->redirect('/');
         }
@@ -531,8 +541,9 @@ class UsersController extends AppController
             'Users.status >= ' . APP_OFF
         ];
 
-        $this->User = $this->getTableLocator()->get('Users');
-        $user = $this->User->find('all', conditions: array_merge($conditions, [
+        /** @var \App\Model\Table\UsersTable */
+        $usersTable = $this->getTableLocator()->get('Users');
+        $user = $usersTable->find('all', conditions: array_merge($conditions, [
             'Users.confirm' => $this->request->getParam('pass')['0']
         ]))->first();
 
@@ -541,7 +552,7 @@ class UsersController extends AppController
             return;
         }
 
-        $user = $this->User->get($user->uid,
+        $user = $usersTable->get($user->uid,
         conditions: $conditions,
         contain: [
             'Categories',
@@ -552,13 +563,13 @@ class UsersController extends AppController
             'confirm' => User::STATUS_OK,
             'status' => APP_ON,
         ];
-        $entity = $this->User->patchEntity($user, $user2save, ['validate' => false]);
-        $this->User->save($entity);
+        $entity = $usersTable->patchEntity($user, $user2save, ['validate' => false]);
+        $usersTable->save($entity);
 
         $this->Authentication->setIdentity($user);
         $this->AppFlash->setFlashMessage('Dein Account ist nun aktiviert, du bist eingeloggt und kannst deine Profildaten ergänzen bzw. dein Passwort ändern.<br />Dein akuelles Passwort wurde dir soeben zugesendet.');
         
-        $newPassword = $this->User->setNewPassword($user->uid);
+        $newPassword = $usersTable->setNewPassword($user->uid);
         
         $email = new AppMailer();
         $email->viewBuilder()->setTemplate('activation_successful');
@@ -618,14 +629,17 @@ class UsersController extends AppController
             $this->set('captchaBuilder', $captchaBuilder);
         }
 
-        $this->Country = $this->getTableLocator()->get('Countries');
-        $this->set('countries', $this->Country->getForDropdown());
+        /** @var \App\Model\Table\CountriesTable */
+        $countriesTable = $this->getTableLocator()->get('Countries');
+        $this->set('countries', $countriesTable->getForDropdown());
 
-        $this->Category = $this->getTableLocator()->get('Categories');
-        $this->set('categories', $this->Category->getForDropdown(APP_ON));
+        /** @var \App\Model\Table\CategoriesTable */
+        $categoriesTable = $this->getTableLocator()->get('Categories');
+        $this->set('categories', $categoriesTable->getForDropdown([APP_ON]));
 
-        $this->Skill = $this->getTableLocator()->get('Skills');
-        $this->set('skillsForDropdown', $this->Skill->getForDropdown(false));
+        /** @var \App\Model\Table\SkillsTable */
+        $skillsTable = $this->getTableLocator()->get('Skills');
+        $this->set('skillsForDropdown', $skillsTable->getForDropdown(false));
 
         $this->set('groups', Configure::read('AppConfig.htmlHelper')->getUserGroupsForRegistration());
 
@@ -634,18 +648,20 @@ class UsersController extends AppController
         ];
         $this->set('metaTags', $metaTags);
 
-        $user = $this->User->newEmptyEntity();
+        /** @var \App\Model\Table\UsersTable */
+        $usersTable = $this->getTableLocator()->get('Users');
+        $user = $usersTable->newEmptyEntity();
 
         if (! empty($this->request->getData())) {
 
             $associatedSkills = $this->request->getData('Users.skills._ids');
-            $newSkills = $this->Skill->getNewSkillsFromRequest($associatedSkills);
-            $existingSkills = $this->Skill->getExistingSkillsFromRequest($associatedSkills);
+            $newSkills = $skillsTable->getNewSkillsFromRequest($associatedSkills);
+            $existingSkills = $skillsTable->getExistingSkillsFromRequest($associatedSkills);
             $this->request->getSession()->write('newSkillsRegistration', $newSkills);
             $this->request = $this->request->withData('Users.skills._ids', $existingSkills);
 
             $this->request = $this->request->withData('groups', ['_ids' => [$userGroup]]);
-            $user = $this->User->patchEntity($user, $this->request->getData(), ['validate' => 'Registration']);
+            $user = $usersTable->patchEntity($user, $this->request->getData(), ['validate' => 'Registration']);
 
             if (!$this->isCalledByTestSuite()) {
                 /* @phpstan-ignore-next-line */
@@ -665,10 +681,10 @@ class UsersController extends AppController
                 $user = $this->request->getData();
                 $user['Users']['confirm'] = md5(StringComponent::createRandomString());
                 $user['Users']['status'] = APP_OFF;
-                $user['Users']['private'] = $this->User->getDefaultPrivateFields();
-                $userEntity = $this->User->newEntity($user, ['validate' => 'Registration']);
+                $user['Users']['private'] = $usersTable->getDefaultPrivateFields();
+                $userEntity = $usersTable->newEntity($user, ['validate' => 'Registration']);
                 $userEntity = $this->stripTagsFromFields($userEntity, 'User');
-                $result = $this->User->save($userEntity);
+                $result = $usersTable->save($userEntity);
 
                 $email = new AppMailer();
                 $email->viewBuilder()->setTemplate('registration_successful');
@@ -682,11 +698,11 @@ class UsersController extends AppController
                 $newSkills = $this->request->getSession()->read('newSkillsRegistration');
                 if (!empty($newSkills)) {
                     // save new skills
-                    $addedSkillIds = $this->Skill->addSkills($newSkills, false, $result->uid);
+                    $addedSkillIds = $skillsTable->addSkills($newSkills, false, $result->uid);
                     // save id associations to user
                     $this->request = $this->request->withData('Users.skills._ids', array_merge($this->request->getData('Users.skills._ids'), $addedSkillIds));
-                    $userEntity = $this->User->patchEntity($userEntity, $this->request->getData());
-                    $this->User->save($userEntity);
+                    $userEntity = $usersTable->patchEntity($userEntity, $this->request->getData());
+                    $usersTable->save($userEntity);
                     $this->request->getSession()->delete('newSkillsRegistration');
                 }
 

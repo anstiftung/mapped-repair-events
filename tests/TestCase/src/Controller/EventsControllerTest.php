@@ -239,6 +239,9 @@ class EventsControllerTest extends AppTestCase
         $this->assertMailCount(0);
     }
 
+    /**
+     * @param array<string, string|int|bool> $data
+     */
     private function doTestEditForm(array $data): void
     {
         $eventsTable = $this->getTableLocator()->get('Events');

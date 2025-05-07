@@ -167,6 +167,9 @@ class WorkshopsTable extends AppTable
         return $provincesMap;
     }
 
+    /**
+     * @param array<string> $additionalContains
+     */
     public function getWorkshopsForAssociatedUser(int $userUid, int $workshopStatus, array $additionalContains = []): SelectQuery
     {
         $workshops = $this->getWorkshopsWithUsers($workshopStatus, $additionalContains);
@@ -212,6 +215,9 @@ class WorkshopsTable extends AppTable
         ];
     }
 
+    /**
+     * @param array<string> $additionalContains
+     */
     public function getWorkshopsWithUsers(int $workshopStatus, array $additionalContains = []): SelectQuery
     {
         $workshops = $this->find('all',

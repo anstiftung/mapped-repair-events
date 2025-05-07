@@ -9,16 +9,6 @@ use App\Model\Table\UsersTable;
 class EventsController extends AdminAppController
 {
 
-    public EventsTable $Event;
-    public UsersTable $User;
-
-    public function initialize(): void
-    {
-        parent::initialize();
-        // keep that because of AppController::stripTagsFromFields()
-        $this->Event = $this->getTableLocator()->get('Events');
-    }
-
     public function beforeFilter(EventInterface $event): void
     {
 
@@ -66,7 +56,9 @@ class EventsController extends AdminAppController
         ];
         $conditions = array_merge($this->conditions, $conditions);
 
-        $query = $this->Event->find('all',
+        /** @var \App\Model\Table\EventsTable */
+        $eventsTable = $this->getTableLocator()->get('Events');
+        $query = $eventsTable->find('all',
         conditions: $conditions,
         contain: [
             'OwnerUsers',
@@ -88,8 +80,9 @@ class EventsController extends AdminAppController
         }
         $this->set('objects', $objects);
 
-        $this->User = $this->getTableLocator()->get('Users');
-        $this->set('users', $this->User->getForDropdown());
+        /** @var \App\Model\Table\UsersTable */
+        $usersTable = $this->getTableLocator()->get('Users');
+        $this->set('users', $usersTable->getForDropdown());
     }
 
 }

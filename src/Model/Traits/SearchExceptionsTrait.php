@@ -10,6 +10,9 @@ trait SearchExceptionsTrait {
         'münchen',
     ];
 
+    /**
+     * @param array<string|int, string> $changeableOrConditions
+     */
     public function getChangeableOrConditions(string $keyword, array $changeableOrConditions): array
     {
 

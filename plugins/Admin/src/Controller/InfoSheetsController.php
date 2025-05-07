@@ -9,18 +9,8 @@ use App\Model\Table\UsersTable;
 class InfoSheetsController extends AdminAppController
 {
 
-    public InfoSheetsTable $InfoSheet;
-    public UsersTable $User;
-
     public bool $searchName = false;
     public bool $searchText = false;
-
-    public function initialize(): void
-    {
-        parent::initialize();
-        // keep that because of AppController::stripTagsFromFields()
-        $this->InfoSheet = $this->getTableLocator()->get('InfoSheets');
-    }
 
     public function beforeFilter(EventInterface $event): void
     {
@@ -58,7 +48,9 @@ class InfoSheetsController extends AdminAppController
         ];
         $conditions = array_merge($this->conditions, $conditions);
 
-        $query = $this->InfoSheet->find('all',
+        /** @var \App\Model\Table\InfoSheetsTable */
+        $infoSheetsTable = $this->getTableLocator()->get('InfoSheets');
+        $query = $infoSheetsTable->find('all',
         conditions: $conditions,
         contain: [
             'OwnerUsers',
@@ -83,16 +75,14 @@ class InfoSheetsController extends AdminAppController
 
         $this->set('objects', $objects);
 
-        $this->User = $this->getTableLocator()->get('Users');
-        $this->set('users', $this->User->getForDropdown());
+        /** @var \App\Model\Table\UsersTable */
+        $usersTable = $this->getTableLocator()->get('Users');
+        $this->set('users', $usersTable->getForDropdown());
 
         $metaTags = [
             'title' => 'Laufzettel'
         ];
         $this->set('metaTags', $metaTags);
-
-        $usersTable = $this->getTableLocator()->get('Users');
-        $this->set('users', $usersTable->getForDropdown());
 
     }
 

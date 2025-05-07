@@ -72,6 +72,9 @@ class FoerderantragPdfWriterService extends PdfWriterService
 
     }
 
+    /**
+     * @param array<string|int, mixed> $definedFields
+     */
     private function getPreparedFields(array $definedFields, EntityInterface $entity): array
     {
         $preparedFields = [];

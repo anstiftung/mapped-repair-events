@@ -173,13 +173,13 @@ class AdminAppController extends AppController
 
     protected function saveObject(EntityInterface $entity): void
     {
-        $modelName = $this->modelName;
-        $entity = $this->stripTagsFromFields($entity, $modelName);
-        if ($this->$modelName->save($entity)) {
-            $this->AppFlash->setFlashMessage($this->$modelName->name_de . ' erfolgreich gespeichert.');
+        $modelInstance = $this->getModelInstance($this->modelName);
+        $entity = $this->stripTagsFromFields($entity, $this->modelName);
+        if ($modelInstance->save($entity)) {
+            $this->AppFlash->setFlashMessage($modelInstance->name_de . ' erfolgreich gespeichert.');
             $this->redirect($this->getPreparedReferer());
         } else {
-            $this->AppFlash->setFlashError($this->$modelName->name_de . ' wurde <b>nicht</b> gespeichert. Bitte überprüfe das Formular.');
+            $this->AppFlash->setFlashError($modelInstance->name_de . ' wurde <b>nicht</b> gespeichert. Bitte überprüfe das Formular.');
         }
     }
 

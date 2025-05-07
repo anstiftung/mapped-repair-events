@@ -748,7 +748,8 @@ class MyHtmlHelper extends HtmlHelper {
     }
 
     /**
-     * creates navigation with up to 2 sublevels
+     * @param array<string, string|array<mixed>> $menuElement
+     * @param array<string, string|array<mixed>> $mainMenuElement
      */
     function createMenuEntry(array $menuElement, ?array $mainMenuElement = null): string
     {
@@ -767,17 +768,9 @@ class MyHtmlHelper extends HtmlHelper {
             $htmlAttributes = array_merge($htmlAttributes, $menuElement['htmlAttributes']);
         }
         if ('/' . $this->here == $menuElement['url']) {
-
-            if (isset($htmlAttributes['class'])) {
-                // $htmlAttributes['class'] .= ' selected';
-            } else {
-                // $htmlAttributes['class'] = ' selected';
-            }
-
             if ($menuElement['level'] == 'main') {
                 $this->selectedMain = $menuElement;
             }
-
             if ($menuElement['level'] == 'sub1') {
                 $this->selectedMain = $mainMenuElement;
                 $this->selectedSub1 = $menuElement;

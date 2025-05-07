@@ -7,15 +7,6 @@ use App\Model\Table\BrandsTable;
 
 class BrandsController extends AdminAppController
 {
-
-    public BrandsTable $Brand;
-
-    public function initialize(): void
-    {
-        parent::initialize();
-        // keep that because of AppController::stripTagsFromFields()
-        $this->Brand = $this->getTableLocator()->get('Brands');
-    }
     
     public function insert(): void
     {
@@ -24,6 +15,7 @@ class BrandsController extends AdminAppController
             'owner' => $this->isLoggedIn() ? $this->loggedUser->uid : 0,
             'status' => APP_OFF
         ];
+        /** @var \App\Model\Table\BrandsTable */
         $brandsTable = $this->getTableLocator()->get('Brands');
         $entity = $brandsTable->newEntity($brand);
         $brand = $brandsTable->save($entity);
@@ -42,6 +34,7 @@ class BrandsController extends AdminAppController
     
     public function edit(int $id): void
     {
+        /** @var \App\Model\Table\BrandsTable */
         $brandsTable = $this->getTableLocator()->get('Brands');
         $brand = $brandsTable->find('all', conditions: [
             'Brands.id' => $id,
@@ -87,6 +80,7 @@ class BrandsController extends AdminAppController
         ];
         $conditions = array_merge($this->conditions, $conditions);
 
+        /** @var \App\Model\Table\BrandsTable */
         $brandsTable = $this->getTableLocator()->get('Brands');
         $query = $brandsTable->find('all',
         conditions: $conditions,

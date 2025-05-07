@@ -4,6 +4,10 @@ namespace App\Model\Traits;
 
 trait ApproveMultipleTrait
 {
+
+    /**
+     * @param array<int> $ids
+     */
     public function setApprovedMultiple(array $ids): false|int
     {
         if (empty($ids)) {

@@ -51,12 +51,6 @@ class User extends Entity implements IdentityInterface
         return $groupsTable->isRepairhelper($this);
     }
 
-    public function IsInGroup(array $groups): bool
-    {
-        $groupsTable = TableRegistry::getTableLocator()->get('Groups');
-        return $groupsTable->isInGroup($this, $groups);
-    }
-
     /**
      * diese methode ist für das frontend (keine uid in url vorhanden)
      * checks if the logged user is the owner of the passed modelName / url or not

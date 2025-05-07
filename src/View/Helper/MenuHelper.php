@@ -9,6 +9,10 @@ use Cake\View\Helper;
 class MenuHelper extends Helper
 {
 
+    /**
+     * @param array<string, string|array<mixed>> $items
+     * @param array<string, string> $options
+     */
     public function render(array $items, array $options): string
     {
         $tmpMenu = '<ul id="'.$options['id'].'" class="'.$options['class'].'">';
@@ -25,9 +29,11 @@ class MenuHelper extends Helper
         return $tmpMenu;
     }
 
+    /**
+     * @param \App\Model\Entity\Page[] $pages
+     */
     public function buildPageMenu(array $pages): array
     {
-
         $menu = [];
         foreach ($pages as $page) {
             $children = [];
@@ -58,6 +64,9 @@ class MenuHelper extends Helper
         return $menu;
     }
 
+    /**
+     * @param array<mixed> $item
+     */
     private function buildMenuItem(array $item): string
     {
 
@@ -89,6 +98,9 @@ class MenuHelper extends Helper
         return $tmpMenuItem;
     }
 
+    /**
+     * @param array<string> $class
+     */
     private function renderMenuElement(string $slug, string $name, string $style = '', array $class = [], string $target = ''): string
     {
 

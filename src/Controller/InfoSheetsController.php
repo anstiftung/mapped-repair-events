@@ -226,13 +226,13 @@ class InfoSheetsController extends AppController
 
         $this->set('uid', $infoSheet->uid);
 
-        $this->Category = $this->getTableLocator()->get('Categories');
-        $categoriesForSubcategory = $this->Category->getForSubcategoryDropdown();
+        $categoriesTable = $this->getTableLocator()->get('Categories');
+        $categoriesForSubcategory = $categoriesTable->getForSubcategoryDropdown();
         $categoriesForSubcategory['Kategorie nicht vorhanden?'] = [
             '-1' => 'Unterkategorie hinzufügen'
         ];
         $this->set('categoriesForSubcategory', $categoriesForSubcategory);
-        $this->set('categories', $this->Category->getForDropdown(APP_ON));
+        $this->set('categories', $categoriesTable->getForDropdown([APP_ON]));
 
         $this->Brand = $this->getTableLocator()->get('Brands');
         $brandsForDropdown = $this->Brand->getForDropdown();
@@ -271,8 +271,8 @@ class InfoSheetsController extends AppController
                 $entity = $this->stripTagsFromFields($patchedEntity, 'InfoSheet');
 
                 if ($patchedEntity->category_id == -1) {
-                    $category = $this->Category->save(
-                        $this->Category->newEntity(
+                    $category = $categoriesTable->save(
+                        $categoriesTable->newEntity(
                             [
                             'name' => $patchedEntity->new_subcategory_name,
                             'parent_id' => $patchedEntity->new_subcategory_parent_id,
