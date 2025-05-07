@@ -98,6 +98,9 @@ class CategoriesTable extends Table
         return (float) $result;
     }
 
+    /**
+     * @return array<array<string>>
+     */
     public function getForSubcategoryDropdown(): array
     {
         $categories = $this->find('threaded',
@@ -202,6 +205,7 @@ class CategoriesTable extends Table
 
     /**
      * @param array<int> $visibleOnPlatform
+     * @return array<int, string>
      */
     public function getForDropdown(array $visibleOnPlatform): array
     {

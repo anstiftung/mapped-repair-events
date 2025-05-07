@@ -27,6 +27,9 @@ class OrdsCategoriesTable extends Table
         return $validator;
     }
 
+    /**
+     * @return array<int, string>
+     */
     public function getForDropdown(): array
     {
 

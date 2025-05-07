@@ -17,6 +17,9 @@ class BlogsTable extends Table
         ]);
     }
 
+    /**
+     * @return array<int, string>
+     */
     public function getForDropdown(): array
     {
         $blogs = $this->find('all', order: [

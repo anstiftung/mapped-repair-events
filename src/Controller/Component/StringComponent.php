@@ -25,6 +25,7 @@ class StringComponent extends Component
 
     /**
      * @param array<string, mixed> $data
+     * @return array<string, mixed>
      */
     public static function cleanAllStringsInData(array|ArrayObject $data): array|ArrayObject
     {
@@ -121,17 +122,18 @@ class StringComponent extends Component
         return $confirmationCode;
     }
 
+    /**
+     * @return array<string, string>
+     */
     public static function decodeConfirmationCode(string $emailAndConfirmationCodeHash): array
     {
         $emailHash = substr($emailAndConfirmationCodeHash, 0, 5);
         $cc = substr($emailAndConfirmationCodeHash, - 5);
 
-        $return = [
+        return [
             'emailHash' => $emailHash,
-            'confirmationCode' => $cc
+            'confirmationCode' => $cc,
         ];
-
-        return $return;
     }
 
     public static function createRandomString(int $n = 8): string

@@ -518,6 +518,7 @@ class WidgetsController extends AppController
     /**
      * @param array<string> $month
      * @param array<string> $year
+     * @return array<string, string>
      */
     private function getDateFromByMonthAndYear(string|array $month, string|array $year): array
     {

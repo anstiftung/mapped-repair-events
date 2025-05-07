@@ -141,6 +141,9 @@ class AppController extends Controller
         }
     }
 
+    /**
+     * @return string[]
+     */
     protected function getPreviewConditions(string $modelName, string $url): array
     {
         $previewConditions = [];
@@ -174,6 +177,7 @@ class AppController extends Controller
 
     /**
      * @param array<string, string> $metaTags
+     * @return array<string, string>
      */
     public function mergeCustomMetaTags(array $metaTags, EntityInterface $object): array
     {

@@ -28,6 +28,9 @@ class GeoService {
         return $lat >= self::VALID_BOUNDING_BOX['lat']['min'] && $lat <= self::VALID_BOUNDING_BOX['lat']['max'] && $lng >= self::VALID_BOUNDING_BOX['lng']['min'] && $lng <= self::VALID_BOUNDING_BOX['lng']['max'];
     }
 
+    /**
+     * @return array<string, int>
+     */
     public function getGeoDataByCoordinates(string $lat, string $lng): array
     {
         $requestUrl = 'https://maps.googleapis.com/maps/api/geocode/json?key='.Configure::read('googleMapApiKey').'&latlng=' . $lat . ',' . $lng;
@@ -36,6 +39,9 @@ class GeoService {
         return ['provinceId' => $provinceId];
     }
 
+    /**
+     * @return array<string, string|int>
+     */
     public function getGeoDataByAddress(string $addressString): array
     {
 

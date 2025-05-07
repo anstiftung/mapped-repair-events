@@ -23,6 +23,9 @@ class BrandsTable extends Table
         ]);
     }
 
+    /**
+     * @return array<int, string>
+     */
     public function getForDropdown(): array
     {
 

@@ -16,13 +16,14 @@ class ProvincesTable extends Table
 
     /**
      * @param array<int, int> $provinceCountsMap
+     * @return array<array<string>>
      */
     public function getForDropdown(array $provinceCountsMap): array
     {
         $provinces = $this->find('all',
             order: [
                 'Countries.name_de' => 'ASC',
-                'Provinces.name' => 'ASC'
+                'Provinces.name' => 'ASC',
             ],
             contain: [
                 'Countries',

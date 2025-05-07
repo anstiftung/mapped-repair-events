@@ -85,6 +85,7 @@ trait UploadsTrait {
     /**
      * @param array<int|string, mixed> $associations
      * @param array<string> $uploadTypes
+     * @return array<string, list<array<string, mixed>>>
      */
     private function handleNewFundinguploads(Funding $funding, array $associations, Funding $patchedEntity, array $uploadTypes): array
     {

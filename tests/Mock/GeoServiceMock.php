@@ -4,6 +4,9 @@ namespace App\Test\Mock;
 
 class GeoServiceMock {
 
+    /**
+     * @return array<string, int>
+     */
     public function getGeoDataByCoordinates(string $lat, string $lng): array
     {
         return [
@@ -11,6 +14,9 @@ class GeoServiceMock {
         ];
     }
 
+    /**
+     * @return array<string, int|float>
+     */
     public function getGeoDataByAddress(string $address): array
     {
         return [

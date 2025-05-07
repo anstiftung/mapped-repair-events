@@ -214,6 +214,9 @@ class UsersTable extends AppTable
         return $validator;
     }
 
+    /**
+     * @return \App\Model\Entity\Workshop[]
+     */
     public function getWorkshopsWhereUserIsLastOrgaUser(SelectQuery $workshops): array
     {
         $lastOrgaWorkshops = [];
@@ -441,6 +444,9 @@ class UsersTable extends AppTable
         return $query;
     }
 
+    /**
+     * @return array<int, string>
+     */
     public function getForDropdown(): array
     {
         $users = $this->find('all',

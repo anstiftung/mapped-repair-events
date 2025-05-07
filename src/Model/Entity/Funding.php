@@ -67,6 +67,9 @@ class Funding extends Entity
         return $total;
     }
 
+    /**
+     * @return array<string, array<int, \App\Model\Entity\Fundingbudgetplan>>
+     */
     public function _getGroupedValidBudgetplans(): array
     {
         $result = [];
@@ -79,6 +82,9 @@ class Funding extends Entity
         return $result;
     }
 
+    /**
+     * @return array<string, array<int, \App\Model\Entity\Fundingreceiptlist>>
+     */
     public function _getGroupedValidReceiptlists(): array
     {
         $result = [];
@@ -107,6 +113,9 @@ class Funding extends Entity
         return $this->budgetplan_total_with_limit - $this->receiptlist_total;
     }
 
+    /**
+     * @return array<int, float>
+     */
     public function _getGroupedValidBudgetplansTotals(): array
     {
         $result = [];
@@ -120,6 +129,9 @@ class Funding extends Entity
         return $result;
     }
 
+    /**
+     * @return array<int, float>
+     */
     public function _getGroupedValidReceiptlistsTotals(): array
     {
         $result = [];

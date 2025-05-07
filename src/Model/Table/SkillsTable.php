@@ -96,6 +96,9 @@ class SkillsTable extends Table
 
     }
 
+    /**
+     * @return array<int, string>
+     */
     public function getForDropdownIncludingCategories(): array
     {
         $skillsForDropdown = $this->getForDropdown(false);
@@ -111,6 +114,9 @@ class SkillsTable extends Table
         return $skillsForDropdown;
     }
 
+    /**
+     * @return array<int, string>
+     */
     public function getForDropdown(bool $includeInactive): array
     {
 

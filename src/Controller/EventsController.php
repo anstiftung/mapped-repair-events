@@ -427,6 +427,7 @@ class EventsController extends AppController
 
     /**
      * @param \App\Model\Entity\Event[] $events
+     * @return array<string, \App\Model\Entity\Event[]|string[]>
      */
     private function _edit(SelectQuery|array $events, bool $isEditMode): array
     {
@@ -785,6 +786,7 @@ class EventsController extends AppController
 
     /**
      * combines multiple events to one marker
+     * @return array<int, mixed>
      */
     private function combineEventsForMap(PaginatedInterface|SelectQuery $events): array
     {

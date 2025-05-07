@@ -31,6 +31,7 @@ class MenuHelper extends Helper
 
     /**
      * @param \App\Model\Entity\Page[] $pages
+     * @return list<array<string, mixed>>
      */
     public function buildPageMenu(array $pages): array
     {

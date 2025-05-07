@@ -18,6 +18,9 @@ class MyTimeHelper extends TimeHelper {
         return strtotime((string) Configure::read('AppConfig.fundingsEndDateNTime')) < time();
     }
 
+    /**
+     * @return array<int, int>
+     */
     public function getAllYearsUntilThisYear(int $thisYear, int $firstYear): array
     {
         $years = [];
@@ -28,6 +31,9 @@ class MyTimeHelper extends TimeHelper {
         return $years;
     }
 
+    /**
+     * @return array<string|int, string>
+     */
     public function getMonths(): array
     {
         $months = [

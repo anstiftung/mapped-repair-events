@@ -28,6 +28,9 @@ class FundingsController extends AppController
     use UploadsTrait;
     use VerwendungsnachweisTrait;
 
+    /**
+     * @return string[]
+     */
     private function getBasicErrorMessages(Funding $funding): array
     {
         $errors = ['Zugriff auf diese Seite nicht möglich.'];
@@ -148,6 +151,7 @@ class FundingsController extends AppController
 
     /**
      * @param array<int|string, mixed> $associations
+     * @return array<string, array<string, bool|string>>
      */
     private function removeValidationFromAssociations(array $associations): array
     {

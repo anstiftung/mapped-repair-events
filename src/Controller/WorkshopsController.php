@@ -201,6 +201,7 @@ class WorkshopsController extends AppController
 
     /**
      * @param \App\Model\Entity\Category[]|null $categories
+     * @return string[]
      */
     private function getPreparedCategoryIcons(?array $categories): array
     {
@@ -987,6 +988,9 @@ class WorkshopsController extends AppController
 
     }
 
+    /**
+     * @return array<string, string>
+     */
     private function checkType(string $type): array
     {
         if ($type != 'user') {

@@ -6,6 +6,9 @@ namespace App\Model\Entity\Traits;
 trait FundingAdminFilterTrait {
 
     
+    /**
+     * @return array<string, string|callable>
+     */
     public static function getAdminFilterOptions(): array {
         return [
             'to-be-verified-by-admins' =>  self::STATUS_MAPPING_CHANGEABLE_BY_ADMIN[self::STATUS_PENDING],
@@ -19,6 +22,9 @@ trait FundingAdminFilterTrait {
         ];
     }
 
+    /**
+     * @return array<string, string|callable>
+     */
     public static function getAdminFilterConditions(): array {
         return [
             'to-be-verified-by-admins' => 'Fundings.activity_proof_status = ' . self::STATUS_PENDING . 
