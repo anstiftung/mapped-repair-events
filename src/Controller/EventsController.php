@@ -425,6 +425,9 @@ class EventsController extends AppController
         }
     }
 
+    /**
+     * @param \App\Model\Entity\Event[] $events
+     */
     private function _edit(SelectQuery|array $events, bool $isEditMode): array
     {
 

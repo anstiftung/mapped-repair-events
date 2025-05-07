@@ -183,6 +183,9 @@ class AdminAppController extends AppController
         }
     }
 
+    /**
+     * @param array<string, array<string, mixed>> $searchOptions
+     */
     protected function addSearchOptions(array $searchOptions): void
     {
         $searchOptions = array_reverse($searchOptions);

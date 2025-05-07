@@ -515,6 +515,10 @@ class WidgetsController extends AppController
 
     }
 
+    /**
+     * @param array<string> $month
+     * @param array<string> $year
+     */
     private function getDateFromByMonthAndYear(string|array $month, string|array $year): array
     {
         $yearTo = $year;
@@ -718,11 +722,17 @@ class WidgetsController extends AppController
 
     }
 
+    /**
+     * @param array<string, mixed> $statisticsData
+     */
     private function setDonutChartHasData(array $statisticsData): void
     {
         $this->set('chartHasData', $statisticsData['data'][0] > 0 || $statisticsData['data'][1] > 0);
     }
 
+    /**
+     * @param array<string, mixed> $statisticsData
+     */
     private function setBarChartHasData(array $statisticsData): void
     {
         $this->set('chartHasData', !empty($statisticsData['datasets'][0]['data']) || !empty($statisticsData['datasets'][1]['data']));

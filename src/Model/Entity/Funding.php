@@ -20,7 +20,10 @@ class Funding extends Entity
 
     const MAX_FUNDING_SUM = 3000;
     
-    public static function getRenderedFields(array $fields, string $entityName, FormHelper $formHelper, bool $disabled, ? EntityInterface $entity = null): string
+    /**
+     * @param array<string|int, mixed> $fields
+     */
+    public static function getRenderedFields(array $fields, string $entityName, FormHelper $formHelper, bool $disabled, ?EntityInterface $entity = null): string
     {
         $renderedFields = '';
         $fieldsToBeFormattedWithToDigits = ['amount'];

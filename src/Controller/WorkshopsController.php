@@ -199,6 +199,9 @@ class WorkshopsController extends AppController
         }
     }
 
+    /**
+     * @param \App\Model\Entity\Category[]|null $categories
+     */
     private function getPreparedCategoryIcons(?array $categories): array
     {
         $preparedCategories = [];

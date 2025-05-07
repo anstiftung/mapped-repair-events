@@ -88,6 +88,9 @@ abstract class AppTable extends Table
         return $validator;
     }
 
+    /**
+     * @param array<string|int, mixed> $data
+     */
     public function getPatchedEntityForAdminEdit(EntityInterface $entity, array $data): EntityInterface
     {
         $isAdmin = Router::getRequest()?->getAttribute('identity')?->isAdmin();

@@ -13,6 +13,9 @@ use Stringable;
 class FileAndEmailLog extends FileLog
 {
 
+    /**
+     * @param array<string, string> $context
+     */
     public function log($level, Stringable|string $message, array $context = []): void
     {
         parent::log($level, $message, $context);

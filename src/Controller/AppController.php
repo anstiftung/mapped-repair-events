@@ -172,6 +172,9 @@ class AppController extends Controller
         ]);
     }
 
+    /**
+     * @param array<string, string> $metaTags
+     */
     public function mergeCustomMetaTags(array $metaTags, EntityInterface $object): array
     {
         if (!empty($object->metatag) && !empty($object->metatag->title)) {

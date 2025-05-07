@@ -23,6 +23,9 @@ class StringComponent extends Component
         return preg_replace('/^([\d]+)-(.*)$/', '$2', $string);
     }
 
+    /**
+     * @param array<string, mixed> $data
+     */
     public static function cleanAllStringsInData(array|ArrayObject $data): array|ArrayObject
     {
         foreach ($data as $key => $value) {

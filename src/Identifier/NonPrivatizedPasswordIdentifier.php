@@ -8,6 +8,10 @@ use Authentication\Identifier\PasswordIdentifier;
 
 class NonPrivatizedPasswordIdentifier extends PasswordIdentifier
 {
+
+    /**
+     * @param array<string> $credentials
+     */
     public function identify(array $credentials): ArrayAccess|array|null
     {
         if (!isset($credentials[self::CREDENTIAL_USERNAME])) {

@@ -10,6 +10,9 @@ use Cake\Utility\Hash;
 class UserLinkToWorkshopRule
 {
 
+    /**
+     * @param array<string, string> $options
+     */
     public function __invoke(EntityInterface $entity, array $options): bool|string
     {
 

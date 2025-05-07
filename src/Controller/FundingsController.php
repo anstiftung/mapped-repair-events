@@ -55,6 +55,9 @@ class FundingsController extends AppController
         return false;
     }
 
+    /**
+     * @param array<int|string, mixed> $associations
+     */
     private function patchFunding(Funding $funding, array $associations): Funding
     {
         $fundingsTable = $this->getTableLocator()->get('Fundings');
@@ -72,6 +75,10 @@ class FundingsController extends AppController
         return implode(',', $updatedArray);
     }
 
+    /**
+     * @param array<string, mixed> $newFundinguploads
+     * @param array<string, mixed> $deleteFundinguploads
+     */
     private function patchFundingStatusIfNewUploadWasUploadedOrDeleted(array $newFundinguploads, Funding $patchedEntity, string $uploadType, ?array $deleteFundinguploads): Funding
     {
         if (!empty($newFundinguploads) || !empty($deleteFundinguploads)) {
@@ -108,6 +115,10 @@ class FundingsController extends AppController
         $this->redirect(Configure::read('AppConfig.htmlHelper')->urlFundings());
     }
 
+    /**
+     * @param array<string, mixed> $errors
+     * @param array<int|string, mixed> $associationsWithoutValidation
+     */
     private function getPatchedFundingForValidFields(array $errors, int $workshopUid, array $associationsWithoutValidation): Funding
     {
         $data = $this->request->getData();
@@ -135,6 +146,9 @@ class FundingsController extends AppController
         return $patchedEntity;
     }
 
+    /**
+     * @param array<int|string, mixed> $associations
+     */
     private function removeValidationFromAssociations(array $associations): array
     {
         $result = array_map(function($association): array {
