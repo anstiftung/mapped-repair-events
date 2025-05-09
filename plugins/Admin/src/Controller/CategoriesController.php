@@ -9,15 +9,6 @@ use App\Model\Table\CategoriesTable;
 class CategoriesController extends AdminAppController
 {
 
-    public CategoriesTable $Category;
-
-    public function initialize(): void
-    {
-        parent::initialize();
-        // keep that because of AppController::stripTagsFromFields()
-        $this->Category = $this->getTableLocator()->get('Categories');
-    }
-
     public function beforeFilter(EventInterface $event): void
     {
         $this->searchUid = false;
@@ -28,6 +19,8 @@ class CategoriesController extends AdminAppController
     public function setApprovedMultiple(): void {
         $selectedIds = $this->request->getQuery('selectedIds', '');
         $selectedIds = explode(',', $selectedIds);
+
+        /** @var \App\Model\Table\CategoriesTable */
         $categoriesTable = $this->getTableLocator()->get('Categories');
         $affectedCount = $categoriesTable->setApprovedMultiple($selectedIds);
         $this->AppFlash->setFlashMessage($affectedCount . ' Kategorien erfolgreich bestätigt.');
@@ -41,6 +34,8 @@ class CategoriesController extends AdminAppController
             'owner' => $this->isLoggedIn() ? $this->loggedUser->uid : 0,
             'status' => APP_OFF
         ];
+
+        /** @var \App\Model\Table\CategoriesTable */
         $categoriesTable = $this->getTableLocator()->get('Categories');
         $entity = $categoriesTable->newEntity($category);
         $category = $categoriesTable->save($entity);
@@ -50,6 +45,8 @@ class CategoriesController extends AdminAppController
 
     public function edit(int $id): void
     {
+
+        /** @var \App\Model\Table\CategoriesTable */
         $categoriesTable = $this->getTableLocator()->get('Categories');
         $category = $categoriesTable->find('all', conditions: [
             'Categories.id' => $id,
@@ -69,7 +66,6 @@ class CategoriesController extends AdminAppController
             $this->request = $this->request->withData('Categories.carbon_footprint', str_replace(',', '.', $this->request->getData('Categories.carbon_footprint')));
             $this->request = $this->request->withData('Categories.material_footprint', str_replace(',', '.', $this->request->getData('Categories.material_footprint')));
 
-            $categoriesTable = $this->getTableLocator()->get('Categories');
             $patchedEntity = $categoriesTable->patchEntity(
                 $category,
                 $this->request->getData(),
@@ -88,6 +84,7 @@ class CategoriesController extends AdminAppController
         $metaTags = ['title' => 'Kategorie bearbeiten'];
         $this->set('metaTags', $metaTags);
 
+        /** @var \App\Model\Table\OrdsCategoriesTable */
         $ordsCategoriesTable = $this->getTableLocator()->get('OrdsCategories');
         $this->set('ordsCategories', $ordsCategoriesTable->getForDropdown());
         $this->set('mainCategories', $categoriesTable->getForDropdown([APP_ON, APP_OFF]));
@@ -103,6 +100,7 @@ class CategoriesController extends AdminAppController
         ];
         $conditions = array_merge($this->conditions, $conditions);
 
+        /** @var \App\Model\Table\CategoriesTable */
         $categoriesTable = $this->getTableLocator()->get('Categories');
         $query = $categoriesTable->find('all',
         conditions: $conditions,

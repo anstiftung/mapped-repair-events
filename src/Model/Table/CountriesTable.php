@@ -13,6 +13,9 @@ class CountriesTable extends Table
         $this->setPrimaryKey('code');
     }
 
+    /**
+     * @return array<int, string>
+     */
     public function getForDropdown(): array
     {
         $countries = $this->find('all', order: [

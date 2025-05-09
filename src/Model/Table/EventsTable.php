@@ -18,6 +18,9 @@ class EventsTable extends AppTable
 
     public string $name_de = 'Termin';
 
+    /**
+     * @var string[]
+     */
     public array $allowedBasicHtmlFields = [
         'eventbeschreibung'
     ];
@@ -94,6 +97,9 @@ class EventsTable extends AppTable
         };
     }
 
+    /**
+     * @return array<int, int>
+     */
     public function getProvinceCounts(): array
     {
         
@@ -114,6 +120,9 @@ class EventsTable extends AppTable
         return $provincesMap;
     }    
 
+    /**
+     * @return array<int|string, string|int>
+     */
     public function getListConditions(): array
     {
         return [
@@ -123,6 +132,9 @@ class EventsTable extends AppTable
         ];
     }
 
+    /**
+     * @return array<int|string, string>
+     */
     public function getListFields(): array
     {
         return [
@@ -148,6 +160,9 @@ class EventsTable extends AppTable
         ];
     }
 
+    /**
+     * @return array<string, string>
+     */
     public function getListOrder(): array
     {
         return [

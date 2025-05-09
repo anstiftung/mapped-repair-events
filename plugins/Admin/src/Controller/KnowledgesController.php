@@ -10,23 +10,13 @@ use App\Model\Table\SkillsTable;
 class KnowledgesController extends AdminAppController
 {
 
-    public CategoriesTable $Category;
-    public SkillsTable $Skill;
-    public KnowledgesTable $Knowledge;
-
-    public function initialize(): void
-    {
-        parent::initialize();
-        // keep that because of AppController::stripTagsFromFields()
-        $this->Knowledge = $this->getTableLocator()->get('Knowledges');
-    }
-
-
     public function insert(): void
     {
         $knowledge = [
             'name' => 'Neuer Reparaturwissens-Beitrag von ' . $this->loggedUser->name,
         ];
+
+        /** @var \App\Model\Table\KnowledgesTable */
         $knowledgesTable = $this->getTableLocator()->get('Knowledges');
         $entity = $knowledgesTable->newEntity($knowledge);
         $knowledge = $knowledgesTable->save($entity);
@@ -36,16 +26,17 @@ class KnowledgesController extends AdminAppController
 
     public function edit(int $uid): void
     {
+        /** @var \App\Model\Table\KnowledgesTable */
         $knowledgesTable = $this->getTableLocator()->get('Knowledges');
         $knowledge = $knowledgesTable->find('all',
-        conditions: [
-            'Knowledges.uid' => $uid,
-            'Knowledges.status >= ' . APP_DELETED
-        ],
-        contain: [
-            'Categories',
-            'Skills',
-        ])->first();
+            conditions: [
+                'Knowledges.uid' => $uid,
+                'Knowledges.status >= ' . APP_DELETED
+            ],
+            contain: [
+                'Categories',
+                'Skills',
+            ])->first();
 
         if (empty($knowledge)) {
             throw new NotFoundException;
@@ -56,13 +47,14 @@ class KnowledgesController extends AdminAppController
         $this->setReferer();
         $this->setIsCurrentlyUpdated($uid);
 
-        $this->Skill = $this->getTableLocator()->get('Skills');
+        /** @var \App\Model\Table\SkillsTable */
+        $skillsTable = $this->getTableLocator()->get('Skills');
 
         if (!empty($this->request->getData())) {
 
             $associatedSkills = $this->request->getData('Knowledges.skills._ids');
-            $newSkills = $this->Skill->getNewSkillsFromRequest($associatedSkills);
-            $existingSkills = $this->Skill->getExistingSkillsFromRequest($associatedSkills);
+            $newSkills = $skillsTable->getNewSkillsFromRequest($associatedSkills);
+            $existingSkills = $skillsTable->getExistingSkillsFromRequest($associatedSkills);
             $this->request->getSession()->write('newSkillsKnowledges', $newSkills);
             $this->request = $this->request->withData('Knowledges.skills._ids', $existingSkills);
 
@@ -76,7 +68,7 @@ class KnowledgesController extends AdminAppController
                 $newSkills = $this->request->getSession()->read('newSkillsKnowledges');
                 if (!empty($newSkills)) {
                     // save new skills
-                    $addedSkillIds = $this->Skill->addSkills($newSkills, $this->loggedUser->isAdmin(), $this->loggedUser->uid);
+                    $addedSkillIds = $skillsTable->addSkills($newSkills, $this->loggedUser->isAdmin(), $this->loggedUser->uid);
                     // save id associations to knowledge
                     $this->request = $this->request->withData('Knowledges.skills._ids', array_merge($this->request->getData('Knowledges.skills._ids'), $addedSkillIds));
                     $patchedEntity = $knowledgesTable->getPatchedEntityForAdminEdit($knowledge, $this->request->getData());
@@ -93,11 +85,12 @@ class KnowledgesController extends AdminAppController
 
         $this->set('knowledge', $knowledge);
 
-        $this->Category = $this->getTableLocator()->get('Categories');
-        $this->set('categories', $this->Category->getForDropdown(APP_ON));
+        /** @var \App\Model\Table\CategoriesTable */
+        $categoriesTable = $this->getTableLocator()->get('Categories');
+        $this->set('categories', $categoriesTable->getForDropdown([APP_ON]));
 
-        $this->Skill = $this->getTableLocator()->get('Skills');
-        $skillsForDropdown = $this->Skill->getForDropdown(false);
+        /** @var \App\Model\Table\SkillsTable */
+        $skillsForDropdown = $skillsTable->getForDropdown(false);
         $this->set('skillsForDropdown', $skillsForDropdown);
 
     }
@@ -111,14 +104,15 @@ class KnowledgesController extends AdminAppController
         ];
         $conditions = array_merge($this->conditions, $conditions);
 
+        /** @var \App\Model\Table\KnowledgesTable */
         $knowledgesTable = $this->getTableLocator()->get('Knowledges');
         $query = $knowledgesTable->find('all',
-        conditions: $conditions,
-        contain: [
-            'Categories',
-            'OwnerUsers',
-            'Skills',
-        ]);
+            conditions: $conditions,
+            contain: [
+                'Categories',
+                'OwnerUsers',
+                'Skills',
+            ]);
 
         $objects = $this->paginate($query, [
             'order' => [

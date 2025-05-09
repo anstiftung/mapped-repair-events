@@ -6,13 +6,16 @@ namespace App\Test\Fixture;
 class InfoSheetsFixture extends AppFixture
 {
 
-    public array $records = [
-        [
-            'uid' => 7,
-            'status' => APP_ON,
-            'event_uid' => 6,
-            'category_id' => 87,
-        ],
-    ];
+    public function init(): void {
+        $this->records = [
+            [
+                'uid' => 7,
+                'status' => APP_ON,
+                'event_uid' => 6,
+                'category_id' => 87,
+            ], 
+        ];
+        parent::init();
+    }
 }
 ?>

@@ -9,30 +9,25 @@ use App\Model\Table\PagesTable;
 class PagesController extends AdminAppController
 {
 
-    public PagesTable $Page;
-    
-    public function initialize(): void
-    {
-        parent::initialize();
-        // keep that because of AppController::stripTagsFromFields()
-        $this->Page = $this->getTableLocator()->get('Pages');
-    }
-
     public function insert(): void
     {
         $page = [
             'name' => 'Neue Seite von ' . $this->loggedUser->name,
             'url' => StringComponent::createRandomString(6)
         ];
-        $entity = $this->Page->newEntity($page);
-        $page = $this->Page->save($entity);
+        /** @var \App\Model\Table\PagesTable */
+        $pagesTable = $this->getTableLocator()->get('Pages');
+        $entity = $pagesTable->newEntity($page);
+        $page = $pagesTable->save($entity);
         $this->AppFlash->setFlashMessage('Seite erfolgreich erstellt. UID: ' . $page->uid); // uid for fixture
         $this->redirect($this->getReferer());
     }
 
     public function edit(int $uid): void
     {
-        $page = $this->Page->find('all',
+        /** @var \App\Model\Table\PagesTable */
+        $pagesTable = $this->getTableLocator()->get('Pages');
+        $page = $pagesTable->find('all',
         conditions: [
             'Pages.uid' => $uid,
             'Pages.status >= ' . APP_DELETED
@@ -45,7 +40,7 @@ class PagesController extends AdminAppController
             throw new NotFoundException;
         }
 
-        $this->set('pagesForSelect', $this->Page->getForSelect($page->uid));
+        $this->set('pagesForSelect', $pagesTable->getForSelect($page->uid));
         $this->set('uid', $page->uid);
 
         $this->setReferer();
@@ -53,7 +48,7 @@ class PagesController extends AdminAppController
 
         if (!empty($this->request->getData())) {
 
-            $patchedEntity = $this->Page->getPatchedEntityForAdminEdit($page, $this->request->getData());
+            $patchedEntity = $pagesTable->getPatchedEntityForAdminEdit($page, $this->request->getData());
             if (!($patchedEntity->hasErrors())) {
                 $patchedEntity = $this->patchEntityWithCurrentlyUpdatedFields($patchedEntity);
                 $this->saveObject($patchedEntity);
@@ -73,7 +68,9 @@ class PagesController extends AdminAppController
         ];
         $conditions = array_merge($this->conditions, $conditions);
 
-        $query = $this->Page->find('all',
+        /** @var \App\Model\Table\PagesTable */
+        $pagesTable = $this->getTableLocator()->get('Pages');
+        $query = $pagesTable->find('all',
         conditions: $conditions,
         contain: [
             'OwnerUsers',

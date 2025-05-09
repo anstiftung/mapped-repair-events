@@ -5,11 +5,18 @@ namespace App\Model\Traits;
 
 trait SearchExceptionsTrait {
 
+    /**
+     * @var string[]
+     */
     private array $searchExceptions = [
         'berlin',
         'münchen',
     ];
 
+    /**
+     * @param array<string|int, string> $changeableOrConditions
+     * @return array<string|int, string>
+     */
     public function getChangeableOrConditions(string $keyword, array $changeableOrConditions): array
     {
 

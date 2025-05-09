@@ -15,6 +15,7 @@ use App\Services\GeoService;
 use App\Model\Table\WorkshopsTable;
 use App\Test\Mock\GeoServiceMock;
 use Cake\Datasource\EntityInterface;
+use Cake\ORM\Table;
 
 class AppController extends Controller
 {
@@ -140,6 +141,9 @@ class AppController extends Controller
         }
     }
 
+    /**
+     * @return string[]
+     */
     protected function getPreviewConditions(string $modelName, string $url): array
     {
         $previewConditions = [];
@@ -171,6 +175,10 @@ class AppController extends Controller
         ]);
     }
 
+    /**
+     * @param array<string, string> $metaTags
+     * @return array<string, string>
+     */
     public function mergeCustomMetaTags(array $metaTags, EntityInterface $object): array
     {
         if (!empty($object->metatag) && !empty($object->metatag->title)) {
@@ -202,18 +210,29 @@ class AppController extends Controller
 
     protected function patchEntityWithCurrentlyUpdatedFields(EntityInterface $entity): EntityInterface
     {
-        $modelName = $this->modelName;
-        $entity = $this->$modelName->patchEntity($entity, [
+        $modelInstance = $this->getModelInstance($this->modelName);
+        $entity = $modelInstance->patchEntity($entity, [
             'currently_updated_by' => 0,
             'currently_updated_start' => new DateTime()
         ]);
         return $entity;
     }
 
+    protected function getModelInstance(string $modelName): Table
+    {
+        if (isset($this->$modelName)) {
+            $modelInstance = $this->$modelName;
+        } else {
+            $modelInstance = $this->getTableLocator()->get(Inflector::pluralize($modelName));
+        }
+        return $modelInstance;
+    }
+
     protected function stripTagsFromFields(EntityInterface $entity, string $modelName): EntityInterface
     {
+        $modelInstance = $this->getModelInstance($modelName);
         foreach ($entity->toArray() as $field => $data) {
-            if (in_array($field, $this->$modelName->allowedBasicHtmlFields)) {
+            if (in_array($field, $modelInstance->allowedBasicHtmlFields)) {
                 if (!is_null($data)) {
                     $entity->$field = strip_tags($data, ALLOWED_TAGS_USER);
                 }
@@ -242,8 +261,8 @@ class AppController extends Controller
 
     protected function isCurrentlyUpdated(int $uid): bool
     {
-        $modelName = $this->modelName;
-        $data = $this->$modelName->find('all',
+        $modelInstance = $this->getModelInstance($this->modelName);
+        $data = $modelInstance->find('all',
             conditions: [
                 $this->pluralizedModelName . '.uid' => $uid,
                 $this->pluralizedModelName . '.status >= ' . APP_DELETED,
@@ -274,8 +293,8 @@ class AppController extends Controller
             'currently_updated_by' => $this->isLoggedIn() ? $this->loggedUser->uid : 0,
             'currently_updated_start' => new DateTime()
         ];
-        $entity = $this->$modelName->patchEntity($data, $saveData);
-        $this->$modelName->save($entity);
+        $entity = $modelInstance->patchEntity($data, $saveData);
+        $modelInstance->save($entity);
 
         return false;
     }

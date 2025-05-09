@@ -10,6 +10,10 @@ class PagesTable extends AppTable
 {
 
     public string $name_de = 'Seite';
+
+    /**
+     * @var array<int, string>
+     */
     private array $flattenedArray = [];
 
     public function initialize(array $config): void
@@ -38,6 +42,10 @@ class PagesTable extends AppTable
         return $validator;
     }
 
+    /**
+     * @param \App\Model\Entity\Page[] $items
+     * @return array<int, string>
+     */
     private function flattenNestedArrayWithChildren(SelectQuery|array $items, string $separator = ''): array
     {
         foreach ($items as $item) {
@@ -57,6 +65,9 @@ class PagesTable extends AppTable
         return $this->flattenedArray;
     }
 
+    /**
+     * @param array<string|int, string|int> $conditions
+     */
     public function getThreaded(array $conditions = []): SelectQuery
     {
         $pages = $this->find('threaded',
@@ -70,6 +81,9 @@ class PagesTable extends AppTable
         return $pages;
     }
 
+    /**
+     * @return array<int, string>
+     */
     public function getForSelect(?int $excludePageId = null): array
     {
         $conditions = [];

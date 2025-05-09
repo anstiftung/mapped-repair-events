@@ -20,7 +20,10 @@ class Funding extends Entity
 
     const MAX_FUNDING_SUM = 3000;
     
-    public static function getRenderedFields(array $fields, string $entityName, FormHelper $formHelper, bool $disabled, ? EntityInterface $entity = null): string
+    /**
+     * @param array<string|int, mixed> $fields
+     */
+    public static function getRenderedFields(array $fields, string $entityName, FormHelper $formHelper, bool $disabled, ?EntityInterface $entity = null): string
     {
         $renderedFields = '';
         $fieldsToBeFormattedWithToDigits = ['amount'];
@@ -64,6 +67,9 @@ class Funding extends Entity
         return $total;
     }
 
+    /**
+     * @return array<string, array<int, \App\Model\Entity\Fundingbudgetplan>>
+     */
     public function _getGroupedValidBudgetplans(): array
     {
         $result = [];
@@ -76,6 +82,9 @@ class Funding extends Entity
         return $result;
     }
 
+    /**
+     * @return array<string, array<int, \App\Model\Entity\Fundingreceiptlist>>
+     */
     public function _getGroupedValidReceiptlists(): array
     {
         $result = [];
@@ -104,6 +113,9 @@ class Funding extends Entity
         return $this->budgetplan_total_with_limit - $this->receiptlist_total;
     }
 
+    /**
+     * @return array<int, float>
+     */
     public function _getGroupedValidBudgetplansTotals(): array
     {
         $result = [];
@@ -117,6 +129,9 @@ class Funding extends Entity
         return $result;
     }
 
+    /**
+     * @return array<int, float>
+     */
     public function _getGroupedValidReceiptlistsTotals(): array
     {
         $result = [];

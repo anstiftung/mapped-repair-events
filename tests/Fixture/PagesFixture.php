@@ -6,15 +6,18 @@ namespace App\Test\Fixture;
 class PagesFixture extends AppFixture
 {
 
-    public array $records = [
-        [
-            'uid' => 5,
-            'name' => 'Test Page',
-            'text' => '<b>some html</b>',
-            'url' => 'test-page',
-            'status' => APP_ON
-        ]
-    ];
+    public function init(): void {
+        $this->records = [
+            [
+                'uid' => 5,
+                'name' => 'Test Page',
+                'text' => '<b>some html</b>',
+                'url' => 'test-page',
+                'status' => APP_ON
+            ]
+        ];
+        parent::init();
+    }
 
 }
 ?>

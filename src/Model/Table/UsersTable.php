@@ -21,6 +21,9 @@ class UsersTable extends AppTable
 
     public string  $name_de = 'User';
 
+    /**
+     * @var string[]
+     */
     public array $allowedBasicHtmlFields = [
         'street'
     ];
@@ -152,6 +155,9 @@ class UsersTable extends AppTable
         }
     }
 
+    /**
+     * @param array<int, string> $groups
+     */
     private function addGroupsValidation(Validator $validator, array $groups, bool $multiple): Validator
     {
         $validator->add('groups', 'checkForAllowedGroups', [
@@ -211,6 +217,9 @@ class UsersTable extends AppTable
         return $validator;
     }
 
+    /**
+     * @return \App\Model\Entity\Workshop[]
+     */
     public function getWorkshopsWhereUserIsLastOrgaUser(SelectQuery $workshops): array
     {
         $lastOrgaWorkshops = [];
@@ -233,6 +242,9 @@ class UsersTable extends AppTable
         return $lastOrgaWorkshops;
     }
 
+    /**
+     * @param \App\Model\Entity\Workshop[] $workshops
+     */
     private function getLastOrgaValidationErrorMessage(array $workshops): string
     {
         $workshopLinks = [];
@@ -404,16 +416,25 @@ class UsersTable extends AppTable
         return $validator;
     }
 
+    /**
+     * @param array<string, mixed> $context
+     */
     public function newPasswordEqualsValidator(string $value, array $context): bool
     {
         return $context['data']['password_new_1'] == $context['data']['password_new_2'];
     }
 
+    /**
+     * @param array<string, mixed> $context
+     */
     public function newPasswordDiffersToOldValidator(string $value, array $context): bool
     {
         return $context['data']['password_new_1'] != $context['data']['password'];
     }
 
+    /**
+     * @param array<string, string> $options
+     */
     public function findAuth(SelectQuery $query, array $options): SelectQuery
     {
         $query->where([
@@ -426,6 +447,9 @@ class UsersTable extends AppTable
         return $query;
     }
 
+    /**
+     * @return array<int, string>
+     */
     public function getForDropdown(): array
     {
         $users = $this->find('all',

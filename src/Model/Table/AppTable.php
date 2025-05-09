@@ -14,6 +14,9 @@ use ArrayObject;
 abstract class AppTable extends Table
 {
 
+    /**
+     * @var string[]
+     */
     public array $allowedBasicHtmlFields = [];
 
     public ?int $loggedUserUid = 0;
@@ -88,6 +91,9 @@ abstract class AppTable extends Table
         return $validator;
     }
 
+    /**
+     * @param array<string|int, mixed> $data
+     */
     public function getPatchedEntityForAdminEdit(EntityInterface $entity, array $data): EntityInterface
     {
         $isAdmin = Router::getRequest()?->getAttribute('identity')?->isAdmin();

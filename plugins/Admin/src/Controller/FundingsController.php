@@ -143,6 +143,9 @@ class FundingsController extends AdminAppController
 
     }
 
+    /**
+     * @return string[]
+     */
     private function getCsvHeader(): array
     {
         return [

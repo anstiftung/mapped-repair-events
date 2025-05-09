@@ -22,11 +22,14 @@ class User extends Entity implements IdentityInterface
         $this->privatizeData($this);
     }
 
-    public function getIdentifier(): array|string|int|null
+    public function getIdentifier(): string|int|null
     {
         return $this->get('uid');
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getOriginalData(): ArrayAccess|array
     {
         $this->revertPrivatizeData();
@@ -49,12 +52,6 @@ class User extends Entity implements IdentityInterface
     {
         $groupsTable = TableRegistry::getTableLocator()->get('Groups');
         return $groupsTable->isRepairhelper($this);
-    }
-
-    public function IsInGroup(array $groups): bool
-    {
-        $groupsTable = TableRegistry::getTableLocator()->get('Groups');
-        return $groupsTable->isInGroup($this, $groups);
     }
 
     /**

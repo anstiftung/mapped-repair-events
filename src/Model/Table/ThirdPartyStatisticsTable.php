@@ -15,24 +15,26 @@ class ThirdPartyStatisticsTable extends Table
         parent::initialize($config);
     }
 
+    /**
+     * @return array<int, \App\Model\Entity\ThirdPartyStatistic>
+     */
     public function getSumsByDate(string $dateFrom, string $dateTo): array
     {
-
         $query = $this->find();
-        $dateFrom = new DateTime($dateFrom);
-        $dateTo = new DateTime($dateTo);
-        $query->where(['ThirdPartyStatistics.date_from >= ' => $dateFrom]);
-        $query->where(['ThirdPartyStatistics.date_to <= ' => $dateTo]);
+        $query->where(['ThirdPartyStatistics.date_from >= ' => new DateTime($dateFrom)]);
+        $query->where(['ThirdPartyStatistics.date_to <= ' => new DateTime($dateTo)]);
         $query->select(
             ['sumRepaired' => $query->func()->sum('ThirdPartyStatistics.repaired')]
         );
         $query->select('ThirdPartyStatistics.category_id');
         $query->groupBy('ThirdPartyStatistics.category_id');
-
         return $query->toArray();
-
     }
 
+    /**
+     * @param \App\Model\Entity\ThirdPartyStatistic[] $sums
+     * @return array<int, float>
+     */
     public function sumUpForMainCategory(array $sums): array
     {
         $preparedSums = [];
@@ -58,6 +60,10 @@ class ThirdPartyStatisticsTable extends Table
         return $preparedSums;
     }
 
+    /**
+     * @param array<int, float> $sums
+     * @return list<array<string, mixed>>
+     */
     public function bindCategoryDataToSums(array $sums): array
     {
         $preparedSums = [];
@@ -71,28 +77,10 @@ class ThirdPartyStatisticsTable extends Table
             $preparedSums[] = [
                 'name' => $category->name,
                 'id' => $category->id,
-                'repaired' => $sum
+                'repaired' => $sum,
             ];
         }
         return $preparedSums;
-    }
-
-    public function getCategoryNames(array $sums): array
-    {
-        $result = [];
-        foreach($sums as $sum) {
-            $result[] = $sum['name'];
-        }
-        return $result;
-    }
-
-    public function getSumsRepaired(array $sums): array
-    {
-        $result = [];
-        foreach($sums as $sum) {
-            $result[] = $sum['repaired'];
-        }
-        return $result;
     }
 
 }

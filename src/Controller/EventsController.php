@@ -425,10 +425,15 @@ class EventsController extends AppController
         }
     }
 
+    /**
+     * @param \App\Model\Entity\Event[] $events
+     * @return array<string, \App\Model\Entity\Event[]|string[]>
+     */
     private function _edit(SelectQuery|array $events, bool $isEditMode): array
     {
+
         $categoriesTable = $this->getTableLocator()->get('Categories');
-        $this->set('categories', $categoriesTable->getForDropdown(APP_ON));
+        $this->set('categories', $categoriesTable->getForDropdown([APP_ON]));
 
         $this->set('uid', $events[0]->uid);
 
@@ -781,6 +786,7 @@ class EventsController extends AppController
 
     /**
      * combines multiple events to one marker
+     * @return array<int, mixed>
      */
     private function combineEventsForMap(PaginatedInterface|SelectQuery $events): array
     {

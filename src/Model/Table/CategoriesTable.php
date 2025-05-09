@@ -15,7 +15,11 @@ class CategoriesTable extends Table
 
     use ApproveMultipleTrait;
 
+    /**
+     * @var string[]
+     */
     public array $allowedBasicHtmlFields = [];
+
     public string $name_de = 'Kategorie';
 
     public function initialize(array $config): void
@@ -98,6 +102,9 @@ class CategoriesTable extends Table
         return (float) $result;
     }
 
+    /**
+     * @return array<array<string>>
+     */
     public function getForSubcategoryDropdown(): array
     {
         $categories = $this->find('threaded',
@@ -144,6 +151,9 @@ class CategoriesTable extends Table
         return $repairedCount * $carbonFootprintFactor * $savedEnergyPart;
     }
 
+    /**
+     * @return array<array<string, string|int|float>>
+     */
     public function getCategoriesForStatisticsGlobal(): array
     {
 
@@ -155,7 +165,7 @@ class CategoriesTable extends Table
                 'id' => $category->id,
                 'name' => $category->name,
                 'carbon_footprint' => $category->carbon_footprint,
-                'material_footprint' => $category->material_footprint
+                'material_footprint' => $category->material_footprint,
             ];
         }
 
@@ -171,7 +181,7 @@ class CategoriesTable extends Table
                 'id' => $category->id,
                 'name' => $category->name,
                 'carbon_footprint' => $category->carbon_footprint,
-                'material_footprint' => $category->material_footprint
+                'material_footprint' => $category->material_footprint,
             ];
         }
 
@@ -180,6 +190,9 @@ class CategoriesTable extends Table
         return $categories;
     }
 
+    /**
+     * @return array<int, \App\Model\Entity\Category>
+     */
     public function getMainCategoriesForFrontendIndexedById(): array
     {
         return $this->getMainCategoriesForFrontend()->formatResults(function ($results) {
@@ -200,7 +213,11 @@ class CategoriesTable extends Table
         return $categories;
     }
 
-    public function getForDropdown(int|array $visibleOnPlatform): array
+    /**
+     * @param array<int> $visibleOnPlatform
+     * @return array<int, string>
+     */
+    public function getForDropdown(array $visibleOnPlatform): array
     {
 
         $categories = $this->find('all',

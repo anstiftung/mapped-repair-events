@@ -4,10 +4,8 @@ namespace Admin\Controller;
 
 use App\Controller\AppController;
 use Cake\Event\EventInterface;
-use Cake\ORM\Query;
 use Cake\ORM\Query\SelectQuery;
 use Cake\Utility\Inflector;
-use Cake\ORM\Entity;
 use Cake\Datasource\EntityInterface;
 
 class AdminAppController extends AppController
@@ -15,6 +13,9 @@ class AdminAppController extends AppController
 
     public array $paginate;
 
+    /**
+     * @var array<string, array<string, mixed>>
+     */
     public array $searchOptions = [];
 
     public bool $searchName = true;
@@ -25,10 +26,19 @@ class AdminAppController extends AppController
 
     public bool $searchStatus = true;
 
+    /**
+     * @var array<string, array<string, mixed>>
+     */
     public array $conditions = [];
 
+    /**
+    * @var array<string, string|callable>
+     */
     public array $afterFindCallbacks = [];
 
+    /**
+     * @var array<string, mixed>
+     */
     public array $matchings = [];
 
     public function initialize(): void
@@ -173,16 +183,19 @@ class AdminAppController extends AppController
 
     protected function saveObject(EntityInterface $entity): void
     {
-        $modelName = $this->modelName;
-        $entity = $this->stripTagsFromFields($entity, $modelName);
-        if ($this->$modelName->save($entity)) {
-            $this->AppFlash->setFlashMessage($this->$modelName->name_de . ' erfolgreich gespeichert.');
+        $modelInstance = $this->getModelInstance($this->modelName);
+        $entity = $this->stripTagsFromFields($entity, $this->modelName);
+        if ($modelInstance->save($entity)) {
+            $this->AppFlash->setFlashMessage($modelInstance->name_de . ' erfolgreich gespeichert.');
             $this->redirect($this->getPreparedReferer());
         } else {
-            $this->AppFlash->setFlashError($this->$modelName->name_de . ' wurde <b>nicht</b> gespeichert. Bitte überprüfe das Formular.');
+            $this->AppFlash->setFlashError($modelInstance->name_de . ' wurde <b>nicht</b> gespeichert. Bitte überprüfe das Formular.');
         }
     }
 
+    /**
+     * @param array<string, array<string, mixed>> $searchOptions
+     */
     protected function addSearchOptions(array $searchOptions): void
     {
         $searchOptions = array_reverse($searchOptions);

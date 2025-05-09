@@ -11,6 +11,10 @@ abstract class PdfWriterService
 {
 
     protected mixed $pdfLibrary;
+
+    /**
+     * @var array<string, mixed>
+     */
     protected array $data = [];
     protected ?string $plugin = null;
     protected string $filename = '';
@@ -22,6 +26,9 @@ abstract class PdfWriterService
         return $this;
     }
 
+    /**
+     * @param array<string, mixed> $data
+     */
     public function setData(array $data): static
     {
         $this->data = array_merge($this->data, $data);
@@ -44,6 +51,9 @@ abstract class PdfWriterService
         return $this;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getData(): array
     {
         return $this->data;

@@ -81,7 +81,9 @@ abstract class AppTcpdfService extends TCPDF
         }
     }
 
-
+    /**
+     * @param array<string, mixed> $data
+     */
     public function getFundingReceiptlistAsTable(
         array $data,
         string $width = '100%',
@@ -134,6 +136,9 @@ abstract class AppTcpdfService extends TCPDF
         return $html;
     }
     
+    /**
+     * @param array<string, mixed> $data
+     */
     public function getFundingDataAsTable(array $data, string $width = '100%', string $widthColumnA = '30%', string $widthColumnB = '70%', string $alignmentColumnA = 'left', string $alignmentColumnB = 'left'): string
     {
         $html = '<table width="' . $width . '" border="0" cellpadding="0">';

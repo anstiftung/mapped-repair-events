@@ -22,14 +22,12 @@ use App\Model\Entity\Worknews;
 use App\Mailer\AppMailer;
 use App\Model\Entity\Workshop;
 use Cake\Http\Response;
-use Cake\Datasource\EntityInterface;
 use App\Model\Entity\User;
 
 class WorkshopsController extends AppController
 {
 
     public WorkshopsTable $Workshop;
-    public CategoriesTable $Category;
     public CountriesTable $Country;
     public UsersTable $User;
     public InfoSheetsTable $InfoSheet;
@@ -102,8 +100,10 @@ class WorkshopsController extends AppController
         $this->User = $this->getTableLocator()->get('Users');
         $this->Workshop = $this->getTableLocator()->get('Workshops');
         $this->Country = $this->getTableLocator()->get('Countries');
-        $this->Category = $this->getTableLocator()->get('Categories');
-        $this->set('categories', $this->Category->getForDropdown(APP_ON));
+
+        /** @var \App\Model\Table\CategoriesTable */
+        $categoriesTable = $this->getTableLocator()->get('Categories');
+        $this->set('categories', $categoriesTable->getForDropdown([APP_ON]));
 
         $this->set('uid', $workshop->uid);
 
@@ -199,6 +199,10 @@ class WorkshopsController extends AppController
         }
     }
 
+    /**
+     * @param \App\Model\Entity\Category[]|null $categories
+     * @return string[]
+     */
     private function getPreparedCategoryIcons(?array $categories): array
     {
         $preparedCategories = [];
@@ -240,14 +244,15 @@ class WorkshopsController extends AppController
         }
         $categoryIds = array_unique($categoryIds);
 
-        $this->Category = $this->getTableLocator()->get('Categories');
+        /** @var \App\Model\Table\CategoriesTable */
+        $categoriesTable = $this->getTableLocator()->get('Categories');
         $categories = [];
-        $workshopsAssociation = $this->Category->getAssociation('Workshops');
+        $workshopsAssociation = $categoriesTable->getAssociation('Workshops');
         $workshopsAssociation->setConditions([
             'Workshops.status' => APP_ON,
         ]);
         if (!empty($categoryIds)) {
-            $categories = $this->Category->find('all',
+            $categories = $categoriesTable->find('all',
             conditions: [
                 'Categories.status' => APP_ON,
                 'Categories.id IN' => $categoryIds,
@@ -873,8 +878,9 @@ class WorkshopsController extends AppController
         // mobile version does not include calendar and only shows bound events
         // it's the calendar component that fetches the workshop's events
         if ($this->request->getSession()->read('isMobile')) {
-            $this->Category = $this->getTableLocator()->get('Categories');
-            $categories = $this->Category->find('all');
+            /** @var \App\Model\Table\CategoriesTable */
+            $categoriesTable = $this->getTableLocator()->get('Categories');
+            $categories = $categoriesTable->find('all');
             $contain[] = 'Events.Categories';
         }
 
@@ -982,6 +988,9 @@ class WorkshopsController extends AppController
 
     }
 
+    /**
+     * @return array<string, string>
+     */
     private function checkType(string $type): array
     {
         if ($type != 'user') {

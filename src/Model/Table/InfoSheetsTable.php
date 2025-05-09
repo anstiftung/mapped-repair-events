@@ -282,26 +282,41 @@ class InfoSheetsTable extends AppTable
         return $query;
     }
 
+    /**
+     * @param array<string, mixed> $context
+     */
     private function isSubcategoryCreateModeEnabled(array $context): bool
     {
         return !empty($context['data']) && $context['data']['category_id'] == -1;
     }
 
+    /**
+     * @param array<string, mixed> $context
+     */
     private function isBrandCreateModeEnabled(array $context): bool
     {
         return !empty($context['data']) && $context['data']['brand_id'] == -1;
     }
 
+    /**
+     * @param array<string, mixed> $context
+     */
     private function isDefectFound(array $context): bool
     {
         return !empty($context['data']) && !($context['data']['defect_found_reason'] == 3 && $context['data']['no_repair_reason'] == 15);
     }
 
+    /**
+     * @param array<string, mixed> $context
+     */
     private function isRepairPostponed(array $context): bool
     {
         return !empty($context['data']) && $context['data']['defect_found_reason'] == 2;
     }
 
+    /**
+     * @param array<string, mixed> $context
+     */
     private function isNoRepair(array $context): bool
     {
         return !empty($context['data']) && $context['data']['defect_found_reason'] == 3;

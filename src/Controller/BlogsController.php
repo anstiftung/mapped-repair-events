@@ -90,6 +90,9 @@ class BlogsController extends AppController
 
     }
 
+    /**
+     * @return list<array<string, mixed>>
+     */
     private function preparePostsForFeed(SelectQuery $posts): array
     {
         $items = [];

@@ -8,15 +8,6 @@ use App\Model\Table\OrdsCategoriesTable;
 class OrdsCategoriesController extends AdminAppController
 {
 
-    public OrdsCategoriesTable $OrdsCategory;
-    
-    public function initialize(): void
-    {
-        parent::initialize();
-        // keep that because of AppController::stripTagsFromFields()
-        $this->OrdsCategory = $this->getTableLocator()->get('OrdsCategories');
-    }
-
     public function insert(): void
     {
         $ordsCategory = [
@@ -24,15 +15,19 @@ class OrdsCategoriesController extends AdminAppController
             'owner' => $this->isLoggedIn() ? $this->loggedUser->uid : 0,
             'status' => APP_ON,
         ];
-        $entity = $this->OrdsCategory->newEntity($ordsCategory);
-        $this->OrdsCategory->save($entity);
+        /** @var \App\Model\Table\OrdsCategoriesTable */
+        $ordsCategoriesTable = $this->getTableLocator()->get('OrdsCategories');
+        $entity = $ordsCategoriesTable->newEntity($ordsCategory);
+        $ordsCategoriesTable->save($entity);
         $this->AppFlash->setFlashMessage('ORDS-Kategorie erfolgreich erstellt.');
         $this->redirect($this->getReferer());
     }
 
     public function edit(int $id): void
     {
-        $ordsCategory = $this->OrdsCategory->find('all', conditions: [
+        /** @var \App\Model\Table\OrdsCategoriesTable */
+        $ordsCategoriesTable = $this->getTableLocator()->get('OrdsCategories');
+        $ordsCategory = $ordsCategoriesTable->find('all', conditions: [
             'OrdsCategories.id' => $id,
             'OrdsCategories.status >= ' . APP_DELETED
         ])->first();
@@ -47,7 +42,7 @@ class OrdsCategoriesController extends AdminAppController
 
         if (!empty($this->request->getData())) {
 
-            $patchedEntity = $this->OrdsCategory->patchEntity(
+            $patchedEntity = $ordsCategoriesTable->patchEntity(
                 $ordsCategory,
                 $this->request->getData(),
                 ['validate' => true]
@@ -76,7 +71,9 @@ class OrdsCategoriesController extends AdminAppController
         ];
         $conditions = array_merge($this->conditions, $conditions);
 
-        $query = $this->OrdsCategory->find('all',
+        /** @var \App\Model\Table\OrdsCategoriesTable */
+        $ordsCategoriesTable = $this->getTableLocator()->get('OrdsCategories');
+        $query = $ordsCategoriesTable->find('all',
         conditions: $conditions,
         contain: [
             'OwnerUsers',

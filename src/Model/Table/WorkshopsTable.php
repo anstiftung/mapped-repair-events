@@ -24,6 +24,9 @@ class WorkshopsTable extends AppTable
 
     public string $name_de = '';
 
+    /**
+     * @var string[]
+     */
     public array $allowedBasicHtmlFields = [
         'additional_contact',
         'opening_hours',
@@ -146,18 +149,21 @@ class WorkshopsTable extends AppTable
         return $validator;
     }
 
+    /**
+     * @return array<int, int>
+     */
     public function getProvinceCounts(): array
     {
         
         $query = $this->find('all')
-        ->select([
-            'province_id',
-            'count' => $this->find()->func()->count('*')
-        ])
-        ->where([
-            $this->aliasField('status') => APP_ON,
-        ])
-        ->groupBy($this->aliasField('province_id'));
+            ->select([
+                'province_id',
+                'count' => $this->find()->func()->count('*')
+            ])
+            ->where([
+                $this->aliasField('status') => APP_ON,
+            ])
+            ->groupBy($this->aliasField('province_id'));
         $provinces = $query->toArray();
 
         $provincesMap = [];
@@ -167,6 +173,9 @@ class WorkshopsTable extends AppTable
         return $provincesMap;
     }
 
+    /**
+     * @param array<string> $additionalContains
+     */
     public function getWorkshopsForAssociatedUser(int $userUid, int $workshopStatus, array $additionalContains = []): SelectQuery
     {
         $workshops = $this->getWorkshopsWithUsers($workshopStatus, $additionalContains);
@@ -185,6 +194,9 @@ class WorkshopsTable extends AppTable
         return $workshops;
     }
 
+    /**
+     * @return array<int, int>
+     */
     public function transformForDropdown(SelectQuery $workshops): array
     {
         $result = [];
@@ -194,6 +206,9 @@ class WorkshopsTable extends AppTable
         return $result;
     }
 
+    /**
+     * @return array<string|int, mixed>
+     */
     public function getFundingContain(): array
     {
         return [
@@ -212,6 +227,9 @@ class WorkshopsTable extends AppTable
         ];
     }
 
+    /**
+     * @param array<string> $additionalContains
+     */
     public function getWorkshopsWithUsers(int $workshopStatus, array $additionalContains = []): SelectQuery
     {
         $workshops = $this->find('all',
@@ -256,6 +274,9 @@ class WorkshopsTable extends AppTable
 
     }
 
+    /**
+     * @return \App\Model\Entity\User[]
+     */
     public function getTeam(Workshop $workshop): array
     {
         return $workshop->users;
@@ -263,6 +284,7 @@ class WorkshopsTable extends AppTable
 
     /**
      * returns owner and approved users_workshops users with group $orgaTeamGroups
+     * @return \App\Model\Entity\User[]
      */
     public function getOrgaTeam(Workshop $workshop): array
     {
@@ -386,6 +408,9 @@ class WorkshopsTable extends AppTable
         return !empty($workshop->users_workshops);
     }
 
+    /**
+     * @return array<int, string>
+     */
     public function getForDropdown(): array
     {
         $workshops = $this->find('all',

@@ -16,9 +16,24 @@ use Cake\I18n\Date;
 
 class MyHtmlHelper extends HtmlHelper {
 
+    /**
+     * @var array<string, string>
+     */
     public array $selectedMain = [];
+
+    /**
+     * @var array<string, string>
+     */
     public array $selectedSub1 = [];
+
+    /**
+     * @var array<string, string>
+     */
     public array $selectedSub2 = [];
+
+    /**
+     * @var array<string, string>
+     */
     public array $selectedSub3 = [];
 
     public bool $selectParentElements = true;
@@ -41,6 +56,9 @@ class MyHtmlHelper extends HtmlHelper {
         return false;
     }
 
+    /**
+     * @return array<int, string>
+     */
     public function getWorkshopStatisticTypes(): array
     {
         return [
@@ -50,6 +68,9 @@ class MyHtmlHelper extends HtmlHelper {
         ];
     }
 
+    /**
+     * @return array<string, string>
+     */
     public function getMenuTypes(): array
     {
         return [
@@ -161,6 +182,9 @@ class MyHtmlHelper extends HtmlHelper {
         return round($n * $x) / $x;
     }
 
+    /**
+     * @return array<string, string>
+     */
     function getGenders(): array
     {
         return [
@@ -299,6 +323,9 @@ class MyHtmlHelper extends HtmlHelper {
         return $this->urlFundings() . '/delete/' . $fundingId;
     }
 
+    /**
+     * @return array<array{"url": string, "name": string}>
+     */
     function getUserBackendNaviLinks(int $userUid, bool $isMyProfile, bool $isOrga): array
     {
         $result = [];
@@ -326,8 +353,7 @@ class MyHtmlHelper extends HtmlHelper {
      */
     function replaceAddressAbbreviations(string $string): string
     {
-        $string = preg_replace('/(s)tr\./i', '$1traße', $string);
-        return $string;
+        return preg_replace('/(s)tr\./i', '$1traße', $string);
     }
 
     function getFacebookUrl(string $username): string
@@ -630,6 +656,10 @@ class MyHtmlHelper extends HtmlHelper {
     {
         return '/reparaturwissen';
     }
+
+    /**
+     * @return array<string>
+     */
     public function getPostTypesWithPreview(): array
     {
         return [
@@ -690,33 +720,42 @@ class MyHtmlHelper extends HtmlHelper {
         return '/users/add';
     }
 
+    /**
+     * @return array<int, string>
+     */
     function getUserGroupsForRegistration(): array
     {
-        $userGroups = [
+        return [
             GROUPS_ORGA         => 'Organisator*in',
             GROUPS_REPAIRHELPER => Configure::read('AppConfig.repairHelperName'),
         ];
-        return $userGroups;
     }
 
+    /**
+     * @return array<int, string>
+     */
     function getUserGroupsForWorkshopDetail(): array
     {
-        $userGroups = [
+        return [
             GROUPS_ADMIN        => 'Admin',
             GROUPS_ORGA         => 'Organisator*in',
             GROUPS_REPAIRHELPER => Configure::read('AppConfig.repairHelperName'),
         ];
-        return $userGroups;
     }
 
+    /**
+     * @return array<int, string>
+     */
     function getUserGroups(): array
     {
-        $userGroups = [
+        return [
             GROUPS_ADMIN       => 'Admin'
         ];
-        return $userGroups;
     }
 
+    /**
+     * @return array<int, string>
+     */
     function getUserGroupsForUserEdit(bool $isAdmin = false): array
     {
         $userGroups = [];
@@ -741,6 +780,9 @@ class MyHtmlHelper extends HtmlHelper {
         return number_format($bytes, $precision, ',', '.') . ' ' . $units[$pow];
     }
 
+    /**
+     * @return string[]
+     */
     function getPhotoDimensions(string $dimension): array|false
     {
         if (!preg_match('/x/', $dimension)) return false;
@@ -748,7 +790,8 @@ class MyHtmlHelper extends HtmlHelper {
     }
 
     /**
-     * creates navigation with up to 2 sublevels
+     * @param array<string, string|array<mixed>> $menuElement
+     * @param array<string, string|array<mixed>> $mainMenuElement
      */
     function createMenuEntry(array $menuElement, ?array $mainMenuElement = null): string
     {
@@ -767,17 +810,9 @@ class MyHtmlHelper extends HtmlHelper {
             $htmlAttributes = array_merge($htmlAttributes, $menuElement['htmlAttributes']);
         }
         if ('/' . $this->here == $menuElement['url']) {
-
-            if (isset($htmlAttributes['class'])) {
-                // $htmlAttributes['class'] .= ' selected';
-            } else {
-                // $htmlAttributes['class'] = ' selected';
-            }
-
             if ($menuElement['level'] == 'main') {
                 $this->selectedMain = $menuElement;
             }
-
             if ($menuElement['level'] == 'sub1') {
                 $this->selectedMain = $mainMenuElement;
                 $this->selectedSub1 = $menuElement;

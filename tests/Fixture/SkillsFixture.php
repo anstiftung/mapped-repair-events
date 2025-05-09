@@ -6,12 +6,16 @@ namespace App\Test\Fixture;
 class SkillsFixture extends AppFixture
 {
 
-      public array $records = [
-          [
+    public function init(): void {
+        $this->records = [
+           [
               'id' => 1,
               'name' => 'Open Source',
               'status' => 1,
-          ]
-      ];
+           ]
+        ];
+        parent::init();
+    }
+
 }
 ?>

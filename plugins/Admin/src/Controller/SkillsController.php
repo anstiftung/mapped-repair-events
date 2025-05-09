@@ -8,15 +8,6 @@ use Cake\Event\EventInterface;
 
 class SkillsController extends AdminAppController
 {
-    
-    public SkillsTable $Skill;
-
-    public function initialize(): void
-    {
-        parent::initialize();
-        // keep that because of AppController::stripTagsFromFields()
-        $this->Skill = $this->getTableLocator()->get('Skills');
-    }
 
     public function beforeFilter(EventInterface $event): void
     {
@@ -28,6 +19,8 @@ class SkillsController extends AdminAppController
     public function setApprovedMultiple(): void {
         $selectedIds = $this->request->getQuery('selectedIds', '');
         $selectedIds = explode(',', $selectedIds);
+
+        /** @var \App\Model\Table\SkillsTable */
         $skillsTable = $this->getTableLocator()->get('Skills');
         $affectedCount = $skillsTable->setApprovedMultiple($selectedIds);
         $this->AppFlash->setFlashMessage($affectedCount . ' Kenntnisse erfolgreich bestätigt.');
@@ -41,6 +34,8 @@ class SkillsController extends AdminAppController
             'owner' => $this->isLoggedIn() ? $this->loggedUser->uid : 0,
             'status' => APP_OFF
         ];
+
+        /** @var \App\Model\Table\SkillsTable */
         $skillsTable = $this->getTableLocator()->get('Skills');
         $entity = $skillsTable->newEntity($skill);
         $skill = $skillsTable->save($entity);
@@ -50,6 +45,7 @@ class SkillsController extends AdminAppController
 
     public function edit(int $id): void
     {
+        /** @var \App\Model\Table\SkillsTable */
         $skillsTable = $this->getTableLocator()->get('Skills');
         $skill = $skillsTable->find('all', conditions: [
             'Skills.id' => $id,
@@ -95,15 +91,16 @@ class SkillsController extends AdminAppController
         ];
         $conditions = array_merge($this->conditions, $conditions);
 
+        /** @var \App\Model\Table\SkillsTable */
         $skillsTable = $this->getTableLocator()->get('Skills');
         $query = $skillsTable->find('all',
-        conditions: $conditions,
-        contain: [
-            'OwnerUsers',
-        ],
-        order: [
-            'Skills.name' => 'ASC'
-        ]);
+            conditions: $conditions,
+            contain: [
+                'OwnerUsers',
+            ],
+            order: [
+                'Skills.name' => 'ASC'
+            ]);
 
         $objects = $this->paginate($query);
 

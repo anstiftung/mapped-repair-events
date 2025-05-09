@@ -9,6 +9,10 @@ use App\Controller\Component\StringComponent;
 
 trait UploadsTrait {
 
+    /**
+     * @param array<int|string, mixed> $associations
+     * @param array<string> $uploadTypes
+     */
     private function handleUpdateNewFundinguploadsWithIds(Funding $funding, array $associations, Funding $patchedEntity, array $uploadTypes): Funding
     {
         foreach($uploadTypes as $uploadTypeId => $uploadType) {
@@ -33,6 +37,11 @@ trait UploadsTrait {
         return $patchedEntity;
     }
 
+    /**
+     * @param array<int|string, mixed> $associations
+     * @param array<string, mixed> $newFundinguploads
+     * @param array<string> $uploadTypes
+     */
     private function handleDeleteFundinguploads(Funding $funding, array $associations, Funding $patchedEntity, array $newFundinguploads, array $uploadTypes): void
     {
 
@@ -73,6 +82,11 @@ trait UploadsTrait {
 
     }
 
+    /**
+     * @param array<int|string, mixed> $associations
+     * @param array<string> $uploadTypes
+     * @return array<string, list<array<string, mixed>>>
+     */
     private function handleNewFundinguploads(Funding $funding, array $associations, Funding $patchedEntity, array $uploadTypes): array
     {
         $newFundinguploads = [];

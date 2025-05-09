@@ -6,7 +6,8 @@ namespace App\Test\Fixture;
 class UsersFixture extends AppFixture
 {
 
-      public array $records = [
+    public function init(): void {
+        $this->records = [
           [
               'uid' => 1,
               'firstname' => 'John',
@@ -52,6 +53,9 @@ class UsersFixture extends AppFixture
               'created' => '2019-09-17 08:23:23',
               'modified' => '2019-09-17 08:23:23'
           ],
-      ];
+        ];
+        parent::init();
+    }
+
 }
 ?>

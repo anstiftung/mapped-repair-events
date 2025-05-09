@@ -50,6 +50,10 @@ class VerwendungsnachweisPdfWriterService extends PdfWriterService
 
     }
 
+    /**
+     * @param array<string|int, mixed> $definedFields
+     * @return array<string, array<string, mixed>>
+     */
     private function getPreparedFields(array $definedFields, Fundingusageproof $fundingusageproof): array
     {
         $preparedFields = [];
