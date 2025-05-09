@@ -12,6 +12,9 @@ class Workshop extends Entity
     const STATISTICS_SHOW_ALL = 1;
     const STATISTICS_SHOW_ONLY_CHART = 2;
 
+    /**
+     * @return string[]
+     */
     protected function _getFundingErrors(): array {
 
         $errors = [];

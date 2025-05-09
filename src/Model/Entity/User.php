@@ -22,11 +22,14 @@ class User extends Entity implements IdentityInterface
         $this->privatizeData($this);
     }
 
-    public function getIdentifier(): array|string|int|null
+    public function getIdentifier(): string|int|null
     {
         return $this->get('uid');
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getOriginalData(): ArrayAccess|array
     {
         $this->revertPrivatizeData();

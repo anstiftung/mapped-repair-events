@@ -40,6 +40,7 @@ class PagesTable extends AppTable
 
     /**
      * @param \App\Model\Entity\Page[] $items
+     * @return array<int, string>
      */
     private function flattenNestedArrayWithChildren(SelectQuery|array $items, string $separator = ''): array
     {
@@ -76,6 +77,9 @@ class PagesTable extends AppTable
         return $pages;
     }
 
+    /**
+     * @return array<int, string>
+     */
     public function getForSelect(?int $excludePageId = null): array
     {
         $conditions = [];

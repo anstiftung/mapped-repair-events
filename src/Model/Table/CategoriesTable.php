@@ -147,6 +147,9 @@ class CategoriesTable extends Table
         return $repairedCount * $carbonFootprintFactor * $savedEnergyPart;
     }
 
+    /**
+     * @return array<array<string, string|int|float>>
+     */
     public function getCategoriesForStatisticsGlobal(): array
     {
 
@@ -158,7 +161,7 @@ class CategoriesTable extends Table
                 'id' => $category->id,
                 'name' => $category->name,
                 'carbon_footprint' => $category->carbon_footprint,
-                'material_footprint' => $category->material_footprint
+                'material_footprint' => $category->material_footprint,
             ];
         }
 
@@ -174,7 +177,7 @@ class CategoriesTable extends Table
                 'id' => $category->id,
                 'name' => $category->name,
                 'carbon_footprint' => $category->carbon_footprint,
-                'material_footprint' => $category->material_footprint
+                'material_footprint' => $category->material_footprint,
             ];
         }
 
@@ -183,6 +186,9 @@ class CategoriesTable extends Table
         return $categories;
     }
 
+    /**
+     * @return array<int, \App\Model\Entity\Category>
+     */
     public function getMainCategoriesForFrontendIndexedById(): array
     {
         return $this->getMainCategoriesForFrontend()->formatResults(function ($results) {

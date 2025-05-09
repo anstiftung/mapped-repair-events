@@ -42,6 +42,7 @@ class SkillsTable extends Table
 
     /**
      * @param array<int|string>|string|null $associatedSkillIds
+     * @return array<int, string>
      */
     public function getNewSkillsFromRequest(array|string|null $associatedSkillIds): array
     {
@@ -56,6 +57,7 @@ class SkillsTable extends Table
 
     /**
      * @param array<int|string>|string|null $associatedSkillIds
+     * @return array<int, string>
      */
     public function getExistingSkillsFromRequest(array|string|null $associatedSkillIds): array
     {
@@ -70,7 +72,8 @@ class SkillsTable extends Table
 
     /**
      * @param array<int|string> $newSkills
-     */   
+     * @return array<int, string>
+     */
     public function addSkills(array $newSkills, bool $isAdmin, int $userUid): array
     {
 
