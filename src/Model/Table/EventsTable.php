@@ -18,6 +18,9 @@ class EventsTable extends AppTable
 
     public string $name_de = 'Termin';
 
+    /**
+     * @var string[]
+     */
     public array $allowedBasicHtmlFields = [
         'eventbeschreibung'
     ];

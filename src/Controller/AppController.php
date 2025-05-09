@@ -230,7 +230,6 @@ class AppController extends Controller
 
     protected function stripTagsFromFields(EntityInterface $entity, string $modelName): EntityInterface
     {
-    
         $modelInstance = $this->getModelInstance($modelName);
         foreach ($entity->toArray() as $field => $data) {
             if (in_array($field, $modelInstance->allowedBasicHtmlFields)) {

@@ -8,7 +8,11 @@ use Cake\Validation\Validator;
 class OrdsCategoriesTable extends Table
 {
 
+    /**
+     * @var string[]
+     */
     public array $allowedBasicHtmlFields = [];
+
     public string $name_de = 'ORDS-Kategorie';
 
     public function initialize(array $config): void

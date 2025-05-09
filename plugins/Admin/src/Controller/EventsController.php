@@ -3,8 +3,6 @@ declare(strict_types=1);
 namespace Admin\Controller;
 
 use Cake\Event\EventInterface;
-use App\Model\Table\EventsTable;
-use App\Model\Table\UsersTable;
 
 class EventsController extends AdminAppController
 {

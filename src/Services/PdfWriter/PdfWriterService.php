@@ -11,6 +11,10 @@ abstract class PdfWriterService
 {
 
     protected mixed $pdfLibrary;
+
+    /**
+     * @var array<string, mixed>
+     */
     protected array $data = [];
     protected ?string $plugin = null;
     protected string $filename = '';

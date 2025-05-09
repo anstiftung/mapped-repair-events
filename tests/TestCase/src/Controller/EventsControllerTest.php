@@ -29,6 +29,9 @@ class EventsControllerTest extends AppTestCase
     use LogFileAssertionsTrait;
     use QueueTrait;
 
+    /**
+     * @var array<string, mixed>
+     */
     private array $newEventData;
 
 	public function controllerSpy(EventInterface $event, ?Controller $controller = null): void

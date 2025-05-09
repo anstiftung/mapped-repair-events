@@ -15,7 +15,11 @@ class CategoriesTable extends Table
 
     use ApproveMultipleTrait;
 
+    /**
+     * @var string[]
+     */
     public array $allowedBasicHtmlFields = [];
+
     public string $name_de = 'Kategorie';
 
     public function initialize(array $config): void

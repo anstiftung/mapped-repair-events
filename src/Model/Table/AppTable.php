@@ -14,6 +14,9 @@ use ArrayObject;
 abstract class AppTable extends Table
 {
 
+    /**
+     * @var string[]
+     */
     public array $allowedBasicHtmlFields = [];
 
     public ?int $loggedUserUid = 0;

@@ -10,7 +10,11 @@ class BrandsTable extends Table
 
     use ApproveMultipleTrait;
 
+    /**
+     * @var string[]
+     */
     public array $allowedBasicHtmlFields = [];
+
     public string $name_de = 'Marke';
 
     public function initialize(array $config): void

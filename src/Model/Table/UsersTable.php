@@ -21,6 +21,9 @@ class UsersTable extends AppTable
 
     public string  $name_de = 'User';
 
+    /**
+     * @var string[]
+     */
     public array $allowedBasicHtmlFields = [
         'street'
     ];

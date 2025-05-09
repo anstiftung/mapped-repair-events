@@ -16,9 +16,24 @@ use Cake\I18n\Date;
 
 class MyHtmlHelper extends HtmlHelper {
 
+    /**
+     * @var array<string, string>
+     */
     public array $selectedMain = [];
+
+    /**
+     * @var array<string, string>
+     */
     public array $selectedSub1 = [];
+
+    /**
+     * @var array<string, string>
+     */
     public array $selectedSub2 = [];
+
+    /**
+     * @var array<string, string>
+     */
     public array $selectedSub3 = [];
 
     public bool $selectParentElements = true;

@@ -4,10 +4,8 @@ namespace Admin\Controller;
 
 use App\Controller\AppController;
 use Cake\Event\EventInterface;
-use Cake\ORM\Query;
 use Cake\ORM\Query\SelectQuery;
 use Cake\Utility\Inflector;
-use Cake\ORM\Entity;
 use Cake\Datasource\EntityInterface;
 
 class AdminAppController extends AppController
@@ -15,6 +13,9 @@ class AdminAppController extends AppController
 
     public array $paginate;
 
+    /**
+     * @var array<string, array<string, mixed>>
+     */
     public array $searchOptions = [];
 
     public bool $searchName = true;
@@ -25,10 +26,19 @@ class AdminAppController extends AppController
 
     public bool $searchStatus = true;
 
+    /**
+     * @var array<string, array<string, mixed>>
+     */
     public array $conditions = [];
 
+    /**
+    * @var array<string, string|callable>
+     */
     public array $afterFindCallbacks = [];
 
+    /**
+     * @var array<string, mixed>
+     */
     public array $matchings = [];
 
     public function initialize(): void

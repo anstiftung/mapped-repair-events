@@ -10,6 +10,10 @@ class PagesTable extends AppTable
 {
 
     public string $name_de = 'Seite';
+
+    /**
+     * @var array<int, string>
+     */
     private array $flattenedArray = [];
 
     public function initialize(array $config): void

@@ -25,6 +25,9 @@ class UsersControllerTest extends AppTestCase
     use LoginTrait;
     use QueueTrait;
 
+    /**
+     * @var array<string, mixed>
+     */
     private array $validUserData = [
         'nick' => 'JohnDoeA<img onerror="alert();" />',
         'firstname' => 'John<img onerror="alert();" />',

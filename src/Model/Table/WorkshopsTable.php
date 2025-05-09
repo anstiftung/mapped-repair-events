@@ -24,6 +24,9 @@ class WorkshopsTable extends AppTable
 
     public string $name_de = '';
 
+    /**
+     * @var string[]
+     */
     public array $allowedBasicHtmlFields = [
         'additional_contact',
         'opening_hours',

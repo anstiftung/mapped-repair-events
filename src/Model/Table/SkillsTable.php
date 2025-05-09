@@ -13,7 +13,11 @@ class SkillsTable extends Table
 
     use ApproveMultipleTrait;
 
+    /**
+     * @var string[]
+     */
     public array $allowedBasicHtmlFields = [];
+
     public string $name_de = 'Kenntnis';
 
     public function initialize(array $config): void

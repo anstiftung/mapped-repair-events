@@ -15,7 +15,7 @@ parameters:
         - message: '#Access to an undefined property .*#'
         - message: '#Cannot access property .*#'
         - message: '#Call to an undefined method Authorization\\IdentityInterface::is*.#'
-        - message: '#Property .* type has no value type specified in iterable type array.#'
+        #- message: '#Property .* type has no value type specified in iterable type array.#'
         - message: '#Class .* extends generic class .* but does not specify its types: .*#'
         - message: '#Method .* has parameter .* with generic (class|interface) .* but does not specify its types: .*#'
         - message: '#Method .* return type with generic (class|interface) .* does not specify its types: .*#'

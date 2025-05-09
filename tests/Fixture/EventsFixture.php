@@ -8,7 +8,7 @@ use Cake\I18n\Date;
 
 class EventsFixture extends AppFixture
 {
-
+    
     public function init(): void
     {
         $this->records = [
