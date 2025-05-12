@@ -72,8 +72,8 @@ class FundingsController extends AdminAppController
 
         $fundings = $fundingsTable->find('all',
             conditions: [
-                $fundingsTable->aliasField('submit_date IS NOT NULL'),
-                $fundingsTable->aliasField('money_transfer_date IS NULL'),
+                //$fundingsTable->aliasField('submit_date IS NOT NULL'),
+                //$fundingsTable->aliasField('money_transfer_date IS NULL'),
                 $fundingsTable->aliasField('owner NOT IN') => [1824,1825,4722,79515], // exclude admins
             ],
             contain: [
