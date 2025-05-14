@@ -80,6 +80,7 @@ class FundingsController extends AdminAppController
                 'OwnerUsers',
                 'Fundingsupporters',
                 'Fundingbudgetplans',
+                'Workshops',
             ],
             order: [
                 $fundingsTable->aliasField('submit_date') => 'ASC',
@@ -104,6 +105,7 @@ class FundingsController extends AdminAppController
                 'Antrag-' . $funding->uid, // RechNr
                 date('dm'), // Belegdatum
                 '', // InterneRechNr
+                $funding->workshop->name, // Initiative
                 substr($funding->fundingsupporter->name, 0, 40), // LieferantName
                 $funding->fundingsupporter->city, // LieferantOrt
                 '70001', // LieferantKonto
@@ -154,6 +156,7 @@ class FundingsController extends AdminAppController
             'RechNr',
             'Belegdatum',
             'InterneRechNr',
+            'Initiative',
             'LieferantName',
             'LieferantOrt',
             'LieferantKonto',
