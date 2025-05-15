@@ -1475,7 +1475,7 @@ MappedRepairEvents.Helper = {
                 changeYear : true,
                 changeMonth : true,
                 duration : 'fast',
-                yearRange : '2010:2030'
+                yearRange : '2010:2035'
             };
             $.datepicker.setDefaults($.datepicker.regional['de']);
         });
