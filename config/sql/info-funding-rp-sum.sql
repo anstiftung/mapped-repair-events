@@ -1,6 +1,6 @@
 SELECT
 funding_uid,
-workshop_uid
+workshop_uid,
 LEAST(SUM(fbp.amount), 3000) as sum_least
 FROM fundingbudgetplans fbp
 JOIN fundings f ON fbp.funding_uid = f.uid
