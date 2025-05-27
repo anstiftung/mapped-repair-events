@@ -15,7 +15,7 @@ declare(strict_types=1);
         <?php echo !empty($info_sheet->brand) ? $info_sheet->brand->name : ''; ?>
     </td>
     <td>
-        <?php echo $info_sheet->owner_user->name; ?>
+        <?php echo $info_sheet->owner_user != null ? $info_sheet->owner_user->name : ''; ?>
     </td>
     <?php
         echo '<td class="icon">';
