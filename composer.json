@@ -5,7 +5,7 @@
     "config": {
         "platform-check": false,
         "platform": {
-            "php": "8.3"
+            "php": "8.4"
         },
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true,
@@ -13,7 +13,7 @@
         }
     },
     "require": {
-        "php": ">=8.3",
+        "php": ">=8.4",
         "cakephp/authentication": "^3.0",
         "cakephp/authorization": "^3.0",
         "cakephp/cakephp": "^5.2",
@@ -27,7 +27,7 @@
         "ezyang/htmlpurifier": "^4.11",
         "dereuromark/cakephp-feed": "^3.0",
         "league/csv": "^9.8",
-        "eluceo/ical": "2.*",
+        "eluceo/ical": "2.x-dev",
         "gregwar/captcha": "^1.1",
         "druidfi/mysqldump-php": "^2.0",
         "dereuromark/cakephp-queue": "8.*",
