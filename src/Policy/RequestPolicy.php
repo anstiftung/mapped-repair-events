@@ -27,7 +27,7 @@ class RequestPolicy implements RequestPolicyInterface
         };
 
         if (class_exists($policy)) {
-            return (new $policy())->canAccess($identity, $request);
+            return new $policy()->canAccess($identity, $request);
         }
 
         // !sic default == true to throw correct 404Error for not available files /files/uploadify/users/thumbs-150/39430.jpeg

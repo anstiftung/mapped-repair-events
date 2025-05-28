@@ -13,9 +13,9 @@ return RectorConfig::configure()
         __DIR__ . '/src',
         __DIR__ . '/tests',
     ])
-    ->withPhpLevel(PhpVersion::PHP_83)
+    ->withPhpLevel(PhpVersion::PHP_84)
 	->withSets([
-		SetList::PHP_83,
+		SetList::PHP_84,
 	])
 
     ->withRules([
