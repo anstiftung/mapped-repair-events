@@ -26,21 +26,22 @@ use Cake\Core\Configure;
     </div>
 
     <?php
-        echo $this->AssetCompress->script('_widget-' . $assetNamespace, ['raw' => Configure::read('debug')]);
+        if ($useJs) {
+            echo $this->AssetCompress->script('_widget-' . $assetNamespace, ['raw' => Configure::read('debug')]);
 
-        // add script BEFORE all scripts that are loaded in views (block)
-        echo $this->Html->scriptBlock(
-            $this->Html->wrapJavascriptBlock(
-                JS_NAMESPACE.".Helper.highlightFormFields();",
-                ['inline' => true]
-            )
-        );
+            // add script BEFORE all scripts that are loaded in views (block)
+            echo $this->Html->scriptBlock(
+                $this->Html->wrapJavascriptBlock(
+                    JS_NAMESPACE.".Helper.highlightFormFields();",
+                    ['inline' => true]
+                )
+            );
 
-        $scripts = $this->fetch('script');
-        if ($scripts != '') {
-            echo $this->Html->wrapJavascriptBlock($scripts);
+            $scripts = $this->fetch('script');
+            if ($scripts != '') {
+                echo $this->Html->wrapJavascriptBlock($scripts);
+            }
         }
-
     ?>
 
 </body>

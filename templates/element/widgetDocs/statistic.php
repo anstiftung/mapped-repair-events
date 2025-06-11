@@ -82,4 +82,16 @@ declare(strict_types=1);
         &lt;iframe frameborder="0" width="100%" height="700" src="<?php echo Configure::read('AppConfig.serverName'); ?>/widgets/statistics-global?<span class="highlight">?showDonutChart=0</span>"&gt;&lt;/iframe&gt;
     </code>
 
+    <br />
+    <h2>Anzahl der verschiedenen Bereiche (repariert / reparabel / nicht repariert) anzeigen</h2>
+    <strong class="highlight">Beispiel-Link:</strong> <a title="Voransicht" target="_blank" href="/widgets/test-widget-statistic-counts-workshop.php">Voransicht Statistik Anzahl Initiative</a>
+    <ul>
+        <li>showWorkshopName auf <b>0</b> setzen, falls der Initiativen-Name nicht angezeigt werden soll.</li>
+        <li>Hinweis: Die Farbei können wir gewohnt angepasst werden, siehe oben.</li>
+        <li>Der Inhalt passt sich automatisch an die Breite / Höhe des Widgets an.</li>
+    </ul>
+    <code class="inlinecode">
+        &lt;iframe frameborder="0" width="200" height="130" src="<?php echo Configure::read('AppConfig.serverName'); ?>/widgets/statistics-counts-workshop/1234?<span class="highlight">?showWorkshopName=0</span>"&gt;&lt;/iframe&gt;
+    </code>
+
 </div>

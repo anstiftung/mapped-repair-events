@@ -41,11 +41,35 @@ class WidgetsController extends AppController
         $this->set('metaTags', ['title' => 'Widgets Integration']);
     }
 
+    public function statisticsCountsWorkshop(int $workshopUid): void
+    {
+        $this->parseStatisticsWorkshopParams();
+        $this->parseStatisticsParams();
+        $this->viewBuilder()->setLayout('widget');
+
+        $this->set('assetNamespace', 'statistics-counts');
+        $this->set('useJs', false);
+
+        $workshopsTable = $this->getTableLocator()->get('Workshops');
+        $workshop = $workshopsTable->get($workshopUid);
+        $this->set('workshop', $workshop);
+
+        /** @var \App\Model\Table\InfoSheetsTable */
+        $infoSheetsTable = $this->getTableLocator()->get('InfoSheets');
+        $dataRepaired = $infoSheetsTable->getRepairedByWorkshopUid($workshopUid, null, null);
+        $dataRepairable = $infoSheetsTable->getRepairableByWorkshopUid($workshopUid, null, null);
+        $dataNotRepaired = $infoSheetsTable->getNotRepairedByWorkshopUid($workshopUid, null, null);
+        $this->set('dataRepaired', $dataRepaired);
+        $this->set('dataRepairable', $dataRepairable);
+        $this->set('dataNotRepaired', $dataNotRepaired);
+    }
+    
     public function events(): void
     {
         $this->viewBuilder()->setLayout('widget');
 
         $this->set('assetNamespace', 'events');
+        $this->set('useJs', true);
 
         $workshopUid = h($this->request->getQuery('id')) ?? 0;
         $this->Workshop = $this->getTableLocator()->get('Workshops');
@@ -82,6 +106,7 @@ class WidgetsController extends AppController
         $this->viewBuilder()->setLayout('widget');
 
         $this->set('assetNamespace', 'map');
+        $this->set('useJs', true);
 
         $customZoomLevel = 0;
         $lat = '';
@@ -185,6 +210,7 @@ class WidgetsController extends AppController
         $this->parseStatisticsGlobalParams();
 
         $this->set('assetNamespace', 'statistics');
+        $this->set('useJs', true);
 
         $metaTags = ['title' => 'Globale Statistik'];
         $this->set('metaTags', $metaTags);
@@ -229,6 +255,7 @@ class WidgetsController extends AppController
         $this->parseStatisticsWorkshopParams();
 
         $this->set('assetNamespace', 'statistics');
+        $this->set('useJs', true);
 
         $this->viewBuilder()->setLayout('widget');
 
