@@ -32,6 +32,27 @@ class WidgetsController extends AppController
         $this->set('metaTags', ['title' => 'Widgets Integration']);
     }
 
+    public function statisticsCountsGlobal(): void
+    {
+        $this->parseStatisticsParams();
+        $this->viewBuilder()->setLayout('widget');
+
+        $this->set('assetNamespace', 'statistics-counts');
+        $this->set('useJs', false);
+
+        /** @var \App\Model\Table\InfoSheetsTable */
+        $infoSheetsTable = $this->getTableLocator()->get('InfoSheets');
+        $dataRepaired = $infoSheetsTable->getRepaired(null, null);
+        $dataRepairable = $infoSheetsTable->getRepairable(null, null);
+        $dataNotRepaired = $infoSheetsTable->getNotRepaired(null, null);
+        $this->set('dataRepaired', $dataRepaired);
+        $this->set('dataRepairable', $dataRepairable);
+        $this->set('dataNotRepaired', $dataNotRepaired);
+        $this->set('showWorkshopName', false);
+
+        $this->render('statisticsCountsWorkshop');
+    }
+
     public function statisticsCountsWorkshop(int $workshopUid): void
     {
         $this->parseStatisticsWorkshopParams();

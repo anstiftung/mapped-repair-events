@@ -84,14 +84,19 @@ declare(strict_types=1);
 
     <br />
     <h2>Anzahl der verschiedenen Bereiche (repariert / reparabel / nicht repariert) anzeigen</h2>
-    <strong class="highlight">Beispiel-Link:</strong> <a title="Voransicht" target="_blank" href="/widgets/test-widget-statistic-counts-workshop.php">Voransicht Statistik Anzahl Initiative</a>
+    <strong class="highlight">Beispiel-Link:</strong> <a title="Voransicht" target="_blank" href="/widgets/test-widget-statistic-counts-workshop.php">Voransicht Statistik Anzahl (Global / Initiative)</a>
     <ul>
-        <li>showWorkshopName auf <b>0</b> setzen, falls der Initiativen-Name nicht angezeigt werden soll.</li>
+        <li>Bei Initiative: showWorkshopName auf <b>0</b> setzen, falls der Initiativen-Name nicht angezeigt werden soll.</li>
         <li>Hinweis: Die Farbei können wir gewohnt angepasst werden, siehe oben.</li>
         <li>Der Inhalt passt sich automatisch an die Breite / Höhe des Widgets an.</li>
     </ul>
+    <p><b>Initiativen-Statistik:</b></p>
     <code class="inlinecode">
         &lt;iframe frameborder="0" width="200" height="130" src="<?php echo Configure::read('AppConfig.serverName'); ?>/widgets/statistics-counts-workshop/1234?<span class="highlight">?showWorkshopName=0</span>"&gt;&lt;/iframe&gt;
+    </code>
+    <p><b>Globale Statistik:</b></p>
+    <code class="inlinecode">
+        &lt;iframe frameborder="0" width="200" height="130" src="<?php echo Configure::read('AppConfig.serverName'); ?>/widgets/statistics-counts-global"&gt;&lt;/iframe&gt;
     </code>
 
 </div>
