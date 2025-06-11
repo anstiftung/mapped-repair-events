@@ -42,9 +42,11 @@ class WidgetsController extends AppController
 
         /** @var \App\Model\Table\InfoSheetsTable */
         $infoSheetsTable = $this->getTableLocator()->get('InfoSheets');
-        $dataRepaired = $infoSheetsTable->getRepaired(null, null);
-        $dataRepairable = $infoSheetsTable->getRepairable(null, null);
-        $dataNotRepaired = $infoSheetsTable->getNotRepaired(null, null);
+        $dateFrom = '2010-01-01';
+        $dateTo = date('Y') . '-12-31';
+        $dataRepaired = $infoSheetsTable->getRepaired($dateFrom, $dateTo);
+        $dataRepairable = $infoSheetsTable->getRepairable($dateFrom, $dateTo);
+        $dataNotRepaired = $infoSheetsTable->getNotRepaired($dateFrom, $dateTo);
         $this->set('dataRepaired', $dataRepaired);
         $this->set('dataRepairable', $dataRepairable);
         $this->set('dataNotRepaired', $dataNotRepaired);
