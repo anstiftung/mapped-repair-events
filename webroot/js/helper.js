@@ -659,7 +659,8 @@ MappedRepairEvents.Helper = {
         if (ev.is_online_event) {
             calEvent += '<span class="is-online-event">[Online]</span>';
         }
-        calEvent += '<span itemprop="name"><b>'+ formattedDate + ev.eventname+'</b></span>: ';
+
+        calEvent += '<span itemprop="name"><b>'+ formattedDate + (ev.eventname ?? '') +'</b></span>: ';
         calEvent += '<span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress"><span itemprop="streetAddress">'+ev.strasse+',</span> ';
         calEvent += '<span itemprop="postalCode"> '+ev.zip+'</span> ';
         calEvent += '<span itemprop="addressLocality">'+ev.ort+'</span> von ';
