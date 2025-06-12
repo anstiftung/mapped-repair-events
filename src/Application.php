@@ -46,6 +46,9 @@ use Cake\Http\Middleware\EncryptedCookieMiddleware;
 use Cake\I18n\DateTime;
 use Authentication\Identifier\AbstractIdentifier;
 
+/**
+ * @extends \Cake\Http\BaseApplication<\App\Application>
+ */
 class Application extends BaseApplication
     implements AuthenticationServiceProviderInterface, AuthorizationServiceProviderInterface
 {
