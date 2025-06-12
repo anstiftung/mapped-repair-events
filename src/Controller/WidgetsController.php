@@ -3,10 +3,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Model\Table\CategoriesTable;
-use App\Model\Table\InfoSheetsTable;
-use App\Model\Table\ThirdPartyStatisticsTable;
-use App\Model\Table\WorkshopsTable;
 use stdClass;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
@@ -15,11 +11,6 @@ use App\Model\Entity\Workshop;
 
 class WidgetsController extends AppController
 {
-
-    public CategoriesTable $Category;
-    public InfoSheetsTable $InfoSheet;
-    public ThirdPartyStatisticsTable $ThirdPartyStatistic;
-    public WorkshopsTable $Workshop;
 
     public function beforeFilter(EventInterface $event): void
     {
@@ -41,20 +32,66 @@ class WidgetsController extends AppController
         $this->set('metaTags', ['title' => 'Widgets Integration']);
     }
 
+    public function statisticsCountsGlobal(): void
+    {
+        $this->parseStatisticsParams();
+        $this->viewBuilder()->setLayout('widget');
+
+        $this->set('assetNamespace', 'statistics-counts');
+        $this->set('useJs', false);
+
+        /** @var \App\Model\Table\InfoSheetsTable */
+        $infoSheetsTable = $this->getTableLocator()->get('InfoSheets');
+        $dateFrom = '2010-01-01';
+        $dateTo = date('Y') . '-12-31';
+        $dataRepaired = $infoSheetsTable->getRepaired($dateFrom, $dateTo);
+        $dataRepairable = $infoSheetsTable->getRepairable($dateFrom, $dateTo);
+        $dataNotRepaired = $infoSheetsTable->getNotRepaired($dateFrom, $dateTo);
+        $this->set('dataRepaired', $dataRepaired);
+        $this->set('dataRepairable', $dataRepairable);
+        $this->set('dataNotRepaired', $dataNotRepaired);
+        $this->set('showWorkshopName', false);
+
+        $this->render('statisticsCountsWorkshop');
+    }
+
+    public function statisticsCountsWorkshop(int $workshopUid): void
+    {
+        $this->parseStatisticsWorkshopParams();
+        $this->parseStatisticsParams();
+        $this->viewBuilder()->setLayout('widget');
+
+        $this->set('assetNamespace', 'statistics-counts');
+        $this->set('useJs', false);
+
+        /** @var \App\Model\Table\WorkshopsTable */
+        $workshopsTable = $this->getTableLocator()->get('Workshops');
+        $workshop = $workshopsTable->get($workshopUid);
+        $this->set('workshop', $workshop);
+
+        /** @var \App\Model\Table\InfoSheetsTable */
+        $infoSheetsTable = $this->getTableLocator()->get('InfoSheets');
+        $dataRepaired = $infoSheetsTable->getRepairedByWorkshopUid($workshopUid, null, null);
+        $dataRepairable = $infoSheetsTable->getRepairableByWorkshopUid($workshopUid, null, null);
+        $dataNotRepaired = $infoSheetsTable->getNotRepairedByWorkshopUid($workshopUid, null, null);
+        $this->set('dataRepaired', $dataRepaired);
+        $this->set('dataRepairable', $dataRepairable);
+        $this->set('dataNotRepaired', $dataNotRepaired);
+    }
+    
     public function events(): void
     {
         $this->viewBuilder()->setLayout('widget');
 
         $this->set('assetNamespace', 'events');
+        $this->set('useJs', true);
 
         $workshopUid = h($this->request->getQuery('id')) ?? 0;
-        $this->Workshop = $this->getTableLocator()->get('Workshops');
-        $workshopFound = $this->Workshop->find('all', conditions: [
-            'Workshops.uid' => (int) $workshopUid
-        ])->count();
-        if (!$workshopFound) {
-            throw new NotFoundException('workshop uid not correct');
-        }
+
+        /** @var \App\Model\Table\WorkshopsTable */
+        $workshopsTable = $this->getTableLocator()->get('Workshops');
+        $workshopsTable->get($workshopUid);
+
         $this->set('workshopUid', $workshopUid);
 
         $num = h($this->request->getQuery('num')) ?? 1;
@@ -82,6 +119,7 @@ class WidgetsController extends AppController
         $this->viewBuilder()->setLayout('widget');
 
         $this->set('assetNamespace', 'map');
+        $this->set('useJs', true);
 
         $customZoomLevel = 0;
         $lat = '';
@@ -185,6 +223,7 @@ class WidgetsController extends AppController
         $this->parseStatisticsGlobalParams();
 
         $this->set('assetNamespace', 'statistics');
+        $this->set('useJs', true);
 
         $metaTags = ['title' => 'Globale Statistik'];
         $this->set('metaTags', $metaTags);
@@ -201,9 +240,11 @@ class WidgetsController extends AppController
                 $this->viewBuilder()->getVar('borderColorNotOk'),
                 $this->viewBuilder()->getVar('dataSource')
             );
-            $this->InfoSheet = $this->getTableLocator()->get('InfoSheets');
+
+            /** @var \App\Model\Table\InfoSheetsTable */
+            $infoSheetsTable = $this->getTableLocator()->get('InfoSheets');
             $dates = $this->getDateFromByMonthAndYear($this->viewBuilder()->getVar('month'), $this->viewBuilder()->getVar('year'));
-            $workshopCount = $this->InfoSheet->getWorkshopCountWithInfoSheets($dates['dateFrom'], $dates['dateTo']);
+            $workshopCount = $infoSheetsTable->getWorkshopCountWithInfoSheets($dates['dateFrom'], $dates['dateTo']);
             $this->set('workshopCount', $workshopCount);
         }
         $showDonutChart = $this->viewBuilder()->getVar('showDonutChart');
@@ -229,11 +270,13 @@ class WidgetsController extends AppController
         $this->parseStatisticsWorkshopParams();
 
         $this->set('assetNamespace', 'statistics');
+        $this->set('useJs', true);
 
         $this->viewBuilder()->setLayout('widget');
 
-        $this->Workshop = $this->getTableLocator()->get('Workshops');
-        $workshop = $this->Workshop->find('all', conditions: [
+        /** @var \App\Model\Table\WorkshopsTable */
+        $workshopsTable = $this->getTableLocator()->get('Workshops');
+        $workshop = $workshopsTable->find('all', conditions: [
             'Workshops.uid' => $workshopUid,
             'Workshops.show_statistics > ' => Workshop::STATISTICS_DISABLED,
         ])->first();
@@ -289,9 +332,11 @@ class WidgetsController extends AppController
         ): void
     {
 
-        $this->InfoSheet = $this->getTableLocator()->get('InfoSheets');
-        $this->Category = $this->getTableLocator()->get('Categories');
-        $categoriesForStatistics = $this->Category->getMainCategoriesForFrontend()->toArray();
+        /** @var \App\Model\Table\InfoSheetsTable */
+        $infoSheetsTable = $this->getTableLocator()->get('InfoSheets');
+        /** @var \App\Model\Table\CategoriesTable */
+        $categoriesTable = $this->getTableLocator()->get('Categories');
+        $categoriesForStatistics = $categoriesTable->getMainCategoriesForFrontend()->toArray();
 
         $categoriesLabels = [];
         $categoriesDatasets = [];
@@ -300,11 +345,11 @@ class WidgetsController extends AppController
         $categoriesDataNotRepaired = [];
         $carbonFootprintSum = 0;
         foreach($categoriesForStatistics as &$c) {
-            $repaired = $this->InfoSheet->getRepairedByMainCategoryId($workshopUid, $c['id'], $dateFrom, $dateTo);
-            $repairable = $this->InfoSheet->getRepairableByMainCategoryId($workshopUid, $c['id'], $dateFrom, $dateTo);
-            $notRepaired = $this->InfoSheet->getNotRepairedByMainCategoryId($workshopUid, $c['id'], $dateFrom, $dateTo);
-            $carbonFootprint = $this->Category->getCarbonFootprintByParentCategoryId($c->id);
-            $carbonFootprintSum += $this->Category->calculateCarbonFootprint($repaired, $carbonFootprint);
+            $repaired = $infoSheetsTable->getRepairedByMainCategoryId($workshopUid, $c['id'], $dateFrom, $dateTo);
+            $repairable = $infoSheetsTable->getRepairableByMainCategoryId($workshopUid, $c['id'], $dateFrom, $dateTo);
+            $notRepaired = $infoSheetsTable->getNotRepairedByMainCategoryId($workshopUid, $c['id'], $dateFrom, $dateTo);
+            $carbonFootprint = $categoriesTable->getCarbonFootprintByParentCategoryId($c->id);
+            $carbonFootprintSum += $categoriesTable->calculateCarbonFootprint($repaired, $carbonFootprint);
             if ($repaired == 0 && $repairable == 0 && $notRepaired == 0) {
                 unset($c);
                 continue;
@@ -364,11 +409,11 @@ class WidgetsController extends AppController
         ): void
     {
 
-        $this->InfoSheet = $this->getTableLocator()->get('InfoSheets');
-
-        $dataRepaired = $this->InfoSheet->getRepairedByWorkshopUid($workshopUid, $dateFrom, $dateTo);
-        $dataRepairable = $this->InfoSheet->getRepairableByWorkshopUid($workshopUid, $dateFrom, $dateTo);
-        $dataNotRepaired = $this->InfoSheet->getNotRepairedByWorkshopUid($workshopUid, $dateFrom, $dateTo);
+        /** @var \App\Model\Table\InfoSheetsTable */
+        $infoSheetsTable = $this->getTableLocator()->get('InfoSheets');
+        $dataRepaired = $infoSheetsTable->getRepairedByWorkshopUid($workshopUid, $dateFrom, $dateTo);
+        $dataRepairable = $infoSheetsTable->getRepairableByWorkshopUid($workshopUid, $dateFrom, $dateTo);
+        $dataNotRepaired = $infoSheetsTable->getNotRepairedByWorkshopUid($workshopUid, $dateFrom, $dateTo);
         $this->set('statisticsRepairedData', [
             'backgroundColor' => [$backgroundColorOk, $backgroundColorRepairable, $backgroundColorNotOk],
             'borderColor' => [$borderColorOk, $borderColorRepairable, $borderColorNotOk],
@@ -567,8 +612,9 @@ class WidgetsController extends AppController
         $includeThirdPartyStatistics = in_array($dataSource, ['all', 'third-party-name']);
         $includeInfoSheetStatistics = in_array($dataSource, ['all', 'platform']);
 
-        $this->Category = $this->getTableLocator()->get('Categories');
-        $categoriesForStatistics = $this->Category->getCategoriesForStatisticsGlobal();
+        /** @var \App\Model\Table\CategoriesTable */
+        $categoriesTable = $this->getTableLocator()->get('Categories');
+        $categoriesForStatistics = $categoriesTable->getCategoriesForStatisticsGlobal();
 
         $categoriesIds = [];
         $categoriesLabels = [];
@@ -591,15 +637,16 @@ class WidgetsController extends AppController
 
         if ($includeInfoSheetStatistics) {
 
-            $this->InfoSheet = $this->getTableLocator()->get('InfoSheets');
+            /** @var \App\Model\Table\InfoSheetsTable */
+            $infoSheetsTable = $this->getTableLocator()->get('InfoSheets');
             foreach($categoriesIds as $index => $mainCategoryId) {
-                $repaired = $this->InfoSheet->getRepairedGlobalByMainCategoryId($mainCategoryId, $dateFrom, $dateTo);
-                $carbonFootprint = $this->Category->getCarbonFootprintByParentCategoryId($mainCategoryId);
-                $carbonFootprintSum += $this->Category->calculateCarbonFootprint($repaired, $carbonFootprint);
-                $materialFootprint = $this->Category->getMaterialFootprintByParentCategoryId($mainCategoryId);
-                $materialFootprintSum += $this->Category->calculateMaterialFootprint($repaired, $materialFootprint);
-                $notRepaired = $this->InfoSheet->getNotRepairedGlobalByMainCategoryId($mainCategoryId, $dateFrom, $dateTo);
-                $repairable = $this->InfoSheet->getRepairableGlobalByMainCategoryId($mainCategoryId, $dateFrom, $dateTo);
+                $repaired = $infoSheetsTable->getRepairedGlobalByMainCategoryId($mainCategoryId, $dateFrom, $dateTo);
+                $carbonFootprint = $categoriesTable->getCarbonFootprintByParentCategoryId($mainCategoryId);
+                $carbonFootprintSum += $categoriesTable->calculateCarbonFootprint($repaired, $carbonFootprint);
+                $materialFootprint = $categoriesTable->getMaterialFootprintByParentCategoryId($mainCategoryId);
+                $materialFootprintSum += $categoriesTable->calculateMaterialFootprint($repaired, $materialFootprint);
+                $notRepaired = $infoSheetsTable->getNotRepairedGlobalByMainCategoryId($mainCategoryId, $dateFrom, $dateTo);
+                $repairable = $infoSheetsTable->getRepairableGlobalByMainCategoryId($mainCategoryId, $dateFrom, $dateTo);
                 $categoriesDataRepaired[$index] += $repaired;
                 $categoriesDataRepairable[$index] += $repairable;
                 $categoriesDataNotRepaired[$index] += $notRepaired;
@@ -609,17 +656,18 @@ class WidgetsController extends AppController
 
         if ($includeThirdPartyStatistics) {
 
-            $this->ThirdPartyStatistic = $this->getTableLocator()->get('ThirdPartyStatistics');
-            $thirdPartySums = $this->ThirdPartyStatistic->getSumsByDate($dateFrom, $dateTo);
-            $thirdPartyPreparedSums = $this->ThirdPartyStatistic->sumUpForMainCategory($thirdPartySums);
-            $thirdPartyPreparedSums = $this->ThirdPartyStatistic->bindCategoryDataToSums($thirdPartyPreparedSums);
+            /** @var \App\Model\Table\ThirdPartyStatisticsTable */
+            $thirdPartyStatisticsTable = $this->getTableLocator()->get('ThirdPartyStatistics');
+            $thirdPartySums = $thirdPartyStatisticsTable->getSumsByDate($dateFrom, $dateTo);
+            $thirdPartyPreparedSums = $thirdPartyStatisticsTable->sumUpForMainCategory($thirdPartySums);
+            $thirdPartyPreparedSums = $thirdPartyStatisticsTable->bindCategoryDataToSums($thirdPartyPreparedSums);
 
             foreach($categoriesIds as $index => $categoryId) {
                 foreach($thirdPartyPreparedSums as $thirdPartyPreparedSum) {
                     /* @phpstan-ignore-next-line */
-                    $carbonFootprintSum += $this->Category->calculateCarbonFootprint((float) $thirdPartyPreparedSum['repaired'], (float) $categoriesCarbonFootprint[$index]);
+                    $carbonFootprintSum += $categoriesTable->calculateCarbonFootprint((float) $thirdPartyPreparedSum['repaired'], (float) $categoriesCarbonFootprint[$index]);
                     /* @phpstan-ignore-next-line */
-                    $materialFootprintSum += $this->Category->calculateMaterialFootprint((float) $thirdPartyPreparedSum['repaired'], (float) $categoriesMaterialFootprint[$index]);
+                    $materialFootprintSum += $categoriesTable->calculateMaterialFootprint((float) $thirdPartyPreparedSum['repaired'], (float) $categoriesMaterialFootprint[$index]);
                     if ($categoryId == $thirdPartyPreparedSum['id']) {
                         @$categoriesDataRepaired[$index] += $thirdPartyPreparedSum['repaired'];
                         continue;
@@ -699,11 +747,12 @@ class WidgetsController extends AppController
         $dateFrom = $dates['dateFrom'];
         $dateTo = $dates['dateTo'];
 
-        $this->InfoSheet = $this->getTableLocator()->get('InfoSheets');
+        /** @var \App\Model\Table\InfoSheetsTable */
+        $infoSheetsTable = $this->getTableLocator()->get('InfoSheets');
 
-        $dataRepaired = $this->InfoSheet->getRepaired($dateFrom, $dateTo);
-        $dataRepairable = $this->InfoSheet->getRepairable($dateFrom, $dateTo);
-        $dataNotRepaired = $this->InfoSheet->getNotRepaired($dateFrom, $dateTo);
+        $dataRepaired = $infoSheetsTable->getRepaired($dateFrom, $dateTo);
+        $dataRepairable = $infoSheetsTable->getRepairable($dateFrom, $dateTo);
+        $dataNotRepaired = $infoSheetsTable->getNotRepaired($dateFrom, $dateTo);
 
         $this->set('statisticsRepairedData', [
             'backgroundColor' => [$backgroundColorOk, $backgroundColorRepairable, $backgroundColorNotOk],
