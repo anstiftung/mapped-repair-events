@@ -92,7 +92,7 @@ declare(strict_types=1);
     </ul>
     <p><b>Initiativen-Statistik:</b></p>
     <code class="inlinecode">
-        &lt;iframe frameborder="0" width="200" height="130" src="<?php echo Configure::read('AppConfig.serverName'); ?>/widgets/statistics-counts-workshop/1234?<span class="highlight">?showWorkshopName=0</span>"&gt;&lt;/iframe&gt;
+        &lt;iframe frameborder="0" width="200" height="130" src="<?php echo Configure::read('AppConfig.serverName'); ?>/widgets/statistics-counts-workshop/1234<span class="highlight">?showWorkshopName=0</span>"&gt;&lt;/iframe&gt;
     </code>
     <p><b>Globale Statistik:</b></p>
     <code class="inlinecode">
