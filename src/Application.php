@@ -168,22 +168,26 @@ class Application extends BaseApplication
             'queryParam' => 'redirect',
         ]);
 
-        $service->loadIdentifier('App.NonPrivatizedPassword', [
-            'resolver' => [
-                'className' => OrmResolver::class,
-                'finder' => 'auth', // UsersTable::findAuth
+        $identifier = [
+            'App.NonPrivatizedPassword' => [
+                'resolver' => [
+                    'className' => OrmResolver::class,
+                    'finder' => 'auth', // UsersTable::findAuth
+                ],
+                'fields' => $fields,
             ],
-            'fields' => $fields,
-        ]);
+        ];
         
         // Load the authenticators
         $service->loadAuthenticator('Authentication.Session', [
             'fields' => [AbstractIdentifier::CREDENTIAL_USERNAME => 'email'],
             'identify' => false,
+            'identifier' => $identifier,
         ]);
         $service->loadAuthenticator('Authentication.Form', [
             'url' => Configure::read('AppConfig.htmlHelper')->urlLogin(),
             'fields' => [AbstractIdentifier::CREDENTIAL_USERNAME => 'email'],
+            'identifier' => $identifier,
         ]);
         
         $service->loadAuthenticator('Authentication.Cookie', [
@@ -192,6 +196,7 @@ class Application extends BaseApplication
             'cookie' => [
                 'expires' => new DateTime('+90 day'),
             ],
+            'identifier' => $identifier,
         ]);
 
         return $service;
