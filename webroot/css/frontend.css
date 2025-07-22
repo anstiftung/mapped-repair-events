@@ -326,7 +326,7 @@ body.workshops.home h2 {
 i.fa-border {
     background-color: #fff;
     border-radius: 3px;
-    padding: 5px 6px;
+    padding: 5px 3px;
     border-color: #ccc;
 }
 a:hover i.fa-border {
@@ -2488,7 +2488,7 @@ div.pagination-search div.numbers {
 }
 .sort a.asc:before,
 .sort a.desc:before {
-    font-family: 'Font Awesome 6 Free';
+    font-family: 'Font Awesome 7 Free';
     padding-right: 5px;
 }
 .sort a.asc:before {
