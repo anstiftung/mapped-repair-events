@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Controller\Traits\Fundings\ConfirmEventsTrait;
 use Cake\Core\Configure;
 use App\Model\Entity\Funding;
 use Cake\Utility\Inflector;
@@ -23,6 +24,7 @@ use Cake\Datasource\EntityInterface;
 class FundingsController extends AppController
 {
 
+    use ConfirmEventsTrait;
     use EditTrait;
     use IndexTrait;
     use UploadsTrait;

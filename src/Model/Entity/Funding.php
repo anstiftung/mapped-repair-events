@@ -19,6 +19,7 @@ class Funding extends Entity
     use FundingStatusTrait;
 
     const MAX_FUNDING_SUM = 3000;
+    const MIN_CONFIRMED_EVENTS = 4;
     
     /**
      * @param array<string|int, mixed> $fields
@@ -325,11 +326,6 @@ class Funding extends Entity
         }, self::FIELDS_USAGEPROOF_CHECKBOXES);
 
         foreach($checkboxes as $checkbox) {
-            /*
-            if (count($this->fundinguploads_pr_materials) == 0 && $checkbox == 'checkbox_d') {
-                continue;
-            }
-            */
             if (!$this->fundingusageproof->$checkbox) {
                 return self::STATUS_CHECKBOXES_MISSING;
             }

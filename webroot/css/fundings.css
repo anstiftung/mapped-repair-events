@@ -469,3 +469,12 @@ body.fundings.edit div.admin.edit #cancel-button {
     clear: none;
     margin-right: 10px;
 }
+body.fundings.confirmEvents .events-wrapper {
+    margin: 20px 0;
+}
+body.fundings.confirmEvents .event {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 0;
+}

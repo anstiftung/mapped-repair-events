@@ -24,6 +24,10 @@ trait IndexTrait {
         } else {
             $workshops = $workshopsTable->getWorkshopsForAssociatedUser($this->loggedUser->uid, APP_OFF, $workshopsTable->getFundingContain());
         }
+        $workshops->where([
+            'Workshops.uid' => 96580,
+        ]);
+
 
         foreach ($workshops as $workshop) {
             $workshop->funding_exists = !empty($workshop->workshop_funding);
