@@ -284,6 +284,13 @@ class EventsController extends AppController
         );
 
         if ($this->Event->save($patchedEntity)) {
+
+            /** @var \App\Model\Table\FundingconfirmedeventsTable */
+            $fundingconfirmedeventsTable = $this->fetchTable('Fundingconfirmedevents');
+            $fundingconfirmedeventsTable->deleteAll([
+                'event_uid' => $eventUid,
+            ]);
+
             $this->AppFlash->setFlashMessage('Der Termin wurde erfolgreich gelöscht.');
 
             if ($originalEventStatus && $event->datumstart->isWithinNext('7 days')) {
