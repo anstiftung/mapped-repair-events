@@ -46,14 +46,29 @@ echo $this->element('jqueryTabsWithoutAjax', [
                                 $event->ort,
                                 'UID: ' . $event->uid,
                             ];
+                            $eventActions = [];
                             if (!$event->datumstart->isPast()) {
-                                $eventInfos[] = $this->Html->link(
+                                $eventActions[] = $this->Html->link(
                                     '<i class="far fa-edit fa-border"></i>',
                                         $this->Html->urlEventEdit($event->uid),
-                                    ['title' => 'Termin bearbeiten', 'escape' => false]
+                                    [
+                                        'title' => 'Termin bearbeiten',
+                                        'escape' => false,
+                                    ]
+                                );
+                            } else {
+                                $eventActions[] = $this->Html->link(
+                                    '<i class="far fa-edit fa-border"></i>',
+                                        'javascript:void(0);',
+                                    [
+                                        'title' => 'Vergangener Termin - Bearbeiten nicht mehr möglich',
+                                        'class' => 'disabled',
+                                        'escape' => false,
+                                    ]
                                 );
                             }
                             echo '<div class="event-info">' . implode(' / ', $eventInfos) . '</div>';
+                            echo '<div class="event-actions">' . implode('', $eventActions) . '</div>';
                         echo '</div>';
                     }
                     $i++;

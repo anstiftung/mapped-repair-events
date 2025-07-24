@@ -383,6 +383,21 @@ body.fundings.uploadZuwendungsbestaetigung fieldset {
 body.fundings.uploadZuwendungsbestaetigung h1 {
     margin-bottom: 20px;
 }
+
+body.fundings.confirmEvents .events-wrapper {
+    margin: 20px 0;
+    width: 600px;
+}
+body.fundings.confirmEvents .event {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 5px 0;
+}
+body.fundings.confirmEvents .event-actions {
+    margin-left: auto;
+}
+
 @media (max-width: 767px) {
 
     #fundingForm fieldset.fundingreceiptlist div.row-header {
@@ -448,6 +463,9 @@ body.fundings.uploadZuwendungsbestaetigung h1 {
     #fundingForm .upload-form-wrapper {
         grid-template-columns: 1fr;
     }
+    body.fundings.confirmEvents .events-wrapper {
+        width: 100%;
+    }
 }
 
 body.fundings.index .admin tr.is-verified {
@@ -468,13 +486,4 @@ body.fundings.edit .admin #fundingForm fieldset:not(.fundinglist) div.input:not(
 body.fundings.edit div.admin.edit #cancel-button {
     clear: none;
     margin-right: 10px;
-}
-body.fundings.confirmEvents .events-wrapper {
-    margin: 20px 0;
-}
-body.fundings.confirmEvents .event {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    padding: 5px 0;
 }

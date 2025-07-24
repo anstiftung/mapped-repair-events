@@ -13,10 +13,8 @@ echo '<div style="margin-top:10px;margin-left:10px;">';
             'class' => 'button',
         ],
     );
-    $confirmedCount = $workshop->fundingconfirmedevents[0]->count;
-    if ($confirmedCount > 0) {
-        echo '<div style="margin-top:10px;">';
-            echo 'Bestätigte Veranstaltungen: ' . $confirmedCount;
-        echo '</div>';
-    }
+    $confirmedCount = $workshop->fundingconfirmedevents[0]->count ?? 0;
+    echo '<div style="margin-top:10px;">';
+        echo 'Bestätigte Veranstaltungen: ' . $confirmedCount;
+    echo '</div>';
 echo '</div>';
