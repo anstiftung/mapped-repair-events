@@ -13,7 +13,7 @@ class Fundingconfirmedevents extends AbstractMigration
             'null' => false,
             'signed' => false,
         ])
-        ->addColumn('workshop_uid', 'integer', [
+        ->addColumn('funding_uid', 'integer', [
             'null' => false,
             'signed' => false,
         ])

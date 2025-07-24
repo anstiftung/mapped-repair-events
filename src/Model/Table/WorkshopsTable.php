@@ -68,9 +68,6 @@ class WorkshopsTable extends AppTable
                 'FundingAllFutureEvents.status' => APP_ON,
             ],
         ]);
-        $this->hasMany('Fundingconfirmedevents', [
-            'foreignKey' => 'workshop_uid',
-        ]);
         $this->hasMany('Events', [
             'foreignKey' => 'workshop_uid',
             'conditions' => [
@@ -219,14 +216,14 @@ class WorkshopsTable extends AppTable
                 'OwnerUsers',
                 'Fundingbudgetplans',
                 'FundinguploadsZuwendungsbestaetigungs',
+                'Fundingconfirmedevents' => function (SelectQuery $q) {
+                    return $q->select(['funding_uid', 'count' => $q->func()->count('*')])->groupBy('funding_uid');
+                },
             ],
             'FundingAllPastEvents' => function (SelectQuery $q) {
                 return $q->select(['workshop_uid', 'count' => $q->func()->count('*')])->groupBy('workshop_uid');
             },
             'FundingAllFutureEvents' => function (SelectQuery $q) {
-                return $q->select(['workshop_uid', 'count' => $q->func()->count('*')])->groupBy('workshop_uid');
-            },
-            'Fundingconfirmedevents' => function (SelectQuery $q) {
                 return $q->select(['workshop_uid', 'count' => $q->func()->count('*')])->groupBy('workshop_uid');
             },
             'Users.Groups',

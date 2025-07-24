@@ -47,13 +47,13 @@ trait ConfirmEventsTrait {
             /** @var \App\Model\Table\FundingconfirmedeventsTable */
             $fundingconfirmedeventsTable = $this->fetchTable('Fundingconfirmedevents');
             $fundingconfirmedeventsTable->deleteAll([
-                'workshop_uid' => $funding->workshop_uid,
+                'funding_uid' => $funding->uid,
             ]);
 
             $newEntities = $fundingconfirmedeventsTable->newEntities(array_map(function($eventUid) use ($funding) {
                 return [
                     'event_uid' => $eventUid,
-                    'workshop_uid' => $funding->workshop_uid,
+                    'funding_uid' => $funding->uid,
                 ];
             }, $confirmedevents));
             if (!empty($newEntities)) {

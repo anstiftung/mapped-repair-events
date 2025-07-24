@@ -5,6 +5,13 @@ if ($funding->submit_date === null) {
     return;
 }
 
+echo '<div>';
+    echo $this->element('funding/status/confirmedEventsStatus', [
+        'funding' => $funding,
+        'additionalTextBefore' => 'Veranstaltungen bestätigen: ' . $funding->fundingconfirmedevents_count . ' bestätigt',
+    ]);
+echo '</div>';
+
 echo '<div style="margin-top:10px;margin-left:10px;">';
     echo $this->Html->link(
         'Veranstaltungen bestätigen',
@@ -13,8 +20,5 @@ echo '<div style="margin-top:10px;margin-left:10px;">';
             'class' => 'button',
         ],
     );
-    $confirmedCount = $workshop->fundingconfirmedevents[0]->count ?? 0;
-    echo '<div style="margin-top:10px;">';
-        echo 'Bestätigte Veranstaltungen: ' . $confirmedCount;
-    echo '</div>';
+
 echo '</div>';

@@ -146,6 +146,36 @@ class Funding extends Entity
         return $result;
     }
 
+    public function _getConfirmedEventsStatus(): int
+    {
+        if ($this->fundingconfirmedevents_count == 0) {
+            return self::STATUS_DATA_MISSING;
+        }
+        if ($this->fundingconfirmedevents_count >= self::MIN_CONFIRMED_EVENTS) {
+            return self::STATUS_DATA_OK;
+        }
+        return self::STATUS_PENDING;
+    }
+
+    public function _getConfirmedEventsCssClass(): string
+    {
+        if ($this->confirmed_events_status == self::STATUS_DATA_MISSING) {
+            return 'is-missing';
+        }
+        if ($this->confirmed_events_status == self::STATUS_PENDING) {
+            return 'is-pending';
+        }
+        if ($this->confirmed_events_status == self::STATUS_DATA_OK) {
+            return 'is-verified';
+        }
+        return '';
+    }
+
+    public function _getConfirmedEventsStatusHumanReadable(): string
+    {
+        return self::STATUS_MAPPING[$this->confirmed_events_status];
+    }
+
     public function _getBudgetplanStatus(): int
     {
         foreach($this->fundingbudgetplans as $fundingbudgetplan) {
@@ -588,6 +618,13 @@ class Funding extends Entity
 
     public function _getZuwendungsbestaetigungsCount(): int {
         return count($this->fundinguploads_zuwendungsbestaetigungs);
+    }
+
+    public function _getFundingconfirmedeventsCount(): int {
+        if (empty($this->fundingconfirmedevents)) {
+            return 0;
+        }
+        return $this->fundingconfirmedevents[0]->count ?? 0;
     }
 
 }
