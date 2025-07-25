@@ -19,6 +19,7 @@ class Funding extends Entity
     use FundingStatusTrait;
 
     const MAX_FUNDING_SUM = 3000;
+    const MIN_CONFIRMED_EVENTS = 4;
     
     /**
      * @param array<string|int, mixed> $fields
@@ -143,6 +144,36 @@ class Funding extends Entity
             $result[$typeId] = $total;
         }
         return $result;
+    }
+
+    public function _getConfirmedEventsStatus(): int
+    {
+        if ($this->fundingconfirmedevents_count == 0) {
+            return self::STATUS_DATA_MISSING;
+        }
+        if ($this->fundingconfirmedevents_count >= self::MIN_CONFIRMED_EVENTS) {
+            return self::STATUS_DATA_OK;
+        }
+        return self::STATUS_PENDING;
+    }
+
+    public function _getConfirmedEventsCssClass(): string
+    {
+        if ($this->confirmed_events_status == self::STATUS_DATA_MISSING) {
+            return 'is-missing';
+        }
+        if ($this->confirmed_events_status == self::STATUS_PENDING) {
+            return 'is-pending';
+        }
+        if ($this->confirmed_events_status == self::STATUS_DATA_OK) {
+            return 'is-verified';
+        }
+        return '';
+    }
+
+    public function _getConfirmedEventsStatusHumanReadable(): string
+    {
+        return self::STATUS_MAPPING[$this->confirmed_events_status];
     }
 
     public function _getBudgetplanStatus(): int
@@ -325,11 +356,6 @@ class Funding extends Entity
         }, self::FIELDS_USAGEPROOF_CHECKBOXES);
 
         foreach($checkboxes as $checkbox) {
-            /*
-            if (count($this->fundinguploads_pr_materials) == 0 && $checkbox == 'checkbox_d') {
-                continue;
-            }
-            */
             if (!$this->fundingusageproof->$checkbox) {
                 return self::STATUS_CHECKBOXES_MISSING;
             }
@@ -592,6 +618,10 @@ class Funding extends Entity
 
     public function _getZuwendungsbestaetigungsCount(): int {
         return count($this->fundinguploads_zuwendungsbestaetigungs);
+    }
+
+    public function _getFundingconfirmedeventsCount(): int {
+        return count($this->fundingconfirmedevents);
     }
 
 }

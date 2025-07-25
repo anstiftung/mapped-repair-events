@@ -75,7 +75,9 @@ class FundingsTable extends AppTable
             'foreignKey' => 'funding_uid',
             'dependent' => true,
         ]);
-
+        $this->hasMany('Fundingconfirmedevents', [
+            'foreignKey' => 'funding_uid',
+        ]);
     }
 
     public function getSchema(): TableSchemaInterface

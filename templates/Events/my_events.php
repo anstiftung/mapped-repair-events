@@ -163,7 +163,8 @@ if (Configure::read('AppConfig.statisticsEnabled')) {
                                                   [
                                                       'title' => 'Termin löschen',
                                                       'escape' => false,
-                                                      'class' => 'delete-event'
+                                                      'class' => 'delete-event',
+                                                      'data-event-uid' => $event->uid,
                                                   ]
                                             );
                                         echo '</td>';
