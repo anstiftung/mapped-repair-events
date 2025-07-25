@@ -5,8 +5,10 @@ use App\Model\Entity\Funding;
 use Cake\Core\Configure;
 
 $this->element('addScript', ['script' =>
-    JS_NAMESPACE.".Helper.bindCancelButton();"
+    JS_NAMESPACE.".Helper.bindCancelButton();".
+    JS_NAMESPACE.".Helper.bindDeleteEventButton();"
 ]);
+
 echo $this->element('jqueryTabsWithoutAjax', [
     'links' => $this->Html->getUserBackendNaviLinks($loggedUser->uid, true, $loggedUser->isOrga()),
     'selected' => $this->Html->urlFundings(),
@@ -79,6 +81,18 @@ echo $this->element('jqueryTabsWithoutAjax', [
                                     ]
                                 );
                             }
+                            $eventActions[] = $this->Html->link(
+                                '<i class="far fa-trash-alt fa-border"></i>',
+                                'javascript:void(0)',
+                                    [
+                                        'title' => 'Termin löschen',
+                                        'escape' => false,
+                                        'data-event-uid' => $event->uid,
+                                        'data-redirect-url' => $this->Html->urlFundingsConfirmEvents($funding->uid),
+                                        'class' => 'delete-event',
+                                        'style' => 'margin-left: 5px;',
+                                    ]
+                            );
                             echo '<div class="event-info">' . implode(' / ', $eventInfos) . '</div>';
                             echo '<div class="event-actions">' . implode('', $eventActions) . '</div>';
                         echo '</div>';
