@@ -411,6 +411,7 @@ class FundingsController extends AdminAppController
             'Fundingbudgetplans',
             'Fundingusageproofs',
             'Fundingreceiptlists',
+            'Fundingconfirmedevents',
         ]);
 
         $uids = [];

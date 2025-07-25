@@ -621,10 +621,7 @@ class Funding extends Entity
     }
 
     public function _getFundingconfirmedeventsCount(): int {
-        if (empty($this->fundingconfirmedevents)) {
-            return 0;
-        }
-        return $this->fundingconfirmedevents[0]->count ?? 0;
+        return count($this->fundingconfirmedevents);
     }
 
 }
