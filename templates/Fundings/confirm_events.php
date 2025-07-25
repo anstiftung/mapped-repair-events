@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 use App\Model\Entity\Funding;
+use Cake\Core\Configure;
 
 $this->element('addScript', ['script' =>
     JS_NAMESPACE.".Helper.bindCancelButton();"
@@ -20,6 +21,17 @@ echo $this->element('jqueryTabsWithoutAjax', [
             echo '<p style="margin-top: 20px;">';
                 echo 'Bitte jene Veranstaltungen anhaken, die im Rahmen des Förderprogramms tatsächlich durchgeführt wurden.<br />';
                 echo 'Es müssen <b>mindestens ' . Funding::MIN_CONFIRMED_EVENTS . ' Veranstaltungen</b> bestätigt werden.';
+            echo '</p>';
+
+            echo '<p style="margin-top: 10px;">';
+                echo $this->Html->link(
+                    '<i class="fa fa-plus-circle"></i> Neuen Termin erstellen',
+                    Configure::read('AppConfig.htmlHelper')->urlEventNew($funding->workshop_uid),
+                    [
+                        'class' => 'button',
+                        'escape' => false,
+                    ]
+                );
             echo '</p>';
 
             echo $this->Form->create($funding, [
