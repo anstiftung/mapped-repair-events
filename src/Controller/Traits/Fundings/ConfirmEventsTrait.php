@@ -6,6 +6,7 @@ namespace App\Controller\Traits\Fundings;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Http\Response;
 use Cake\Core\Configure;
+use Cake\Log\Log;
 
 trait ConfirmEventsTrait {
 
@@ -38,11 +39,7 @@ trait ConfirmEventsTrait {
 
         if (!empty($this->request->getData())) {
 
-            $confirmedevents = $this->request->getData('confirmedevents');
-            $confirmedevents = array_filter($confirmedevents, function($value) {
-                return $value > 0;
-            });
-            $confirmedevents = array_values($confirmedevents);
+            $confirmedEventUids = $this->getCleanedEventUids($funding->workshop_uid);
 
             /** @var \App\Model\Table\FundingconfirmedeventsTable */
             $fundingconfirmedeventsTable = $this->fetchTable('Fundingconfirmedevents');
@@ -55,7 +52,7 @@ trait ConfirmEventsTrait {
                     'event_uid' => $eventUid,
                     'funding_uid' => $funding->uid,
                 ];
-            }, $confirmedevents));
+            }, $confirmedEventUids));
             if (!empty($newEntities)) {
                 $fundingconfirmedeventsTable->saveMany($newEntities);
             }
@@ -69,6 +66,21 @@ trait ConfirmEventsTrait {
         $this->set('funding', $funding);
 
         return null;
+    }
+
+    private function getCleanedEventUids(int $workshopUid): array {
+        $confirmedevents = $this->request->getData('confirmedevents');
+        $confirmedevents = array_filter($confirmedevents, function($value) {
+            return $value > 0;
+        });
+        $confirmedevents = array_values($confirmedevents);
+
+        $eventsTable = $this->fetchTable('Events');
+        $events = $eventsTable->find()
+            ->where(['uid IN' => $confirmedevents,
+            'workshop_uid' => $workshopUid])
+            ->all();
+        return $events->extract('uid')->toArray();
     }
 
 }

@@ -21,8 +21,6 @@ use App\Services\PdfWriter\FoerderbewilligungPdfWriterService;
 use App\Test\TestCase\Traits\QueueTrait;
 use Cake\TestSuite\EmailTrait;
 use Cake\Http\Exception\NotFoundException;
-use App\Services\PdfWriter\VerwendungsnachweisPdfWriterService;
-use App\Services\FolderService;
 
 class FundingsControllerTest extends AppTestCase
 {
@@ -573,6 +571,52 @@ class FundingsControllerTest extends AppTestCase
         $fundinguploads = $fundinguploadsTable->find()->where([$fundinguploadsTable->aliasField('funding_uid') => $funding->uid])->toArray();
         $this->assertEmpty($fundinguploads);
 
+    }
+
+    public function testConfirmEvents(): void
+    {
+        $workshopUid = 11;
+        $fundingUid = 10;
+
+        $this->loginAsOrga();
+        $this->post(Configure::read('AppConfig.htmlHelper')->urlFundingsConfirmEvents($fundingUid), [
+            'referer' => '/',
+            'confirmedevents' => [
+                6, // wrong workshop association
+                12, // ok
+                100, // not an event
+            ],
+        ]);
+        $this->assertResponseCode(302);
+        $this->assertFlashMessage('Die Veranstaltungen wurden erfolgreich bestätigt.');
+        
+        /** @var \App\Model\Table\EventsTable */
+        $eventsTable = $this->getTableLocator()->get('Events');
+        $events = $eventsTable->find()
+            ->contain(['Fundingconfirmedevents'])
+            ->where(['workshop_uid' => $workshopUid]);
+
+        foreach($events as $event) {
+            $this->assertNotEmpty($event->fundingconfirmedevent);
+        }
+
+        $fundingconfirmedeventsTable = $this->fetchTable('Fundingconfirmedevents');
+        $fundingconfirmedevents = $fundingconfirmedeventsTable->find()
+            ->where(['funding_uid' => $fundingUid])
+            ->toArray();
+        $this->assertCount(1, $fundingconfirmedevents); // 1 events confirmed
+
+        $fundingsTable = $this->fetchTable('Fundings');
+        $funding = $fundingsTable->find('all',
+            conditions: [
+                'uid' => $fundingUid,
+            ],
+            contain: [
+                'Fundingconfirmedevents',
+            ])->first();
+
+        $this->assertCount(1, $funding->fundingconfirmedevents);
+    
     }
 
 }

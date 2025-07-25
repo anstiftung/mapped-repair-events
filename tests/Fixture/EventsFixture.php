@@ -41,6 +41,22 @@ class EventsFixture extends AppFixture
                 'status' => 1,
                 'owner' => 1
             ],
+            [
+                'uid' => 12,
+                'workshop_uid' => 11,
+                'eventbeschreibung' => 'description',
+                'ort' => 'Berlin',
+                'strasse' => 'Müllerstraße 123',
+                'veranstaltungsort' => 'Haus Drei',
+                'datumstart' => Date::now()->addDays(7),
+                'uhrzeitstart' => new DateTime('09:00'),
+                'uhrzeitend' => new DateTime('18:00'),
+                'use_custom_coordinates' => 1,
+                'lat' => 52.520008,
+                'lng' => 13.404954,
+                'status' => 1,
+                'owner' => 1
+            ],
         ];
         parent::init();
     }
