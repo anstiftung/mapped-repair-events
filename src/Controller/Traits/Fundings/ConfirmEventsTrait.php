@@ -68,6 +68,9 @@ trait ConfirmEventsTrait {
         return null;
     }
 
+    /**
+     * @return array<int>
+     */
     private function getCleanedEventUids(int $workshopUid): array {
         $confirmedevents = $this->request->getData('confirmedevents');
         $confirmedevents = array_filter($confirmedevents, function($value) {
