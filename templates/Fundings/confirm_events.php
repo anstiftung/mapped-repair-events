@@ -21,8 +21,8 @@ echo $this->element('jqueryTabsWithoutAjax', [
             echo $this->element('heading', ['first' => $metaTags['title']]);
 
             echo '<p style="margin-top: 20px;">';
-                echo 'Bitte jene Veranstaltungen anhaken, die im Rahmen des Förderprogramms tatsächlich durchgeführt wurden.<br />';
-                echo 'Es müssen <b>mindestens ' . Funding::MIN_CONFIRMED_EVENTS . ' Veranstaltungen</b> bestätigt werden.';
+                echo 'Bitte jene Veranstaltungen anhaken, die im Rahmen des Förderprogramms im Jahr 2025 tatsächlich durchgeführt wurden.<br />';
+                echo 'Es müssen <b>mindestens ' . Funding::MIN_CONFIRMED_EVENTS . ' Veranstaltungen</b> angehakt werden.';
             echo '</p>';
 
             echo '<p style="margin-top: 10px;">';
@@ -98,11 +98,15 @@ echo $this->element('jqueryTabsWithoutAjax', [
                         echo '</div>';
                     }
                     $i++;
+
+                    echo '<br />';
+
+                    echo $this->element('cancelAndSaveButton', [
+                        'saveLabel' => 'Speichern',
+                    ]);
+
                 echo '</div>';
 
-                echo $this->element('cancelAndSaveButton', [
-                    'saveLabel' => 'Speichern',
-                ]);
 
             echo $this->Form->end();
 
