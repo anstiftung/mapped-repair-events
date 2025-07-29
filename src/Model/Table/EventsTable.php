@@ -10,6 +10,7 @@ use App\Services\GeoService;
 use Cake\ORM\Query\SelectQuery;
 use App\Model\Entity\Event;
 use Cake\Collection\CollectionInterface;
+use Cake\ORM\TableRegistry;
 
 class EventsTable extends AppTable
 {
@@ -100,7 +101,8 @@ class EventsTable extends AppTable
                     $conditions['Events.uid !='] = $context['data']['uid'];
                 }
 
-                $duplicateCount = $this->find('all', conditions: $conditions)->count();
+                $eventsTable = TableRegistry::getTableLocator()->get('Events');
+                $duplicateCount = $eventsTable->find('all', conditions: $conditions)->count();
                 
                 return $duplicateCount === 0;
             },
