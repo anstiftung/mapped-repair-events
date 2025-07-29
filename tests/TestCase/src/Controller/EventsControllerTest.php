@@ -341,5 +341,42 @@ class EventsControllerTest extends AppTestCase
         $this->assertResponseContains('Es existiert bereits ein Termin für diese Initiative zur gleichen Zeit an diesem Tag.');
     }
 
+    public function testEditEventDoesNotTriggerDuplicateValidation(): void
+    {
+        $this->loadNewEventData();
+        $this->loginAsOrga();
+        
+        // Use existing event from fixture (uid: 6)
+        $editData = [
+            'uid' => 6,
+            'workshop_uid' => 2,
+            'eventbeschreibung' => 'Updated description',
+            'ort' => 'Berlin',
+            'strasse' => 'Demo Street 1',
+            'zip' => '10999',
+            'lat' => '48,1291558',
+            'lng' => '11,3626812',
+            'datumstart' => '01.01.2040', // Same as fixture
+            'uhrzeitstart' => '09:00',     // Same as fixture
+            'uhrzeitend' => '18:00',       // Same as fixture
+            'use_custom_coordinates' => true,
+            'province_id' => '1',
+        ];
+
+        // Edit existing event - should work even with same date/times because it excludes itself
+        $this->post(
+            Configure::read('AppConfig.htmlHelper')->urlEventEdit(6),
+            [
+                'referer' => '/',
+                $editData
+            ]
+        );
+        
+        // Should NOT show duplicate validation error
+        $this->assertResponseNotContains('Es existiert bereits ein Termin für diese Initiative zur gleichen Zeit an diesem Tag.');
+        // Should redirect on success or show form without validation errors
+        $this->assertResponseCode(302); // Redirect on success
+    }
+
 }
 ?>
