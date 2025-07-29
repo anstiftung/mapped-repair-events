@@ -299,5 +299,47 @@ class EventsControllerTest extends AppTestCase
         $this->assertHeaderContains('Content-Disposition', 'attachment; filename="events.ics"');
     }
 
+    public function testAddDuplicateEventValidation(): void
+    {
+        $this->loadNewEventData();
+        $this->loginAsOrga();
+        
+        // Prepare valid event data
+        $this->newEventData['workshop_uid'] = 2;
+        $this->newEventData['ort'] = 'Berlin';
+        $this->newEventData['strasse'] = 'Demo Street 1';
+        $this->newEventData['zip'] = '10999';
+        $this->newEventData['lat'] = '48,1291558';
+        $this->newEventData['lng'] = '11,3626812';
+        $this->newEventData['datumstart'] = '01.01.2025';
+        $this->newEventData['uhrzeitstart'] = '10:00';
+        $this->newEventData['uhrzeitend'] = '12:00';
+
+        // Create the first event successfully
+        $this->post(
+            Configure::read('AppConfig.htmlHelper')->urlEventNew(2),
+            [
+                'referer' => '/',
+                $this->newEventData
+            ]
+        );
+        $this->assertResponseCode(302); // Redirect on success
+
+        // Try to create a duplicate event with same workshop, date, and times
+        $duplicateEventData = $this->newEventData;
+        $duplicateEventData['strasse'] = 'Different Street 123'; // Different street to ensure it's not location based
+        
+        $this->post(
+            Configure::read('AppConfig.htmlHelper')->urlEventNew(2),
+            [
+                'referer' => '/',
+                $duplicateEventData
+            ]
+        );
+        
+        // Should show validation error
+        $this->assertResponseContains('Es existiert bereits ein Termin für diese Initiative zur gleichen Zeit an diesem Tag.');
+    }
+
 }
 ?>
