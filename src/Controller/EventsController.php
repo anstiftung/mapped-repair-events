@@ -441,7 +441,8 @@ class EventsController extends AppController
 
         if (!empty($this->request->getData())) {
             $patchedEvents = [];
-            foreach($this->request->getData() as $data) {
+            $originalDateStrings = []; // Store original date strings for form re-rendering
+            foreach($this->request->getData() as $index => $data) {
                 if (!is_array($data)) {
                     continue; // skip referer
                 }
@@ -449,6 +450,10 @@ class EventsController extends AppController
                     continue; // skip metadata (fields / unlocked / debug)
                 }
                 $data = array_merge($this->request->getData()[0], $data);
+                
+                // Store original date string for form re-rendering in case of validation errors
+                $originalDateStrings[$index] = $data['datumstart'] ?? '';
+                
                 if ($data['datumstart']) {
                     $data['datumstart'] = new DateTime($data['datumstart']);
                 }
@@ -489,6 +494,16 @@ class EventsController extends AppController
             $errors = $events[0]->getErrors();
             if (isset($errors['lat']) && isset($errors['lat']['geoCoordinatesInBoundingBox'])) {
                 $this->AppFlash->setFlashError($errors['lat']['geoCoordinatesInBoundingBox']);
+            }
+            
+            // If there are validation errors, restore original date strings for proper form display
+            if ($hasErrors) {
+                foreach($events as $index => $event) {
+                    if (isset($originalDateStrings[$index]) && !empty($originalDateStrings[$index])) {
+                        // Create a temporary property to store the original date string for the form
+                        $event->set('datumstart_display', $originalDateStrings[$index]);
+                    }
+                }
             }
 
             if (!$hasErrors) {

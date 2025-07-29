@@ -104,7 +104,14 @@ $this->element('addScript', ['script' =>
             echo '<div class="row">';
 
                 $indexForLabel = $i + 1;
-                echo $this->Form->control($i.'.datumstart',  ['class' => 'datepicker-input', 'type' => 'text', 'label' => __('Add Event: Start Date') . ' #' . $indexForLabel, 'value' => !empty($event->datumstart) ? $event->datumstart->i18nFormat(Configure::read('DateFormat.de.DateLong2')) : '']);
+                // Use original date string if available (when form has validation errors), otherwise format the date
+                $dateValue = '';
+                if (!empty($event->datumstart_display)) {
+                    $dateValue = $event->datumstart_display;
+                } elseif (!empty($event->datumstart)) {
+                    $dateValue = $event->datumstart->i18nFormat(Configure::read('DateFormat.de.DateLong2'));
+                }
+                echo $this->Form->control($i.'.datumstart',  ['class' => 'datepicker-input', 'type' => 'text', 'label' => __('Add Event: Start Date') . ' #' . $indexForLabel, 'value' => $dateValue]);
                 echo '<div class="time-fields-wrapper">';
                     echo $this->Form->control($i.'.uhrzeitstart', ['label' => __('Add Event: Start Time'), 'step' => 0]);
                     echo $this->Form->control($i.'.uhrzeitend', ['label' => __('Add Event: End Time'), 'step' => 0]);
