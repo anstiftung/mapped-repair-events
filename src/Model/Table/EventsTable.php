@@ -10,6 +10,7 @@ use App\Services\GeoService;
 use Cake\ORM\Query\SelectQuery;
 use App\Model\Entity\Event;
 use Cake\Collection\CollectionInterface;
+use Cake\ORM\TableRegistry;
 
 class EventsTable extends AppTable
 {
@@ -74,6 +75,42 @@ class EventsTable extends AppTable
             'rule' => ['custom', ZIP_REGEX],
             'message' => 'Die PLZ ist nicht gültig.'
         ]);
+        $validator = $this->addDuplicateEventValidationRule($validator);
+        return $validator;
+    }
+
+    private function addDuplicateEventValidationRule(Validator $validator): Validator
+    {
+        $validator->add('datumstart', 'duplicateEvent', [
+            'rule' => function($value, $context): bool {
+                // Skip validation if required fields are missing
+                if (empty($context['data']['workshop_uid']) || 
+                    empty($context['data']['datumstart']) || 
+                    empty($context['data']['uhrzeitstart']) || 
+                    empty($context['data']['uhrzeitend'])) {
+                    return true; // Let other validators handle empty fields
+                }
+
+                $conditions = [
+                    $this->aliasField('workshop_uid') => $context['data']['workshop_uid'],
+                    $this->aliasField('datumstart') => $context['data']['datumstart'],
+                    $this->aliasField('uhrzeitstart') => $context['data']['uhrzeitstart'],
+                    $this->aliasField('uhrzeitend') => $context['data']['uhrzeitend'],
+                    $this->aliasField('status IN') => [APP_ON, APP_OFF],
+                ];
+
+                // When editing an existing event, exclude it from the duplicate check
+                if (!empty($context['data']['uid'])) {
+                    $conditions[$this->aliasField('uid !=')] = $context['data']['uid'];
+                }
+
+                $duplicateCount = $this->find('all', conditions: $conditions)->count();
+                
+                return $duplicateCount === 0;
+            },
+            'message' => 'Es existiert bereits ein Termin für diese Initiative zur gleichen Zeit an diesem Tag.'
+        ]);
+        
         return $validator;
     }
 
