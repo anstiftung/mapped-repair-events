@@ -89,20 +89,19 @@ class EventsTable extends AppTable
                 }
 
                 $conditions = [
-                    'Events.workshop_uid' => $context['data']['workshop_uid'],
-                    'Events.datumstart' => $context['data']['datumstart'],
-                    'Events.uhrzeitstart' => $context['data']['uhrzeitstart'],
-                    'Events.uhrzeitend' => $context['data']['uhrzeitend'],
-                    'Events.status >=' => APP_DELETED, // Include deleted events to prevent conflicts
+                    $this->aliasField('workshop_uid') => $context['data']['workshop_uid'],
+                    $this->aliasField('datumstart') => $context['data']['datumstart'],
+                    $this->aliasField('uhrzeitstart') => $context['data']['uhrzeitstart'],
+                    $this->aliasField('uhrzeitend') => $context['data']['uhrzeitend'],
+                    $this->aliasField('status IN') => [APP_ON, APP_OFF],
                 ];
 
                 // When editing an existing event, exclude it from the duplicate check
                 if (!empty($context['data']['uid'])) {
-                    $conditions['Events.uid !='] = $context['data']['uid'];
+                    $conditions[$this->aliasField('uid !=')] = $context['data']['uid'];
                 }
 
-                $eventsTable = TableRegistry::getTableLocator()->get('Events');
-                $duplicateCount = $eventsTable->find('all', conditions: $conditions)->count();
+                $duplicateCount = $this->find('all', conditions: $conditions)->count();
                 
                 return $duplicateCount === 0;
             },
