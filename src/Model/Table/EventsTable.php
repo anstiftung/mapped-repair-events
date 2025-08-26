@@ -10,7 +10,7 @@ use App\Services\GeoService;
 use Cake\ORM\Query\SelectQuery;
 use App\Model\Entity\Event;
 use Cake\Collection\CollectionInterface;
-use Cake\ORM\TableRegistry;
+use Cake\Routing\Router;
 
 class EventsTable extends AppTable
 {
@@ -78,7 +78,33 @@ class EventsTable extends AppTable
 
     private function addDuplicateEventValidationRule(Validator $validator): Validator
     {
-        $validator->add('datumstart', 'duplicateEvent', [
+        /*
+        $validator->add('datumstart', 'duplicateEventNotYetSaved', [
+            'rule' => function($value, $context): bool {
+
+                $events = [];
+                foreach(Router::getRequest()->getData() as $data) {
+                    if (!is_array($data)) {
+                       continue; // skip referer
+                    }
+                    if (!array_key_exists('datumstart', $data)) {
+                        continue; // skip metadata (fields / unlocked / debug)
+                    }
+
+                    $events[] = $data;
+                }
+
+                $keys = array_map(function($event) {
+                    return $event['datumstart'] . '|' . $event['uhrzeitstart'] . '|' . $event['uhrzeitend'];
+                }, $events);
+
+                $currentEntityKey = $context['data']['datumstart']->format('m.d.Y') . '|' . $context['data']['uhrzeitstart']->format('H:i') . '|' . $context['data']['uhrzeitend']->format('H:i');
+                return count($keys) !== count(array_unique($keys)) && in_array($currentEntityKey, $keys);
+            },
+            'message' => 'Du kannst keine Veranstaltungen zur gleichen Zeit am gleichen Tag anlegen.',
+        ]);
+        */
+        $validator->add('datumstart', 'duplicateEventAlreadySaved', [
             'rule' => function($value, $context): bool {
                 // Skip validation if required fields are missing
                 if (empty($context['data']['workshop_uid']) || 

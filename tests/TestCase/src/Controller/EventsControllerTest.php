@@ -315,15 +315,24 @@ class EventsControllerTest extends AppTestCase
         $this->newEventData['uhrzeitstart'] = '10:00';
         $this->newEventData['uhrzeitend'] = '12:00';
 
-        // Create the first event successfully
+        $newEventData2 = [
+            'datumstart' => '01.01.2025',
+            'uhrzeitstart' => '10:00',
+            'uhrzeitend' => '12:00',
+        ];
+
+        // Try to create two events with same date
         $this->post(
             Configure::read('AppConfig.htmlHelper')->urlEventNew(2),
             [
                 'referer' => '/',
-                $this->newEventData
+                $this->newEventData,
+                $newEventData2,
             ]
         );
-        $this->assertResponseCode(302); // Redirect on success
+
+        $foundCount = substr_count($this->_response->getBody()->__toString(), 'Du kannst keine Veranstaltungen zur gleichen Zeit am gleichen Tag anlegen.');
+        $this->assertEquals(2, $foundCount);
 
         // Try to create a duplicate event with same workshop, date, and times
         $duplicateEventData = $this->newEventData;
@@ -333,7 +342,7 @@ class EventsControllerTest extends AppTestCase
             Configure::read('AppConfig.htmlHelper')->urlEventNew(2),
             [
                 'referer' => '/',
-                $duplicateEventData
+                $duplicateEventData,
             ]
         );
         
