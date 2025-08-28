@@ -18,6 +18,7 @@ use Cake\I18n\Time;
 use Cake\Event\EventInterface;
 use Cake\Controller\Controller;
 use App\Test\Mock\GeoServiceMock;
+use Cake\Log\Log;
 
 class EventsControllerTest extends AppTestCase
 {
@@ -96,12 +97,12 @@ class EventsControllerTest extends AppTestCase
         $this->newEventData['zip'] = '10999';
         $this->newEventData['lat'] = '48,1291558';
         $this->newEventData['lng'] = '11,3626812';
-        $this->newEventData['datumstart'] = '01.01.2020';
+        $this->newEventData['datumstart'] = '01.02.2020';
         $this->newEventData['uhrzeitstart'] = '10:00';
         $this->newEventData['uhrzeitend'] = '20:00';
 
         $newEventData2 = [
-            'datumstart' => '01.02.2020',
+            'datumstart' => '02.02.2020',
             'uhrzeitstart' => '12:00',
             'uhrzeitend' => '22:00',
         ];

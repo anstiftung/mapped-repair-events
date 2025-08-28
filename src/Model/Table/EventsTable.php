@@ -78,12 +78,16 @@ class EventsTable extends AppTable
 
     private function addDuplicateEventValidationRule(Validator $validator): Validator
     {
-        /*
         $validator->add('datumstart', 'duplicateEventNotYetSaved', [
             'rule' => function($value, $context): bool {
-
+                
                 $events = [];
-                foreach(Router::getRequest()->getData() as $data) {
+                $request = Router::getRequest() ?? null;
+                if ($request === null) {
+                    return true;
+                }
+                    
+                foreach($request->getData() as $data) {
                     if (!is_array($data)) {
                        continue; // skip referer
                     }
@@ -94,16 +98,23 @@ class EventsTable extends AppTable
                     $events[] = $data;
                 }
 
+                if (count($events) == 1) {
+                    return true; // No duplicates possible with only one event
+                }
+
                 $keys = array_map(function($event) {
                     return $event['datumstart'] . '|' . $event['uhrzeitstart'] . '|' . $event['uhrzeitend'];
                 }, $events);
 
                 $currentEntityKey = $context['data']['datumstart']->format('m.d.Y') . '|' . $context['data']['uhrzeitstart']->format('H:i') . '|' . $context['data']['uhrzeitend']->format('H:i');
-                return count($keys) !== count(array_unique($keys)) && in_array($currentEntityKey, $keys);
+                if (count($keys) === count(array_unique($keys))) {
+                    return true;
+                }
+                return in_array($currentEntityKey, $keys);
             },
             'message' => 'Du kannst keine Veranstaltungen zur gleichen Zeit am gleichen Tag anlegen.',
         ]);
-        */
+
         $validator->add('datumstart', 'duplicateEventAlreadySaved', [
             'rule' => function($value, $context): bool {
                 // Skip validation if required fields are missing
