@@ -288,6 +288,11 @@ class MyHtmlHelper extends HtmlHelper {
         return $this->urlFundings() . '/verwendungsnachweis/' . $fundingUid;
     }
 
+    function urlFundingsConfirmEvents(int $fundingUid): string
+    {
+        return $this->urlFundings() . '/confirmEvents/' . $fundingUid;
+    }
+
     function urlFundingsUploadZuwendungsbestaetigung(int $fundingUid): string
     {
         return $this->urlFundings() . '/uploadZuwendungsbestaetigung/' . $fundingUid;

@@ -122,8 +122,8 @@ class EventsControllerTest extends AppTestCase
             'Categories',
         ])->toArray();
 
-        $eventIndexA = 2;
-        $this->assertEquals(4, count($events));
+        $eventIndexA = 3;
+        $this->assertEquals(5, count($events));
         $this->assertEquals($events[$eventIndexA]->eventbeschreibung, 'description<img src="n" alt="n" />');
         $this->assertEquals($events[$eventIndexA]->strasse, $this->newEventData['strasse']);
         $this->assertEquals($events[$eventIndexA]->datumstart, new Date($this->newEventData['datumstart']));
@@ -134,7 +134,7 @@ class EventsControllerTest extends AppTestCase
         $this->assertEquals($events[$eventIndexA]->workshop_uid, 2);
         $this->assertEquals($events[$eventIndexA]->province_id, 1);
 
-        $eventIndexB = 3;
+        $eventIndexB = 4;
         $this->assertEquals($events[$eventIndexB]->datumstart, new Date($newEventData2['datumstart']));
         $this->assertEquals($events[$eventIndexB]->uhrzeitstart, new Time($newEventData2['uhrzeitstart']));
         $this->assertEquals($events[$eventIndexB]->uhrzeitend, new Time($newEventData2['uhrzeitend']));
