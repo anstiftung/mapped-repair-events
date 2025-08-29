@@ -321,6 +321,12 @@ class EventsControllerTest extends AppTestCase
             'uhrzeitend' => '12:00:00',
         ];
 
+        $newEventData3 = [
+            'datumstart' => '01.01.2040',
+            'uhrzeitstart' => '09:00:00',
+            'uhrzeitend' => '18:00:00',
+        ];
+
         // Try to create two events with same date
         $this->post(
             Configure::read('AppConfig.htmlHelper')->urlEventNew(2),
@@ -328,26 +334,15 @@ class EventsControllerTest extends AppTestCase
                 'referer' => '/',
                 $this->newEventData,
                 $newEventData2,
+                $newEventData3,
             ]
         );
 
         $foundCount = substr_count($this->_response->getBody()->__toString(), 'Du kannst keine Veranstaltungen zur gleichen Zeit am gleichen Tag anlegen.');
         $this->assertEquals(2, $foundCount);
-
-        // Try to create a duplicate event with same workshop, date, and times
-        $duplicateEventData = $this->newEventData;
-        $duplicateEventData['strasse'] = 'Different Street 123'; // Different street to ensure it's not location based
         
-        $this->post(
-            Configure::read('AppConfig.htmlHelper')->urlEventNew(2),
-            [
-                'referer' => '/',
-                $duplicateEventData,
-            ]
-        );
-        
-        // Should show validation error
-        //$this->assertResponseContains('Es existiert bereits ein Termin für diese Initiative zur gleichen Zeit an diesem Tag.');
+        $foundCount = substr_count($this->_response->getBody()->__toString(), 'Es existiert bereits ein Termin für diese Initiative zur gleichen Zeit an diesem Tag.');
+        $this->assertEquals(1, $foundCount);
     }
 
     public function testEditEventDoesNotTriggerDuplicateValidation(): void
