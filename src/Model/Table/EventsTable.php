@@ -98,19 +98,18 @@ class EventsTable extends AppTable
                     $events[] = $data;
                 }
 
-                if (count($events) == 1) {
-                    return true; // No duplicates possible with only one event
-                }
-
                 $keys = array_map(function($event) {
                     return $event['datumstart'] . '|' . $event['uhrzeitstart'] . '|' . $event['uhrzeitend'];
                 }, $events);
 
-                $currentEntityKey = $context['data']['datumstart']->format('m.d.Y') . '|' . $context['data']['uhrzeitstart']->format('H:i') . '|' . $context['data']['uhrzeitend']->format('H:i');
-                if (count($keys) === count(array_unique($keys))) {
-                    return true;
+                $currentEntityKey = $context['data']['datumstart']->format('d.m.Y') . '|' . $context['data']['uhrzeitstart']->format('H:i:s') . '|' . $context['data']['uhrzeitend']->format('H:i:s');
+                $currentEntityKeyFoundCount = 0;
+                foreach ($keys as $key) {
+                    if ($key == $currentEntityKey) {
+                        $currentEntityKeyFoundCount++;
+                    }
                 }
-                return in_array($currentEntityKey, $keys);
+                return $currentEntityKeyFoundCount < 2;
             },
             'message' => 'Du kannst keine Veranstaltungen zur gleichen Zeit am gleichen Tag anlegen.',
         ]);
@@ -144,7 +143,6 @@ class EventsTable extends AppTable
             },
             'message' => 'Es existiert bereits ein Termin für diese Initiative zur gleichen Zeit an diesem Tag.'
         ]);
-        
         return $validator;
     }
 
