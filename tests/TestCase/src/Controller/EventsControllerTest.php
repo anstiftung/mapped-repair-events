@@ -18,7 +18,6 @@ use Cake\I18n\Time;
 use Cake\Event\EventInterface;
 use Cake\Controller\Controller;
 use App\Test\Mock\GeoServiceMock;
-use Cake\Log\Log;
 
 class EventsControllerTest extends AppTestCase
 {
