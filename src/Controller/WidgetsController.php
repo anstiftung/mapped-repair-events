@@ -22,7 +22,9 @@ class WidgetsController extends AppController
             'mapWithFundings',
             'integration',
             'statisticsGlobal',
-            'statisticsWorkshop'
+            'statisticsWorkshop',
+            'statisticsCountsGlobal',
+            'statisticsCountsWorkshop',
         ]);
 
     }
