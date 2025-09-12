@@ -216,6 +216,7 @@ class WorkshopsTable extends AppTable
                 'OwnerUsers',
                 'Fundingbudgetplans',
                 'FundinguploadsZuwendungsbestaetigungs',
+                'Fundingconfirmedevents',
             ],
             'FundingAllPastEvents' => function (SelectQuery $q) {
                 return $q->select(['workshop_uid', 'count' => $q->func()->count('*')])->groupBy('workshop_uid');

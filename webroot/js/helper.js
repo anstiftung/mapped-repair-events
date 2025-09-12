@@ -737,7 +737,7 @@ MappedRepairEvents.Helper = {
 
         $('a.delete-event').on('click', function() {
             var message = 'Soll dieser Termin wirklich gelöscht werden?<br />Dies kann nicht rückgängig gemacht werden!';
-            var eventUid = $(this).closest('tr').find('td.eventUid').html();
+            var eventUid = $(this).data('event-uid');
             $.prompt(message, {
                 buttons : {
                     Ja : true,
@@ -745,7 +745,7 @@ MappedRepairEvents.Helper = {
                 },
                 submit : function(v, m, f) {
                     if (m) {
-                        var url = '/termine/delete/' + eventUid;
+                        const url = '/termine/delete/' + eventUid;
                         document.location.href = url;
                     }
                 }
