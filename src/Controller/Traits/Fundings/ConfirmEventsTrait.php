@@ -6,7 +6,6 @@ namespace App\Controller\Traits\Fundings;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Http\Response;
 use Cake\Core\Configure;
-use Cake\Log\Log;
 
 trait ConfirmEventsTrait {
 
