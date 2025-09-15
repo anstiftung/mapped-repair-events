@@ -19,6 +19,8 @@ trait FundingAdminFilterTrait {
             'submitted-and-money-transferred' => 'Förderantrag überwiesen',
             'submittable-but-not-submitted' => 'Förderantrag vollständig, aber noch nicht eingereicht',
             'at-least-one-verfied-by-admin-and-not-all-fields-verified' => 'mind. ein "bestätigt von Admin", aber noch nicht 32 Felder ausgefüllt',
+            'not-enough-events-confirmed' => 'weniger als ' . self::MIN_CONFIRMED_EVENTS .  ' Veranstaltungen bestätigt',
+            'enough-events-confirmed' => 'mindestens ' . self::MIN_CONFIRMED_EVENTS .  ' Veranstaltungen bestätigt',
         ];
     }
 
@@ -44,6 +46,12 @@ trait FundingAdminFilterTrait {
             },
             'at-least-one-verfied-by-admin-and-not-all-fields-verified' => function($funding): bool {
                 return $funding->admin_fields_verified_count > 0 && $funding->user_fields_verified_count < $funding->user_fields_count;
+            },
+            'not-enough-events-confirmed' => function($funding): bool {
+                return $funding->workshop->workshop_funding->fundingconfirmedevents_count < self::MIN_CONFIRMED_EVENTS;
+            },
+            'enough-events-confirmed' => function($funding): bool {
+                return $funding->workshop->workshop_funding->fundingconfirmedevents_count >= self::MIN_CONFIRMED_EVENTS;
             },
         ];
     }

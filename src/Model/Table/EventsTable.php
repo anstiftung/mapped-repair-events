@@ -47,6 +47,9 @@ class EventsTable extends AppTable
 			'foreignKey' => 'event_uid',
 			'dependent'  => true,
 		]);
+        $this->hasOne('Fundingconfirmedevents', [
+            'foreignKey' => 'event_uid',
+        ]);
     }
 
     public function validationDefault(Validator $validator): Validator

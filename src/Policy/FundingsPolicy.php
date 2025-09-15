@@ -52,7 +52,7 @@ class FundingsPolicy implements RequestPolicyInterface
 
         }
 
-        if (in_array($request->getParam('action'), ['download'])) {
+        if (in_array($request->getParam('action'), ['download', 'confirmEvents'])) {
 
             if  ($identity->isAdmin()) {
                 return true;

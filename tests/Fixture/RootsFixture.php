@@ -52,6 +52,10 @@ class RootsFixture extends AppFixture
                 'uid' => 11,
                 'object_type' => 'workshops',
             ],
+            [
+                'uid' => 12,
+                'object_type' => 'events',
+            ],
         ];
         parent::init();
     }
