@@ -52,6 +52,8 @@ echo $this->element('jqueryTabsWithoutAjax', [
                             echo $this->Form->checkbox('confirmedevents[]', [
                                 'value' => $event->uid,
                                 'label' => 'Bestätigen',
+                                'disabled' => !$event->datumstart->isPast(),
+                                'title' => !$event->datumstart->isPast() ? 'Nur bereits vergangene Termine können bestätigt werden' : '',
                                 'checked' => !empty($event->fundingconfirmedevent),
                             ]);
                             $eventInfos = [

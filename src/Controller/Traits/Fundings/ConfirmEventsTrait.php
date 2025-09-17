@@ -38,21 +38,20 @@ trait ConfirmEventsTrait {
 
         if (!empty($this->request->getData())) {
 
-            $confirmedEventUids = $this->getCleanedEventUids($funding->workshop_uid);
-
             /** @var \App\Model\Table\FundingconfirmedeventsTable */
             $fundingconfirmedeventsTable = $this->fetchTable('Fundingconfirmedevents');
             $fundingconfirmedeventsTable->deleteAll([
                 'funding_uid' => $funding->uid,
             ]);
 
-            $newEntities = $fundingconfirmedeventsTable->newEntities(array_map(function($eventUid) use ($funding) {
-                return [
-                    'event_uid' => $eventUid,
-                    'funding_uid' => $funding->uid,
-                ];
-            }, $confirmedEventUids));
-            if (!empty($newEntities)) {
+            $confirmedEventUids = $this->getCleanedEventUids($funding->workshop_uid);
+            if (count($confirmedEventUids) > 0) {
+                $newEntities = $fundingconfirmedeventsTable->newEntities(array_map(function($eventUid) use ($funding) {
+                    return [
+                        'event_uid' => $eventUid,
+                        'funding_uid' => $funding->uid,
+                    ];
+                }, $confirmedEventUids));
                 $fundingconfirmedeventsTable->saveMany($newEntities);
             }
             $this->AppFlash->setFlashMessage('Die Veranstaltungen wurden erfolgreich bestätigt.');
@@ -79,9 +78,14 @@ trait ConfirmEventsTrait {
 
         $eventsTable = $this->fetchTable('Events');
         $events = $eventsTable->find()
-            ->where(['uid IN' => $confirmedevents,
-            'workshop_uid' => $workshopUid])
+            ->where([
+                'uid IN' => $confirmedevents,
+                'workshop_uid' => $workshopUid,
+            ])
             ->all();
+        $events = $events->filter(function($event) {
+            return $event->datumstart->isPast();
+        });
         return $events->extract('uid')->toArray();
     }
 

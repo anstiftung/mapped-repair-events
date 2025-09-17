@@ -44,9 +44,13 @@ a#urlHelpLink:hover {
 button[disabled],
 button.disabled,
 a.disabled {
-    opacity: 0.5;
     cursor: not-allowed ! important;
+    opacity: 0.5;
 }
+input[disabled] {
+    cursor: not-allowed;
+}
+
 a:hover img {
     background-color: transparent !important
 }
