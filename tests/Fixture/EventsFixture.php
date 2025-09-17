@@ -48,7 +48,7 @@ class EventsFixture extends AppFixture
                 'ort' => 'Berlin',
                 'strasse' => 'Müllerstraße 123',
                 'veranstaltungsort' => 'Haus Drei',
-                'datumstart' => Date::now()->addDays(7),
+                'datumstart' => Date::now()->subDays(7),
                 'uhrzeitstart' => new DateTime('09:00'),
                 'uhrzeitend' => new DateTime('18:00'),
                 'use_custom_coordinates' => 1,
