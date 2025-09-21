@@ -301,7 +301,7 @@ class EventsController extends AppController
                     'Worknews.confirm' => Worknews::STATUS_OK,
                 ]);
 
-                if (!empty($subscribers)) {
+                if ($subscribers->count() > 0) {
                     $email = new AppMailer();
                     $email->viewBuilder()->setTemplate('event_deleted');
                     foreach ($subscribers as $subscriber) {
@@ -426,7 +426,7 @@ class EventsController extends AppController
         if (isset($workshop) && $patchedEntity->renotify) {
             $worknewsTable = $this->getTableLocator()->get('Worknews');
             $subscribers = $worknewsTable->getSubscribers($patchedEntity->workshop_uid);
-            if (!empty($subscribers)) {
+            if ($subscribers->count() > 0) {
                 $worknewsTable->sendNotifications($subscribers, 'Veranstaltung geändert: ' . $workshop->name, 'event_changed', $workshop, $patchedEntity, $patchedEntities['dirtyFields'], $patchedEntities['originalValues']);
             }
         }
@@ -577,8 +577,9 @@ class EventsController extends AppController
         }
 
         if (!empty($this->request->getQuery('categories'))) {
-            $categories = explode(',', h($this->request->getQuery('categories')));
-            if (!empty($categories)) {
+            $categoriesRaw = (string)$this->request->getQuery('categories');
+            $categories = array_values(array_filter(explode(',', h($categoriesRaw)), static fn($v) => $v !== ''));
+            if (count($categories) > 0) {
                 $events->innerJoinWith('EventCategories', function ($q) use ($categories) {
                     return $q->where([
                         'EventCategories.category_id NOT IN' => $categories,
@@ -747,8 +748,9 @@ class EventsController extends AppController
         }
 
         if (!empty($this->request->getQuery('categories'))) {
-            $categories = explode(',', h($this->request->getQuery('categories')));
-            if (!empty($categories)) {
+            $categoriesRaw = (string)$this->request->getQuery('categories');
+            $categories = array_values(array_filter(explode(',', h($categoriesRaw)), static fn($v) => $v !== ''));
+            if (count($categories) > 0) {
                 $query->innerJoinWith('EventCategories', function ($q) use ($categories) {
                     return $q->where([
                         'EventCategories.category_id IN' => $categories,

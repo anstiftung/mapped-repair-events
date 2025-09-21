@@ -19,8 +19,6 @@ parameters:
           paths:
             - templates
             - plugins/Admin/templates
-        - message: '#Variable \$.* in empty\(\) always exists and is .* falsy\.$#'
-          path: src
 rules:
     - Ergebnis\PHPStan\Rules\Files\DeclareStrictTypesRule
 includes:

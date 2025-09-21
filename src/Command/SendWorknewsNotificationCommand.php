@@ -32,7 +32,7 @@ class SendWorknewsNotificationCommand extends Command
         $worknewsTable = $this->getTableLocator()->get('Worknews');
         foreach($events as $event) {
             $subscribers = $worknewsTable->getSubscribers($event->workshop_uid);
-            if (!empty($subscribers)) {
+            if ($subscribers->count() > 0) {
                 if (!empty($event->workshop)) {
                     $worknewsTable->sendNotifications($subscribers, 'Veranstaltung nächste Woche: ' . $event->workshop->name, 'event_next_week', $event->workshop, $event);
                 }

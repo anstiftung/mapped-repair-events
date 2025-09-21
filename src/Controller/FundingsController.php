@@ -36,7 +36,7 @@ class FundingsController extends AppController
     private function getBasicErrorMessages(Funding $funding): array
     {
         $errors = ['Zugriff auf diese Seite nicht möglich.'];
-        if (!empty($funding) && $funding->workshop->status == APP_DELETED) {
+        if (isset($funding->workshop) && $funding->workshop->status == APP_DELETED) {
             $errors[] = 'Die Initiative ist gelöscht.';
         }
         return $errors;
