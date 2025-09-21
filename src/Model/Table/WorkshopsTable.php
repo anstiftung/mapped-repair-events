@@ -97,6 +97,11 @@ class WorkshopsTable extends AppTable
         ]);
     }
 
+    /**
+     * @param \Cake\Event\EventInterface<\Cake\Datasource\EntityInterface> $event
+     * @param \ArrayObject<string, mixed> $data
+     * @param \ArrayObject<string, mixed> $options
+     */
     public function beforeMarshal(EventInterface $event, ArrayObject $data, ArrayObject $options): void
     {
         if (isset($data['website'])) {
@@ -176,6 +181,10 @@ class WorkshopsTable extends AppTable
     /**
      * @param array<string> $additionalContains
      */
+    /**
+     * @param array<int, string> $additionalContains
+     * @return \Cake\ORM\Query\SelectQuery<\App\Model\Entity\Workshop>
+     */
     public function getWorkshopsForAssociatedUser(int $userUid, int $workshopStatus, array $additionalContains = []): SelectQuery
     {
         $workshops = $this->getWorkshopsWithUsers($workshopStatus, $additionalContains);
@@ -196,6 +205,10 @@ class WorkshopsTable extends AppTable
 
     /**
      * @return array<int, int>
+     */
+    /**
+     * @param \Cake\ORM\Query\SelectQuery<\App\Model\Entity\Workshop> $workshops
+     * @return array<int, string>
      */
     public function transformForDropdown(SelectQuery $workshops): array
     {
@@ -230,6 +243,10 @@ class WorkshopsTable extends AppTable
 
     /**
      * @param array<string> $additionalContains
+     */
+    /**
+     * @param array<int, string> $additionalContains
+     * @return \Cake\ORM\Query\SelectQuery<\App\Model\Entity\Workshop>
      */
     public function getWorkshopsWithUsers(int $workshopStatus, array $additionalContains = []): SelectQuery
     {
@@ -368,6 +385,7 @@ class WorkshopsTable extends AppTable
         };
     }
 
+    /** @return \Cake\ORM\Query\SelectQuery<\App\Model\Entity\Workshop> */
     public function getLatestWorkshops(): SelectQuery
     {
         $workshops = $this->find('all',

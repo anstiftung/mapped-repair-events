@@ -42,6 +42,7 @@ class PostsTable extends AppTable
         return $validator;
     }
 
+    /** @return \Cake\ORM\Query\SelectQuery<\Cake\Datasource\EntityInterface> */
     public function getLatestPosts(): SelectQuery
     {
         $posts = $this->find('all',

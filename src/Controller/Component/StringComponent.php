@@ -24,8 +24,8 @@ class StringComponent extends Component
     }
 
     /**
-     * @param array<string, mixed> $data
-     * @return array<string, mixed>
+     * @param array<string, mixed>|ArrayObject<string, mixed> $data
+     * @return array<string, mixed>|ArrayObject<string, mixed>
      */
     public static function cleanAllStringsInData(array|ArrayObject $data): array|ArrayObject
     {

@@ -25,6 +25,11 @@ class FundingbudgetplansTable extends Table
         ]);
     }
 
+    /**
+     * @param \Cake\Event\EventInterface<\Cake\Datasource\EntityInterface> $event
+     * @param \ArrayObject<string, mixed> $data
+     * @param \ArrayObject<string, mixed> $options
+     */
     public function beforeMarshal(EventInterface $event, ArrayObject $data, ArrayObject $options): void
     {
         $data = StringComponent::cleanAllStringsInData($data);

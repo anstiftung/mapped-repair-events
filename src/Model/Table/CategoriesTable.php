@@ -200,6 +200,7 @@ class CategoriesTable extends Table
         })->toArray();
     }
 
+    /** @return \Cake\ORM\Query\SelectQuery<\App\Model\Entity\Category> */
     public function getMainCategoriesForFrontend(): SelectQuery
     {
         $categories = $this->find('all',

@@ -46,7 +46,10 @@ class UsersControllerTest extends AppTestCase
         ],
     ];
 
-	public function controllerSpy(EventInterface $event, ?Controller $controller = null): void
+    /**
+     * @param \Cake\Event\EventInterface<\Cake\Controller\Controller> $event
+     */
+    public function controllerSpy(EventInterface $event, ?Controller $controller = null): void
     {
 		parent::controllerSpy($event, $controller);
 		$this->_controller->geoService = new GeoServiceMock();

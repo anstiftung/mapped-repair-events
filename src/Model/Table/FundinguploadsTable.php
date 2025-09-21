@@ -20,6 +20,10 @@ class FundinguploadsTable extends Table
         ]);
     }
 
+    /**
+     * @param \Cake\Event\EventInterface<\Cake\Datasource\EntityInterface> $event
+     * @param \ArrayObject<string, mixed> $options
+     */
     public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options): void
     {
         if ($entity->isNew() && !$entity->id) {
