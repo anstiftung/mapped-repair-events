@@ -86,6 +86,7 @@ class InfoSheetsTable extends AppTable
         return $validator;
     }
 
+    /** @return \Cake\ORM\Query\SelectQuery<\App\Model\Entity\InfoSheet> */
     private function prepareStatisticsDataGlobal(?string $dateFrom=null, ?string $dateTo=null): SelectQuery
     {
         $query = $this->find();
@@ -107,6 +108,7 @@ class InfoSheetsTable extends AppTable
         return $query;
     }
 
+    /** @return \Cake\ORM\Query\SelectQuery<\App\Model\Entity\InfoSheet> */
     private function prepareStatisticsDataByWorkshopUid(int $workshopUid, ?string $dateFrom, ?string $dateTo): SelectQuery
     {
         $query = $this->prepareStatisticsDataGlobal($dateFrom, $dateTo);
@@ -116,6 +118,7 @@ class InfoSheetsTable extends AppTable
         return $query;
     }
 
+    /** @return \Cake\ORM\Query\SelectQuery<\App\Model\Entity\InfoSheet> */
     private function prepareStatisticsDataGlobalByMainCategory(int $categoryId, ?string $dateFrom, ?string $dateTo): SelectQuery
     {
         $query = $this->prepareStatisticsDataGlobal($dateFrom, $dateTo);
@@ -128,6 +131,7 @@ class InfoSheetsTable extends AppTable
         return $query;
     }
 
+    /** @return \Cake\ORM\Query\SelectQuery<\App\Model\Entity\InfoSheet> */
     private function prepareStatisticsDataByMainCategory(int $workshopUid, int $categoryId, ?string $dateFrom, ?string $dateTo): SelectQuery
     {
         $query = $this->prepareStatisticsDataByWorkshopUid($workshopUid, $dateFrom, $dateTo);
@@ -241,6 +245,10 @@ class InfoSheetsTable extends AppTable
         return $query->count();
     }
 
+    /**
+     * @param \Cake\ORM\Query\SelectQuery<\App\Model\Entity\InfoSheet> $query
+     * @return \Cake\ORM\Query\SelectQuery<\App\Model\Entity\InfoSheet>
+     */
     private function setNotRepairedConditions(SelectQuery $query): SelectQuery
     {
         $query->where(function ($exp, $query) {
@@ -257,6 +265,10 @@ class InfoSheetsTable extends AppTable
         return $query;
     }
 
+    /**
+     * @param \Cake\ORM\Query\SelectQuery<\App\Model\Entity\InfoSheet> $query
+     * @return \Cake\ORM\Query\SelectQuery<\App\Model\Entity\InfoSheet>
+     */
     private function setRepairableConditions(SelectQuery $query): SelectQuery
     {
         $query->where(function ($exp, $query) {
@@ -274,6 +286,10 @@ class InfoSheetsTable extends AppTable
         return $query;
     }
 
+    /**
+     * @param \Cake\ORM\Query\SelectQuery<\App\Model\Entity\InfoSheet> $query
+     * @return \Cake\ORM\Query\SelectQuery<\App\Model\Entity\InfoSheet>
+     */
     private function setRepairedConditions(SelectQuery $query): SelectQuery
     {
         $query->where([

@@ -28,7 +28,7 @@ class User extends Entity implements IdentityInterface
     }
 
     /**
-     * @return array<string, mixed>
+     * @return ArrayAccess<string, mixed>|array<string, mixed>
      */
     public function getOriginalData(): ArrayAccess|array
     {

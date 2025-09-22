@@ -46,6 +46,10 @@ class PagesTable extends AppTable
      * @param \App\Model\Entity\Page[] $items
      * @return array<int, string>
      */
+    /**
+     * @param \Cake\ORM\Query\SelectQuery<\App\Model\Entity\Page>|array<int, \App\Model\Entity\Page> $items
+     * @return array<int, string>
+     */
     private function flattenNestedArrayWithChildren(SelectQuery|array $items, string $separator = ''): array
     {
         foreach ($items as $item) {
@@ -67,6 +71,7 @@ class PagesTable extends AppTable
 
     /**
      * @param array<string|int, string|int> $conditions
+     * @return \Cake\ORM\Query\SelectQuery<\App\Model\Entity\Page>
      */
     public function getThreaded(array $conditions = []): SelectQuery
     {

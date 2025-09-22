@@ -28,6 +28,11 @@ class UsersTable extends AppTable
         'street'
     ];
 
+    /**
+     * @param \Cake\Event\EventInterface<\Cake\Datasource\EntityInterface> $event
+     * @param ArrayObject<string, mixed> $data
+     * @param ArrayObject<string, mixed> $options
+     */
     public function beforeMarshal(EventInterface $event, ArrayObject $data, ArrayObject $options): void
     {
         if (isset($data['website'])) {
@@ -96,6 +101,10 @@ class UsersTable extends AppTable
         return $rules;
     }
 
+    /**
+     * @param \Cake\Event\EventInterface<\Cake\Datasource\EntityInterface> $event
+     * @param ArrayObject<string, mixed> $options
+     */
     public function beforeDelete(EventInterface $event, EntityInterface $entity, ArrayObject $options): void
     {
 
@@ -219,6 +228,10 @@ class UsersTable extends AppTable
 
     /**
      * @return \App\Model\Entity\Workshop[]
+     */
+    /**
+     * @param \Cake\ORM\Query\SelectQuery<\App\Model\Entity\Workshop> $workshops
+     * @return array<int, \App\Model\Entity\Workshop>
      */
     public function getWorkshopsWhereUserIsLastOrgaUser(SelectQuery $workshops): array
     {
@@ -434,6 +447,11 @@ class UsersTable extends AppTable
 
     /**
      * @param array<string, string> $options
+     */
+    /**
+     * @param \Cake\ORM\Query\SelectQuery<\App\Model\Entity\User> $query
+     * @param array<string, string> $options
+     * @return \Cake\ORM\Query\SelectQuery<\App\Model\Entity\User>
      */
     public function findAuth(SelectQuery $query, array $options): SelectQuery
     {

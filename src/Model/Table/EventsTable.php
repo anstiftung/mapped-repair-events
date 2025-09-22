@@ -246,6 +246,10 @@ class EventsTable extends AppTable
         ];
     }
 
+    /**
+     * @param \Cake\ORM\Query\SelectQuery<\App\Model\Entity\Event> $query
+     * @return \Cake\ORM\Query\SelectQuery<\App\Model\Entity\Event>
+     */
     public function findAll(SelectQuery $query): SelectQuery
     {
         return $query->formatResults(function (CollectionInterface $results): CollectionInterface {

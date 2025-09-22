@@ -1,9 +1,6 @@
 <?php
 declare(strict_types=1);
-/**
- * damit der controller in jeder componente verfügbar ist
- * @author Mario Rothauer <marothauer@gmail.com>
- */
+
 namespace App\Controller\Component;
 
 use Cake\Controller\Component;
@@ -17,6 +14,10 @@ class AppComponent extends Component
     protected Controller $controller;
     protected Session $session;
 
+    /**
+     * @param \Cake\Controller\ComponentRegistry<\Cake\Controller\Controller> $registry
+     * @param array<string, mixed> $config
+     */
     public function __construct(ComponentRegistry $registry, array $config = [])
     {
         parent::__construct($registry, $config);

@@ -36,6 +36,7 @@ class WorknewsTable extends Table
         return $validator;
     }
 
+    /** @return \Cake\ORM\Query\SelectQuery<\App\Model\Entity\Worknews> */
     public function getSubscribers(int $workshopUid): SelectQuery
     {
         $subscribers = $this->find('all',
@@ -50,6 +51,11 @@ class WorknewsTable extends Table
     }
 
     /**
+     * @param array<string> $dirtyFields
+     * @param array<string> $originalValues
+     */
+    /**
+     * @param \Cake\ORM\Query\SelectQuery<\App\Model\Entity\Worknews> $subscribers
      * @param array<string> $dirtyFields
      * @param array<string> $originalValues
      */

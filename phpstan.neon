@@ -15,14 +15,10 @@ parameters:
         - message: '#Access to an undefined property .*#'
         - message: '#Cannot access property .*#'
         - message: '#Call to an undefined method Authorization\\IdentityInterface::is*.#'
-        - message: '#Method .* has parameter .* with generic (class|interface) .* but does not specify its types: .*#'
-        - message: '#Method .* return type with generic (class|interface) .* does not specify its types: .*#'
         - message: '#Variable \$.* might not be defined#'
           paths:
             - templates
             - plugins/Admin/templates
-        - message: '#Variable \$.* in empty\(\) always exists and is .* falsy\.$#'
-          path: src
 rules:
     - Ergebnis\PHPStan\Rules\Files\DeclareStrictTypesRule
 includes:

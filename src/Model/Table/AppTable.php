@@ -105,6 +105,10 @@ abstract class AppTable extends Table
         return $patchedEntity;
     }
 
+    /**
+     * @param \Cake\Event\EventInterface<\Cake\Datasource\EntityInterface> $event
+     * @param ArrayObject<string, mixed> $options
+     */
     public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options): void
     {
         $this->loggedUserUid = Router::getRequest()?->getAttribute('identity')?->uid;

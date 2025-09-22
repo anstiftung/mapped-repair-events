@@ -170,6 +170,10 @@ class AdminAppController extends AppController
         return null;
     }
 
+    /**
+     * @param \Cake\ORM\Query\SelectQuery<\Cake\Datasource\EntityInterface> $query
+     * @return \Cake\ORM\Query\SelectQuery<\Cake\Datasource\EntityInterface>
+     */
     protected function addMatchingsToQuery(SelectQuery $query): SelectQuery
     {
 
