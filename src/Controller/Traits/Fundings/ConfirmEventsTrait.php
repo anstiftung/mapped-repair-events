@@ -75,6 +75,9 @@ trait ConfirmEventsTrait {
             return $value > 0;
         });
         $confirmedevents = array_values($confirmedevents);
+        if (count($confirmedevents) === 0) {
+            return [];
+        }
 
         $eventsTable = $this->fetchTable('Events');
         $events = $eventsTable->find()
