@@ -141,6 +141,7 @@ body.fundings.edit div.admin.edit {
     align-items: baseline;
     padding: 0px 0px 5px 0px;
     border-radius: 3px;
+    word-break: break-word;
 }
 #fundingForm fieldset.fundingreceiptlist div.row {
     grid-template-columns: 150px auto 150px 150px 110px 110px 85px 85px;
