@@ -69,6 +69,7 @@ class UpdateProvicesFromGeoDataCommand extends Command
             $usersTable->aliasField('uid') => 'ASC']
         );
 
+        /** @var \App\Model\Entity\User $user */
         foreach($users as $user) {
             $user->revertPrivatizeData();
             $geoData = $geoService->getGeoDataByCoordinates($user->lat, $user->lng);

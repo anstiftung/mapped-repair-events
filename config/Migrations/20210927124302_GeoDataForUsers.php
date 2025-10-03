@@ -22,6 +22,7 @@ class GeoDataForUsers extends AbstractMigration
             ],
         );
 
+        /** @var \App\Model\Entity\User $user */
         foreach($users as $user) {
 
             $user->revertPrivatizeData();

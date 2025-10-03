@@ -14,6 +14,8 @@ class SendWorknewsNotificationCommand extends Command
     {
 
         // find all events that start in one week
+
+        /** @var \App\Model\Table\EventsTable $eventsTable */
         $eventsTable = $this->getTableLocator()->get('Events');
         $events = $eventsTable->find('all',
         conditions: [
@@ -30,6 +32,8 @@ class SendWorknewsNotificationCommand extends Command
 
         // send notification mail to all subscribers
         $worknewsTable = $this->getTableLocator()->get('Worknews');
+
+        /** @var \App\Model\Entity\Event $event */
         foreach($events as $event) {
             $subscribers = $worknewsTable->getSubscribers($event->workshop_uid);
             if ($subscribers->count() > 0) {

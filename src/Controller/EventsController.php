@@ -796,7 +796,7 @@ class EventsController extends AppController
     /**
      * combines multiple events to one marker
      *
-     * @param \Cake\ORM\Query\SelectQuery<\Cake\Datasource\EntityInterface>|\Cake\Datasource\Paging\PaginatedInterface $events
+     * @param \Cake\ORM\Query\SelectQuery<\App\Model\Entity\Event>|\Cake\Datasource\Paging\PaginatedInterface<array-key, \App\Model\Entity\Event> $events
      * @return array<int, mixed>
      */
     private function combineEventsForMap(PaginatedInterface|SelectQuery $events): array

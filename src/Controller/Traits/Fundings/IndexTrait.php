@@ -25,6 +25,7 @@ trait IndexTrait {
             $workshops = $workshopsTable->getWorkshopsForAssociatedUser($this->loggedUser->uid, APP_OFF, $workshopsTable->getFundingContain());
         }
 
+        /** @var \App\Model\Entity\Workshop $workshop */
         foreach ($workshops as $workshop) {
             $workshop->funding_exists = !empty($workshop->workshop_funding);
             $workshop->funding_created_by_different_owner = $workshop->funding_exists && $workshop->workshop_funding->owner != $this->loggedUser->uid;

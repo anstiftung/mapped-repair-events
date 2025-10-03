@@ -227,15 +227,14 @@ class UsersTable extends AppTable
     }
 
     /**
-     * @return \App\Model\Entity\Workshop[]
-     */
-    /**
      * @param \Cake\ORM\Query\SelectQuery<\App\Model\Entity\Workshop> $workshops
-     * @return array<int, \App\Model\Entity\Workshop>
+     * @return \App\Model\Entity\Workshop[]
      */
     public function getWorkshopsWhereUserIsLastOrgaUser(SelectQuery $workshops): array
     {
         $lastOrgaWorkshops = [];
+
+        /** @var \App\Model\Entity\Workshop $workshop */
         foreach($workshops as $workshop) {
             $sumOrgaUsers = 0;
             foreach($workshop->users as $user) {
@@ -480,6 +479,8 @@ class UsersTable extends AppTable
         ]);
 
         $preparedUsers = [];
+
+        /** @var \App\Model\Entity\User $user */
         foreach($users as $user) {
             $user->revertPrivatizeData();
             $preparedUsers[$user->uid] = $user->name . ' (' . $user->nick . ')';
