@@ -92,7 +92,7 @@ class FundingsController extends AdminAppController
             $validFundings[] = $funding;
         }
 
-        $writer = Writer::createFromString();
+        $writer = Writer::fromString();
         $writer->setDelimiter(';');
 
         $writer->insertOne($this->getCsvHeader());

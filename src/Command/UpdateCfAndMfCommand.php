@@ -22,7 +22,7 @@ class UpdateCfAndMfCommand extends Command
             ],
         )->toArray();
 
-        $reader = Reader::createFromPath(CONFIG . 'sql' . DS . 'cf-mf-update-2024-09.csv');
+        $reader = Reader::from(CONFIG . 'sql' . DS . 'cf-mf-update-2024-09.csv');
         $csvRecords = $reader->getRecords();
 
         $i = 0;

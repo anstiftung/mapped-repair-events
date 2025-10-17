@@ -50,7 +50,7 @@ class InfoSheetsController extends AppController
             throw new NotFoundException('no repair data found');
         }
 
-        $writer = Writer::createFromString();
+        $writer = Writer::fromString();
         $writer->insertOne(array_keys($records[0]));
         $id = 1;
         foreach($records as &$record) {
@@ -100,7 +100,7 @@ class InfoSheetsController extends AppController
             throw new NotFoundException('info sheets not found');
         }
 
-        $writer = Writer::createFromString();
+        $writer = Writer::fromString();
         foreach($records as &$record) {
             if ($record['Fehlerbeschreibung'] != '') {
                 $record['Fehlerbeschreibung'] = str_replace("\r\n", " ", $record['Fehlerbeschreibung']);
