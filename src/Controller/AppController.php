@@ -205,7 +205,17 @@ class AppController extends Controller
 
     public function getReferer(): string
     {
-        return $this->request->getData('referer') ?? $_SERVER['HTTP_REFERER'] ?? '/';
+        $referer = $this->request->getData('referer') ?? $_SERVER['HTTP_REFERER'] ?? '/';
+        $referer = $this->addAdditionalRefererQueryParamsToUrl($referer);
+        return $referer;
+    }
+
+    public function addAdditionalRefererQueryParamsToUrl(string $url): string
+    {
+        if ($this->getRequest()->getQuery('additionalRefererQueryParams')) {
+            $url .= (str_contains($url, '?') ? '&' : '?') . 'additionalRefererQueryParams=' . $this->getRequest()->getQuery('additionalRefererQueryParams');
+        }
+        return $url;
     }
 
     protected function patchEntityWithCurrentlyUpdatedFields(EntityInterface $entity): EntityInterface

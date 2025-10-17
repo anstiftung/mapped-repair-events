@@ -8,11 +8,41 @@ $openFirstElement = 'true';
 if ($workshops->count() > 1) {
     $openFirstElement = 'false';
 }
+
+function getKeyFromAdditioalnalRefererQueryParams(string $key, int $defaultValue): int {
+    $value = $defaultValue;
+    if (isset($_GET['additionalRefererQueryParams']) && $_GET['additionalRefererQueryParams'] != '') {
+        $additionalRefererQueryParams = explode(';', urldecode($_GET['additionalRefererQueryParams']));
+        foreach ($additionalRefererQueryParams as $param) {
+            $paramParts = explode('=', $param);
+            if (count($paramParts) == 2 && $paramParts[0] == $key) {
+                $value = (int) $paramParts[1];
+            }
+        }
+    }
+    return $value;
+}
+
 $this->element('addScript', ['script' =>
     JS_NAMESPACE.".Helper.bindToggleLinks(false, " . $openFirstElement . ");".
     JS_NAMESPACE.".Helper.bindToggleLinksForSubtables();".
     JS_NAMESPACE.".Helper.bindDeleteEventButton();"
 ]);
+
+$workshopUidToOpen = getKeyFromAdditioalnalRefererQueryParams('workshop-uid', 0);
+if ($workshopUidToOpen > 0) {
+    $this->element('addScript', ['script' =>
+        JS_NAMESPACE.".Helper.openToggleLinkById('workshop-uid-" . $workshopUidToOpen . "');"
+    ]);
+}
+
+$eventUidToOpen = getKeyFromAdditioalnalRefererQueryParams('event-uid', 0);
+if ($eventUidToOpen > 0) {
+    $this->element('addScript', ['script' =>
+        JS_NAMESPACE.".Helper.openToggleLinkById('event-uid-" . $eventUidToOpen . "');"
+    ]);
+}
+
 if (Configure::read('AppConfig.statisticsEnabled')) {
     $this->element('addScript', ['script' =>
         JS_NAMESPACE.".Helper.bindDownloadInfoSheetButton();".
@@ -42,7 +72,7 @@ if (Configure::read('AppConfig.statisticsEnabled')) {
             <?php if (count($workshop->events) == 0) { ?>
                 <h2 class="<?php echo join(' ', $workshopRowClass); ?>"><?php echo $workshop->name . ' (' . count($workshop->events) . ' Termine)' . $workshopTitleSuffix; ?></h2>
             <?php } else { ?>
-                <a class="toggle-link heading <?php echo join(' ', $workshopRowClass); ?>" href="javascript:void(0);">
+                <a id="workshop-uid-<?php echo $workshop->uid; ?>" class="toggle-link heading <?php echo join(' ', $workshopRowClass); ?>" href="javascript:void(0);">
                     <?php
                         $workshopToggleLinkLabel = $workshop->name;
                         $workshopToggleLinkLabelAdditionalInfos = [$this->Number->precision(count($workshop->events), 0) . ' Termin' . (count($workshop->events) == 1 ? '' : 'e')];
@@ -119,14 +149,14 @@ if (Configure::read('AppConfig.statisticsEnabled')) {
                                         echo '<td>';
 
                                             if (count($event->info_sheets) > 0) {
-                                                echo '<a class="toggle-link-for-subtable" href="javascript:void(0);">';
+                                                echo '<a id="event-uid-' . $event->uid . '" class="toggle-link-for-subtable" href="javascript:void(0);">';
                                                     echo '<i class="fa fa-plus"></i>' . ' (' . count($event->info_sheets) . ')';
                                                 echo '</a>';
                                             }
 
                                             echo $this->Html->link(
                                             '<i class="far fa-calendar-plus fa-border"></i>',
-                                            $this->Html->urlInfoSheetNew($event->uid),
+                                            $this->Html->urlInfoSheetNew($event->uid, 'workshop-uid='.$workshop->uid.';event-uid='.$event->uid),
                                                 ['title' => 'Neuen Laufzettel erstellen', 'escape' => false, 'class' => 'add-info-sheet']
                                             );
 
@@ -213,7 +243,8 @@ if (Configure::read('AppConfig.statisticsEnabled')) {
                                                 ]);
                                                 foreach($event->info_sheets as $info_sheet) {
                                                      echo $this->element('infoSheet/infoSheetTableRow', [
-                                                         'info_sheet' => $info_sheet
+                                                         'event' => $event,
+                                                         'info_sheet' => $info_sheet,
                                                      ]);
                                                 }
                                             echo '</table>';

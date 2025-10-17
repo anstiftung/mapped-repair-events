@@ -528,13 +528,21 @@ class MyHtmlHelper extends HtmlHelper {
     {
         return '/termine/add' . (!is_null($workshopUid) ? '/'.$workshopUid : '');
     }
-    function urlInfoSheetNew(int $eventUid): string
+    function urlInfoSheetNew(int $eventUid, string $additionalRefererQueryParams = ''): string
     {
-        return '/laufzettel/add/' . $eventUid;
+        $url = '/laufzettel/add/' . $eventUid;
+        if ($additionalRefererQueryParams != '') {
+            $url .= '?additionalRefererQueryParams=' . urlencode($additionalRefererQueryParams);
+        }
+        return $url;
     }
-    function urlInfoSheetEdit(int $infoSheetUid): string
+    function urlInfoSheetEdit(int $infoSheetUid, $additionalRefererQueryParams = ''): string
     {
-        return '/laufzettel/edit/' . $infoSheetUid;
+        $url = '/laufzettel/edit/' . $infoSheetUid;
+        if ($additionalRefererQueryParams != '') {
+            $url .= '?additionalRefererQueryParams=' . urlencode($additionalRefererQueryParams);
+        }
+        return $url;
     }
     function urlInfoSheetDelete(int $infoSheetUid): string
     {

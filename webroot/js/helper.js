@@ -1134,6 +1134,10 @@ MappedRepairEvents.Helper = {
 
     },
 
+    openToggleLinkById: function(id) {
+        $('#' + id).filter('.toggle-link, .toggle-link-for-subtable').trigger('click');
+    },
+
     bindShowMoreLink: function(autoOpen) {
 
         autoOpen = autoOpen || false;

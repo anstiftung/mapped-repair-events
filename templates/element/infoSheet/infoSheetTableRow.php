@@ -34,7 +34,7 @@ declare(strict_types=1);
         echo '<td class="icon">';
             echo $this->Html->link(
                '<i class="far fa-edit fa-border"></i>',
-               $this->Html->urlInfoSheetEdit($info_sheet->uid),
+               $this->Html->urlInfoSheetEdit($info_sheet->uid, 'workshop-uid='.$event->workshop_uid.';event-uid='.$info_sheet->event_uid),
                ['title' => 'Laufzettel bearbeiten', 'escape' => false]
             );
         echo '</td>';
