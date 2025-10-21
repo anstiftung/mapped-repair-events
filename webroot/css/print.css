@@ -1,9 +1,18 @@
-@media print{
-
+@media print {
   #nav,
+  .socialicons,
+  #footer,
+  .cancel-and-save-button-wrapper,
   #infoSheetEditForm h1,
   #infoSheetEditForm #print-button {
     display: none;
+  }
+  #header {
+    border-bottom: none;
+    height: 100px ! important;
+  }
+  #footer {
+    border: none;
   }
   #content {
     width: 1100px;
