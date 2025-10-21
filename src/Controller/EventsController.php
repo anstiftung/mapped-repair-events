@@ -171,7 +171,6 @@ class EventsController extends AppController
         $this->Workshop = $this->getTableLocator()->get('Workshops');
         if ($this->isAdmin()) {
             $workshops = $this->Workshop->getWorkshopsWithUsers(APP_DELETED);
-            $workshops->where(['Workshops.uid IN' => [100900, 22902]]);
         } else {
             $workshops = $this->Workshop->getWorkshopsForAssociatedUser($this->loggedUser->uid, APP_DELETED);
         }
