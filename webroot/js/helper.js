@@ -893,6 +893,7 @@ MappedRepairEvents.Helper = {
         });
         $('#nav #menu').append(socialIcons);
 
+        $('#header').append($('#flashMessage'));
 
         $('body').append($('#nav'));
         $('#login-box').show();

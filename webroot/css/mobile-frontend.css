@@ -653,7 +653,8 @@
     }
 
     #flashMessage {
-        margin-top: 10px;
+        margin-top: 14px;
+        width: 90%;
     }
     body.workshops.verwalten a.add-workshop {
         float: none;
