@@ -25,7 +25,7 @@ use Cake\Core\Configure;
     <?php
     echo $this->Form->create($infoSheet, [
         'novalidate' => 'novalidate',
-        'url' => $editFormUrl,
+        'url' => $this->request->getRequestTarget(),
         'id' => 'infoSheetEditForm'
     ]);
     ?>

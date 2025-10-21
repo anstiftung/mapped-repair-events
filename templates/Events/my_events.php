@@ -8,11 +8,27 @@ $openFirstElement = 'true';
 if ($workshops->count() > 1) {
     $openFirstElement = 'false';
 }
+
 $this->element('addScript', ['script' =>
     JS_NAMESPACE.".Helper.bindToggleLinks(false, " . $openFirstElement . ");".
     JS_NAMESPACE.".Helper.bindToggleLinksForSubtables();".
     JS_NAMESPACE.".Helper.bindDeleteEventButton();"
 ]);
+
+$workshopUidToOpen = $this->Html->getKeyFromRefererParams('workshop-uid', $this->request->getQuery('refererParams', ''));
+if ($workshopUidToOpen > 0) {
+    $this->element('addScript', ['script' =>
+        JS_NAMESPACE.".Helper.openToggleLinkByIdAndScrollToElement('workshop-uid-" . $workshopUidToOpen . "');"
+    ]);
+}
+
+$eventUidToOpen = $this->Html->getKeyFromRefererParams('event-uid', $this->request->getQuery('refererParams', ''));
+if ($eventUidToOpen > 0) {
+    $this->element('addScript', ['script' =>
+        JS_NAMESPACE.".Helper.openToggleLinkByIdAndScrollToElement('event-uid-" . $eventUidToOpen . "');"
+    ]);
+}
+
 if (Configure::read('AppConfig.statisticsEnabled')) {
     $this->element('addScript', ['script' =>
         JS_NAMESPACE.".Helper.bindDownloadInfoSheetButton();".
@@ -42,7 +58,7 @@ if (Configure::read('AppConfig.statisticsEnabled')) {
             <?php if (count($workshop->events) == 0) { ?>
                 <h2 class="<?php echo join(' ', $workshopRowClass); ?>"><?php echo $workshop->name . ' (' . count($workshop->events) . ' Termine)' . $workshopTitleSuffix; ?></h2>
             <?php } else { ?>
-                <a class="toggle-link heading <?php echo join(' ', $workshopRowClass); ?>" href="javascript:void(0);">
+                <a id="workshop-uid-<?php echo $workshop->uid; ?>" class="toggle-link heading <?php echo join(' ', $workshopRowClass); ?>" href="javascript:void(0);">
                     <?php
                         $workshopToggleLinkLabel = $workshop->name;
                         $workshopToggleLinkLabelAdditionalInfos = [$this->Number->precision(count($workshop->events), 0) . ' Termin' . (count($workshop->events) == 1 ? '' : 'e')];
@@ -58,7 +74,7 @@ if (Configure::read('AppConfig.statisticsEnabled')) {
                 </a>
             <?php } ?>
 
-            <a href="<?php echo Configure::read('AppConfig.htmlHelper')->urlEventNew($workshop->uid); ?>" class="button add-event<?php echo $hasEditEventPermissions ? '': ' hide'; ?>"><i class="fa fa-plus-circle"></i> Neuen Termin erstellen</a>
+            <a href="<?php echo Configure::read('AppConfig.htmlHelper')->urlEventNew($workshop->uid, 'workshop-uid=' . $workshop->uid); ?>" class="button add-event<?php echo $hasEditEventPermissions ? '': ' hide'; ?>"><i class="fa fa-plus-circle"></i> Neuen Termin erstellen</a>
 
             <?php if (count($workshop->events) > 0) { ?>
 
@@ -119,14 +135,14 @@ if (Configure::read('AppConfig.statisticsEnabled')) {
                                         echo '<td>';
 
                                             if (count($event->info_sheets) > 0) {
-                                                echo '<a class="toggle-link-for-subtable" href="javascript:void(0);">';
+                                                echo '<a id="event-uid-' . $event->uid . '" class="toggle-link-for-subtable" href="javascript:void(0);">';
                                                     echo '<i class="fa fa-plus"></i>' . ' (' . count($event->info_sheets) . ')';
                                                 echo '</a>';
                                             }
 
                                             echo $this->Html->link(
                                             '<i class="far fa-calendar-plus fa-border"></i>',
-                                            $this->Html->urlInfoSheetNew($event->uid),
+                                            $this->Html->urlInfoSheetNew($event->uid, 'workshop-uid='.$workshop->uid.';event-uid='.$event->uid),
                                                 ['title' => 'Neuen Laufzettel erstellen', 'escape' => false, 'class' => 'add-info-sheet']
                                             );
 
@@ -173,7 +189,7 @@ if (Configure::read('AppConfig.statisticsEnabled')) {
                                         echo '<td class="icon">';
                                         echo $this->Html->link(
                                                '<i class="far fa-copy fa-border"></i>',
-                                               $this->Html->urlEventDuplicate($event->uid),
+                                               $this->Html->urlEventDuplicate($event->uid, 'workshop-uid=' . $event->workshop_uid),
                                                   ['title' => 'Termin duplizieren', 'escape' => false]
                                             );
                                         echo '</td>';
@@ -183,7 +199,7 @@ if (Configure::read('AppConfig.statisticsEnabled')) {
                                         if (!$event->datumstart->isPast()) {
                                             echo $this->Html->link(
                                                    '<i class="far fa-edit fa-border"></i>',
-                                                   $this->Html->urlEventEdit($event->uid),
+                                                   $this->Html->urlEventEdit($event->uid, 'workshop-uid=' . $event->workshop_uid),
                                                       ['title' => 'Termin bearbeiten', 'escape' => false]
                                                 );
                                         }
@@ -213,7 +229,8 @@ if (Configure::read('AppConfig.statisticsEnabled')) {
                                                 ]);
                                                 foreach($event->info_sheets as $info_sheet) {
                                                      echo $this->element('infoSheet/infoSheetTableRow', [
-                                                         'info_sheet' => $info_sheet
+                                                         'event' => $event,
+                                                         'info_sheet' => $info_sheet,
                                                      ]);
                                                 }
                                             echo '</table>';

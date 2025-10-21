@@ -170,7 +170,6 @@ class InfoSheetsController extends AppController
         $this->set('metaTags', ['title' => 'Laufzettel erstellen']);
 
         $this->set('eventUid', $eventUid);
-        $this->set('editFormUrl', Configure::read('AppConfig.htmlHelper')->urlInfoSheetNew($eventUid));
 
         $this->_edit($infoSheet, false);
 
@@ -199,7 +198,6 @@ class InfoSheetsController extends AppController
 
         $this->setIsCurrentlyUpdated($infoSheet->uid);
         $this->set('metaTags', ['title' => 'Laufzettel bearbeiten']);
-        $this->set('editFormUrl', Configure::read('AppConfig.htmlHelper')->urlInfoSheetEdit($infoSheet->uid));
 
         $events = $this->InfoSheet->Events->find('all',
             conditions: [
@@ -299,7 +297,9 @@ class InfoSheetsController extends AppController
                 if ($this->InfoSheet->save($entity)) {
                     $this->AppFlash->setFlashMessage($this->InfoSheet->name_de . ' erfolgreich gespeichert.');
                     if (in_array('save-button', array_keys($this->request->getData()))) {
-                        $this->redirect(Configure::read('AppConfig.htmlHelper')->urlMyEvents());
+                        $redirectUrl = Configure::read('AppConfig.htmlHelper')->urlMyEvents();
+                        $redirectUrl = $this->addRefererParamsToUrl($redirectUrl);
+                        $this->redirect($redirectUrl);
                     } else {
                         $this->redirect($this->getPreparedReferer());
                     }

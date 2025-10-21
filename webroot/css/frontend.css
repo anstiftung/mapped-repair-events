@@ -2345,7 +2345,6 @@ div.addthis_toolbox a {
     margin-top: -2px;
 }
 /* START flash message box */
-
 #flashMessage {
     line-height: 18px;
     padding: 10px 15px;
@@ -2354,10 +2353,16 @@ div.addthis_toolbox a {
     -moz-border-radius: 3px;
     -khtml-border-radius: 3px;
     -webkit-border-radius: 3px;
-    width: 70%;
+    width: 750px;
     display: block;
     font-weight: 700;
-    position: relative;
+    position: fixed;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 8px;
+    z-index: 10000;
+    opacity: 0.9;
 }
 #flashMessage.success,
 #flashMessage.success .closer i {

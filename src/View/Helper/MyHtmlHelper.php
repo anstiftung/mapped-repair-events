@@ -520,25 +520,54 @@ class MyHtmlHelper extends HtmlHelper {
     {
         return '/termine/edit/' . $uid;
     }
-    function urlEventDuplicate(int $uid): string
+    function urlEventDuplicate(int $uid, string $refererParams = ''): string
     {
-        return '/termine/duplicate/' . $uid;
+        $url = '/termine/duplicate/' . $uid;
+        $url = $this->addRefererParamsToUrl($url, $refererParams);
+        return $url;
     }
-    function urlEventNew(?int $workshopUid = null): string
+    function urlEventNew(?int $workshopUid = null, string $refererParams = ''): string
     {
-        return '/termine/add' . (!is_null($workshopUid) ? '/'.$workshopUid : '');
+        $url = '/termine/add' . (!is_null($workshopUid) ? '/'.$workshopUid : '');
+        $url = $this->addRefererParamsToUrl($url, $refererParams);
+        return $url;
     }
-    function urlInfoSheetNew(int $eventUid): string
+    function urlInfoSheetNew(int $eventUid, string $refererParams = ''): string
     {
-        return '/laufzettel/add/' . $eventUid;
+        $url = '/laufzettel/add/' . $eventUid;
+        $url = $this->addRefererParamsToUrl($url, $refererParams);
+        return $url;
     }
-    function urlInfoSheetEdit(int $infoSheetUid): string
+    function urlInfoSheetEdit(int $infoSheetUid, string $refererParams = ''): string
     {
-        return '/laufzettel/edit/' . $infoSheetUid;
+        $url = '/laufzettel/edit/' . $infoSheetUid;
+        $url = $this->addRefererParamsToUrl($url, $refererParams);
+        return $url;
     }
+
     function urlInfoSheetDelete(int $infoSheetUid): string
     {
         return '/laufzettel/delete/' . $infoSheetUid;
+    }
+
+    function addRefererParamsToUrl(string $url, string $refererParams): string
+    {
+        return $refererParams != '' ? $url . '?refererParams=' . urlencode($refererParams) : $url;
+    }
+
+    function getKeyFromRefererParams(string $key, string $refererParams): int {
+        $value = 0;
+        if ($refererParams == '') {
+            return $value;
+        }
+        $explodedRefererParams = explode(';', urldecode($refererParams));
+        foreach ($explodedRefererParams as $param) {
+            $paramParts = explode('=', $param);
+            if (count($paramParts) == 2 && $paramParts[0] == $key) {
+                $value = (int) $paramParts[1];
+            }
+        }
+        return $value;
     }
 
     function urlFeed(): string
