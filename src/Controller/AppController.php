@@ -206,14 +206,14 @@ class AppController extends Controller
     public function getReferer(): string
     {
         $referer = $this->request->getData('referer') ?? $_SERVER['HTTP_REFERER'] ?? '/';
-        $referer = $this->addAdditionalRefererQueryParamsToUrl($referer);
+        $referer = $this->addRefererParamsToUrl($referer);
         return $referer;
     }
 
-    public function addAdditionalRefererQueryParamsToUrl(string $url): string
+    public function addRefererParamsToUrl(string $url): string
     {
-        if ($this->getRequest()->getQuery('additionalRefererQueryParams')) {
-            $url .= (str_contains($url, '?') ? '&' : '?') . 'additionalRefererQueryParams=' . $this->getRequest()->getQuery('additionalRefererQueryParams');
+        if ($this->getRequest()->getQuery('refererParams')) {
+            $url .= (str_contains($url, '?') ? '&' : '?') . 'refererParams=' . $this->getRequest()->getQuery('refererParams');
         }
         return $url;
     }

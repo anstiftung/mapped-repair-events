@@ -298,7 +298,7 @@ class InfoSheetsController extends AppController
                     $this->AppFlash->setFlashMessage($this->InfoSheet->name_de . ' erfolgreich gespeichert.');
                     if (in_array('save-button', array_keys($this->request->getData()))) {
                         $redirectUrl = Configure::read('AppConfig.htmlHelper')->urlMyEvents();
-                        $redirectUrl = $this->addAdditionalRefererQueryParamsToUrl($redirectUrl);
+                        $redirectUrl = $this->addRefererParamsToUrl($redirectUrl);
                         $this->redirect($redirectUrl);
                     } else {
                         $this->redirect($this->getPreparedReferer());
