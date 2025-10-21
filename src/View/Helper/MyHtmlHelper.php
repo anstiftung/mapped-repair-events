@@ -520,33 +520,39 @@ class MyHtmlHelper extends HtmlHelper {
     {
         return '/termine/edit/' . $uid;
     }
-    function urlEventDuplicate(int $uid): string
+    function urlEventDuplicate(int $uid, string $refererParams = ''): string
     {
-        return '/termine/duplicate/' . $uid;
+        $url = '/termine/duplicate/' . $uid;
+        $url = $this->addRefererParamsToUrl($url, $refererParams);
+        return $url;
     }
-    function urlEventNew(?int $workshopUid = null): string
+    function urlEventNew(?int $workshopUid = null, string $refererParams = ''): string
     {
-        return '/termine/add' . (!is_null($workshopUid) ? '/'.$workshopUid : '');
+        $url = '/termine/add' . (!is_null($workshopUid) ? '/'.$workshopUid : '');
+        $url = $this->addRefererParamsToUrl($url, $refererParams);
+        return $url;
     }
     function urlInfoSheetNew(int $eventUid, string $refererParams = ''): string
     {
         $url = '/laufzettel/add/' . $eventUid;
-        if ($refererParams != '') {
-            $url .= '?refererParams=' . urlencode($refererParams);
-        }
+        $url = $this->addRefererParamsToUrl($url, $refererParams);
         return $url;
     }
     function urlInfoSheetEdit(int $infoSheetUid, string $refererParams = ''): string
     {
         $url = '/laufzettel/edit/' . $infoSheetUid;
-        if ($refererParams != '') {
-            $url .= '?refererParams=' . urlencode($refererParams);
-        }
+        $url = $this->addRefererParamsToUrl($url, $refererParams);
         return $url;
     }
+
     function urlInfoSheetDelete(int $infoSheetUid): string
     {
         return '/laufzettel/delete/' . $infoSheetUid;
+    }
+
+    function addRefererParamsToUrl(string $url, string $refererParams): string
+    {
+        return $refererParams != '' ? $url . '?refererParams=' . urlencode($refererParams) : $url;
     }
 
     function getKeyFromRefererParams(string $key, string $refererParams): int {

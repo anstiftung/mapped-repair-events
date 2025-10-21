@@ -758,7 +758,9 @@ MappedRepairEvents.Helper = {
 
         $('a.delete-info_sheet').on('click', function() {
             var message = 'Soll dieser Laufzettel wirklich gelöscht werden?<br />Dies kann nicht rückgängig gemacht werden!';
-            var eventUid = $(this).closest('tr').find('td.infoSheetUid').html();
+            var infoSheetUid = $(this).closest('tr').find('td.infoSheetUid').html();
+            var eventUid = $(this).data('event-uid');
+            var workshopUid = $(this).data('workshop-uid');
             $.prompt(message, {
                 buttons : {
                     Ja : true,
@@ -766,7 +768,7 @@ MappedRepairEvents.Helper = {
                 },
                 submit : function(v, m, f) {
                     if (m) {
-                        var url = '/laufzettel/delete/' + eventUid;
+                        var url = '/laufzettel/delete/' + infoSheetUid + '?refererParams=workshop-uid=' + workshopUid + ';event-uid=' + eventUid;
                         document.location.href = url;
                     }
                 }

@@ -25,7 +25,9 @@ declare(strict_types=1);
                 [
                     'title' => 'Laufzettel löschen',
                     'escape' => false,
-                    'class' => 'delete-info_sheet'
+                    'class' => 'delete-info_sheet',
+                    'data-workshop-uid' => $event->workshop_uid,
+                    'data-event-uid' => $info_sheet->event_uid,
                 ]
             );
         echo '</td>';

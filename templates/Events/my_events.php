@@ -74,7 +74,7 @@ if (Configure::read('AppConfig.statisticsEnabled')) {
                 </a>
             <?php } ?>
 
-            <a href="<?php echo Configure::read('AppConfig.htmlHelper')->urlEventNew($workshop->uid); ?>" class="button add-event<?php echo $hasEditEventPermissions ? '': ' hide'; ?>"><i class="fa fa-plus-circle"></i> Neuen Termin erstellen</a>
+            <a href="<?php echo Configure::read('AppConfig.htmlHelper')->urlEventNew($workshop->uid, 'workshop-uid=' . $workshop->uid); ?>" class="button add-event<?php echo $hasEditEventPermissions ? '': ' hide'; ?>"><i class="fa fa-plus-circle"></i> Neuen Termin erstellen</a>
 
             <?php if (count($workshop->events) > 0) { ?>
 
@@ -189,7 +189,7 @@ if (Configure::read('AppConfig.statisticsEnabled')) {
                                         echo '<td class="icon">';
                                         echo $this->Html->link(
                                                '<i class="far fa-copy fa-border"></i>',
-                                               $this->Html->urlEventDuplicate($event->uid),
+                                               $this->Html->urlEventDuplicate($event->uid, 'workshop-uid=' . $event->workshop_uid),
                                                   ['title' => 'Termin duplizieren', 'escape' => false]
                                             );
                                         echo '</td>';
@@ -199,7 +199,7 @@ if (Configure::read('AppConfig.statisticsEnabled')) {
                                         if (!$event->datumstart->isPast()) {
                                             echo $this->Html->link(
                                                    '<i class="far fa-edit fa-border"></i>',
-                                                   $this->Html->urlEventEdit($event->uid),
+                                                   $this->Html->urlEventEdit($event->uid, 'workshop-uid=' . $event->workshop_uid),
                                                       ['title' => 'Termin bearbeiten', 'escape' => false]
                                                 );
                                         }
