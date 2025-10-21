@@ -18,14 +18,14 @@ $this->element('addScript', ['script' =>
 $workshopUidToOpen = $this->Html->getKeyFromRefererParams('workshop-uid', $this->request->getQuery('refererParams', ''));
 if ($workshopUidToOpen > 0) {
     $this->element('addScript', ['script' =>
-        JS_NAMESPACE.".Helper.openToggleLinkById('workshop-uid-" . $workshopUidToOpen . "');"
+        JS_NAMESPACE.".Helper.openToggleLinkByIdAndScrollToElement('workshop-uid-" . $workshopUidToOpen . "');"
     ]);
 }
 
 $eventUidToOpen = $this->Html->getKeyFromRefererParams('event-uid', $this->request->getQuery('refererParams', ''));
 if ($eventUidToOpen > 0) {
     $this->element('addScript', ['script' =>
-        JS_NAMESPACE.".Helper.openToggleLinkById('event-uid-" . $eventUidToOpen . "');"
+        JS_NAMESPACE.".Helper.openToggleLinkByIdAndScrollToElement('event-uid-" . $eventUidToOpen . "');"
     ]);
 }
 

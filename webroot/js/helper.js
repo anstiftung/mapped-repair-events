@@ -1134,8 +1134,12 @@ MappedRepairEvents.Helper = {
 
     },
 
-    openToggleLinkById: function(id) {
-        $('#' + id).filter('.toggle-link, .toggle-link-for-subtable').trigger('click');
+    openToggleLinkByIdAndScrollToElement: function(id) {
+        const element = $('#' + id);
+        element.filter('.toggle-link, .toggle-link-for-subtable').trigger('click');
+        $('html,body').animate({
+            scrollTop: element.offset().top - $('#header').height()
+        }, 400);
     },
 
     bindShowMoreLink: function(autoOpen) {
