@@ -9,34 +9,20 @@ if ($workshops->count() > 1) {
     $openFirstElement = 'false';
 }
 
-function getKeyFromRefererParams(string $key, int $defaultValue): int {
-    $value = $defaultValue;
-    if (isset($_GET['refererParams']) && $_GET['refererParams'] != '') {
-        $refererParams = explode(';', urldecode($_GET['refererParams']));
-        foreach ($refererParams as $param) {
-            $paramParts = explode('=', $param);
-            if (count($paramParts) == 2 && $paramParts[0] == $key) {
-                $value = (int) $paramParts[1];
-            }
-        }
-    }
-    return $value;
-}
-
 $this->element('addScript', ['script' =>
     JS_NAMESPACE.".Helper.bindToggleLinks(false, " . $openFirstElement . ");".
     JS_NAMESPACE.".Helper.bindToggleLinksForSubtables();".
     JS_NAMESPACE.".Helper.bindDeleteEventButton();"
 ]);
 
-$workshopUidToOpen = getKeyFromRefererParams('workshop-uid', 0);
+$workshopUidToOpen = $this->Html->getKeyFromRefererParams('workshop-uid', $this->request->getQuery('refererParams', ''));
 if ($workshopUidToOpen > 0) {
     $this->element('addScript', ['script' =>
         JS_NAMESPACE.".Helper.openToggleLinkById('workshop-uid-" . $workshopUidToOpen . "');"
     ]);
 }
 
-$eventUidToOpen = getKeyFromRefererParams('event-uid', 0);
+$eventUidToOpen = $this->Html->getKeyFromRefererParams('event-uid', $this->request->getQuery('refererParams', ''));
 if ($eventUidToOpen > 0) {
     $this->element('addScript', ['script' =>
         JS_NAMESPACE.".Helper.openToggleLinkById('event-uid-" . $eventUidToOpen . "');"

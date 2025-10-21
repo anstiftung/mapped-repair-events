@@ -549,6 +549,21 @@ class MyHtmlHelper extends HtmlHelper {
         return '/laufzettel/delete/' . $infoSheetUid;
     }
 
+    function getKeyFromRefererParams(string $key, string $refererParams): int {
+        $value = 0;
+        if ($refererParams == '') {
+            return $value;
+        }
+        $explodedRefererParams = explode(';', urldecode($refererParams));
+        foreach ($explodedRefererParams as $param) {
+            $paramParts = explode('=', $param);
+            if (count($paramParts) == 2 && $paramParts[0] == $key) {
+                $value = (int) $paramParts[1];
+            }
+        }
+        return $value;
+    }
+
     function urlFeed(): string
     {
         return '/feed.rss';
