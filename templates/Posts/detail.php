@@ -25,7 +25,7 @@ if ($this->request->getSession()->read('isMobile')) {
             foreach($post->photos as $photo) {
                 echo '<div class="image-wrapper">';
                     echo '<a href="'.$this->Html->getThumbs800ImageMultiple($photo->name).'">';
-                        echo '<img alt="'.$photo->text.'" src="'.$this->Html->getThumbs280ImageMultiple($photo->name).'" / width="280" >';
+                        echo '<img alt="'.$photo->text.'" src="'.$this->Html->getThumbs800ImageMultiple($photo->name).'" / width="280" >';
                     echo '</a>';
                     if ($photo->text != '') {
                         echo '<div class="image-text">'.$photo->text.'</div>';
