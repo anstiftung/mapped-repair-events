@@ -75,4 +75,8 @@ class Workshop extends Entity
         return !$this->funding_is_past_events_count_ok;
     }
 
+    public function _getIsTextEmpty(): bool {
+        return trim(strip_tags($this->text)) === '';
+    }
+
 }

@@ -118,7 +118,7 @@ if(!empty($workshop->categories)) { ?>
     </div>
 <?php }
 
-if ($workshop->text != '') {
+if (!$workshop->is_text_empty) {
     echo '<div class="sc"></div>';
     echo $this->Html->Tag('h2', __('Workshop Detail headline Description'));
     echo '<br />';
