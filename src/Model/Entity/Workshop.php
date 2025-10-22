@@ -76,7 +76,11 @@ class Workshop extends Entity
     }
 
     public function _getIsTextEmpty(): bool {
-        return trim(strip_tags($this->text)) === '';
+        return $this->unformatted_text === '';
+    }
+
+    public function _getUnformattedText(): string {
+        return trim(strip_tags($this->text));
     }
 
 }
