@@ -102,10 +102,12 @@ if (!$this->request->getSession()->read('isMobile')) {
             echo $this->element('workshop/team', [
                 'team' => $team
             ]);
-            echo $this->element('workshop/statistics', [
-                'workshop' => $workshop
-            ]);
-
+            if ($showStatistics) {
+                echo $this->element('workshop/statistics', [
+                    'workshop' => $workshop
+                ]);
+            }
+            
             if ($this->request->getSession()->read('isMobile')) {
                 echo $this->element('workshop/worknewsToggle', [
                     'subscribed' => $subscribed,

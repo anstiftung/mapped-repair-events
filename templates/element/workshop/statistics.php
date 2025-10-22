@@ -1,12 +1,6 @@
 <?php
 declare(strict_types=1);
 
-use Cake\Core\Configure;
-
-if (!Configure::read('AppConfig.statisticsEnabled') || $workshop->show_statistics == 0) {
-    return;
-}
-
 if (!$this->request->getSession()->read('isMobile')) {
     echo $this->element('addScript', ['script' =>
         JS_NAMESPACE.".Helper.fixChartInHiddenIframe();
