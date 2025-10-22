@@ -2302,6 +2302,7 @@ img.rounded {
     border-radius: 115px;
     -webkit-border-radius: 115px;
     -moz-border-radius: 115px;
+    object-fit: cover;
 }
 img.rounded50 {
     width: 50px;
