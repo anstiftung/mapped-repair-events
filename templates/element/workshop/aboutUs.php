@@ -81,28 +81,28 @@ if ($workshop->additional_contact != '') {
 
 echo '<div class="sc"></div>';
 
-if (!$this->request->getSession()->read('isMobile')) {
-
-    foreach ($orgaTeam as $user) {
-        echo '<div class="orgaansprech">';
-            echo '<a class="green" title="Zum Profil" href="'.$this->Html->urlUserProfile($user->uid) . '">';
-                echo $this->Html->getUserProfileImage($user);
-                echo '<b style="color:#727374;">' . __('CONTACT PERSON') . '</b><br />';
-                if ($user->firstname != '' || $user->lastname != '') {
-                    if ($user->firstname != '') {
-                        echo $user->firstname . ' ';
+if (!$this->request->getSession()->read('isMobile') && !empty($orgaTeam)) {
+    echo '<div class="orga-team-wrapper">';
+        foreach ($orgaTeam as $user) {
+            echo '<div class="orgaansprech">';
+                echo '<a class="green" title="Zum Profil" href="'.$this->Html->urlUserProfile($user->uid) . '">';
+                    echo $this->Html->getUserProfileImage($user);
+                    echo '<b style="color:#727374;">' . __('CONTACT PERSON') . '</b><br />';
+                    if ($user->firstname != '' || $user->lastname != '') {
+                        if ($user->firstname != '') {
+                            echo $user->firstname . ' ';
+                        }
+                        if ($user->lastname != '') {
+                            echo $user->lastname;
+                        }
+                    } else {
+                        echo $user->nick;
                     }
-                    if ($user->lastname != '') {
-                        echo $user->lastname;
-                    }
-                } else {
-                    echo $user->nick;
-                }
-                echo '<br />';
-            echo '</a>';
-        echo '</div>';
-    }
-
+                    echo '<br />';
+                echo '</a>';
+            echo '</div>';
+        }
+    echo '</div>';
 }
 
 if(!empty($workshop->categories)) { ?>

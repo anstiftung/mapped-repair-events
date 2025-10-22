@@ -1408,13 +1408,16 @@ body.workshops.detail #calendar {
     color: #fff;
     background-color: var(--theme-color-a) !important;
 }
+.orga-team-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 0;
+    margin-bottom: 15px;
+}
 .orgaansprech {
-    float: left;
     width: 33%;
     text-align: center ! important;
-    height: 165px;
     position: relative;
-    margin-top: 10px;
 }
 .orgaansprech a:hover {
     opacity: .7;
