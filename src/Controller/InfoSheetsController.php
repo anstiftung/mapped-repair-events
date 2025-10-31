@@ -132,7 +132,7 @@ class InfoSheetsController extends AppController
 
     }
 
-    public function add(int $eventUid): void
+    public function add(int $eventUid): ?Response
     {
         $eventsTable = $this->getTableLocator()->get('Events');
         $eventsTable->getAssociation('Workshops')->setConditions(['Workshops.status > ' . APP_DELETED]);
@@ -162,8 +162,9 @@ class InfoSheetsController extends AppController
 
         // assures rendering of success message on redirected page and NOT before and then not showing it
         if (empty($this->request->getData())) {
-            $this->render('edit');
+            return $this->render('edit');
         }
+        return null;
     }
 
     public function edit(int $infoSheetUid): void
@@ -304,7 +305,7 @@ class InfoSheetsController extends AppController
         $this->set('isEditMode', $isEditMode);
 
         if (!empty($errors)) {
-            $this->render('edit');
+            return $this->render('edit');
         }
 
         return null;

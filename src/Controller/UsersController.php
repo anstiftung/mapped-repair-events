@@ -267,7 +267,7 @@ class UsersController extends AppController
         return null;
     }
 
-    public function add(): void
+    public function add(): Response
     {
 
         /** @var \App\Model\Table\UsersTable */
@@ -286,7 +286,7 @@ class UsersController extends AppController
         ];
         $this->set('metaTags', $metaTags);
 
-        $this->render('profil');
+        return $this->render('profil');
 
     }
 
@@ -591,22 +591,24 @@ class UsersController extends AppController
 
     }
 
-    public function registerRepairhelper(): void
+    public function registerRepairhelper(): ?Response
     {
         $this->register(GROUPS_REPAIRHELPER);
         // assures rendering of success message on redirected page and NOT before and then not showing it
         if (empty($this->request->getData())) {
-            $this->render('register');
+            return $this->render('register');
         }
+        return null;
     }
 
-    public function registerOrga(): void
+    public function registerOrga(): ?Response
     {
         $this->register(GROUPS_ORGA);
         // assures rendering of success message on redirected page and NOT before and then not showing it
         if (empty($this->request->getData())) {
-            $this->render('register');
+            return $this->render('register');
         }
+        return null;
     }
 
     private function isCalledByTestSuite(): bool
@@ -714,7 +716,7 @@ class UsersController extends AppController
             } else {
                 $this->AppFlash->setFlashError('Es sind Fehler aufgetreten.');
                 $this->set('user', $user);
-                $this->render('register');
+                return $this->render('register');
             }
         } else {
             $this->request->getSession()->delete('newSkillsRegistration');

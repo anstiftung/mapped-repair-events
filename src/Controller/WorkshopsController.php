@@ -58,7 +58,7 @@ class WorkshopsController extends AppController
         $this->addViewClasses([JsonView::class]);
     }
 
-    public function add(): void
+    public function add(): ?Response
     {
         $workshop = $this->Workshop->newEntity(
             ['status' => APP_OFF],
@@ -69,8 +69,9 @@ class WorkshopsController extends AppController
 
         // assures rendering of success message on redirected page and NOT before and then not showing it
         if (empty($this->request->getData())) {
-            $this->render('edit');
+            return $this->render('edit');
         }
+        return null;
     }
 
     public function edit(int $uid): void
@@ -195,7 +196,7 @@ class WorkshopsController extends AppController
         $this->set('isEditMode', $isEditMode);
 
         if (!empty($errors)) {
-            $this->render('edit');
+            return $this->render('edit');
         }
         
         return null;
