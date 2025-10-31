@@ -1,21 +1,21 @@
 <?php
 declare(strict_types=1);
+
 use Cake\Core\Configure;
 echo $this->element('jqueryTabsWithoutAjax', [
     'links' => $this->Html->getUserBackendNaviLinks($loggedUser->uid, true, $loggedUser->isOrga())
 ]);
-$openFirstElement = 'true';
-if ($workshops->count() > 1) {
-    $openFirstElement = 'false';
-}
 
 $this->element('addScript', ['script' =>
-    JS_NAMESPACE.".Helper.bindToggleLinks(false, " . $openFirstElement . ");".
+    JS_NAMESPACE.".Helper.bindToggleLinks(false, false);".
     JS_NAMESPACE.".Helper.bindToggleLinksForSubtables();".
     JS_NAMESPACE.".Helper.bindDeleteEventButton();"
 ]);
 
 $workshopUidToOpen = $this->Html->getKeyFromRefererParams('workshop-uid', $this->request->getQuery('refererParams', ''));
+if ($workshops->count() == 1) {
+    $workshopUidToOpen = $workshops->first()->uid;
+}
 if ($workshopUidToOpen > 0) {
     $this->element('addScript', ['script' =>
         JS_NAMESPACE.".Helper.openToggleLinkByIdAndScrollToElement('workshop-uid-" . $workshopUidToOpen . "');"

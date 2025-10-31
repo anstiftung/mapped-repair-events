@@ -9,7 +9,7 @@ use Cake\Core\Configure;
     }
 
     $this->element('addScript', ['script' =>
-        JS_NAMESPACE.".Helper.bindCancelButtonWithFixedRedirect('".$infoSheet->uid."', '".$this->Html->urlMyEvents()."');".
+        JS_NAMESPACE.".Helper.bindCancelButtonWithFixedRedirect('".$infoSheet->uid."', '".$referer."');".
         JS_NAMESPACE.".Helper.bindSaveAndRedirectToUrlButton();".
         JS_NAMESPACE.".InfoSheet.initSubCategoryDropdown('#infosheets-category-id');".
         JS_NAMESPACE.".InfoSheet.initMainCategoryDropdown('#infosheets-new-subcategory-parent-id');".

@@ -213,7 +213,11 @@ class AppController extends Controller
     public function addRefererParamsToUrl(string $url): string
     {
         if ($this->getRequest()->getQuery('refererParams')) {
-            $url .= (str_contains($url, '?') ? '&' : '?') . 'refererParams=' . $this->getRequest()->getQuery('refererParams');
+            if (!str_contains($url, 'refererParams=')) {
+                $url .= (str_contains($url, '?') ? '&' : '?') . 'refererParams=' . $this->getRequest()->getQuery('refererParams');
+            } else {
+                $url = preg_replace('/refererParams=[^&]*/', 'refererParams=' . $this->getRequest()->getQuery('refererParams'), $url);
+            }
         }
         return $url;
     }

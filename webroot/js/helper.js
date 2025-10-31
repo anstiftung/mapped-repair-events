@@ -437,7 +437,7 @@ MappedRepairEvents.Helper = {
                 '/admin/' + 'intern/' + 'ajaxCancelAdminEditPage/',
                 {
                     uid: uid,
-                    referer: redirect
+                    referer: redirect,
                 },
                 { onOk : function(data) {
                     document.location.href = data.referer;
