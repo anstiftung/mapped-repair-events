@@ -125,7 +125,7 @@ return [
         'additionalBlogCategoryName' => 'Kategorie 2',
         'tmpWwwDir' => '/tmp',
         'tmpUploadFileSize' => 800,
-        'twitterUsername' => '',
+        'youtubeLink' => '',
         'facebookUsername' => '',
         'themeColorA' => '#4D8EA2',
         'themeColorB' => '#e3d3e9',

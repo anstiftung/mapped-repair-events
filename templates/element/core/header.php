@@ -35,9 +35,9 @@ use Cake\Core\Configure;
             <i class="fab fa-square-facebook"></i>
         </a>
     <?php } ?>
-    <?php if (Configure::read('AppConfig.twitterUsername') != '') { ?>
-        <a href="https://x.com/<?php echo Configure::read('AppConfig.twitterUsername'); ?>" target="_blank" title="<?php echo Configure::read('AppConfig.platformName'); ?> auf X">
-            <i class="fab fa-square-x-twitter"></i>
+    <?php if (Configure::read('AppConfig.youtubeLink') != '') { ?>
+        <a href="<?php echo Configure::read('AppConfig.youtubeLink'); ?>" target="_blank" title="<?php echo Configure::read('AppConfig.platformName'); ?> auf YouTube">
+            <i class="fab fa-square-youtube"></i>
         </a>
     <?php } ?>
 </div>
