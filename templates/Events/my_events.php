@@ -14,7 +14,7 @@ $this->element('addScript', ['script' =>
 
 $workshopUidToOpen = $this->Html->getKeyFromRefererParams('workshop-uid', $this->request->getQuery('refererParams', ''));
 if ($workshops->count() == 1) {
-    $workshopUidToOpen = $workshops->first()->uid;
+    $workshopUidToOpen = $workshops->items()->first()->uid;
 }
 if ($workshopUidToOpen > 0) {
     $this->element('addScript', ['script' =>
