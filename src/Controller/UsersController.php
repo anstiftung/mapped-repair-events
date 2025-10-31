@@ -12,6 +12,7 @@ use Gregwar\Captcha\CaptchaBuilder;
 use App\Model\Entity\User;
 use App\Mailer\AppMailer;
 use App\Model\Entity\Page;
+use Cake\Http\Response;
 
 class UsersController extends AppController
 {
@@ -33,7 +34,7 @@ class UsersController extends AppController
 
     }
 
-    public function all(): void
+    public function all(): ?Response
     {
 
         // pass[0] can contain "44-tag-name" or "category-name"
@@ -123,8 +124,7 @@ class UsersController extends AppController
             /* @phpstan-ignore-next-line */
             $correctSlug = Configure::read('AppConfig.htmlHelper')->urlSkillDetail($skillId, $skill->name);
             if ($correctSlug != Configure::read('AppConfig.htmlHelper')->urlSkillDetail($skillId, StringComponent::removeIdFromSlug($this->getRequest()->getParam('pass')[0]))) {
-                $this->redirect($correctSlug);
-                return;
+                return $this->redirect($correctSlug);
             }
         }
 
@@ -143,6 +143,7 @@ class UsersController extends AppController
             $overviewLink = Configure::read('AppConfig.htmlHelper')->urlSkills();
         }
         $this->set('overviewLink', $overviewLink);
+        return null;
     }
 
     public function publicProfile(): void
@@ -208,7 +209,7 @@ class UsersController extends AppController
         $this->set('metaTags', $metaTags);
     }
 
-    public function neuesPasswortAnfordern(): void
+    public function neuesPasswortAnfordern(): ?Response
     {
         $metaTags = [
             'title' => 'Neues Passwort anfordern'
@@ -256,17 +257,17 @@ class UsersController extends AppController
                 $this->set('password', $newPassword);
                 $this->set('user', $user);
 
-                $this->redirect(Configure::read('AppConfig.htmlHelper')->urlLogin());
+                return $this->redirect(Configure::read('AppConfig.htmlHelper')->urlLogin());
             } else {
                 $this->AppFlash->setFlashError('Es sind Fehler aufgetreten.');
             }
         }
 
         $this->set('user', $user);
-
+        return null;
     }
 
-    public function add(): void
+    public function add(): Response
     {
 
         /** @var \App\Model\Table\UsersTable */
@@ -285,11 +286,11 @@ class UsersController extends AppController
         ];
         $this->set('metaTags', $metaTags);
 
-        $this->render('profil');
+        return $this->render('profil');
 
     }
 
-    private function _profil(User $user, bool $isMyProfile, bool $isEditMode): void
+    private function _profil(User $user, bool $isMyProfile, bool $isEditMode): ?Response
     {
         /** @var \App\Model\Table\CategoriesTable */
         $categoriesTable = $this->getTableLocator()->get('Categories');
@@ -358,13 +359,12 @@ class UsersController extends AppController
                     $message = 'Der User wurde erfolgreich erstellt.';
                 }
                 $this->AppFlash->setFlashMessage($message);
-                $this->redirect($this->request->getData('referer'));
+                return $this->redirect($this->request->getData('referer'));
             } else {
                 $this->AppFlash->setFlashError(__('An error occurred while saving the form. Please check your form.'));
             }
         }
         $this->set('user', $user);
-
 
         /** @var \App\Model\Table\PagesTable */
         $pagesTable = $this->getTableLocator()->get('Pages');
@@ -384,8 +384,7 @@ class UsersController extends AppController
 
         $this->set('isMyProfile', $isMyProfile);
         $this->set('isEditMode', $isEditMode);
-
-
+        return null;
     }
 
     public function profil(?int $userUid=null): void
@@ -446,7 +445,7 @@ class UsersController extends AppController
 
     }
 
-    public function passwortAendern(): void
+    public function passwortAendern(): ?Response
     {
 
         $metaTags = [
@@ -460,7 +459,7 @@ class UsersController extends AppController
         $this->set('user', $user);
 
         if (empty($this->request->getData())) {
-            return;
+            return null;
         }
 
         $user = $usersTable->newEntity([]);
@@ -479,12 +478,13 @@ class UsersController extends AppController
             $entity = $usersTable->patchEntity($user, $user2save, ['validate' => false]);
             $usersTable->save($entity);
             $this->AppFlash->setFlashMessage('Dein Passwort wurde erfolgreich geändert.');
-            $this->redirect('/');
+            return $this->redirect('/');
         }
         $this->set('user', $user);
+        return null;
     }
 
-    public function login(): void
+    public function login(): ?Response
     {
         $metaTags = [
             'title' => 'Anmelden'
@@ -498,14 +498,15 @@ class UsersController extends AppController
                 if (!$target) {
                     $target = Configure::read('AppConfig.htmlHelper')->urlUserHome();
                 }
-                $this->redirect($target);
+                return $this->redirect($target);
             } else {
                 $this->AppFlash->setFlashError('Der Login hat nicht funktioniert. Benutzername oder Passwort falsch? Konto aktiviert?');
             }
         }
+        return null;
     }
 
-    public function delete(): void
+    public function delete(): ?Response
     {
         $metaTags = [
             'title' => 'Profil löschen'
@@ -525,16 +526,17 @@ class UsersController extends AppController
             ]);
             $email->addToQueue();
             $this->AppFlash->setFlashMessage('Deine Lösch-Anfrage wurde erfolgreich übermittelt. Wir werden dein Profil in den nächsten Tagen löschen.');
-            $this->redirect('/');
+            return $this->redirect('/');
         }
+        return null;
     }
 
-    public function activate(): void
+    public function activate(): ?Response
     {
 
         if (! isset($this->request->getParam('pass')['0'])) {
             $this->AppFlash->setFlashError(__('Invalid parameters.'));
-            return;
+            return null;
         }
 
         $conditions = [
@@ -549,7 +551,7 @@ class UsersController extends AppController
 
         if (empty($user)) {
             $this->AppFlash->setFlashError(__('Invalid activation code.'));
-            return;
+            return null;
         }
 
         $user = $usersTable->get($user->uid,
@@ -585,26 +587,28 @@ class UsersController extends AppController
         }
         $email->addToQueue();
 
-        $this->redirect(Configure::read('AppConfig.htmlHelper')->urlUserHome());
+        return$this->redirect(Configure::read('AppConfig.htmlHelper')->urlUserHome());
 
     }
 
-    public function registerRepairhelper(): void
+    public function registerRepairhelper(): ?Response
     {
         $this->register(GROUPS_REPAIRHELPER);
         // assures rendering of success message on redirected page and NOT before and then not showing it
         if (empty($this->request->getData())) {
-            $this->render('register');
+            return $this->render('register');
         }
+        return null;
     }
 
-    public function registerOrga(): void
+    public function registerOrga(): ?Response
     {
         $this->register(GROUPS_ORGA);
         // assures rendering of success message on redirected page and NOT before and then not showing it
         if (empty($this->request->getData())) {
-            $this->render('register');
+            return $this->render('register');
         }
+        return null;
     }
 
     private function isCalledByTestSuite(): bool
@@ -612,7 +616,7 @@ class UsersController extends AppController
         return !empty($_SERVER['argv']) && !empty($_SERVER['argv'][0]) && preg_match('`vendor/bin/phpunit`', (string) $_SERVER['argv'][0]);
     }
 
-    public function register(int $userGroup=GROUPS_REPAIRHELPER): void
+    public function register(int $userGroup=GROUPS_REPAIRHELPER): ?Response
     {
 
         $this->set('isCalledByTestSuite', $this->isCalledByTestSuite());
@@ -708,25 +712,26 @@ class UsersController extends AppController
 
                 $this->AppFlash->setFlashMessage('Deine Registrierung war erfolgreich. Bitte überprüfe dein E-Mail-Konto um deine E-Mail-Adresse zu bestätigen.');
 
-                $this->redirect(Configure::read('AppConfig.htmlHelper')->urlLogin());
+                return $this->redirect(Configure::read('AppConfig.htmlHelper')->urlLogin());
             } else {
                 $this->AppFlash->setFlashError('Es sind Fehler aufgetreten.');
                 $this->set('user', $user);
-                $this->render('register');
+                return $this->render('register');
             }
         } else {
             $this->request->getSession()->delete('newSkillsRegistration');
         }
 
         $this->set('user', $user);
+        return null;
 
     }
 
-    public function logout(): void
+    public function logout(): Response
     {
         $this->AppFlash->setFlashMessage('Du hast dich erfolgreich ausgeloggt.');
         $this->Authentication->logout();
-        $this->redirect('/');
+        return $this->redirect('/');
     }
 
 }

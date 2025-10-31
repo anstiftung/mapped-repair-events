@@ -111,13 +111,13 @@ class FundingsController extends AppController
         }
     }
 
-    public function delete(): void
+    public function delete(): Response
     {
         $fundingUid = (int) $this->request->getParam('uid');
         $fundingsTable = $this->getTableLocator()->get('Fundings');
         $fundingsTable->deleteCustom($fundingUid);
         $this->AppFlash->setFlashMessage('Der Förderantrag wurde erfolgreich gelöscht.');
-        $this->redirect(Configure::read('AppConfig.htmlHelper')->urlFundings());
+        return $this->redirect(Configure::read('AppConfig.htmlHelper')->urlFundings());
     }
 
     /**

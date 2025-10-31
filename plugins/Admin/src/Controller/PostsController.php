@@ -10,11 +10,12 @@ use App\Model\Table\PostsTable;
 use App\Model\Table\BlogsTable;
 use App\Model\Table\UsersTable;
 use Cake\I18n\Date;
+use Cake\Http\Response;
 
 class PostsController extends AdminAppController
 {
 
-    public function insert(int $blogId): void
+    public function insert(int $blogId): Response
     {
         $post = [
             'name' => 'Neuer Post von ' . $this->loggedUser->name,
@@ -29,11 +30,10 @@ class PostsController extends AdminAppController
         $post = $postsTable->save($entity);
 
         $this->AppFlash->setFlashMessage('Post erfolgreich erstellt. UID: ' . $post->uid); // uid for fixture
-        $this->redirect($this->getReferer());
-
+        return $this->redirect($this->getReferer());
     }
 
-    public function edit(int $uid): void
+    public function edit(int $uid): ?Response
     {
         /** @var \App\Model\Table\PostsTable */
         $postsTable = $this->getTableLocator()->get('Posts');
@@ -72,7 +72,7 @@ class PostsController extends AdminAppController
 
             if (!($patchedEntity->hasErrors())) {
                 $patchedEntity = $this->patchEntityWithCurrentlyUpdatedFields($patchedEntity);
-                $this->saveObject($patchedEntity);
+                return $this->saveObject($patchedEntity);
             } else {
                 $post = $patchedEntity;
             }
@@ -83,7 +83,7 @@ class PostsController extends AdminAppController
         /** @var \App\Model\Table\BlogsTable */
         $blogsTable = $this->getTableLocator()->get('Blogs');
         $this->set('blogs', $blogsTable->getForDropdown());
-
+        return null;
     }
 
     public function beforeFilter(EventInterface $event): void

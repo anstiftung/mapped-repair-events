@@ -258,7 +258,7 @@ class EventsController extends AppController
 
     }
 
-    public function delete(int $eventUid): void
+    public function delete(int $eventUid): Response
     {
         $event = $this->Event->find('all',
             conditions: [
@@ -322,11 +322,11 @@ class EventsController extends AppController
             $this->AppFlash->setErrorMessage('Beim Löschen ist ein Fehler aufgetreten');
         }
 
-        $this->redirect($this->getReferer());
+        return $this->redirect($this->getReferer());
 
     }
 
-    public function add(int $preselectedWorkshopUid): void
+    public function add(int $preselectedWorkshopUid): ?Response
     {
 
         $event = $this->Event->newEntity(
@@ -356,11 +356,12 @@ class EventsController extends AppController
 
         // assures rendering of success message on redirected page and NOT before and then not showing it
         if (empty($this->request->getData())) {
-            $this->render('edit');
+            return $this->render('edit');
         }
+        return null;
     }
 
-    public function duplicate(int $eventUid): void
+    public function duplicate(int $eventUid): Response
     {
         $event = $this->Event->find('all',
             conditions: [
@@ -382,7 +383,7 @@ class EventsController extends AppController
         $this->set('preselectedWorkshopUid', $event->workshop_uid);
         $this->set('isDuplicateMode', true);
         $this->_edit([$event], false);
-        $this->render('edit');
+        return $this->render('edit');
     }
 
     public function edit(int $eventUid): void
@@ -516,7 +517,7 @@ class EventsController extends AppController
                 }
                 $message = count($events) . ' ' . $message . ' erfolgreich gespeichert.';
                 $this->AppFlash->setFlashMessage($message);
-                $this->redirect($this->getPreparedReferer());
+                $redirect = $this->redirect($this->getPreparedReferer());
                 return [
                     'events' => $events,
                     'dirtyFields' => $dirtyFields ?? [],
@@ -528,7 +529,7 @@ class EventsController extends AppController
 
         $this->set('events', $events);
         $this->set('isEditMode', $isEditMode);
-        $this->render('edit');
+        $render = $this->render('edit');
         return [
             'events' => $events,
         ];

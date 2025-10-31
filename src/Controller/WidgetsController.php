@@ -8,6 +8,7 @@ use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use Cake\Http\Exception\NotFoundException;
 use App\Model\Entity\Workshop;
+use Cake\Http\Response;
 
 class WidgetsController extends AppController
 {
@@ -34,7 +35,7 @@ class WidgetsController extends AppController
         $this->set('metaTags', ['title' => 'Widgets Integration']);
     }
 
-    public function statisticsCountsGlobal(): void
+    public function statisticsCountsGlobal(): Response
     {
         $this->parseStatisticsParams();
         $this->viewBuilder()->setLayout('widget');
@@ -54,7 +55,7 @@ class WidgetsController extends AppController
         $this->set('dataNotRepaired', $dataNotRepaired);
         $this->set('showWorkshopName', false);
 
-        $this->render('statisticsCountsWorkshop');
+        return $this->render('statisticsCountsWorkshop');
     }
 
     public function statisticsCountsWorkshop(int $workshopUid): void
@@ -106,11 +107,11 @@ class WidgetsController extends AppController
 
     }
 
-    public function mapWithFundings(): void
+    public function mapWithFundings(): Response
     {
         $this->map();
         $this->set('osmMethod', 'search-with-fundings');
-        $this->render('map');
+        return $this->render('map');
     }
 
     public function map(): void

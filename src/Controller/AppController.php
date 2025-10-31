@@ -16,6 +16,7 @@ use App\Model\Table\WorkshopsTable;
 use App\Test\Mock\GeoServiceMock;
 use Cake\Datasource\EntityInterface;
 use Cake\ORM\Table;
+use Cake\Http\Response;
 
 class AppController extends Controller
 {
@@ -131,14 +132,15 @@ class AppController extends Controller
      * nur, wenn die seite inaktiv ist, flash message anzeigen, sonst verwirrt es
      * den user
      */
-    protected function doPreviewChecks(int $status, string $redirectUrl): void
+    protected function doPreviewChecks(int $status, string $redirectUrl): ?Response
     {
         if ($status == APP_ON && $this->isPreview()) {
-            $this->redirect($redirectUrl);
+            return $this->redirect($redirectUrl);
         }
         if ($status == APP_OFF && $this->isPreview()) {
             $this->AppFlash->setFlashError('Diese Seite ist inaktiv und somit nicht öffentlich sichtbar.');
         }
+        return null;
     }
 
     /**

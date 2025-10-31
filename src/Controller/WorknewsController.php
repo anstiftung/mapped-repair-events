@@ -8,6 +8,7 @@ use Cake\Event\EventInterface;
 use Cake\Http\Exception\NotFoundException;
 use Cake\I18n\DateTime;
 use App\Model\Entity\Worknews;
+use Cake\Http\Response;
 
 class WorknewsController extends AppController {
 
@@ -22,7 +23,7 @@ class WorknewsController extends AppController {
         ]);
     }
 
-    public function worknewsActivate(): null
+    public function worknewsActivate(): Response
     {
 
         if (empty($this->request->getParam('pass')['0'])) {
@@ -41,8 +42,7 @@ class WorknewsController extends AppController {
 
         if (empty($worknews)) {
             $this->AppFlash->setFlashError(__('Invalid activation code.'));
-            $this->redirect('/');
-            return null;
+            return $this->redirect('/');
         }
 
         $this->Worknews->save(
@@ -56,12 +56,10 @@ class WorknewsController extends AppController {
         );
         $this->AppFlash->setFlashMessage(__('Your subscription is activated!'));
 
-        $this->redirect($worknews->workshop->url);
-        return null;
-
+        return $this->redirect($worknews->workshop->url);
     }
 
-    public function worknewsUnsubscribe(): void
+    public function worknewsUnsubscribe(): Response
     {
 
         if (empty($this->request->getParam('pass')['0'])) {
@@ -79,15 +77,14 @@ class WorknewsController extends AppController {
 
         if (empty($worknews)) {
             $this->AppFlash->setFlashError('Der Abmeldecode ist ungültig oder wurde bereits verwendet.');
-            $this->redirect('/');
-            return;
+            return $this->redirect('/');
         }
 
         $this->Worknews->delete(
             $this->Worknews->get($worknews->id)
         );
         $this->AppFlash->setFlashMessage('Deine Abmeldung aus der abonnierten Liste ist erfolgt.');
-        $this->redirect($worknews->workshop->url);
+        return $this->redirect($worknews->workshop->url);
 
     }
 

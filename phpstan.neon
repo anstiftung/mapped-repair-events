@@ -21,8 +21,6 @@ parameters:
           paths:
             - templates
             - plugins/Admin/templates
-        - identifier: cake.controller.redirectMustBeUsed
-        - identifier: cake.controller.renderMustBeUsed
 rules:
     - Ergebnis\PHPStan\Rules\Files\DeclareStrictTypesRule
 includes:

@@ -3,14 +3,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Controller\Component\StringComponent;
-use App\Model\Table\BrandsTable;
-use App\Model\Table\CategoriesTable;
-use App\Model\Table\EventsTable;
-use App\Model\Table\FormFieldsTable;
-use App\Model\Table\InfoSheetsTable;
-use App\Model\Table\WorkshopsTable;
 use Cake\Core\Configure;
-use Cake\Event\EventInterface;
 use Cake\Http\Exception\NotFoundException;
 use League\Csv\Writer;
 use Cake\Http\Response;
@@ -18,19 +11,6 @@ use App\Model\Entity\InfoSheet;
 
 class InfoSheetsController extends AppController
 {
-
-    public InfoSheetsTable $InfoSheet;
-    public EventsTable $Event;
-    public WorkshopsTable $Workshop;
-    public CategoriesTable $Category;
-    public BrandsTable $Brand;
-    public FormFieldsTable $FormField;
-    
-    public function beforeFilter(EventInterface $event): void
-    {
-        parent::beforeFilter($event);
-        $this->InfoSheet = $this->getTableLocator()->get('InfoSheets');
-    }
 
     public function fullDownload(string $date=''): Response
     {
@@ -44,7 +24,9 @@ class InfoSheetsController extends AppController
             $filename .= '-until-' . $date;
         }
 
-        $statement = $this->InfoSheet->getConnection()->execute($query, $params);
+        /* @var InfoSheetsTable  $infoSheetsTable */
+        $infoSheetsTable = $this->getTableLocator()->get('InfoSheets');
+        $statement = $infoSheetsTable->getConnection()->execute($query, $params);
         $records = $statement->fetchAll('assoc');
         if (empty($records)) {
             throw new NotFoundException('no repair data found');
@@ -74,8 +56,9 @@ class InfoSheetsController extends AppController
     public function download(int $workshopUid, string $year=''): Response
     {
 
-        $this->Workshop = $this->getTableLocator()->get('Workshops');
-        $workshop = $this->Workshop->find('all', conditions: [
+        /* @var WorkshopsTable $workshopsTable */
+        $workshopsTable = $this->getTableLocator()->get('Workshops');
+        $workshop = $workshopsTable->find('all', conditions: [
             'Workshops.uid' => $workshopUid
         ])->first();
 
@@ -94,7 +77,9 @@ class InfoSheetsController extends AppController
             $filename .= '-' . $year;
         }
 
-        $statement = $this->InfoSheet->getConnection()->execute($query, $params);
+        /* @var App\Model\Table\InfoSheetsTable  $infoSheetsTable */
+        $infoSheetsTable = $this->getTableLocator()->get('InfoSheets');
+        $statement = $infoSheetsTable->getConnection()->execute($query, $params);
         $records = $statement->fetchAll('assoc');
         if (empty($records)) {
             throw new NotFoundException('info sheets not found');
@@ -119,9 +104,11 @@ class InfoSheetsController extends AppController
         return $response;
     }
 
-    public function delete(int $infoSheetUid): void
+    public function delete(int $infoSheetUid): Response
     {
-        $infoSheet = $this->InfoSheet->find('all', conditions: [
+        /* @var App\Model\Table\InfoSheetsTable  $infoSheetsTable */
+        $infoSheetsTable = $this->getTableLocator()->get('InfoSheets');
+        $infoSheet = $infoSheetsTable->find('all', conditions: [
             'InfoSheets.uid' => $infoSheetUid,
             'InfoSheets.status >= ' . APP_DELETED
         ])->first();
@@ -130,27 +117,26 @@ class InfoSheetsController extends AppController
             throw new NotFoundException;
         }
 
-        $patchedEntity = $this->InfoSheet->patchEntity(
-            $this->InfoSheet->get($infoSheetUid),
+        $patchedEntity = $infoSheetsTable->patchEntity(
+            $infoSheetsTable->get($infoSheetUid),
             ['status' => APP_DELETED]
         );
 
-        if ($this->InfoSheet->save($patchedEntity)) {
+        if ($infoSheetsTable->save($patchedEntity)) {
             $this->AppFlash->setFlashMessage('Der Laufzettel wurde erfolgreich gelöscht.');
         } else {
             $this->AppFlash->setErrorMessage('Beim Löschen ist ein Fehler aufgetreten');
         }
 
-        $this->redirect($this->getReferer());
+        return $this->redirect($this->getReferer());
 
     }
 
-    public function add(int $eventUid): void
+    public function add(int $eventUid): ?Response
     {
-        $this->Event = $this->getTableLocator()->get('Events');
-
-        $this->Event->getAssociation('Workshops')->setConditions(['Workshops.status > ' . APP_DELETED]);
-        $event = $this->Event->find('all',
+        $eventsTable = $this->getTableLocator()->get('Events');
+        $eventsTable->getAssociation('Workshops')->setConditions(['Workshops.status > ' . APP_DELETED]);
+        $event = $eventsTable->find('all',
         conditions: [
             'Events.uid' => $eventUid
         ],
@@ -158,7 +144,8 @@ class InfoSheetsController extends AppController
             'Workshops'
         ]);
 
-        $infoSheet = $this->InfoSheet->newEntity(
+        $infoSheetsTable = $this->getTableLocator()->get('InfoSheets');
+        $infoSheet = $infoSheetsTable->newEntity(
             [
                 'status' => APP_ON,
                 'event_uid' => $eventUid
@@ -175,13 +162,15 @@ class InfoSheetsController extends AppController
 
         // assures rendering of success message on redirected page and NOT before and then not showing it
         if (empty($this->request->getData())) {
-            $this->render('edit');
+            return $this->render('edit');
         }
+        return null;
     }
 
     public function edit(int $infoSheetUid): void
     {
-        $infoSheet = $this->InfoSheet->find('all',
+        $infoSheetsTable = $this->getTableLocator()->get('InfoSheets');
+        $infoSheet = $infoSheetsTable->find('all',
         conditions: [
             'InfoSheets.uid' => $infoSheetUid,
             'InfoSheets.status >= ' . APP_DELETED
@@ -199,12 +188,13 @@ class InfoSheetsController extends AppController
         $this->setIsCurrentlyUpdated($infoSheet->uid);
         $this->set('metaTags', ['title' => 'Laufzettel bearbeiten']);
 
-        $events = $this->InfoSheet->Events->find('all',
+        $eventsTable = $this->getTableLocator()->get('Events');
+        $events = $eventsTable->find('all',
             conditions: [
                 'Events.workshop_uid' => $infoSheet->event->workshop_uid,
                 'Events.status >' . APP_DELETED,
             ],
-            order: $this->InfoSheet->Events->getListOrder(),
+            order: $eventsTable->getListOrder(),
         );
         $eventsForDropdown = [];
         foreach($events as $event) {
@@ -219,11 +209,10 @@ class InfoSheetsController extends AppController
         $this->_edit($infoSheet, true);
     }
 
-    private function _edit(InfoSheet $infoSheet, bool $isEditMode): void
+    private function _edit(InfoSheet $infoSheet, bool $isEditMode): ?Response
     {
 
         $this->set('uid', $infoSheet->uid);
-
         $categoriesTable = $this->getTableLocator()->get('Categories');
         $categoriesForSubcategory = $categoriesTable->getForSubcategoryDropdown();
         $categoriesForSubcategory['Kategorie nicht vorhanden?'] = [
@@ -232,35 +221,35 @@ class InfoSheetsController extends AppController
         $this->set('categoriesForSubcategory', $categoriesForSubcategory);
         $this->set('categories', $categoriesTable->getForDropdown([APP_ON]));
 
-        $this->Brand = $this->getTableLocator()->get('Brands');
-        $brandsForDropdown = $this->Brand->getForDropdown();
+        $brandsTable = $this->getTableLocator()->get('Brands');
+        $brandsForDropdown = $brandsTable->getForDropdown();
         $brandsForDropdown['Marke nicht vorhanden?'] = [
             '-1' => 'Marke hinzufügen'
         ];
         $this->set('brands', $brandsForDropdown);
 
-        $this->FormField = $this->getTableLocator()->get('FormFields');
-
-        $powerSupplyFormField = $this->FormField->getForForm(1);
+        $formFieldsTable = $this->getTableLocator()->get('FormFields');
+        $powerSupplyFormField = $formFieldsTable->getForForm(1);
         $this->set('powerSupplyFormField', $powerSupplyFormField);
 
-        $defectFoundReasonFormField = $this->FormField->getForForm(3);
+        $defectFoundReasonFormField = $formFieldsTable->getForForm(3);
         $this->set('defectFoundReasonFormField', $defectFoundReasonFormField);
 
-        $repairPostponedReasonFormField = $this->FormField->getForForm(4);
+        $repairPostponedReasonFormField = $formFieldsTable->getForForm(4);
         $this->set('repairPostponedReasonFormField', $repairPostponedReasonFormField);
 
-        $noRepairReasonFormField = $this->FormField->getForForm(5);
+        $noRepairReasonFormField = $formFieldsTable->getForForm(5);
         $this->set('noRepairReasonFormField', $noRepairReasonFormField);
 
-        $deviceMustNotBeUsedAnymoreFormField = $this->FormField->getForForm(6);
+        $deviceMustNotBeUsedAnymoreFormField = $formFieldsTable->getForForm(6);
         $this->set('deviceMustNotBeUsedAnymoreFormField', $deviceMustNotBeUsedAnymoreFormField);
 
         $this->setReferer();
 
         if (!empty($this->request->getData())) {
 
-            $patchedEntity = $this->InfoSheet->getPatchedEntityForAdminEdit($infoSheet, $this->request->getData());
+            $infoSheetsTable = $this->getTableLocator()->get('InfoSheets');
+            $patchedEntity = $infoSheetsTable->getPatchedEntityForAdminEdit($infoSheet, $this->request->getData());
 
             $errors = $patchedEntity->getErrors();
             if (empty($errors)) {
@@ -283,8 +272,8 @@ class InfoSheetsController extends AppController
                 }
 
                 if ($patchedEntity->brand_id == -1) {
-                    $brand = $this->Brand->save(
-                        $this->Brand->newEntity(
+                    $brand = $brandsTable->save(
+                        $brandsTable->newEntity(
                             [
                                 'name' => $patchedEntity->new_brand_name,
                                 'status' => $this->isAdmin() ? APP_ON : APP_OFF,
@@ -294,14 +283,14 @@ class InfoSheetsController extends AppController
                     $entity->brand_id = $brand->id;
                 }
 
-                if ($this->InfoSheet->save($entity)) {
-                    $this->AppFlash->setFlashMessage($this->InfoSheet->name_de . ' erfolgreich gespeichert.');
+                if ($infoSheetsTable->save($entity)) {
+                    $this->AppFlash->setFlashMessage($infoSheetsTable->name_de . ' erfolgreich gespeichert.');
                     if (in_array('save-button', array_keys($this->request->getData()))) {
                         $redirectUrl = Configure::read('AppConfig.htmlHelper')->urlMyEvents();
                         $redirectUrl = $this->addRefererParamsToUrl($redirectUrl);
-                        $this->redirect($redirectUrl);
+                        return $this->redirect($redirectUrl);
                     } else {
-                        $this->redirect($this->getPreparedReferer());
+                        return $this->redirect($this->getPreparedReferer());
                     }
                 } else {
                     $this->AppFlash->setFlashError($this->InfoSheet->name_de . ' <b>nicht</b>erfolgreich gespeichert.');
@@ -316,8 +305,10 @@ class InfoSheetsController extends AppController
         $this->set('isEditMode', $isEditMode);
 
         if (!empty($errors)) {
-            $this->render('edit');
+            return $this->render('edit');
         }
+
+        return null;
 
     }
 

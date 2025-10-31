@@ -19,6 +19,7 @@ use App\Model\Table\EventsTable;
 use App\Model\Table\KnowledgesTable;
 use Cake\View\JsonView;
 use App\Model\Table\FundingsTable;
+use Cake\Http\Response;
 
 class InternController extends AdminAppController
 {
@@ -305,7 +306,7 @@ class InternController extends AdminAppController
     /**
      * deletes both db entries and physical files (thumbs)
      */
-    public function ajaxMiniUploadFormDeleteImage(int $uid): void
+    public function ajaxMiniUploadFormDeleteImage(int $uid): Response
     {
         $uid = (int) $uid;
 
@@ -346,8 +347,7 @@ class InternController extends AdminAppController
         $objectTable->save($entity);
 
         $this->AppFlash->setFlashMessage('Das Bild wurde erfolgreich gelöscht.');
-
-        $this->redirect($this->referer());
+        return $this->redirect($this->referer());
     }
 
     public function ajaxDeleteObject(): void

@@ -4,11 +4,12 @@ namespace Admin\Controller;
 
 use Cake\Http\Exception\NotFoundException;
 use App\Model\Table\BrandsTable;
+use Cake\Http\Response;
 
 class BrandsController extends AdminAppController
 {
     
-    public function insert(): void
+    public function insert(): Response
     {
         $brand = [
             'name' => 'Neue Marke',
@@ -20,19 +21,19 @@ class BrandsController extends AdminAppController
         $entity = $brandsTable->newEntity($brand);
         $brand = $brandsTable->save($entity);
         $this->AppFlash->setFlashMessage('Marke erfolgreich erstellt.');
-        $this->redirect($this->getReferer());
+        return $this->redirect($this->getReferer());
     }
 
-    public function setApprovedMultiple(): void {
+    public function setApprovedMultiple(): Response {
         $selectedIds = $this->request->getQuery('selectedIds', '');
         $selectedIds = explode(',', $selectedIds);
         $brandsTable = $this->getTableLocator()->get('Brands');
         $affectedCount = $brandsTable->setApprovedMultiple($selectedIds);
         $this->AppFlash->setFlashMessage($affectedCount . ' Marken erfolgreich bestätigt.');
-        $this->redirect($this->getReferer());
+        return $this->redirect($this->getReferer());
     }
     
-    public function edit(int $id): void
+    public function edit(int $id): ?Response
     {
         /** @var \App\Model\Table\BrandsTable */
         $brandsTable = $this->getTableLocator()->get('Brands');
@@ -58,7 +59,7 @@ class BrandsController extends AdminAppController
             );
 
             if (!($patchedEntity->hasErrors())) {
-                $this->saveObject($patchedEntity);
+                return $this->saveObject($patchedEntity);
             } else {
                 $brand = $patchedEntity;
             }
@@ -68,6 +69,7 @@ class BrandsController extends AdminAppController
 
         $metaTags = ['title' => 'Marke bearbeiten'];
         $this->set('metaTags', $metaTags);
+        return null;
 
     }
 
