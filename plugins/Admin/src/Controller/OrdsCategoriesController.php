@@ -4,11 +4,12 @@ namespace Admin\Controller;
 
 use Cake\Http\Exception\NotFoundException;
 use App\Model\Table\OrdsCategoriesTable;
+use Cake\Http\Response;
 
 class OrdsCategoriesController extends AdminAppController
 {
 
-    public function insert(): void
+    public function insert(): Response
     {
         $ordsCategory = [
             'name' => 'Neue ORDS-Kategorie',
@@ -20,10 +21,10 @@ class OrdsCategoriesController extends AdminAppController
         $entity = $ordsCategoriesTable->newEntity($ordsCategory);
         $ordsCategoriesTable->save($entity);
         $this->AppFlash->setFlashMessage('ORDS-Kategorie erfolgreich erstellt.');
-        $this->redirect($this->getReferer());
+        return $this->redirect($this->getReferer());
     }
 
-    public function edit(int $id): void
+    public function edit(int $id): ?Response
     {
         /** @var \App\Model\Table\OrdsCategoriesTable */
         $ordsCategoriesTable = $this->getTableLocator()->get('OrdsCategories');
@@ -49,7 +50,7 @@ class OrdsCategoriesController extends AdminAppController
             );
 
             if (!($patchedEntity->hasErrors())) {
-                $this->saveObject($patchedEntity);
+                return $this->saveObject($patchedEntity);
             } else {
                 $ordsCategory = $patchedEntity;
             }
@@ -59,7 +60,7 @@ class OrdsCategoriesController extends AdminAppController
 
         $metaTags = ['title' => 'ORDS-Kategorie bearbeiten'];
         $this->set('metaTags', $metaTags);
-
+        return null;
     }
 
     public function index(): void

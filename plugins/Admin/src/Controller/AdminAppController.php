@@ -7,6 +7,7 @@ use Cake\Event\EventInterface;
 use Cake\ORM\Query\SelectQuery;
 use Cake\Utility\Inflector;
 use Cake\Datasource\EntityInterface;
+use Cake\Http\Response;
 
 class AdminAppController extends AppController
 {
@@ -185,16 +186,17 @@ class AdminAppController extends AppController
         return $query;
     }
 
-    protected function saveObject(EntityInterface $entity): void
+    protected function saveObject(EntityInterface $entity): ?Response
     {
         $modelInstance = $this->getModelInstance($this->modelName);
         $entity = $this->stripTagsFromFields($entity, $this->modelName);
         if ($modelInstance->save($entity)) {
             $this->AppFlash->setFlashMessage($modelInstance->name_de . ' erfolgreich gespeichert.');
-            $this->redirect($this->getPreparedReferer());
+            return $this->redirect($this->getPreparedReferer());
         } else {
             $this->AppFlash->setFlashError($modelInstance->name_de . ' wurde <b>nicht</b> gespeichert. Bitte überprüfe das Formular.');
         }
+        return null;
     }
 
     /**

@@ -119,7 +119,7 @@ class InfoSheetsController extends AppController
         return $response;
     }
 
-    public function delete(int $infoSheetUid): void
+    public function delete(int $infoSheetUid): Response
     {
         $infoSheet = $this->InfoSheet->find('all', conditions: [
             'InfoSheets.uid' => $infoSheetUid,
@@ -141,7 +141,7 @@ class InfoSheetsController extends AppController
             $this->AppFlash->setErrorMessage('Beim Löschen ist ein Fehler aufgetreten');
         }
 
-        $this->redirect($this->getReferer());
+        return $this->redirect($this->getReferer());
 
     }
 
@@ -219,7 +219,7 @@ class InfoSheetsController extends AppController
         $this->_edit($infoSheet, true);
     }
 
-    private function _edit(InfoSheet $infoSheet, bool $isEditMode): void
+    private function _edit(InfoSheet $infoSheet, bool $isEditMode): ?Response
     {
 
         $this->set('uid', $infoSheet->uid);
@@ -299,9 +299,9 @@ class InfoSheetsController extends AppController
                     if (in_array('save-button', array_keys($this->request->getData()))) {
                         $redirectUrl = Configure::read('AppConfig.htmlHelper')->urlMyEvents();
                         $redirectUrl = $this->addRefererParamsToUrl($redirectUrl);
-                        $this->redirect($redirectUrl);
+                        return $this->redirect($redirectUrl);
                     } else {
-                        $this->redirect($this->getPreparedReferer());
+                        return $this->redirect($this->getPreparedReferer());
                     }
                 } else {
                     $this->AppFlash->setFlashError($this->InfoSheet->name_de . ' <b>nicht</b>erfolgreich gespeichert.');
@@ -318,6 +318,8 @@ class InfoSheetsController extends AppController
         if (!empty($errors)) {
             $this->render('edit');
         }
+
+        return null;
 
     }
 

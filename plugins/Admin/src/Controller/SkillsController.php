@@ -5,6 +5,7 @@ namespace Admin\Controller;
 use Cake\Http\Exception\NotFoundException;
 use App\Model\Table\SkillsTable;
 use Cake\Event\EventInterface;
+use Cake\Http\Response;
 
 class SkillsController extends AdminAppController
 {
@@ -16,7 +17,7 @@ class SkillsController extends AdminAppController
         parent::beforeFilter($event);
     }
 
-    public function setApprovedMultiple(): void {
+    public function setApprovedMultiple(): Response {
         $selectedIds = $this->request->getQuery('selectedIds', '');
         $selectedIds = explode(',', $selectedIds);
 
@@ -24,10 +25,10 @@ class SkillsController extends AdminAppController
         $skillsTable = $this->getTableLocator()->get('Skills');
         $affectedCount = $skillsTable->setApprovedMultiple($selectedIds);
         $this->AppFlash->setFlashMessage($affectedCount . ' Kenntnisse erfolgreich bestätigt.');
-        $this->redirect($this->getReferer());
-    }    
+        return $this->redirect($this->getReferer());
+    }
 
-    public function insert(): void
+    public function insert(): Response
     {
         $skill = [
             'name' => 'Neue Kenntnis',
@@ -40,10 +41,10 @@ class SkillsController extends AdminAppController
         $entity = $skillsTable->newEntity($skill);
         $skill = $skillsTable->save($entity);
         $this->AppFlash->setFlashMessage('Kenntnis erfolgreich erstellt.');
-        $this->redirect($this->getReferer());
+        return $this->redirect($this->getReferer());
     }
 
-    public function edit(int $id): void
+    public function edit(int $id): ?Response
     {
         /** @var \App\Model\Table\SkillsTable */
         $skillsTable = $this->getTableLocator()->get('Skills');
@@ -69,7 +70,7 @@ class SkillsController extends AdminAppController
             );
 
             if (!($patchedEntity->hasErrors())) {
-                $this->saveObject($patchedEntity);
+                return $this->saveObject($patchedEntity);
             } else {
                 $skill = $patchedEntity;
             }
@@ -79,7 +80,7 @@ class SkillsController extends AdminAppController
 
         $metaTags = ['title' => 'Kenntnis bearbeiten'];
         $this->set('metaTags', $metaTags);
-
+        return null;
     }
 
     public function index(): void

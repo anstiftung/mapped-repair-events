@@ -3,14 +3,12 @@ declare(strict_types=1);
 namespace Admin\Controller;
 
 use Cake\Http\Exception\NotFoundException;
-use App\Model\Table\CategoriesTable;
-use App\Model\Table\KnowledgesTable;
-use App\Model\Table\SkillsTable;
+use Cake\Http\Response;
 
 class KnowledgesController extends AdminAppController
 {
 
-    public function insert(): void
+    public function insert(): Response
     {
         $knowledge = [
             'name' => 'Neuer Reparaturwissens-Beitrag von ' . $this->loggedUser->name,
@@ -21,10 +19,10 @@ class KnowledgesController extends AdminAppController
         $entity = $knowledgesTable->newEntity($knowledge);
         $knowledge = $knowledgesTable->save($entity);
         $this->AppFlash->setFlashMessage('Knowledge erfolgreich erstellt. UID: ' . $knowledge->uid); // uid for fixture
-        $this->redirect($this->getReferer());
+        return $this->redirect($this->getReferer());
     }
 
-    public function edit(int $uid): void
+    public function edit(int $uid): ?Response
     {
         /** @var \App\Model\Table\KnowledgesTable */
         $knowledgesTable = $this->getTableLocator()->get('Knowledges');
@@ -72,8 +70,8 @@ class KnowledgesController extends AdminAppController
                     // save id associations to knowledge
                     $this->request = $this->request->withData('Knowledges.skills._ids', array_merge($this->request->getData('Knowledges.skills._ids'), $addedSkillIds));
                     $patchedEntity = $knowledgesTable->getPatchedEntityForAdminEdit($knowledge, $this->request->getData());
-                    $this->saveObject($patchedEntity);
                     $this->request->getSession()->delete('newSkillsKnowledges');
+                    return $this->saveObject($patchedEntity);
                 }
 
             } else {
@@ -92,6 +90,7 @@ class KnowledgesController extends AdminAppController
         /** @var \App\Model\Table\SkillsTable */
         $skillsForDropdown = $skillsTable->getForDropdown(false);
         $this->set('skillsForDropdown', $skillsForDropdown);
+        return null;
 
     }
 

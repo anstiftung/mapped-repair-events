@@ -94,7 +94,7 @@ class WorkshopsController extends AppController
 
     }
 
-    private function _edit(Workshop $workshop, bool $isEditMode): void
+    private function _edit(Workshop $workshop, bool $isEditMode): ?Response
     {
 
         $this->User = $this->getTableLocator()->get('Users');
@@ -178,7 +178,7 @@ class WorkshopsController extends AppController
                         $email->addToQueue();
                     }
 
-                    $this->redirect($this->getPreparedReferer());
+                    return $this->redirect($this->getPreparedReferer());
 
                 } else {
                     $this->AppFlash->setFlashError($this->Workshop->name_de . ' <b>nicht</b>erfolgreich gespeichert.');
@@ -197,6 +197,8 @@ class WorkshopsController extends AppController
         if (!empty($errors)) {
             $this->render('edit');
         }
+        
+        return null;
     }
 
     /**
@@ -753,12 +755,11 @@ class WorkshopsController extends AppController
 
     }
 
-    private function processWorknewsAddForm(Workshop $workshop): null
+    private function processWorknewsAddForm(Workshop $workshop): ?Response
     {
 
         if (!empty($this->getRequest()->getData()) && ($this->getRequest()->getData('botEwX482') == '' || $this->getRequest()->getData('botEwX482') < 1)) {
-            $this->redirect('/');
-            return null;
+            return $this->redirect('/');
         }
 
         $this->Worknews = $this->getTableLocator()->get('Worknews');
@@ -1061,7 +1062,7 @@ class WorkshopsController extends AppController
         return $workshop;
     }
 
-    public function userApprove(): void
+    public function userApprove(): Response
     {
         $type = $this->request->getParam('pass')[0];
         $preparedType = $this->checkType($type);
@@ -1089,25 +1090,25 @@ class WorkshopsController extends AppController
         /* END email-versand an anfrage-steller */
 
         $this->AppFlash->setFlashMessage(str_replace('%name%', $userEntity->name, $preparedType['approveMessage']));
-        $this->redirect($this->referer());
+        return $this->redirect($this->referer());
     }
 
-    public function userRefuse(): void
+    public function userRefuse(): Response
     {
         $preparedType = $this->checkType($this->request->getParam('pass')[0]);
         $workshop = $this->userDelete($this->request->getParam('pass')[0]);
         $userEntity = $this->getUserEntity($workshop);
         $this->AppFlash->setFlashMessage(str_replace('%name%', $userEntity->name, $preparedType['refuseMessage']));
-        $this->redirect($this->referer());
+        return $this->redirect($this->referer());
     }
 
-    public function userResign(): void
+    public function userResign(): Response
     {
         $preparedType = $this->checkType($this->request->getParam('pass')[0]);
         $workshop = $this->userDelete($this->request->getParam('pass')[0]);
         $userEntity = $this->getUserEntity($workshop);
         $this->AppFlash->setFlashMessage(str_replace('%name%', $userEntity->name, $preparedType['resignMessage']));
-        $this->redirect($this->referer());
+        return $this->redirect($this->referer());
     }
 
     public function userDelete(string $type): Workshop
@@ -1129,7 +1130,7 @@ class WorkshopsController extends AppController
         return $workshop->users[0];
     }
 
-    public function apply(string $relationTable, string $foreignKey, string $model, int $userUid): void
+    public function apply(string $relationTable, string $foreignKey, string $model, int $userUid): ?Response
     {
         if (! empty($this->request->getData())) {
 
@@ -1200,7 +1201,7 @@ class WorkshopsController extends AppController
             }
             $this->AppFlash->setFlashMessage($message);
             $redirectUrlMethod = 'urlUserWorkshopApplication' . Inflector::singularize($userModel);
-            $this->redirect(Configure::read('AppConfig.htmlHelper')->$redirectUrlMethod());
+            return $this->redirect(Configure::read('AppConfig.htmlHelper')->$redirectUrlMethod());
         }
 
         $this->User = $this->getTableLocator()->get('Users');
@@ -1232,6 +1233,7 @@ class WorkshopsController extends AppController
         $this->set('associatedWorkshops', $associatedWorkshops);
 
         $this->set('workshopsForDropdown', $workshopsForDropdown);
+        return null;
     }
 
     public function applyAsUser(): void

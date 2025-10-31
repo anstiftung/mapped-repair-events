@@ -186,7 +186,7 @@ class FundingsController extends AdminAppController
         ];
     }
 
-    public function usageproofEdit(int $uid): void
+    public function usageproofEdit(int $uid): ?Response
     {
 
         if (empty($uid)) {
@@ -266,16 +266,17 @@ class FundingsController extends AdminAppController
                 }
 
                 $fundingsTable->save($patchedEntity);
-                $this->redirect($this->getReferer());
+                return $this->redirect($this->getReferer());
             } else {
                 $funding = $patchedEntity;
             }
         }
 
         $this->set('funding', $funding);
-    }    
+        return null;
+    }
 
-    public function edit(int $uid): void
+    public function edit(int $uid): ?Response
     {
         $fundingsTable = $this->getTableLocator()->get('Fundings');
         $workshopsTable = $this->getTableLocator()->get('Workshops');
@@ -325,13 +326,14 @@ class FundingsController extends AdminAppController
                 }
     
                 $fundingsTable->save($patchedEntity, $associtions);
-                $this->redirect($this->getReferer());
+                return $this->redirect($this->getReferer());
             } else {
                 $funding = $patchedEntity;
             }
         }
 
         $this->set('funding', $funding);
+        return null;
     
     }
 

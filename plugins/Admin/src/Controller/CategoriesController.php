@@ -5,6 +5,7 @@ namespace Admin\Controller;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Event\EventInterface;
 use App\Model\Table\CategoriesTable;
+use Cake\Http\Response;
 
 class CategoriesController extends AdminAppController
 {
@@ -16,7 +17,7 @@ class CategoriesController extends AdminAppController
         parent::beforeFilter($event);
     }
 
-    public function setApprovedMultiple(): void {
+    public function setApprovedMultiple(): Response {
         $selectedIds = $this->request->getQuery('selectedIds', '');
         $selectedIds = explode(',', $selectedIds);
 
@@ -24,10 +25,10 @@ class CategoriesController extends AdminAppController
         $categoriesTable = $this->getTableLocator()->get('Categories');
         $affectedCount = $categoriesTable->setApprovedMultiple($selectedIds);
         $this->AppFlash->setFlashMessage($affectedCount . ' Kategorien erfolgreich bestätigt.');
-        $this->redirect($this->getReferer());
+        return $this->redirect($this->getReferer());
     }
 
-    public function insert(): void
+    public function insert(): Response
     {
         $category = [
             'name' => 'Neue Kategorie',
@@ -40,10 +41,10 @@ class CategoriesController extends AdminAppController
         $entity = $categoriesTable->newEntity($category);
         $category = $categoriesTable->save($entity);
         $this->AppFlash->setFlashMessage('Kategorie erfolgreich erstellt.');
-        $this->redirect($this->getReferer());
+        return $this->redirect($this->getReferer());
     }
 
-    public function edit(int $id): void
+    public function edit(int $id): ?Response
     {
 
         /** @var \App\Model\Table\CategoriesTable */
@@ -73,7 +74,7 @@ class CategoriesController extends AdminAppController
             );
 
             if (!($patchedEntity->hasErrors())) {
-                $this->saveObject($patchedEntity);
+                return $this->saveObject($patchedEntity);
             } else {
                 $category = $patchedEntity;
             }
@@ -88,6 +89,8 @@ class CategoriesController extends AdminAppController
         $ordsCategoriesTable = $this->getTableLocator()->get('OrdsCategories');
         $this->set('ordsCategories', $ordsCategoriesTable->getForDropdown());
         $this->set('mainCategories', $categoriesTable->getForDropdown([APP_ON, APP_OFF]));
+
+        return null;
 
     }
 

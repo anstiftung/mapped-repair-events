@@ -4,12 +4,12 @@ namespace Admin\Controller;
 
 use App\Controller\Component\StringComponent;
 use Cake\Http\Exception\NotFoundException;
-use App\Model\Table\PagesTable;
+use Cake\Http\Response;
 
 class PagesController extends AdminAppController
 {
 
-    public function insert(): void
+    public function insert(): Response
     {
         $page = [
             'name' => 'Neue Seite von ' . $this->loggedUser->name,
@@ -20,10 +20,10 @@ class PagesController extends AdminAppController
         $entity = $pagesTable->newEntity($page);
         $page = $pagesTable->save($entity);
         $this->AppFlash->setFlashMessage('Seite erfolgreich erstellt. UID: ' . $page->uid); // uid for fixture
-        $this->redirect($this->getReferer());
+        return $this->redirect($this->getReferer());
     }
 
-    public function edit(int $uid): void
+    public function edit(int $uid): ?Response
     {
         /** @var \App\Model\Table\PagesTable */
         $pagesTable = $this->getTableLocator()->get('Pages');
@@ -51,13 +51,14 @@ class PagesController extends AdminAppController
             $patchedEntity = $pagesTable->getPatchedEntityForAdminEdit($page, $this->request->getData());
             if (!($patchedEntity->hasErrors())) {
                 $patchedEntity = $this->patchEntityWithCurrentlyUpdatedFields($patchedEntity);
-                $this->saveObject($patchedEntity);
+                return $this->saveObject($patchedEntity);
             } else {
                 $page = $patchedEntity;
             }
         }
 
         $this->set('page', $page);
+        return null;
     }
 
     public function index(): void

@@ -258,7 +258,7 @@ class EventsController extends AppController
 
     }
 
-    public function delete(int $eventUid): void
+    public function delete(int $eventUid): Response
     {
         $event = $this->Event->find('all',
             conditions: [
@@ -322,7 +322,7 @@ class EventsController extends AppController
             $this->AppFlash->setErrorMessage('Beim Löschen ist ein Fehler aufgetreten');
         }
 
-        $this->redirect($this->getReferer());
+        return $this->redirect($this->getReferer());
 
     }
 
@@ -516,7 +516,7 @@ class EventsController extends AppController
                 }
                 $message = count($events) . ' ' . $message . ' erfolgreich gespeichert.';
                 $this->AppFlash->setFlashMessage($message);
-                $this->redirect($this->getPreparedReferer());
+                $redirect = $this->redirect($this->getPreparedReferer());
                 return [
                     'events' => $events,
                     'dirtyFields' => $dirtyFields ?? [],
