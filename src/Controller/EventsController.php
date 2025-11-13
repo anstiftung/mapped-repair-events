@@ -770,6 +770,41 @@ class EventsController extends AppController
             'Workshops',
             'EventCategories',
         ]);
+
+        if ($query->count() == 0 && $keyword != '') {
+            $citiesTable = $this->getTableLocator()->get('Cities');
+            $city = $citiesTable->find('all',
+            conditions: [
+                $citiesTable->aliasField('name') => $keyword,
+            ],
+            order: [
+                'Cities.population' => 'DESC',
+            ],
+            )->first();
+            if (!empty($city) && !empty($city->latitude) && !empty($city->longitude)) {
+                $lat = $city->latitude;
+                $lng = $city->longitude;
+                $radius = 50;
+
+                $conditions = $this->Event->getListConditions();
+                $query = $eventsTable->find('all',
+                    conditions: $conditions
+                );
+
+                $query->select($eventsTable->getListFields());
+                $query->orderBy($eventsTable->getListOrder());
+                $query->contain([
+                    'Workshops',
+                    'EventCategories',
+                ]);
+                // add radius conditions
+                $haversine = "(6371 * acos(cos(radians($lat)) * cos(radians(Events.lat)) * cos(radians(Events.lng) - radians($lng)) + sin(radians($lat)) * sin(radians(Events.lat))))";
+                $query->where(function ($exp) use ($haversine, $radius) {
+                    return $exp->lt($haversine, $radius);
+                });
+            }
+        }
+
         $events = $this->paginate($query);
         $this->set('events', $events);
 

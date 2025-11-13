@@ -7,7 +7,7 @@ class CreateGeonamesRaw extends AbstractMigration
 {
     public function change(): void
     {
-        $table = $this->table('geonames_raw');
+        $table = $this->table('cities');
 
         $table
             ->addColumn('geonameid', 'integer', ['null' => false])

@@ -40,7 +40,7 @@ class ImportCitiesCommand extends Command
     
     private function getImportedGeonameIds($connection): array
     {
-        $query = $connection->execute('SELECT geonameid FROM geonames_raw');
+        $query = $connection->execute('SELECT geonameid FROM cities');
         $ids = [];
         
         foreach ($query as $row) {
@@ -168,7 +168,7 @@ class ImportCitiesCommand extends Command
         }
         
         $sql = sprintf(
-            'INSERT INTO geonames_raw (%s) VALUES %s',
+            'INSERT INTO cities (%s) VALUES %s',
             implode(', ', $fields),
             implode(', ', $placeholders)
         );
