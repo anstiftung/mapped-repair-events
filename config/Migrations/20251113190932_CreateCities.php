@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-use Migrations\BaseMigration;
+use Migrations\AbstractMigration;
 
-class CreateCities extends BaseMigration
+class CreateCities extends AbstractMigration
 {
     public function change(): void
     {
@@ -31,7 +31,9 @@ class CreateCities extends BaseMigration
             ->addColumn('modification_date', 'date', ['null' => true])
             ->addIndex(['geonameid'], ['unique' => true])
             ->addIndex(['country_code'])
-            ->addIndex(['latitude', 'longitude'])
+            ->addIndex(['latitude'])
+            ->addIndex(['longitude'])
+            ->addIndex(['name'])
             ->create();
     }
 }
