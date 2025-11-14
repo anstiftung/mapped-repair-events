@@ -780,7 +780,8 @@ class EventsController extends AppController
         $nearbyQueryFallbackResult = $citiesTable->getFallbackNearbyQuery($query, $fallbackNearbyQuery, $keyword, 'Events');
         $this->set('fallbackNearbyUsed', $nearbyQueryFallbackResult['is_fallback']);
 
-        $events = $this->paginate($nearbyQueryFallbackResult['query']);
+        $query = $nearbyQueryFallbackResult['query'];
+        $events = $this->paginate($query);
         $this->set('events', $events);
 
         // $events needs to be cloned, because unset($e['workshop']); in combineEventsForMap would also remove it from $events
