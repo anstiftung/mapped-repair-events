@@ -771,27 +771,13 @@ class EventsController extends AppController
             'EventCategories',
         ]);
 
-        $fallbackNearbyEventsQuery = clone $query;
+        $fallbackNearbyQuery = clone $query;
         if ($keyword != '') {
             $query->where($this->Event->getKeywordSearchConditions($keyword, false));
         }
 
-        $fallbackNearbyEventsCount = 0;
-        if ($query->count() == 0 && $keyword != '') {
-            $citiesTable = $this->getTableLocator()->get('Cities');
-            $city = $citiesTable->findForFallback($keyword);
-            if (!empty($city) && !empty($city->latitude) && !empty($city->longitude)) {
-                $haversineCondition = $this->geoService->getHaversineCondition($city->latitude, $city->longitude);
-                $fallbackNearbyEventsQuery->where(function ($exp) use ($haversineCondition) {
-                    return $exp->lt($haversineCondition, Event::FALLBACK_RADIUS_KM);
-                });
-                $fallbackNearbyEventsCount = $fallbackNearbyEventsQuery->count();
-                if ($fallbackNearbyEventsCount > 0) {
-                    $query = $fallbackNearbyEventsQuery;
-                }
-            }
-        }
-        $this->set('fallbackNearbyEventsCount', $fallbackNearbyEventsCount);
+        $query = $this->geoService->getFallbackNearbyQuery($query, $fallbackNearbyQuery, $keyword, 'Events');
+        $this->set('fallbackNearbyUsed', isset($query->is_fallback));
 
         $events = $this->paginate($query);
         $this->set('events', $events);

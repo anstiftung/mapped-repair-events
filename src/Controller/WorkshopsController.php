@@ -1340,7 +1340,6 @@ class WorkshopsController extends AppController
         $keyword = '';
         if (!empty($this->request->getQuery('keyword'))) {
             $keyword = h(strtolower(trim((string) $this->request->getQuery('keyword'))));
-            $query->where($workshopsTable->getKeywordSearchConditions($keyword, false));
         }
         $this->set('keyword', $keyword);
 
@@ -1355,6 +1354,14 @@ class WorkshopsController extends AppController
         if ($provinceId > 0) {
             $query->where([$workshopsTable->aliasField('province_id') => $provinceId]);
         }
+
+        $fallbackNearbyQuery = clone $query;
+        if ($keyword != '') {
+            $query->where($workshopsTable->getKeywordSearchConditions($keyword, false));
+        }
+
+        $query = $this->geoService->getFallbackNearbyQuery($query, $fallbackNearbyQuery, $keyword, 'Workshops');
+        $this->set('fallbackNearbyUsed', isset($query->is_fallback));
 
         $workshops = $this->paginate($query, [
             'sortableFields' => [

@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 use Cake\Core\Configure;
 use App\Model\Entity\Event;
 
@@ -49,8 +50,8 @@ $this->element('addScript', ['script' =>
     $paginationParams = [
         'objectNameSingular' => 'Termin',
         'objectNamePlural' => 'Termine',
-        'objectNameSingularDativ' => $fallbackNearbyEventsCount > 0 ? 'Termin im Umkreis von '.Event::FALLBACK_RADIUS_KM.' km von "' . $keyword . '"' : 'Termin',
-        'objectNamePluralDativ' => $fallbackNearbyEventsCount > 0 ? 'Terminen im Umkreis von '.Event::FALLBACK_RADIUS_KM.' km von "' . $keyword . '"' : 'Terminen',
+        'objectNameSingularDativ' => $fallbackNearbyUsed > 0 ? 'Termin im Umkreis von '.Event::FALLBACK_RADIUS_KM.' km von "' . $keyword . '"' : 'Termin',
+        'objectNamePluralDativ' => $fallbackNearbyUsed > 0 ? 'Terminen im Umkreis von '.Event::FALLBACK_RADIUS_KM.' km von "' . $keyword . '"' : 'Terminen',
         'allCount' => $allEventsCount
     ];
     echo $this->element('paginationSearch', $paginationParams);
@@ -120,17 +121,11 @@ $this->element('addScript', ['script' =>
     <div class="right">
 
         <?php
-
             $jqueryString = "var map = new ".JS_NAMESPACE.".Map(".json_encode($eventsForMap).");";
             $jqueryString .= "map.objectType = 'Event';";
-            if ($keyword != '' || count($selectedCategories) > 0) {
-                $jqueryString .= "map.loadAllEvents('".$keyword."', '".join(',', $selectedCategories)."');";
-            } else {
-                $jqueryString .= "map.initMarkers();";
-            }
+            $jqueryString .= "map.initMarkers();";
             $jqueryString .= "map.setMapAsFixed(($('#header').height() + 8));";
             $this->element('addScript', ['script' => $jqueryString]);
-
         ?>
 
         <div id="mapContainer">

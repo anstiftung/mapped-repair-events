@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
 
-use App\Controller\Component\StringComponent;
 use Cake\Utility\Text;
+use App\Model\Entity\Event;
 
 echo $this->element('highlightNavi', ['main' => 'ORTE']);
 $this->element('addScript', ['script' =>
@@ -39,7 +39,10 @@ $this->element('addScript', ['script' =>
     </div>
 
     <?php
-    $paginationParams = ['objectNameSingular' => 'Initiative', 'objectNamePlural' => 'Initiativen'];
+    $paginationParams = [
+        'objectNameSingular' => $fallbackNearbyUsed > 0 ? 'Initiative im Umkreis von '.Event::FALLBACK_RADIUS_KM.' km von "' . $keyword . '"' : 'Initiative',
+        'objectNamePlural' => $fallbackNearbyUsed > 0 ? 'Initiativen im Umkreis von '.Event::FALLBACK_RADIUS_KM.' km von "' . $keyword . '"' : 'Initiativen',
+    ];
     echo $this->element('paginationSearch', $paginationParams);
 
     echo '</div>'; // div.top
@@ -90,11 +93,7 @@ $this->element('addScript', ['script' =>
 
         <?php
             $jqueryString = "var map = new ".JS_NAMESPACE.".Map(".json_encode($workshopsForMap).");";
-            if ($keyword != '') {
-                $jqueryString .= "map.loadAllWorkshops('".$keyword."');";
-            } else {
-                $jqueryString .= "map.initMarkers();";
-            }
+            $jqueryString .= "map.initMarkers();";
             $jqueryString .= "map.setMapAsFixed(($('#header').height() + 8));";
             $this->element('addScript', ['script' => $jqueryString]);
         ?>
