@@ -46,6 +46,8 @@ class CitiesTable extends Table
                         'query' => $fallbackNearbyQuery,
                         'is_fallback' => true,
                     ];
+                } else {
+                    Log::error('No ' . $tableAlias . ' found near city "' . $keyword . '"');
                 }
             }
         }
