@@ -13,6 +13,12 @@ use Cake\Database\Connection;
 class ImportCitiesCommand extends Command
 {
     private const BATCH_SIZE = 1000;
+
+    /**
+     * https://download.geonames.org/export/dump/CH.zip
+     * https://download.geonames.org/export/dump/DE.zip
+     * https://download.geonames.org/export/dump/AT.zip
+     */
     private const FILES_TO_IMPORT = ['DE.txt', 'CH.txt', 'AT.txt'];
     
     public function execute(Arguments $args, ConsoleIo $io)
