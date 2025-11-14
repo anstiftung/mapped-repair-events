@@ -1360,10 +1360,11 @@ class WorkshopsController extends AppController
             $query->where($workshopsTable->getKeywordSearchConditions($keyword, false));
         }
 
-        $query = $this->geoService->getFallbackNearbyQuery($query, $fallbackNearbyQuery, $keyword, 'Workshops');
-        $this->set('fallbackNearbyUsed', isset($query->is_fallback));
+        $citiesTable = $this->getTableLocator()->get('Cities');
+        $nearbyQueryFallbackResult = $citiesTable->getFallbackNearbyQuery($query, $fallbackNearbyQuery, $keyword, 'Workshops');
+        $this->set('fallbackNearbyUsed', $nearbyQueryFallbackResult['is_fallback']);
 
-        $workshops = $this->paginate($query, [
+        $workshops = $this->paginate($nearbyQueryFallbackResult['query'], [
             'sortableFields' => [
                 'Workshops.created', 'Workshops.zip', 'Workshops.city', 'Workshops.name'
             ],

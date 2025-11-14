@@ -25,34 +25,6 @@ class GeoService {
 
     const ERROR_OUT_OF_BOUNDING_BOX = 'Die Geo-Koordinaten liegen nicht in Europa, vielleicht hast du Breite (Lat) und Länge (Long) vertauscht?';
 
-    public function getHaversineCondition(float $lat, float $lng, string $tableAlias): string
-    {
-        return "(6371 * acos(cos(radians($lat)) * cos(radians($tableAlias.lat)) * cos(radians($tableAlias.lng) - radians($lng)) + sin(radians($lat)) * sin(radians($tableAlias.lat))))";
-    }
-
-    public function getFallbackNearbyQuery(SelectQuery $baseQuery, SelectQuery $fallbackNearbyQuery, string $keyword, string $tableAlias): SelectQuery {
-
-        if ($baseQuery->count() == 0 && $keyword != '') {
-            $citiesTable = FactoryLocator::get('Table')->get('Cities');
-            $city = $citiesTable->findForFallback($keyword);
-            if (!empty($city) && !empty($city->latitude) && !empty($city->longitude)) {
-                $haversineCondition = $this->getHaversineCondition($city->latitude, $city->longitude, $tableAlias);
-                $fallbackNearbyQuery->where(function ($exp) use ($haversineCondition) {
-                    return $exp->lt($haversineCondition, Event::FALLBACK_RADIUS_KM);
-                });
-                $fallbackNearbyCount = $fallbackNearbyQuery->count();
-                if ($fallbackNearbyCount > 0) {
-                    $fallbackNearbyQuery->is_fallback = true; // phpstan-ignore-line
-                    Log::error($fallbackNearbyCount . ' ' . $tableAlias . ' found near city "' . $keyword . '"');
-                    return $fallbackNearbyQuery;
-                }
-            }
-        }
-        return $baseQuery;
-
-
-    }
-
     public function isPointInBoundingBox(float $lat, float $lng): bool
     {
         return $lat >= self::VALID_BOUNDING_BOX['lat']['min'] && $lat <= self::VALID_BOUNDING_BOX['lat']['max'] && $lng >= self::VALID_BOUNDING_BOX['lng']['min'] && $lng <= self::VALID_BOUNDING_BOX['lng']['max'];
