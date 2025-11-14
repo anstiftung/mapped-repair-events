@@ -23,6 +23,11 @@ class GeoService {
 
     const ERROR_OUT_OF_BOUNDING_BOX = 'Die Geo-Koordinaten liegen nicht in Europa, vielleicht hast du Breite (Lat) und Länge (Long) vertauscht?';
 
+    public function getHaversineCondition(float $lat, float $lng): string
+    {
+        return "(6371 * acos(cos(radians($lat)) * cos(radians(Events.lat)) * cos(radians(Events.lng) - radians($lng)) + sin(radians($lat)) * sin(radians(Events.lat))))";
+    }
+
     public function isPointInBoundingBox(float $lat, float $lng): bool
     {
         return $lat >= self::VALID_BOUNDING_BOX['lat']['min'] && $lat <= self::VALID_BOUNDING_BOX['lat']['max'] && $lng >= self::VALID_BOUNDING_BOX['lng']['min'] && $lng <= self::VALID_BOUNDING_BOX['lng']['max'];

@@ -6,7 +6,7 @@ use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use Cake\Http\Exception\NotFoundException;
 use Eluceo\iCal\Domain\Entity\Calendar;
-use Eluceo\iCal\Domain\Entity\Event;
+use App\Model\Entity\Event;
 use Eluceo\iCal\Domain\Entity\TimeZone;
 use \DateTimeZone as PhpDateTimeZone;
 use \DateTime as PhpDateTime;
@@ -89,9 +89,10 @@ class EventsController extends AppController
 
         $icalEvents = [];
 
+        /** @var Event $event */
         foreach($events as $event) {
 
-            $icalEvent = new Event();
+            $icalEvent = new \Eluceo\iCal\Domain\Entity\Event();
 
             $location = $event->strasse . ' ' . $event->zip . ' ' . $event->ort;
             if ($event->veranstaltungsort != '') {
@@ -719,7 +720,6 @@ class EventsController extends AppController
         $keyword = '';
         if (!empty($this->request->getQuery('keyword'))) {
             $keyword = h(strtolower(trim((string) $this->request->getQuery('keyword'))));
-            $query->where($this->Event->getKeywordSearchConditions($keyword, false));
         }
         $this->set('keyword', $keyword);
 
@@ -771,39 +771,27 @@ class EventsController extends AppController
             'EventCategories',
         ]);
 
+        $fallbackNearbyEventsQuery = clone $query;
+        if ($keyword != '') {
+            $query->where($this->Event->getKeywordSearchConditions($keyword, false));
+        }
+
+        $fallbackNearbyEventsCount = 0;
         if ($query->count() == 0 && $keyword != '') {
             $citiesTable = $this->getTableLocator()->get('Cities');
-            $city = $citiesTable->find('all',
-            conditions: [
-                $citiesTable->aliasField('name') => $keyword,
-            ],
-            order: [
-                'Cities.population' => 'DESC',
-            ],
-            )->first();
+            $city = $citiesTable->findForFallback($keyword);
             if (!empty($city) && !empty($city->latitude) && !empty($city->longitude)) {
-                $lat = $city->latitude;
-                $lng = $city->longitude;
-                $radius = 50;
-
-                $conditions = $this->Event->getListConditions();
-                $query = $eventsTable->find('all',
-                    conditions: $conditions
-                );
-
-                $query->select($eventsTable->getListFields());
-                $query->orderBy($eventsTable->getListOrder());
-                $query->contain([
-                    'Workshops',
-                    'EventCategories',
-                ]);
-                // add radius conditions
-                $haversine = "(6371 * acos(cos(radians($lat)) * cos(radians(Events.lat)) * cos(radians(Events.lng) - radians($lng)) + sin(radians($lat)) * sin(radians(Events.lat))))";
-                $query->where(function ($exp) use ($haversine, $radius) {
-                    return $exp->lt($haversine, $radius);
+                $haversineCondition = $this->geoService->getHaversineCondition($city->latitude, $city->longitude);
+                $fallbackNearbyEventsQuery->where(function ($exp) use ($haversineCondition) {
+                    return $exp->lt($haversineCondition, Event::FALLBACK_RADIUS_KM);
                 });
+                $fallbackNearbyEventsCount = $fallbackNearbyEventsQuery->count();
+                if ($fallbackNearbyEventsCount > 0) {
+                    $query = $fallbackNearbyEventsQuery;
+                }
             }
         }
+        $this->set('fallbackNearbyEventsCount', $fallbackNearbyEventsCount);
 
         $events = $this->paginate($query);
         $this->set('events', $events);

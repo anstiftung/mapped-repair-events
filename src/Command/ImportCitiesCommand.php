@@ -7,6 +7,8 @@ use Cake\Command\Command;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Datasource\ConnectionManager;
+use Cake\Datasource\ConnectionInterface;
+use Cake\Database\Connection;
 
 class ImportCitiesCommand extends Command
 {
@@ -38,7 +40,10 @@ class ImportCitiesCommand extends Command
         return static::CODE_SUCCESS;
     }
     
-    private function getImportedGeonameIds($connection): array
+    /**
+     * @return array<int, bool>
+     */
+    private function getImportedGeonameIds(mixed $connection): array
     {
         $query = $connection->execute('SELECT geonameid FROM cities');
         $ids = [];
@@ -50,7 +55,10 @@ class ImportCitiesCommand extends Command
         return $ids;
     }
     
-    private function importFile(string $filePath, $connection, ConsoleIo $io, array &$importedIds): void
+    /**
+     * @param array<bool> $importedIds
+     */
+    private function importFile(string $filePath, mixed $connection, ConsoleIo $io, array &$importedIds): void
     {
         $handle = fopen($filePath, 'r');
         if (!$handle) {
@@ -115,6 +123,9 @@ class ImportCitiesCommand extends Command
             $importedCount, $skippedCount));
     }
     
+    /**
+     * @return array<string, mixed>|null
+     */
     private function parseLine(string $line): ?array
     {
         // Geonames format is tab-separated
@@ -148,7 +159,10 @@ class ImportCitiesCommand extends Command
         ];
     }
     
-    private function insertBatch($connection, array $batch): void
+    /**
+     * @param list<array<string, mixed>> $batch
+     */
+    private function insertBatch(mixed $connection, array $batch): void
     {
         if (empty($batch)) {
             return;
