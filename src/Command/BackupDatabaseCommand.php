@@ -47,6 +47,7 @@ class BackupDatabaseCommand extends Command
             'compress' => 'Bzip2',
             'add-drop-table' => true,
             'exclude-tables' => [
+                'cities',
                 'queued_jobs',
             ],
         ];

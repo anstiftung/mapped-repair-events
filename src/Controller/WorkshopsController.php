@@ -1340,7 +1340,6 @@ class WorkshopsController extends AppController
         $keyword = '';
         if (!empty($this->request->getQuery('keyword'))) {
             $keyword = h(strtolower(trim((string) $this->request->getQuery('keyword'))));
-            $query->where($workshopsTable->getKeywordSearchConditions($keyword, false));
         }
         $this->set('keyword', $keyword);
 
@@ -1356,7 +1355,16 @@ class WorkshopsController extends AppController
             $query->where([$workshopsTable->aliasField('province_id') => $provinceId]);
         }
 
-        $workshops = $this->paginate($query, [
+        $fallbackNearbyQuery = clone $query;
+        if ($keyword != '') {
+            $query->where($workshopsTable->getKeywordSearchConditions($keyword, false));
+        }
+
+        $citiesTable = $this->getTableLocator()->get('Cities');
+        $nearbyQueryFallbackResult = $citiesTable->getFallbackNearbyQuery($query, $fallbackNearbyQuery, $keyword, 'Workshops');
+        $this->set('fallbackNearbyUsed', $nearbyQueryFallbackResult['is_fallback']);
+
+        $workshops = $this->paginate($nearbyQueryFallbackResult['query'], [
             'sortableFields' => [
                 'Workshops.created', 'Workshops.zip', 'Workshops.city', 'Workshops.name'
             ],

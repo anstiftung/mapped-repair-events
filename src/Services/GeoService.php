@@ -7,6 +7,8 @@ use Cake\Core\Configure;
 use Cake\Datasource\FactoryLocator;
 use Cake\Validation\Validator;
 use Cake\Log\Log;
+use Cake\ORM\Query\SelectQuery;
+use App\Model\Entity\Event;
 
 class GeoService {
 

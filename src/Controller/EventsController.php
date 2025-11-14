@@ -6,7 +6,7 @@ use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use Cake\Http\Exception\NotFoundException;
 use Eluceo\iCal\Domain\Entity\Calendar;
-use Eluceo\iCal\Domain\Entity\Event;
+use App\Model\Entity\Event;
 use Eluceo\iCal\Domain\Entity\TimeZone;
 use \DateTimeZone as PhpDateTimeZone;
 use \DateTime as PhpDateTime;
@@ -89,9 +89,10 @@ class EventsController extends AppController
 
         $icalEvents = [];
 
+        /** @var Event $event */
         foreach($events as $event) {
 
-            $icalEvent = new Event();
+            $icalEvent = new \Eluceo\iCal\Domain\Entity\Event();
 
             $location = $event->strasse . ' ' . $event->zip . ' ' . $event->ort;
             if ($event->veranstaltungsort != '') {
@@ -719,7 +720,6 @@ class EventsController extends AppController
         $keyword = '';
         if (!empty($this->request->getQuery('keyword'))) {
             $keyword = h(strtolower(trim((string) $this->request->getQuery('keyword'))));
-            $query->where($this->Event->getKeywordSearchConditions($keyword, false));
         }
         $this->set('keyword', $keyword);
 
@@ -770,6 +770,17 @@ class EventsController extends AppController
             'Workshops',
             'EventCategories',
         ]);
+
+        $fallbackNearbyQuery = clone $query;
+        if ($keyword != '') {
+            $query->where($this->Event->getKeywordSearchConditions($keyword, false));
+        }
+
+        $citiesTable = $this->getTableLocator()->get('Cities');
+        $nearbyQueryFallbackResult = $citiesTable->getFallbackNearbyQuery($query, $fallbackNearbyQuery, $keyword, 'Events');
+        $this->set('fallbackNearbyUsed', $nearbyQueryFallbackResult['is_fallback']);
+
+        $query = $nearbyQueryFallbackResult['query'];
         $events = $this->paginate($query);
         $this->set('events', $events);
 
