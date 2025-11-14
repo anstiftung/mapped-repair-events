@@ -43,6 +43,7 @@ class GeoService {
                 $fallbackNearbyCount = $fallbackNearbyQuery->count();
                 if ($fallbackNearbyCount > 0) {
                     $fallbackNearbyQuery->is_fallback = true; // phpstan-ignore-line
+                    Log::error($fallbackNearbyCount . ' ' . $tableAlias . ' found near city "' . $keyword . '"');
                     return $fallbackNearbyQuery;
                 }
             }
