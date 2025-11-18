@@ -130,17 +130,9 @@ class InfoSheetsTable extends AppTable
     private function prepareStatisticsDataGlobalByMainCategory(int $categoryId, ?string $dateFrom, ?string $dateTo, ?string $city): SelectQuery
     {
         $query = $this->prepareStatisticsDataGlobal($dateFrom, $dateTo, $city);
-
-        $contain = [
+        $query->contain([
             'Categories',
-        ];
-        if (!is_null($city) && $city !== '') {
-            $contain[] = 'Events';
-            $query->where(function($exp) use ($city) {
-                return $exp->like('Events.ort', '%' . $city . '%');
-            });
-        }
-        $query->contain($contain);
+        ]);
         $query->where([
             'Categories.parent_id' => $categoryId,
         ]);
