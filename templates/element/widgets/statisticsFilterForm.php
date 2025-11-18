@@ -22,6 +22,12 @@ declare(strict_types=1);
         if (isset($showCarbonFootprint)) {
             echo $this->Form->hidden('showCarbonFootprint', ['value' => $showCarbonFootprint]);
         }
+        if (isset($city)) {
+            echo $this->Form->hidden('city', ['value' => $city]);
+        }
+        if (isset($showCityName)) {
+            echo $this->Form->hidden('showCityName', ['value' => $showCityName]);
+        }
         echo $this->Form->hidden('backgroundColorOk', ['value' => $backgroundColorOk]);
         echo $this->Form->hidden('backgroundColorRepairable', ['value' => $backgroundColorRepairable]);
         echo $this->Form->hidden('backgroundColorNotOk', ['value' => $backgroundColorNotOk]);
@@ -51,7 +57,7 @@ declare(strict_types=1);
             echo '<span>bis</span>';
             echo $this->Form->control('dateTo',  ['type' => 'text', 'label' => '', 'value' => $dateTo, 'class' => 'datepicker-input']);
         }
-        if (!empty($dataSources)) {
+        if (!empty($dataSources) && $city == '') {
             echo $this->Form->control('dataSource',  ['type' => 'select', 'label' => '', 'options' => $dataSources, 'value' => $dataSource]);
         }
         echo '<button id="reset" class="button gray">Zurücksetzen</button>';

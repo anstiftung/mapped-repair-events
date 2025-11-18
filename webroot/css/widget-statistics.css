@@ -55,7 +55,7 @@ p.info {
     float: left;
 }
 .input.select select {
-    padding: 5px;
+    padding: 6px;
     border-radius: 3px;
     -moz-border-radius: 3px;
     -khtml-border-radius: 3px;

@@ -86,16 +86,24 @@ class InfoSheetsTable extends AppTable
         return $validator;
     }
 
-    /** @return \Cake\ORM\Query\SelectQuery<\App\Model\Entity\InfoSheet> */
-    private function prepareStatisticsDataGlobal(?string $dateFrom=null, ?string $dateTo=null): SelectQuery
+    /**
+     * @return \Cake\ORM\Query\SelectQuery<\App\Model\Entity\InfoSheet>
+     **/
+    private function prepareStatisticsDataGlobal(?string $dateFrom=null, ?string $dateTo=null, ?string $city=null): SelectQuery
     {
         $query = $this->find();
         $query->contain([
-            'Events'
+            'Events',
         ]);
         $query->where([
             'InfoSheets.status' => APP_ON,
         ]);
+
+        if (!is_null($city) && $city !== '') {
+            $query->where(function($exp) use ($city) {
+                return $exp->like('Events.ort', '%' . $city . '%');
+            });
+        }
 
         if (!is_null($dateFrom) && !is_null($dateTo)) {
             $dateFrom = new DateTime($dateFrom);
@@ -119,12 +127,20 @@ class InfoSheetsTable extends AppTable
     }
 
     /** @return \Cake\ORM\Query\SelectQuery<\App\Model\Entity\InfoSheet> */
-    private function prepareStatisticsDataGlobalByMainCategory(int $categoryId, ?string $dateFrom, ?string $dateTo): SelectQuery
+    private function prepareStatisticsDataGlobalByMainCategory(int $categoryId, ?string $dateFrom, ?string $dateTo, ?string $city): SelectQuery
     {
-        $query = $this->prepareStatisticsDataGlobal($dateFrom, $dateTo);
-        $query->contain([
-            'Categories'
-        ]);
+        $query = $this->prepareStatisticsDataGlobal($dateFrom, $dateTo, $city);
+
+        $contain = [
+            'Categories',
+        ];
+        if (!is_null($city) && $city !== '') {
+            $contain[] = 'Events';
+            $query->where(function($exp) use ($city) {
+                return $exp->like('Events.ort', '%' . $city . '%');
+            });
+        }
+        $query->contain($contain);
         $query->where([
             'Categories.parent_id' => $categoryId,
         ]);
@@ -136,7 +152,7 @@ class InfoSheetsTable extends AppTable
     {
         $query = $this->prepareStatisticsDataByWorkshopUid($workshopUid, $dateFrom, $dateTo);
         $query->contain([
-            'Categories'
+            'Categories',
         ]);
         $query->where([
             'Categories.parent_id' => $categoryId,
@@ -144,23 +160,23 @@ class InfoSheetsTable extends AppTable
         return $query;
     }
 
-    public function getRepairedGlobalByMainCategoryId(int $categoryId, ?string $dateFrom, ?string $dateTo): int
+    public function getRepairedGlobalByMainCategoryId(int $categoryId, ?string $dateFrom, ?string $dateTo, ?string $city): int
     {
-        $query = $this->prepareStatisticsDataGlobalByMainCategory($categoryId, $dateFrom, $dateTo);
+        $query = $this->prepareStatisticsDataGlobalByMainCategory($categoryId, $dateFrom, $dateTo, $city);
         $query = $this->setRepairedConditions($query);
         return $query->count();
     }
 
-    public function getRepairableGlobalByMainCategoryId(int $categoryId, ?string $dateFrom, ?string $dateTo): int
+    public function getRepairableGlobalByMainCategoryId(int $categoryId, ?string $dateFrom, ?string $dateTo, ?string $city): int
     {
-        $query = $this->prepareStatisticsDataGlobalByMainCategory($categoryId, $dateFrom, $dateTo);
+        $query = $this->prepareStatisticsDataGlobalByMainCategory($categoryId, $dateFrom, $dateTo, $city);
         $query = $this->setRepairableConditions($query);
         return $query->count();
     }
 
-    public function getNotRepairedGlobalByMainCategoryId(int $categoryId, ?string $dateFrom, ?string $dateTo): int
+    public function getNotRepairedGlobalByMainCategoryId(int $categoryId, ?string $dateFrom, ?string $dateTo, ?string $city): int
     {
-        $query = $this->prepareStatisticsDataGlobalByMainCategory($categoryId, $dateFrom, $dateTo);
+        $query = $this->prepareStatisticsDataGlobalByMainCategory($categoryId, $dateFrom, $dateTo, $city);
         $query = $this->setNotRepairedConditions($query);
         return $query->count();
     }
@@ -186,23 +202,23 @@ class InfoSheetsTable extends AppTable
         return $query->count();
     }
 
-    public function getRepaired(?string $dateFrom, ?string $dateTo): int
+    public function getRepaired(?string $dateFrom, ?string $dateTo, ?string $city=null): int
     {
-        $query = $this->prepareStatisticsDataGlobal($dateFrom, $dateTo);
+        $query = $this->prepareStatisticsDataGlobal($dateFrom, $dateTo, $city);
         $query = $this->setRepairedConditions($query);
         return $query->count();
     }
 
-    public function getRepairable(?string $dateFrom, ?string $dateTo): int
+    public function getRepairable(?string $dateFrom, ?string $dateTo, ?string $city=null): int
     {
-        $query = $this->prepareStatisticsDataGlobal($dateFrom, $dateTo);
+        $query = $this->prepareStatisticsDataGlobal($dateFrom, $dateTo, $city);
         $query = $this->setRepairableConditions($query);
         return $query->count();
     }
 
-    public function getNotRepaired(?string $dateFrom, ?string $dateTo): int
+    public function getNotRepaired(?string $dateFrom, ?string $dateTo, ?string $city=null): int
     {
-        $query = $this->prepareStatisticsDataGlobal($dateFrom, $dateTo);
+        $query = $this->prepareStatisticsDataGlobal($dateFrom, $dateTo, $city);
         $query = $this->setNotRepairedConditions($query);
         return $query->count();
     }
@@ -237,9 +253,9 @@ class InfoSheetsTable extends AppTable
         return $count;
     }
 
-    public function getWorkshopCountWithInfoSheets(?string $dateFrom, ?string $dateTo): int
+    public function getWorkshopCountWithInfoSheets(?string $dateFrom, ?string $dateTo, ?string $city): int
     {
-        $query = $this->prepareStatisticsDataGlobal($dateFrom, $dateTo);
+        $query = $this->prepareStatisticsDataGlobal($dateFrom, $dateTo, $city);
         $query->select(['Events.workshop_uid']);
         $query->groupBy('Events.workshop_uid');
         return $query->count();

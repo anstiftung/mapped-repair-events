@@ -1,6 +1,20 @@
 <?php
 declare(strict_types=1);
 
+if ($showCityName && $city != '') { ?>
+    <style>
+       h2 a {
+           color: <?php echo $borderColorOk;?>;
+       }
+    </style>
+    <h2>
+        <?php
+            echo $this->Html->link(h($city), $this->Html->urlEvents($city), ['target' => '_blank']);
+        ?>
+    </h2>
+<?php } ?>
+
+<?php
 echo $this->element('widgets/statisticsFilterForm', [
     'showDonutChart' => $showDonutChart,
     'showBarChart' => $showBarChart,
@@ -12,7 +26,9 @@ echo $this->element('widgets/statisticsFilterForm', [
     'dataSource' => $dataSource,
     'month' => $month,
     'year' => $year,
-    'defaultDataSource' => $defaultDataSource
+    'defaultDataSource' => $defaultDataSource,
+    'city' => $city,
+    'showCityName' => $showCityName,
 ]);
 
 if ($carbonFootprintSum > 0) {
