@@ -105,6 +105,14 @@ class HtmlOutputTest extends AppTestCase
         $this->assertResponseCode(200);
     }
 
+    public function testEventsWithCityFallback(): void
+    {
+        $this->changeEventDate();
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlEvents() . '?keyword=potsdam');
+        $this->doAssertHtmlOutput();
+        $this->assertResponseContains('<div class="numbers">2 Termine im Umkreis von 30 km von "potsdam" gefunden</div>');
+    }
+
     public function testEventsWithCategoryFilterFound(): void
     {
         $this->changeEventDate();

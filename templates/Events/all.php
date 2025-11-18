@@ -2,7 +2,6 @@
 declare(strict_types=1);
 
 use Cake\Core\Configure;
-use App\Model\Entity\City;
 
 echo $this->element('highlightNavi', ['main' => 'TERMINE']);
 $this->element('addScript', ['script' =>
@@ -50,9 +49,11 @@ $this->element('addScript', ['script' =>
     $paginationParams = [
         'objectNameSingular' => 'Termin',
         'objectNamePlural' => 'Termine',
-        'objectNameSingularDativ' => $fallbackNearbyUsed > 0 ? 'Termin im Umkreis von '.City::FALLBACK_RADIUS_KM.' km von "' . $keyword . '"' : 'Termin',
-        'objectNamePluralDativ' => $fallbackNearbyUsed > 0 ? 'Terminen im Umkreis von '.City::FALLBACK_RADIUS_KM.' km von "' . $keyword . '"' : 'Terminen',
-        'allCount' => $allEventsCount
+        'objectNameSingularDativ' => 'Termin',
+        'objectNamePluralDativ' => 'Terminen',
+        'allCount' => $allEventsCount,
+        'fallbackNearbyUsed' => $fallbackNearbyUsed,
+        'keyword' => $keyword,
     ];
     echo $this->element('paginationSearch', $paginationParams);
 

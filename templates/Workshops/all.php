@@ -2,7 +2,6 @@
 declare(strict_types=1);
 
 use Cake\Utility\Text;
-use App\Model\Entity\City;
 
 echo $this->element('highlightNavi', ['main' => 'ORTE']);
 $this->element('addScript', ['script' =>
@@ -40,8 +39,10 @@ $this->element('addScript', ['script' =>
 
     <?php
     $paginationParams = [
-        'objectNameSingular' => $fallbackNearbyUsed > 0 ? 'Initiative im Umkreis von '.City::FALLBACK_RADIUS_KM.' km von "' . $keyword . '"' : 'Initiative',
-        'objectNamePlural' => $fallbackNearbyUsed > 0 ? 'Initiativen im Umkreis von '.City::FALLBACK_RADIUS_KM.' km von "' . $keyword . '"' : 'Initiativen',
+        'objectNameSingular' => 'Initiative',
+        'objectNamePlural' => 'Initiativen',
+        'fallbackNearbyUsed' => $fallbackNearbyUsed,
+        'keyword' => $keyword,
     ];
     echo $this->element('paginationSearch', $paginationParams);
 
