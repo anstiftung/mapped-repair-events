@@ -5,7 +5,6 @@ namespace App\Model\Table;
 use Cake\ORM\Table;
 use App\Model\Entity\City;
 use Cake\ORM\Query\SelectQuery;
-use Cake\Log\Log;
 
 class CitiesTable extends Table
 {
@@ -41,13 +40,10 @@ class CitiesTable extends Table
                 });
                 $fallbackNearbyCount = $fallbackNearbyQuery->count();
                 if ($fallbackNearbyCount > 0) {
-                    Log::error($fallbackNearbyCount . ' ' . $tableAlias . ' found near city "' . $keyword . '"');
                     return [
                         'query' => $fallbackNearbyQuery,
                         'is_fallback' => true,
                     ];
-                } else {
-                    Log::error('No ' . $tableAlias . ' found near city "' . $keyword . '"');
                 }
             }
         }
