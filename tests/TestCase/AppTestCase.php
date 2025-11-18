@@ -15,6 +15,7 @@ class AppTestCase extends TestCase
         'app.Blogs',
         'app.Brands',
         'app.Categories',
+        'app.Cities',
         'app.Countries',
         'app.Events',
         'app.EventsCategories',

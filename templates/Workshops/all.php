@@ -1,7 +1,6 @@
 <?php
 declare(strict_types=1);
 
-use App\Controller\Component\StringComponent;
 use Cake\Utility\Text;
 
 echo $this->element('highlightNavi', ['main' => 'ORTE']);
@@ -39,7 +38,12 @@ $this->element('addScript', ['script' =>
     </div>
 
     <?php
-    $paginationParams = ['objectNameSingular' => 'Initiative', 'objectNamePlural' => 'Initiativen'];
+    $paginationParams = [
+        'objectNameSingular' => 'Initiative',
+        'objectNamePlural' => 'Initiativen',
+        'fallbackNearbyUsed' => $fallbackNearbyUsed,
+        'keyword' => $keyword,
+    ];
     echo $this->element('paginationSearch', $paginationParams);
 
     echo '</div>'; // div.top
@@ -90,11 +94,7 @@ $this->element('addScript', ['script' =>
 
         <?php
             $jqueryString = "var map = new ".JS_NAMESPACE.".Map(".json_encode($workshopsForMap).");";
-            if ($keyword != '') {
-                $jqueryString .= "map.loadAllWorkshops('".$keyword."');";
-            } else {
-                $jqueryString .= "map.initMarkers();";
-            }
+            $jqueryString .= "map.initMarkers();";
             $jqueryString .= "map.setMapAsFixed(($('#header').height() + 8));";
             $this->element('addScript', ['script' => $jqueryString]);
         ?>

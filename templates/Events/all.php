@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 use Cake\Core\Configure;
 
 echo $this->element('highlightNavi', ['main' => 'TERMINE']);
@@ -50,9 +51,10 @@ $this->element('addScript', ['script' =>
         'objectNamePlural' => 'Termine',
         'objectNameSingularDativ' => 'Termin',
         'objectNamePluralDativ' => 'Terminen',
-        'allCount' => $allEventsCount
+        'allCount' => $allEventsCount,
+        'fallbackNearbyUsed' => $fallbackNearbyUsed,
+        'keyword' => $keyword,
     ];
-    
     echo $this->element('paginationSearch', $paginationParams);
 
     echo '</div>'; // div.top
@@ -120,17 +122,11 @@ $this->element('addScript', ['script' =>
     <div class="right">
 
         <?php
-
             $jqueryString = "var map = new ".JS_NAMESPACE.".Map(".json_encode($eventsForMap).");";
             $jqueryString .= "map.objectType = 'Event';";
-            if ($keyword != '' || count($selectedCategories) > 0) {
-                $jqueryString .= "map.loadAllEvents('".$keyword."', '".join(',', $selectedCategories)."');";
-            } else {
-                $jqueryString .= "map.initMarkers();";
-            }
+            $jqueryString .= "map.initMarkers();";
             $jqueryString .= "map.setMapAsFixed(($('#header').height() + 8));";
             $this->element('addScript', ['script' => $jqueryString]);
-
         ?>
 
         <div id="mapContainer">
