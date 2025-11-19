@@ -25,6 +25,9 @@ declare(strict_types=1);
         if (isset($city)) {
             echo $this->Form->hidden('city', ['value' => $city]);
         }
+        if (isset($province)) {
+            echo $this->Form->hidden('province', ['value' => $province->name]);
+        }
         if (isset($showName)) {
             echo $this->Form->hidden('showName', ['value' => $showName]);
         }
