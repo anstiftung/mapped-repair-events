@@ -25,8 +25,8 @@ declare(strict_types=1);
         if (isset($city)) {
             echo $this->Form->hidden('city', ['value' => $city]);
         }
-        if (isset($showCityName)) {
-            echo $this->Form->hidden('showCityName', ['value' => $showCityName]);
+        if (isset($showName)) {
+            echo $this->Form->hidden('showName', ['value' => $showName]);
         }
         echo $this->Form->hidden('backgroundColorOk', ['value' => $backgroundColorOk]);
         echo $this->Form->hidden('backgroundColorRepairable', ['value' => $backgroundColorRepairable]);

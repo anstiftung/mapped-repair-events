@@ -30,14 +30,18 @@ declare(strict_types=1);
         &lt;iframe frameborder="0" width="100%" height="700" src="<?php echo Configure::read('AppConfig.serverName'); ?>/widgets/statistics-global?<span class="highlight">defaultDataSource=platform</span>"&gt;&lt;/iframe&gt;
     </code>
 
-    <h2>Globale Statistik: Stadt auswählen</h2>
+    <h2>Globale Statistik: Stadt / Bundesland / Kanton auswählen</h2>
     <ul>
-        <li>Die Stadt kann als Filter für die globale Statistik ausgewählt werden.</li>
-        <li>Der Name der Stadt kann ausgeblendet werden, indem der Parameter showCityName auf 0 gesetzt wird.</li>
+        <li>Sowohl Stadt (city) als auch Bundesland / Kanton (province) können als Filter für die globale Statistik ausgewählt werden.</li>
+        <li>Der Name kann ausgeblendet werden, indem der Parameter showName auf 0 gesetzt wird.</li>
     </ul>
 
     <code class="inlinecode">
-        &lt;iframe frameborder="0" width="100%" height="700" src="<?php echo Configure::read('AppConfig.serverName'); ?>/widgets/statistics-global?<span class="highlight">city=Berlin</span>&<span class="highlight">showCityName=0</span>"&gt;&lt;/iframe&gt;
+        &lt;iframe frameborder="0" width="100%" height="700" src="<?php echo Configure::read('AppConfig.serverName'); ?>/widgets/statistics-global?<span class="highlight">city=Hamburg</span>&<span class="highlight">showName=0</span>"&gt;&lt;/iframe&gt;
+    </code>
+
+    <code class="inlinecode">
+        &lt;iframe frameborder="0" width="100%" height="700" src="<?php echo Configure::read('AppConfig.serverName'); ?>/widgets/statistics-global?<span class="highlight">province=Bayern</span>"&gt;&lt;/iframe&gt;
     </code>
 
     <br />

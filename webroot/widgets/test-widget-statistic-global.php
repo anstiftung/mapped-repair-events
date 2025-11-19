@@ -21,7 +21,8 @@
     <body>
         <iframe src="/widgets/statistics-global?defaultDataSource=platform"></iframe>
         <iframe src="/widgets/statistics-global"></iframe>
-        <iframe src="/widgets/statistics-global?city=Berlin"></iframe>
+        <iframe src="/widgets/statistics-global?city=Hamburg"></iframe>
+        <iframe src="/widgets/statistics-global?province=Bayern"></iframe>
         <iframe src="/widgets/statistics-global?borderColorOk=rgb(14,113,184)&backgroundColorOk=rgba(14,113,184,0.6)&borderColorNotOk=rgb(181,24,33)&backgroundColorNotOk=rgba(181,24,33,0.6)"></iframe>
         <iframe style="height:550px;" src="/widgets/statistics-global?showDonutChart=0"></iframe>
     </body>

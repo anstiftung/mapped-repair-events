@@ -1,7 +1,8 @@
 <?php
 declare(strict_types=1);
+use App\Model\Entity\Province;
 
-if ($showCityName && $city != '') { ?>
+if ($showName && ($city != '' || $province instanceof Province)) { ?>
     <style>
        h2 a {
            color: <?php echo $borderColorOk;?>;
@@ -9,7 +10,12 @@ if ($showCityName && $city != '') { ?>
     </style>
     <h2>
         <?php
-            echo $this->Html->link(h($city), $this->Html->urlEvents($city), ['target' => '_blank']);
+        if ($province instanceof Province) {
+            echo $this->Html->link($province->name, $this->Html->urlEvents() . '?provinceId=' . $province->id, ['target' => '_blank']);
+        }
+        if ($city != '') {
+            echo $this->Html->link($city, $this->Html->urlEvents($city), ['target' => '_blank']);
+        }
         ?>
     </h2>
 <?php } ?>
@@ -28,7 +34,7 @@ echo $this->element('widgets/statisticsFilterForm', [
     'year' => $year,
     'defaultDataSource' => $defaultDataSource,
     'city' => $city,
-    'showCityName' => $showCityName,
+    'showName' => $showName,
 ]);
 
 if ($carbonFootprintSum > 0) {

@@ -6,6 +6,7 @@ namespace App\Model\Table;
 use Cake\Validation\Validator;
 use Cake\I18n\DateTime;
 use Cake\ORM\Query\SelectQuery;
+use App\Model\Entity\Province;
 
 class InfoSheetsTable extends AppTable
 {
@@ -89,7 +90,7 @@ class InfoSheetsTable extends AppTable
     /**
      * @return \Cake\ORM\Query\SelectQuery<\App\Model\Entity\InfoSheet>
      **/
-    private function prepareStatisticsDataGlobal(?string $dateFrom=null, ?string $dateTo=null, ?string $city=null): SelectQuery
+    private function prepareStatisticsDataGlobal(?string $dateFrom=null, ?string $dateTo=null, ?string $city=null, ?Province $province=null): SelectQuery
     {
         $query = $this->find();
         $query->contain([
@@ -103,6 +104,12 @@ class InfoSheetsTable extends AppTable
             $query->where(function($exp) use ($city) {
                 return $exp->like('Events.ort', '%' . $city . '%');
             });
+        }
+
+        if (!is_null($province)) {
+            $query->where([
+                'Events.province_id' => $province->id,
+            ]);
         }
 
         if (!is_null($dateFrom) && !is_null($dateTo)) {
@@ -127,9 +134,9 @@ class InfoSheetsTable extends AppTable
     }
 
     /** @return \Cake\ORM\Query\SelectQuery<\App\Model\Entity\InfoSheet> */
-    private function prepareStatisticsDataGlobalByMainCategory(int $categoryId, ?string $dateFrom, ?string $dateTo, ?string $city): SelectQuery
+    private function prepareStatisticsDataGlobalByMainCategory(int $categoryId, ?string $dateFrom, ?string $dateTo, ?string $city, ?Province $province): SelectQuery
     {
-        $query = $this->prepareStatisticsDataGlobal($dateFrom, $dateTo, $city);
+        $query = $this->prepareStatisticsDataGlobal($dateFrom, $dateTo, $city, $province);
         $query->contain([
             'Categories',
         ]);
@@ -152,23 +159,23 @@ class InfoSheetsTable extends AppTable
         return $query;
     }
 
-    public function getRepairedGlobalByMainCategoryId(int $categoryId, ?string $dateFrom, ?string $dateTo, ?string $city): int
+    public function getRepairedGlobalByMainCategoryId(int $categoryId, ?string $dateFrom, ?string $dateTo, ?string $city, ?Province $province): int
     {
-        $query = $this->prepareStatisticsDataGlobalByMainCategory($categoryId, $dateFrom, $dateTo, $city);
+        $query = $this->prepareStatisticsDataGlobalByMainCategory($categoryId, $dateFrom, $dateTo, $city, $province);
         $query = $this->setRepairedConditions($query);
         return $query->count();
     }
 
-    public function getRepairableGlobalByMainCategoryId(int $categoryId, ?string $dateFrom, ?string $dateTo, ?string $city): int
+    public function getRepairableGlobalByMainCategoryId(int $categoryId, ?string $dateFrom, ?string $dateTo, ?string $city, ?Province $province): int
     {
-        $query = $this->prepareStatisticsDataGlobalByMainCategory($categoryId, $dateFrom, $dateTo, $city);
+        $query = $this->prepareStatisticsDataGlobalByMainCategory($categoryId, $dateFrom, $dateTo, $city, $province);
         $query = $this->setRepairableConditions($query);
         return $query->count();
     }
 
-    public function getNotRepairedGlobalByMainCategoryId(int $categoryId, ?string $dateFrom, ?string $dateTo, ?string $city): int
+    public function getNotRepairedGlobalByMainCategoryId(int $categoryId, ?string $dateFrom, ?string $dateTo, ?string $city, ?Province $province): int
     {
-        $query = $this->prepareStatisticsDataGlobalByMainCategory($categoryId, $dateFrom, $dateTo, $city);
+        $query = $this->prepareStatisticsDataGlobalByMainCategory($categoryId, $dateFrom, $dateTo, $city, $province);
         $query = $this->setNotRepairedConditions($query);
         return $query->count();
     }
@@ -194,23 +201,23 @@ class InfoSheetsTable extends AppTable
         return $query->count();
     }
 
-    public function getRepaired(?string $dateFrom, ?string $dateTo, ?string $city=null): int
+    public function getRepaired(?string $dateFrom, ?string $dateTo, ?string $city=null, ?Province $province=null): int
     {
-        $query = $this->prepareStatisticsDataGlobal($dateFrom, $dateTo, $city);
+        $query = $this->prepareStatisticsDataGlobal($dateFrom, $dateTo, $city, $province);
         $query = $this->setRepairedConditions($query);
         return $query->count();
     }
 
-    public function getRepairable(?string $dateFrom, ?string $dateTo, ?string $city=null): int
+    public function getRepairable(?string $dateFrom, ?string $dateTo, ?string $city=null, ?Province $province=null): int
     {
-        $query = $this->prepareStatisticsDataGlobal($dateFrom, $dateTo, $city);
+        $query = $this->prepareStatisticsDataGlobal($dateFrom, $dateTo, $city, $province);
         $query = $this->setRepairableConditions($query);
         return $query->count();
     }
 
-    public function getNotRepaired(?string $dateFrom, ?string $dateTo, ?string $city=null): int
+    public function getNotRepaired(?string $dateFrom, ?string $dateTo, ?string $city=null, ?Province $province=null): int
     {
-        $query = $this->prepareStatisticsDataGlobal($dateFrom, $dateTo, $city);
+        $query = $this->prepareStatisticsDataGlobal($dateFrom, $dateTo, $city, $province);
         $query = $this->setNotRepairedConditions($query);
         return $query->count();
     }
@@ -245,9 +252,9 @@ class InfoSheetsTable extends AppTable
         return $count;
     }
 
-    public function getWorkshopCountWithInfoSheets(?string $dateFrom, ?string $dateTo, ?string $city): int
+    public function getWorkshopCountWithInfoSheets(?string $dateFrom, ?string $dateTo, ?string $city, ?Province $province): int
     {
-        $query = $this->prepareStatisticsDataGlobal($dateFrom, $dateTo, $city);
+        $query = $this->prepareStatisticsDataGlobal($dateFrom, $dateTo, $city, $province);
         $query->select(['Events.workshop_uid']);
         $query->groupBy('Events.workshop_uid');
         return $query->count();

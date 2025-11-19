@@ -9,6 +9,7 @@ use Cake\Event\EventInterface;
 use Cake\Http\Exception\NotFoundException;
 use App\Model\Entity\Workshop;
 use Cake\Http\Response;
+use App\Model\Entity\Province;
 
 class WidgetsController extends AppController
 {
@@ -243,12 +244,13 @@ class WidgetsController extends AppController
                 $this->viewBuilder()->getVar('borderColorNotOk'),
                 $this->viewBuilder()->getVar('dataSource'),
                 $this->viewBuilder()->getVar('city'),
+                $this->viewBuilder()->getVar('province'),
             );
 
             /** @var \App\Model\Table\InfoSheetsTable */
             $infoSheetsTable = $this->getTableLocator()->get('InfoSheets');
             $dates = $this->getDateFromByMonthAndYear($this->viewBuilder()->getVar('month'), $this->viewBuilder()->getVar('year'));
-            $workshopCount = $infoSheetsTable->getWorkshopCountWithInfoSheets($dates['dateFrom'], $dates['dateTo'], $this->viewBuilder()->getVar('city'));
+            $workshopCount = $infoSheetsTable->getWorkshopCountWithInfoSheets($dates['dateFrom'], $dates['dateTo'], $this->viewBuilder()->getVar('city'), $this->viewBuilder()->getVar('province'));
             $this->set('workshopCount', $workshopCount);
         }
         $showDonutChart = $this->viewBuilder()->getVar('showDonutChart');
@@ -263,6 +265,7 @@ class WidgetsController extends AppController
                 $this->viewBuilder()->getVar('borderColorRepairable'),
                 $this->viewBuilder()->getVar('borderColorNotOk'),
                 $this->viewBuilder()->getVar('city'),
+                $this->viewBuilder()->getVar('province'),
             );
         }
 
@@ -511,14 +514,24 @@ class WidgetsController extends AppController
         $this->set('month', $month);
 
         $city = h($this->request->getQuery('city', ''));
-        if ($city != '') {
+        $this->set('city', $city);
+
+        $province = h($this->request->getQuery('province', ''));
+        $provincesTable = $this->getTableLocator()->get('Provinces');
+        $provinceEntity = $provincesTable->findByName($province);
+        if ($province != '' && !$provinceEntity instanceof Province) {
+            echo 'Das angegebene Bundesland / Kanton "'.$province.'" wurde nicht gefunden.';
+            exit;
+        }
+        $this->set('province', $provinceEntity);
+
+        if ($city != '' || $province != '') {
             $dataSource = 'platform';
         }
-        $this->set('city', $city);
         $this->set('dataSource', $dataSource);
 
-        $showCityName = (bool) $this->request->getQuery('showCityName', true);
-        $this->set('showCityName', $showCityName);
+        $showName = (bool) $this->request->getQuery('showName', true);
+        $this->set('showName', $showName);
 
     }
 
@@ -618,6 +631,7 @@ class WidgetsController extends AppController
         string $borderColorNotOk,
         string $dataSource,
         string $city,
+        ?Province $province,
         ): void
     {
 
@@ -656,13 +670,13 @@ class WidgetsController extends AppController
             /** @var \App\Model\Table\InfoSheetsTable */
             $infoSheetsTable = $this->getTableLocator()->get('InfoSheets');
             foreach($categoriesIds as $index => $mainCategoryId) {
-                $repaired = $infoSheetsTable->getRepairedGlobalByMainCategoryId($mainCategoryId, $dateFrom, $dateTo, $city);
+                $repaired = $infoSheetsTable->getRepairedGlobalByMainCategoryId($mainCategoryId, $dateFrom, $dateTo, $city, $province);
                 $carbonFootprint = $categoriesTable->getCarbonFootprintByParentCategoryId($mainCategoryId);
                 $carbonFootprintSum += $categoriesTable->calculateCarbonFootprint($repaired, $carbonFootprint);
                 $materialFootprint = $categoriesTable->getMaterialFootprintByParentCategoryId($mainCategoryId);
                 $materialFootprintSum += $categoriesTable->calculateMaterialFootprint($repaired, $materialFootprint);
-                $notRepaired = $infoSheetsTable->getNotRepairedGlobalByMainCategoryId($mainCategoryId, $dateFrom, $dateTo, $city);
-                $repairable = $infoSheetsTable->getRepairableGlobalByMainCategoryId($mainCategoryId, $dateFrom, $dateTo, $city);
+                $notRepaired = $infoSheetsTable->getNotRepairedGlobalByMainCategoryId($mainCategoryId, $dateFrom, $dateTo, $city, $province);
+                $repairable = $infoSheetsTable->getRepairableGlobalByMainCategoryId($mainCategoryId, $dateFrom, $dateTo, $city, $province);
                 $categoriesDataRepaired[$index] += $repaired;
                 $categoriesDataRepairable[$index] += $repairable;
                 $categoriesDataNotRepaired[$index] += $notRepaired;
@@ -757,6 +771,7 @@ class WidgetsController extends AppController
         string $borderColorRepairable,
         string $borderColorNotOk,
         string $city,
+        ?Province $province,
         ): void
     {
 
@@ -767,9 +782,9 @@ class WidgetsController extends AppController
         /** @var \App\Model\Table\InfoSheetsTable */
         $infoSheetsTable = $this->getTableLocator()->get('InfoSheets');
 
-        $dataRepaired = $infoSheetsTable->getRepaired($dateFrom, $dateTo, $city);
-        $dataRepairable = $infoSheetsTable->getRepairable($dateFrom, $dateTo, $city);
-        $dataNotRepaired = $infoSheetsTable->getNotRepaired($dateFrom, $dateTo, $city);
+        $dataRepaired = $infoSheetsTable->getRepaired($dateFrom, $dateTo, $city, $province);
+        $dataRepairable = $infoSheetsTable->getRepairable($dateFrom, $dateTo, $city, $province);
+        $dataNotRepaired = $infoSheetsTable->getNotRepaired($dateFrom, $dateTo, $city, $province);
 
         $this->set('statisticsRepairedData', [
             'backgroundColor' => [$backgroundColorOk, $backgroundColorRepairable, $backgroundColorNotOk],
