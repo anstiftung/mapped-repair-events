@@ -28,7 +28,7 @@ echo $this->element('widgets/statisticsFilterForm', [
     'backgroundColorNotOk' => $backgroundColorNotOk,
     'borderColorOk' => $borderColorOk,
     'borderColorNotOk' => $borderColorNotOk,
-    'dataSources' => $city == '' ? $dataSources : [],
+    'dataSources' => ($city == '' || $province instanceof Province) ? $dataSources : [],
     'dataSource' => $dataSource,
     'month' => $month,
     'year' => $year,
