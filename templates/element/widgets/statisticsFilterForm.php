@@ -57,7 +57,7 @@ declare(strict_types=1);
             echo '<span>bis</span>';
             echo $this->Form->control('dateTo',  ['type' => 'text', 'label' => '', 'value' => $dateTo, 'class' => 'datepicker-input']);
         }
-        if (!empty($dataSources) && $city == '') {
+        if (!empty($dataSources)) {
             echo $this->Form->control('dataSource',  ['type' => 'select', 'label' => '', 'options' => $dataSources, 'value' => $dataSource]);
         }
         echo '<button id="reset" class="button gray">Zurücksetzen</button>';
