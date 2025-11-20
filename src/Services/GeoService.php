@@ -80,6 +80,7 @@ class GeoService {
         if (!empty($output->results) && isset($output->results[0]->address_components)) {
             /** @var \App\Model\Table\ProvincesTable $provincesTable */
             $provincesTable = FactoryLocator::get('Table')->get('Provinces');
+            $province = null;
             foreach($output->results[0]->address_components as $addressComponent) {
                 if ($addressComponent->types[0] == 'administrative_area_level_1') {
                     $province = $provincesTable->findByName($addressComponent->long_name);
