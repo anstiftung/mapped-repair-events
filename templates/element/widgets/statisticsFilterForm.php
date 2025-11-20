@@ -22,6 +22,15 @@ declare(strict_types=1);
         if (isset($showCarbonFootprint)) {
             echo $this->Form->hidden('showCarbonFootprint', ['value' => $showCarbonFootprint]);
         }
+        if (isset($city)) {
+            echo $this->Form->hidden('city', ['value' => $city]);
+        }
+        if (isset($province)) {
+            echo $this->Form->hidden('province', ['value' => $province->name]);
+        }
+        if (isset($showName)) {
+            echo $this->Form->hidden('showName', ['value' => $showName]);
+        }
         echo $this->Form->hidden('backgroundColorOk', ['value' => $backgroundColorOk]);
         echo $this->Form->hidden('backgroundColorRepairable', ['value' => $backgroundColorRepairable]);
         echo $this->Form->hidden('backgroundColorNotOk', ['value' => $backgroundColorNotOk]);

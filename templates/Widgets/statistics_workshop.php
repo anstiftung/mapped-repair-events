@@ -9,7 +9,7 @@ if ($showWorkshopName) { ?>
     </style>
     <h2>
         <?php
-        echo '<a target="_blank" href="'.$this->Html->urlWorkshopDetail($workshop->url).'">'.$workshop->name.'</a>';
+            echo $this->Html->link($workshop->name, $this->Html->urlWorkshopDetail($workshop->url), ['target' => '_blank']);
         ?>
     </h2>
 <?php } ?>

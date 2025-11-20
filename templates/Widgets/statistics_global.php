@@ -1,6 +1,26 @@
 <?php
 declare(strict_types=1);
+use App\Model\Entity\Province;
 
+if ($showName && ($city != '' || $province instanceof Province)) { ?>
+    <style>
+       h2 a {
+           color: <?php echo $borderColorOk;?>;
+       }
+    </style>
+    <h2>
+        <?php
+        if ($province instanceof Province) {
+            echo $this->Html->link($province->name, $this->Html->urlEvents() . '?provinceId=' . $province->id, ['target' => '_blank']);
+        }
+        if ($city != '') {
+            echo $this->Html->link($city, $this->Html->urlEvents($city), ['target' => '_blank']);
+        }
+        ?>
+    </h2>
+<?php } ?>
+
+<?php
 echo $this->element('widgets/statisticsFilterForm', [
     'showDonutChart' => $showDonutChart,
     'showBarChart' => $showBarChart,
@@ -8,11 +28,13 @@ echo $this->element('widgets/statisticsFilterForm', [
     'backgroundColorNotOk' => $backgroundColorNotOk,
     'borderColorOk' => $borderColorOk,
     'borderColorNotOk' => $borderColorNotOk,
-    'dataSources' => $dataSources,
+    'dataSources' => ($city == '' && !($province instanceof Province)) ? $dataSources : [],
     'dataSource' => $dataSource,
     'month' => $month,
     'year' => $year,
-    'defaultDataSource' => $defaultDataSource
+    'defaultDataSource' => $defaultDataSource,
+    'city' => $city,
+    'showName' => $showName,
 ]);
 
 if ($carbonFootprintSum > 0) {

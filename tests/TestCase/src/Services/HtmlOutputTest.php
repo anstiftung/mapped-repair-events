@@ -72,6 +72,24 @@ class HtmlOutputTest extends AppTestCase
         $this->doAssertHtmlOutput();
     }
 
+    public function testStatisticsGlobalWithCityFilter(): void
+    {
+        $this->get('/widgets/statisticsGlobal?city=berlin');
+        $this->doAssertHtmlOutput();
+    }
+
+    public function testStatisticsGlobalWithProvinceFilterOk(): void
+    {
+        $this->get('/widgets/statisticsGlobal?province=Bayern');
+        $this->doAssertHtmlOutput();
+    }
+
+    public function testStatisticsGlobalWithProvinceFilterNotFound(): void
+    {
+        $this->get('/widgets/statisticsGlobal?province=Niedersachsen');
+        $this->assertResponseCode(404);
+    }
+
     public function testSkills(): void
     {
         $this->get(Configure::read('AppConfig.htmlHelper')->urlSkills());
@@ -108,7 +126,7 @@ class HtmlOutputTest extends AppTestCase
     public function testEventsWithCityFallback(): void
     {
         $this->changeEventDate();
-        $this->get(Configure::read('AppConfig.htmlHelper')->urlEvents() . '?keyword=potsdam');
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlEvents('potsdam'));
         $this->doAssertHtmlOutput();
         $this->assertResponseContains('<div class="numbers">2 Termine im Umkreis von 30 km von "potsdam" gefunden</div>');
     }

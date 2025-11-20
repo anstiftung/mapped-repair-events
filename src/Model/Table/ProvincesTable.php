@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace App\Model\Table;
 
 use Cake\ORM\Table;
+use App\Model\Entity\Province;
 
 class ProvincesTable extends Table
 {
@@ -12,6 +13,19 @@ class ProvincesTable extends Table
         $this->belongsTo('Countries', [
             'foreignKey' => 'country_code',
         ]);
+    }
+
+    public function findByName(string $name): ?Province {
+        $province = $this->find()->where([
+            'OR' =>
+                [
+                    $this->aliasField('name') => $name,
+                    'FIND_IN_SET(:long_name, alternative_names) !=' => 0,
+                ],
+        ])
+        ->bind(':long_name', $name, 'string')
+        ->first();
+        return $province;
     }
 
     /**

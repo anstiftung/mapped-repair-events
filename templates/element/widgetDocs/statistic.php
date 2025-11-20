@@ -30,6 +30,20 @@ declare(strict_types=1);
         &lt;iframe frameborder="0" width="100%" height="700" src="<?php echo Configure::read('AppConfig.serverName'); ?>/widgets/statistics-global?<span class="highlight">defaultDataSource=platform</span>"&gt;&lt;/iframe&gt;
     </code>
 
+    <h2>Globale Statistik: Stadt / Bundesland / Kanton auswählen</h2>
+    <ul>
+        <li>Sowohl Stadt (city) als auch Bundesland / Kanton (province) können als Filter für die globale Statistik ausgewählt werden.</li>
+        <li>Der Name kann ausgeblendet werden, indem der Parameter showName auf 0 gesetzt wird.</li>
+    </ul>
+
+    <code class="inlinecode">
+        &lt;iframe frameborder="0" width="100%" height="700" src="<?php echo Configure::read('AppConfig.serverName'); ?>/widgets/statistics-global?<span class="highlight">city=Hamburg</span>&<span class="highlight">showName=0</span>"&gt;&lt;/iframe&gt;
+    </code>
+
+    <code class="inlinecode">
+        &lt;iframe frameborder="0" width="100%" height="700" src="<?php echo Configure::read('AppConfig.serverName'); ?>/widgets/statistics-global?<span class="highlight">province=Bayern</span>"&gt;&lt;/iframe&gt;
+    </code>
+
     <br />
     <h2><?php echo Configure::read('AppConfig.platformName'); ?>-Statistik: Schnell-Einbindung</h2>
     <strong class="highlight">Beispiel-Link:</strong> <a title="Voransicht" target="_blank" href="/widgets/test-widget-statistic-workshop.php">Voransicht Statistik Initiative</a>

@@ -78,20 +78,13 @@ class GeoService {
         $provinceId = 0;
 
         if (!empty($output->results) && isset($output->results[0]->address_components)) {
+            /** @var \App\Model\Table\ProvincesTable $provincesTable */
             $provincesTable = FactoryLocator::get('Table')->get('Provinces');
+            $province = null;
             foreach($output->results[0]->address_components as $addressComponent) {
                 if ($addressComponent->types[0] == 'administrative_area_level_1') {
-                    // @phpstan-ignore-next-line
-                    $province = $provincesTable->find()->where([
-                        'OR' =>
-                            [
-                                $provincesTable->aliasField('name') => $addressComponent->long_name,
-                                'FIND_IN_SET(:long_name, alternative_names) !=' => 0,
-                            ],
-                    ])
-                    ->bind(':long_name', $addressComponent->long_name, 'string')
-                    ->first();
-                    continue;
+                    $province = $provincesTable->findByName($addressComponent->long_name);
+                    break;
                 }
             }
         }

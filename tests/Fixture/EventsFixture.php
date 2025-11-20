@@ -23,7 +23,8 @@ class EventsFixture extends AppFixture
                 'lat' => 52.520008,
                 'lng' => 13.404954,
                 'status' => 1,
-                'owner' => 1
+                'owner' => 1,
+                'province_id' => 1,
             ],
             [
                 'uid' => 9,
@@ -39,7 +40,8 @@ class EventsFixture extends AppFixture
                 'lat' => 52.520008,
                 'lng' => 13.404954,
                 'status' => 1,
-                'owner' => 1
+                'owner' => 1,
+                'province_id' => 0.,
             ],
             [
                 'uid' => 12,
@@ -55,7 +57,8 @@ class EventsFixture extends AppFixture
                 'lat' => 52.520008,
                 'lng' => 13.404954,
                 'status' => 1,
-                'owner' => 1
+                'owner' => 1,
+                'province_id' => 0,
             ],
         ];
         parent::init();
