@@ -520,8 +520,7 @@ class WidgetsController extends AppController
         $provincesTable = $this->getTableLocator()->get('Provinces');
         $provinceEntity = $provincesTable->findByName($province);
         if ($province != '' && !$provinceEntity instanceof Province) {
-            echo 'Das angegebene Bundesland / Kanton "'.$province.'" wurde nicht gefunden.';
-            exit;
+            throw new NotFoundException('Das angegebene Bundesland / Kanton "' . $province . '" wurde nicht gefunden.');
         }
         $this->set('province', $provinceEntity);
 
