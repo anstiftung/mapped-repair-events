@@ -109,8 +109,18 @@ declare(strict_types=1);
         &lt;iframe frameborder="0" width="200" height="130" src="<?php echo Configure::read('AppConfig.serverName'); ?>/widgets/statistics-counts-workshop/1234<span class="highlight">?showWorkshopName=0</span>"&gt;&lt;/iframe&gt;
     </code>
     <p><b>Globale Statistik:</b></p>
+    <ul>
+        <li>Sowohl Stadt (city) als auch Bundesland / Kanton (province) können als Filter für die globale Statistik ausgewählt werden.</li>
+        <li>Der Name kann ausgeblendet werden, indem der Parameter showName auf 0 gesetzt wird.</li>
+    </ul>
     <code class="inlinecode">
         &lt;iframe frameborder="0" width="200" height="130" src="<?php echo Configure::read('AppConfig.serverName'); ?>/widgets/statistics-counts-global"&gt;&lt;/iframe&gt;
+    </code>
+    <code class="inlinecode">
+        &lt;iframe frameborder="0" width="200" height="130" src="<?php echo Configure::read('AppConfig.serverName'); ?>/widgets/statistics-counts-global?<span class="highlight">city=Hamburg</span>"&gt;&lt;/iframe&gt;
+    </code>
+    <code class="inlinecode">
+        &lt;iframe frameborder="0" width="200" height="130" src="<?php echo Configure::read('AppConfig.serverName'); ?>/widgets/statistics-counts-global?<span class="highlight">province=Bayern</span>&<span class="highlight">showName=0</span>"&gt;&lt;/iframe&gt;
     </code>
 
 </div>

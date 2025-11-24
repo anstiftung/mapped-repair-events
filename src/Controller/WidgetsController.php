@@ -38,6 +38,7 @@ class WidgetsController extends AppController
 
     public function statisticsCountsGlobal(): Response
     {
+        $this->parseStatisticsGlobalParams();
         $this->parseStatisticsParams();
         $this->viewBuilder()->setLayout('widget');
 
@@ -48,9 +49,11 @@ class WidgetsController extends AppController
         $infoSheetsTable = $this->getTableLocator()->get('InfoSheets');
         $dateFrom = '2010-01-01';
         $dateTo = date('Y') . '-12-31';
-        $dataRepaired = $infoSheetsTable->getRepaired($dateFrom, $dateTo);
-        $dataRepairable = $infoSheetsTable->getRepairable($dateFrom, $dateTo);
-        $dataNotRepaired = $infoSheetsTable->getNotRepaired($dateFrom, $dateTo);
+        $city = $this->viewBuilder()->getVar('city');
+        $province = $this->viewBuilder()->getVar('province');
+        $dataRepaired = $infoSheetsTable->getRepaired($dateFrom, $dateTo, $city, $province);
+        $dataRepairable = $infoSheetsTable->getRepairable($dateFrom, $dateTo, $city, $province);
+        $dataNotRepaired = $infoSheetsTable->getNotRepaired($dateFrom, $dateTo, $city, $province);
         $this->set('dataRepaired', $dataRepaired);
         $this->set('dataRepairable', $dataRepairable);
         $this->set('dataNotRepaired', $dataNotRepaired);
@@ -81,8 +84,9 @@ class WidgetsController extends AppController
         $this->set('dataRepaired', $dataRepaired);
         $this->set('dataRepairable', $dataRepairable);
         $this->set('dataNotRepaired', $dataNotRepaired);
+        $this->set('showName', false);
     }
-    
+
     public function events(): void
     {
         $this->viewBuilder()->setLayout('widget');

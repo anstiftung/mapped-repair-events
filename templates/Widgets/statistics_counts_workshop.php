@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+use App\Model\Entity\Province;
 ?>
 
 <style>
@@ -26,7 +27,26 @@ if ($showWorkshopName) { ?>
     </style>
     <h2>
         <?php
-        echo '<a target="_blank" href="'.$this->Html->urlWorkshopDetail($workshop->url).'">'.$workshop->name.'</a>';
+            echo $this->Html->link($workshop->name, $this->Html->urlWorkshopDetail($workshop->url), ['target' => '_blank']);
+        ?>
+    </h2>
+<?php } ?>
+
+<?php
+if ($showName && ($city != '' || $province instanceof Province)) { ?>
+    <style>
+       h2 a {
+           color: <?php echo $borderColorOk;?>;
+       }
+    </style>
+    <h2>
+        <?php
+        if ($province instanceof Province) {
+            echo $this->Html->link($province->name, $this->Html->urlEvents() . '?provinceId=' . $province->id, ['target' => '_blank']);
+        }
+        if ($city != '') {
+            echo $this->Html->link($city, $this->Html->urlEvents($city), ['target' => '_blank']);
+        }
         ?>
     </h2>
 <?php } ?>

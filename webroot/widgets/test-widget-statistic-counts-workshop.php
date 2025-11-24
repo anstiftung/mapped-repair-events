@@ -16,6 +16,10 @@
     <body>
         <iframe style="height:18px;width:520px;" src="/widgets/statistics-counts-global"></iframe>
         <br />
+        <iframe style="height:55px;width:520px;" src="/widgets/statistics-counts-global?city=Hamburg"></iframe>
+        <br />
+        <iframe style="height:18px;width:520px;" src="/widgets/statistics-counts-global?province=Bayern&showName=0"></iframe>
+        <br />
         <iframe style="height:130px;width:200px;" src="/widgets/statistics-counts-workshop/11277"></iframe>
         <br />
         <iframe style="height:18px;width:520px;" src="/widgets/statistics-counts-workshop/11277?showWorkshopName=0"></iframe>

@@ -66,6 +66,24 @@ class HtmlOutputTest extends AppTestCase
         $this->doAssertHtmlOutput();
     }
 
+    public function testStatisticsCountsGlobal(): void
+    {
+        $this->get('/widgets/statisticsCountsGlobal');
+        $this->doAssertHtmlOutput();
+    }
+
+    public function testStatisticsCountsGlobalWithCityFilter(): void
+    {
+        $this->get('/widgets/statisticsCountsGlobal?city=berlin');
+        $this->doAssertHtmlOutput();
+    }
+
+    public function testStatisticsCountsGlobalWithProvinceFilterOk(): void
+    {
+        $this->get('/widgets/statisticsCountsGlobal?province=Bayern');
+        $this->doAssertHtmlOutput();
+    }
+
     public function testStatisticsGlobal(): void
     {
         $this->get('/widgets/statisticsGlobal');
