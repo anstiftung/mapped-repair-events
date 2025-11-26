@@ -21,7 +21,6 @@ parameters:
           paths:
             - templates
             - plugins/Admin/templates
-        - identifier: cake.debug.debugFuncCallUse
         - identifier: cake.debug.debugStaticCallUse
 rules:
     - Ergebnis\PHPStan\Rules\Files\DeclareStrictTypesRule

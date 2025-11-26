@@ -46,26 +46,6 @@ class InternController extends AdminAppController
         $this->addViewClasses([JsonView::class]);
     }
 
-    public function addCategory(string $name): void
-    {
-        $categories = $this->getTableLocator()->get('Categories');
-        $c = $categories->save($categories->newEntity(['name' => $name, 'icon' => StringComponent::slugify($name)]));
-        pr($c);
-        exit;
-    }
-
-    public function addSubCategory(string $name, int $parentId): void
-    {
-        $categories = $this->getTableLocator()->get('Categories');
-        $c = $categories->save($categories->newEntity([
-            'name' => $name,
-            'parent_id' => $parentId,
-            'icon' => StringComponent::slugify($name)
-        ]));
-        pr($c);
-        exit;
-    }
-
     private function getExtension(string $mimeType): string
     {
         $extensions = [
