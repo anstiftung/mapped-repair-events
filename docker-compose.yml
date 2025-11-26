@@ -12,15 +12,15 @@ services:
     volumes:
       - ./:/app
     depends_on:
-      - mysql-test
+      - database-test
     environment:
       WEB_DOCUMENT_ROOT: /app/webroot
     ports:
       - "8113:80"
 
-  mysql-dev:
-    image: mysql:8.0
-    container_name: rep.mysql.dev
+  database-dev:
+    image: mariadb:10.11
+    container_name: rep.database.dev
     working_dir: /app
     volumes:
       - rep_db:/var/lib/mysql
@@ -33,11 +33,11 @@ services:
     networks:
       - nginx-frontproxy
 
-  mysql-test:
-    image: mysql:8.0
-    container_name: rep.mysql.test
+  database-test:
+    image: mariadb:10.11
+    container_name: rep.database.test
     restart: always
-    tmpfs: /var/lib/mysql:exec,size=1G #smaller size (eg. 256M) lead to failing tests
+    tmpfs: /var/lib/mysql:exec,size=512M #smaller size (eg. 256M) lead to failing tests
     ports:
       - '3331:3306'
     env_file:
@@ -49,14 +49,14 @@ services:
 
   phpmyadmin-dev:
     depends_on:
-     - mysql-dev
+     - database-dev
     image: phpmyadmin/phpmyadmin
     container_name: rep.phpmyadmin-dev
     restart: always
     ports:
      - '8122:80'
     environment:
-      PMA_HOST: mysql-dev
+      PMA_HOST: database-dev
       PMA_USER: my_user
       PMA_PASSWORD: password
       PMA_PORT: 3330
@@ -66,14 +66,14 @@ services:
 
   phpmyadmin-test:
     depends_on:
-     - mysql-test
+     - database-test
     image: phpmyadmin/phpmyadmin
     container_name: rep.phpmyadmin-test
     restart: always
     ports:
      - '8123:80'
     environment:
-      PMA_HOST: mysql-test
+      PMA_HOST: database-test
       PMA_USER: my_user
       PMA_PASSWORD: password
       PMA_PORT: 3331

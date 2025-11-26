@@ -19,7 +19,7 @@ return [
     ],
     'Datasources' => [
         'test' => [
-            'host' => 'mysql-test',
+            'host' => 'database-test',
             'username' => 'my_user',
             'password' => 'password',
             'database' => 'my_app',
