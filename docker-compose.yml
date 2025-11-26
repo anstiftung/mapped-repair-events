@@ -21,7 +21,7 @@ services:
   database-dev:
     image: mariadb:10.11
     container_name: rep.database.dev
-    working_dir: /app
+    restart: always
     volumes:
       - rep_db:/var/lib/mysql
     env_file:
