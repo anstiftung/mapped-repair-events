@@ -84,7 +84,7 @@ class FoerderantragPdfWriterService extends PdfWriterService
             $preparedFields[$workshopFieldName] = [
                 'name' => $workshopFieldName,
                 'label' => $workshopField['options']['label'],
-                'value' => $entity[$workshopFieldName],
+                'value' => $entity->$workshopFieldName,
             ];
         }
         return $preparedFields;

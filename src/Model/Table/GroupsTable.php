@@ -10,10 +10,10 @@ class GroupsTable extends Table
 
     public function isAdmin(User $user): bool
     {
-        if (empty($user['groups']))
+        if (empty($user->groups))
             return false;
-        foreach ($user['groups'] as $group) {
-            if ($group['id'] == GROUPS_ADMIN) {
+        foreach ($user->groups as $group) {
+            if ($group->id == GROUPS_ADMIN) {
                 return true;
             }
         }
@@ -22,10 +22,10 @@ class GroupsTable extends Table
 
     public function isOrga(User $user): bool
     {
-        if (empty($user['groups']))
+        if (empty($user->groups))
             return false;
-        foreach ($user['groups'] as $group) {
-            if ($group['id'] == GROUPS_ORGA) {
+        foreach ($user->groups as $group) {
+            if ($group->id == GROUPS_ORGA) {
                 return true;
             }
         }
@@ -34,10 +34,10 @@ class GroupsTable extends Table
 
     public function isRepairhelper(User $user): bool
     {
-        if (empty($user['groups']))
+        if (empty($user->groups))
             return false;
-            foreach ($user['groups'] as $group) {
-                if ($group['id'] == GROUPS_REPAIRHELPER) {
+            foreach ($user->groups as $group) {
+                if ($group->id == GROUPS_REPAIRHELPER) {
                     return true;
                 }
             }

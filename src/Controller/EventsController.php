@@ -701,8 +701,8 @@ class EventsController extends AppController
 
             $newUrl = str_replace('//', '/', $newUrl);
 
-            $category['href'] = $newUrl;
-            $category['class'] = $categoryClass;
+            $category->href = $newUrl;
+            $category->class = $categoryClass;
             $preparedCategories[] = [
                 'id' => $category->id,
                 'name' => $category->name,

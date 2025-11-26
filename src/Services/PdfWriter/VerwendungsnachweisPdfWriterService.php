@@ -62,7 +62,7 @@ class VerwendungsnachweisPdfWriterService extends PdfWriterService
             $preparedFields[$workshopFieldName] = [
                 'name' => $workshopFieldName,
                 'label' => $workshopField['options']['label'],
-                'value' => $fundingusageproof[$workshopFieldName],
+                'value' => $fundingusageproof->$workshopFieldName,
             ];
         }
         return $preparedFields;

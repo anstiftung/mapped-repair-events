@@ -742,8 +742,8 @@ class MyHtmlHelper extends HtmlHelper {
 
     function getUserProfileImage(User $user): string
     {
-        $userAltText = $user->image_alt_text ?? $user['image_alt_text'];
-        $userImage = $user->image ?? $user['image'];
+        $userAltText = $user->image_alt_text ?? $user->image_alt_text;
+        $userImage = $user->image ?? $user->image;
         $userImageSrc = $this->getUserProfileImageSrc($user, $userImage);
         $imageHtml = '<img alt="'.$userAltText.'"  class="rounded" src="'.$userImageSrc.'" >';
         return $imageHtml;

@@ -30,7 +30,7 @@ class Funding extends Entity
         $fieldsToBeFormattedWithToDigits = ['amount'];
         foreach($fields as $field) {
             if ($entity !== null && in_array($field['name'], $fieldsToBeFormattedWithToDigits)) {
-                $value = $entity[$field['name']];
+                $value = $entity[$field['name']]; // @phpstan-ignore-line
                 if ($value !== null) {
                     $field['options']['value'] = number_format((float) $value, 2, '.', '');
                 }

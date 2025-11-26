@@ -256,15 +256,15 @@ class EventsTable extends AppTable
 
             return $results->map(function (Event $row): Event {
 
-                if ($row['datumstart']) {
-                    $row['datumstart_formatted'] = $row['datumstart']->i18nFormat(Configure::read('DateFormat.Database'));
+                if ($row->datumstart) {
+                    $row->datumstart_formatted = $row->datumstart->i18nFormat(Configure::read('DateFormat.Database'));
                 }
 
-                if ($row['uhrzeitstart']) {
-                    $row['uhrzeitstart_formatted'] = $row['uhrzeitstart']->i18nFormat(Configure::read('DateFormat.de.TimeShort'));
+                if ($row->uhrzeitstart) {
+                    $row->uhrzeitstart_formatted = $row->uhrzeitstart->i18nFormat(Configure::read('DateFormat.de.TimeShort'));
                 }
-                if ($row['uhrzeitend']) {
-                    $row['uhrzeitend_formatted'] = $row['uhrzeitend']->i18nFormat(Configure::read('DateFormat.de.TimeShort'));
+                if ($row->uhrzeitend) {
+                    $row->uhrzeitend_formatted = $row->uhrzeitend->i18nFormat(Configure::read('DateFormat.de.TimeShort'));
                 }
 
                 return $row;
