@@ -29,7 +29,6 @@ class ErrorController extends AppController
     {
         $this->viewBuilder()->setTemplatePath('Error');
         parent::beforeRender($event);
-        $this->set('metaTags', ['title' => 'Seite nicht gefunden']);
     }
 
 }
