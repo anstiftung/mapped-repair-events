@@ -17,7 +17,7 @@
         "cakephp/authentication": "^3.0",
         "cakephp/authorization": "^3.0",
         "cakephp/cakephp": "^5.2",
-        "cakephp/migrations": "^4.0",
+        "cakephp/migrations": "4.5.1",
         "cakephp/plugin-installer": "~2.0",
         "mobiledetect/mobiledetectlib": "4.*",
         "markstory/asset_compress": "5.*",
