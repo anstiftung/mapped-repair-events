@@ -14,10 +14,6 @@ use Cake\View\Exception\MissingHelperException;
 
 return [
 
-    'Migrations' => [
-        'backend' => 'phinx',
-    ],
-
     /*
      * Debug Level:
      *
