@@ -35,7 +35,7 @@
                     "lng": 13.404954,
                     "datumstart": "{{expectedDate}}",
                     "strasse": "M\u00fcllerstra\u00dfe 123",
-                    "zip": null,
+                    "zip": "10115",
                     "ort": "Berlin",
                     "image": null,
                     "image_alt_text": null,

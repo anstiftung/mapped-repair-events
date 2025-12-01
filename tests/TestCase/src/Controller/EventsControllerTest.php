@@ -291,7 +291,7 @@ class EventsControllerTest extends AppTestCase
         $this->assertResponseContains('BEGIN:VEVENT');
         $this->assertResponseContains('SUMMARY:Test Workshop');
         $this->assertResponseContains('DESCRIPTION:description');
-        $this->assertResponseContains('LOCATION:Müllerstraße 123  Berlin Haus Drei');
+        $this->assertResponseContains('LOCATION:Müllerstraße 123 10115 Berlin Haus Drei');
     }
 
     public function testIcalAll(): void
@@ -306,7 +306,7 @@ class EventsControllerTest extends AppTestCase
     {
         $this->loadNewEventData();
         $this->loginAsOrga();
-        
+
         // Prepare valid event data
         $this->newEventData['workshop_uid'] = 2;
         $this->newEventData['ort'] = 'Berlin';
@@ -318,19 +318,28 @@ class EventsControllerTest extends AppTestCase
         $this->newEventData['uhrzeitstart'] = '10:00:00';
         $this->newEventData['uhrzeitend'] = '12:00:00';
 
+        // Second event with same date/time but SAME location with trailing spaces (should fail - spaces will be trimmed)
         $newEventData2 = [
             'datumstart' => '01.01.2025',
             'uhrzeitstart' => '10:00:00',
             'uhrzeitend' => '12:00:00',
+            'ort' => ' Berlin ',  // trailing space
+            'strasse' => ' Demo Street 1 ',  // trailing space
+            'zip' => ' 10999 ',  // trailing space
         ];
 
+        // Third event with same date/time as fixture event 9 at same location (should fail against saved event)
+        $fixtureDate = Date::now()->addDays(7)->format('d.m.Y');
         $newEventData3 = [
-            'datumstart' => '01.01.2040',
+            'datumstart' => $fixtureDate,
             'uhrzeitstart' => '09:00:00',
             'uhrzeitend' => '18:00:00',
+            'ort' => 'Berlin',
+            'strasse' => 'Müllerstraße 123',
+            'zip' => '10115',
         ];
 
-        // Try to create two events with same date
+        // Try to create events with same date/time/location
         $this->post(
             Configure::read('AppConfig.htmlHelper')->urlEventNew(2),
             [
@@ -341,10 +350,10 @@ class EventsControllerTest extends AppTestCase
             ]
         );
 
-        $foundCount = substr_count($this->_response->getBody()->__toString(), 'Du kannst keine Veranstaltungen zur gleichen Zeit am gleichen Tag anlegen.');
+        $foundCount = substr_count($this->_response->getBody()->__toString(), 'Du kannst keine Veranstaltungen zur gleichen Zeit, am gleichen Tag und am gleichen Ort anlegen.');
         $this->assertEquals(2, $foundCount);
-        
-        $foundCount = substr_count($this->_response->getBody()->__toString(), 'Es existiert bereits ein Termin für diese Initiative zur gleichen Zeit an diesem Tag.');
+
+        $foundCount = substr_count($this->_response->getBody()->__toString(), 'Es existiert bereits ein Termin für diese Initiative zur gleichen Zeit, am gleichen Tag und am gleichen Ort.');
         $this->assertEquals(1, $foundCount);
     }
 
@@ -352,7 +361,7 @@ class EventsControllerTest extends AppTestCase
     {
         $this->loadNewEventData();
         $this->loginAsOrga();
-        
+
         // Use existing event from fixture (uid: 6)
         $editData = [
             'uid' => 6,
@@ -378,11 +387,65 @@ class EventsControllerTest extends AppTestCase
                 $editData
             ]
         );
-        
+
         // Should NOT show duplicate validation error
-        $this->assertResponseNotContains('Es existiert bereits ein Termin für diese Initiative zur gleichen Zeit an diesem Tag.');
+        $this->assertResponseNotContains('Es existiert bereits ein Termin für diese Initiative zur gleichen Zeit, am gleichen Tag und am gleichen Ort.');
         // Should redirect on success or show form without validation errors
         $this->assertResponseCode(302); // Redirect on success
+    }
+
+    public function testAddEventsWithSameDateTimeButDifferentLocation(): void
+    {
+        $this->loadNewEventData();
+        $this->loginAsOrga();
+
+        // First event at location A
+        $eventData1 = [
+            'workshop_uid' => 2,
+            'ort' => 'Berlin',
+            'strasse' => 'Demo Street 1',
+            'zip' => '10999',
+            'lat' => '52.520008',
+            'lng' => '13.404954',
+            'datumstart' => '15.03.2025',
+            'uhrzeitstart' => '14:00:00',
+            'uhrzeitend' => '16:00:00',
+            'eventbeschreibung' => 'Event at location A',
+            'use_custom_coordinates' => true,
+            'province_id' => '1',
+        ];
+
+        // Second event at location B with same date/time
+        $eventData2 = [
+            'workshop_uid' => 2,
+            'ort' => 'München',
+            'strasse' => 'Marienplatz 1',
+            'zip' => '80331',
+            'lat' => '48.137154',
+            'lng' => '11.576124',
+            'datumstart' => '15.03.2025',
+            'uhrzeitstart' => '14:00:00',
+            'uhrzeitend' => '16:00:00',
+            'eventbeschreibung' => 'Event at location B',
+            'use_custom_coordinates' => true,
+            'province_id' => '2',
+        ];
+
+        // Try to create two events with same date/time but DIFFERENT locations - should succeed
+        $this->post(
+            Configure::read('AppConfig.htmlHelper')->urlEventNew(2),
+            [
+                'referer' => '/',
+                $eventData1,
+                $eventData2,
+            ]
+        );
+
+        // Should NOT show any duplicate validation errors
+        $this->assertResponseNotContains('Du kannst keine Veranstaltungen zur gleichen Zeit, am gleichen Tag und am gleichen Ort anlegen.');
+        $this->assertResponseNotContains('Es existiert bereits ein Termin für diese Initiative zur gleichen Zeit, am gleichen Tag und am gleichen Ort.');
+        // Should redirect on success
+        $this->assertResponseCode(302);
     }
 
 }

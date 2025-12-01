@@ -23,7 +23,7 @@
                         "uid": 9,
                         "status": 1,
                         "strasse": "M\u00fcllerstra\u00dfe 123",
-                        "zip": null,
+                        "zip": "10115",
                         "ort": "Berlin",
                         "is_online_event": 0,
                         "lat": 52.520008,

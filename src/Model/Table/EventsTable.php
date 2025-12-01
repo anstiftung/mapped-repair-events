@@ -11,6 +11,8 @@ use Cake\ORM\Query\SelectQuery;
 use App\Model\Entity\Event;
 use Cake\Collection\CollectionInterface;
 use Cake\Routing\Router;
+use ArrayObject;
+use Cake\Event\EventInterface;
 
 class EventsTable extends AppTable
 {
@@ -52,6 +54,24 @@ class EventsTable extends AppTable
         ]);
     }
 
+    /**
+     * @param \Cake\Event\EventInterface<\Cake\Datasource\EntityInterface> $event
+     * @param \ArrayObject<string, mixed> $data
+     * @param \ArrayObject<string, mixed> $options
+     */
+    public function beforeMarshal(EventInterface $event, ArrayObject $data, ArrayObject $options): void
+    {
+        if (isset($data['ort'])) {
+            $data['ort'] = trim($data['ort']);
+        }
+        if (isset($data['zip'])) {
+            $data['zip'] = trim($data['zip']);
+        }
+        if (isset($data['strasse'])) {
+            $data['strasse'] = trim($data['strasse']);
+        }
+    }
+
     public function validationDefault(Validator $validator): Validator
     {
         $geoService = new GeoService();
@@ -83,13 +103,13 @@ class EventsTable extends AppTable
     {
         $validator->add('datumstart', 'duplicateEventNotYetSaved', [
             'rule' => function($value, $context): bool {
-                
+
                 $events = [];
                 $request = Router::getRequest() ?? null;
                 if ($request === null) {
                     return true;
                 }
-                    
+
                 foreach($request->getData() as $data) {
                     if (!is_array($data)) {
                        continue; // skip referer
@@ -102,10 +122,18 @@ class EventsTable extends AppTable
                 }
 
                 $keys = array_map(function($event) {
-                    return $event['datumstart'] . '|' . $event['uhrzeitstart'] . '|' . $event['uhrzeitend'];
+                    // Trim values to match beforeMarshal trimming
+                    $ort = isset($event['ort']) ? trim($event['ort']) : '';
+                    $zip = isset($event['zip']) ? trim($event['zip']) : '';
+                    $strasse = isset($event['strasse']) ? trim($event['strasse']) : '';
+                    return $event['datumstart'] . '|' . $event['uhrzeitstart'] . '|' . $event['uhrzeitend'] . '|' . $ort . '|' . $zip . '|' . $strasse;
                 }, $events);
 
-                $currentEntityKey = $context['data']['datumstart']->format('d.m.Y') . '|' . $context['data']['uhrzeitstart']->format('H:i:s') . '|' . $context['data']['uhrzeitend']->format('H:i:s');
+                // Trim values to match beforeMarshal trimming
+                $ort = isset($context['data']['ort']) ? trim($context['data']['ort']) : '';
+                $zip = isset($context['data']['zip']) ? trim($context['data']['zip']) : '';
+                $strasse = isset($context['data']['strasse']) ? trim($context['data']['strasse']) : '';
+                $currentEntityKey = $context['data']['datumstart']->format('d.m.Y') . '|' . $context['data']['uhrzeitstart']->format('H:i:s') . '|' . $context['data']['uhrzeitend']->format('H:i:s') . '|' . $ort . '|' . $zip . '|' . $strasse;
                 $currentEntityKeyFoundCount = 0;
                 foreach ($keys as $key) {
                     if ($key == $currentEntityKey) {
@@ -114,15 +142,15 @@ class EventsTable extends AppTable
                 }
                 return $currentEntityKeyFoundCount < 2;
             },
-            'message' => 'Du kannst keine Veranstaltungen zur gleichen Zeit am gleichen Tag anlegen.',
+            'message' => 'Du kannst keine Veranstaltungen zur gleichen Zeit, am gleichen Tag und am gleichen Ort anlegen.',
         ]);
 
         $validator->add('datumstart', 'duplicateEventAlreadySaved', [
             'rule' => function($value, $context): bool {
                 // Skip validation if required fields are missing
-                if (empty($context['data']['workshop_uid']) || 
-                    empty($context['data']['datumstart']) || 
-                    empty($context['data']['uhrzeitstart']) || 
+                if (empty($context['data']['workshop_uid']) ||
+                    empty($context['data']['datumstart']) ||
+                    empty($context['data']['uhrzeitstart']) ||
                     empty($context['data']['uhrzeitend'])) {
                     return true; // Let other validators handle empty fields
                 }
@@ -132,6 +160,9 @@ class EventsTable extends AppTable
                     $this->aliasField('datumstart') => $context['data']['datumstart'],
                     $this->aliasField('uhrzeitstart') => $context['data']['uhrzeitstart'],
                     $this->aliasField('uhrzeitend') => $context['data']['uhrzeitend'],
+                    $this->aliasField('ort') => $context['data']['ort'] ?? '',
+                    $this->aliasField('zip') => $context['data']['zip'] ?? '',
+                    $this->aliasField('strasse') => $context['data']['strasse'] ?? '',
                     $this->aliasField('status IN') => [APP_ON, APP_OFF],
                 ];
 
@@ -141,10 +172,10 @@ class EventsTable extends AppTable
                 }
 
                 $duplicateCount = $this->find('all', conditions: $conditions)->count();
-                
+
                 return $duplicateCount === 0;
             },
-            'message' => 'Es existiert bereits ein Termin für diese Initiative zur gleichen Zeit an diesem Tag.'
+            'message' => 'Es existiert bereits ein Termin für diese Initiative zur gleichen Zeit, am gleichen Tag und am gleichen Ort.'
         ]);
         return $validator;
     }
@@ -177,7 +208,7 @@ class EventsTable extends AppTable
      */
     public function getProvinceCounts(): array
     {
-        
+
         $query = $this->find('all')
         ->select([
             'province_id',
@@ -193,7 +224,7 @@ class EventsTable extends AppTable
             $provincesMap[$province->province_id] = $province->count;
         }
         return $provincesMap;
-    }    
+    }
 
     /**
      * @return array<int|string, string|int>

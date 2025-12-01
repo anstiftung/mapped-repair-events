@@ -8,7 +8,7 @@ use Cake\I18n\Date;
 
 class EventsFixture extends AppFixture
 {
-    
+
     public function init(): void
     {
         $this->records = [
@@ -32,6 +32,7 @@ class EventsFixture extends AppFixture
                 'eventbeschreibung' => 'description',
                 'ort' => 'Berlin',
                 'strasse' => 'Müllerstraße 123',
+                'zip' => '10115',
                 'veranstaltungsort' => 'Haus Drei',
                 'datumstart' => Date::now()->addDays(7),
                 'uhrzeitstart' => new DateTime('09:00'),
