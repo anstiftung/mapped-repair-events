@@ -18,7 +18,7 @@ class FundingreceiptlistsTable extends Table
     const DESCRIPTION_MAX_LENGTH = 150;
     const DESCRIPTION_ERROR_MESSAGE = self::DESCRIPTION_MIN_LENGTH . ' bis ' . self::DESCRIPTION_MAX_LENGTH . ' Zeichen';
 
-    const RECIPIENT_MIN_LENGTH = 5;
+    const RECIPIENT_MIN_LENGTH = 3;
     const RECIPIENT_MAX_LENGTH = 100;
     const RECIPIENT_ERROR_MESSAGE = self::RECIPIENT_MIN_LENGTH . ' bis ' . self::RECIPIENT_MAX_LENGTH . ' Zeichen';
 
