@@ -2,7 +2,10 @@
 declare(strict_types=1);
 namespace App\Model\Table;
 
-class PhotosTable extends AppTable
+/**
+ * @extends \App\Model\Table\AppRootTable<\App\Model\Entity\Photo>
+ */
+class PhotosTable extends AppRootTable
 {
 
 }

@@ -2,10 +2,12 @@
 declare(strict_types=1);
 namespace App\Model\Table;
 
-use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
-class OrdsCategoriesTable extends Table
+/**
+ * @extends \App\Model\Table\AppTable<\App\Model\Entity\OrdsCategory>
+ */
+class OrdsCategoriesTable extends AppTable
 {
 
     /**

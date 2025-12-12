@@ -3,14 +3,16 @@ declare(strict_types=1);
 namespace App\Model\Table;
 
 use Cake\Core\Configure;
-use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Hash;
 use Cake\Validation\Validator;
 use Cake\ORM\Query\SelectQuery;
 use App\Model\Traits\ApproveMultipleTrait;
 
-class CategoriesTable extends Table
+/**
+ * @extends \App\Model\Table\AppTable<\App\Model\Entity\Category>
+ */
+class CategoriesTable extends AppTable
 {
 
     use ApproveMultipleTrait;

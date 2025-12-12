@@ -12,7 +12,10 @@ use Laminas\Diactoros\UploadedFile;
 use Cake\ORM\TableRegistry;
 use App\Model\Entity\Funding;
 
-class FundingsTable extends AppTable
+/**
+ * @extends \App\Model\Table\AppRootTable<\App\Model\Entity\Funding>
+ */
+class FundingsTable extends AppRootTable
 {
 
     const FUNDINGBUDGETPLANS_COUNT_VISIBLE = 5;

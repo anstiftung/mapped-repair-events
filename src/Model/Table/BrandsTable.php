@@ -2,10 +2,12 @@
 declare(strict_types=1);
 namespace App\Model\Table;
 
-use Cake\ORM\Table;
 use App\Model\Traits\ApproveMultipleTrait;
 
-class BrandsTable extends Table
+/**
+ * @extends \App\Model\Table\AppTable<\App\Model\Entity\Brand>
+ */
+class BrandsTable extends AppTable
 {
 
     use ApproveMultipleTrait;

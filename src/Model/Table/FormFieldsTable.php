@@ -2,10 +2,12 @@
 declare(strict_types=1);
 namespace App\Model\Table;
 
-use Cake\ORM\Table;
 use App\Model\Entity\FormField;
 
-class FormFieldsTable extends Table
+/**
+ * @extends \App\Model\Table\AppTable<\App\Model\Entity\FormField>
+ */
+class FormFieldsTable extends AppTable
 {
 
     public function initialize(array $config): void

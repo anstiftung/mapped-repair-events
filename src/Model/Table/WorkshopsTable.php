@@ -15,7 +15,10 @@ use Cake\ORM\Query\SelectQuery;
 use App\Model\Entity\User;
 use Authorization\IdentityInterface;
 
-class WorkshopsTable extends AppTable
+/**
+ * @extends \App\Model\Table\AppRootTable<\App\Model\Entity\Workshop>
+ */
+class WorkshopsTable extends AppRootTable
 {
 
     use SearchExceptionsTrait;

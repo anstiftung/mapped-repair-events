@@ -2,10 +2,12 @@
 declare(strict_types=1);
 namespace App\Model\Table;
 
-use Cake\ORM\Table;
 use App\Model\Entity\User;
 
-class GroupsTable extends Table
+/**
+ * @extends \App\Model\Table\AppTable<\App\Model\Entity\Group>
+ */
+class GroupsTable extends AppTable
 {
 
     public function isAdmin(User $user): bool

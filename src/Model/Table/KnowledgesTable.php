@@ -4,7 +4,10 @@ namespace App\Model\Table;
 
 use Cake\Validation\Validator;
 
-class KnowledgesTable extends AppTable
+/**
+ * @extends \App\Model\Table\AppRootTable<\App\Model\Entity\Knowledge>
+ */
+class KnowledgesTable extends AppRootTable
 {
 
     public string $name_de = 'Reparaturwissens-Beitrag';

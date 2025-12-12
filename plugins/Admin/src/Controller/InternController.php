@@ -445,7 +445,8 @@ class InternController extends AdminAppController
             $objectType = $this->Root->getType($uid);
             $objectClass = Inflector::classify($objectType);
             $pluralizedClass = Inflector::pluralize($objectClass);
-            $this->{$objectClass} = $this->getTableLocator()->get($pluralizedClass);
+            $table = $this->getTableLocator()->get($pluralizedClass);
+            $this->{$objectClass} = $table;
 
             $object = $this->$objectClass->find('all', conditions: [
                 $pluralizedClass . '.uid' => $uid,
@@ -454,10 +455,12 @@ class InternController extends AdminAppController
 
             // eigene bearbeitungs-hinweise bei click auf cancel löschen
             if ($object->currently_updated_by == $this->isLoggedIn() ? $this->loggedUser->uid : 0) {
-                $entity = $this->$objectClass->patchEntity($object, [
+                /** @phpstan-ignore-next-line */
+                $entity = $table->patchEntity($object, [
                     'currently_updated_by' => 0
                 ]);
-                $this->$objectClass->save($entity);
+                /** @phpstan-ignore-next-line */
+                $table->save($entity);
             }
         }
 

@@ -2,13 +2,15 @@
 declare(strict_types=1);
 namespace App\Model\Table;
 
-use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use Cake\Event\EventInterface;
 use ArrayObject;
 use App\Controller\Component\StringComponent;
 
-class FundingdatasTable extends Table
+/**
+ * @extends \App\Model\Table\AppTable<\App\Model\Entity\Fundingdata>
+ */
+class FundingdatasTable extends AppTable
 {
 
     const DESCRIPTION_MIN_LENGTH = 250;

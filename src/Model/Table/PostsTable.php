@@ -5,7 +5,10 @@ namespace App\Model\Table;
 use Cake\Validation\Validator;
 use Cake\ORM\Query\SelectQuery;
 
-class PostsTable extends AppTable
+/**
+ * @extends \App\Model\Table\AppRootTable<\App\Model\Entity\Post>
+ */
+class PostsTable extends AppRootTable
 {
 
     public string $name_de = 'Post';

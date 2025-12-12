@@ -2,8 +2,8 @@
 declare(strict_types=1);
 
 namespace App\Model\Table;
+
 use Cake\Core\Configure;
-use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use App\Model\Entity\Worknews;
 use App\Mailer\AppMailer;
@@ -11,7 +11,10 @@ use Cake\ORM\Query\SelectQuery;
 use App\Model\Entity\Workshop;
 use App\Model\Entity\Event;
 
-class WorknewsTable extends Table
+/**
+ * @extends \App\Model\Table\AppTable<\App\Model\Entity\Worknews>
+ */
+class WorknewsTable extends AppTable
 {
 
     public function initialize(array $config): void

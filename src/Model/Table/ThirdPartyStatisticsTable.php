@@ -3,11 +3,13 @@ declare(strict_types=1);
 namespace App\Model\Table;
 
 use Cake\Core\Configure;
-use Cake\ORM\Table;
 use Cake\I18n\DateTime;
 use Cake\ORM\TableRegistry;
 
-class ThirdPartyStatisticsTable extends Table
+/**
+ * @extends \App\Model\Table\AppTable<\App\Model\Entity\ThirdPartyStatistic>
+ */
+class ThirdPartyStatisticsTable extends AppTable
 {
 
     public function initialize(array $config): void

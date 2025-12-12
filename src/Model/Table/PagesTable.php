@@ -6,7 +6,10 @@ use Cake\Validation\Validator;
 use App\Model\Entity\Page;
 use Cake\ORM\Query\SelectQuery;
 
-class PagesTable extends AppTable
+/**
+ * @extends \App\Model\Table\AppRootTable<\App\Model\Entity\Page>
+ */
+class PagesTable extends AppRootTable
 {
 
     public string $name_de = 'Seite';

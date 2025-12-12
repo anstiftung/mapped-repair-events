@@ -4,11 +4,13 @@ namespace App\Model\Table;
 
 use Cake\Datasource\EntityInterface;
 use Cake\Event\EventInterface;
-use Cake\ORM\Table;
 use Cake\Utility\Text;
 use ArrayObject;
 
-class FundinguploadsTable extends Table
+/**
+ * @extends \App\Model\Table\AppTable<\App\Model\Entity\Fundingupload>
+ */
+class FundinguploadsTable extends AppTable
 {
 
     public function initialize(array $config): void

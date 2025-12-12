@@ -3,9 +3,10 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
-use Cake\ORM\Table;
-
-class BlockedWorkshopSlugsTable extends Table {
+/**
+ * @extends \App\Model\Table\AppTable<\App\Model\Entity\BlockedWorkshopSlug>
+ */
+class BlockedWorkshopSlugsTable extends AppTable {
 
 }
 

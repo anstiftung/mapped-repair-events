@@ -3,12 +3,14 @@ declare(strict_types=1);
 namespace App\Model\Table;
 
 use App\Controller\Component\StringComponent;
-use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use Cake\Event\EventInterface;
 use ArrayObject;
 
-class FundingsupportersTable extends Table
+/**
+ * @extends \App\Model\Table\AppTable<\App\Model\Entity\Fundingsupporter>
+ */
+class FundingsupportersTable extends AppTable
 {
 
     public function initialize(array $config): void

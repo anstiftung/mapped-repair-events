@@ -2,9 +2,10 @@
 declare(strict_types=1);
 namespace App\Model\Table;
 
-use Cake\ORM\Table;
-
-class BlogsTable extends Table
+/**
+ * @extends \App\Model\Table\AppTable<\App\Model\Entity\Blog>
+ */
+class BlogsTable extends AppTable
 {
 
     public function initialize(array $config): void

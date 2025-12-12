@@ -16,7 +16,10 @@ use App\Controller\Component\StringComponent;
 use Cake\ORM\TableRegistry;
 use Cake\ORM\Query\SelectQuery;
 
-class UsersTable extends AppTable
+/**
+ * @extends \App\Model\Table\AppRootTable<\App\Model\Entity\User>
+ */
+class UsersTable extends AppRootTable
 {
 
     public string  $name_de = 'User';

@@ -2,11 +2,13 @@
 declare(strict_types=1);
 namespace App\Model\Table;
 
-use Cake\ORM\Table;
 use App\Model\Entity\City;
 use Cake\ORM\Query\SelectQuery;
 
-class CitiesTable extends Table
+/**
+ * @extends \App\Model\Table\AppTable<\App\Model\Entity\City>
+ */
+class CitiesTable extends AppTable
 {
     public function findForFallback(string $keyword): ?City {
         $query = $this->find('all',

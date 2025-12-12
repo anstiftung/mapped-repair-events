@@ -3,12 +3,14 @@ declare(strict_types=1);
 namespace App\Model\Table;
 
 use App\Controller\Component\StringComponent;
-use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use Cake\ORM\TableRegistry;
 use App\Model\Traits\ApproveMultipleTrait;
 
-class SkillsTable extends Table
+/**
+ * @extends \App\Model\Table\AppTable<\App\Model\Entity\Skill>
+ */
+class SkillsTable extends AppTable
 {
 
     use ApproveMultipleTrait;

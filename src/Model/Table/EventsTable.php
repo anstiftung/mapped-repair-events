@@ -14,7 +14,10 @@ use Cake\Routing\Router;
 use ArrayObject;
 use Cake\Event\EventInterface;
 
-class EventsTable extends AppTable
+/**
+ * @extends \App\Model\Table\AppRootTable<\App\Model\Entity\Event>
+ */
+class EventsTable extends AppRootTable
 {
 
     use SearchExceptionsTrait;

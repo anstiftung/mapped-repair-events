@@ -309,7 +309,9 @@ class AppController extends Controller
             'currently_updated_by' => $this->isLoggedIn() ? $this->loggedUser->uid : 0,
             'currently_updated_start' => new DateTime()
         ];
+        /** @phpstan-ignore-next-line */
         $entity = $modelInstance->patchEntity($data, $saveData);
+        /** @phpstan-ignore-next-line */
         $modelInstance->save($entity);
 
         return false;

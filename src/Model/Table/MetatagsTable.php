@@ -2,9 +2,10 @@
 declare(strict_types=1);
 namespace App\Model\Table;
 
-use Cake\ORM\Table;
-
-class MetatagsTable extends Table
+/**
+ * @extends \App\Model\Table\AppTable<\App\Model\Entity\Metatag>
+ */
+class MetatagsTable extends AppTable
 {
 
 }

@@ -2,10 +2,12 @@
 declare(strict_types=1);
 namespace App\Model\Table;
 
-use Cake\ORM\Table;
 use App\Model\Entity\Province;
 
-class ProvincesTable extends Table
+/**
+ * @extends \App\Model\Table\AppTable<\App\Model\Entity\Province>
+ */
+class ProvincesTable extends AppTable
 {
 
     public function initialize(array $config): void

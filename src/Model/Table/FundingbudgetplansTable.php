@@ -2,14 +2,16 @@
 declare(strict_types=1);
 namespace App\Model\Table;
 
-use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use App\Model\Entity\Fundingbudgetplan;
 use App\Controller\Component\StringComponent;
 use Cake\Event\EventInterface;
 use ArrayObject;
 
-class FundingbudgetplansTable extends Table
+/**
+ * @extends \App\Model\Table\AppTable<\App\Model\Entity\Fundingbudgetplan>
+ */
+class FundingbudgetplansTable extends AppTable
 {
 
     const DESCRIPTION_MIN_LENGTH = 5;

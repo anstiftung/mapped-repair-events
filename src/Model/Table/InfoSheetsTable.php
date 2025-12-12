@@ -8,7 +8,10 @@ use Cake\I18n\DateTime;
 use Cake\ORM\Query\SelectQuery;
 use App\Model\Entity\Province;
 
-class InfoSheetsTable extends AppTable
+/**
+ * @extends \App\Model\Table\AppRootTable<\App\Model\Entity\InfoSheet>
+ */
+class InfoSheetsTable extends AppRootTable
 {
 
     public string $name_de = 'Laufzettel';

@@ -3,9 +3,10 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
-use Cake\ORM\Table;
-
-class RootsTable extends Table
+/**
+ * @extends \App\Model\Table\AppTable<\App\Model\Entity\Root>
+ */
+class RootsTable extends AppTable
 {
 
     public function initialize(array $config): void

@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace App\Model\Table;
 
-use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use App\Model\Entity\Fundingbudgetplan;
 use App\Controller\Component\StringComponent;
@@ -11,7 +10,10 @@ use ArrayObject;
 use App\Model\Entity\Fundingreceiptlist;
 use Cake\I18n\Date;
 
-class FundingreceiptlistsTable extends Table
+/**
+ * @extends \App\Model\Table\AppTable<\App\Model\Entity\Fundingreceiptlist>
+ */
+class FundingreceiptlistsTable extends AppTable
 {
 
     const DESCRIPTION_MIN_LENGTH = 2;
