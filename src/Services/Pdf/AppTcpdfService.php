@@ -68,6 +68,7 @@ abstract class AppTcpdfService extends TCPDF
         if ($this->GetPage() > 1) {
             $this->SetTopMargin(30);
         }
+        $this->SetAutoPageBreak(true, 20);
     }
 
     public function Footer(): void
