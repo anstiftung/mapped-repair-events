@@ -271,11 +271,11 @@ class InfoSheetsTable extends AppRootTable
     {
         $query->where(function ($exp, $query) {
             return $exp->or([
-                $query->newExpr()->and([
+                $query->expr()->and([
                     'InfoSheets.defect_found_reason' => 3,
                     'InfoSheets.no_repair_reason IN' => [2,3,4,6,10,11,12,13,14,15],
                 ]),
-                $query->newExpr()->and([
+                $query->expr()->and([
                     'InfoSheets.defect_found_reason' => 4,
                 ]),
             ]);
@@ -291,11 +291,11 @@ class InfoSheetsTable extends AppRootTable
     {
         $query->where(function ($exp, $query) {
             return $exp->or([
-                $query->newExpr()->and([
+                $query->expr()->and([
                     'InfoSheets.defect_found_reason' => 2,
                     'InfoSheets.repair_postponed_reason IN' => [1,2,3],
                 ]),
-                $query->newExpr()->and([
+                $query->expr()->and([
                     'InfoSheets.defect_found_reason' => 3,
                     'InfoSheets.no_repair_reason IN' => [1,5,9],
                 ]),

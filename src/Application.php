@@ -75,11 +75,7 @@ class Application extends BaseApplication
         $this->addPlugin('AssetCompress', ['bootstrap' => true]);
         $this->addPlugin('Queue');
 
-        $this->addPlugin('Admin', [
-            'bootstrap' => false,
-            'routes' => true,
-            'autoload' => true
-        ]);
+        $this->addPlugin('Admin');
 
         $this->addPlugin('Feed', ['bootstrap' => true]);
 
