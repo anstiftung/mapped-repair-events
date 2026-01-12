@@ -13,6 +13,7 @@ use Cake\Collection\CollectionInterface;
 use Cake\Routing\Router;
 use ArrayObject;
 use Cake\Event\EventInterface;
+use Cake\Log\Log;
 
 /**
  * @extends \App\Model\Table\AppRootTable<\App\Model\Entity\Event>
@@ -111,6 +112,10 @@ class EventsTable extends AppRootTable
                 $request = Router::getRequest() ?? null;
                 if ($request === null) {
                     return true;
+                }
+
+                if (empty($context['data']['uhrzeitstart']) || empty($context['data']['uhrzeitend'])) {
+                    return true; // Let other validators handle empty fields
                 }
 
                 foreach($request->getData() as $data) {
