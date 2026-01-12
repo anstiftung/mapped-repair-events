@@ -373,6 +373,9 @@ class MyHtmlHelper extends HtmlHelper {
         return trim((string) $html);
     }
 
+    /**
+     * @param View<\App\View\AppView> $View
+     */
     public function __construct(View $View, array $config = [])
     {
         $this->helpers[] = 'Number';

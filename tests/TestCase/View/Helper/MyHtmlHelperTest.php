@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 use App\View\Helper\MyHtmlHelper;
-use Cake\View\View;
+use App\View\AppView;
 
 class MyHtmlHelperTest extends \PHPUnit\Framework\TestCase
 {
@@ -10,7 +10,7 @@ class MyHtmlHelperTest extends \PHPUnit\Framework\TestCase
 
     public function setUp(): void
     {
-        $this->MyHtmlHelper = new MyHtmlHelper(new View());
+        $this->MyHtmlHelper = new MyHtmlHelper(new AppView());
     }
 
     public function testGetCarbonFootprintAsStringSun(): void
