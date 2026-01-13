@@ -46,10 +46,6 @@ class PagesTable extends AppRootTable
     }
 
     /**
-     * @param \App\Model\Entity\Page[] $items
-     * @return array<int, string>
-     */
-    /**
      * @param \Cake\ORM\Query\SelectQuery<\App\Model\Entity\Page>|array<int, \App\Model\Entity\Page> $items
      * @return array<int, string>
      */
@@ -64,7 +60,7 @@ class PagesTable extends AppRootTable
             if (! empty($item['children'])) {
                 $this->flattenNestedArrayWithChildren($item->children, str_repeat('-', 
                 /* @phpstan-ignore-next-line */
-                $this->getLevel($item) + 1)
+                $this->getBehavior('Tree')->getLevel($item) + 1)
                  . ' ');
             }
         }
