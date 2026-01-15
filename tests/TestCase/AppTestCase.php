@@ -11,6 +11,7 @@ class AppTestCase extends TestCase
     use IntegrationTestTrait;
 
     protected array $fixtures = [
+        'app.ApiTokens',
         'app.BlockedWorkshopSlugs',
         'app.Blogs',
         'app.Brands',

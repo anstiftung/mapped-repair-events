@@ -1,0 +1,25 @@
+<?php
+declare(strict_types=1);
+
+use Migrations\AbstractMigration;
+
+class ApiTokens extends AbstractMigration
+{
+    public function change(): void
+    {
+        $query = "CREATE TABLE `api_tokens` (
+            `id` int UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `name` varchar(255) NOT NULL,
+            `token` varchar(64) NOT NULL,
+            `allowed_search_terms` JSON DEFAULT NULL,
+            `last_used` datetime DEFAULT NULL,
+            `expires_at` datetime DEFAULT NULL,
+            `is_active` tinyint(1) DEFAULT 1,
+            `created` datetime DEFAULT CURRENT_TIMESTAMP,
+            `modified` datetime DEFAULT CURRENT_TIMESTAMP,
+            UNIQUE KEY `token` (`token`),
+            KEY `is_active` (`is_active`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
+        $this->execute($query);
+    }
+}
