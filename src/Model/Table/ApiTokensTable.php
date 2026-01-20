@@ -54,8 +54,8 @@ class ApiTokensTable extends AppTable
             ->allowEmptyDateTime('expires_at');
 
         $validator
-            ->boolean('is_active')
-            ->notEmptyString('is_active');
+            ->boolean('status')
+            ->notEmptyString('status');
 
         return $validator;
     }
@@ -78,7 +78,7 @@ class ApiTokensTable extends AppTable
         return $this->find()
             ->where([
                 'token' => $token,
-                'is_active' => true,
+                'status' => true,
             ])
             ->first();
     }

@@ -30,7 +30,7 @@ class ApiTokensController extends AdminAppController
                 'name' => 'Name',
                 'searchType' => 'search',
             ],
-            'ApiTokens.is_active' => [
+            'ApiTokens.status' => [
                 'name' => 'Status',
                 'searchType' => 'equal',
                 'extraDropdown' => true,

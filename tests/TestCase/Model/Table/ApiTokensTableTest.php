@@ -21,7 +21,7 @@ class ApiTokensTableTest extends AppTestCase
         $apiToken = $this->ApiTokens->newEntity([
             'name' => 'Test Token',
             'token' => 'test-token-123456789',
-            'is_active' => true,
+            'status' => true,
         ]);
 
         $this->assertEmpty($apiToken->getErrors());
@@ -31,7 +31,7 @@ class ApiTokensTableTest extends AppTestCase
     {
         $apiToken = $this->ApiTokens->newEntity([
             'token' => 'test-token-123456789',
-            'is_active' => true,
+            'status' => true,
         ]);
 
         $this->assertNotEmpty($apiToken->getErrors());
