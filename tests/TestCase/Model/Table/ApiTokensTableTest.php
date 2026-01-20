@@ -12,7 +12,6 @@ class ApiTokensTableTest extends AppTestCase
     public function setUp(): void
     {
         parent::setUp();
-        /** @var ApiTokensTable $ApiTokens */
         $this->ApiTokens = $this->getTableLocator()->get('ApiTokens');
     }
 
