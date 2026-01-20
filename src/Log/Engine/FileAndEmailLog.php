@@ -38,6 +38,7 @@ class FileAndEmailLog extends FileLog
             preg_quote('`FormProtector` instance has not been created.', '/'),
             'Recipient address rejected',
             'Domain does not exist',
+            'categories must only contain integers',
         ];
         if (preg_match('/' . join('|', $ignoredExceptionsRegex) . '/', $message)) {
             return false;
