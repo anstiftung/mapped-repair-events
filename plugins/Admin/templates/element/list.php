@@ -284,6 +284,13 @@ if ($showDeleteLink) {
                         }
                     } elseif (! empty($field['type'])) {
 
+                        if ($field['type'] == 'boolean') {
+                            if ($value == APP_ON) {
+                                echo 'Ja';
+                            } else {
+                                echo 'Nein';
+                            }
+                        }
                         if ($field['type'] == 'datetime') {
                             if ($value) {
                                 echo $value->i18nFormat(Configure::read('DateFormat.de.DateNTimeShort'));

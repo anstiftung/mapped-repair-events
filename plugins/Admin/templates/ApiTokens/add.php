@@ -6,11 +6,13 @@ $this->element('addScript', ['script' =>
     JS_NAMESPACE . ".Helper.layoutEditButtons();"
 ]);
 echo $this->element('highlightNavi', ['main' => 'API Tokens']);
+
+$isEditMode = !$apiToken->isNew();
 ?>
 
 <div class="admin edit">
     <div class="edit">
-        <?php echo $this->element('heading', ['first' => 'Neues API Token']); ?>
+        <?php echo $this->element('heading', ['first' => $isEditMode ? 'API Token bearbeiten' : 'Neues API Token']); ?>
 
         <?php
         echo $this->Form->create($apiToken, ['novalidate']);
@@ -24,7 +26,7 @@ echo $this->element('highlightNavi', ['main' => 'API Tokens']);
 
         echo $this->Form->control('allowed_search_terms', [
             'type' => 'textarea',
-            'label' => 'Erlaubte Suchbegriffe (ein Begriff pro Zeile, z.B. Berlin, München)',
+            'label' => 'Erlaubte Suchbegriffe (ein Begriff pro Zeile)',
             'placeholder' => "Berlin\nMünchen\nHamburg",
             'rows' => 5,
         ]) . '<br />';
@@ -38,13 +40,19 @@ echo $this->element('highlightNavi', ['main' => 'API Tokens']);
         echo $this->Form->control('is_active', [
             'type' => 'checkbox',
             'label' => 'Aktiv',
-            'checked' => true,
         ]) . '<br />';
 
-        echo '<div class="info-box">';
-        echo '<strong>Wichtig:</strong> Ein neues, zufälliges Token wird automatisch beim Speichern generiert. ';
-        echo 'Das Token wird nur einmal angezeigt - bitte speichern Sie es sicher!';
-        echo '</div>';
+        if ($isEditMode) {
+            echo '<div class="info-box">';
+            echo '<strong>Token:</strong> ' . h($apiToken->token) . '<br />';
+            echo '<strong>Zuletzt verwendet:</strong> ' . ($apiToken->last_used ? $apiToken->last_used->nice() : 'Noch nicht verwendet') . '<br />';
+            echo '</div><br />';
+        } else {
+            echo '<div class="info-box">';
+            echo '<strong>Wichtig:</strong> Ein neues, zufälliges Token wird automatisch beim Speichern generiert. ';
+            echo 'Das Token wird nur einmal angezeigt - bitte speichern Sie es sicher!';
+            echo '</div>';
+        }
         ?>
     </div>
 
