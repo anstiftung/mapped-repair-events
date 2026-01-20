@@ -74,7 +74,7 @@ class ApiTokensController extends AdminAppController
             // Convert allowed_search_terms from textarea to JSON array
             if (!empty($data['allowed_search_terms']) && is_string($data['allowed_search_terms'])) {
                 $terms = array_filter(array_map('trim', explode("\n", $data['allowed_search_terms'])));
-                $data['allowed_search_terms'] = json_encode(array_values($terms));
+                $data['allowed_search_terms'] = json_encode(array_values($terms), JSON_UNESCAPED_UNICODE);
             }
 
             $apiToken = $this->ApiToken->patchEntity($apiToken, $data);
@@ -114,7 +114,7 @@ class ApiTokensController extends AdminAppController
             // Convert allowed_search_terms from textarea to JSON array
             if (isset($data['allowed_search_terms']) && is_string($data['allowed_search_terms'])) {
                 $terms = array_filter(array_map('trim', explode("\n", $data['allowed_search_terms'])));
-                $data['allowed_search_terms'] = json_encode(array_values($terms));
+                $data['allowed_search_terms'] = json_encode(array_values($terms), JSON_UNESCAPED_UNICODE);
             }
 
             $apiToken = $this->ApiToken->patchEntity($apiToken, $data);
