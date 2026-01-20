@@ -143,21 +143,6 @@ class ApiTokensController extends AdminAppController
         return null;
     }
 
-    public function delete(int $id): Response
-    {
-        $this->request->allowMethod(['post', 'delete']);
-
-        $apiToken = $this->ApiToken->get($id);
-        
-        if ($this->ApiToken->delete($apiToken)) {
-            $this->AppFlash->setFlashMessage('API Token erfolgreich gelöscht.');
-        } else {
-            $this->AppFlash->setFlashError('API Token konnte nicht gelöscht werden.');
-        }
-
-        return $this->redirect(['action' => 'index']);
-    }
-
     public function regenerate(int $id): Response
     {
         $this->request->allowMethod(['post']);

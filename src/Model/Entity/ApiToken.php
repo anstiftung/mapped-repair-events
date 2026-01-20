@@ -13,7 +13,7 @@ class ApiToken extends Entity
         'allowed_search_terms' => true,
         'last_used' => true,
         'expires_at' => true,
-        'is_active' => true,
+        'status' => true,
         'created' => true,
         'modified' => true,
     ];
@@ -46,7 +46,7 @@ class ApiToken extends Entity
      */
     public function isValid(): bool
     {
-        return $this->is_active && !$this->isExpired();
+        return $this->status === 1 && !$this->isExpired();
     }
 
     /**

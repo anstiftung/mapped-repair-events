@@ -14,12 +14,12 @@ class ApiTokens extends AbstractMigration
             `allowed_search_terms` JSON DEFAULT NULL,
             `last_used` datetime DEFAULT NULL,
             `expires_at` datetime DEFAULT NULL,
-            `is_active` tinyint(1) DEFAULT 1,
+            `status` tinyint(1) DEFAULT 1,
             `created` datetime DEFAULT CURRENT_TIMESTAMP,
             `modified` datetime DEFAULT CURRENT_TIMESTAMP,
             UNIQUE KEY `token` (`token`),
-            KEY `is_active` (`is_active`)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
+            KEY `status` (`status`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;";
         $this->execute($query);
     }
 }

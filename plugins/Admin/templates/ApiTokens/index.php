@@ -11,7 +11,6 @@ echo $this->element('list', [
         ['name' => 'id', 'label' => 'ID'],
         ['name' => 'name', 'label' => 'Name'],
         ['name' => 'allowed_search_terms', 'label' => 'Erlaubte Suchbegriffe'],
-        ['name' => 'is_active', 'type' => 'boolean', 'label' => 'Aktiv'],
         ['name' => 'last_used', 'type' => 'datetime', 'label' => 'Zuletzt verwendet'],
         ['name' => 'expires_at', 'type' => 'datetime', 'label' => 'Ablaufdatum'],
         ['name' => 'created', 'type' => 'datetime', 'label' => 'Erstellt'],

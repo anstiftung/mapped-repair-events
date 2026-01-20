@@ -12,12 +12,17 @@ $isEditMode = !$apiToken->isNew();
 
 <div class="admin edit">
     <div class="edit">
-        <?php echo $this->element('heading', ['first' => $isEditMode ? 'API Token bearbeiten' : 'Neues API Token']); ?>
+        <?php echo $this->element('heading', ['first' => $isEditMode ? 'API Token bearbeiten' : 'Neuer API Token']); ?>
 
         <?php
         echo $this->Form->create($apiToken, ['novalidate']);
         echo $this->Form->hidden('referer', ['value' => $referer]);
         $this->Form->unlockField('referer');
+
+        echo $this->Form->control('status', [
+            'type' => 'checkbox',
+            'label' => 'Aktiv',
+        ]) . '<br />';
 
         echo $this->Form->control('name', [
             'label' => 'Name',
@@ -37,11 +42,6 @@ $isEditMode = !$apiToken->isNew();
             'empty' => true,
         ]) . '<br />';
 
-        echo $this->Form->control('is_active', [
-            'type' => 'checkbox',
-            'label' => 'Aktiv',
-        ]) . '<br />';
-
         if ($isEditMode) {
             echo '<div class="info-box">';
             echo '<strong>Token:</strong> ' . h($apiToken->token) . '<br />';
@@ -49,8 +49,7 @@ $isEditMode = !$apiToken->isNew();
             echo '</div><br />';
         } else {
             echo '<div class="info-box">';
-            echo '<strong>Wichtig:</strong> Ein neues, zufälliges Token wird automatisch beim Speichern generiert. ';
-            echo 'Das Token wird nur einmal angezeigt - bitte speichern Sie es sicher!';
+                echo 'Der neue Token wird automatisch beim Speichern generiert.';
             echo '</div>';
         }
         ?>
