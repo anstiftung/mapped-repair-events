@@ -55,19 +55,19 @@ class ApiToken extends Entity
     public function isSearchTermAllowed(string $searchTerm): bool
     {
         if (empty($this->allowed_search_terms)) {
-            return true; // No restrictions
+            return false; // Empty search terms = no access
         }
 
         $allowedTerms = is_string($this->allowed_search_terms) 
             ? json_decode($this->allowed_search_terms, true) 
             : $this->allowed_search_terms;
 
-        if (!is_array($allowedTerms)) {
-            return true;
+        if (!is_array($allowedTerms) || empty($allowedTerms)) {
+            return false; // Invalid or empty = no access
         }
-
+        
         foreach ($allowedTerms as $allowedTerm) {
-            if (stripos($searchTerm, $allowedTerm) !== false) {
+            if (mb_strtolower($allowedTerm) === mb_strtolower($searchTerm)) {
                 return true;
             }
         }

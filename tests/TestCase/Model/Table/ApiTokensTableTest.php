@@ -20,6 +20,7 @@ class ApiTokensTableTest extends AppTestCase
         $apiToken = $this->ApiTokens->newEntity([
             'name' => 'Test Token',
             'token' => 'test-token-123456789',
+            'allowed_search_terms' => '["Berlin"]',
             'status' => true,
         ]);
 

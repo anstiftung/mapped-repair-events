@@ -46,6 +46,15 @@ class ApiTokenAuthMiddleware implements MiddlewareInterface
             throw new UnauthorizedException('API token has expired');
         }
 
+        // Validate allowed search terms if city parameter is present
+        $queryParams = $request->getQueryParams();
+        if (isset($queryParams['city'])) {
+            $city = (string) $queryParams['city'];
+            if (!$apiToken->isSearchTermAllowed($city)) {
+                throw new UnauthorizedException('Access to this city is not allowed with this API token');
+            }
+        }
+
         // Update last_used timestamp
         $apiTokensTable->updateLastUsed($apiToken->id);
 

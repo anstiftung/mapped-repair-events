@@ -35,7 +35,7 @@ class ApiTokensTable extends AppTable
             ->scalar('name')
             ->maxLength('name', 255)
             ->requirePresence('name', 'create')
-            ->notEmptyString('name', 'Bitte geben Sie einen Namen ein.');
+            ->notEmptyString('name', 'Bitte gib einen Namen ein.');
 
         $validator
             ->scalar('token')
@@ -43,7 +43,9 @@ class ApiTokensTable extends AppTable
             ->requirePresence('token', 'create')
             ->notEmptyString('token');
 
-        $validator->notEmptyString('allowed_search_terms');
+        $validator
+            ->requirePresence('allowed_search_terms', 'create')
+            ->notEmptyString('allowed_search_terms', 'Bitte gib mindestens einen erlaubten Suchbegriff ein.');
 
         $validator
             ->dateTime('last_used')

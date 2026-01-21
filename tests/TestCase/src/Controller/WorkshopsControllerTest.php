@@ -291,8 +291,8 @@ class WorkshopsControllerTest extends AppTestCase
             ],
         ]);
         $this->get('/api/v1/workshops?city=hamburg');
-        $this->assertResponseContains('no workshops found');
-        $this->assertResponseCode(404);
+        $this->assertResponseContains('Access to this city is not allowed with this API token');
+        $this->assertResponseCode(401);
     }
 
     public function testRestWorkshopsWrongParam(): void
@@ -303,8 +303,8 @@ class WorkshopsControllerTest extends AppTestCase
             ],
         ]);
         $this->get('/api/v1/workshops?city=ha');
-        $this->assertResponseContains('city not passed or invalid (min 3 chars)');
-        $this->assertResponseCode(400);
+        $this->assertResponseContains('Access to this city is not allowed with this API token');
+        $this->assertResponseCode(401);
     }
     public function testApiV1WorkshopsWithoutToken(): void
     {
@@ -337,6 +337,18 @@ class WorkshopsControllerTest extends AppTestCase
         $this->assertResponseCode(401);
     }
 
+    public function testApiV1WorkshopsWithTokenRequestingNonValidCity(): void
+    {
+        $this->configRequest([
+            'headers' => [
+                'Authorization' => 'Bearer ' . ApiTokensFixture::VALID_TOKEN,
+            ],
+        ]);
+        $this->get('/api/v1/workshops?city=köln');
+        $this->assertResponseContains('Access to this city is not allowed with this API token');
+        $this->assertResponseCode(401);
+    }
+
     public function testApiV1WorkshopsWithBearerToken(): void
     {
         $this->configRequest([
@@ -352,7 +364,19 @@ class WorkshopsControllerTest extends AppTestCase
         $this->assertResponseContains($expectedResult);
         $this->assertResponseOk();
     }
-    
+
+    public function testApiV1WorkshopsWithEmptySearchTermsToken(): void
+    {
+        $this->configRequest([
+            'headers' => [
+                'Authorization' => 'Bearer ' . ApiTokensFixture::EMPTY_SEARCH_TERMS_TOKEN,
+            ],
+        ]);
+        $this->get('/api/v1/workshops?city=berlin');
+        $this->assertResponseContains('Access to this city is not allowed with this API token');
+        $this->assertResponseCode(401);
+    }
+
     public function testDeleteWorkshop(): void
     {
         $this->loginAsAdmin();
