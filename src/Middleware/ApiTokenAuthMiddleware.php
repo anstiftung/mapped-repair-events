@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Middleware;
 
-use Cake\Http\Response;
+use Cake\Http\Exception\UnauthorizedException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -30,7 +30,7 @@ class ApiTokenAuthMiddleware implements MiddlewareInterface
         $token = $this->extractToken($request);
 
         if ($token === null) {
-            return $this->createErrorResponse('API token is required. Please provide a valid token in the Authorization header as Bearer token.', 401);
+            throw new UnauthorizedException('API token is required. Please provide a valid token in the Authorization header as Bearer token.');
         }
 
         /** @var ApiTokensTable $apiTokensTable */
@@ -38,12 +38,12 @@ class ApiTokenAuthMiddleware implements MiddlewareInterface
         $apiToken = $apiTokensTable->findByToken($token);
 
         if ($apiToken === null) {
-            return $this->createErrorResponse('Invalid or inactive API token', 401);
+            throw new UnauthorizedException('Invalid or inactive API token');
         }
 
         // Check if token has expired
         if ($apiToken->expires_at !== null && $apiToken->expires_at < new \DateTime()) {
-            return $this->createErrorResponse('API token has expired', 401);
+            throw new UnauthorizedException('API token has expired');
         }
 
         // Validate allowed search terms if city parameter is present
@@ -51,7 +51,7 @@ class ApiTokenAuthMiddleware implements MiddlewareInterface
         if (isset($queryParams['city'])) {
             $city = (string) $queryParams['city'];
             if (!$apiToken->isSearchTermAllowed($city)) {
-                return $this->createErrorResponse('Access to this city is not allowed with this API token', 401);
+                throw new UnauthorizedException('Access to this city is not allowed with this API token');
             }
         }
 
@@ -62,29 +62,6 @@ class ApiTokenAuthMiddleware implements MiddlewareInterface
         $request = $request->withAttribute('apiToken', $apiToken);
 
         return $handler->handle($request);
-    }
-
-    /**
-     * Create error response with CORS headers
-     */
-    private function createErrorResponse(string $message, int $statusCode): Response
-    {
-        $response = new Response();
-        
-        /** @var \Cake\Http\ServerRequest $serverRequest */
-        $serverRequest = \Cake\Routing\Router::getRequest();
-        
-        $response = $response->cors($serverRequest)
-            ->allowOrigin(['*'])
-            ->allowMethods(['GET'])
-            ->allowHeaders(['Authorization', 'Content-Type'])
-            ->build();
-        
-        /* @phpstan-ignore-next-line */    
-        return $response
-            ->withStatus($statusCode)
-            ->withType('application/json')
-            ->withStringBody(json_encode(['error' => $message]));
     }
 
     /**
