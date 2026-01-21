@@ -30,11 +30,6 @@ class ApiTokensController extends AdminAppController
                 'name' => 'Name',
                 'searchType' => 'search',
             ],
-            'ApiTokens.status' => [
-                'name' => 'Status',
-                'searchType' => 'equal',
-                'extraDropdown' => true,
-            ],
         ]);
 
         $this->generateSearchConditions('standard');
