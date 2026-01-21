@@ -7,13 +7,16 @@ use Cake\TestSuite\Fixture\TestFixture;
 class ApiTokensFixture extends TestFixture
 {
 
+    public const string VALID_TOKEN = 'valid-token-12345';
+    public const string INACTIVE_TOKEN = 'inactive-token-12345';
+
     public function init(): void
         {
             $this->records = [
             [
                 'id' => 1,
                 'name' => 'Test Token',
-                'token' => 'valid-token-12345',
+                'token' => self::VALID_TOKEN,
                 'allowed_search_terms' => '["Berlin", "München"]',
                 'status' => 1,
                 'last_used' => null,
@@ -24,7 +27,7 @@ class ApiTokensFixture extends TestFixture
             [
                 'id' => 2,
                 'name' => 'Inactive Token',
-                'token' => 'inactive-token-12345',
+                'token' => self::INACTIVE_TOKEN,
                 'allowed_search_terms' => null,
                 'status' => 0,
                 'last_used' => null,

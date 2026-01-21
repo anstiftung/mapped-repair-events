@@ -16,6 +16,7 @@ use Cake\I18n\Date;
 use Cake\Event\EventInterface;
 use Cake\Controller\Controller;
 use App\Test\Mock\GeoServiceMock;
+use App\Test\Fixture\ApiTokensFixture;
 
 class WorkshopsControllerTest extends AppTestCase
 {
@@ -49,6 +50,11 @@ class WorkshopsControllerTest extends AppTestCase
     public function testDifferentAjaxRequests(): void
     {
 
+        $this->configRequest([
+            'headers' => [
+                'Authorization' => 'Bearer ' . ApiTokensFixture::VALID_TOKEN,
+            ],
+        ]);
         $expectedResult = file_get_contents(TESTS . 'comparisons' . DS . 'rest-workshops-berlin.json');
         $expectedResult = $this->correctServerName($expectedResult);
         $expectedNextEventDate = Date::now()->addDays(7)->format('d.m.Y');
@@ -263,6 +269,11 @@ class WorkshopsControllerTest extends AppTestCase
 
     public function testRestWorkshopsBerlin(): void
     {
+        $this->configRequest([
+            'headers' => [
+                'Authorization' => 'Bearer ' . ApiTokensFixture::VALID_TOKEN,
+            ],
+        ]);
         $expectedResult = file_get_contents(TESTS . 'comparisons' . DS . 'rest-workshops-berlin.json');
         $expectedResult = $this->correctServerName($expectedResult);
         $expectedNextEventDate = Date::now()->addDays(7)->format('d.m.Y');
@@ -274,6 +285,11 @@ class WorkshopsControllerTest extends AppTestCase
 
     public function testRestWorkshopsHamburg(): void
     {
+        $this->configRequest([
+            'headers' => [
+                'Authorization' => 'Bearer ' . ApiTokensFixture::VALID_TOKEN,
+            ],
+        ]);
         $this->get('/api/v1/workshops?city=hamburg');
         $this->assertResponseContains('no workshops found');
         $this->assertResponseCode(404);
@@ -281,11 +297,62 @@ class WorkshopsControllerTest extends AppTestCase
 
     public function testRestWorkshopsWrongParam(): void
     {
+        $this->configRequest([
+            'headers' => [
+                'Authorization' => 'Bearer ' . ApiTokensFixture::VALID_TOKEN,
+            ],
+        ]);
         $this->get('/api/v1/workshops?city=ha');
         $this->assertResponseContains('city not passed or invalid (min 3 chars)');
         $this->assertResponseCode(400);
     }
+    public function testApiV1WorkshopsWithoutToken(): void
+    {
+        $this->get('/api/v1/workshops?city=berlin');
+        $this->assertResponseContains('API token is required');
+        $this->assertResponseCode(401);
+    }
 
+    public function testApiV1WorkshopsWithInvalidToken(): void
+    {
+        $this->configRequest([
+            'headers' => [
+                'Authorization' => 'Bearer invalid-token-12345',
+            ],
+        ]);
+        $this->get('/api/v1/workshops?city=berlin');
+        $this->assertResponseContains('Invalid or inactive API token');
+        $this->assertResponseCode(401);
+    }
+
+    public function testApiV1WorkshopsWithInactiveToken(): void
+    {
+        $this->configRequest([
+            'headers' => [
+                'Authorization' => 'Bearer ' . ApiTokensFixture::INACTIVE_TOKEN,
+            ],
+        ]);
+        $this->get('/api/v1/workshops?city=berlin');
+        $this->assertResponseContains('Invalid or inactive API token');
+        $this->assertResponseCode(401);
+    }
+
+    public function testApiV1WorkshopsWithBearerToken(): void
+    {
+        $this->configRequest([
+            'headers' => [
+                'Authorization' => 'Bearer ' . ApiTokensFixture::VALID_TOKEN,
+            ],
+        ]);
+        $expectedResult = file_get_contents(TESTS . 'comparisons' . DS . 'rest-workshops-berlin.json');
+        $expectedResult = $this->correctServerName($expectedResult);
+        $expectedNextEventDate = Date::now()->addDays(7)->format('d.m.Y');
+        $expectedResult = $this->correctExpectedDate($expectedResult, $expectedNextEventDate);
+        $this->get('/api/v1/workshops?city=berlin');
+        $this->assertResponseContains($expectedResult);
+        $this->assertResponseOk();
+    }
+    
     public function testDeleteWorkshop(): void
     {
         $this->loginAsAdmin();
