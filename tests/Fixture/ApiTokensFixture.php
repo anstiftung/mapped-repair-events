@@ -12,8 +12,8 @@ class ApiTokensFixture extends TestFixture
     public const string EMPTY_SEARCH_TERMS_TOKEN = 'empty-search-terms-token';
 
     public function init(): void
-        {
-            $this->records = [
+    {
+        $this->records = [
             [
                 'id' => 1,
                 'name' => 'Test Token',

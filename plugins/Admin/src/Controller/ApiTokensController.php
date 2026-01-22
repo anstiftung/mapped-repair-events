@@ -75,7 +75,7 @@ class ApiTokensController extends AdminAppController
             $apiToken = $this->ApiToken->patchEntity($apiToken, $data);
 
             if ($this->ApiToken->save($apiToken)) {
-                $this->AppFlash->setFlashMessage('API Token erfolgreich erstellt.' . $data['token']);
+                $this->AppFlash->setFlashMessage('API Token erfolgreich erstellt. ' . $data['token']);
                 return $this->redirect(['action' => 'index']);
             } else {
                 $this->AppFlash->setFlashError('API Token konnte nicht gespeichert werden.');

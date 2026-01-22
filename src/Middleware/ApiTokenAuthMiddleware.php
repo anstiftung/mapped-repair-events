@@ -54,8 +54,7 @@ class ApiTokenAuthMiddleware implements MiddlewareInterface
             return $this->createErrorResponse($request, 'Invalid or inactive API token', 401);
         }
 
-        // Check if token has expired
-        if ($apiToken->expires_at !== null && $apiToken->expires_at < new \DateTime()) {
+        if ($apiToken->isExpired()) {
             return $this->createErrorResponse($request, 'API token has expired', 401);
         }
 
