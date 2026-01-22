@@ -45,6 +45,7 @@ return [
         ],
     ],
     'isApiEnabled' => false,
+    'useApiTokenAuthMiddleware' => true,
     'AppConfig' => [
         'platformName' => 'Meine Plattform',
         'titleSuffix' => 'Meine Plattform',

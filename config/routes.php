@@ -121,8 +121,10 @@ return function (RouteBuilder $routes) {
             $routes->connect('/api/workshops', ['controller' => 'workshops', 'action' => 'getWorkshopsForHyperModeWebsite']);
             
             $routes->scope('/api/v1', function (RouteBuilder $routes) {
-                $routes->registerMiddleware('apiTokenAuth', new ApiTokenAuthMiddleware());
-                $routes->applyMiddleware('apiTokenAuth');
+                if (Configure::read('useApiTokenAuthMiddleware')) {
+                    $routes->registerMiddleware('apiTokenAuth', new ApiTokenAuthMiddleware());
+                    $routes->applyMiddleware('apiTokenAuth');
+                }
                 $routes->connect('/workshops', [
                     'controller' => 'workshops',
                     'action' => 'getWorkshopsWithCityFilter',
