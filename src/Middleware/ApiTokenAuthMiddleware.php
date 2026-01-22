@@ -3,13 +3,14 @@ declare(strict_types=1);
 
 namespace App\Middleware;
 
-use Cake\Http\Exception\UnauthorizedException;
+use Cake\Http\Response;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Cake\ORM\Locator\LocatorAwareTrait;
 use App\Model\Table\ApiTokensTable;
+use Cake\Log\Log;
 
 /**
  * API Token Authentication Middleware
@@ -27,10 +28,22 @@ class ApiTokenAuthMiddleware implements MiddlewareInterface
         ServerRequestInterface $request,
         RequestHandlerInterface $handler,
     ): ResponseInterface {
+        
+        // Handle CORS preflight OPTIONS request
+        if ($request->getMethod() === 'OPTIONS') {
+            $response = new Response();
+            return $response
+                ->withStatus(200)
+                ->withHeader('Access-Control-Allow-Origin', '*')
+                ->withHeader('Access-Control-Allow-Methods', 'GET, OPTIONS')
+                ->withHeader('Access-Control-Allow-Headers', 'Authorization, Content-Type')
+                ->withHeader('Access-Control-Max-Age', '86400');
+        }
+        
         $token = $this->extractToken($request);
 
         if ($token === null) {
-            throw new UnauthorizedException('API token is required. Please provide a valid token in the Authorization header as Bearer token.');
+            return $this->createErrorResponse($request, 'API token is required. Please provide a valid token in the Authorization header as Bearer token.', 401);
         }
 
         /** @var ApiTokensTable $apiTokensTable */
@@ -38,12 +51,12 @@ class ApiTokenAuthMiddleware implements MiddlewareInterface
         $apiToken = $apiTokensTable->findByToken($token);
 
         if ($apiToken === null) {
-            throw new UnauthorizedException('Invalid or inactive API token');
+            return $this->createErrorResponse($request, 'Invalid or inactive API token', 401);
         }
 
         // Check if token has expired
         if ($apiToken->expires_at !== null && $apiToken->expires_at < new \DateTime()) {
-            throw new UnauthorizedException('API token has expired');
+            return $this->createErrorResponse($request, 'API token has expired', 401);
         }
 
         // Validate allowed search terms if city parameter is present
@@ -51,7 +64,13 @@ class ApiTokenAuthMiddleware implements MiddlewareInterface
         if (isset($queryParams['city'])) {
             $city = (string) $queryParams['city'];
             if (!$apiToken->isSearchTermAllowed($city)) {
-                throw new UnauthorizedException('Access to this city is not allowed with this API token');
+                $allowedTerms = json_decode($apiToken->allowed_search_terms, true) ?: [];
+                $allowedTermsList = !empty($allowedTerms) ? implode(', ', $allowedTerms) : 'none';
+                return $this->createErrorResponse(
+                    $request,
+                    'Access to this city is not allowed with this API token. Allowed search terms: ' . $allowedTermsList,
+                    401,
+                );
             }
         }
 
@@ -61,7 +80,34 @@ class ApiTokenAuthMiddleware implements MiddlewareInterface
         // Add token to request attributes for later use
         $request = $request->withAttribute('apiToken', $apiToken);
 
-        return $handler->handle($request);
+        // Process the request through the rest of the middleware stack
+        $response = $handler->handle($request);
+        
+        // Ensure CORS headers are present on all responses
+        if ($response instanceof Response) {
+            $response = $response
+                ->withHeader('Access-Control-Allow-Origin', '*')
+                ->withHeader('Access-Control-Allow-Methods', 'GET')
+                ->withHeader('Access-Control-Allow-Headers', 'Authorization, Content-Type');
+        }
+        
+        return $response;
+    }
+
+    /**
+     * Create error response with CORS headers
+     */
+    private function createErrorResponse(ServerRequestInterface $request, string $message, int $statusCode): Response
+    {
+        $response = new Response();
+        
+        return $response
+            ->withStatus($statusCode)
+            ->withType('application/json')
+            ->withStringBody(json_encode(['error' => $message]))
+            ->withHeader('Access-Control-Allow-Origin', '*')
+            ->withHeader('Access-Control-Allow-Methods', 'GET')
+            ->withHeader('Access-Control-Allow-Headers', 'Authorization, Content-Type');
     }
 
     /**
@@ -69,8 +115,7 @@ class ApiTokenAuthMiddleware implements MiddlewareInterface
      *
      * Checks Authorization header (Bearer token)
      */
-    private function extractToken(ServerRequestInterface $request): ?string
-    {
+    private function extractToken(ServerRequestInterface $request): ?string {
         // Check Authorization header
         $authHeader = $request->getHeaderLine('Authorization');
         if (!empty($authHeader) && preg_match('/^Bearer\s+(.+)$/i', $authHeader, $matches)) {

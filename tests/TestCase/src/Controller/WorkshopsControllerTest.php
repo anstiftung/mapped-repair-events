@@ -291,8 +291,9 @@ class WorkshopsControllerTest extends AppTestCase
             ],
         ]);
         $this->get('/api/v1/workshops?city=hamburg');
-        $this->assertResponseContains('Access to this city is not allowed with this API token');
         $this->assertResponseCode(401);
+        $response = $this->getJsonResponseBody();
+        $this->assertEquals('Access to this city is not allowed with this API token. Allowed search terms: Berlin, München', $response['error']);
     }
 
     public function testRestWorkshopsWrongParam(): void
@@ -303,14 +304,16 @@ class WorkshopsControllerTest extends AppTestCase
             ],
         ]);
         $this->get('/api/v1/workshops?city=ha');
-        $this->assertResponseContains('Access to this city is not allowed with this API token');
         $this->assertResponseCode(401);
+        $response = $this->getJsonResponseBody();
+        $this->assertEquals('Access to this city is not allowed with this API token. Allowed search terms: Berlin, München', $response['error']);
     }
     public function testApiV1WorkshopsWithoutToken(): void
     {
         $this->get('/api/v1/workshops?city=berlin');
-        $this->assertResponseContains('API token is required');
         $this->assertResponseCode(401);
+        $response = $this->getJsonResponseBody();
+        $this->assertEquals('API token is required. Please provide a valid token in the Authorization header as Bearer token.', $response['error']);
     }
 
     public function testApiV1WorkshopsWithInvalidToken(): void
@@ -321,8 +324,9 @@ class WorkshopsControllerTest extends AppTestCase
             ],
         ]);
         $this->get('/api/v1/workshops?city=berlin');
-        $this->assertResponseContains('Invalid or inactive API token');
         $this->assertResponseCode(401);
+        $response = $this->getJsonResponseBody();
+        $this->assertEquals('Invalid or inactive API token', $response['error']);
     }
 
     public function testApiV1WorkshopsWithInactiveToken(): void
@@ -333,8 +337,9 @@ class WorkshopsControllerTest extends AppTestCase
             ],
         ]);
         $this->get('/api/v1/workshops?city=berlin');
-        $this->assertResponseContains('Invalid or inactive API token');
         $this->assertResponseCode(401);
+        $response = $this->getJsonResponseBody();
+        $this->assertEquals('Invalid or inactive API token', $response['error']);
     }
 
     public function testApiV1WorkshopsWithTokenRequestingNonValidCity(): void
@@ -345,8 +350,9 @@ class WorkshopsControllerTest extends AppTestCase
             ],
         ]);
         $this->get('/api/v1/workshops?city=köln');
-        $this->assertResponseContains('Access to this city is not allowed with this API token');
         $this->assertResponseCode(401);
+        $response = $this->getJsonResponseBody();
+        $this->assertEquals('Access to this city is not allowed with this API token. Allowed search terms: Berlin, München', $response['error']);
     }
 
     public function testApiV1WorkshopsWithBearerToken(): void
@@ -373,8 +379,40 @@ class WorkshopsControllerTest extends AppTestCase
             ],
         ]);
         $this->get('/api/v1/workshops?city=berlin');
-        $this->assertResponseContains('Access to this city is not allowed with this API token');
         $this->assertResponseCode(401);
+        $response = $this->getJsonResponseBody();
+        $this->assertEquals('Access to this city is not allowed with this API token. Allowed search terms: none', $response['error']);
+    }
+
+    public function testApiV1WorkshopsCorsHeadersOnError(): void
+    {
+        $this->configRequest([
+            'headers' => [
+                'Authorization' => 'Bearer invalid-token',
+            ],
+        ]);
+        $this->get('/api/v1/workshops?city=berlin');
+        $this->assertResponseCode(401);
+        $response = $this->getJsonResponseBody();
+        $this->assertEquals('Invalid or inactive API token', $response['error']);
+        $this->assertHeader('Access-Control-Allow-Origin', '*');
+        $this->assertHeader('Access-Control-Allow-Methods', 'GET');
+        $this->assertHeader('Access-Control-Allow-Headers', 'Authorization, Content-Type');
+        $this->assertContentType('application/json');
+    }
+
+    public function testApiV1WorkshopsCorsHeadersOnSuccess(): void
+    {
+        $this->configRequest([
+            'headers' => [
+                'Authorization' => 'Bearer ' . ApiTokensFixture::VALID_TOKEN,
+            ],
+        ]);
+        $this->get('/api/v1/workshops?city=berlin');
+        $this->assertResponseOk();
+        $this->assertHeader('Access-Control-Allow-Origin', '*');
+        $this->assertHeader('Access-Control-Allow-Methods', 'GET');
+        $this->assertHeader('Access-Control-Allow-Headers', 'Authorization, Content-Type');
     }
 
     public function testDeleteWorkshop(): void

@@ -60,6 +60,14 @@ class AppTestCase extends TestCase
         return preg_replace('/\{\{expectedDate\}\}/', str_replace('/', '\\\/', $expectedDate), $html);
     }
 
+    /**
+     * @return array<string, mixed>
+     */
+    protected function getJsonResponseBody(): array
+    {
+        return json_decode((string) $this->_response->getBody(), true);
+    }
+
     public function setUp(): void
     {
         parent::setUp();

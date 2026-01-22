@@ -126,7 +126,7 @@ return function (RouteBuilder $routes) {
                 $routes->connect('/workshops', [
                     'controller' => 'workshops',
                     'action' => 'getWorkshopsWithCityFilter',
-                ])->setMethods(['GET']);
+                ])->setMethods(['GET', 'OPTIONS']);
             });
         }
 
