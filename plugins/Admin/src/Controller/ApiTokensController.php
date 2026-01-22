@@ -138,21 +138,4 @@ class ApiTokensController extends AdminAppController
         return null;
     }
 
-    public function regenerate(int $id): Response
-    {
-        $this->request->allowMethod(['post']);
-
-        $apiToken = $this->ApiToken->get($id);
-        $newToken = ApiToken::generateToken();
-        $apiToken->token = $newToken;
-
-        if ($this->ApiToken->save($apiToken)) {
-            $this->AppFlash->setFlashMessage('Token erfolgreich neu generiert.');
-            $this->Flash->success('Neues Token: ' . $newToken . ' (Bitte speichern Sie dieses Token!)');
-        } else {
-            $this->AppFlash->setFlashError('Token konnte nicht neu generiert werden.');
-        }
-
-        return $this->redirect(['action' => 'edit', $id]);
-    }
 }
