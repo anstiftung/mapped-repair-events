@@ -5,6 +5,7 @@ use Cake\Core\Configure;
 use Cake\Routing\RouteBuilder;
 use Cake\Routing\Route\DashedRoute;
 use Cake\Routing\Router;
+use App\Middleware\ApiTokenAuthMiddleware;
 
 
 return function (RouteBuilder $routes) {
@@ -116,12 +117,28 @@ return function (RouteBuilder $routes) {
         $routes->connect('/{blogUrl}/*', ['controller'=>'blogs', 'action'=>'detail'], ['blogUrl' => 'neuigkeiten|'.Configure::read('AppConfig.htmlHelper')->getAdditionalBlogCategoryUrl()]);
 
         if (Configure::read('isApiEnabled')) {
-            $routes->connect('/api/splitter', ['controller' => 'posts', 'action' => 'getSplitter']);
-            $routes->connect('/api/workshops', ['controller' => 'workshops', 'action' => 'getWorkshopsForHyperModeWebsite']);
-            $routes->connect('/api/v1/workshops', [
-                'controller' => 'workshops',
-                'action' => 'getWorkshopsWithCityFilter',
-            ])->setMethods(['GET']);
+            $routes->scope('/api', function (RouteBuilder $routes) {
+                $routes->connect('/splitter', [
+                    'controller' => 'api',
+                    'action' => 'getSplitter',
+                ])->setMethods(['GET', 'OPTIONS']);
+                
+                $routes->connect('/workshops', [
+                    'controller' => 'api',
+                    'action' => 'getWorkshopsForHyperModeWebsite',
+                ])->setMethods(['GET', 'OPTIONS']);
+            });
+            
+            $routes->scope('/api/v1', function (RouteBuilder $routes) {
+                if (Configure::read('useApiTokenAuthMiddleware')) {
+                    $routes->registerMiddleware('apiTokenAuth', new ApiTokenAuthMiddleware());
+                    $routes->applyMiddleware('apiTokenAuth');
+                }
+                $routes->connect('/workshops', [
+                    'controller' => 'api',
+                    'action' => 'getWorkshopsWithCityFilter',
+                ])->setMethods(['GET', 'OPTIONS']);
+            });
         }
 
         if (Configure::read('AppConfig.fundingsEnabled')) {

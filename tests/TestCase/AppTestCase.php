@@ -11,6 +11,7 @@ class AppTestCase extends TestCase
     use IntegrationTestTrait;
 
     protected array $fixtures = [
+        'app.ApiTokens',
         'app.BlockedWorkshopSlugs',
         'app.Blogs',
         'app.Brands',
@@ -57,6 +58,14 @@ class AppTestCase extends TestCase
     protected function correctExpectedDate(string $html, string $expectedDate): string
     {
         return preg_replace('/\{\{expectedDate\}\}/', str_replace('/', '\\\/', $expectedDate), $html);
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    protected function getJsonResponseBody(): array
+    {
+        return json_decode((string) $this->_response->getBody(), true);
     }
 
     public function setUp(): void

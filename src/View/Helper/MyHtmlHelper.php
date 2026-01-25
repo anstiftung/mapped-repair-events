@@ -499,6 +499,14 @@ class MyHtmlHelper extends HtmlHelper {
     {
         return '/admin/skills/edit/' . $id;
     }
+    function urlApiTokenAdd(): string
+    {
+        return '/admin/apiTokens/add/';
+    }
+    function urlApiTokenEdit(int $id): string
+    {
+        return '/admin/apiTokens/edit/' . $id;
+    }
     function urlBrandNew(): string
     {
         return '/admin/brands/insert/';
