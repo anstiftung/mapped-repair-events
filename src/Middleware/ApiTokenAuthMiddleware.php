@@ -64,11 +64,8 @@ class ApiTokenAuthMiddleware implements MiddlewareInterface
         if (!empty($origin) && !$apiToken->isDomainAllowed($origin)) {
             $allowedDomains = json_decode($apiToken->allowed_domains, true) ?: [];
             $allowedDomainsList = !empty($allowedDomains) ? implode(', ', $allowedDomains) : 'none';
-            return $this->createErrorResponse(
-                $request,
-                'Access from this domain is not allowed with this API token. Allowed domains: ' . $allowedDomainsList,
-                401,
-            );
+            Log::error('Access from this domain is not allowed with this API token. Allowed domains: ' . $allowedDomainsList);
+            return $this->createErrorResponse($request, 'Invalid or inactive API token', 401);
         }
 
         // Validate allowed search terms if city parameter is present

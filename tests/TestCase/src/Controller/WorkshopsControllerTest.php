@@ -437,7 +437,7 @@ class WorkshopsControllerTest extends AppTestCase
         $this->get('/api/v1/workshops?city=berlin');
         $this->assertResponseCode(401);
         $response = $this->getJsonResponseBody();
-        $this->assertEquals('Access from this domain is not allowed with this API token. Allowed domains: example.com', $response['error']);
+        $this->assertEquals('Invalid or inactive API token', $response['error']);
     }
 
     public function testDeleteWorkshop(): void
