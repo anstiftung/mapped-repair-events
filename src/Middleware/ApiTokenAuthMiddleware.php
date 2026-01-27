@@ -58,6 +58,20 @@ class ApiTokenAuthMiddleware implements MiddlewareInterface
             return $this->createErrorResponse($request, 'API token has expired', 401);
         }
 
+        // Validate allowed domain
+        $serverParams = $request->getServerParams();
+        $host = $serverParams['HTTP_HOST'] ?? $serverParams['SERVER_NAME'] ?? '';
+        
+        if (!empty($host) && !$apiToken->isDomainAllowed($host)) {
+            $allowedDomains = json_decode($apiToken->allowed_domains, true) ?: [];
+            $allowedDomainsList = !empty($allowedDomains) ? implode(', ', $allowedDomains) : 'none';
+            return $this->createErrorResponse(
+                $request,
+                'Access from this domain is not allowed with this API token. Allowed domains: ' . $allowedDomainsList,
+                401,
+            );
+        }
+
         // Validate allowed search terms if city parameter is present
         $queryParams = $request->getQueryParams();
         if (isset($queryParams['city'])) {

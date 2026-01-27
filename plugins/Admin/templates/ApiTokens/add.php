@@ -36,6 +36,13 @@ $isEditMode = !$apiToken->isNew();
             'rows' => 5,
         ]) . '<br />';
 
+        echo $this->Form->control('allowed_domains', [
+            'type' => 'textarea',
+            'label' => 'Erlaubte Domains (eine Domain pro Zeile), ohne https:// und ohne Pfad',
+            'placeholder' => "reparatur-initiativen.de",
+            'rows' => 5,
+        ]) . '<br />';
+
         echo $this->Form->control('expires_at', [
             'type' => 'datetime',
             'label' => 'Ablaufdatum (optional)',

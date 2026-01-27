@@ -415,6 +415,19 @@ class WorkshopsControllerTest extends AppTestCase
         $this->assertHeader('Access-Control-Allow-Headers', 'Authorization, Content-Type');
     }
 
+    public function testApiV1WorkshopsWithWrongDomain(): void
+    {
+        $this->configRequest([
+            'headers' => [
+                'Authorization' => 'Bearer ' . ApiTokensFixture::WRONG_DOMAIN_TOKEN,
+            ],
+        ]);
+        $this->get('/api/v1/workshops?city=berlin');
+        $this->assertResponseCode(401);
+        $response = $this->getJsonResponseBody();
+        $this->assertEquals('Access from this domain is not allowed with this API token. Allowed domains: example.com', $response['error']);
+    }
+
     public function testDeleteWorkshop(): void
     {
         $this->loginAsAdmin();

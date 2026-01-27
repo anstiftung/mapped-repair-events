@@ -11,6 +11,7 @@ class ApiToken extends Entity
         'name' => true,
         'token' => true,
         'allowed_search_terms' => true,
+        'allowed_domains' => true,
         'last_used' => true,
         'expires_at' => true,
         'status' => true,
@@ -68,6 +69,32 @@ class ApiToken extends Entity
         
         foreach ($allowedTerms as $allowedTerm) {
             if (mb_strtolower($allowedTerm) === mb_strtolower($searchTerm)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if a domain is allowed for this token
+     */
+    public function isDomainAllowed(string $domain): bool
+    {
+        if (empty($this->allowed_domains)) {
+            return false; // Empty allowed_domains = no access
+        }
+
+        $allowedDomains = is_string($this->allowed_domains) 
+            ? json_decode($this->allowed_domains, true) 
+            : $this->allowed_domains;
+
+        if (!is_array($allowedDomains) || empty($allowedDomains)) {
+            return false; // Invalid or empty = no access
+        }
+        
+        foreach ($allowedDomains as $allowedDomain) {
+            if (mb_strtolower($allowedDomain) === mb_strtolower($domain)) {
                 return true;
             }
         }
