@@ -53,6 +53,7 @@ class WorkshopsControllerTest extends AppTestCase
         $this->configRequest([
             'headers' => [
                 'Authorization' => 'Bearer ' . ApiTokensFixture::VALID_TOKEN,
+                'Origin' => 'http://localhost',
             ],
         ]);
         $expectedResult = file_get_contents(TESTS . 'comparisons' . DS . 'rest-workshops-berlin.json');
@@ -272,6 +273,7 @@ class WorkshopsControllerTest extends AppTestCase
         $this->configRequest([
             'headers' => [
                 'Authorization' => 'Bearer ' . ApiTokensFixture::VALID_TOKEN,
+                'Origin' => 'http://localhost',
             ],
         ]);
         $expectedResult = file_get_contents(TESTS . 'comparisons' . DS . 'rest-workshops-berlin.json');
@@ -288,6 +290,7 @@ class WorkshopsControllerTest extends AppTestCase
         $this->configRequest([
             'headers' => [
                 'Authorization' => 'Bearer ' . ApiTokensFixture::VALID_TOKEN,
+                'Origin' => 'http://localhost',
             ],
         ]);
         $this->get('/api/v1/workshops?city=hamburg');
@@ -301,6 +304,7 @@ class WorkshopsControllerTest extends AppTestCase
         $this->configRequest([
             'headers' => [
                 'Authorization' => 'Bearer ' . ApiTokensFixture::VALID_TOKEN,
+                'Origin' => 'http://localhost',
             ],
         ]);
         $this->get('/api/v1/workshops?city=ha');
@@ -321,6 +325,7 @@ class WorkshopsControllerTest extends AppTestCase
         $this->configRequest([
             'headers' => [
                 'Authorization' => 'Bearer invalid-token-12345',
+                'Origin' => 'http://localhost',
             ],
         ]);
         $this->get('/api/v1/workshops?city=berlin');
@@ -334,6 +339,7 @@ class WorkshopsControllerTest extends AppTestCase
         $this->configRequest([
             'headers' => [
                 'Authorization' => 'Bearer ' . ApiTokensFixture::INACTIVE_TOKEN,
+                'Origin' => 'http://localhost',
             ],
         ]);
         $this->get('/api/v1/workshops?city=berlin');
@@ -347,6 +353,7 @@ class WorkshopsControllerTest extends AppTestCase
         $this->configRequest([
             'headers' => [
                 'Authorization' => 'Bearer ' . ApiTokensFixture::VALID_TOKEN,
+                'Origin' => 'http://localhost',
             ],
         ]);
         $this->get('/api/v1/workshops?city=köln');
@@ -360,6 +367,7 @@ class WorkshopsControllerTest extends AppTestCase
         $this->configRequest([
             'headers' => [
                 'Authorization' => 'Bearer ' . ApiTokensFixture::VALID_TOKEN,
+                'Origin' => 'http://localhost',
             ],
         ]);
         $expectedResult = file_get_contents(TESTS . 'comparisons' . DS . 'rest-workshops-berlin.json');
@@ -376,6 +384,7 @@ class WorkshopsControllerTest extends AppTestCase
         $this->configRequest([
             'headers' => [
                 'Authorization' => 'Bearer ' . ApiTokensFixture::EMPTY_SEARCH_TERMS_TOKEN,
+                'Origin' => 'http://localhost',
             ],
         ]);
         $this->get('/api/v1/workshops?city=berlin');
@@ -389,6 +398,7 @@ class WorkshopsControllerTest extends AppTestCase
         $this->configRequest([
             'headers' => [
                 'Authorization' => 'Bearer invalid-token',
+                'Origin' => 'http://localhost',
             ],
         ]);
         $this->get('/api/v1/workshops?city=berlin');
@@ -406,6 +416,7 @@ class WorkshopsControllerTest extends AppTestCase
         $this->configRequest([
             'headers' => [
                 'Authorization' => 'Bearer ' . ApiTokensFixture::VALID_TOKEN,
+                'Origin' => 'http://localhost',
             ],
         ]);
         $this->get('/api/v1/workshops?city=berlin');
@@ -420,6 +431,7 @@ class WorkshopsControllerTest extends AppTestCase
         $this->configRequest([
             'headers' => [
                 'Authorization' => 'Bearer ' . ApiTokensFixture::WRONG_DOMAIN_TOKEN,
+                'Origin' => 'http://localhost',
             ],
         ]);
         $this->get('/api/v1/workshops?city=berlin');

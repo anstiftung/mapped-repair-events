@@ -58,11 +58,10 @@ class ApiTokenAuthMiddleware implements MiddlewareInterface
             return $this->createErrorResponse($request, 'API token has expired', 401);
         }
 
-        // Validate allowed domain
-        $serverParams = $request->getServerParams();
-        $host = $serverParams['HTTP_HOST'] ?? $serverParams['SERVER_NAME'] ?? '';
+        // Validate allowed domain (check origin of the request)
+        $origin = $this->extractOriginDomain($request);
         
-        if (!empty($host) && !$apiToken->isDomainAllowed($host)) {
+        if (!empty($origin) && !$apiToken->isDomainAllowed($origin)) {
             $allowedDomains = json_decode($apiToken->allowed_domains, true) ?: [];
             $allowedDomainsList = !empty($allowedDomains) ? implode(', ', $allowedDomains) : 'none';
             return $this->createErrorResponse(
@@ -133,6 +132,34 @@ class ApiTokenAuthMiddleware implements MiddlewareInterface
         $authHeader = $request->getHeaderLine('Authorization');
         if (!empty($authHeader) && preg_match('/^Bearer\s+(.+)$/i', $authHeader, $matches)) {
             return $matches[1];
+        }
+
+        return null;
+    }
+
+    /**
+     * Extract the origin domain from the request
+     *
+     * Checks Origin header first, then falls back to Referer header
+     */
+    private function extractOriginDomain(ServerRequestInterface $request): ?string
+    {
+        // Check Origin header (preferred for CORS requests)
+        $origin = $request->getHeaderLine('Origin');
+        if (!empty($origin)) {
+            $parsed = parse_url($origin);
+            if (is_array($parsed) && isset($parsed['host'])) {
+                return $parsed['host'];
+            }
+        }
+
+        // Fallback to Referer header
+        $referer = $request->getHeaderLine('Referer');
+        if (!empty($referer)) {
+            $parsed = parse_url($referer);
+            if (is_array($parsed) && isset($parsed['host'])) {
+                return $parsed['host'];
+            }
         }
 
         return null;
