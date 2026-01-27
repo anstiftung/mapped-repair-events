@@ -58,6 +58,16 @@ class ApiTokenAuthMiddleware implements MiddlewareInterface
             return $this->createErrorResponse($request, 'API token has expired', 401);
         }
 
+        // Validate allowed domain (check origin of the request)
+        $origin = $this->extractOriginDomain($request);
+        
+        if (!empty($origin) && !$apiToken->isDomainAllowed($origin)) {
+            $allowedDomains = json_decode($apiToken->allowed_domains, true) ?: [];
+            $allowedDomainsList = !empty($allowedDomains) ? implode(', ', $allowedDomains) : 'none';
+            Log::error('Access from this domain is not allowed with this API token. Allowed domains: ' . $allowedDomainsList);
+            return $this->createErrorResponse($request, 'Invalid or inactive API token', 401);
+        }
+
         // Validate allowed search terms if city parameter is present
         $queryParams = $request->getQueryParams();
         if (isset($queryParams['city'])) {
@@ -119,6 +129,34 @@ class ApiTokenAuthMiddleware implements MiddlewareInterface
         $authHeader = $request->getHeaderLine('Authorization');
         if (!empty($authHeader) && preg_match('/^Bearer\s+(.+)$/i', $authHeader, $matches)) {
             return $matches[1];
+        }
+
+        return null;
+    }
+
+    /**
+     * Extract the origin domain from the request
+     *
+     * Checks Origin header first, then falls back to Referer header
+     */
+    private function extractOriginDomain(ServerRequestInterface $request): ?string
+    {
+        // Check Origin header (preferred for CORS requests)
+        $origin = $request->getHeaderLine('Origin');
+        if (!empty($origin)) {
+            $parsed = parse_url($origin);
+            if (is_array($parsed) && isset($parsed['host'])) {
+                return $parsed['host'];
+            }
+        }
+
+        // Fallback to Referer header
+        $referer = $request->getHeaderLine('Referer');
+        if (!empty($referer)) {
+            $parsed = parse_url($referer);
+            if (is_array($parsed) && isset($parsed['host'])) {
+                return $parsed['host'];
+            }
         }
 
         return null;

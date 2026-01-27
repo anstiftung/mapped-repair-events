@@ -48,6 +48,10 @@ class ApiTokensTable extends AppTable
             ->notEmptyString('allowed_search_terms', 'Bitte gib mindestens einen erlaubten Suchbegriff ein.');
 
         $validator
+            ->requirePresence('allowed_domains', 'create')
+            ->notEmptyString('allowed_domains', 'Bitte gib mindestens eine erlaubte Domain ein.');
+
+        $validator
             ->dateTime('last_used')
             ->allowEmptyDateTime('last_used');
 

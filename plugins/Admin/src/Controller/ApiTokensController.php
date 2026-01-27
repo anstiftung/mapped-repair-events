@@ -72,6 +72,12 @@ class ApiTokensController extends AdminAppController
                 $data['allowed_search_terms'] = json_encode(array_values($terms), JSON_UNESCAPED_UNICODE);
             }
 
+            // Convert allowed_domains from textarea to JSON array
+            if (!empty($data['allowed_domains']) && is_string($data['allowed_domains'])) {
+                $domains = array_filter(array_map('trim', explode("\n", $data['allowed_domains'])));
+                $data['allowed_domains'] = json_encode(array_values($domains), JSON_UNESCAPED_UNICODE);
+            }
+
             $apiToken = $this->ApiToken->patchEntity($apiToken, $data);
 
             if ($this->ApiToken->save($apiToken)) {
@@ -112,6 +118,12 @@ class ApiTokensController extends AdminAppController
                 $data['allowed_search_terms'] = json_encode(array_values($terms), JSON_UNESCAPED_UNICODE);
             }
 
+            // Convert allowed_domains from textarea to JSON array
+            if (isset($data['allowed_domains']) && is_string($data['allowed_domains'])) {
+                $domains = array_filter(array_map('trim', explode("\n", $data['allowed_domains'])));
+                $data['allowed_domains'] = json_encode(array_values($domains), JSON_UNESCAPED_UNICODE);
+            }
+
             $apiToken = $this->ApiToken->patchEntity($apiToken, $data);
 
             if ($this->ApiToken->save($apiToken)) {
@@ -129,6 +141,16 @@ class ApiTokensController extends AdminAppController
                 : $apiToken->allowed_search_terms;
             if (is_array($terms)) {
                 $apiToken->allowed_search_terms = implode("\n", $terms);
+            }
+        }
+
+        // Convert JSON array to newline-separated string for textarea
+        if (!empty($apiToken->allowed_domains)) {
+            $domains = is_string($apiToken->allowed_domains) 
+                ? json_decode($apiToken->allowed_domains, true) 
+                : $apiToken->allowed_domains;
+            if (is_array($domains)) {
+                $apiToken->allowed_domains = implode("\n", $domains);
             }
         }
 

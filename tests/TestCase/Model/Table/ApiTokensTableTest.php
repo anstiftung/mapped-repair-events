@@ -21,6 +21,7 @@ class ApiTokensTableTest extends AppTestCase
             'name' => 'Test Token',
             'token' => 'test-token-123456789',
             'allowed_search_terms' => '["Berlin"]',
+            'allowed_domains' => '["localhost"]',
             'status' => true,
         ]);
 
