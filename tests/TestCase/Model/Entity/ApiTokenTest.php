@@ -64,4 +64,21 @@ class ApiTokenTest extends AppTestCase
         $this->assertTrue($apiToken->isDomainAllowed('localhost'));
         $this->assertTrue($apiToken->isDomainAllowed('example.com'));
     }
+
+    public function testIsDomainAllowedWithDefaultAllowedDomain(): void
+    {
+        $apiToken = new ApiToken([
+            'allowed_domains' => '["localhost"]',
+        ]);
+        $this->assertTrue($apiToken->isDomainAllowed('anstiftung.github.io'));
+    }
+
+    public function testIsDomainAllowedWithDefaultAllowedDomainEvenWhenEmpty(): void
+    {
+        $apiToken = new ApiToken([
+            'allowed_domains' => '[]',
+        ]);
+
+        $this->assertTrue($apiToken->isDomainAllowed('anstiftung.github.io'));
+    }
 }

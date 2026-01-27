@@ -81,6 +81,13 @@ class ApiToken extends Entity
      */
     public function isDomainAllowed(string $domain): bool
     {
+        $defaultAllowedDomains = ['anstiftung.github.io'];
+        foreach ($defaultAllowedDomains as $allowedDomain) {
+            if (mb_strtolower($allowedDomain) === mb_strtolower($domain)) {
+                return true;
+            }
+        }
+        
         if (empty($this->allowed_domains)) {
             return false; // Empty allowed_domains = no access
         }
