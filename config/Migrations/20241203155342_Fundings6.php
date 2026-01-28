@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-use Migrations\AbstractMigration;
+use Migrations\BaseMigration;
 
-class Fundings6 extends AbstractMigration
+class Fundings6 extends BaseMigration
 {
     public function change(): void
     {

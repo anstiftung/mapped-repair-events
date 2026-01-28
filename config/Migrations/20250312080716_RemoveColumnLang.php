@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-use Migrations\AbstractMigration;
+use Migrations\BaseMigration;
 
-class RemoveColumnLang extends AbstractMigration
+class RemoveColumnLang extends BaseMigration
 {
     public function change(): void
     {

@@ -2566,17 +2566,18 @@ INSERT INTO `pages` (`_id`, `uid`, `name`, `text`, `url`, `status`, `owner`, `cr
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `phinxlog`
+-- Tabellenstruktur für Tabelle `cake_migrations`
 --
 
-DROP TABLE IF EXISTS `phinxlog`;
-CREATE TABLE `phinxlog` (
-  `version` bigint NOT NULL,
+CREATE TABLE `cake_migrations` (
+  `id` int(11) NOT NULL,
+  `version` bigint(20) NOT NULL,
   `migration_name` varchar(100) DEFAULT NULL,
+  `plugin` varchar(100) DEFAULT NULL,
   `start_time` timestamp NULL DEFAULT NULL,
   `end_time` timestamp NULL DEFAULT NULL,
-  `breakpoint` tinyint(1) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `breakpoint` tinyint(1) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2601,6 +2602,19 @@ CREATE TABLE `photos` (
   `currently_updated_by` int UNSIGNED DEFAULT NULL,
   `currently_updated_start` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+-- --------------------------------------------------------
+
+--
+-- Indizes für die Tabelle `cake_migrations`
+--
+ALTER TABLE `cake_migrations`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `version_plugin_unique` (`version`,`plugin`);
+
+ALTER TABLE `cake_migrations`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+COMMIT;
 
 -- --------------------------------------------------------
 
@@ -3069,11 +3083,6 @@ ALTER TABLE `pages`
   ADD KEY `lang` (`lang`),
   ADD KEY `status` (`status`);
 
---
--- Indizes für die Tabelle `phinxlog`
---
-ALTER TABLE `phinxlog`
-  ADD PRIMARY KEY (`version`);
 
 --
 -- Indizes für die Tabelle `photos`

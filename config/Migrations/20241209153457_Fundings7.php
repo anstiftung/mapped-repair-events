@@ -2,10 +2,10 @@
 declare(strict_types=1);
 
 use Cake\Datasource\FactoryLocator;
-use Migrations\AbstractMigration;
+use Migrations\BaseMigration;
 use App\Model\Entity\Funding;
 
-class Fundings7 extends AbstractMigration
+class Fundings7 extends BaseMigration
 {
     public function change(): void
     {

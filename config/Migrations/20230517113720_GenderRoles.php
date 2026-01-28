@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-use Migrations\AbstractMigration;
+use Migrations\BaseMigration;
 
-class GenderRoles extends AbstractMigration
+class GenderRoles extends BaseMigration
 {
     /**
      * Change Method.

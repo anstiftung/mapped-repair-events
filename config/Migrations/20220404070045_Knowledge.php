@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-use Migrations\AbstractMigration;
+use Migrations\BaseMigration;
 
-class Knowledge extends AbstractMigration
+class Knowledge extends BaseMigration
 {
     public function change(): void
     {

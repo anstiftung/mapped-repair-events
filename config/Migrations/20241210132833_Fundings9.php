@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-use Migrations\AbstractMigration;
+use Migrations\BaseMigration;
 use App\Model\Entity\Funding;
 use Cake\ORM\TableRegistry;
 
-class Fundings9 extends AbstractMigration
+class Fundings9 extends BaseMigration
 {
     public function change(): void
     {

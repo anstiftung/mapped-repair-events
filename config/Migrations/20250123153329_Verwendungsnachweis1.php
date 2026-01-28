@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-use Migrations\AbstractMigration;
+use Migrations\BaseMigration;
 use App\Model\Entity\Funding;
 
-class Verwendungsnachweis1 extends AbstractMigration
+class Verwendungsnachweis1 extends BaseMigration
 {
     public function change(): void
     {

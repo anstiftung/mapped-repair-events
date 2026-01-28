@@ -38,6 +38,9 @@ define('BIC_REGEX', '/^[A-Z]{4}[A-Z]{2}[A-Z0-9]{2}([A-Z0-9]{3})?$/');
 define('UUID_REGEX', '[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[0-5][a-fA-F0-9]{3}-[089aAbB][a-fA-F0-9]{3}-[a-fA-F0-9]{12}'); // see Validate::uuid()
 
 return [
+    'Migrations' => [
+        'legacyTables' => false,
+    ],
     'Email' => [
         'default' => [
             'emailFormat' => 'html',

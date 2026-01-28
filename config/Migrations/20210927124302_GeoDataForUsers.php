@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-use Migrations\AbstractMigration;
+use Migrations\BaseMigration;
 use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
 
-class GeoDataForUsers extends AbstractMigration
+class GeoDataForUsers extends BaseMigration
 {
     public function change(): void
     {

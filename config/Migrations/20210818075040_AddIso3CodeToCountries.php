@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-use Migrations\AbstractMigration;
+use Migrations\BaseMigration;
 
-class AddIso3CodeToCountries extends AbstractMigration
+class AddIso3CodeToCountries extends BaseMigration
 {
     public function change(): void
     {

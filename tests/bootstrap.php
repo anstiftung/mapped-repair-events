@@ -15,7 +15,7 @@ require dirname(__DIR__) . '/config/bootstrap.php';
 use Cake\TestSuite\Fixture\SchemaLoader;
 $schemLoader = new SchemaLoader();
 $schemLoader->loadSqlFiles(dirname(__DIR__) . '/config/sql/init/database.sql', 'test', true, true);
-$schemLoader->loadSqlFiles(dirname(__DIR__) . '/config/sql/init/phinxlog.sql', 'test', false);
+$schemLoader->loadSqlFiles(dirname(__DIR__) . '/config/sql/init/cake_migrations.sql', 'test', false);
 
 // 1) run migrations
 $migrations = new Migrations();
