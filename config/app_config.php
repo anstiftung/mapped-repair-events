@@ -39,7 +39,7 @@ define('UUID_REGEX', '[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[0-5][a-fA-F0-9]{3}-[089aAbB
 
 return [
     'Migrations' => [
-        'legacyTables' => null,
+        'legacyTables' => false,
     ],
     'Email' => [
         'default' => [
