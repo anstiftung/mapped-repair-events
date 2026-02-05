@@ -251,7 +251,25 @@ class FundingsControllerVerwendungsnachweisTest extends AppTestCase
         $this->assertEquals(Funding::STATUS_DATA_MISSING, $funding->usageproof_status);
         $this->assertEquals(2, count($funding->fundingreceiptlists));
 
-        // 5) SUBMIT
+        // 5) SUBMIT with errors
+        $testFundingusageproofCompleteWithErrors = $testFundingusageproofComplete;
+        $testFundingusageproofCompleteWithErrors['main_description'] = '';
+        $this->post($route, [
+            'referer' => '/',
+            'submit_usageproof' => 1,
+            'Fundings' => [
+                'fundingusageproof' => $testFundingusageproofCompleteWithErrors,
+                'fundingreceiptlists' => [
+                    $validFundingreceiptlist,
+                ],
+            ],
+        ]);
+        $funding = $fundingsTable->getUnprivatizedFundingWithAllAssociations($fundingUid);
+        $this->assertEquals(Funding::STATUS_DATA_MISSING, $funding->usageproof_status);
+        $this->assertNull($funding->usageproof_submit_date);
+        $this->assertResponseContains('Der Verwendungsnachweis wurde nicht eingereicht.<br />Bitte behebe die Fehler und reiche erneut ein.');
+
+        // 6) SUBMIT
         $this->post($route, [
             'referer' => '/',
             'submit_usageproof' => 1,
@@ -269,7 +287,7 @@ class FundingsControllerVerwendungsnachweisTest extends AppTestCase
         $this->assertFlashMessage('Der Verwendungsnachweis wurde bereits eingereicht und kann nicht mehr bearbeitet werden.');
         $this->assertRedirect(Configure::read('AppConfig.htmlHelper')->urlFundings());
 
-        // 6) REJECT by admin
+        // 7) REJECT by admin
         $this->loginAsAdmin();
         $this->post('/admin/fundings/usageproofEdit/' . $fundingUid, [
             'referer' => '/',
@@ -283,7 +301,7 @@ class FundingsControllerVerwendungsnachweisTest extends AppTestCase
         $this->assertMailSentToAt(0, $funding->owner_user->email);
         $this->assertMailSubjectContainsAt(0, 'Der Status deines Verwendungsnachweises wurde geändert');
 
-        // 7) submit again
+        // 8) submit again
         $this->loginAsOrga();
         $this->post($route, [
             'referer' => '/',
@@ -297,7 +315,7 @@ class FundingsControllerVerwendungsnachweisTest extends AppTestCase
         ]);
         $funding = $fundingsTable->getUnprivatizedFundingWithAllAssociations($fundingUid);
 
-        // 6) VERIFY by admin and trigger email with pdf
+        // 9) VERIFY by admin and trigger email with pdf
         $this->loginAsAdmin();
         $this->post('/admin/fundings/usageproofEdit/' . $fundingUid, [
             'referer' => '/',
@@ -324,7 +342,7 @@ class FundingsControllerVerwendungsnachweisTest extends AppTestCase
         $this->assertContentType('application/pdf');
 
 
-        // 9) CLEANUP files
+        // 10) CLEANUP files
         $filePath = Fundingupload::UPLOAD_PATH . $funding->uid;
         FolderService::deleteFolder($filePath);
 
