@@ -25,6 +25,7 @@ trait FundingAdminFilterTrait {
             'usageproof-rejected' => 'Verwendungsnachweis: von Admin beanstandet',
             'not-enough-events-confirmed' => 'weniger als ' . self::MIN_CONFIRMED_EVENTS .  ' Veranstaltungen bestätigt',
             'enough-events-confirmed' => 'mindestens ' . self::MIN_CONFIRMED_EVENTS .  ' Veranstaltungen bestätigt',
+            'wrong-usageproof-submissions' => 'Fehlerhaft eingereichte Verwendungsnachweise',
         ];
     }
 
@@ -68,6 +69,9 @@ trait FundingAdminFilterTrait {
             },
             'enough-events-confirmed' => function($funding): bool {
                 return $funding->workshop->workshop_funding->fundingconfirmedevents_count >= self::MIN_CONFIRMED_EVENTS;
+            },
+            'wrong-usageproof-submissions' => function($funding): bool {
+                return $funding->usageproof_status === self::STATUS_REJECTED_BY_ADMIN && $funding->fundingusageproof->submit_date === null && $funding->usageproof_is_submittable;
             },
         ];
     }

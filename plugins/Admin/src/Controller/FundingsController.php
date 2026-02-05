@@ -65,39 +65,6 @@ class FundingsController extends AdminAppController
         die($pdfWriterService->writeInline());
     }
 
-    public function listWrongSubmittedUsageproofs(): void
-    {
-        $fundingsTable = $this->getTableLocator()->get('Fundings');
-        $workshopsTable = $this->getTableLocator()->get('Workshops');
-
-        $fundings = $fundingsTable->find('all',
-            conditions: [
-                $fundingsTable->aliasField('usageproof_submit_date IS NULL'),
-                $fundingsTable->aliasField('usageproof_status') => Funding::STATUS_REJECTED_BY_ADMIN,
-            ],
-            order: [
-                $workshopsTable->aliasField('name') => 'ASC',
-            ],
-            contain: [
-                'Fundingusageproofs',
-                'Fundingreceiptlists',
-                'Fundingbudgetplans',
-                'FundinguploadsPrMaterials',
-                'Workshops',
-            ])->toArray();
-
-        $errorFundings = [];
-        foreach($fundings as $funding) {
-            if (!$funding->usageproof_is_submittable) {
-                continue;
-            }
-            $errorFundings[] = $funding;
-        }
-
-        $this->set('errorFundings', $errorFundings);
-
-    }
-
     public function bankExport(): Response
     {
 
