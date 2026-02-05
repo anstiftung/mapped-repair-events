@@ -12,6 +12,7 @@ use League\Csv\Writer;
 use App\Model\Entity\Funding;
 use Cake\Http\Response;
 use App\Services\PdfWriter\VerwendungsnachweisPdfWriterService;
+use Cake\Core\Configure;
 
 class FundingsController extends AdminAppController
 {
@@ -62,6 +63,42 @@ class FundingsController extends AdminAppController
         $pdfWriterService = new VerwendungsnachweisPdfWriterService();
         $pdfWriterService->prepareAndSetData($fundingUid, DateTime::now());
         die($pdfWriterService->writeInline());
+    }
+
+    public function listWrongSubmittedUsageproofs(): void
+    {
+        $fundingsTable = $this->getTableLocator()->get('Fundings');
+        $workshopsTable = $this->getTableLocator()->get('Workshops');
+
+        $fundings = $fundingsTable->find('all',
+            conditions: [
+                $fundingsTable->aliasField('usageproof_submit_date IS NULL'),
+                $fundingsTable->aliasField('usageproof_status') => Funding::STATUS_REJECTED_BY_ADMIN,
+            ],
+            order: [
+                $workshopsTable->aliasField('name') => 'ASC',
+            ],
+            contain: [
+                'Fundingusageproofs',
+                'Fundingreceiptlists',
+                'Fundingbudgetplans',
+                'FundinguploadsPrMaterials',
+                'Workshops',
+            ])->toArray();
+
+        $errorFundings = [];
+        foreach($fundings as $funding) {
+            if (!$funding->usageproof_is_submittable) {
+                continue;
+            }
+            $errorFundings[] = $funding;
+        }
+
+        echo 'Falsch eingereichte Verwendungsnachweise: ' . count($errorFundings) . '<br /><br />';
+        foreach($errorFundings as $errorFunding) {
+            echo 'FundingUID: ' . $errorFunding->uid . ' - ' . $errorFunding->workshop->name . '<br />';
+        }
+        exit;
     }
 
     public function bankExport(): Response
