@@ -11,6 +11,7 @@ trait SearchExceptionsTrait {
     private array $searchExceptions = [
         'berlin',
         'münchen',
+        'essen',
     ];
 
     /**
