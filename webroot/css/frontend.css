@@ -1986,13 +1986,47 @@ iframe .rc,
     -khtml-border-radius: 3px;
     -webkit-border-radius: 3px;
 }
+::placeholder {
+    color: #757575;
+}
 #login-box-form .input input {
     width: 165px;
     float: left;
     margin: 5px 0px 5px -3px;
-    color: #999;
+    color: #757575;
 }
-#login-box-form .input input {
+.password-toggle-wrapper {
+    position: relative;
+    display: inline-block;
+}
+.password-toggle-wrapper input[type="password"] {
+    padding-right: 30px !important;
+    width: 175px !important;
+}
+#login-box-form .password-toggle-wrapper input[type="password"] {
+    width: 140px !important;
+}
+.password-toggle-icon {
+    position: absolute;
+    right: 1px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #666;
+    font-size: 14px;
+    user-select: none;
+    padding: 8px;
+    background-color: #f5f5f5;
+    border-left: 1px solid #ddd;
+    transition: all 0.2s ease;
+    width: 12px;
+    height: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#login-box-form  .input input {
     background-color: white ! important;
     border: 1px solid #CCCCCA ! important;
 }

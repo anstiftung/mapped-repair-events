@@ -2,6 +2,7 @@ MappedRepairEvents.Helper = {
 
     init : function() {
         this.highlightFormFields();
+        this.initPasswordToggle();
         this.checkUrlForLoginBoxOpen();
         this.bindFlashMessageCancelButton();
         this.beautifyDropdowns();
@@ -1399,6 +1400,45 @@ MappedRepairEvents.Helper = {
         });
         formFieldsToHighlight.on('blur', function() {
             $(this).css('background-color', 'white');
+        });
+    },
+
+    initPasswordToggle : function() {
+        $('input[type="password"]').each(function() {
+            var inputField = $(this);
+
+            if (inputField.hasClass('no-password-toggle')) {
+                return;
+            }
+
+            if (inputField.parent().hasClass('password-toggle-wrapper')) {
+                return;
+            }
+
+            inputField.wrap('<span class="password-toggle-wrapper"></span>');
+
+            var toggleIcon = $('<i class="fas fa-eye password-toggle-icon" role="button" tabindex="0" aria-label="Show password"></i>');
+
+            inputField.after(toggleIcon);
+
+            toggleIcon.on('click keydown', function(event) {
+                if (event.type === 'keydown' && event.which !== 13 && event.which !== 32) {
+                    return;
+                }
+
+                var icon = $(this);
+                var passwordInput = icon.prev('input');
+
+                if (passwordInput.attr('type') === 'password') {
+                    passwordInput.attr('type', 'text');
+                    icon.removeClass('fa-eye').addClass('fa-eye-slash');
+                    icon.attr('aria-label', 'Hide password');
+                } else {
+                    passwordInput.attr('type', 'password');
+                    icon.removeClass('fa-eye-slash').addClass('fa-eye');
+                    icon.attr('aria-label', 'Show password');
+                }
+            });
         });
     },
 
