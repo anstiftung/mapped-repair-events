@@ -5,7 +5,7 @@
     "config": {
         "platform-check": false,
         "platform": {
-            "php": "8.4"
+            "php": "8.5"
         },
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true,
@@ -13,7 +13,7 @@
         }
     },
     "require": {
-        "php": ">=8.4",
+        "php": ">=8.5",
         "cakephp/authentication": "^3.0",
         "cakephp/authorization": "^3.0",
         "cakephp/cakephp": "^5.2",

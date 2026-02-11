@@ -66,7 +66,7 @@ abstract class AppRootTable extends AppTable
         ]);
         $validator->add('url', 'alphaNumericDash', [
             'rule' => function ($value, $context): bool {
-                return (boolean) preg_match('`^[0-9a-zA-Z-]*$`', $value);
+                return (bool) preg_match('`^[0-9a-zA-Z-]*$`', $value);
             },
             'message' => 'Bitte nur a-z, Zahlen und das Zeichen - verwenden.'
         ]);

@@ -3,7 +3,7 @@
 ## When Suggesting Code
 - Run all commands inside Docker container `rep.php`
 - Respect CakePHP conventions
-- Use PHP 8.4 features appropriately
+- Use PHP 8.5 features appropriately
 - Include type hints
 - Follow existing code style in the file
 - Verify against PHPStan rules (call `composer phpstan`)
