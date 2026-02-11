@@ -408,6 +408,17 @@ a.icon-link-text {
     float: left;
     margin-bottom: 5px;
 }
+.content-info-box {
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 6px;
+    background-color: var(--theme-color-j)
+}
+.content-info-box h3 {
+    text-transform: none;
+    font-size: 16px;
+    color: var(--theme-color-a);
+}
 table.list a.icon-link-text {
     font-size: 12px;
     font-weight: normal;

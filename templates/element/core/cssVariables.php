@@ -13,6 +13,7 @@ use Cake\Core\Configure;
         --theme-color-g: <?php echo Configure::read('AppConfig.themeColorG'); ?>;
         --theme-color-h: <?php echo Configure::read('AppConfig.themeColorH'); ?>;
         --theme-color-i: <?php echo Configure::read('AppConfig.themeColorI'); ?>;
+        --theme-color-j: <?php echo Configure::read('AppConfig.themeColorJ'); ?>;
         --theme-font: <?php echo Configure::read('AppConfig.themeFont'); ?>;
     }
 </style>

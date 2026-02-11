@@ -140,6 +140,7 @@ return [
         'themeColorG' => '#B57CDB',
         'themeColorH' => '#d7cbdfcc',
         'themeColorI' => '#d7cbdf',
+        'themeColorJ' => '#e8edf4',
         'themeFont' => 'Open Sans',
         'externNewsletterUrl' => 'https://civicrm.anstiftung.de/civicrm_newsletter/subscribe/default',
         'splitterPath' => '/files/kcfinder/pages/15203',
