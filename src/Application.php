@@ -17,33 +17,34 @@ declare(strict_types=1);
 
 namespace App;
 
-use App\Policy\RequestPolicy;
-use Authentication\AuthenticationService;
-use Authentication\AuthenticationServiceInterface;
-use Authentication\AuthenticationServiceProviderInterface;
-use Authentication\Identifier\PasswordIdentifier;
-use Authentication\Identifier\Resolver\OrmResolver;
-use Authentication\Middleware\AuthenticationMiddleware;
-use Authorization\AuthorizationService;
-use Authorization\AuthorizationServiceInterface;
-use Authorization\AuthorizationServiceProviderInterface;
-use Authorization\Exception\ForbiddenException;
-use Authorization\Exception\MissingIdentityException;
-use Authorization\Middleware\AuthorizationMiddleware;
-use Authorization\Middleware\RequestAuthorizationMiddleware;
-use Authorization\Policy\MapResolver;
 use Cake\Core\Configure;
-use Cake\Error\Middleware\ErrorHandlerMiddleware;
-use Cake\Http\BaseApplication;
-use Cake\Http\Middleware\BodyParserMiddleware;
-use Cake\Http\Middleware\CsrfProtectionMiddleware;
-use Cake\Http\Middleware\EncryptedCookieMiddleware;
-use Cake\Http\MiddlewareQueue;
 use Cake\Http\ServerRequest;
-use Cake\I18n\DateTime;
+use App\Policy\RequestPolicy;
+use Cake\Http\BaseApplication;
+use Cake\Http\MiddlewareQueue;
+use Authorization\Policy\MapResolver;
+use Authorization\AuthorizationService;
+use Authentication\AuthenticationService;
 use Cake\Routing\Middleware\AssetMiddleware;
-use Cake\Routing\Middleware\RoutingMiddleware;
 use Psr\Http\Message\ServerRequestInterface;
+use Cake\Routing\Middleware\RoutingMiddleware;
+use Cake\Core\Exception\MissingPluginException;
+use Authorization\AuthorizationServiceInterface;
+use Cake\Error\Middleware\ErrorHandlerMiddleware;
+use Authentication\AuthenticationServiceInterface;
+use Cake\Http\Middleware\CsrfProtectionMiddleware;
+use Authorization\Middleware\AuthorizationMiddleware;
+use Authentication\Middleware\AuthenticationMiddleware;
+use Authorization\AuthorizationServiceProviderInterface;
+use Authentication\AuthenticationServiceProviderInterface;
+use Authentication\Identifier\Resolver\OrmResolver;
+use Authorization\Middleware\RequestAuthorizationMiddleware;
+use Authorization\Exception\MissingIdentityException;
+use Authorization\Exception\ForbiddenException;
+use Cake\Http\Middleware\BodyParserMiddleware;
+use Cake\Http\Middleware\EncryptedCookieMiddleware;
+use Cake\I18n\DateTime;
+use Authentication\Identifier\AbstractIdentifier;
 
 /**
  * @extends \Cake\Http\BaseApplication<\App\Application>
@@ -155,8 +156,8 @@ class Application extends BaseApplication
     {
 
         $fields = [
-            PasswordIdentifier::CREDENTIAL_USERNAME => 'email',
-            PasswordIdentifier::CREDENTIAL_PASSWORD => 'password',
+            AbstractIdentifier::CREDENTIAL_USERNAME => 'email',
+            AbstractIdentifier::CREDENTIAL_PASSWORD => 'password',
         ];
         $service = new AuthenticationService();
         $service->setConfig([
@@ -164,23 +165,24 @@ class Application extends BaseApplication
         ]);
 
         $identifier = [
-            'className' => 'App.NonPrivatizedPassword',
-            'resolver' => [
-                'className' => OrmResolver::class,
-                'finder' => 'auth', // UsersTable::findAuth
+            'App.NonPrivatizedPassword' => [
+                'resolver' => [
+                    'className' => OrmResolver::class,
+                    'finder' => 'auth', // UsersTable::findAuth
+                ],
+                'fields' => $fields,
             ],
-            'fields' => $fields,
         ];
         
         // Load the authenticators
         $service->loadAuthenticator('Authentication.Session', [
-            'fields' => [PasswordIdentifier::CREDENTIAL_USERNAME => 'email'],
+            'fields' => [AbstractIdentifier::CREDENTIAL_USERNAME => 'email'],
             'identify' => false,
             'identifier' => $identifier,
         ]);
         $service->loadAuthenticator('Authentication.Form', [
-            'loginUrl' => Configure::read('AppConfig.htmlHelper')->urlLogin(),
-            'fields' => [PasswordIdentifier::CREDENTIAL_USERNAME => 'email'],
+            'url' => Configure::read('AppConfig.htmlHelper')->urlLogin(),
+            'fields' => [AbstractIdentifier::CREDENTIAL_USERNAME => 'email'],
             'identifier' => $identifier,
         ]);
         
