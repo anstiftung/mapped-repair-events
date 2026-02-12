@@ -260,7 +260,7 @@ class FundingsControllerVerwendungsnachweisTest extends AppTestCase
             'Fundings' => [
                 'fundingusageproof' => $testFundingusageproofCompleteWithErrors,
                 'fundingreceiptlists' => [
-                    $validFundingreceiptlist,
+                    ['description' => ''], // invalid
                 ],
             ],
         ]);
