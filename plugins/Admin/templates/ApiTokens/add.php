@@ -41,7 +41,7 @@ $isEditMode = !$apiToken->isNew();
 
         echo $this->Form->control('allowed_search_terms', [
             'type' => 'textarea',
-            'label' => 'Erlaubte Suchbegriffe',
+            'label' => 'Erlaubte Suchbegriffe (ein Begriff pro Zeile)',
             'placeholder' => "Berlin\nMünchen\nHamburg",
             'rows' => 5,
         ]) . '<br />';
