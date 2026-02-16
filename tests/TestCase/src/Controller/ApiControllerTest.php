@@ -5,6 +5,7 @@ namespace App\Test\TestCase\Controller;
 
 use App\Test\Fixture\ApiTokensFixture;
 use App\Test\TestCase\AppTestCase;
+use Cake\Core\Configure;
 use Cake\I18n\Date;
 
 class ApiControllerTest extends AppTestCase {
@@ -183,6 +184,7 @@ class ApiControllerTest extends AppTestCase {
 
     public function testGetSplitterOk(): void
     {
+        Configure::write('AppConfig.splitterPath', '/files'); // prevent errors on github actions
         $this->configRequest([
             'headers' => [
                 'Authorization' => 'Bearer ' . ApiTokensFixture::VALID_SPLITTER_TOKEN,
