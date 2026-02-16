@@ -71,6 +71,9 @@ class ApiTokensController extends AdminAppController
                 $terms = array_filter(array_map('trim', explode("\n", $data['allowed_search_terms'])));
                 $data['allowed_search_terms'] = json_encode(array_values($terms), JSON_UNESCAPED_UNICODE);
             }
+            if (empty($data['allowed_search_terms'])) {
+                $data['allowed_search_terms'] = null;
+            }
 
             // Convert allowed_domains from textarea to JSON array
             if (!empty($data['allowed_domains']) && is_string($data['allowed_domains'])) {
@@ -116,6 +119,9 @@ class ApiTokensController extends AdminAppController
             if (isset($data['allowed_search_terms']) && is_string($data['allowed_search_terms'])) {
                 $terms = array_filter(array_map('trim', explode("\n", $data['allowed_search_terms'])));
                 $data['allowed_search_terms'] = json_encode(array_values($terms), JSON_UNESCAPED_UNICODE);
+            }
+            if (array_key_exists('allowed_search_terms', $data) && empty($data['allowed_search_terms'])) {
+                $data['allowed_search_terms'] = null;
             }
 
             // Convert allowed_domains from textarea to JSON array

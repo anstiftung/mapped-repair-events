@@ -9,11 +9,11 @@ use Cake\I18n\Date;
 
 class ApiControllerTest extends AppTestCase {
 
-    public function testRestWorkshopsBerlin(): void
+    public function testWorkshopsBerlin(): void
     {
         $this->configRequest([
             'headers' => [
-                'Authorization' => 'Bearer ' . ApiTokensFixture::VALID_TOKEN,
+                'Authorization' => 'Bearer ' . ApiTokensFixture::VALID_WORKSHOPS_TOKEN,
                 'Origin' => 'http://localhost',
             ],
         ]);
@@ -26,11 +26,11 @@ class ApiControllerTest extends AppTestCase {
         $this->assertResponseOk();
     }
 
-    public function testRestWorkshopsHamburg(): void
+    public function testWorkshopsHamburg(): void
     {
         $this->configRequest([
             'headers' => [
-                'Authorization' => 'Bearer ' . ApiTokensFixture::VALID_TOKEN,
+                'Authorization' => 'Bearer ' . ApiTokensFixture::VALID_WORKSHOPS_TOKEN,
                 'Origin' => 'http://localhost',
             ],
         ]);
@@ -40,11 +40,11 @@ class ApiControllerTest extends AppTestCase {
         $this->assertEquals('Access to this city is not allowed with this API token. Allowed search terms: Berlin, München', $response['error']);
     }
 
-    public function testRestWorkshopsWrongParam(): void
+    public function testWorkshopsWrongParam(): void
     {
         $this->configRequest([
             'headers' => [
-                'Authorization' => 'Bearer ' . ApiTokensFixture::VALID_TOKEN,
+                'Authorization' => 'Bearer ' . ApiTokensFixture::VALID_WORKSHOPS_TOKEN,
                 'Origin' => 'http://localhost',
             ],
         ]);
@@ -53,7 +53,7 @@ class ApiControllerTest extends AppTestCase {
         $response = $this->getJsonResponseBody();
         $this->assertEquals('Access to this city is not allowed with this API token. Allowed search terms: Berlin, München', $response['error']);
     }
-    public function testApiV1WorkshopsWithoutToken(): void
+    public function testWorkshopsWithoutToken(): void
     {
         $this->get('/api/v1/workshops?city=berlin');
         $this->assertResponseCode(401);
@@ -61,7 +61,7 @@ class ApiControllerTest extends AppTestCase {
         $this->assertEquals('API token is required. Please provide a valid token in the Authorization header as Bearer token.', $response['error']);
     }
 
-    public function testApiV1WorkshopsWithInvalidToken(): void
+    public function testWorkshopsWithInvalidToken(): void
     {
         $this->configRequest([
             'headers' => [
@@ -75,11 +75,11 @@ class ApiControllerTest extends AppTestCase {
         $this->assertEquals('Invalid or inactive API token', $response['error']);
     }
 
-    public function testApiV1WorkshopsWithInactiveToken(): void
+    public function testWorkshopsWithInactiveToken(): void
     {
         $this->configRequest([
             'headers' => [
-                'Authorization' => 'Bearer ' . ApiTokensFixture::INACTIVE_TOKEN,
+                'Authorization' => 'Bearer ' . ApiTokensFixture::INACTIVE_WORKSHOPS_TOKEN,
                 'Origin' => 'http://localhost',
             ],
         ]);
@@ -89,11 +89,11 @@ class ApiControllerTest extends AppTestCase {
         $this->assertEquals('Invalid or inactive API token', $response['error']);
     }
 
-    public function testApiV1WorkshopsWithTokenRequestingNonValidCity(): void
+    public function testWorkshopsWithTokenRequestingNonValidCity(): void
     {
         $this->configRequest([
             'headers' => [
-                'Authorization' => 'Bearer ' . ApiTokensFixture::VALID_TOKEN,
+                'Authorization' => 'Bearer ' . ApiTokensFixture::VALID_WORKSHOPS_TOKEN,
                 'Origin' => 'http://localhost',
             ],
         ]);
@@ -103,11 +103,11 @@ class ApiControllerTest extends AppTestCase {
         $this->assertEquals('Access to this city is not allowed with this API token. Allowed search terms: Berlin, München', $response['error']);
     }
 
-    public function testApiV1WorkshopsWithBearerToken(): void
+    public function testWorkshopsWithBearerToken(): void
     {
         $this->configRequest([
             'headers' => [
-                'Authorization' => 'Bearer ' . ApiTokensFixture::VALID_TOKEN,
+                'Authorization' => 'Bearer ' . ApiTokensFixture::VALID_WORKSHOPS_TOKEN,
                 'Origin' => 'http://localhost',
             ],
         ]);
@@ -120,11 +120,11 @@ class ApiControllerTest extends AppTestCase {
         $this->assertResponseOk();
     }
     
-    public function testApiV1WorkshopsWithEmptySearchTermsToken(): void
+    public function testWorkshopsWithEmptySearchTermsToken(): void
     {
         $this->configRequest([
             'headers' => [
-                'Authorization' => 'Bearer ' . ApiTokensFixture::EMPTY_SEARCH_TERMS_TOKEN,
+                'Authorization' => 'Bearer ' . ApiTokensFixture::EMPTY_WORKSHOPS_SEARCH_TERMS_TOKEN,
                 'Origin' => 'http://localhost',
             ],
         ]);
@@ -134,7 +134,7 @@ class ApiControllerTest extends AppTestCase {
         $this->assertEquals('Access to this city is not allowed with this API token. Allowed search terms: none', $response['error']);
     }
 
-    public function testApiV1WorkshopsCorsHeadersOnError(): void
+    public function testWorkshopsCorsHeadersOnError(): void
     {
         $this->configRequest([
             'headers' => [
@@ -152,11 +152,11 @@ class ApiControllerTest extends AppTestCase {
         $this->assertContentType('application/json');
     }
 
-    public function testApiV1WorkshopsCorsHeadersOnSuccess(): void
+    public function testWorkshopsCorsHeadersOnSuccess(): void
     {
         $this->configRequest([
             'headers' => [
-                'Authorization' => 'Bearer ' . ApiTokensFixture::VALID_TOKEN,
+                'Authorization' => 'Bearer ' . ApiTokensFixture::VALID_WORKSHOPS_TOKEN,
                 'Origin' => 'http://localhost',
             ],
         ]);
@@ -167,11 +167,11 @@ class ApiControllerTest extends AppTestCase {
         $this->assertHeader('Access-Control-Allow-Headers', 'Authorization, Content-Type');
     }
 
-    public function testApiV1WorkshopsWithWrongDomain(): void
+    public function testWorkshopsWithWrongDomain(): void
     {
         $this->configRequest([
             'headers' => [
-                'Authorization' => 'Bearer ' . ApiTokensFixture::WRONG_DOMAIN_TOKEN,
+                'Authorization' => 'Bearer ' . ApiTokensFixture::WRONG_DOMAIN_WORKSHOPS_TOKEN,
                 'Origin' => 'http://localhost',
             ],
         ]);
@@ -179,6 +179,34 @@ class ApiControllerTest extends AppTestCase {
         $this->assertResponseCode(401);
         $response = $this->getJsonResponseBody();
         $this->assertEquals('Invalid or inactive API token', $response['error']);
+    }
+
+    public function testGetSplitterOk(): void
+    {
+        $this->configRequest([
+            'headers' => [
+                'Authorization' => 'Bearer ' . ApiTokensFixture::VALID_SPLITTER_TOKEN,
+                'Origin' => 'http://localhost',
+            ],
+        ]);
+        $this->get('/api/splitter');
+        $this->assertResponseOk();
+    }
+
+    public function testGetWorkshopsForHyperModeWebsite(): void
+    {
+        $this->configRequest([
+            'headers' => [
+                'Authorization' => 'Bearer ' . ApiTokensFixture::VALID_WORKSHOPS_HYPERMODE_TOKEN,
+                'Origin' => 'http://localhost',
+            ],
+        ]);
+        $this->get('/api/workshops');
+        $this->assertResponseOk();
+        $response = $this->getJsonResponseBody();
+        $this->assertArrayHasKey('workshops', $response);
+        $this->assertIsArray($response['workshops']);
+        $this->assertCount(1, $response['workshops']);
     }
 
 }

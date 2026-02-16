@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+use App\Model\Entity\ApiToken;
+
 $this->element('addScript', ['script' =>
     JS_NAMESPACE . ".Helper.bindCancelButton();".
     JS_NAMESPACE . ".Helper.layoutEditButtons();"
@@ -29,9 +31,17 @@ $isEditMode = !$apiToken->isNew();
             'required' => true,
         ]) . '<br />';
 
+        echo $this->Form->control('type', [
+            'type' => 'select',
+            'label' => 'Typ',
+            'options' => ApiToken::TYPES,
+            'default' => ApiToken::TYPE_WORKSHOPS,
+            'required' => true,
+        ]) . '<br />';
+
         echo $this->Form->control('allowed_search_terms', [
             'type' => 'textarea',
-            'label' => 'Erlaubte Suchbegriffe (ein Begriff pro Zeile)',
+            'label' => 'Erlaubte Suchbegriffe (nur fuer Workshops API erforderlich)',
             'placeholder' => "Berlin\nMünchen\nHamburg",
             'rows' => 5,
         ]) . '<br />';

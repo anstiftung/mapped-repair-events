@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+use App\Model\Entity\ApiToken;
+
 echo $this->element('list', [
     'objects' => $objects,
     'heading' => 'API Token',
@@ -10,6 +12,7 @@ echo $this->element('list', [
     'fields' => [
         ['name' => 'id', 'label' => 'ID'],
         ['name' => 'name', 'label' => 'Name'],
+        ['name' => 'type', 'label' => 'Typ', 'values' => (object)ApiToken::TYPES],
         ['name' => 'allowed_search_terms', 'label' => 'Erlaubte Suchbegriffe'],
         ['name' => 'allowed_domains', 'label' => 'Erlaubte Domains'],
         ['name' => 'last_used', 'type' => 'datetime', 'label' => 'Zuletzt verwendet'],
