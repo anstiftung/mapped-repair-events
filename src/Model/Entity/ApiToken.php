@@ -7,8 +7,22 @@ use Cake\Utility\Security;
 
 class ApiToken extends Entity
 {
+
+    public const TYPE_WORKSHOPS = 1;
+    public const TYPE_SPLITTER = 2;
+    public const TYPE_HYPERMODE_WEBSITE = 3;
+    public const TYPE_STATISTICS = 4;
+
+    public const TYPES = [
+        self::TYPE_WORKSHOPS => 'Initiativen API',
+        self::TYPE_STATISTICS => 'Statistik API',
+        self::TYPE_SPLITTER => 'Splitter API',
+        self::TYPE_HYPERMODE_WEBSITE => 'Initiativen HyperMode API',
+    ];
+
     protected array $_accessible = [
         'name' => true,
+        'type' => true,
         'token' => true,
         'allowed_search_terms' => true,
         'allowed_domains' => true,

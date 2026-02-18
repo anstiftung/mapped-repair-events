@@ -3556,6 +3556,10 @@ div.admin div.edit .error-message {
     margin-top: 5px;
     line-height: 15px;
 }
+body.api_tokens div.admin div.edit div.input.textarea.error .error-message {
+    margin-top: -3px;
+    margin-bottom: 8px;
+}
 body.events div.admin div.edit .date-time-wrapper .error-message {
     margin-left: 79px;
 }
@@ -3599,7 +3603,7 @@ div.admin div.edit label {
     margin-right: 6px;
     width: 130px;
     float: left;
-    line-height: 26px;
+    line-height: 20px;
     margin-top: 4px;
     word-break: break-word;
 }

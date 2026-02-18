@@ -3,14 +3,16 @@ declare(strict_types=1);
 
 namespace App\Middleware;
 
+use App\Model\Entity\ApiToken;
+use App\Model\Table\ApiTokensTable;
+use Cake\Core\Configure;
 use Cake\Http\Response;
+use Cake\Log\Log;
+use Cake\ORM\Locator\LocatorAwareTrait;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Cake\ORM\Locator\LocatorAwareTrait;
-use App\Model\Table\ApiTokensTable;
-use Cake\Log\Log;
 
 /**
  * API Token Authentication Middleware
@@ -21,6 +23,18 @@ class ApiTokenAuthMiddleware implements MiddlewareInterface
 {
     use LocatorAwareTrait;
 
+    private function checkIsMiddlewareEnabledForApiType(ServerRequestInterface $request): bool
+    {
+        $action = $request->getParam('action'); // @phpstan-ignore-line
+
+        return match ($action) {
+            'getWorkshopsWithCityFilter' => Configure::read('useApiTokenAuthMiddleware1'),
+            'getSplitter' => Configure::read('useApiTokenAuthMiddleware2'),
+            'getWorkshopsForHyperModeWebsite' => Configure::read('useApiTokenAuthMiddleware3'),
+            default => false,
+        };
+    }
+
     /**
      * Process the request
      */
@@ -28,7 +42,12 @@ class ApiTokenAuthMiddleware implements MiddlewareInterface
         ServerRequestInterface $request,
         RequestHandlerInterface $handler,
     ): ResponseInterface {
-        
+    
+
+        if (!$this->checkIsMiddlewareEnabledForApiType($request)) {
+            return $handler->handle($request);
+        }
+
         // Handle CORS preflight OPTIONS request
         if ($request->getMethod() === 'OPTIONS') {
             $response = new Response();
@@ -58,6 +77,12 @@ class ApiTokenAuthMiddleware implements MiddlewareInterface
             return $this->createErrorResponse($request, 'API token has expired', 401);
         }
 
+        
+        $requiredType = $this->resolveRequiredType($request);
+        if ($requiredType !== null && (int)$apiToken->type !== $requiredType) {
+            return $this->createErrorResponse($request, 'Invalid or inactive API token', 401);
+        }
+
         // Validate allowed domain (check origin of the request)
         $origin = $this->extractOriginDomain($request);
         
@@ -70,7 +95,7 @@ class ApiTokenAuthMiddleware implements MiddlewareInterface
 
         // Validate allowed search terms if city parameter is present
         $queryParams = $request->getQueryParams();
-        if (isset($queryParams['city'])) {
+        if (isset($queryParams['city']) && (int)$apiToken->type === ApiToken::TYPE_WORKSHOPS) {
             $city = (string) $queryParams['city'];
             if (!$apiToken->isSearchTermAllowed($city)) {
                 $allowedTerms = json_decode($apiToken->allowed_search_terms, true) ?: [];
@@ -101,6 +126,18 @@ class ApiTokenAuthMiddleware implements MiddlewareInterface
         }
         
         return $response;
+    }
+
+    private function resolveRequiredType(ServerRequestInterface $request): ?int
+    {
+        $action = $request->getParam('action'); // @phpstan-ignore-line
+
+        return match ($action) {
+            'getWorkshopsForHyperModeWebsite' => ApiToken::TYPE_HYPERMODE_WEBSITE,
+            'getWorkshops' => ApiToken::TYPE_WORKSHOPS,
+            'getSplitter' => ApiToken::TYPE_SPLITTER,
+            default => null,
+        };
     }
 
     /**

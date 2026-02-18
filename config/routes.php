@@ -118,26 +118,11 @@ return function (RouteBuilder $routes) {
 
         if (Configure::read('isApiEnabled')) {
             $routes->scope('/api', function (RouteBuilder $routes) {
-                $routes->connect('/splitter', [
-                    'controller' => 'api',
-                    'action' => 'getSplitter',
-                ])->setMethods(['GET', 'OPTIONS']);
-                
-                $routes->connect('/workshops', [
-                    'controller' => 'api',
-                    'action' => 'getWorkshopsForHyperModeWebsite',
-                ])->setMethods(['GET', 'OPTIONS']);
-            });
-            
-            $routes->scope('/api/v1', function (RouteBuilder $routes) {
-                if (Configure::read('useApiTokenAuthMiddleware')) {
-                    $routes->registerMiddleware('apiTokenAuth', new ApiTokenAuthMiddleware());
-                    $routes->applyMiddleware('apiTokenAuth');
-                }
-                $routes->connect('/workshops', [
-                    'controller' => 'api',
-                    'action' => 'getWorkshopsWithCityFilter',
-                ])->setMethods(['GET', 'OPTIONS']);
+                $routes->registerMiddleware('apiTokenAuth', new ApiTokenAuthMiddleware());
+                $routes->applyMiddleware('apiTokenAuth');
+                $routes->connect('/workshops', ['controller' => 'api', 'action' => 'getWorkshopsForHyperModeWebsite'])->setMethods(['GET', 'OPTIONS']);
+                $routes->connect('/splitter', ['controller' => 'api', 'action' => 'getSplitter'])->setMethods(['GET', 'OPTIONS']);
+                $routes->connect('/v1/workshops', ['controller' => 'api', 'action' => 'getWorkshopsWithCityFilter'])->setMethods(['GET', 'OPTIONS']);
             });
         }
 

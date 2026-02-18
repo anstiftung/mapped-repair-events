@@ -11,23 +11,17 @@ use Cake\View\JsonView;
 class ApiController extends AppController
 {
 
-    public WorkshopsTable $Workshop;
-
     public function beforeFilter(EventInterface $event): void
     {
         parent::beforeFilter($event);
-        $this->Workshop = $this->getTableLocator()->get('Workshops');
-        $this->Authentication->allowUnauthenticated([
-            'getWorkshopsWithCityFilter',
-            'getWorkshopsForHyperModeWebsite',
-            'getSplitter',
-        ]);
+        $this->Authentication->disableIdentityCheck();
     }
 
     public function initialize(): void
     {
         parent::initialize();
         $this->addViewClasses([JsonView::class]);
+        $this->request = $this->request->withParam('_ext', 'json');
     }
 
     public function getWorkshopsWithCityFilter(): ?Response
@@ -39,14 +33,14 @@ class ApiController extends AppController
             ->allowMethods(['GET'])
             ->build();
 
-        $this->request = $this->request->withParam('_ext', 'json');
-
         $city = $this->request->getQuery('city');
         if ($city === null || strlen((string) $city) < 3) {
             return $this->response->withStatus(400)->withType('json')->withStringBody(json_encode('city not passed or invalid (min 3 chars)'));
         }
 
-        $workshops = $this->Workshop->find('all',
+        /** @var WorkshopsTable $workshopsTable */
+        $workshopsTable = $this->getTableLocator()->get('Workshops');
+        $workshops = $workshopsTable->find('all',
         conditions: [
             'Workshops.status' => APP_ON,
             'Workshops.city LIKE' => "{$city}%",
@@ -115,9 +109,9 @@ class ApiController extends AppController
     public function getWorkshopsForHyperModeWebsite(): void
     {
 
-        $this->request = $this->request->withParam('_ext', 'json');
-
-        $workshops = $this->Workshop->find('all',
+        /** @var WorkshopsTable $workshopsTable */
+        $workshopsTable = $this->getTableLocator()->get('Workshops');
+        $workshops = $workshopsTable->find('all',
         conditions: [
             'Workshops.status' => APP_ON,
         ],
@@ -152,7 +146,6 @@ class ApiController extends AppController
 
     public function getSplitter(): void
     {
-        $this->request = $this->request->withParam('_ext', 'json');
         $dir = new \DirectoryIterator(WWW_ROOT . Configure::read('AppConfig.splitterPath'));
         $prefix = 'SPLiTTER';
         $result = [];
