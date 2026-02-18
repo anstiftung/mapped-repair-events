@@ -95,6 +95,8 @@ class ApiTokensController extends AdminAppController
 
             $apiToken = $this->ApiToken->patchEntity($apiToken, $data);
 
+            $this->nullifyEmptyJsonFields($apiToken);
+
             if ($this->ApiToken->save($apiToken)) {
                 $this->AppFlash->setFlashMessage('API Token erfolgreich aktualisiert.');
                 return $this->redirect(['action' => 'index']);
@@ -103,8 +105,13 @@ class ApiTokensController extends AdminAppController
             }
         }
 
+        // Preserve entity errors: setDirty() (triggered by assignment) clears field-level errors
+        $errors = $apiToken->getErrors();
+
         $apiToken->allowed_search_terms = $this->convertJsonArrayToTextareaValue($apiToken->allowed_search_terms);
         $apiToken->allowed_domains = $this->convertJsonArrayToTextareaValue($apiToken->allowed_domains);
+
+        $apiToken->setErrors($errors);
 
         $this->set('apiToken', $apiToken);
         $this->set('id', $id);
@@ -131,15 +138,25 @@ class ApiTokensController extends AdminAppController
         return $data;
     }
 
-    private function convertTextareaValueToJsonArray(string $value): ?string
+    private function convertTextareaValueToJsonArray(string $value): string
     {
         $entries = array_filter(array_map('trim', explode("\n", $value)));
 
         if ($entries === []) {
-            return null;
+            return '';
         }
 
         return json_encode(array_values($entries), JSON_UNESCAPED_UNICODE);
+    }
+
+    private function nullifyEmptyJsonFields(ApiToken $apiToken): void
+    {
+        if ($apiToken->allowed_search_terms === '') {
+            $apiToken->allowed_search_terms = null;
+        }
+        if ($apiToken->allowed_domains === '') {
+            $apiToken->allowed_domains = null;
+        }
     }
 
     private function convertJsonArrayToTextareaValue(mixed $value): ?string

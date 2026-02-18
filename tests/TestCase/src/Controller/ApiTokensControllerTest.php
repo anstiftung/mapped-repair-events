@@ -53,6 +53,7 @@ class ApiTokensControllerTest extends AppTestCase
         ]);
 
         $this->assertNoRedirect();
+        $this->assertResponseContains('Bitte gib mindestens einen erlaubten Suchbegriff ein.');
 
         $apiTokenAfter = $apiTokensTable->get(1);
         $this->assertSame($apiTokenBefore->name, $apiTokenAfter->name);

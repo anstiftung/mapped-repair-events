@@ -34,24 +34,68 @@ class ApiTokensTable extends AppTable
         $validator
             ->scalar('name')
             ->maxLength('name', 255)
+            ->requirePresence('name', 'create')
             ->notEmptyString('name', 'Bitte gib einen Namen ein.');
 
         $validator
             ->scalar('token')
             ->maxLength('token', 64)
+            ->requirePresence('token', 'create')
             ->notEmptyString('token');
 
         $validator
             ->integer('type')
+            ->requirePresence('type', 'create')
             ->notEmptyString('type')
             ->inList('type', array_keys(ApiToken::TYPES), 'Bitte wähle einen gültigen Typ.');
 
-        $validator
-            ->notEmptyString('allowed_search_terms', 'Bitte gib mindestens einen erlaubten Suchbegriff ein.', function (array $context): bool {
-                return (int)($context['data']['type'] ?? 0) === ApiToken::TYPE_WORKSHOPS;
-            });
+        $hasSearchTerms = function (mixed $value): bool {
+            if ($value === null || $value === '') {
+                return false;
+            }
+
+            if (is_array($value)) {
+                return $value !== [];
+            }
+
+            if (!is_string($value)) {
+                return false;
+            }
+
+            $decoded = json_decode($value, true);
+            if (is_array($decoded)) {
+                return $decoded !== [];
+            }
+
+            return trim($value) !== '';
+        };
 
         $validator
+            ->add('allowed_search_terms', 'requiredForWorkshops', [
+                'rule' => function (mixed $value, array $context) use ($hasSearchTerms): bool {
+                    $type = (int)($context['data']['type'] ?? 0);
+                    if ($type !== ApiToken::TYPE_WORKSHOPS) {
+                        return true;
+                    }
+
+                    return $hasSearchTerms($value);
+                },
+                'message' => 'Für den Typ "Workshops API" muss mindestens ein erlaubter Suchbegriff angegeben werden.',
+            ])
+            ->add('allowed_search_terms', 'emptyForNonWorkshops', [
+                'rule' => function (mixed $value, array $context) use ($hasSearchTerms): bool {
+                    $type = (int)($context['data']['type'] ?? 0);
+                    if ($type === ApiToken::TYPE_WORKSHOPS) {
+                        return true;
+                    }
+
+                    return !$hasSearchTerms($value);
+                },
+                'message' => 'Erlaubte Suchbegriffe sind nur für den Typ "Workshops API" erlaubt und müssen für alle anderen Typen leer sein.',
+            ]);
+
+        $validator
+            ->requirePresence('allowed_domains', 'create')
             ->notEmptyString('allowed_domains', 'Bitte gib mindestens eine erlaubte Domain ein.');
 
         $validator
