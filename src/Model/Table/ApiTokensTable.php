@@ -47,7 +47,7 @@ class ApiTokensTable extends AppTable
             ->integer('type')
             ->requirePresence('type', 'create')
             ->notEmptyString('type')
-            ->inList('type', array_keys(ApiToken::TYPES), 'Bitte waehle einen gueltigen Typ.');
+            ->inList('type', array_keys(ApiToken::TYPES), 'Bitte wähle einen gültigen Typ.');
 
         $validator
             ->notEmptyString('allowed_search_terms', 'Bitte gib mindestens einen erlaubten Suchbegriff ein.', function (array $context): bool {
