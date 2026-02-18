@@ -34,18 +34,15 @@ class ApiTokensTable extends AppTable
         $validator
             ->scalar('name')
             ->maxLength('name', 255)
-            ->requirePresence('name', 'create')
             ->notEmptyString('name', 'Bitte gib einen Namen ein.');
 
         $validator
             ->scalar('token')
             ->maxLength('token', 64)
-            ->requirePresence('token', 'create')
             ->notEmptyString('token');
 
         $validator
             ->integer('type')
-            ->requirePresence('type', 'create')
             ->notEmptyString('type')
             ->inList('type', array_keys(ApiToken::TYPES), 'Bitte wähle einen gültigen Typ.');
 
@@ -55,7 +52,6 @@ class ApiTokensTable extends AppTable
             });
 
         $validator
-            ->requirePresence('allowed_domains', 'create')
             ->notEmptyString('allowed_domains', 'Bitte gib mindestens eine erlaubte Domain ein.');
 
         $validator
