@@ -53,9 +53,33 @@ class ApiTokensControllerTest extends AppTestCase
         ]);
 
         $this->assertNoRedirect();
-        $this->assertResponseContains('Bitte gib mindestens einen erlaubten Suchbegriff ein.');
+        $this->assertResponseContains('Für den Typ Workshops API muss mindestens ein erlaubter Suchbegriff angegeben werden.');
 
         $apiTokenAfter = $apiTokensTable->get(1);
+        $this->assertSame($apiTokenBefore->name, $apiTokenAfter->name);
+        $this->assertSame($apiTokenBefore->allowed_search_terms, $apiTokenAfter->allowed_search_terms);
+    }
+
+    public function testEditFormShowsValidationErrorWhenNonWorkshopContainsSearchTerms(): void
+    {
+        $this->loginAsAdmin();
+
+        $apiTokensTable = $this->getTableLocator()->get('ApiTokens');
+        $apiTokenBefore = $apiTokensTable->get(5);
+
+        $this->post('/admin/apiTokens/edit/5', [
+            'referer' => '/admin/apiTokens',
+            'name' => 'Updated Splitter Token',
+            'type' => ApiToken::TYPE_SPLITTER,
+            'allowed_search_terms' => "Berlin\nHamburg",
+            'allowed_domains' => "localhost\nexample.org",
+            'status' => 1,
+        ]);
+
+        $this->assertNoRedirect();
+        $this->assertResponseContains('Erlaubte Suchbegriffe sind nur für den Typ Workshops API erlaubt und müssen für alle anderen Typen leer sein.');
+
+        $apiTokenAfter = $apiTokensTable->get(5);
         $this->assertSame($apiTokenBefore->name, $apiTokenAfter->name);
         $this->assertSame($apiTokenBefore->allowed_search_terms, $apiTokenAfter->allowed_search_terms);
     }

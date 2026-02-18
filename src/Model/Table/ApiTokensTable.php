@@ -80,7 +80,7 @@ class ApiTokensTable extends AppTable
 
                     return $hasSearchTerms($value);
                 },
-                'message' => 'Für den Typ "Workshops API" muss mindestens ein erlaubter Suchbegriff angegeben werden.',
+                'message' => 'Für den Typ Workshops API muss mindestens ein erlaubter Suchbegriff angegeben werden.',
             ])
             ->add('allowed_search_terms', 'emptyForNonWorkshops', [
                 'rule' => function (mixed $value, array $context) use ($hasSearchTerms): bool {
@@ -91,7 +91,7 @@ class ApiTokensTable extends AppTable
 
                     return !$hasSearchTerms($value);
                 },
-                'message' => 'Erlaubte Suchbegriffe sind nur für den Typ "Workshops API" erlaubt und müssen für alle anderen Typen leer sein.',
+                'message' => 'Erlaubte Suchbegriffe sind nur für den Typ Workshops API erlaubt und müssen für alle anderen Typen leer sein.',
             ]);
 
         $validator
