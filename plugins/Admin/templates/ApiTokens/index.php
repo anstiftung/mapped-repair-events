@@ -7,7 +7,7 @@ echo $this->element('list', [
     'objects' => $objects,
     'heading' => 'API Token',
     'editMethod' => ['url' => 'urlApiTokenEdit'],
-    'newMethod' => ['url' => 'urlApiTokenAdd'],
+    'newMethod' => ['url' => 'urlApiTokenNew'],
     'selectable' => false,
     'fields' => [
         ['name' => 'id', 'label' => 'ID'],

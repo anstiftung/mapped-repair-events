@@ -54,47 +54,28 @@ class ApiTokensController extends AdminAppController
         $this->set('objects', $objects);
     }
 
-    public function add(): ?Response
+    public function insert(): Response
     {
-        $apiToken = $this->ApiToken->newEmptyEntity();
+        $apiTokenData = [
+            'name' => 'Neuer API Token',
+            'token' => ApiToken::generateToken(),
+            'type' => ApiToken::TYPE_WORKSHOPS,
+            'allowed_search_terms' => [],
+            'allowed_domains' => [],
+            'status' => APP_OFF,
+        ];
 
-        if ($this->request->is('post')) {
-            $data = $this->request->getData();
-            
-            // Generate a new token
-            if (empty($data['token'])) {
-                $data['token'] = ApiToken::generateToken();
-            }
+        $entity = $this->ApiToken->newEntity($apiTokenData);
+        $apiToken = $this->ApiToken->save($entity);
 
-            // Convert allowed_search_terms from textarea to JSON array
-            if (!empty($data['allowed_search_terms']) && is_string($data['allowed_search_terms'])) {
-                $terms = array_filter(array_map('trim', explode("\n", $data['allowed_search_terms'])));
-                $data['allowed_search_terms'] = json_encode(array_values($terms), JSON_UNESCAPED_UNICODE);
-            }
-            if (empty($data['allowed_search_terms'])) {
-                $data['allowed_search_terms'] = null;
-            }
-
-            // Convert allowed_domains from textarea to JSON array
-            if (!empty($data['allowed_domains']) && is_string($data['allowed_domains'])) {
-                $domains = array_filter(array_map('trim', explode("\n", $data['allowed_domains'])));
-                $data['allowed_domains'] = json_encode(array_values($domains), JSON_UNESCAPED_UNICODE);
-            }
-
-            $apiToken = $this->ApiToken->patchEntity($apiToken, $data);
-
-            if ($this->ApiToken->save($apiToken)) {
-                $this->AppFlash->setFlashMessage('API Token erfolgreich erstellt. ' . $data['token']);
-                return $this->redirect(['action' => 'index']);
-            } else {
-                $this->AppFlash->setFlashError('API Token konnte nicht gespeichert werden.');
-            }
+        if (!$apiToken) {
+            $this->AppFlash->setFlashError('API Token konnte nicht erstellt werden.');
+            return $this->redirect($this->getReferer());
         }
 
-        $this->set('apiToken', $apiToken);
-        $this->setReferer();
-        
-        return null;
+        $this->AppFlash->setFlashMessage('API Token erfolgreich erstellt.');
+
+        return $this->redirect($this->getReferer());
     }
 
     public function edit(int $id): ?Response
@@ -109,26 +90,8 @@ class ApiTokensController extends AdminAppController
 
         $this->setReferer();
 
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $data = $this->request->getData();
-            
-            // Prevent token modification in edit
-            unset($data['token']);
-
-            // Convert allowed_search_terms from textarea to JSON array
-            if (isset($data['allowed_search_terms']) && is_string($data['allowed_search_terms'])) {
-                $terms = array_filter(array_map('trim', explode("\n", $data['allowed_search_terms'])));
-                $data['allowed_search_terms'] = json_encode(array_values($terms), JSON_UNESCAPED_UNICODE);
-            }
-            if (array_key_exists('allowed_search_terms', $data) && empty($data['allowed_search_terms'])) {
-                $data['allowed_search_terms'] = null;
-            }
-
-            // Convert allowed_domains from textarea to JSON array
-            if (isset($data['allowed_domains']) && is_string($data['allowed_domains'])) {
-                $domains = array_filter(array_map('trim', explode("\n", $data['allowed_domains'])));
-                $data['allowed_domains'] = json_encode(array_values($domains), JSON_UNESCAPED_UNICODE);
-            }
+        if (!empty($this->request->getData())) {
+            $data = $this->normalizeRequestData($this->request->getData());
 
             $apiToken = $this->ApiToken->patchEntity($apiToken, $data);
 
@@ -140,30 +103,60 @@ class ApiTokensController extends AdminAppController
             }
         }
 
-        // Convert JSON array to newline-separated string for textarea
-        if (!empty($apiToken->allowed_search_terms)) {
-            $terms = is_string($apiToken->allowed_search_terms) 
-                ? json_decode($apiToken->allowed_search_terms, true) 
-                : $apiToken->allowed_search_terms;
-            if (is_array($terms)) {
-                $apiToken->allowed_search_terms = implode("\n", $terms);
-            }
-        }
-
-        // Convert JSON array to newline-separated string for textarea
-        if (!empty($apiToken->allowed_domains)) {
-            $domains = is_string($apiToken->allowed_domains) 
-                ? json_decode($apiToken->allowed_domains, true) 
-                : $apiToken->allowed_domains;
-            if (is_array($domains)) {
-                $apiToken->allowed_domains = implode("\n", $domains);
-            }
-        }
+        $apiToken->allowed_search_terms = $this->convertJsonArrayToTextareaValue($apiToken->allowed_search_terms);
+        $apiToken->allowed_domains = $this->convertJsonArrayToTextareaValue($apiToken->allowed_domains);
 
         $this->set('apiToken', $apiToken);
         $this->set('id', $id);
         
         return null;
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     * @return array<string, mixed>
+     */
+    private function normalizeRequestData(array $data): array
+    {
+        unset($data['token']);
+
+        if (array_key_exists('allowed_search_terms', $data) && is_string($data['allowed_search_terms'])) {
+            $data['allowed_search_terms'] = $this->convertTextareaValueToJsonArray($data['allowed_search_terms']);
+        }
+
+        if (array_key_exists('allowed_domains', $data) && is_string($data['allowed_domains'])) {
+            $data['allowed_domains'] = $this->convertTextareaValueToJsonArray($data['allowed_domains']);
+        }
+
+        return $data;
+    }
+
+    private function convertTextareaValueToJsonArray(string $value): ?string
+    {
+        $entries = array_filter(array_map('trim', explode("\n", $value)));
+
+        if ($entries === []) {
+            return null;
+        }
+
+        return json_encode(array_values($entries), JSON_UNESCAPED_UNICODE);
+    }
+
+    private function convertJsonArrayToTextareaValue(mixed $value): ?string
+    {
+        if (empty($value)) {
+            return null;
+        }
+
+        $entries = is_string($value)
+            ? json_decode($value, true)
+            : $value;
+
+        if (!is_array($entries) || $entries === []) {
+            return null;
+        }
+
+        return implode("\n", $entries);
     }
 
 }
