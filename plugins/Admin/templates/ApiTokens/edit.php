@@ -40,14 +40,13 @@ echo $this->element('highlightNavi', ['main' => 'API Tokens']);
         echo $this->Form->control('allowed_search_terms', [
             'type' => 'textarea',
             'label' => 'Erlaubte Suchbegriffe (ein Begriff pro Zeile)',
-            'placeholder' => "Berlin\nMünchen\nHamburg",
             'rows' => 5,
         ]) . '<br />';
 
         echo $this->Form->control('allowed_domains', [
             'type' => 'textarea',
             'label' => 'Erlaubte Domains (eine Domain pro Zeile), ohne https:// und ohne Pfad',
-            'placeholder' => "reparatur-initiativen.de",
+            'placeholder' => "z.B. reparatur-initiativen.de",
             'rows' => 5,
         ]) . '<br />';
 
