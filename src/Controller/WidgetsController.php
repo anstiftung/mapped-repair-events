@@ -4,12 +4,13 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use stdClass;
+use Cake\Http\Response;
 use Cake\Core\Configure;
+use InvalidArgumentException;
+use App\Model\Entity\Province;
+use App\Model\Entity\Workshop;
 use Cake\Event\EventInterface;
 use Cake\Http\Exception\NotFoundException;
-use App\Model\Entity\Workshop;
-use Cake\Http\Response;
-use App\Model\Entity\Province;
 
 class WidgetsController extends AppController
 {
@@ -89,12 +90,16 @@ class WidgetsController extends AppController
 
     public function events(): void
     {
+
         $this->viewBuilder()->setLayout('widget');
 
         $this->set('assetNamespace', 'events');
         $this->set('useJs', true);
 
-        $workshopUid = h($this->request->getQuery('id')) ?? 0;
+        $workshopUid = (int) h($this->request->getQuery('id', 0));
+        if ($workshopUid != $this->request->getQuery('id')) {
+            throw new InvalidArgumentException();
+        }
 
         /** @var \App\Model\Table\WorkshopsTable */
         $workshopsTable = $this->getTableLocator()->get('Workshops');
