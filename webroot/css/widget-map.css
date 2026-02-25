@@ -183,7 +183,7 @@ input[readonly="readonly"] {
 }
 
 #flashMessage.error {
-    background: darkred;
+    background: #8B0000;
     color: white;
 }
 
@@ -197,8 +197,8 @@ input[readonly="readonly"] {
 
 #flashMessage.red {
     padding: 10px;
-    border-top: 3px solid darkred;
-    border-bottom: 3px solid darkred;
+    border-top: 3px solid #8B0000;
+    border-bottom: 3px solid #8B0000;
     text-indent: 10px;
     background-color: #f2f2f2;
     width: auto !important;

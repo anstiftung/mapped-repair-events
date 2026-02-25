@@ -134,7 +134,7 @@ a.green:visited {
     font-weight: bold
 }
 .red {
-    color: darkred;
+    color: #8B0000;
 }
 @keyframes blink {
     0% {
@@ -2420,7 +2420,7 @@ div.addthis_toolbox a {
 }
 #flashMessage.error,
 #flashMessage.error .closer i {
-    background: darkred;
+    background: #8B0000;
     color: white;
 }
 #flashMessage .closer:hover i {
@@ -2439,8 +2439,8 @@ div.addthis_toolbox a {
 }
 #flashMessage.red {
     padding: 10px;
-    border-top: 3px solid darkred;
-    border-bottom: 3px solid darkred;
+    border-top: 3px solid #8B0000;
+    border-bottom: 3px solid #8B0000;
     text-indent: 10px;
     background-color: #f2f2f2;
     width: auto !important;
