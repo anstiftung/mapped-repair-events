@@ -3,21 +3,22 @@ declare(strict_types=1);
 
 namespace App\Test\TestCase\Controller;
 
-use App\Services\GeoService;
-use App\Test\TestCase\AppTestCase;
-use App\Test\TestCase\Traits\LogFileAssertionsTrait;
-use App\Test\TestCase\Traits\LoginTrait;
-use App\Test\TestCase\Traits\QueueTrait;
-use App\Test\TestCase\Traits\UserAssertionsTrait;
-use Cake\Core\Configure;
-use Cake\TestSuite\EmailTrait;
-use Cake\TestSuite\IntegrationTestTrait;
-use Cake\TestSuite\StringCompareTrait;
+use Cake\Log\Log;
 use Cake\I18n\Date;
 use Cake\I18n\Time;
+use Cake\Core\Configure;
+use App\Services\GeoService;
 use Cake\Event\EventInterface;
+use Cake\TestSuite\EmailTrait;
 use Cake\Controller\Controller;
 use App\Test\Mock\GeoServiceMock;
+use App\Test\TestCase\AppTestCase;
+use Cake\TestSuite\StringCompareTrait;
+use App\Test\TestCase\Traits\LoginTrait;
+use App\Test\TestCase\Traits\QueueTrait;
+use Cake\TestSuite\IntegrationTestTrait;
+use App\Test\TestCase\Traits\UserAssertionsTrait;
+use App\Test\TestCase\Traits\LogFileAssertionsTrait;
 
 class EventsControllerTest extends AppTestCase
 {
@@ -300,6 +301,20 @@ class EventsControllerTest extends AppTestCase
         $this->assertResponseOk();
         $this->assertHeaderContains('Content-Type', 'text/calendar');
         $this->assertHeaderContains('Content-Disposition', 'attachment; filename="events.ics"');
+    }
+
+    public function testMyEventsAsOrga(): void
+    {
+        $this->loginAsOrga();
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlMyEvents());
+        $this->assertResponseOk();
+        $this->assertResponseContains('Meine Termine');
+        $this->assertResponseContains('Test Workshop (2 Termine, 1 Laufzettel, 1 Termin-Abonnement)');
+        $this->assertResponseContains('Berlin, Müllerstraße 123');
+        $this->assertResponseContains('01.01.2040');
+        $this->assertResponseContains('09:00 - 18:00 Uhr');
+        $this->assertResponseContains('<td class="eventUid">6</td>');
+        $this->assertResponseContains('<td class="eventUid">9</td>');
     }
 
     public function testAddDuplicateEventValidation(): void
