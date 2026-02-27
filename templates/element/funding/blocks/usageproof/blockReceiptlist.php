@@ -26,7 +26,7 @@ echo '<fieldset class="fundinglist fundingreceiptlist full-width">';
                 if (isset($field['hideInHeading'])) {
                     continue;
                 }
-                echo '<span>' . ($field['options']['placeholder'] ?? '') . '</span>';
+                    echo '<span>' . $field['options']['placeholder'] . '</span>';
             }
         echo '</div>';
         foreach($funding->fundingreceiptlists as $fundingreceiptlistIndex => $fundingreceiptlist) {

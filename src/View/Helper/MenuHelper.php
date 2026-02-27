@@ -6,6 +6,9 @@ namespace App\View\Helper;
 use Cake\Core\Configure;
 use Cake\View\Helper;
 
+/**
+ * @extends \Cake\View\Helper<\Cake\View\View>
+ */
 class MenuHelper extends Helper
 {
 

@@ -177,20 +177,24 @@ class EventsController extends AppController
         }
 
         $workshops->contain([
-            'Events.InfoSheets.OwnerUsers',
-            'Events.InfoSheets.Brands' => function($q) {
-                return $q->select($this->Workshop->Events->InfoSheets->Brands);
-            },
-            'Events.InfoSheets.Categories' => function($q) {
-                return $q->select($this->Workshop->Events->InfoSheets->Categories);
-            }
-        ]);
-
-        /* @phpstan-ignore-next-line */
-        $this->Workshop->getAssociation('Events')->setConditions(['Events.status > ' . APP_DELETED])
-        ->setSort([
-            'Events.datumstart' => 'DESC',
-            'Events.uhrzeitstart' => 'DESC'
+            'Events' => [
+                'conditions' => [
+                    'Events.status > ' . APP_DELETED,
+                ],
+                'sort' => [
+                    'Events.datumstart' => 'DESC',
+                    'Events.uhrzeitstart' => 'DESC',
+                ],
+                'InfoSheets' => [
+                    'OwnerUsers',
+                    'Brands' => function($q) {
+                        return $q->select($this->Workshop->Events->InfoSheets->Brands);
+                    },
+                    'Categories' => function($q) {
+                        return $q->select($this->Workshop->Events->InfoSheets->Categories);
+                    }
+                ],
+            ],
         ]);
 
         $conditions = [
@@ -202,11 +206,13 @@ class EventsController extends AppController
             $conditions['InfoSheets.owner'] = $this->isLoggedIn() ? $this->loggedUser->uid : 0;
         }
 
-        /* @phpstan-ignore-next-line */
-        $this->Workshop->getAssociation('Events')->getAssociation('InfoSheets')
-        ->setConditions($conditions)
-        ->setSort([
-            'InfoSheets.device_name' => 'ASC'
+        $workshops->contain([
+            'Events.InfoSheets' => [
+                'conditions' => $conditions,
+                'sort' => [
+                    'InfoSheets.device_name' => 'ASC',
+                ],
+            ],
         ]);
 
         $workshops = $this->paginate($workshops, [
@@ -223,9 +229,6 @@ class EventsController extends AppController
                 }
             }
         }
-
-        // workaround: if limit is not added, this warning appears
-        // Warning (2): count(): Parameter must be an array or an object that implements Countable in [src/Template/Events/my_events.ctp, line 42]
         $this->set('workshops', $workshops);
 
         $metaTags = [

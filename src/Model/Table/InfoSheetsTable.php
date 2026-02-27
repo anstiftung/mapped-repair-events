@@ -96,6 +96,7 @@ class InfoSheetsTable extends AppRootTable
     private function prepareStatisticsDataGlobal(?string $dateFrom=null, ?string $dateTo=null, ?string $city=null, ?Province $province=null): SelectQuery
     {
         $query = $this->find();
+        /** @var \Cake\ORM\Query\SelectQuery<\App\Model\Entity\InfoSheet> $query */
         $query->contain([
             'Events',
         ]);
