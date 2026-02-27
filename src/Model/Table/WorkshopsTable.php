@@ -265,6 +265,7 @@ class WorkshopsTable extends AppRootTable
         order: [
             'Workshops.name' => 'ASC'
         ]);
+        /** @var \Cake\ORM\Query\SelectQuery<\App\Model\Entity\Workshop> $workshops */
         foreach($workshops as $workshop) {
             foreach($workshop->users as $user) {
                 $user->revertPrivatizeData();
@@ -408,6 +409,7 @@ class WorkshopsTable extends AppRootTable
             'Workshops.status' => APP_ON,
             'Workshops.image != ' => ''
         ]);
+        /** @var \Cake\ORM\Query\SelectQuery<\App\Model\Entity\Workshop> $workshops */
         return $workshops;
     }
 

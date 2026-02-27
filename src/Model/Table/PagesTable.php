@@ -4,6 +4,7 @@ namespace App\Model\Table;
 
 use Cake\Validation\Validator;
 use App\Model\Entity\Page;
+use Cake\ORM\Behavior\TreeBehavior;
 use Cake\ORM\Query\SelectQuery;
 
 /**
@@ -46,7 +47,8 @@ class PagesTable extends AppRootTable
     }
 
     /**
-     * @param \Cake\ORM\Query\SelectQuery<\App\Model\Entity\Page>|array<int, \App\Model\Entity\Page> $items
+     * @template TSubject of array|\Cake\Datasource\EntityInterface
+     * @param \Cake\ORM\Query\SelectQuery<TSubject>|array<int, \App\Model\Entity\Page> $items
      * @return array<int, string>
      */
     private function flattenNestedArrayWithChildren(SelectQuery|array $items, string $separator = ''): array
@@ -58,9 +60,10 @@ class PagesTable extends AppRootTable
             }
             $this->flattenedArray[$item->uid] = $separator . $item->name . $statusString;
             if (! empty($item['children'])) {
+                /** @var TreeBehavior $treeBehavior */
+                $treeBehavior = $this->getBehavior('Tree');
                 $this->flattenNestedArrayWithChildren($item->children, str_repeat('-', 
-                /* @phpstan-ignore-next-line */
-                $this->getBehavior('Tree')->getLevel($item) + 1)
+                $treeBehavior->getLevel($item) + 1)
                  . ' ');
             }
         }
@@ -82,6 +85,7 @@ class PagesTable extends AppRootTable
             'Pages.position' => 'ASC',
             'Pages.name' => 'ASC'
         ]);
+        /** @var \Cake\ORM\Query\SelectQuery<\App\Model\Entity\Page> $pages */
         return $pages;
     }
 

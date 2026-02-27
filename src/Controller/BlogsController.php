@@ -91,7 +91,8 @@ class BlogsController extends AppController
     }
 
     /**
-     * @param \Cake\ORM\Query\SelectQuery<\Cake\Datasource\EntityInterface> $posts
+     * @template TSubject of array|\Cake\Datasource\EntityInterface
+     * @param \Cake\ORM\Query\SelectQuery<TSubject> $posts
      * @return list<array<string, mixed>>
      */
     private function preparePostsForFeed(SelectQuery $posts): array

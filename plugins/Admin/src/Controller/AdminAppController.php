@@ -172,8 +172,9 @@ class AdminAppController extends AppController
     }
 
     /**
-     * @param \Cake\ORM\Query\SelectQuery<\Cake\Datasource\EntityInterface> $query
-     * @return \Cake\ORM\Query\SelectQuery<\Cake\Datasource\EntityInterface>
+     * @template TSubject of array|\Cake\Datasource\EntityInterface
+     * @param \Cake\ORM\Query\SelectQuery<TSubject> $query
+     * @return \Cake\ORM\Query\SelectQuery<TSubject>
      */
     protected function addMatchingsToQuery(SelectQuery $query): SelectQuery
     {

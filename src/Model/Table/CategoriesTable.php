@@ -213,6 +213,7 @@ class CategoriesTable extends AppTable
         order: [
             'Categories.name' => 'ASC'
         ]);
+        /** @var \Cake\ORM\Query\SelectQuery<\App\Model\Entity\Category> $categories */
         return $categories;
     }
 

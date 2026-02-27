@@ -38,7 +38,7 @@ $this->element('addScript', ['script' =>
                     if (isset($field['hideInHeading']) || $field['name'] == 'type') {
                         continue;
                     }
-                    echo '<span>' . ($field['options']['placeholder'] ?? '') . '</span>';
+                    echo '<span>' . $field['options']['placeholder'] . '</span>';
                 }
             echo '</div>';
 

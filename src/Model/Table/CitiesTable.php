@@ -27,9 +27,10 @@ class CitiesTable extends AppTable
         return "(6371 * acos(cos(radians($lat)) * cos(radians($tableAlias.lat)) * cos(radians($tableAlias.lng) - radians($lng)) + sin(radians($lat)) * sin(radians($tableAlias.lat))))";
     }
     /**
-     * @param SelectQuery<\App\Model\Entity\Event|\App\Model\Entity\Workshop> $baseQuery
-     * @param SelectQuery<\App\Model\Entity\Event|\App\Model\Entity\Workshop> $fallbackNearbyQuery
-     * @return array{query: SelectQuery<\App\Model\Entity\Event|\App\Model\Entity\Workshop>, is_fallback: bool}
+     * @template TSubject of array|\Cake\Datasource\EntityInterface
+     * @param SelectQuery<TSubject> $baseQuery
+     * @param SelectQuery<TSubject> $fallbackNearbyQuery
+     * @return array{query: SelectQuery<TSubject>, is_fallback: bool}
      */
     public function getFallbackNearbyQuery(SelectQuery $baseQuery, SelectQuery $fallbackNearbyQuery, string $keyword, string $tableAlias): array {
 

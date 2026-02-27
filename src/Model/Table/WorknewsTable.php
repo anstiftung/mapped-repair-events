@@ -50,6 +50,7 @@ class WorknewsTable extends AppTable
         contain: [
             'Workshops',
         ]);
+        /** @var \Cake\ORM\Query\SelectQuery<\App\Model\Entity\Worknews> $subscribers */
         return $subscribers;
     }
 

@@ -8,8 +8,8 @@ use Cake\Validation\Validator;
 use App\Model\Traits\SearchExceptionsTrait;
 use App\Services\GeoService;
 use Cake\ORM\Query\SelectQuery;
-use App\Model\Entity\Event;
 use Cake\Collection\CollectionInterface;
+use Cake\Datasource\EntityInterface;
 use Cake\Routing\Router;
 use ArrayObject;
 use Cake\Event\EventInterface;
@@ -286,14 +286,15 @@ class EventsTable extends AppRootTable
     }
 
     /**
-     * @param \Cake\ORM\Query\SelectQuery<\App\Model\Entity\Event> $query
-     * @return \Cake\ORM\Query\SelectQuery<\App\Model\Entity\Event>
+     * @template TSubject of array|\Cake\Datasource\EntityInterface
+     * @param \Cake\ORM\Query\SelectQuery<TSubject> $query
+     * @return \Cake\ORM\Query\SelectQuery<TSubject>
      */
     public function findAll(SelectQuery $query): SelectQuery
     {
         return $query->formatResults(function (CollectionInterface $results): CollectionInterface {
 
-            return $results->map(function (Event $row): Event {
+            return $results->map(function (EntityInterface $row): EntityInterface {
 
                 if ($row->datumstart) {
                     $row->datumstart_formatted = $row->datumstart->i18nFormat(Configure::read('DateFormat.Database'));

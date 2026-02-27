@@ -45,7 +45,7 @@ class PostsTable extends AppRootTable
         return $validator;
     }
 
-    /** @return \Cake\ORM\Query\SelectQuery<\Cake\Datasource\EntityInterface> */
+    /** @return \Cake\ORM\Query\SelectQuery<\App\Model\Entity\Post> */
     public function getLatestPosts(): SelectQuery
     {
         $posts = $this->find('all',
@@ -62,6 +62,7 @@ class PostsTable extends AppRootTable
         conditions: [
             'Posts.status' => APP_ON,
         ]);
+        /** @var \Cake\ORM\Query\SelectQuery<\App\Model\Entity\Post> $posts */
         return $posts;
     }
 
