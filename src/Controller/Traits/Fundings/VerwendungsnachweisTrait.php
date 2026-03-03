@@ -76,8 +76,10 @@ trait VerwendungsnachweisTrait {
             }
 
             // remove all invalid fundingreceiptlists in order to avoid saving nothing
+            $fundingreceiptlistHasErrors = false;
             foreach($patchedEntity->fundingreceiptlists as $index => $fundingreceiptlist) {
                 if ($fundingreceiptlist->hasErrors()) {
+                    $fundingreceiptlistHasErrors = true;
                     unset($patchedEntity->fundingreceiptlists[$index]);
                 }
             }
@@ -90,12 +92,17 @@ trait VerwendungsnachweisTrait {
             }
 
             // ADD fundingreceiptlist
+            $flashErrors = [];
             if (!empty($this->request->getData('add_receiptlist'))) {
-                $newFundingreceiptlistEntity = $fundingreceiptlistsTable->createNewUnvalidatedEmptyEntity($funding->uid);
-                $fundingreceiptlistsTable->save($newFundingreceiptlistEntity);
-                $flashMessages[] = 'Ein Beleg wurde erfolgreich hinzugefügt.';
-                $this->AppFlash->setFlashMessage(join('<br />', $flashMessages));
-                return $this->redirect(Configure::read('AppConfig.htmlHelper')->urlFundingsUsageproof($funding->uid));
+                if ($fundingreceiptlistHasErrors) {
+                    $flashErrors = ['Es sind ungültige Beleg-Zeilen vorhanden. Bitte behebe zuerst die Fehler und versuche danach erneut, eine Beleg-Zeile hinzuzufügen.'];
+                } else {
+                    $newFundingreceiptlistEntity = $fundingreceiptlistsTable->createNewUnvalidatedEmptyEntity($funding->uid);
+                    $fundingreceiptlistsTable->save($newFundingreceiptlistEntity);
+                    $flashMessages[] = 'Ein Beleg wurde erfolgreich hinzugefügt.';
+                    $this->AppFlash->setFlashMessage(join('<br />', $flashMessages));
+                    return $this->redirect(Configure::read('AppConfig.htmlHelper')->urlFundingsUsageproof($funding->uid));
+                }
             }
 
             // START uploads
@@ -107,7 +114,11 @@ trait VerwendungsnachweisTrait {
             $patchedEntity = $this->handleUpdateNewFundinguploadsWithIds($funding, $associations, $patchedEntity, Fundingupload::TYPE_MAP_STEP_3);
             // END uploads
 
-            $this->AppFlash->setFlashMessage(join('<br />', $flashMessages));
+            if (!empty($flashErrors)) {
+                $this->AppFlash->setFlashError(join('<br />', $flashErrors));
+            } else {
+                $this->AppFlash->setFlashMessage(join('<br />', $flashMessages));
+            }
             $funding = $this->patchFunding($funding, $associations);
 
             if (!empty($this->request->getData('submit_usageproof'))) {
