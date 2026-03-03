@@ -19,7 +19,7 @@ $pdf->writeHTML($html, true, false, true, false, '');
 $pdf->Ln(3);
 
 $pdf->SetFontSizeSmall();
-$html = '<p>"' . $sachbericht['main_description']['value'] . '"</p>';
+$html = '<p>"' . h((string)$sachbericht['main_description']['value']) . '"</p>';
 $pdf->writeHTML($html, true, false, true, false, '');
 $pdf->SetFontSizeDefault();
 
@@ -53,11 +53,11 @@ foreach($funding->grouped_valid_receiptlists as $typeId => $fundingreceiptlists)
     $html .= '<b>' . Fundingbudgetplan::TYPE_MAP[$typeId] . '</b><br />';
     foreach($fundingreceiptlists as $fundingreceiptlist) {
         $preparedDataForTable[] = [
-            'columnA' => $fundingreceiptlist->description,
-            'columnB' => $fundingreceiptlist->recipient,
-            'columnC' => $fundingreceiptlist->receipt_type,
+            'columnA' => h((string)$fundingreceiptlist->description),
+            'columnB' => h((string)$fundingreceiptlist->recipient),
+            'columnC' => h((string)$fundingreceiptlist->receipt_type),
             'columnD' => $fundingreceiptlist->payment_date->format('d.m.Y'),
-            'columnE' => $fundingreceiptlist->receipt_number,
+            'columnE' => h((string)$fundingreceiptlist->receipt_number),
             'columnF' => $this->MyNumber->formatAsDecimal($fundingreceiptlist->amount) . ' €',
         ];
     }
@@ -124,7 +124,7 @@ if ($receiptlistChecboxConditionA || $receiptlistChecboxConditionB) {
         $pdf->writeHTML($html, true, false, true, false, '');
 
         $html = '<p><b>' . 'Erklärung zu Abweichung der Belegliste' . '</b><br />';
-        $html .= '"' . $funding->fundingusageproof->difference_declaration . '"';
+        $html .= '"' . h((string)$funding->fundingusageproof->difference_declaration) . '"';
         $pdf->writeHTML($html, true, false, true, false, '');
     }
 

@@ -50,19 +50,19 @@ $this->element('addScript', ['script' =>
                     foreach($fundingreceiptlists as $fundingreceiptlist) {
                         echo '<div class="row row-readonly full-width">';
                             echo '<span>';
-                                echo $fundingreceiptlist->description;
+                                echo h($fundingreceiptlist->description);
                             echo '</span>';
                             echo '<span>';
-                                echo $fundingreceiptlist->recipient;
+                                echo h($fundingreceiptlist->recipient);
                             echo '</span>';
                             echo '<span>';
-                                echo $fundingreceiptlist->receipt_type;
+                                echo h($fundingreceiptlist->receipt_type);
                             echo '</span>';
                             echo '<span>';
                                 echo $fundingreceiptlist->payment_date->format('d.m.Y');
                             echo '</span>';
                             echo '<span>';
-                                echo $fundingreceiptlist->receipt_number;
+                                echo h($fundingreceiptlist->receipt_number);
                             echo '</span>';
                             echo '<span style="text-align:right;">';
                                 echo $this->MyNumber->formatAsDecimal($fundingreceiptlist->amount) . ' €';

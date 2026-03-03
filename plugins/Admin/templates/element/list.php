@@ -322,7 +322,7 @@ if ($showDeleteLink) {
                             'habtm',
                             'unchanged',
                         ])) {
-                            echo $value;
+                            echo h((string)$value);
                         }
                     } else if (isset($field['tooltip']) && $field['tooltip']) {
                         if ($value != '') {
@@ -371,7 +371,7 @@ if ($showDeleteLink) {
                                     ]),
                                 );
                             } else {
-                                echo $value;
+                                echo h((string)$value);
                             }
                         }
                     }

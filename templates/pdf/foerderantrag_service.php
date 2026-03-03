@@ -36,7 +36,7 @@ $html = '<b>' . Funding::FIELDS_FUNDINGDATA_DESCRIPTION_LABEL . '</b>';
 $pdf->writeHTML($html, true, false, true, false, '');
 $pdf->Ln(3);
 
-$html = '<p>' . $description['description']['value'] . '</p>';
+$html = '<p>' . h((string)$description['description']['value']) . '</p>';
 $pdf->writeHTML($html, true, false, true, false, '');
 $pdf->Ln(10);
 
@@ -52,7 +52,7 @@ foreach($funding->grouped_valid_budgetplans as $typeId => $fundingbudgetplans) {
     $preparedDataForTable = [];
     foreach($fundingbudgetplans as $fundingbudgetplan) {
         $preparedDataForTable[] = [
-            'label' => $fundingbudgetplan->description,
+            'label' => h((string)$fundingbudgetplan->description),
             'value' => $this->MyNumber->formatAsDecimal($fundingbudgetplan->amount) . ' €',
         ];
     }

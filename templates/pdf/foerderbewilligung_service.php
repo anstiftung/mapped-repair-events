@@ -7,9 +7,9 @@ $pdf->Ln(65);
 
 $html = '
 <p>' .
-    $funding->fundingsupporter->name . '<br />' .
-    $funding->fundingsupporter->street . '<br />' .
-    $funding->fundingsupporter->zip . ' ' . $funding->fundingsupporter->city .
+    h((string)$funding->fundingsupporter->name) . '<br />' .
+    h((string)$funding->fundingsupporter->street) . '<br />' .
+    h((string)$funding->fundingsupporter->zip) . ' ' . h((string)$funding->fundingsupporter->city) .
 '</p>';
 $pdf->writeHTML($html, true, false, true, false, '');
 $pdf->Ln(15);
@@ -27,8 +27,8 @@ $pdf->Ln(5);
 
 $html = '
 <p>
-Sehr geehrte/r ' . $funding->owner_user->name . ',<br />
-sehr geehrte/r ' . $funding->fundingsupporter->name . ',
+Sehr geehrte/r ' . h((string)$funding->owner_user->name) . ',<br />
+sehr geehrte/r ' . h((string)$funding->fundingsupporter->name) . ',
 </p>
 
 <p>
@@ -42,7 +42,7 @@ Die Mittel sind vorgesehen für Anschaffungen/Maßnahmen gemäß Antrag <b>' . $
 </p>
 
 <p>
-Die Fördersumme wird in den nächsten zwei bis vier Wochen, spätestens jedoch bis Anfang März, auf das Konto ' . $funding->fundingsupporter->iban . ' überwiesen.
+Die Fördersumme wird in den nächsten zwei bis vier Wochen, spätestens jedoch bis Anfang März, auf das Konto ' . h((string)$funding->fundingsupporter->iban) . ' überwiesen.
 </p>
 
 <p>Die zugrundeliegende

@@ -31,7 +31,8 @@ class StringComponent extends Component
     {
         foreach ($data as $key => $value) {
             if (is_string($value)) {
-                $cleanedValue = strip_tags($value);
+                $cleanedValue = html_entity_decode($value, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+                $cleanedValue = strip_tags($cleanedValue);
                 $cleanedValue = self::removeEmojis($cleanedValue);
                 $data[$key] = $cleanedValue;
             }

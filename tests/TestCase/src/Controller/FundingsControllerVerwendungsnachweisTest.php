@@ -119,7 +119,7 @@ class FundingsControllerVerwendungsnachweisTest extends AppTestCase
             'question_radio_d' => 1,
             'question_radio_e' => 1,
             'question_radio_f' => 1,
-            'question_text_a' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum.',
+            'question_text_a' => 'Lorem ipsum dolor sit amet > consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum.',
             'question_text_b' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum.',
         ];
 
@@ -196,6 +196,8 @@ class FundingsControllerVerwendungsnachweisTest extends AppTestCase
         $this->assertEquals(Funding::STATUS_DATA_OK, $funding->receiptlist_status);
         $this->assertEquals(Funding::STATUS_CHECKBOXES_OK, $funding->usageproof_checkboxes_status);
         $this->assertEquals(Funding::STATUS_QUESTIONS_OK, $funding->usageproof_questions_status);
+        $this->assertEquals($testFundingusageproofComplete['question_text_a'], $funding->fundingusageproof->question_text_a);
+        $this->assertStringNotContainsString('&gt;', $funding->fundingusageproof->question_text_a);
         $this->assertEquals(true, $funding->usageproof_is_submittable);
         $this->assertEquals(1, count($funding->fundingreceiptlists));
 

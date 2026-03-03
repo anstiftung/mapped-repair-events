@@ -11,7 +11,7 @@ foreach($funding->grouped_valid_budgetplans as $typeId => $fundingbudgetplans) {
         foreach($fundingbudgetplans as $fundingbudgetplan) {
             echo '<div class="flexbox full-width">';
                 echo '<div style="flex-grow:1;">';
-                    echo $fundingbudgetplan->description;
+                    echo h($fundingbudgetplan->description);
                 echo '</div>';
                 echo '<div style="align-self:flex-end;">';
                     echo $this->MyNumber->formatAsDecimal($fundingbudgetplan->amount) . ' €';
