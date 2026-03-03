@@ -28,7 +28,7 @@
     "jQuery-Impromptu": "https://github.com/trentrichardson/jQuery-Impromptu/tarball/master",
     "jquery-knob": "https://github.com/aterrien/jQuery-Knob/tarball/master",
     "jquery-slugify": "^1.2.5",
-    "jquery-ui": "^1.14.1",
+    "jquery-ui": "^1.14.2",
     "leaflet": "^1.9.4",
     "moment": "^2.30.1",
     "scrolltofixed": "^1.0.6",
