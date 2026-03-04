@@ -1,4 +1,4 @@
-# last run on 2025-03-06
+# last run on 2026-03-04
 
 ### START events ###
 DELETE FROM events WHERE status = -1 AND updated < NOW() - INTERVAL 6 MONTH;
