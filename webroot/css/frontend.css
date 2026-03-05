@@ -3796,6 +3796,7 @@ div.admin.edit .iframe-preview-heading {
 #workshopEditForm .cancel-and-save-button-wrapper,
 #eventEditForm .cancel-and-save-button-wrapper,
 #infoSheetEditForm .cancel-and-save-button-wrapper,
+#fundingForm .cancel-and-save-button-wrapper,
 #userDeleteForm .cancel-and-save-button-wrapper {
     width: 100%;
     margin-top: 20px;
@@ -3803,6 +3804,7 @@ div.admin.edit .iframe-preview-heading {
 }
 #workshopEditForm .cancel-and-save-button-wrapper button,
 #eventEditForm .cancel-and-save-button-wrapper button,
+#fundingForm .cancel-and-save-button-wrapper button,
 #infoSheetEditForm .cancel-and-save-button-wrapper button,
 #userDeleteForm .cancel-and-save-button-wrapper button {
   margin-left: 0;
@@ -3811,6 +3813,7 @@ div.admin.edit .iframe-preview-heading {
 
 #workshopEditForm .cancel-and-save-button-wrapper #cancel-button,
 #eventEditForm .cancel-and-save-button-wrapper #cancel-button,
+#fundingForm .cancel-and-save-button-wrapper #cancel-button,
 #infoSheetEditForm .cancel-and-save-button-wrapper #cancel-button,
 #userDeleteForm .cancel-and-save-button-wrapper #cancel-button {
   float: left;
