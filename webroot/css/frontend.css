@@ -477,7 +477,10 @@ table.list a.icon-link-text {
     margin-bottom: 0;
 }
 input[type=text]:focus,
+input[type=number]:focus,
 input[type=email]:focus,
+input[type=checkbox]:focus,
+input[type=radio]:focus,
 textarea:focus,
 .setfocus {
     box-shadow: 0 0 5px rgba(200, 210, 24, 1);
