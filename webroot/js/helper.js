@@ -29,6 +29,60 @@ MappedRepairEvents.Helper = {
         }, 0);
     },
 
+    setFocusTrapForForm : function(formSelector, firstFieldSelector) {
+        var form = $(formSelector);
+        if (form.length == 0) {
+            return;
+        }
+
+        var focusFirstField = function() {
+            var firstField = form.find(firstFieldSelector).first();
+            if (firstField.length == 0) {
+                return;
+            }
+
+            if (firstField.hasClass('select2-hidden-accessible')) {
+                firstField.next('.select2').find('.select2-selection').trigger('focus');
+                return;
+            }
+
+            firstField.trigger('focus');
+        };
+
+        form.off('keydown.mreFocusTrap').on('keydown.mreFocusTrap', function(event) {
+            if (event.which != 9) {
+                return;
+            }
+
+            var firstField = form.find(firstFieldSelector).first();
+            var firstFieldFocusTarget = firstField;
+            if (firstField.hasClass('select2-hidden-accessible')) {
+                firstFieldFocusTarget = firstField.next('.select2').find('.select2-selection').first();
+            }
+
+            var focusableElements = form
+                .find('a[href], button:not([disabled]), input:not([type="hidden"]):not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])')
+                .filter(':visible');
+
+            if (focusableElements.length == 0) {
+                return;
+            }
+
+            var lastFocusable = focusableElements.last()[0];
+            var activeElement = document.activeElement;
+
+            if (!event.shiftKey && activeElement === lastFocusable) {
+                event.preventDefault();
+                focusFirstField();
+            }
+
+            if (event.shiftKey && firstFieldFocusTarget.length > 0 && activeElement === firstFieldFocusTarget[0]) {
+                event.preventDefault();
+                $(lastFocusable).trigger('focus');
+            }
+        });
+    },
+
     initCopyPermalinkToClipboard : function() {
         var clipboard = new ClipboardJS('.knowledge-permalink', {
             text: function(trigger) {
