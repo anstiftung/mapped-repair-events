@@ -5,6 +5,14 @@ declare(strict_types=1);
 
     <?php
 
+        if (!isset($hideCancelButton) || !$hideCancelButton) {
+            echo $this->Form->button('Abbrechen', [
+                'type' => 'button',
+                'id' => 'cancel-button',
+                'class' => 'rounded gray',
+            ]);
+        }
+
         echo '<div class="button-wrapper-right">';
         
             if (isset($showSaveAndRedirectToUrlButton) && !empty($showSaveAndRedirectToUrlButton)) {
@@ -25,18 +33,6 @@ declare(strict_types=1);
             ]);
 
         echo '</div>';
-
-        if (!isset($hideCancelButton) || !$hideCancelButton) {
-            echo $this->Form->button('Abbrechen', [
-                'type' => 'button',
-                'id' => 'cancel-button',
-                'class' => 'rounded gray',
-            ]);
-        }
-
-        if (isset($additionalButton)) {
-            echo $additionalButton;
-        }
 
     ?>
 

@@ -15,6 +15,8 @@ use Cake\Core\Configure;
         JS_NAMESPACE.".InfoSheet.initMainCategoryDropdown('#infosheets-new-subcategory-parent-id');".
         JS_NAMESPACE.".InfoSheet.initBrandDropdown('#infosheets-brand-id');".
         JS_NAMESPACE.".InfoSheet.initDependentRadioButtons();".
+        JS_NAMESPACE.".Helper.setFocusToSelect2Dropdown('#infosheets-category-id');".
+        JS_NAMESPACE.".Helper.setFocusTrapForForm('#infoSheetEditForm', '#infosheets-category-id');".
         JS_NAMESPACE.".Helper.layoutEditButtons();
     "]);
 ?>
