@@ -15,6 +15,20 @@ MappedRepairEvents.Helper = {
         MappedRepairEvents.Detect.setIsMobile();
     },
 
+    setFocusToSelect2Dropdown : function(container) {
+        var dropdown = $(container);
+        if (dropdown.length == 0) {
+            return;
+        }
+
+        window.setTimeout(function() {
+            if (dropdown.hasClass('select2-hidden-accessible')) {
+                dropdown.select2('close');
+            }
+            dropdown.trigger('focus');
+        }, 0);
+    },
+
     initCopyPermalinkToClipboard : function() {
         var clipboard = new ClipboardJS('.knowledge-permalink', {
             text: function(trigger) {
