@@ -430,14 +430,15 @@ MappedRepairEvents.Helper = {
 
     bindCancelButtonWithFixedRedirect: function(uid, redirect) {
 
-        uid = uid || 0;
+        // fix for https://github.com/anstiftung/mapped-repair-events/issues/228
+        // Click on "Abbrechen" after "Speichern und neuen Laufzettel für diesen Termin öffnen" was clicked
+        redirect = redirect.replace(/laufzettel\/add\/\d+/, 'meine-termine');
 
         $('#cancel-button').on('click', function() {
-
             MappedRepairEvents.Helper.ajaxCall(
                 '/admin/' + 'intern/' + 'ajaxCancelAdminEditPage/',
                 {
-                    uid: uid,
+                    uid: uid || 0,
                     referer: redirect,
                 },
                 { onOk : function(data) {
