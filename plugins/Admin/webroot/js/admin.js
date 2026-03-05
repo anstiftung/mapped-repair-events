@@ -2,7 +2,6 @@
 MappedRepairEvents.Admin = {
 
     init : function() {
-        MappedRepairEvents.Helper.highlightFormFields();
         MappedRepairEvents.Helper.bindFlashMessageCancelButton();
         MappedRepairEvents.Helper.beautifyDropdowns();
         new RowMarker().init()

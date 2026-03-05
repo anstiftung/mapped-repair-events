@@ -1,7 +1,6 @@
 MappedRepairEvents.Helper = {
 
     init : function() {
-        this.highlightFormFields();
         this.initPasswordToggle();
         this.checkUrlForLoginBoxOpen();
         this.bindFlashMessageCancelButton();
@@ -1389,18 +1388,6 @@ MappedRepairEvents.Helper = {
                 }
             });
 
-        });
-    },
-
-    highlightFormFields : function() {
-        var formFieldsToHighlight = $(
-            'input[type="text"], input[type="password"], textarea, select').not(
-            'input[readonly="readonly"]');
-        formFieldsToHighlight.on('focus', function() {
-            $(this).css('background-color', '#EFEFEF');
-        });
-        formFieldsToHighlight.on('blur', function() {
-            $(this).css('background-color', 'white');
         });
     },
 

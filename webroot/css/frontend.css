@@ -479,26 +479,17 @@ table.list a.icon-link-text {
 input[type=text]:focus,
 input[type=number]:focus,
 input[type=email]:focus,
+input[type=time]:focus,
 input[type=checkbox]:focus,
 input[type=radio]:focus,
 textarea:focus,
-.setfocus {
+.setfocus,
+.select2-container--default.select2-container--focus .select2-selection--single,
+.select2-container--default.select2-container--open .select2-selection--single,
+.select2-container--default.select2-container--focus .select2-selection--multiple,
+.select2-container--default.select2-container--open .select2-selection--multiple {
     box-shadow: 0 0 5px rgba(200, 210, 24, 1);
-    padding: 5px;
     border: 1px solid rgba(200, 210, 24, 1);
-}
-/* Google Suche */
-
-#cse-search-box {
-    width: 100%;
-    margin: 5px 0px 20px 0px;
-}
-#cse-search-box input {
-    border: 1px solid #DFDFDF ! important;
-    width: 200px;
-    padding: 5px;
-    height: 16px;
-    margin-left: 25%
 }
 .checkbox {
     padding: 5px;
