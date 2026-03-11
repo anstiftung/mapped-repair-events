@@ -254,8 +254,7 @@ class StringComponent extends Component
         if (!$exact) {
             // ...search the last occurance of a space...
             $spacepos = strrpos($truncate, ' ');
-            /* @phpstan-ignore-next-line */
-            if (isset($spacepos)) {
+            if ($spacepos !== false) {
                 // ...and cut the text in this position
                 $truncate = substr($truncate, 0, $spacepos);
             }
@@ -299,15 +298,17 @@ class StringComponent extends Component
         }
 
         for ($i = 0; $i < strlen($email); $i++) {
-            if (!strpos($character_set, $email[$i]) > 0) {
+            $characterPosition = strpos($character_set, $email[$i]);
+            if ($characterPosition === false || $characterPosition === 0) {
                 $email[$i] = '+';
+                $characterPosition = strpos($character_set, '+');
             }
-            $cipher_text .= $key[
-                strpos(
-                    $character_set,
-                    $email[$i]
-                )
-            ];
+
+            if ($characterPosition === false) {
+                continue;
+            }
+
+            $cipher_text .= $key[$characterPosition];
         }
 
         $script = 'var a="' . $key . '";var b=a.split("").sort().join("");var c="' . $cipher_text . '";var d="";';

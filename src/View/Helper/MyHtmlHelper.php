@@ -17,22 +17,22 @@ use Cake\I18n\Date;
 class MyHtmlHelper extends HtmlHelper {
 
     /**
-     * @var array<string, string>
+     * @var array<string, mixed>
      */
     public array $selectedMain = [];
 
     /**
-     * @var array<string, string>
+     * @var array<string, mixed>
      */
     public array $selectedSub1 = [];
 
     /**
-     * @var array<string, string>
+     * @var array<string, mixed>
      */
     public array $selectedSub2 = [];
 
     /**
-     * @var array<string, string>
+     * @var array<string, mixed>
      */
     public array $selectedSub3 = [];
 
@@ -88,7 +88,11 @@ class MyHtmlHelper extends HtmlHelper {
     public function getHostName(): string
     {
         $serverName = Configure::read('AppConfig.serverName');
-        $parsedServerName = parse_url((string) $serverName)['host'];
+        $parsedServerName = parse_url((string) $serverName);
+        if (!is_array($parsedServerName) || !isset($parsedServerName['host'])) {
+            return '';
+        }
+        $parsedServerName = $parsedServerName['host'];
         $parsedServerName = str_replace('www.', '', $parsedServerName);
         return $parsedServerName;
     }
@@ -734,7 +738,12 @@ class MyHtmlHelper extends HtmlHelper {
         $userImageSrc = '/files/uploadify/users/thumbs-150/' . $userImage;
         if(empty($userImage)) {
             if (!empty($user->categories)) {
-                $categoryIdForUserProfileImage = $user->categories[random_int(0, count($user->categories) - 1)]->id;
+                $categoryCount = count($user->categories);
+                if ($categoryCount > 0) {
+                    $categoryIdForUserProfileImage = $user->categories[random_int(0, $categoryCount - 1)]->id;
+                } else {
+                    $categoryIdForUserProfileImage = 1;
+                }
             } else {
                 $path = WWW_ROOT . '/img/user-profile';
                 $dir = new \DirectoryIterator($path);
@@ -744,7 +753,13 @@ class MyHtmlHelper extends HtmlHelper {
                         $files[] = $fileinfo->getFilename();
                     }
                 }
-                $categoryIdForUserProfileImage = preg_replace('/[^0-9]/', '', $files[random_int(0, count($files) - 1)]);
+                $filesCount = count($files);
+                if ($filesCount > 0) {
+                    $fileName = $files[random_int(0, $filesCount - 1)];
+                    $categoryIdForUserProfileImage = preg_replace('/[^0-9]/', '', $fileName);
+                } else {
+                    $categoryIdForUserProfileImage = '1';
+                }
             }
             $userImageSrc = '/img/user-profile/user-profile-image-'.$categoryIdForUserProfileImage.'.png';
         }
@@ -817,7 +832,7 @@ class MyHtmlHelper extends HtmlHelper {
         $units = ['B', 'KB', 'MB', 'GB', 'TB'];
 
         $bytes = max($bytes, 0);
-        $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
+        $pow = (int)floor(($bytes ? log($bytes) : 0) / log(1024));
         $pow = min($pow, count($units) - 1);
 
         $bytes /= 1024 ** $pow;
@@ -852,7 +867,9 @@ class MyHtmlHelper extends HtmlHelper {
 
         $htmlAttributes = [];
         if (isset($menuElement['htmlAttributes'])) {
-            $htmlAttributes = array_merge($htmlAttributes, $menuElement['htmlAttributes']);
+            if (is_array($menuElement['htmlAttributes'])) {
+                $htmlAttributes = array_merge($htmlAttributes, $menuElement['htmlAttributes']);
+            }
         }
         if ('/' . $this->here == $menuElement['url']) {
             if ($menuElement['level'] == 'main') {
@@ -864,9 +881,12 @@ class MyHtmlHelper extends HtmlHelper {
             }
         }
 
-        if (isset($menuElement['sub'])) {
+        if (isset($menuElement['sub']) && is_array($menuElement['sub'])) {
 
             foreach ($menuElement['sub'] as $sub1MenuElement) {
+                if (!is_array($sub1MenuElement)) {
+                    continue;
+                }
 
                 if ('/' . $this->here == $sub1MenuElement['url']) {
 
@@ -883,8 +903,11 @@ class MyHtmlHelper extends HtmlHelper {
                     continue;
                 }
 
-                if (isset($sub1MenuElement['sub'])) {
+                if (isset($sub1MenuElement['sub']) && is_array($sub1MenuElement['sub'])) {
                     foreach ($sub1MenuElement['sub'] as $sub2MenuElement) {
+                        if (!is_array($sub2MenuElement) || !isset($sub2MenuElement['url'])) {
+                            continue;
+                        }
                         if ('/' . $this->here == $sub2MenuElement['url']) {
                             // $htmlAttributes['class'] = 'selected';
                             continue;
@@ -896,10 +919,13 @@ class MyHtmlHelper extends HtmlHelper {
 
         $element .= self::link($menuElement['name'], $menuElement['url'], $htmlAttributes);
 
-        if (isset($menuElement['sub'])) {
+        if (isset($menuElement['sub']) && is_array($menuElement['sub'])) {
             $i = 0;
             $element .= '<ul class="submenu">';
             foreach ($menuElement['sub'] as $subMenuElement) {
+                if (!is_array($subMenuElement)) {
+                    continue;
+                }
                 $element .= $this->createMenuEntry($subMenuElement, $menuElement);
                 $i++;
             }

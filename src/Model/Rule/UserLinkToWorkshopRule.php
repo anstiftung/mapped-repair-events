@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Model\Rule;
 
+use App\Model\Entity\User;
 use Cake\Datasource\EntityInterface;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Hash;
@@ -32,6 +33,10 @@ class UserLinkToWorkshopRule
                 ],
             ],
         )->first();
+
+        if (!$user instanceof User) {
+            return true;
+        }
 
         if (empty($user->workshops)) {
             return true;

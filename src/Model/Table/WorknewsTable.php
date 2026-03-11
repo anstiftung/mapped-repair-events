@@ -55,13 +55,9 @@ class WorknewsTable extends AppTable
     }
 
     /**
-     * @param array<string> $dirtyFields
-     * @param array<string> $originalValues
-     */
-    /**
      * @param \Cake\ORM\Query\SelectQuery<\App\Model\Entity\Worknews> $subscribers
      * @param array<string> $dirtyFields
-     * @param array<string> $originalValues
+     * @param array<string, mixed> $originalValues
      */
     public function sendNotifications(SelectQuery $subscribers, string $subject, string $template, Workshop $workshop, Event $event, array $dirtyFields = [], array $originalValues = []): void
     {

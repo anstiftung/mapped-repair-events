@@ -99,10 +99,18 @@ abstract class AppRootTable extends AppTable
      */
     public function getPatchedEntityForAdminEdit(EntityInterface $entity, array $data): EntityInterface
     {
+        /** @var array<string, mixed> $normalizedData */
+        $normalizedData = [];
+        foreach ($data as $key => $value) {
+            if (is_string($key)) {
+                $normalizedData[$key] = $value;
+            }
+        }
+
         $isAdmin = Router::getRequest()?->getAttribute('identity')?->isAdmin();
         $patchedEntity = $this->patchEntity(
             $entity,
-            $data,
+            $normalizedData,
             ['validate' => $isAdmin ? 'admin' : true] // calls Table::validationAdmin
         );
         return $patchedEntity;

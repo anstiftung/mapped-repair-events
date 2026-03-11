@@ -63,7 +63,7 @@ class SkillsTable extends AppTable
 
     /**
      * @param array<int|string>|string|null $associatedSkillIds
-     * @return array<int, string>
+     * @return array<int|string>
      */
     public function getExistingSkillsFromRequest(array|string|null $associatedSkillIds): array
     {
@@ -78,7 +78,7 @@ class SkillsTable extends AppTable
 
     /**
      * @param array<int|string> $newSkills
-     * @return array<int, string>
+     * @return array<int|string>
      */
     public function addSkills(array $newSkills, bool $isAdmin, int $userUid): array
     {
@@ -96,8 +96,10 @@ class SkillsTable extends AppTable
         $addedSkillIds = [];
         if (!empty($skillsToAdd)) {
             $addedSkills = $this->saveMany($skillsToAdd);
-            foreach($addedSkills as $addedSkill) {
-                $addedSkillIds[] = $addedSkill->id;
+            if ($addedSkills !== false) {
+                foreach($addedSkills as $addedSkill) {
+                    $addedSkillIds[] = $addedSkill->id;
+                }
             }
         }
 
@@ -106,7 +108,7 @@ class SkillsTable extends AppTable
     }
 
     /**
-     * @return array<int, string>
+     * @return array<int|string, string>
      */
     public function getForDropdownIncludingCategories(): array
     {
@@ -116,7 +118,7 @@ class SkillsTable extends AppTable
         $preparedCategoriesForDropdown = [];
         foreach($categoriesForDropdown as $c) {
             $slugifiedCategoryName = StringComponent::slugify($c->name);
-            $preparedCategoriesForDropdown[$slugifiedCategoryName] = $c->name;
+            $preparedCategoriesForDropdown[$slugifiedCategoryName] = (string)$c->name;
         }
         $skillsForDropdown = $preparedCategoriesForDropdown + $skillsForDropdown;
         asort($skillsForDropdown);

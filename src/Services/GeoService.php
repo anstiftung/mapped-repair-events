@@ -67,8 +67,20 @@ class GeoService {
 
     private function getDecodedOutput(string $requestUrl): object
     {
+        $errorObject = (object)[
+            'status' => 'ERROR',
+            'results' => [],
+        ];
         $geocode = file_get_contents($requestUrl);
+        if ($geocode === false) {
+            return $errorObject;
+        }
+
         $output = json_decode($geocode);
+        if (!is_object($output)) {
+            return $errorObject;
+        }
+
         return $output;
     }
 

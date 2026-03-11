@@ -146,11 +146,15 @@ class ApiTokenAuthMiddleware implements MiddlewareInterface
     private function createErrorResponse(ServerRequestInterface $request, string $message, int $statusCode): Response
     {
         $response = new Response();
+        $body = json_encode(['error' => $message]);
+        if ($body === false) {
+            $body = '{"error":"Unexpected JSON encoding error"}';
+        }
         
         return $response
             ->withStatus($statusCode)
             ->withType('application/json')
-            ->withStringBody(json_encode(['error' => $message]))
+            ->withStringBody($body)
             ->withHeader('Access-Control-Allow-Origin', '*')
             ->withHeader('Access-Control-Allow-Methods', 'GET')
             ->withHeader('Access-Control-Allow-Headers', 'Authorization, Content-Type');

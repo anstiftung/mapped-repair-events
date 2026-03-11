@@ -23,6 +23,9 @@ class MenuHelper extends Helper
             $tmpMenu .= '<li class="header">'.$options['header'].'</li>';
         }
         foreach ($items as $index => $item) {
+            if (!is_array($item)) {
+                continue;
+            }
             $tmpMenu .= $this->buildMenuItem($item);
         }
         if (!empty($options['footer'])) {

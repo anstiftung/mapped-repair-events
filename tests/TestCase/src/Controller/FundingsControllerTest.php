@@ -221,7 +221,7 @@ class FundingsControllerTest extends AppTestCase
                 'files_fundinguploads_activity_proofs' => [
                     new UploadedFile(
                         $uploadFileActivityProof1,
-                        filesize($uploadFileActivityProof1),
+                        (int)(filesize($uploadFileActivityProof1) ?: 0),
                         UPLOAD_ERR_OK,
                         'test.jpg',
                         'image/jpeg',
@@ -230,7 +230,7 @@ class FundingsControllerTest extends AppTestCase
                 'files_fundinguploads_freistellungsbescheids' => [
                     new UploadedFile(
                         $uploadFileFreistellungsbescheid1,
-                        filesize($uploadFileFreistellungsbescheid1),
+                        (int)(filesize($uploadFileFreistellungsbescheid1) ?: 0),
                         UPLOAD_ERR_OK,
                         'test.jpg',
                         'image/jpeg',
@@ -335,7 +335,7 @@ class FundingsControllerTest extends AppTestCase
                 'files_fundinguploads_activity_proofs' => [
                     new UploadedFile(
                         $uploadFileActivityProof2,
-                        filesize($uploadFileActivityProof2),
+                        (int)(filesize($uploadFileActivityProof2) ?: 0),
                         UPLOAD_ERR_OK,
                         'test.txt',
                         'text/plain',
@@ -344,7 +344,7 @@ class FundingsControllerTest extends AppTestCase
                 'files_fundinguploads_freistellungsbescheids' => [
                     new UploadedFile(
                         $uploadFileFreistellungsbescheid2,
-                        filesize($uploadFileFreistellungsbescheid2),
+                        (int)(filesize($uploadFileFreistellungsbescheid2) ?: 0),
                         UPLOAD_ERR_OK,
                         'test.jpg',
                         'image/jpeg',
@@ -492,7 +492,7 @@ class FundingsControllerTest extends AppTestCase
                 'files_fundinguploads_zuwendungsbestaetigungs' => [
                     new UploadedFile(
                         $uploadFileZuwendungsbestaetigung1,
-                        filesize($uploadFileZuwendungsbestaetigung1),
+                        (int)(filesize($uploadFileZuwendungsbestaetigung1) ?: 0),
                         UPLOAD_ERR_OK,
                         'test.jpg',
                         'image/jpeg',
@@ -559,11 +559,19 @@ class FundingsControllerTest extends AppTestCase
         $this->assertEmpty($deletedFunding);
 
         $fundingsupportersTable = $this->getTableLocator()->get('Fundingsupporters');
-        $fundingsupporter = $fundingsupportersTable->find()->where([$fundingsupportersTable->getPrimaryKey() => $funding->fundingsupporter_id])->first();
+        $fundingsupportersPrimaryKey = $fundingsupportersTable->getPrimaryKey();
+        if (is_array($fundingsupportersPrimaryKey)) {
+            $fundingsupportersPrimaryKey = $fundingsupportersPrimaryKey[0] ?? 'id';
+        }
+        $fundingsupporter = $fundingsupportersTable->find()->where([$fundingsupportersPrimaryKey => $funding->fundingsupporter_id])->first();
         $this->assertEmpty($fundingsupporter);
 
         $fundingdatasTable = $this->getTableLocator()->get('Fundingdatas');
-        $fundingdata = $fundingdatasTable->find()->where([$fundingdatasTable->getPrimaryKey() => $funding->fundingdata_id])->first();
+        $fundingdatasPrimaryKey = $fundingdatasTable->getPrimaryKey();
+        if (is_array($fundingdatasPrimaryKey)) {
+            $fundingdatasPrimaryKey = $fundingdatasPrimaryKey[0] ?? 'id';
+        }
+        $fundingdata = $fundingdatasTable->find()->where([$fundingdatasPrimaryKey => $funding->fundingdata_id])->first();
         $this->assertEmpty($fundingdata);
 
         $fundingbudgetplansTable = $this->getTableLocator()->get('Fundingbudgetplans');

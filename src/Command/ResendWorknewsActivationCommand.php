@@ -31,6 +31,9 @@ class ResendWorknewsActivationCommand extends Command
         $email = new AppMailer();
         
         foreach($query as $worknews) {
+            if (!$worknews instanceof Worknews) {
+                continue;
+            }
 
             $io->out($worknews->created->i18nFormat('dd.MM.yyyy HH:mm:ss') . ': ' . $worknews->email);
             $worknews->activation_email_resent = DateTime::now();

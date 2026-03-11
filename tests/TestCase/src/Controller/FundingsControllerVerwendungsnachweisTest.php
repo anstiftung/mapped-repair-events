@@ -178,7 +178,7 @@ class FundingsControllerVerwendungsnachweisTest extends AppTestCase
                 'files_fundinguploads_pr_materials' => [
                     new UploadedFile(
                         $uploadFilePrMaterial1,
-                        filesize($uploadFilePrMaterial1),
+                        (int)(filesize($uploadFilePrMaterial1) ?: 0),
                         UPLOAD_ERR_OK,
                         'test.jpg',
                         'image/jpeg',

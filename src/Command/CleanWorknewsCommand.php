@@ -26,6 +26,9 @@ class CleanWorknewsCommand extends Command
 
         $i = 0;
         foreach($worknews as $w) {
+            if (!$w instanceof Worknews) {
+                continue;
+            }
             $io->out($w->created->i18nFormat('dd.MM.yyyy HH:mm:ss') . ': ' . $w->email);
             $worknewsTable->delete($w);
             $i++;

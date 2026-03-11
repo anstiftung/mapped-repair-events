@@ -146,7 +146,9 @@ class ApiTokensController extends AdminAppController
             return '';
         }
 
-        return json_encode(array_values($entries), JSON_UNESCAPED_UNICODE);
+        $encoded = json_encode(array_values($entries), JSON_UNESCAPED_UNICODE);
+
+        return $encoded !== false ? $encoded : '';
     }
 
     private function nullifyEmptyJsonFields(ApiToken $apiToken): void

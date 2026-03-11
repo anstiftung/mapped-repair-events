@@ -162,7 +162,6 @@ class WorkshopsTable extends AppRootTable
      */
     public function getProvinceCounts(): array
     {
-        
         $query = $this->find('all')
             ->select([
                 'province_id',
@@ -182,10 +181,7 @@ class WorkshopsTable extends AppRootTable
     }
 
     /**
-     * @param array<string> $additionalContains
-     */
-    /**
-     * @param array<int, string> $additionalContains
+     * @param array<int|string, mixed> $additionalContains
      * @return \Cake\ORM\Query\SelectQuery<\App\Model\Entity\Workshop>
      */
     public function getWorkshopsForAssociatedUser(int $userUid, int $workshopStatus, array $additionalContains = []): SelectQuery
@@ -206,9 +202,6 @@ class WorkshopsTable extends AppRootTable
         return $workshops;
     }
 
-    /**
-     * @return array<int, int>
-     */
     /**
      * @param \Cake\ORM\Query\SelectQuery<\App\Model\Entity\Workshop> $workshops
      * @return array<int, string>
@@ -245,10 +238,7 @@ class WorkshopsTable extends AppRootTable
     }
 
     /**
-     * @param array<string> $additionalContains
-     */
-    /**
-     * @param array<int, string> $additionalContains
+     * @param array<int|string, mixed> $additionalContains
      * @return \Cake\ORM\Query\SelectQuery<\App\Model\Entity\Workshop>
      */
     public function getWorkshopsWithUsers(int $workshopStatus, array $additionalContains = []): SelectQuery

@@ -156,7 +156,7 @@ if ($showDeleteLink) {
                     echo $caption;
                 } else {
 
-                    $splittedField = preg_split('/\./', $field['name']);
+                    $splittedField = preg_split('/\./', $field['name']) ?: [];
 
                     if (count($splittedField) == 1) {
                         $caption = $this->name . "\n"  . $splittedField[0];
@@ -219,7 +219,7 @@ if ($showDeleteLink) {
                             $value .= ' - ' . $fieldValue[$field['field']] . '<br />';
                         }
                     } else {
-                        $splittedField = preg_split('/\./', $field['name']);
+                        $splittedField = preg_split('/\./', $field['name']) ?: [];
                         if (! isset($splittedField[2])) {
                             // example: categories.name
                             if (isset($field['type']) && preg_match('/habtm/', $field['type'])) { // habtm
@@ -269,15 +269,17 @@ if ($showDeleteLink) {
                         $linkParamsArray = $field['link']['params'];
                         $linkParams = [];
                         foreach ($linkParamsArray as $linkParamArray) {
-                            $splittedParams = preg_split('/\./', $linkParamArray);
+                            $splittedParams = preg_split('/\./', $linkParamArray) ?: [];
                             if (count($splittedParams) == 2) {
                                 $linkParams[] = $object[$splittedParams[0]][$splittedParams[1]];
-                            } else {
+                            } elseif (count($splittedParams) > 2) {
                                 $linkParams[] = $object[$splittedParams[0]][$splittedParams[1]][$splittedParams[2]];
                             }
                         }
-                        echo $this->Html->link($value, $this->Html->$linkUrlMethod($linkParams[0])) // TODO wenn urlmethode mehrere parameter besitzt, muss nur noch hier angepasst werden
-;
+                        if (!empty($linkParams)) {
+                            echo $this->Html->link($value, $this->Html->$linkUrlMethod($linkParams[0])); // TODO wenn urlmethode mehrere parameter besitzt, muss nur noch hier angepasst werden
+                        }
+                        
                     } elseif (! empty($field['values'])) {
                         if (isset($field['values']->$value)) {
                             echo $field['values']->$value;
@@ -364,10 +366,14 @@ if ($showDeleteLink) {
                             ]);
                         } else {
                             if (isset($field['filterParam'])) {
-                                $splittedFilterParam = preg_split('/\./', $field['filterParam']);
+                                $splittedFilterParam = preg_split('/\./', $field['filterParam']) ?: [];
+                                $filterValue = '';
+                                if (isset($splittedFilterParam[1])) {
+                                    $filterValue = $object[$splittedFilterParam[1]];
+                                }
                                 echo $this->Html->link($value, $this->request->getPath() . '?' . http_build_query([
                                         'key-standard' => $field['filterParam'],
-                                        'val-standard' => $object[$splittedFilterParam[1]]
+                                        'val-standard' => $filterValue,
                                     ]),
                                 );
                             } else {
@@ -406,8 +412,8 @@ if ($showDeleteLink) {
                 if (isset($editMethod)) {
                     $editMethodUrl = $editMethod['url'];
                     if (isset($editMethod['param'])) {
-                        $splittedField = preg_split('/\./', $editMethod['param']);
-                        $editUid = $object[$splittedField[0]][$splittedField[1]];
+                        $splittedField = preg_split('/\./', $editMethod['param']) ?: [];
+                        $editUid = isset($splittedField[0], $splittedField[1]) ? $object[$splittedField[0]][$splittedField[1]] : '';
                     } else {
                         if (isset($object['uid'])) {
                             $editUid = $object['uid'];
@@ -417,8 +423,10 @@ if ($showDeleteLink) {
                     }
                     $anchor = '';
                     if (isset($editMethod['anchor'])) {
-                        $splittedField = preg_split('/\./', $editMethod['anchor']);
-                        $anchor = $object[$splittedField[0]][$splittedField[1]];
+                        $splittedField = preg_split('/\./', $editMethod['anchor']) ?: [];
+                        if (isset($splittedField[0], $splittedField[1])) {
+                            $anchor = $object[$splittedField[0]][$splittedField[1]];
+                        }
                     }
                     echo '<td class="icon">';
                     echo $this->Html->link('<i class="far fa-edit fa-border"></i>', $this->Html->$editMethodUrl($editUid, $anchor), [

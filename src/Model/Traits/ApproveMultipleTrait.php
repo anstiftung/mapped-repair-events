@@ -14,6 +14,14 @@ trait ApproveMultipleTrait
             return false;
         }
 
+        $primaryKey = $this->getPrimaryKey();
+        if (is_array($primaryKey)) {
+            $primaryKey = $primaryKey[0] ?? null;
+        }
+        if (!is_string($primaryKey) || $primaryKey === '') {
+            return false;
+        }
+
         $affectedCount = $this->updateAll(
             [
                 'status' => APP_ON,
@@ -21,7 +29,7 @@ trait ApproveMultipleTrait
             ],
             [
                 'status <' => APP_ON,
-                $this->getPrimaryKey() . ' IN' => $ids,
+                $primaryKey . ' IN' => $ids,
             ]
         );
 

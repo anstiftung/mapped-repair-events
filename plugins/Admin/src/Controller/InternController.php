@@ -174,6 +174,9 @@ class InternController extends AdminAppController
             $filename = $file['filename'];
             $uploadedFile = $_SERVER['DOCUMENT_ROOT'] . $filename;
             $formatInfo = getimagesize($uploadedFile);
+            if ($formatInfo === false) {
+                continue;
+            }
             $extension = $this->getExtension($formatInfo['mime']);
             $fileNamePlain = strtolower(StringComponent::createRandomString(10)) . '.' . $extension;
 
