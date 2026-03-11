@@ -86,6 +86,9 @@ class InfoSheetsControllerTest extends AppTestCase
         $this->assertEquals($infoSheets[0]->device_name, $this->newInfoSheetData['device_name']);
         $this->assertEquals($infoSheets[0]->defect_description, $this->newInfoSheetData['defect_description']);
         $this->assertEquals($infoSheets[0]->owner, 1);
+
+        $expectedUid = $this->getTableLocator()->get('Roots')->find('all')->count();
+        $this->assertFlashMessage('Laufzettel erfolgreich gespeichert. UID: ' . $expectedUid);
     }
 
     public function testDeleteInfoSheetAsOrga(): void

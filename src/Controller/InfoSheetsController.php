@@ -284,7 +284,18 @@ class InfoSheetsController extends AppController
                 }
 
                 if ($infoSheetsTable->save($entity)) {
-                    $this->AppFlash->setFlashMessage($infoSheetsTable->name_de . ' erfolgreich gespeichert.');
+                    if ($isEditMode) {
+                        $uidForFlashMessage = $entity->uid;
+                    } else {
+                        $newInfoSheetFromDatabase = $infoSheetsTable->find()->where([
+                            $infoSheetsTable->aliasField('owner') => $entity->owner,
+                            $infoSheetsTable->aliasField('event_uid') => $entity->event_uid,
+                        ])
+                        ->orderByDesc($infoSheetsTable->aliasField('uid'))
+                        ->first();
+                        $uidForFlashMessage = $newInfoSheetFromDatabase->uid;
+                    }
+                    $this->AppFlash->setFlashMessage($infoSheetsTable->name_de . ' erfolgreich gespeichert.' . ' UID: ' . $uidForFlashMessage);
                     if (in_array('save-button', array_keys($this->request->getData()))) {
                         $redirectUrl = Configure::read('AppConfig.htmlHelper')->urlMyEvents();
                         $redirectUrl = $this->addRefererParamsToUrl($redirectUrl);
