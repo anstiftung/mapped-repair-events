@@ -62,9 +62,11 @@ class PagesTable extends AppRootTable
             if (! empty($item['children'])) {
                 /** @var TreeBehavior $treeBehavior */
                 $treeBehavior = $this->getBehavior('Tree');
-                $this->flattenNestedArrayWithChildren($item->children, str_repeat('-', 
-                $treeBehavior->getLevel($item) + 1)
-                 . ' ');
+                $level = $item instanceof Page ? $treeBehavior->getLevel($item) : 0;
+                $this->flattenNestedArrayWithChildren(
+                    $item->children,
+                    str_repeat('-', $level + 1) . ' ',
+                );
             }
         }
 

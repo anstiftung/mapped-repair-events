@@ -39,7 +39,18 @@ class GeoDataForUsers extends BaseMigration
                 echo 'no address given for ' . $user->uid . ' ' . $user->name . LF;
                 continue;
             }
-            $geocodeAddress = json_decode(file_get_contents($baseUrl . $address));
+            $geocodeResponse = file_get_contents($baseUrl . $address);
+            if ($geocodeResponse === false) {
+                echo 'no geo data found: ' . $user->uid . ' ' . $user->name . ' - ' . $address . LF;
+                continue;
+            }
+
+            $geocodeAddress = json_decode($geocodeResponse);
+            if (!is_object($geocodeAddress) || !isset($geocodeAddress->status)) {
+                echo 'no geo data found: ' . $user->uid . ' ' . $user->name . ' - ' . $address . LF;
+                continue;
+            }
+
             if ($geocodeAddress->status == 'OK' && empty($geocodeAddress->results[0]->partial_match)) {
                 $user->lat = $geocodeAddress->results[0]->geometry->location->lat;
                 $user->lng = $geocodeAddress->results[0]->geometry->location->lng;

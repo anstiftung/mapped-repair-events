@@ -39,11 +39,13 @@ echo $this->element('highlightNavi',['main' => $blog->name]);
             $postImage = $this->Html->getThumbs100Image($post->image, 'posts');
             $params['imageSize'] = 150;
             $imageInfo = getimagesize(substr(WWW_ROOT.$postImage, 0, -11));
-            $width = $imageInfo[0];
-            $height = $imageInfo[1];
-            if ($width < $height) {
-                // Portrait or Square
-                $params['postLength'] = 860;
+            if ($imageInfo !== false) {
+                $width = $imageInfo[0];
+                $height = $imageInfo[1];
+                if ($width < $height) {
+                    // Portrait or Square
+                    $params['postLength'] = 860;
+                }
             }
         }
         echo '<br /><br />'.$this->element('post', $params);

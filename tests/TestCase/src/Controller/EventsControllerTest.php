@@ -206,7 +206,7 @@ class EventsControllerTest extends AppTestCase
                 'X_REQUESTED_WITH' => 'XMLHttpRequest'
             ]
         ]);
-        $expectedResult = file_get_contents(TESTS . 'comparisons' . DS . 'events-for-map.json');
+        $expectedResult = (string)file_get_contents(TESTS . 'comparisons' . DS . 'events-for-map.json');
         $expectedNextEventDate = Date::now()->addDays(7)->format('Y-m-d');
         $expectedResult = $this->correctExpectedDate($expectedResult, $expectedNextEventDate);
         $this->get('/events/ajaxGetAllEventsForMap');
@@ -273,9 +273,9 @@ class EventsControllerTest extends AppTestCase
 
         $this->assertEquals($event->eventbeschreibung, $data['eventbeschreibung']);
         $this->assertEquals($event->strasse, $data['strasse']);
-        $this->assertEquals($event->datumstart, new Date($data['datumstart']));
-        $this->assertEquals($event->uhrzeitstart, new Time($data['uhrzeitstart']));
-        $this->assertEquals($event->uhrzeitend, new Time($data['uhrzeitend']));
+        $this->assertEquals($event->datumstart, new Date((string)$data['datumstart']));
+        $this->assertEquals($event->uhrzeitstart, new Time((string)$data['uhrzeitstart']));
+        $this->assertEquals($event->uhrzeitend, new Time((string)$data['uhrzeitend']));
 
     }
 

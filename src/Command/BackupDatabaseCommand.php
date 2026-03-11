@@ -54,7 +54,8 @@ class BackupDatabaseCommand extends Command
         $dump = new \Druidfi\Mysqldump\Mysqldump($dsnString, $dbConfig['username'], $dbConfig['password'], $settings);
         $dump->start($filename);
 
-        $message = 'Datenbank-Backup erfolgreich ('.Number::toReadableSize(filesize($filename)).').';
+        $backupSize = filesize($filename);
+        $message = 'Datenbank-Backup erfolgreich ('.Number::toReadableSize($backupSize !== false ? $backupSize : 0).').';
 
         // email zipped file, do not use queue
         $mailer = new Mailer();

@@ -18,7 +18,7 @@ class ApiControllerTest extends AppTestCase {
                 'Origin' => 'http://localhost',
             ],
         ]);
-        $expectedResult = file_get_contents(TESTS . 'comparisons' . DS . 'rest-workshops-berlin.json');
+        $expectedResult = (string)file_get_contents(TESTS . 'comparisons' . DS . 'rest-workshops-berlin.json');
         $expectedResult = $this->correctServerName($expectedResult);
         $expectedNextEventDate = Date::now()->addDays(7)->format('d.m.Y');
         $expectedResult = $this->correctExpectedDate($expectedResult, $expectedNextEventDate);
@@ -112,7 +112,7 @@ class ApiControllerTest extends AppTestCase {
                 'Origin' => 'http://localhost',
             ],
         ]);
-        $expectedResult = file_get_contents(TESTS . 'comparisons' . DS . 'rest-workshops-berlin.json');
+        $expectedResult = (string)file_get_contents(TESTS . 'comparisons' . DS . 'rest-workshops-berlin.json');
         $expectedResult = $this->correctServerName($expectedResult);
         $expectedNextEventDate = Date::now()->addDays(7)->format('d.m.Y');
         $expectedResult = $this->correctExpectedDate($expectedResult, $expectedNextEventDate);

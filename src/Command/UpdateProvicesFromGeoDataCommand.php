@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Command;
 
+use App\Model\Entity\Event;
+use App\Model\Entity\Workshop;
 use Cake\Command\Command;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
@@ -30,6 +32,9 @@ class UpdateProvicesFromGeoDataCommand extends Command
         );
 
         foreach($workshops as $workshop) {
+            if (!$workshop instanceof Workshop) {
+                continue;
+            }
             $geoData = $geoService->getGeoDataByCoordinates($workshop->lat, $workshop->lng);
             $workshop->province_id = $geoData['provinceId'];
             $workshopsTable->save($workshop);
@@ -49,6 +54,9 @@ class UpdateProvicesFromGeoDataCommand extends Command
         );
     
         foreach($events as $event) {
+            if (!$event instanceof Event) {
+                continue;
+            }
             $geoData = $geoService->getGeoDataByCoordinates($event->lat, $event->lng);
             $event->province_id = $geoData['provinceId'];
             $eventsTable->save($event);

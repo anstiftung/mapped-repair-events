@@ -2,8 +2,13 @@
 declare(strict_types=1);
 
 if (!empty($images)) {
+    $encodedImages = json_encode($images);
+    if ($encodedImages === false) {
+        $encodedImages = '[]';
+    }
+
     $this->element('addScript', ['script' =>
-        JS_NAMESPACE.".Upload.setImages('".addslashes(json_encode($images))."');
+        JS_NAMESPACE.".Upload.setImages('".addslashes($encodedImages)."');
     "]);
 }
 

@@ -836,7 +836,7 @@ class WorkshopsController extends AppController
         if (empty($descriptions)) {
             $descriptions = Configure::read($metaTagsConfig . '.descriptions');
         }
-        $description = $descriptions[$descriptionCriterium];
+        $description = is_array($descriptions) && isset($descriptions[$descriptionCriterium]) ? (string)$descriptions[$descriptionCriterium] : '';
         $description = str_replace('%name%', $workshop->name, $description);
         $description = str_replace('%city%', $workshop->city ?? '', $description);
         $metaTags['description'] = $description;

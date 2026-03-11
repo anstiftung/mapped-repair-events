@@ -112,8 +112,14 @@ trait UploadsTrait {
                         // if F5 is pressed, uploads would be saved again
                         $alreadyUploaded = false;
                         foreach($savedFundinguploads as $savedFundingupload) {
-                            $hashedContentCurrentUpload = md5(file_get_contents($fileupload->getStream()->getMetadata('uri')));
-                            $hashedContentSavedFundingupload = md5(file_get_contents(Fundingupload::UPLOAD_PATH . $funding->uid . DS . $savedFundingupload->filename));
+                            $currentUploadContent = file_get_contents((string)$fileupload->getStream()->getMetadata('uri'));
+                            $savedUploadContent = file_get_contents(Fundingupload::UPLOAD_PATH . $funding->uid . DS . $savedFundingupload->filename);
+                            if ($currentUploadContent === false || $savedUploadContent === false) {
+                                continue;
+                            }
+
+                            $hashedContentCurrentUpload = md5($currentUploadContent);
+                            $hashedContentSavedFundingupload = md5($savedUploadContent);
                             if ($hashedContentCurrentUpload === $hashedContentSavedFundingupload) {
                                 $alreadyUploaded = true;
                                 continue;

@@ -28,17 +28,17 @@ class AdminAppController extends AppController
     public bool $searchStatus = true;
 
     /**
-     * @var array<string, array<string, mixed>>
+     * @var array<int|string, array<string, mixed>|string>
      */
     public array $conditions = [];
 
     /**
-    * @var array<string, string|callable>
+    * @var array<int|string, string|callable|mixed>
      */
     public array $afterFindCallbacks = [];
 
     /**
-     * @var array<string, mixed>
+     * @var array<int|string, mixed>
      */
     public array $matchings = [];
 

@@ -16,10 +16,16 @@ class InfoSheetsController extends AppController
     {
 
         $query = file_get_contents(ROOT . DS . 'config' . DS. 'sql' . DS . 'info-sheets-full-download.sql');
+        if ($query === false) {
+            throw new NotFoundException('SQL query file not found');
+        }
         $params = [];
         $filename = 'repair-data-export';
         if ($date != '') {
-            $query = preg_replace('/WHERE 1/', 'WHERE 1 AND e.datumstart <= :date', $query);
+            $updatedQuery = preg_replace('/WHERE 1/', 'WHERE 1 AND e.datumstart <= :date', $query);
+            if ($updatedQuery !== null) {
+                $query = $updatedQuery;
+            }
             $params['date'] = $date;
             $filename .= '-until-' . $date;
         }
@@ -67,12 +73,18 @@ class InfoSheetsController extends AppController
         }
 
         $query = file_get_contents(ROOT . DS . 'config' . DS. 'sql' . DS . 'info-sheets-download.sql');
+        if ($query === false) {
+            throw new NotFoundException('SQL query file not found');
+        }
         $params = [
             'workshopUid' => $workshopUid
         ];
         $filename = 'Laufzettel-Download-' . StringComponent::slugifyAndKeepCase($workshop->name);
         if (in_array($year, Configure::read('AppConfig.timeHelper')->getAllYearsUntilThisYear((int) date('Y'), 2010))) {
-            $query = preg_replace('/WHERE 1/', 'WHERE 1 AND DATE_FORMAT(e.datumstart, \'%Y\') = :year', $query);
+            $updatedQuery = preg_replace('/WHERE 1/', 'WHERE 1 AND DATE_FORMAT(e.datumstart, \'%Y\') = :year', $query);
+            if ($updatedQuery !== null) {
+                $query = $updatedQuery;
+            }
             $params['year'] = $year;
             $filename .= '-' . $year;
         }

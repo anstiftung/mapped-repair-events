@@ -30,6 +30,10 @@ class Fundings9 extends BaseMigration
             $uploadStatusField = $uploadType . '_status';
 
             foreach($fundings as $funding) {
+                if (!$funding instanceof Funding) {
+                    continue;
+                }
+
                 $uploadsCount = count($funding->$uploadEntity);
                 if ($uploadsCount == 0 &&  $funding->$uploadStatusField == Funding::STATUS_PENDING) {
                     $funding->$uploadStatusField = Funding::STATUS_UPLOAD_MISSING;

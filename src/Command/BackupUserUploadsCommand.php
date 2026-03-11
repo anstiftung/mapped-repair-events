@@ -67,7 +67,8 @@ class BackupUserUploadsCommand extends Command
             $zip->close();
         }
 
-        $size = Number::toReadableSize(filesize($zipFilename));
+        $zipSize = filesize($zipFilename);
+        $size = Number::toReadableSize($zipSize !== false ? $zipSize : 0);
         $subject = 'Tägliches User-Uploads-Backup ('.$size.') für '. Configure::read('AppConfig.htmlHelper')->getHostName() . ' erfolgreich erstellt.';
     
         if ($isFullBackup) {

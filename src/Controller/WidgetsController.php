@@ -619,6 +619,22 @@ class WidgetsController extends AppController
             $month = '01';
             $monthTo = '12';
         }
+        if (is_array($yearTo)) {
+            $yearTo = isset($yearTo['year']) ? (string)$yearTo['year'] : date('Y');
+        }
+        if (is_array($monthTo)) {
+            $monthTo = isset($monthTo['month']) ? (string)$monthTo['month'] : '12';
+        }
+
+        if (!is_string($year)) {
+            $year = '';
+        }
+        if (!is_string($month)) {
+            $month = '';
+        }
+        $yearTo = (string)$yearTo;
+        $monthTo = (string)$monthTo;
+
         $dateFrom = '01.' . $month . '.'. $year;
         $dateTo = Configure::read('AppConfig.timeHelper')->getLastDayOfGivenMonth($yearTo.'-'.$monthTo) . '.' . $monthTo . '.' . $yearTo;
 
@@ -664,7 +680,7 @@ class WidgetsController extends AppController
         $materialFootprintSum = 0;
 
         foreach($categoriesForStatistics as $category) {
-            $categoriesIds[] = $category['id'];
+            $categoriesIds[] = (int)$category['id'];
             $categoriesLabels[] = $category ['name'];
             $categoriesCarbonFootprint[] = $category['carbon_footprint'];
             $categoriesMaterialFootprint[] = $category['material_footprint'];

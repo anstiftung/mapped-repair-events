@@ -121,7 +121,11 @@ class EventsController extends AppController
                     Configure::read('DateFormat.de.TimeWithSeconds')
                 )
             );
-            $start = new iCalDateTime(PhpDateTimeImmutable::createFromFormat('Y-m-d H:i:s', $start->format('Y-m-d H:i:s')), false);
+            $startDateTime = PhpDateTimeImmutable::createFromFormat('Y-m-d H:i:s', $start->format('Y-m-d H:i:s'));
+            if ($startDateTime === false) {
+                continue;
+            }
+            $start = new iCalDateTime($startDateTime, false);
 
             $end = new PhpDateTime(
                 $event->datumstart->i18nFormat(
@@ -131,7 +135,11 @@ class EventsController extends AppController
                     Configure::read('DateFormat.de.TimeWithSeconds')
                 )
             );
-            $end = new iCalDateTime(PhpDateTimeImmutable::createFromFormat('Y-m-d H:i:s', $end->format('Y-m-d H:i:s')), false);
+            $endDateTime = PhpDateTimeImmutable::createFromFormat('Y-m-d H:i:s', $end->format('Y-m-d H:i:s'));
+            if ($endDateTime === false) {
+                continue;
+            }
+            $end = new iCalDateTime($endDateTime, false);
             $occurrence = new TimeSpan($start, $end);
 
             $icalEvent
@@ -419,7 +427,10 @@ class EventsController extends AppController
         $this->set('eventStartInLessThan7Days', $eventStartInLessThan7Days);
         
         $patchedEntities = $this->_edit([$event], true);
-        $patchedEntity = $patchedEntities['events'][0];
+        $patchedEntity = $patchedEntities['events'][0] ?? null;
+        if (!$patchedEntity instanceof Event) {
+            return;
+        }
 
         // never send notification mail on add
         // if event is edited and renotify is active, send mail to subscriber
@@ -439,10 +450,18 @@ class EventsController extends AppController
 
     /**
      * @param \Cake\ORM\Query\SelectQuery<\App\Model\Entity\Event>|array<int, \App\Model\Entity\Event> $events
-     * @return array<string, \App\Model\Entity\Event[]|string[]>
+     * @return array<string, mixed>
      */
     private function _edit(SelectQuery|array $events, bool $isEditMode): array
     {
+        if ($events instanceof SelectQuery) {
+            $events = $events->toArray();
+        }
+        if (empty($events) || !$events[0] instanceof Event) {
+            return [
+                'events' => [],
+            ];
+        }
 
         $categoriesTable = $this->getTableLocator()->get('Categories');
         $this->set('categories', $categoriesTable->getForDropdown([APP_ON]));
@@ -611,7 +630,7 @@ class EventsController extends AppController
         $this->set([
             'status' => 1,
             'message' => 'ok',
-            'events' => $this->combineEventsForMap($events)
+            'events' => $this->combineEventsForMap($events->toArray()),
         ]);
         $this->viewBuilder()->setOption('serialize', ['status', 'message', 'events']);
     }
@@ -811,14 +830,17 @@ class EventsController extends AppController
     /**
      * combines multiple events to one marker
      *
-     * @param \Cake\ORM\Query\SelectQuery<\App\Model\Entity\Event>|\Cake\Datasource\Paging\PaginatedInterface<array-key, \App\Model\Entity\Event> $events
+    * @param \Cake\ORM\Query\SelectQuery<array<int|string, mixed>|\Cake\Datasource\EntityInterface>|\Cake\Datasource\Paging\PaginatedInterface<array-key, \App\Model\Entity\Event>|array<int, mixed> $events
      * @return array<int, mixed>
      */
-    private function combineEventsForMap(PaginatedInterface|SelectQuery $events): array
+    private function combineEventsForMap(PaginatedInterface|SelectQuery|array $events): array
     {
         $eventsForMap1 = [];
 
         foreach ($events as $event) {
+            if (!$event instanceof Event) {
+                continue;
+            }
             unset($event->uhrzeitstart);
             unset($event->uhrzeitend);
             $preparedWorkshop = [];
@@ -840,7 +862,7 @@ class EventsController extends AppController
                 'Events' => []
             ];
             foreach ($event['Events'] as $e) {
-                unset($e['workshop']);
+                unset($e->workshop);
                 $preparedEvent['Events'][] = $e;
             }
             $eventsForMap[] = $preparedEvent;

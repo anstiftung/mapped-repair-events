@@ -55,7 +55,12 @@ class MyTimeHelper extends TimeHelper {
 
     public function getLastDayOfGivenMonth(string $date): string
     {
-        return date('t', strtotime($date));
+        $timestamp = strtotime($date);
+        if ($timestamp === false) {
+            return '';
+        }
+
+        return date('t', $timestamp);
     }
 
 

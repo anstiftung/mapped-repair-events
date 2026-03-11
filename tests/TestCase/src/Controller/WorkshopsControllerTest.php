@@ -53,7 +53,7 @@ class WorkshopsControllerTest extends AppTestCase
                 'X_REQUESTED_WITH' => 'XMLHttpRequest',
             ]
         ]);
-        $expectedResult = file_get_contents(TESTS . 'comparisons' . DS . 'workshops-for-map.json');
+        $expectedResult = (string)file_get_contents(TESTS . 'comparisons' . DS . 'workshops-for-map.json');
         $expectedNextEventDate = Date::now()->addDays(7)->format('Y-m-d');
         $expectedResult = $this->correctExpectedDate($expectedResult, $expectedNextEventDate);
         $this->get('/workshops/ajaxGetAllWorkshopsForMap');
@@ -65,7 +65,7 @@ class WorkshopsControllerTest extends AppTestCase
                 'X_REQUESTED_WITH' => 'XMLHttpRequest',
             ]
         ]);
-        $expectedResult = file_get_contents(TESTS . 'comparisons' . DS . 'workshops-for-map-workshop-uid-2.json');
+        $expectedResult = (string)file_get_contents(TESTS . 'comparisons' . DS . 'workshops-for-map-workshop-uid-2.json');
         $expectedNextEventDate = Date::now()->addDays(7)->format('Y-m-d');
         $expectedResult = $this->correctExpectedDate($expectedResult, $expectedNextEventDate);
         $this->get('/workshops/ajaxGetAllWorkshopsForMap?workshopUid=2');
@@ -245,7 +245,7 @@ class WorkshopsControllerTest extends AppTestCase
                 'X_REQUESTED_WITH' => 'XMLHttpRequest'
             ],
         ]);
-        $expectedResult = file_get_contents(TESTS . 'comparisons' . DS . 'data-for-vow-tags-widget.json');
+        $expectedResult = (string)file_get_contents(TESTS . 'comparisons' . DS . 'data-for-vow-tags-widget.json');
         $expectedResult = $this->correctServerName($expectedResult);
         $this->get('/workshops/ajaxGetWorkshopsAndUsersForTags?tags[]=3dreparieren');
         $this->assertResponseContains($expectedResult);
