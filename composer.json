@@ -61,7 +61,7 @@
         "post-update-cmd": [
             "bash devtools/composer-post-install.sh"
         ],
-        "test": "phpunit --colors=always",
+        "test": "php -d pcov.enabled=0 ./vendor/bin/phpunit --colors=always",
         "phpstan": "php ./vendor/bin/phpstan analyze -c phpstan.neon"
     },
     "prefer-stable": true
