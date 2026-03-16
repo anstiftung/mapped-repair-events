@@ -26,7 +26,7 @@ MappedRepairEvents.ModalElfinder = {
                         editor.create.fromHTML('<img src="' + file.url + '">')
                     );
                 } else {
-s                   MappedRepairEvents.Helper.copyToClipboard(fm.convAbsUrl(file.url)).then(
+                    MappedRepairEvents.Helper.copyToClipboard(fm.convAbsUrl(file.url)).then(
                         ()  => {
                             MappedRepairEvents.Helper.showSuccessMessage('Die Url der hochgeladenen Datei wurde erfolgreich in deine Zwischenablage kopiert.');
                         },
