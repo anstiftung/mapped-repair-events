@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace App\Controller;
 
+use App\Controller\Component\StringComponent;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use Cake\Http\Exception\NotFoundException;
@@ -590,7 +591,7 @@ class EventsController extends AppController
         $events->distinct($this->Event->getListFields());
 
         if (!empty($this->request->getQuery('keyword'))) {
-            $keyword = h(strtolower(trim((string) $this->request->getQuery('keyword'))));
+            $keyword = StringComponent::stripUtf8mb4Chars(h(strtolower(trim((string) $this->request->getQuery('keyword')))));
             if ($keyword !== '' && $keyword !== 'null') {
                 $events->where($this->Event->getKeywordSearchConditions($keyword, false));
             }
@@ -741,7 +742,7 @@ class EventsController extends AppController
         
         $keyword = '';
         if (!empty($this->request->getQuery('keyword'))) {
-            $keyword = h(strtolower(trim((string) $this->request->getQuery('keyword'))));
+            $keyword = StringComponent::stripUtf8mb4Chars(h(strtolower(trim((string) $this->request->getQuery('keyword')))));
         }
         $this->set('keyword', $keyword);
 

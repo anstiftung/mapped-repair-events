@@ -40,6 +40,16 @@ class StringComponent extends Component
         return $data;
     }
 
+    /**
+     * Strips all 4-byte UTF-8 characters (U+10000 and above)
+     * and fullwidth/halfwidth forms (U+FF00-U+FFEF),
+     * e.g. emojis, supplementary CJK, musical symbols, ＇ ＂ ＼ etc.
+     */
+    public static function stripUtf8mb4Chars(string $string): string
+    {
+        return preg_replace('/[\x{FF00}-\x{FFEF}\x{10000}-\x{10FFFF}]/u', '', $string);
+    }
+
     public static function removeWhitespace(string $string): string
     {
         return preg_replace('/\s+/', '', $string);

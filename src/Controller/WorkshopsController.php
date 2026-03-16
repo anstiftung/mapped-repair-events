@@ -524,7 +524,7 @@ class WorkshopsController extends AppController
         );
 
         if (!empty($this->request->getQuery('keyword'))) {
-            $keyword = h(strtolower(trim((string) $this->request->getQuery('keyword'))));
+            $keyword = StringComponent::stripUtf8mb4Chars(h(strtolower(trim((string) $this->request->getQuery('keyword')))));
             if ($keyword !== '' && $keyword !== 'null' && $keyword !== WorkshopsTable::KEYWORD_FOR_WORKSHOPS_WITH_FUNDINGS) {
                 $workshops->where($this->Workshop->getKeywordSearchConditions($keyword, true));
             }
@@ -1217,7 +1217,7 @@ class WorkshopsController extends AppController
 
         $keyword = '';
         if (!empty($this->request->getQuery('keyword'))) {
-            $keyword = h(strtolower(trim((string) $this->request->getQuery('keyword'))));
+            $keyword = StringComponent::stripUtf8mb4Chars(h(strtolower(trim((string) $this->request->getQuery('keyword')))));
         }
         $this->set('keyword', $keyword);
 
