@@ -26,8 +26,14 @@ MappedRepairEvents.ModalElfinder = {
                         editor.create.fromHTML('<img src="' + file.url + '">')
                     );
                 } else {
-                    MappedRepairEvents.Helper.copyToClipboard(fm.convAbsUrl(file.url));
-                    MappedRepairEvents.Helper.setFlashMessageSuccess('Die Url der hochgeladenen Datei wurde erfolgreich in deine Zwischenablage kopiert.');
+s                   MappedRepairEvents.Helper.copyToClipboard(fm.convAbsUrl(file.url)).then(
+                        ()  => {
+                            MappedRepairEvents.Helper.showSuccessMessage('Die Url der hochgeladenen Datei wurde erfolgreich in deine Zwischenablage kopiert.');
+                        },
+                        (error) => {
+                            MappedRepairEvents.Helper.showErrorMessage('Clipboard copy failed. Use HTTPS or localhost.');
+                        }
+                    );
                 }
             }
         };
