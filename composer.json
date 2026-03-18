@@ -62,6 +62,7 @@
             "bash devtools/composer-post-install.sh"
         ],
         "test": "php -d pcov.enabled=0 ./vendor/bin/phpunit --colors=always",
+        "test-cov": "php ./vendor/bin/phpunit --colors=always --coverage-cobertura ./tmp/coverage.xml && php ./bin/normalize-coverage-paths.php ./tmp/coverage.xml",
         "phpstan": "php ./vendor/bin/phpstan analyze -c phpstan.neon"
     },
     "prefer-stable": true
