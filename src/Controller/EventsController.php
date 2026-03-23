@@ -189,10 +189,6 @@ class EventsController extends AppController
         $eventsAssociation->setConditions([
             'Events.status >=' . APP_OFF,
         ]);
-        $eventsAssociation->setSort([
-            'Events.datumstart' => 'DESC',
-            'Events.uhrzeitstart' => 'DESC',
-        ]);
 
         $workshops->contain([
             'Events' => [
