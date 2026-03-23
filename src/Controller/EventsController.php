@@ -185,11 +185,17 @@ class EventsController extends AppController
             $workshops = $this->Workshop->getWorkshopsForAssociatedUser($this->loggedUser->uid, APP_DELETED);
         }
 
+        $eventsAssociation = $this->Workshop->getAssociation('Events');
+        $eventsAssociation->setConditions([
+            'Events.status >=' . APP_OFF,
+        ]);
+        $eventsAssociation->setSort([
+            'Events.datumstart' => 'DESC',
+            'Events.uhrzeitstart' => 'DESC',
+        ]);
+
         $workshops->contain([
             'Events' => [
-                'conditions' => [
-                    'Events.status > ' . APP_DELETED,
-                ],
                 'sort' => [
                     'Events.datumstart' => 'DESC',
                     'Events.uhrzeitstart' => 'DESC',

@@ -305,6 +305,12 @@ class EventsControllerTest extends AppTestCase
 
     public function testMyEventsAsOrga(): void
     {
+        // offline events must be shown
+        $eventsTable = $this->getTableLocator()->get('Events');
+        $event = $eventsTable->get(6);
+        $event->status = APP_OFF;
+        $eventsTable->save($event);
+
         $this->loginAsOrga();
         $this->get(Configure::read('AppConfig.htmlHelper')->urlMyEvents());
         $this->assertResponseOk();
