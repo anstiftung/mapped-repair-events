@@ -133,6 +133,28 @@ class UsersControllerTest extends AppTestCase
         $this->assertFalse($passwordHasher->check($oldPassword, (string) $user->password));
     }
 
+    public function testNeuesPasswortAnfordern(): void
+    {
+        $usersTable = $this->getTableLocator()->get('Users');
+        $userBeforeRequest = $usersTable->get(1);
+        $oldPasswordHash = (string) $userBeforeRequest->password;
+
+        $this->post(Configure::read('AppConfig.htmlHelper')->urlNeuesPasswortAnfordern(), [
+            'Users' => [
+                'email' => 'johndoe@mailinator.com',
+            ],
+        ]);
+
+        $this->assertRedirectContains(Configure::read('AppConfig.htmlHelper')->urlLogin());
+
+        $userAfterRequest = $usersTable->get(1);
+        $this->assertNotSame($oldPasswordHash, (string) $userAfterRequest->password);
+
+        $this->runAndAssertQueue();
+        $this->assertMailCount(1);
+        $this->assertMailContainsHtmlAt(0, 'Passwort');
+    }
+
     public function testRegisterOrga(): void
     {
         $this->post(
