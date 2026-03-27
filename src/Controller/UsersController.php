@@ -246,11 +246,7 @@ class UsersController extends AppController
                     'user' => $user,
                 ]);
 
-                if (Configure::read('debug')) {
-                    $email->setTo(Configure::read('AppConfig.debugMailAddress'));
-                } else {
-                    $email->setTo($this->request->getData('Users.email'));
-                }
+                $email->setTo($this->request->getData('Users.email'));
                 $email->addToQueue();
                 $this->AppFlash->setFlashMessage('Dir wurde ein neues Passwort zugeschickt.');
 
@@ -580,11 +576,7 @@ class UsersController extends AppController
             'password' => $newPassword,
             'user' => $user,
         ]);
-        if (Configure::read('debug')) {
-            $email->setTo(Configure::read('AppConfig.debugMailAddress'));
-        } else {
-            $email->setTo($user->email);
-        }
+        $email->setTo($user->email);
         $email->addToQueue();
 
         return$this->redirect(Configure::read('AppConfig.htmlHelper')->urlUserHome());
