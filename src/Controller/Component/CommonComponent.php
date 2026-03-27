@@ -61,11 +61,26 @@ class CommonComponent extends AppComponent {
     /**
      * Trim and sanitize recursively
      */
-    private function trimAndSanitizeDeep(mixed $value, bool $transformNullToString = false): mixed
+    private function trimAndSanitizeDeep(mixed $value, bool $transformNullToString = false, ?string $key = null): mixed
     {
 
         // Laminas\Diactoros\UploadedFile
         if (is_object($value)) {
+            return $value;
+        }
+
+        if ($this->isUntouchedPasswordField($key)) {
+            return $value;
+        }
+
+        if (is_array($value)) {
+            foreach ($value as $childKey => $childValue) {
+                $value[$childKey] = $this->trimAndSanitizeDeep(
+                    $childValue,
+                    $transformNullToString,
+                    is_string($childKey) ? $childKey : null,
+                );
+            }
             return $value;
         }
 
@@ -83,13 +98,16 @@ class CommonComponent extends AppComponent {
         }
         $purifier = new \HTMLPurifier($config);
 
-        if (is_array($value)) {
-            foreach ($value as $k => $v) {
-                $value[$k] = $this->trimAndSanitizeDeep($v, $transformNullToString);
-            }
-            return $value;
-        }
         return ($value === null && !$transformNullToString) ? $value : trim($purifier->purify($value));
+    }
+
+    private function isUntouchedPasswordField(?string $key): bool
+    {
+        if ($key === null) {
+            return false;
+        }
+
+        return str_contains(strtolower($key), 'password');
     }
 
 }

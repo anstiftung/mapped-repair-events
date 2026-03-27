@@ -12,6 +12,7 @@ use Cake\TestSuite\IntegrationTestTrait;
 use App\Test\TestCase\Traits\LoginTrait;
 use App\Model\Entity\User;
 use App\Test\TestCase\Traits\QueueTrait;
+use Authentication\PasswordHasher\DefaultPasswordHasher;
 use Cake\Event\EventInterface;
 use Cake\Controller\Controller;
 use App\Test\Mock\GeoServiceMock;
@@ -105,6 +106,31 @@ class UsersControllerTest extends AppTestCase
         $this->assertEquals('12345', $user->zip);
         $this->assertEquals('johndowx@mailinator.com', $user->email);
 
+    }
+
+    public function testPasswortAendernKeepsAmpersandUntouched(): void
+    {
+        $this->loginAsOrga();
+        $oldPassword = 'Old&Password12';
+        $newPassword = 'New&Password34';
+        $this->setPasswordForUser(1, $oldPassword);
+
+        $this->post(Configure::read('AppConfig.htmlHelper')->urlPasswortAendern(), [
+            'Users' => [
+                'password' => $oldPassword,
+                'password_new_1' => $newPassword,
+                'password_new_2' => $newPassword,
+            ],
+        ]);
+
+        $this->assertRedirectContains('/');
+
+        $usersTable = $this->getTableLocator()->get('Users');
+        $user = $usersTable->get(1);
+        $passwordHasher = new DefaultPasswordHasher();
+
+        $this->assertTrue($passwordHasher->check($newPassword, (string) $user->password));
+        $this->assertFalse($passwordHasher->check($oldPassword, (string) $user->password));
     }
 
     public function testRegisterOrga(): void
@@ -288,6 +314,16 @@ class UsersControllerTest extends AppTestCase
 
     }
 
+
+        private function setPasswordForUser(int $userUid, string $password): void
+        {
+            $usersTable = $this->getTableLocator()->get('Users');
+            $user = $usersTable->get($userUid);
+            $user = $usersTable->patchEntity($user, [
+                'password' => $password,
+            ], ['validate' => false]);
+            $usersTable->saveOrFail($user);
+        }
     private function getRegisteredUser(): User
     {
         $usersTable = $this->getTableLocator()->get('Users');
