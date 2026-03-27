@@ -548,6 +548,7 @@ class WorkshopsController extends AppController
 
         $preparedWorkshops = [];
 
+        /** @var Workshop $workshop */
         foreach ($workshops as &$workshop) {
 
             $hasModifyPermissions = $this->isLoggedIn() && ($this->isAdmin() || $this->Workshop->isUserInOrgaTeam($this->loggedUser, $workshop));
@@ -594,16 +595,16 @@ class WorkshopsController extends AppController
             // special data structure needed
             $preparedWorkshop = [];
 
-            $workshop['events'] = array_values($workshop['events']); // reindex array
-            $workshop['country'] = [
+            $workshop->events = array_values($workshop->events); // reindex array
+            $workshop->country = [
                 'name_de' => $countriesMap[$workshop->country_code] ?? '',
             ];
             unset($workshop->country_code);
 
-            $tmpEvents = $workshop['events'];
-            unset($workshop['events']);
+            $tmpEvents = $workshop->events;
+            unset($workshop->events);
             $preparedWorkshop['Workshop'] = $workshop;
-            $preparedWorkshop['Workshop']['Events'] = $tmpEvents;
+            $preparedWorkshop['Workshop']->Events = $tmpEvents;
             $preparedWorkshops[] = $preparedWorkshop;
 
         }

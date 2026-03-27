@@ -460,7 +460,10 @@ class EventsController extends AppController
         if ($events instanceof SelectQuery) {
             $events = $events->toArray();
         }
-        if (empty($events) || !$events[0] instanceof Event) {
+
+        $events = array_values($events);
+
+        if ($events === []) {
             return [
                 'events' => [],
             ];
@@ -707,7 +710,6 @@ class EventsController extends AppController
                 ]);
             }
 
-            /* @phpstan-ignore-next-line */
             $newUrl = 'categories=' . join(',', $categoryIdsForNewUrl);
             $newUrl = str_replace('categories=,', '&categories=', $newUrl);
 

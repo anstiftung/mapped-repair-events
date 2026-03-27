@@ -14,6 +14,15 @@ use Cake\ORM\TableRegistry;
 class UpdateProvicesFromGeoDataCommand extends Command
 {
 
+    private function resolveProvinceName(mixed $provinceName): string
+    {
+        if (is_string($provinceName) && $provinceName !== '') {
+            return $provinceName;
+        }
+
+        return 'no province found';
+    }
+
     public function execute(Arguments $args, ConsoleIo $io)
     {
 
@@ -38,7 +47,7 @@ class UpdateProvicesFromGeoDataCommand extends Command
             $geoData = $geoService->getGeoDataByCoordinates($workshop->lat, $workshop->lng);
             $workshop->province_id = $geoData['provinceId'];
             $workshopsTable->save($workshop);
-            $provinceName = $provincesMap[$workshop->province_id] ?? 'no province found';
+            $provinceName = $this->resolveProvinceName($provincesMap[$workshop->province_id] ?? null);
             $io->out('Updating workshop: UID: ' . $workshop->uid . ' / Name: '. $workshop->name . ' / Province: ' . $provinceName . ' / Lat: '. $workshop->lat . ' / Lng: ' . $workshop->lng);
             usleep(300000);
         }
@@ -60,7 +69,7 @@ class UpdateProvicesFromGeoDataCommand extends Command
             $geoData = $geoService->getGeoDataByCoordinates($event->lat, $event->lng);
             $event->province_id = $geoData['provinceId'];
             $eventsTable->save($event);
-            $provinceName = $provincesMap[$event->province_id] ?? 'no province found';
+            $provinceName = $this->resolveProvinceName($provincesMap[$event->province_id] ?? null);
             $io->out('Updating event: UID: ' . $event->uid . ' / Province: ' . $provinceName . ' / Lat: '. $event->lat . ' / Lng: ' . $event->lng);
             usleep(300000);
         }
@@ -83,7 +92,7 @@ class UpdateProvicesFromGeoDataCommand extends Command
             $geoData = $geoService->getGeoDataByCoordinates($user->lat, $user->lng);
             $user->province_id = $geoData['provinceId'];
             $usersTable->save($user);
-            $provinceName = $provincesMap[$user->province_id] ?? 'no province found';
+            $provinceName = $this->resolveProvinceName($provincesMap[$user->province_id] ?? null);
             $io->out('Updating user: UID: ' . $user->uid . ' / Name: '. $user->firstname . ' ' . $user->lastname . ' / Province: ' . $provinceName . ' / Lat: '. $user->lat . ' / Lng: ' . $user->lng);
             usleep(300000);
         }

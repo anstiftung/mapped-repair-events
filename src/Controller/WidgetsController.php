@@ -363,9 +363,9 @@ class WidgetsController extends AppController
         $categoriesDataNotRepaired = [];
         $carbonFootprintSum = 0;
         foreach($categoriesForStatistics as &$c) {
-            $repaired = $infoSheetsTable->getRepairedByMainCategoryId($workshopUid, $c['id'], $dateFrom, $dateTo);
-            $repairable = $infoSheetsTable->getRepairableByMainCategoryId($workshopUid, $c['id'], $dateFrom, $dateTo);
-            $notRepaired = $infoSheetsTable->getNotRepairedByMainCategoryId($workshopUid, $c['id'], $dateFrom, $dateTo);
+            $repaired = $infoSheetsTable->getRepairedByMainCategoryId($workshopUid, $c->id, $dateFrom, $dateTo);
+            $repairable = $infoSheetsTable->getRepairableByMainCategoryId($workshopUid, $c->id, $dateFrom, $dateTo);
+            $notRepaired = $infoSheetsTable->getNotRepairedByMainCategoryId($workshopUid, $c->id, $dateFrom, $dateTo);
             $carbonFootprint = $categoriesTable->getCarbonFootprintByParentCategoryId($c->id);
             $carbonFootprintSum += $categoriesTable->calculateCarbonFootprint($repaired, $carbonFootprint);
             if ($repaired == 0 && $repairable == 0 && $notRepaired == 0) {
@@ -718,12 +718,10 @@ class WidgetsController extends AppController
 
             foreach($categoriesIds as $index => $categoryId) {
                 foreach($thirdPartyPreparedSums as $thirdPartyPreparedSum) {
-                    /* @phpstan-ignore-next-line */
                     $carbonFootprintSum += $categoriesTable->calculateCarbonFootprint((float) $thirdPartyPreparedSum['repaired'], (float) $categoriesCarbonFootprint[$index]);
-                    /* @phpstan-ignore-next-line */
                     $materialFootprintSum += $categoriesTable->calculateMaterialFootprint((float) $thirdPartyPreparedSum['repaired'], (float) $categoriesMaterialFootprint[$index]);
                     if ($categoryId == $thirdPartyPreparedSum['id']) {
-                        @$categoriesDataRepaired[$index] += $thirdPartyPreparedSum['repaired'];
+                        $categoriesDataRepaired[$index] += $thirdPartyPreparedSum['repaired'];
                         continue;
                     }
                 }

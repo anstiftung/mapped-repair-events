@@ -2,9 +2,10 @@
 declare(strict_types=1);
 namespace App\Model\Table;
 
-use Cake\Core\Configure;
 use Cake\I18n\DateTime;
+use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
+use App\Model\Entity\Category;
 
 /**
  * @extends \App\Model\Table\AppTable<\App\Model\Entity\ThirdPartyStatistic>
@@ -30,7 +31,11 @@ class ThirdPartyStatisticsTable extends AppTable
         );
         $query->select('ThirdPartyStatistics.category_id');
         $query->groupBy('ThirdPartyStatistics.category_id');
-        return $query->toArray();
+
+        /** @var array<int, \App\Model\Entity\ThirdPartyStatistic> $sums */
+        $sums = $query->all()->toList();
+
+        return $sums;
     }
 
     /**
@@ -47,6 +52,9 @@ class ThirdPartyStatisticsTable extends AppTable
                     'Categories.id' => $sum->category_id,
                 ]
             )->first();
+            if (!$category instanceof Category) {
+                continue;
+            }
             if (in_array($category->parent_id, Configure::read('AppConfig.mainCategoryIdsWhereSubCategoriesAreShown'))) {
                 if (!isset($preparedSums[$category->id])) {
                     $preparedSums[$category->id] = 0;
@@ -64,7 +72,7 @@ class ThirdPartyStatisticsTable extends AppTable
 
     /**
      * @param array<int, float> $sums
-     * @return list<array<string, mixed>>
+     * @return list<array{id: int, name: string, repaired: float}>
      */
     public function bindCategoryDataToSums(array $sums): array
     {
@@ -76,10 +84,13 @@ class ThirdPartyStatisticsTable extends AppTable
                     'Categories.id' => $categoryId,
                 ],
             )->first();
+            if (!$category instanceof Category) {
+                continue;
+            }
             $preparedSums[] = [
-                'name' => $category->name,
+                'name' => (string)$category->name,
                 'id' => $category->id,
-                'repaired' => $sum,
+                'repaired' => (float)$sum,
             ];
         }
         return $preparedSums;
