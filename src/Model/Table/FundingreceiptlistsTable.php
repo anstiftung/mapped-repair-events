@@ -105,11 +105,11 @@ class FundingreceiptlistsTable extends AppTable
                 'rule' => function ($value, $context): bool {
                     if ($value != '' && !is_string($value)) {
                         $formattedValue = $value->format('Y-m-d');
-                        return $formattedValue >= '2024-12-03' && $formattedValue <= '2026-03-31';
+                        return $formattedValue >= '2024-12-03' && $formattedValue <= '2026-04-08';
                     }
                     return true;
                 },
-                'message' => 'Das Datum muss zwischen 03.12.2024 und 31.03.2026 liegen.',
+                'message' => 'Das Datum muss zwischen 03.12.2024 und 08.04.2026 liegen.',
             ]);
 
         $validator
