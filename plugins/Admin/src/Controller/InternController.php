@@ -87,7 +87,7 @@ class InternController extends AdminAppController
         $upload->moveTo(WWW_ROOT . $filenameWithPath);
 
         $manager = new ImageManager(new Driver());
-        $manager->read(WWW_ROOT . $filenameWithPath)
+        $manager->decodePath(WWW_ROOT . $filenameWithPath)
             ->scale(Configure::read('AppConfig.tmpUploadFileSize'))
             ->save(WWW_ROOT . $filenameWithPath);
 
@@ -136,7 +136,7 @@ class InternController extends AdminAppController
         }
 
         $manager = new ImageManager(new Driver());
-        $manager->read($uploadedFile)
+        $manager->decodePath($uploadedFile)
             ->rotate($directionInDegrees)
             ->save($uploadedFile);
 
@@ -198,7 +198,7 @@ class InternController extends AdminAppController
                 $thumbsFileName = Configure::read('AppConfig.htmlHelper')->$thumbMethod($fileNamePlain);
                 $targetFileAbsolute = str_replace('//', '/', $_SERVER['DOCUMENT_ROOT'] . $thumbsFileName);
 
-                $manager->read($_SERVER['DOCUMENT_ROOT'] . $filename)
+                $manager->decodePath($_SERVER['DOCUMENT_ROOT'] . $filename)
                     ->scale($thumbSize)
                     ->save($targetFileAbsolute);
 
@@ -250,7 +250,7 @@ class InternController extends AdminAppController
             $thumbsFileName = Configure::read('AppConfig.htmlHelper')->$thumbMethod($fileNamePlain, $objectType);
 
             $targetFileAbsolute = str_replace('//', '/', $_SERVER['DOCUMENT_ROOT'] . $thumbsFileName);
-            $image = $manager->read($_SERVER['DOCUMENT_ROOT'] . $filename);
+            $image = $manager->decodePath($_SERVER['DOCUMENT_ROOT'] . $filename);
 
             // only users have square 150 image!
             if (isset($thumbSizeOptions['square']) && $thumbSizeOptions['square'] == 1 && preg_match('/users/', $targetFileAbsolute)) {
