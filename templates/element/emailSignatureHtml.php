@@ -5,7 +5,7 @@ declare(strict_types=1);
     --<br /><br />
 
     Netzwerk Reparatur-Initiativen<br />
-    Tom Hansing | Ina Hemmelmann | Linn Quante<br /><br />
+    Tom Hansing | Linn Quante<br /><br />
 
     Tel: +49 089 74 74 60 -18<br /><br />
 
