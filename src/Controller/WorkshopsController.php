@@ -1252,7 +1252,11 @@ class WorkshopsController extends AppController
         $query = $workshopsTable->find('all',
         conditions: $conditions,
         contain: [
-            'Events',
+            'Events' => function (Query $query) {
+                return $query->where([
+                    'DATE(Events.datumstart) >= DATE(NOW())'
+                ]);
+            },
         ]);
 
         $keyword = '';
