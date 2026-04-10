@@ -690,6 +690,33 @@ MappedRepairEvents.Helper = {
         return '<div title="' + category.name + '" class="skill_icon small ' + category.icon + '"></div>';
     },
 
+    getOpenStreetMapEmbedUrl : function(lat, lng, zoomLevel) {
+        var latitude = parseFloat(lat);
+        var longitude = parseFloat(lng);
+        var zoom = parseInt(zoomLevel, 10);
+
+        if (!isFinite(latitude) || !isFinite(longitude)) {
+            return '';
+        }
+
+        if (!isFinite(zoom)) {
+            zoom = 14;
+        }
+
+        var latitudeDelta = 180 / Math.pow(2, zoom + 1);
+        var longitudeDelta = latitudeDelta / Math.max(Math.cos(latitude * Math.PI / 180), 0.2);
+
+        var south = Math.max(latitude - latitudeDelta, -90);
+        var north = Math.min(latitude + latitudeDelta, 90);
+        var west = Math.max(longitude - longitudeDelta, -180);
+        var east = Math.min(longitude + longitudeDelta, 180);
+
+        return '//www.openstreetmap.org/export/embed.html?bbox='
+            + [west, south, east, north].join('%2C')
+            + '&amp;zoom=' + zoom
+            + '&amp;layers=H&amp;marker=' + latitude + '%2C' + longitude;
+    },
+
     getCalEventHtml : function(ev, wuid, showDate, stringEventIsActive, stringEventIsInactive, stringEditEvent, stringDuplicateEvent, stringConfirmDeleteEvent, stringDeleteEvent, stringNoCategories) {
 
         var calEvent = '<div itemscope itemtype="http://schema.org/Event" class="calEvent ';
@@ -768,7 +795,7 @@ MappedRepairEvents.Helper = {
             calEvent += '<div class="mapevent" itemprop="geo" itemscope itemtype="http://schema.org/GeoCoordinates">';
             calEvent += '<meta itemprop="latitude" content="'+ev.lat+'" />';
             calEvent += '<meta itemprop="longitude" content="'+ev.lng+'" />';
-            calEvent += '<iframe class="eiwsd" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="//www.openstreetmap.org/export/embed.html?bbox='+ev.lng+'%2C'+ev.lat+'%2C'+ev.lng+'%2C'+ev.lat+'&amp;zoom=14&amp;layers=H&amp;marker='+ev.lat+'%2C'+ev.lng+'" ></iframe>';
+            calEvent += '<iframe class="eiwsd" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="' + MappedRepairEvents.Helper.getOpenStreetMapEmbedUrl(ev.lat, ev.lng, 14) + '" ></iframe>';
             calEvent += '</div>';
             calEvent += '<div class="sc"></div>';
 
