@@ -2422,7 +2422,8 @@ div.addthis_toolbox a {
     opacity: 0.7;
 }
 #flashMessage.error a {
-    color: var(--default-font-color);
+    color: white;
+    text-decoration: underline;
 }
 #flashMessage .closer {
     position: absolute;

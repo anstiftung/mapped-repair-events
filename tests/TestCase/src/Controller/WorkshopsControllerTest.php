@@ -204,6 +204,66 @@ class WorkshopsControllerTest extends AppTestCase
 
     }
 
+    public function testAddWorkshopWithDuplicateCoordinatesShowsWarning(): void
+    {
+        $workshopForPost = [
+            'name' => 'duplicate initiative',
+            'url' => 'duplicate-initiative',
+            'use_custom_coordinates' => true,
+            'lat' => 52.532,
+            'lng' => 13.384,
+            'province_id' => 1,
+        ];
+
+        $this->loginAsOrga();
+        $this->post(
+            Configure::read('AppConfig.htmlHelper')->urlWorkshopNew(),
+            [
+                'referer' => '/',
+                'Workshops' => $workshopForPost,
+            ],
+        );
+
+        $this->assertResponseContains('Es gibt bereits eine Initiative mit den gleichen Koordinaten');
+        $this->assertResponseContains('Test Workshop');
+
+        $workshopsTable = $this->getTableLocator()->get('Workshops');
+        $workshop = $workshopsTable->find('all', conditions: [
+            'Workshops.url' => $workshopForPost['url'],
+        ])->first();
+        $this->assertNull($workshop);
+    }
+
+    public function testAddWorkshopWithDuplicateCoordinatesAndConfirmation(): void
+    {
+        $workshopForPost = [
+            'name' => 'duplicate initiative',
+            'url' => 'duplicate-initiative',
+            'use_custom_coordinates' => true,
+            'lat' => 52.532,
+            'lng' => 13.384,
+            'province_id' => 1,
+            'confirm_duplicate_coordinates' => '1',
+        ];
+
+        $this->loginAsOrga();
+        $this->post(
+            Configure::read('AppConfig.htmlHelper')->urlWorkshopNew(),
+            [
+                'referer' => '/',
+                'Workshops' => $workshopForPost,
+            ],
+        );
+
+        $workshopsTable = $this->getTableLocator()->get('Workshops');
+        $workshop = $workshopsTable->find('all', conditions: [
+            'Workshops.url' => $workshopForPost['url'],
+        ])->first();
+
+        $this->assertNotNull($workshop);
+        $this->assertEquals('duplicate initiative', $workshop->name);
+    }
+
 
     public function testEditWorkshopAsOrga(): void
     {

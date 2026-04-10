@@ -22,6 +22,7 @@ use App\Model\Entity\Worknews;
 use App\Mailer\AppMailer;
 use App\Model\Entity\Workshop;
 use Cake\Http\Response;
+use Cake\Datasource\EntityInterface;
 use App\Model\Entity\User;
 
 class WorkshopsController extends AppController
@@ -138,6 +139,11 @@ class WorkshopsController extends AppController
                 $this->AppFlash->setFlashError($errors['lat']['geoCoordinatesInBoundingBox']);
             }
 
+            $duplicateResponse = $this->checkForDuplicateCoordinates($patchedEntity, $isEditMode, $errors);
+            if ($duplicateResponse !== null) {
+                return $duplicateResponse;
+            }
+
             if (empty($errors)) {
 
                 $patchedEntity = $this->patchEntityWithCurrentlyUpdatedFields($patchedEntity);
@@ -198,6 +204,39 @@ class WorkshopsController extends AppController
         }
         
         return null;
+    }
+
+    /**
+     * @param array<string, mixed> $errors
+     */
+    private function checkForDuplicateCoordinates(Workshop|EntityInterface $patchedEntity, bool $isEditMode, array $errors): ?Response
+    {
+        if (!empty($errors) || $this->request->getData('Workshops.confirm_duplicate_coordinates')) {
+            return null;
+        }
+
+        $lat = (float) $this->request->getData('Workshops.lat');
+        $lng = (float) $this->request->getData('Workshops.lng');
+        if ($lat == 0 || $lng == 0) {
+            return null;
+        }
+
+        $excludeUid = ($isEditMode && !empty($patchedEntity->uid)) ? $patchedEntity->uid : null;
+        $existingWorkshop = $this->Workshop->findByNearbyCoordinates($lat, $lng, $excludeUid);
+        if ($existingWorkshop === null) {
+            return null;
+        }
+
+        $workshopUrl = Configure::read('AppConfig.htmlHelper')->urlWorkshopDetail($existingWorkshop->url);
+        $this->AppFlash->setFlashError(
+            'Es gibt bereits eine Initiative mit den gleichen Koordinaten: <a href="' . h($workshopUrl) . '" target="_blank">' . h($existingWorkshop->name) . '</a>. '
+            . 'Falls du die Initiative trotzdem speichern möchtest, klicke erneut auf "Initiative speichern".',
+        );
+        $this->set('duplicateCoordinatesConfirmed', true);
+        $this->set('countries', $this->Country->getForDropdown());
+        $this->set('workshop', $patchedEntity);
+        $this->set('isEditMode', $isEditMode);
+        return $this->render('edit');
     }
 
     /**
