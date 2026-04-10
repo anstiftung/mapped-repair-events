@@ -10,7 +10,7 @@ MappedRepairEvents.Map = function(objects, type, isWidget, customCenterCoordinat
 
     this.customZoomLevel = customZoomLevel || 0;
 
-    this.pruneCluster = new PruneClusterForLeaflet(50);
+    this.pruneCluster = new PruneClusterForLeaflet(100);
 
     if (customMarkerSrc) {
         this.defaultIcon = L.icon({
