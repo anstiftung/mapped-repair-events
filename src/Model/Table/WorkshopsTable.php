@@ -422,6 +422,24 @@ class WorkshopsTable extends AppRootTable
         return !empty($workshop->users_workshops);
     }
 
+    public function findByNearbyCoordinates(float $lat, float $lng, ?int $excludeUid = null): ?Workshop
+    {
+        $coordinateTolerance = 0.00045; // ~50m
+        $conditions = [
+            'Workshops.lat >=' => $lat - $coordinateTolerance,
+            'Workshops.lat <=' => $lat + $coordinateTolerance,
+            'Workshops.lng >=' => $lng - $coordinateTolerance,
+            'Workshops.lng <=' => $lng + $coordinateTolerance,
+            'Workshops.status >=' => APP_DELETED,
+        ];
+        if ($excludeUid !== null) {
+            $conditions['Workshops.uid !='] = $excludeUid;
+        }
+        return $this->find('all',
+            conditions: $conditions,
+        )->first();
+    }
+
     /**
      * @return array<int, string>
      */

@@ -31,6 +31,10 @@ use Cake\Core\Configure;
         echo $this->Form->hidden('referer', ['value' => $referer]);
         $this->Form->unlockField('referer');
 
+        if (!empty($duplicateCoordinatesConfirmed)) {
+            echo $this->Form->hidden('Workshops.confirm_duplicate_coordinates', ['value' => '1']);
+        }
+
         ?>
         <div class="edit">
 

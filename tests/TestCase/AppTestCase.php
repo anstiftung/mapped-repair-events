@@ -40,6 +40,8 @@ class AppTestCase extends TestCase
         'app.Roots',
         'app.Skills',
         'app.ThirdPartyStatistics',
+        'app.QueuedJobs',
+        'app.QueueProcesses',
         'app.Users',
         'app.UsersCategories',
         'app.UsersGroups',
