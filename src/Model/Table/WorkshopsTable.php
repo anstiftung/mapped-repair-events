@@ -430,7 +430,7 @@ class WorkshopsTable extends AppRootTable
             'Workshops.lat <=' => $lat + $coordinateTolerance,
             'Workshops.lng >=' => $lng - $coordinateTolerance,
             'Workshops.lng <=' => $lng + $coordinateTolerance,
-            'Workshops.status >=' => APP_DELETED,
+            'Workshops.status > ' => APP_DELETED,
         ];
         if ($excludeUid !== null) {
             $conditions['Workshops.uid !='] = $excludeUid;
