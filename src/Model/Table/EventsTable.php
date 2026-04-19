@@ -286,9 +286,8 @@ class EventsTable extends AppRootTable
     }
 
     /**
-     * @template TSubject of array|\Cake\Datasource\EntityInterface
-     * @param \Cake\ORM\Query\SelectQuery<TSubject> $query
-     * @return \Cake\ORM\Query\SelectQuery<TSubject>
+     * @param \Cake\ORM\Query\SelectQuery<\Cake\Datasource\EntityInterface> $query
+     * @return \Cake\ORM\Query\SelectQuery<\Cake\Datasource\EntityInterface>
      */
     public function findAll(SelectQuery $query): SelectQuery
     {
