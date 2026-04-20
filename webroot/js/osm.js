@@ -89,7 +89,7 @@ MappedRepairEvents.Map = function(objects, type, isWidget, customCenterCoordinat
 MappedRepairEvents.Map.prototype = {
 
     setHeight : function() {
-        var newMapHeight = $(window).height() - $('#header').height() - ($('#mapContainer').css('marginTop').replace('px', '') * 2) - 10;
+        var newMapHeight = $(window).height() - this.fixedMarginTop - 30;
         $('#mapContainer, #map').height(newMapHeight);
         $('#mapContainer, #map').width($('#content .right').width());
         this.map.invalidateSize();
@@ -98,8 +98,10 @@ MappedRepairEvents.Map.prototype = {
 
     setMapAsFixed : function(marginTop) {
 
-        $('#mapContainer').scrollToFixed({
-            marginTop: marginTop
+        this.fixedMarginTop = marginTop;
+        $('#mapContainer').css({
+            position: 'fixed',
+            top: marginTop + 'px',
         });
 
         $(window).on('resize', function() {
