@@ -111,25 +111,6 @@ MappedRepairEvents.Map.prototype = {
         MappedRepairEvents.MapObject.setHeight();
     },
 
-    /**
-     * extract tags from objects and save them in this.tag.tags
-     */
-    initTags : function(objects) {
-
-        var preparedTags = new Array;
-
-        for(var i=0;i<this.objects.length;i++) {
-            var tags = this.objects[i].Tags;
-            for(var j=0;j<tags.length;j++) {
-                preparedTags.push(tags[j]);
-            }
-        }
-
-        this.tag = new MappedRepairEvents.Tag(preparedTags);
-        this.tag.tags = this.tag.sortAndMakeTagsUnique(preparedTags);
-
-    },
-
     loadAllWorkshops : function(keyword, callback) {
         $.ajax({
             url: '/workshops/ajaxGetAllWorkshopsForMap?keyword=' + keyword,
