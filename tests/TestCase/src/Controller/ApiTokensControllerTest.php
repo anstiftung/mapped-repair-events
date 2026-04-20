@@ -53,7 +53,7 @@ class ApiTokensControllerTest extends AppTestCase
         ]);
 
         $this->assertNoRedirect();
-        $this->assertResponseContains('Für den Typ Workshops API muss mindestens ein erlaubter Suchbegriff angegeben werden.');
+        $this->assertResponseContains('Für den Typ Initiativen API muss mindestens ein erlaubter Suchbegriff angegeben werden.');
 
         $apiTokenAfter = $apiTokensTable->get(1);
         $this->assertSame($apiTokenBefore->name, $apiTokenAfter->name);
@@ -77,7 +77,7 @@ class ApiTokensControllerTest extends AppTestCase
         ]);
 
         $this->assertNoRedirect();
-        $this->assertResponseContains('Erlaubte Suchbegriffe sind nur für den Typ Workshops API erlaubt und müssen für alle anderen Typen leer sein.');
+        $this->assertResponseContains('Erlaubte Suchbegriffe sind nur für den Typ Initiativen API erlaubt und müssen für alle anderen Typen leer sein.');
 
         $apiTokenAfter = $apiTokensTable->get(5);
         $this->assertSame($apiTokenBefore->name, $apiTokenAfter->name);

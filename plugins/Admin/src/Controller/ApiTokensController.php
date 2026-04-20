@@ -65,7 +65,7 @@ class ApiTokensController extends AdminAppController
             'status' => APP_OFF,
         ];
 
-        $entity = $this->ApiToken->newEntity($apiTokenData);
+        $entity = $this->ApiToken->newEntity($apiTokenData, ['validate' => false]);
         $apiToken = $this->ApiToken->save($entity);
 
         if (!$apiToken) {
