@@ -99,7 +99,6 @@ MappedRepairEvents.Map.prototype = {
 
     setMapAsFixed : function(marginTop) {
 
-        this.fixedMarginTop = marginTop;
         $('#mapContainer').css({
             position: 'fixed',
             top: marginTop + 'px',
