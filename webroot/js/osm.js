@@ -107,7 +107,7 @@ MappedRepairEvents.Map.prototype = {
             marginTop: '0',
         });
 
-         // for mobile portrait mode the height was not calculated properly
+         // for mobile landscape mode the height was not calculated properly
         if (window.visualViewport) {
             window.visualViewport.addEventListener('resize', function() {
                 MappedRepairEvents.MapObject.setHeight();
