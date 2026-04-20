@@ -89,9 +89,10 @@ MappedRepairEvents.Map = function(objects, type, isWidget, customCenterCoordinat
 MappedRepairEvents.Map.prototype = {
 
     setHeight : function() {
-        var newMapHeight = $(window).height() - this.fixedMarginTop - 30;
-        $('#mapContainer, #map').height(newMapHeight);
-        $('#mapContainer, #map').width($('#content .right').width());
+        var containerWidth = $('#content .right').width();
+        $('#mapContainer').width(containerWidth);
+        var newMapHeight = $('#mapContainer').height();
+        $('#map').height(newMapHeight).width(containerWidth);
         this.map.invalidateSize();
         this.zoomToMarkerLayerBounds();
     },
@@ -102,11 +103,20 @@ MappedRepairEvents.Map.prototype = {
         $('#mapContainer').css({
             position: 'fixed',
             top: marginTop + 'px',
+            bottom: '20px',
+            marginTop: '0',
         });
 
-        $(window).on('resize', function() {
-            MappedRepairEvents.MapObject.setHeight();
-        });
+         // for mobile portrait mode the height was not calculated properly
+        if (window.visualViewport) {
+            window.visualViewport.addEventListener('resize', function() {
+                MappedRepairEvents.MapObject.setHeight();
+            });
+        } else {
+            $(window).on('resize', function() {
+                MappedRepairEvents.MapObject.setHeight();
+            });
+        }
 
         MappedRepairEvents.MapObject.setHeight();
     },
