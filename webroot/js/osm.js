@@ -89,43 +89,35 @@ MappedRepairEvents.Map = function(objects, type, isWidget, customCenterCoordinat
 MappedRepairEvents.Map.prototype = {
 
     setHeight : function() {
-        var newMapHeight = $(window).height() - $('#header').height() - ($('#mapContainer').css('marginTop').replace('px', '') * 2) - 10;
-        $('#mapContainer, #map').height(newMapHeight);
-        $('#mapContainer, #map').width($('#content .right').width());
+        var containerWidth = $('#content .right').width();
+        $('#mapContainer').width(containerWidth);
+        var newMapHeight = $('#mapContainer').height();
+        $('#map').height(newMapHeight).width(containerWidth);
         this.map.invalidateSize();
         this.zoomToMarkerLayerBounds();
     },
 
     setMapAsFixed : function(marginTop) {
 
-        $('#mapContainer').scrollToFixed({
-            marginTop: marginTop
+        $('#mapContainer').css({
+            position: 'fixed',
+            top: marginTop + 'px',
+            bottom: '20px',
+            marginTop: '0',
         });
 
-        $(window).on('resize', function() {
-            MappedRepairEvents.MapObject.setHeight();
-        });
-
-        MappedRepairEvents.MapObject.setHeight();
-    },
-
-    /**
-     * extract tags from objects and save them in this.tag.tags
-     */
-    initTags : function(objects) {
-
-        var preparedTags = new Array;
-
-        for(var i=0;i<this.objects.length;i++) {
-            var tags = this.objects[i].Tags;
-            for(var j=0;j<tags.length;j++) {
-                preparedTags.push(tags[j]);
-            }
+         // for mobile landscape mode the height was not calculated properly
+        if (window.visualViewport) {
+            window.visualViewport.addEventListener('resize', function() {
+                MappedRepairEvents.MapObject.setHeight();
+            });
+        } else {
+            $(window).on('resize', function() {
+                MappedRepairEvents.MapObject.setHeight();
+            });
         }
 
-        this.tag = new MappedRepairEvents.Tag(preparedTags);
-        this.tag.tags = this.tag.sortAndMakeTagsUnique(preparedTags);
-
+        MappedRepairEvents.MapObject.setHeight();
     },
 
     loadAllWorkshops : function(keyword, callback) {
