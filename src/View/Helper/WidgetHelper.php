@@ -25,7 +25,7 @@ class WidgetHelper extends HtmlHelper {
 
     function getDefaultChartBackgroundColorTotal(): string
     {
-        return '#F4C961';
+        return 'rgba(244,201,97,1)';
     }
 
     function getDefaultChartBorderColorOk(): string
@@ -45,7 +45,7 @@ class WidgetHelper extends HtmlHelper {
 
     function getDefaultChartBorderColorTotal(): string
     {
-        return '#EFAD11';
+        return 'rgb(239,173,17)';
     }
 
 }
