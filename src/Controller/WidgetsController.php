@@ -459,7 +459,7 @@ class WidgetsController extends AppController
     private function parseStatisticsWorkshopParams(): void
     {
         $dateFrom = '01.01.2010';
-        if (!empty($this->request->getQuery('dateTo') && Configure::read('AppConfig.timeHelper')->validateDate($this->request->getQuery('dateFrom')))) {
+        if (!empty($this->request->getQuery('dateFrom') && Configure::read('AppConfig.timeHelper')->validateDate($this->request->getQuery('dateFrom')))) {
             $dateFrom = h($this->request->getQuery('dateFrom'));
         }
         $this->set('dateFrom', $dateFrom);
