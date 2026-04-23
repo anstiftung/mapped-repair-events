@@ -111,7 +111,7 @@ if ($isMyProfile) {
                 echo '<div class="sc"></div>';
 
                 echo '<div class="skills-wrapper">';
-                    echo '<b id="users-skills" class="pseudo-field" data-private="true" >Weitere Kenntnisse / Interessen</b>';
+                    echo '<b id="users-skills" class="pseudo-field" data-private="true" >Weitere reparaturbezogene Kenntnisse / Interessen</b>';
                     $this->element('addScript', ['script' => 
                         JS_NAMESPACE . ".Helper.addNewTagsToSelect2Multidropdown('select#users-skills-ids', ".json_encode($this->request->getSession()->read('newSkillsProfile')).");
                     "]);

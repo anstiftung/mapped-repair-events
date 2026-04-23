@@ -47,7 +47,7 @@ use Cake\Core\Configure;
             "]);
 
             echo '<div class="skills-wrapper">';
-                echo '<b id="knowledges-skills" class="pseudo-field">Weitere Kenntnisse / Interessen</b>';
+                echo '<b id="knowledges-skills" class="pseudo-field">Weitere reparaturbezogene Kenntnisse / Interessen</b>';
                 echo $this->Form->control('Knowledges.skills._ids', [
                     'multiple' => 'select',
                     'data-tags' => true,
