@@ -55,9 +55,11 @@ class WidgetsController extends AppController
         $dataRepaired = $infoSheetsTable->getRepaired($dateFrom, $dateTo, $city, $province);
         $dataRepairable = $infoSheetsTable->getRepairable($dateFrom, $dateTo, $city, $province);
         $dataNotRepaired = $infoSheetsTable->getNotRepaired($dateFrom, $dateTo, $city, $province);
+        $dataTotal = $dataRepaired + $dataRepairable + $dataNotRepaired;
         $this->set('dataRepaired', $dataRepaired);
         $this->set('dataRepairable', $dataRepairable);
         $this->set('dataNotRepaired', $dataNotRepaired);
+        $this->set('dataTotal', $dataTotal);
         $this->set('showWorkshopName', false);
 
         return $this->render('statisticsCountsWorkshop');
@@ -82,9 +84,11 @@ class WidgetsController extends AppController
         $dataRepaired = $infoSheetsTable->getRepairedByWorkshopUid($workshopUid, null, null);
         $dataRepairable = $infoSheetsTable->getRepairableByWorkshopUid($workshopUid, null, null);
         $dataNotRepaired = $infoSheetsTable->getNotRepairedByWorkshopUid($workshopUid, null, null);
+        $dataTotal = $dataRepaired + $dataRepairable + $dataNotRepaired;
         $this->set('dataRepaired', $dataRepaired);
         $this->set('dataRepairable', $dataRepairable);
         $this->set('dataNotRepaired', $dataNotRepaired);
+        $this->set('dataTotal', $dataTotal);
         $this->set('showName', false);
     }
 

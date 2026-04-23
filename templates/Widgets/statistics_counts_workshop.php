@@ -16,6 +16,10 @@ use App\Model\Entity\Province;
         border-color: <?php echo $borderColorNotOk; ?>;
         background-color: <?php echo $backgroundColorNotOk; ?>;
     }
+    div.total > div.box {
+        border-color: <?php echo $borderColorTotal; ?>;
+        background-color: <?php echo $backgroundColorTotal; ?>;
+    }
 </style>
 
 <?php
@@ -66,6 +70,11 @@ if ($showName && ($city != '' || $province instanceof Province)) { ?>
     <div class="not-repaired">
         <div class="box"></div>
         <span>Nicht repariert (<?php echo $this->Number->precision($dataNotRepaired, 0); ?>)</span>
+    </div>
+
+    <div class="total">
+        <div class="box"></div>
+        <span>Gesamt (<?php echo $this->Number->precision($dataTotal, 0); ?>)</span>
     </div>
 
 </div>
