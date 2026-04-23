@@ -55,9 +55,11 @@ class WidgetsController extends AppController
         $dataRepaired = $infoSheetsTable->getRepaired($dateFrom, $dateTo, $city, $province);
         $dataRepairable = $infoSheetsTable->getRepairable($dateFrom, $dateTo, $city, $province);
         $dataNotRepaired = $infoSheetsTable->getNotRepaired($dateFrom, $dateTo, $city, $province);
+        $dataTotal = $dataRepaired + $dataRepairable + $dataNotRepaired;
         $this->set('dataRepaired', $dataRepaired);
         $this->set('dataRepairable', $dataRepairable);
         $this->set('dataNotRepaired', $dataNotRepaired);
+        $this->set('dataTotal', $dataTotal);
         $this->set('showWorkshopName', false);
 
         return $this->render('statisticsCountsWorkshop');
@@ -82,9 +84,11 @@ class WidgetsController extends AppController
         $dataRepaired = $infoSheetsTable->getRepairedByWorkshopUid($workshopUid, null, null);
         $dataRepairable = $infoSheetsTable->getRepairableByWorkshopUid($workshopUid, null, null);
         $dataNotRepaired = $infoSheetsTable->getNotRepairedByWorkshopUid($workshopUid, null, null);
+        $dataTotal = $dataRepaired + $dataRepairable + $dataNotRepaired;
         $this->set('dataRepaired', $dataRepaired);
         $this->set('dataRepairable', $dataRepairable);
         $this->set('dataNotRepaired', $dataNotRepaired);
+        $this->set('dataTotal', $dataTotal);
         $this->set('showName', false);
     }
 
@@ -455,7 +459,7 @@ class WidgetsController extends AppController
     private function parseStatisticsWorkshopParams(): void
     {
         $dateFrom = '01.01.2010';
-        if (!empty($this->request->getQuery('dateTo') && Configure::read('AppConfig.timeHelper')->validateDate($this->request->getQuery('dateFrom')))) {
+        if (!empty($this->request->getQuery('dateFrom') && Configure::read('AppConfig.timeHelper')->validateDate($this->request->getQuery('dateFrom')))) {
             $dateFrom = h($this->request->getQuery('dateFrom'));
         }
         $this->set('dateFrom', $dateFrom);
@@ -576,6 +580,12 @@ class WidgetsController extends AppController
         }
         $this->set('backgroundColorNotOk', $backgroundColorNotOk);
 
+        $backgroundColorTotal = Configure::read('AppConfig.widgetHelper')->getDefaultChartBackgroundColorTotal();
+        if (!empty($this->request->getQuery('backgroundColorTotal')) && $this->validateHtmlColor($this->request->getQuery('backgroundColorTotal'))) {
+            $backgroundColorTotal = $this->validateHtmlColor(h($this->request->getQuery('backgroundColorTotal')));
+        }
+        $this->set('backgroundColorTotal', $backgroundColorTotal);
+
         $borderColorOk = Configure::read('AppConfig.widgetHelper')->getDefaultChartBorderColorOk();
         if (!empty($this->request->getQuery('borderColorOk')) && $this->validateHtmlColor($this->request->getQuery('borderColorOk'))) {
             $borderColorOk = $this->validateHtmlColor(h($this->request->getQuery('borderColorOk')));
@@ -593,6 +603,12 @@ class WidgetsController extends AppController
             $borderColorRepairable = $this->validateHtmlColor(h($this->request->getQuery('borderColorRepairable')));
         }
         $this->set('borderColorRepairable', $borderColorRepairable);
+
+        $borderColorTotal = Configure::read('AppConfig.widgetHelper')->getDefaultChartBorderColorTotal();
+        if (!empty($this->request->getQuery('borderColorTotal')) && $this->validateHtmlColor($this->request->getQuery('borderColorTotal'))) {
+            $borderColorTotal = $this->validateHtmlColor(h($this->request->getQuery('borderColorTotal')));
+        }
+        $this->set('borderColorTotal', $borderColorTotal);
 
     }
 

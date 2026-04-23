@@ -25,9 +25,13 @@ echo $this->element('widgets/statisticsFilterForm', [
     'showDonutChart' => $showDonutChart,
     'showBarChart' => $showBarChart,
     'backgroundColorOk' => $backgroundColorOk,
+    'backgroundColorRepairable' => $backgroundColorRepairable,
     'backgroundColorNotOk' => $backgroundColorNotOk,
+    'backgroundColorTotal' => $backgroundColorTotal,
     'borderColorOk' => $borderColorOk,
+    'borderColorRepairable' => $borderColorRepairable,
     'borderColorNotOk' => $borderColorNotOk,
+    'borderColorTotal' => $borderColorTotal,
     'dataSources' => ($city == '' && !($province instanceof Province)) ? $dataSources : [],
     'dataSource' => $dataSource,
     'month' => $month,
@@ -65,7 +69,7 @@ if ($materialFootprintSum > 0) { ?>
 <?php
 if ($showBarChart && $chartHasData) {
     $this->element('addScript', ['script' =>
-        JS_NAMESPACE.".WidgetStatistics.loadWorkshopDetailChartCategories('".json_encode($statisticsCategoriesData)."');
+        JS_NAMESPACE.".WidgetStatistics.loadWorkshopDetailChartCategories('".json_encode($statisticsCategoriesData)."', '" . $backgroundColorTotal . "', '" . $borderColorTotal . "');
     "]);
 ?>
 <canvas id="chartCategories" height="300"></canvas>
@@ -74,7 +78,7 @@ if ($showBarChart && $chartHasData) {
 <?php
 if ($dataSource == 'platform' && $showDonutChart && $chartHasData) {
     $this->element('addScript', ['script' =>
-        JS_NAMESPACE.".WidgetStatistics.loadWorkshopDetailChartRepaired('".json_encode($statisticsRepairedData)."');
+        JS_NAMESPACE.".WidgetStatistics.loadWorkshopDetailChartRepaired('".json_encode($statisticsRepairedData)."', false, '" . $backgroundColorTotal . "', '" . $borderColorTotal . "');
     "]);
 ?>
 <canvas id="chartRepaired" width="75%"></canvas>
