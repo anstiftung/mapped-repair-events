@@ -899,7 +899,7 @@ class WorkshopsController extends AppController
         $showStatistics = false;
         if (Configure::read('AppConfig.statisticsEnabled')) {
             $infoSheetsTable = $this->getTableLocator()->get('InfoSheets');
-            if ($infoSheetsTable->workshopInfoSheetsCount($workshop->uid) > 0 && $workshop->show_statistics > Workshop::STATISTICS_DISABLED) {
+            if ($infoSheetsTable->workshopInfoSheetsCount($workshop->uid) > 0 && $workshop->show_statistics == Workshop::STATISTICS_ENABLED) {
                 $showStatistics = true;
             }
         }
