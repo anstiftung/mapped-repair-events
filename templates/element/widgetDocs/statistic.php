@@ -103,7 +103,7 @@ declare(strict_types=1);
             <li>Hinweis: Das Donut-Diagramm wird beim globalen Statistik-Widget nur dann angezeigt, wenn beim Dropdown Datenquelle der Wert "<?php echo Configure::read('AppConfig.platformName'); ?>" ausgewählt ist.</li>
         </ul>
         <code class="inlinecode">
-            &lt;iframe frameborder="0" width="100%" height="700" src="<?php echo Configure::read('AppConfig.serverName'); ?>/widgets/statistics-global?<span class="highlight">?showDonutChart=0</span>"&gt;&lt;/iframe&gt;
+            &lt;iframe frameborder="0" width="100%" height="700" src="<?php echo Configure::read('AppConfig.serverName'); ?>/widgets/statistics-global?<span class="highlight">showDonutChart=0</span>"&gt;&lt;/iframe&gt;
         </code>
 
     </div>
