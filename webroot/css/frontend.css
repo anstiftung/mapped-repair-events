@@ -2441,6 +2441,19 @@ div.addthis_toolbox a {
     background-color: #f2f2f2;
     width: auto !important;
 }
+.docs-wrapper {
+    border: 1px solid #ccc;
+    padding: 10px;
+    background-color: #f9f9f9;
+    margin-bottom: 20px;
+}
+.docs-wrapper h2 {
+    margin-bottom: 10px;
+}
+.docs-wrapper h3 {
+    margin-top: 15px;
+}
+
 body.workshops.home .right #flashMessage {
     margin: 0;
     font-weight: normal;
