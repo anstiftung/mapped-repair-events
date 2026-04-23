@@ -99,7 +99,7 @@ declare(strict_types=1);
 
         <h3>Balkendiagramm bzw. Donut-Diagramm ausblenden</h3>
         <ul>
-            <li>showDonutChart / showBarChart auf <b>0</b> setzen, falls die enstprechende Grafik nicht angezeigt werden soll.</li>
+            <li>showDonutChart / showBarChart auf <b>0</b> setzen, falls die entsprechende Grafik nicht angezeigt werden soll.</li>
             <li>Hinweis: Das Donut-Diagramm wird beim globalen Statistik-Widget nur dann angezeigt, wenn beim Dropdown Datenquelle der Wert "<?php echo Configure::read('AppConfig.platformName'); ?>" ausgewählt ist.</li>
         </ul>
         <code class="inlinecode">
