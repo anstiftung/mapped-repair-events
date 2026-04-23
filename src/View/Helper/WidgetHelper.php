@@ -23,6 +23,11 @@ class WidgetHelper extends HtmlHelper {
         return 'rgba(77,142,162,1)';
     }
 
+    function getDefaultChartBackgroundColorTotal(): string
+    {
+        return '#F4C961';
+    }
+
     function getDefaultChartBorderColorOk(): string
     {
         return 'rgba(200,210,24,1)';
@@ -36,6 +41,11 @@ class WidgetHelper extends HtmlHelper {
     function getDefaultChartBorderColorRepairable(): string
     {
         return 'rgba(77,142,162,1)';
+    }
+
+    function getDefaultChartBorderColorTotal(): string
+    {
+        return '#EFAD11';
     }
 
 }

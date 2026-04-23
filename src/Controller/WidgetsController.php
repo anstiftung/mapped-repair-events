@@ -576,6 +576,12 @@ class WidgetsController extends AppController
         }
         $this->set('backgroundColorNotOk', $backgroundColorNotOk);
 
+        $backgroundColorTotal = Configure::read('AppConfig.widgetHelper')->getDefaultChartBackgroundColorTotal();
+        if (!empty($this->request->getQuery('backgroundColorTotal')) && $this->validateHtmlColor($this->request->getQuery('backgroundColorTotal'))) {
+            $backgroundColorTotal = $this->validateHtmlColor(h($this->request->getQuery('backgroundColorTotal')));
+        }
+        $this->set('backgroundColorTotal', $backgroundColorTotal);
+
         $borderColorOk = Configure::read('AppConfig.widgetHelper')->getDefaultChartBorderColorOk();
         if (!empty($this->request->getQuery('borderColorOk')) && $this->validateHtmlColor($this->request->getQuery('borderColorOk'))) {
             $borderColorOk = $this->validateHtmlColor(h($this->request->getQuery('borderColorOk')));
@@ -593,6 +599,12 @@ class WidgetsController extends AppController
             $borderColorRepairable = $this->validateHtmlColor(h($this->request->getQuery('borderColorRepairable')));
         }
         $this->set('borderColorRepairable', $borderColorRepairable);
+
+        $borderColorTotal = Configure::read('AppConfig.widgetHelper')->getDefaultChartBorderColorTotal();
+        if (!empty($this->request->getQuery('borderColorTotal')) && $this->validateHtmlColor($this->request->getQuery('borderColorTotal'))) {
+            $borderColorTotal = $this->validateHtmlColor(h($this->request->getQuery('borderColorTotal')));
+        }
+        $this->set('borderColorTotal', $borderColorTotal);
 
     }
 

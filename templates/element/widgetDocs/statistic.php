@@ -59,11 +59,11 @@ declare(strict_types=1);
     <br />
     <h2>Farben anpassen</h2>
     <ul>
-        <li>Die Hintergrund- und Rahmenfarben können angepasst werden. Die Farb-Codes bitte entweder als Hex-Code <b>ohne #</b> oder als RGB / RGBA (wie im Beispiel) angeben.</li>
+        <li>Die Hintergrund- und Rahmenfarben können angepasst werden. Die Farb-Codes entweder als Hex-Code <b>ohne #</b> oder als RGB / RGBA (wie im Beispiel) angeben.</li>
     </ul>
 
     <code class="inlinecode">
-        &lt;iframe frameborder="0" width="100%" height="700" src="<?php echo Configure::read('AppConfig.serverName'); ?>/widgets/statistics-global?<span class="highlight">borderColorOk=rgb(14,113,184)</span>&<span class="highlight">backgroundColorOk=rgba(14,113,184,0.6)</span>&<span class="highlight">borderColorNotOk=rgb(181,24,33)</span>&<span class="highlight">backgroundColorNotOk=rgba(181,24,33,0.6)</span>&<span class="highlight">borderColorRepairable=rgb(242,217,164)</span>&<span class="highlight">backgroundColorRepairable=rgba(242,217,164,0.6)</span>"&gt;&lt;/iframe&gt;
+        &lt;iframe frameborder="0" width="100%" height="700" src="<?php echo Configure::read('AppConfig.serverName'); ?>/widgets/statistics-global?<span class="highlight">borderColorOk=rgb(14,113,184)</span>&<span class="highlight">backgroundColorOk=rgba(14,113,184,0.6)</span>&<span class="highlight">borderColorNotOk=rgb(181,24,33)</span>&<span class="highlight">backgroundColorNotOk=rgba(181,24,33,0.6)</span>&<span class="highlight">borderColorRepairable=rgb(242,217,164)</span>&<span class="highlight">backgroundColorRepairable=rgba(242,217,164,0.6)</span>&<span class="highlight">borderColorTotal=rgb(239,173,17)</span>&<span class="highlight">backgroundColorTotal=rgba(244,201,97,1)</span>"&gt;&lt;/iframe&gt;
     </code>
 
     <br />

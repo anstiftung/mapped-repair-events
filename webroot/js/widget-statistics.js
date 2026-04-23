@@ -116,11 +116,80 @@ MappedRepairEvents.WidgetStatistics = {
         });
     },
 
-    loadWorkshopDetailChartRepaired : function(data, displayLabel) {
+    getChartTotalCount : function(datasets) {
+        return datasets.reduce(function(sum, dataset) {
+            return sum + dataset.data.reduce(function(datasetSum, value) {
+                return datasetSum + value;
+            }, 0);
+        }, 0);
+    },
+
+    getLegendTotalLabelText : function(label, total) {
+        var labelText = (label ?? '').toString().replace(/\((.*)\)/, '').trim();
+
+        return labelText + ' (' + total.toLocaleString() + ')';
+    },
+
+    getDefaultLegendGenerateLabels : function(chart) {
+        return Chart.overrides[chart.config.type]?.plugins?.legend?.labels?.generateLabels || Chart.defaults.plugins.legend.labels.generateLabels;
+    },
+
+    getDefaultLegendOnClick : function(chart) {
+        return Chart.overrides[chart.config.type]?.plugins?.legend?.onClick || Chart.defaults.plugins.legend.onClick;
+    },
+
+    getLegendOptionsWithTotal : function(totalCount, backgroundColorTotal, borderColorTotal) {
+        return {
+            labels: {
+                generateLabels: function(chart) {
+                    var defaultLabels = MappedRepairEvents.WidgetStatistics.getDefaultLegendGenerateLabels(chart)(chart).map(function(label) {
+                        var chartLabel;
+                        var labelTotal;
+
+                        if (label.datasetIndex !== null && label.datasetIndex !== undefined) {
+                            chartLabel = chart.data.datasets[label.datasetIndex].label || label.text;
+                            labelTotal = MappedRepairEvents.WidgetStatistics.getChartTotalCount([chart.data.datasets[label.datasetIndex]]);
+                        } else if (label.index !== null && label.index !== undefined) {
+                            chartLabel = chart.data.labels[label.index] || label.text;
+                            labelTotal = chart.data.datasets[0].data[label.index];
+                        } else {
+                            return label;
+                        }
+
+                        label.text = MappedRepairEvents.WidgetStatistics.getLegendTotalLabelText(chartLabel, labelTotal);
+
+                        return label;
+                    });
+
+                    defaultLabels.push({
+                        text: MappedRepairEvents.WidgetStatistics.getLegendTotalLabelText('Gesamt', totalCount),
+                        fillStyle: backgroundColorTotal,
+                        strokeStyle: borderColorTotal,
+                        lineWidth: 1,
+                        hidden: false,
+                        datasetIndex: null
+                    });
+
+                    return defaultLabels;
+                }
+            },
+            onClick: function(event, legendItem, legend) {
+                if (legendItem.datasetIndex === null && legendItem.index === undefined) {
+                    return;
+                }
+
+                MappedRepairEvents.WidgetStatistics.getDefaultLegendOnClick(legend.chart)(event, legendItem, legend);
+            }
+        };
+    },
+
+    loadWorkshopDetailChartRepaired : function(data, displayLabel, backgroundColorTotal, borderColorTotal) {
 
         displayLabel = displayLabel || false;
 
         data = $.parseJSON(data);
+
+        var totalCount = this.getChartTotalCount([{ data: data.data }]);
 
         var config = {
             type: 'doughnut',
@@ -154,9 +223,9 @@ MappedRepairEvents.WidgetStatistics = {
                     padding: 10
                 },
                 plugins: {
-                    legend: {
+                    legend: Object.assign(this.getLegendOptionsWithTotal(totalCount, backgroundColorTotal, borderColorTotal), {
                         display: displayLabel
-                    },
+                    }),
                     tooltip: {
                         callbacks: {
                             label: function(ctx) {
@@ -176,9 +245,11 @@ MappedRepairEvents.WidgetStatistics = {
 
     },
 
-    loadWorkshopDetailChartCategories : function(data) {
+    loadWorkshopDetailChartCategories : function(data, backgroundColorTotal, borderColorTotal) {
 
         data = $.parseJSON(data);
+
+        var totalCount = this.getChartTotalCount(data.datasets);
 
         for(var i in data.datasets)
         {
@@ -193,6 +264,7 @@ MappedRepairEvents.WidgetStatistics = {
             },
             options: {
                 plugins: {
+                    legend: this.getLegendOptionsWithTotal(totalCount, backgroundColorTotal, borderColorTotal),
                     tooltip: {
                         callbacks: {
                             label: function(ctx) {
