@@ -62,9 +62,8 @@ class MyHtmlHelper extends HtmlHelper {
     public function getWorkshopStatisticTypes(): array
     {
         return [
-            Workshop::STATISTICS_DISABLED => 'Keine Statistik im Profil anzeigen',
-            Workshop::STATISTICS_SHOW_ALL => 'Gesamte Statistik anzeigen',
-            Workshop::STATISTICS_SHOW_ONLY_CHART => 'Nur Zahlenstatistik im Profil anzeigen',
+            Workshop::STATISTICS_DISABLED => 'Statistik im Profil nicht anzeigen',
+            Workshop::STATISTICS_ENABLED => 'Statistik im Profil anzeigen',
         ];
     }
 

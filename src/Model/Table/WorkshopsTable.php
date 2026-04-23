@@ -149,8 +149,7 @@ class WorkshopsTable extends AppRootTable
             'show_statistics',
             [
                 Workshop::STATISTICS_DISABLED,
-                Workshop::STATISTICS_SHOW_ALL,
-                Workshop::STATISTICS_SHOW_ONLY_CHART,
+                Workshop::STATISTICS_ENABLED,
             ],
             'Dieser Wert ist nicht gültig.',
         );

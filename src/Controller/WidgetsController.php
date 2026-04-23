@@ -295,7 +295,7 @@ class WidgetsController extends AppController
         $workshopsTable = $this->getTableLocator()->get('Workshops');
         $workshop = $workshopsTable->find('all', conditions: [
             'Workshops.uid' => $workshopUid,
-            'Workshops.show_statistics > ' => Workshop::STATISTICS_DISABLED,
+            'Workshops.show_statistics' => Workshop::STATISTICS_DISABLED,
         ])->first();
         if (empty($workshop)) {
             throw new NotFoundException;

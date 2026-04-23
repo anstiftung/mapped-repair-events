@@ -9,8 +9,7 @@ class Workshop extends Entity
 {
 
     const STATISTICS_DISABLED = 0;
-    const STATISTICS_SHOW_ALL = 1;
-    const STATISTICS_SHOW_ONLY_CHART = 2;
+    const STATISTICS_ENABLED = 1;
 
     /**
      * @return string[]
