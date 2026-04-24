@@ -20,6 +20,7 @@ use App\Model\Table\KnowledgesTable;
 use Cake\View\JsonView;
 use App\Model\Table\FundingsTable;
 use Cake\Http\Response;
+use Intervention\Image\Alignment;
 
 class InternController extends AdminAppController
 {
@@ -254,7 +255,7 @@ class InternController extends AdminAppController
 
             // only users have square 150 image!
             if (isset($thumbSizeOptions['square']) && $thumbSizeOptions['square'] == 1 && preg_match('/users/', $targetFileAbsolute)) {
-                $image->scale($thumbSize)->crop($thumbSize, $thumbSize, 0, 0, 'ffffff', 'center');
+                $image->contain((int) $thumbSize, (int) $thumbSize, null, Alignment::CENTER);
             } else {
                 if ($thumbSize != 'original') {
                     $image->scale($thumbSize);
