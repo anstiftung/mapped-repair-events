@@ -20,6 +20,7 @@ use App\Model\Table\KnowledgesTable;
 use Cake\View\JsonView;
 use App\Model\Table\FundingsTable;
 use Cake\Http\Response;
+use Intervention\Image\Colors\Rgb\Colorspace as RgbColorspace;
 use Intervention\Image\Alignment;
 
 class InternController extends AdminAppController
@@ -87,10 +88,21 @@ class InternController extends AdminAppController
         $filenameWithPath = Configure::read('AppConfig.tmpUploadImagesDir') . '/' . $filename;
         $upload->moveTo(WWW_ROOT . $filenameWithPath);
 
+        $absoluteFilePath = WWW_ROOT . $filenameWithPath;
         $manager = new ImageManager(new Driver());
-        $manager->decodePath(WWW_ROOT . $filenameWithPath)
-            ->scale(Configure::read('AppConfig.tmpUploadFileSize'))
-            ->save(WWW_ROOT . $filenameWithPath);
+        $image = $manager->decodePath($absoluteFilePath);
+
+        if (! ($image->colorspace() instanceof RgbColorspace)) {
+            @unlink($absoluteFilePath);
+            $message = 'Die hochgeladene Datei muss im RGB-Farbraum vorliegen.';
+            die(json_encode([
+                'status' => 0,
+                'msg' => $message
+            ]));
+        }
+
+        $image->scale(Configure::read('AppConfig.tmpUploadFileSize'))
+            ->save($absoluteFilePath);
 
         die(json_encode([
             'status' => 1,
