@@ -25,7 +25,7 @@ class ApiControllerStatisticsTest extends AppTestCase
                 'Origin' => 'http://localhost',
             ],
         ]);
-        $this->get('/api/statistics?city=Berlin&dateFrom=2039-01-01&dateTo=2040-12-31');
+        $this->get('/api/v1/statistics?city=Berlin&dateFrom=2039-01-01&dateTo=2040-12-31');
         $this->assertResponseOk();
         $response = $this->getJsonResponseBody();
         $expectedResponse = json_decode((string)file_get_contents(TESTS . 'comparisons' . DS . 'rest-statistics-berlin.json'), true);
@@ -44,7 +44,7 @@ class ApiControllerStatisticsTest extends AppTestCase
                 'Origin' => 'http://localhost',
             ],
         ]);
-        $this->get('/api/statistics?province=Bayern&dateFrom=2039-01-01&dateTo=2040-12-31');
+        $this->get('/api/v1/statistics?province=Bayern&dateFrom=2039-01-01&dateTo=2040-12-31');
         $this->assertResponseOk();
         $response = $this->getJsonResponseBody();
         $expectedResponse = json_decode((string)file_get_contents(TESTS . 'comparisons' . DS . 'rest-statistics-bayern.json'), true);
@@ -61,7 +61,7 @@ class ApiControllerStatisticsTest extends AppTestCase
                 'Origin' => 'http://localhost',
             ],
         ]);
-        $this->get('/api/statistics');
+        $this->get('/api/v1/statistics');
         $this->assertResponseCode(401);
         $response = $this->getJsonResponseBody();
         $this->assertEquals('Invalid or inactive API token', $response['error']);
@@ -75,7 +75,7 @@ class ApiControllerStatisticsTest extends AppTestCase
                 'Origin' => 'http://localhost',
             ],
         ]);
-        $this->get('/api/statistics?city=Hamburg');
+        $this->get('/api/v1/statistics?city=Hamburg');
         $this->assertResponseCode(401);
         $response = $this->getJsonResponseBody();
         $this->assertEquals('Access to this city is not allowed with this API token. Allowed search terms: Berlin, Bayern, Niedersachsen', $response['error']);
@@ -89,7 +89,7 @@ class ApiControllerStatisticsTest extends AppTestCase
                 'Origin' => 'http://localhost',
             ],
         ]);
-        $this->get('/api/statistics?province=Hamburg');
+        $this->get('/api/v1/statistics?province=Hamburg');
         $this->assertResponseCode(401);
         $response = $this->getJsonResponseBody();
         $this->assertEquals('Access to this province is not allowed with this API token. Allowed search terms: Berlin, Bayern, Niedersachsen', $response['error']);
@@ -103,7 +103,7 @@ class ApiControllerStatisticsTest extends AppTestCase
                 'Origin' => 'http://localhost',
             ],
         ]);
-        $this->get('/api/statistics?province=Niedersachsen');
+        $this->get('/api/v1/statistics?province=Niedersachsen');
         $this->assertResponseCode(404);
         $response = $this->getJsonResponseBody();
         $this->assertEquals('province not found', $response['error']);

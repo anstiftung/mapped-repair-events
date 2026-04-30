@@ -122,7 +122,7 @@ return function (RouteBuilder $routes) {
                 $routes->applyMiddleware('apiTokenAuth');
                 $routes->connect('/workshops', ['controller' => 'api', 'action' => 'getWorkshopsForHyperModeWebsite'])->setMethods(['GET', 'OPTIONS']);
                 $routes->connect('/splitter', ['controller' => 'api', 'action' => 'getSplitter'])->setMethods(['GET', 'OPTIONS']);
-                $routes->connect('/statistics', ['controller' => 'api', 'action' => 'getStatistics'])->setMethods(['GET', 'OPTIONS']);
+                $routes->connect('/v1/statistics', ['controller' => 'api', 'action' => 'getStatistics'])->setMethods(['GET', 'OPTIONS']);
                 $routes->connect('/v1/workshops', ['controller' => 'api', 'action' => 'getWorkshopsWithCityFilter'])->setMethods(['GET', 'OPTIONS']);
             });
         }
