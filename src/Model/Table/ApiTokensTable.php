@@ -85,13 +85,13 @@ class ApiTokensTable extends AppTable
             ->add('allowed_search_terms', 'emptyForNonWorkshops', [
                 'rule' => function (mixed $value, array $context) use ($hasSearchTerms): bool {
                     $type = (int)($context['data']['type'] ?? 0);
-                    if ($type === ApiToken::TYPE_WORKSHOPS) {
+                    if (in_array($type, [ApiToken::TYPE_WORKSHOPS, ApiToken::TYPE_STATISTICS], true)) {
                         return true;
                     }
 
                     return !$hasSearchTerms($value);
                 },
-                'message' => 'Erlaubte Suchbegriffe sind nur für den Typ Initiativen API erlaubt und müssen für alle anderen Typen leer sein.',
+                'message' => 'Erlaubte Suchbegriffe sind nur für die Typen "Initiativen API" und "Statistik API" erlaubt und müssen für alle anderen Typen leer sein.',
             ]);
 
         $validator

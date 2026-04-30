@@ -77,10 +77,34 @@ class ApiTokensControllerTest extends AppTestCase
         ]);
 
         $this->assertNoRedirect();
-        $this->assertResponseContains('Erlaubte Suchbegriffe sind nur für den Typ Initiativen API erlaubt und müssen für alle anderen Typen leer sein.');
+        $this->assertResponseContains('Erlaubte Suchbegriffe sind nur für die Typen &quot;Initiativen API&quot; und &quot;Statistik API&quot; erlaubt und müssen für alle anderen Typen leer sein.');
 
         $apiTokenAfter = $apiTokensTable->get(5);
         $this->assertSame($apiTokenBefore->name, $apiTokenAfter->name);
         $this->assertSame($apiTokenBefore->allowed_search_terms, $apiTokenAfter->allowed_search_terms);
+    }
+
+    public function testEditFormAllowsStatisticsTokenWithoutSearchTerms(): void
+    {
+        $this->loginAsAdmin();
+
+        $this->post('/admin/apiTokens/edit/7', [
+            'referer' => '/admin/apiTokens',
+            'name' => 'Updated Statistics Token',
+            'type' => ApiToken::TYPE_STATISTICS,
+            'allowed_search_terms' => '',
+            'allowed_domains' => 'localhost',
+            'status' => 1,
+        ]);
+
+        $this->assertResponseCode(302);
+
+        $apiTokensTable = $this->getTableLocator()->get('ApiTokens');
+        $apiToken = $apiTokensTable->get(7);
+
+        $this->assertSame('Updated Statistics Token', $apiToken->name);
+        $this->assertSame(ApiToken::TYPE_STATISTICS, $apiToken->type);
+        $this->assertNull($apiToken->allowed_search_terms);
+        $this->assertSame('["localhost"]', $apiToken->allowed_domains);
     }
 }

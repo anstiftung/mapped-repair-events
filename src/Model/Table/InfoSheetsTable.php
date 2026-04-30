@@ -187,6 +187,14 @@ class InfoSheetsTable extends AppRootTable
         return $query->count();
     }
 
+    public function getWorkshopCountGlobalByMainCategoryId(int $categoryId, ?string $dateFrom, ?string $dateTo, ?string $city, ?Province $province): int
+    {
+        $query = $this->prepareStatisticsDataGlobalByMainCategory($categoryId, $dateFrom, $dateTo, $city, $province);
+        $query->select(['Events.workshop_uid']);
+        $query->groupBy('Events.workshop_uid');
+        return $query->count();
+    }
+
     public function getRepairedByMainCategoryId(int $workshopUid, int $categoryId, ?string $dateFrom, ?string $dateTo): int
     {
         $query = $this->prepareStatisticsDataByMainCategory($workshopUid, $categoryId, $dateFrom, $dateTo);

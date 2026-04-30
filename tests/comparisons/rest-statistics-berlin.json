@@ -1,0 +1,51 @@
+{
+    "statistics": {
+        "filters": {
+            "city": "Berlin",
+            "province": null,
+            "dateFrom": "2039-01-01",
+            "dateTo": "2040-12-31"
+        },
+        "counts": {
+            "repaired": 8,
+            "repairable": 0,
+            "notRepaired": 0,
+            "total": 8
+        },
+        "environmentalImpact": {
+            "carbonFootprint": 0.048,
+            "materialFootprint": 0.072
+        },
+        "initiativeCount": 1,
+        "categories": [
+            {
+                "label": "3D-Reparatur",
+                "counts": {
+                    "repaired": 4,
+                    "repairable": 0,
+                    "notRepaired": 0,
+                    "total": 4
+                },
+                "environmentalImpact": {
+                    "carbonFootprint": 0.036,
+                    "materialFootprint": 0.048
+                },
+                "initiativeCount": 1
+            },
+            {
+                "label": "Elektro",
+                "counts": {
+                    "repaired": 4,
+                    "repairable": 0,
+                    "notRepaired": 0,
+                    "total": 4
+                },
+                "environmentalImpact": {
+                    "carbonFootprint": 0.012,
+                    "materialFootprint": 0.024
+                },
+                "initiativeCount": 1
+            }
+        ]
+    }
+}

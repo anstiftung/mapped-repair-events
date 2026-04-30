@@ -82,10 +82,13 @@ class InfoSheetsControllerTest extends AppTestCase
         order: [
             'InfoSheets.uid' => 'DESC',
         ])->toArray();
-        $this->assertEquals(2, count($infoSheets));
-        $this->assertEquals($infoSheets[0]->device_name, $this->newInfoSheetData['device_name']);
-        $this->assertEquals($infoSheets[0]->defect_description, $this->newInfoSheetData['defect_description']);
-        $this->assertEquals($infoSheets[0]->owner, 1);
+        $this->assertEquals(9, count($infoSheets));
+        $newInfoSheet = array_values(array_filter($infoSheets, function($infoSheet): bool {
+            return $infoSheet->device_name === $this->newInfoSheetData['device_name'];
+        }))[0];
+        $this->assertEquals($newInfoSheet->device_name, $this->newInfoSheetData['device_name']);
+        $this->assertEquals($newInfoSheet->defect_description, $this->newInfoSheetData['defect_description']);
+        $this->assertEquals($newInfoSheet->owner, 1);
 
         $expectedUid = $this->getTableLocator()->get('Roots')->find('all')->count();
         $this->assertFlashMessage('Laufzettel erfolgreich gespeichert. UID: ' . $expectedUid);

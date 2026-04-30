@@ -31,6 +31,7 @@ class ApiTokenAuthMiddleware implements MiddlewareInterface
             'getWorkshopsWithCityFilter' => Configure::read('useApiTokenAuthMiddleware1'),
             'getSplitter' => Configure::read('useApiTokenAuthMiddleware2'),
             'getWorkshopsForHyperModeWebsite' => Configure::read('useApiTokenAuthMiddleware3'),
+            'getStatistics' => true,
             default => false,
         };
     }
@@ -93,19 +94,10 @@ class ApiTokenAuthMiddleware implements MiddlewareInterface
             return $this->createErrorResponse($request, 'Invalid or inactive API token', 401);
         }
 
-        // Validate allowed search terms if city parameter is present
         $queryParams = $request->getQueryParams();
-        if (isset($queryParams['city']) && (int)$apiToken->type === ApiToken::TYPE_WORKSHOPS) {
-            $city = (string) $queryParams['city'];
-            if (!$apiToken->isSearchTermAllowed($city)) {
-                $allowedTerms = json_decode($apiToken->allowed_search_terms, true) ?: [];
-                $allowedTermsList = !empty($allowedTerms) ? implode(', ', $allowedTerms) : 'none';
-                return $this->createErrorResponse(
-                    $request,
-                    'Access to this city is not allowed with this API token. Allowed search terms: ' . $allowedTermsList,
-                    401,
-                );
-            }
+        $searchTermErrorResponse = $this->validateAllowedSearchTerms($request, $apiToken, $queryParams);
+        if ($searchTermErrorResponse !== null) {
+            return $searchTermErrorResponse;
         }
 
         // Update last_used timestamp
@@ -128,14 +120,58 @@ class ApiTokenAuthMiddleware implements MiddlewareInterface
         return $response;
     }
 
+    /**
+     * @param array<string, mixed> $queryParams
+     */
+    private function validateAllowedSearchTerms(ServerRequestInterface $request, ApiToken $apiToken, array $queryParams): ?Response
+    {
+        $restrictedQueryParam = match ((int)$apiToken->type) {
+            ApiToken::TYPE_WORKSHOPS => 'city',
+            ApiToken::TYPE_STATISTICS => $this->getStatisticsSearchTermQueryParam($queryParams),
+            default => null,
+        };
+
+        if ($restrictedQueryParam === null || !isset($queryParams[$restrictedQueryParam])) {
+            return null;
+        }
+
+        $searchTerm = (string)$queryParams[$restrictedQueryParam];
+        if ($apiToken->isSearchTermAllowed($searchTerm)) {
+            return null;
+        }
+
+        $allowedTerms = json_decode($apiToken->allowed_search_terms, true) ?: [];
+        $allowedTermsList = !empty($allowedTerms) ? implode(', ', $allowedTerms) : 'none';
+        return $this->createErrorResponse(
+            $request,
+            'Access to this ' . $restrictedQueryParam . ' is not allowed with this API token. Allowed search terms: ' . $allowedTermsList,
+            401,
+        );
+    }
+
+    /**
+     * @param array<string, mixed> $queryParams
+     */
+    private function getStatisticsSearchTermQueryParam(array $queryParams): ?string
+    {
+        if (isset($queryParams['city'])) {
+            return 'city';
+        }
+        if (isset($queryParams['province'])) {
+            return 'province';
+        }
+        return null;
+    }
+
     private function resolveRequiredType(ServerRequestInterface $request): ?int
     {
         $action = $request->getParam('action'); // @phpstan-ignore-line
 
         return match ($action) {
             'getWorkshopsForHyperModeWebsite' => ApiToken::TYPE_HYPERMODE_WEBSITE,
-            'getWorkshops' => ApiToken::TYPE_WORKSHOPS,
+            'getWorkshopsWithCityFilter' => ApiToken::TYPE_WORKSHOPS,
             'getSplitter' => ApiToken::TYPE_SPLITTER,
+            'getStatistics' => ApiToken::TYPE_STATISTICS,
             default => null,
         };
     }
