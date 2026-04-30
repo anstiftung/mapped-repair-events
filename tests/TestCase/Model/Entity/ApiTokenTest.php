@@ -10,17 +10,17 @@ class ApiTokenTest extends AppTestCase
     public function testIsDomainAllowedWithValidDomain(): void
     {
         $apiToken = new ApiToken([
-            'allowed_domains' => '["localhost", "example.com"]',
+            'allowed_domains' => '["example.org", "example.com"]',
         ]);
 
-        $this->assertTrue($apiToken->isDomainAllowed('localhost'));
+        $this->assertTrue($apiToken->isDomainAllowed('example.org'));
         $this->assertTrue($apiToken->isDomainAllowed('example.com'));
     }
 
     public function testIsDomainAllowedWithInvalidDomain(): void
     {
         $apiToken = new ApiToken([
-            'allowed_domains' => '["localhost", "example.com"]',
+            'allowed_domains' => '["example.org", "example.com"]',
         ]);
 
         $this->assertFalse($apiToken->isDomainAllowed('invalid-domain.com'));
@@ -29,10 +29,10 @@ class ApiTokenTest extends AppTestCase
     public function testIsDomainAllowedCaseInsensitive(): void
     {
         $apiToken = new ApiToken([
-            'allowed_domains' => '["localhost", "Example.COM"]',
+            'allowed_domains' => '["example.org", "Example.COM"]',
         ]);
 
-        $this->assertTrue($apiToken->isDomainAllowed('LOCALHOST'));
+        $this->assertTrue($apiToken->isDomainAllowed('EXAMPLE.ORG'));
         $this->assertTrue($apiToken->isDomainAllowed('example.com'));
         $this->assertTrue($apiToken->isDomainAllowed('EXAMPLE.com'));
     }
@@ -43,7 +43,7 @@ class ApiTokenTest extends AppTestCase
             'allowed_domains' => '[]',
         ]);
 
-        $this->assertFalse($apiToken->isDomainAllowed('localhost'));
+        $this->assertFalse($apiToken->isDomainAllowed('example.org'));
     }
 
     public function testIsDomainAllowedWithNullDomains(): void
@@ -52,23 +52,23 @@ class ApiTokenTest extends AppTestCase
             'allowed_domains' => null,
         ]);
 
-        $this->assertFalse($apiToken->isDomainAllowed('localhost'));
+        $this->assertFalse($apiToken->isDomainAllowed('example.org'));
     }
 
     public function testIsDomainAllowedWithArrayDomains(): void
     {
         $apiToken = new ApiToken([
-            'allowed_domains' => ['localhost', 'example.com'],
+            'allowed_domains' => ['example.org', 'example.com'],
         ]);
 
-        $this->assertTrue($apiToken->isDomainAllowed('localhost'));
+        $this->assertTrue($apiToken->isDomainAllowed('example.org'));
         $this->assertTrue($apiToken->isDomainAllowed('example.com'));
     }
 
     public function testIsDomainAllowedWithDefaultAllowedDomain(): void
     {
         $apiToken = new ApiToken([
-            'allowed_domains' => '["localhost"]',
+            'allowed_domains' => '["example.org"]',
         ]);
         $this->assertTrue($apiToken->isDomainAllowed('anstiftung.github.io'));
     }

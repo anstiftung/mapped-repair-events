@@ -173,7 +173,7 @@ class ApiControllerWorkshopsTest extends AppTestCase
         $this->configRequest([
             'headers' => [
                 'Authorization' => 'Bearer ' . ApiTokensFixture::WRONG_DOMAIN_WORKSHOPS_TOKEN,
-                'Origin' => 'http://localhost',
+                'Origin' => 'http://www.example.com',
             ],
         ]);
         $this->get('/api/v1/workshops?city=berlin');
