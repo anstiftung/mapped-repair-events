@@ -95,13 +95,16 @@ class InfoSheetsTable extends AppRootTable
      **/
     private function prepareStatisticsDataGlobal(?string $dateFrom=null, ?string $dateTo=null, ?string $city=null, ?Province $province=null): SelectQuery
     {
-        $query = $this->find();
         /** @var \Cake\ORM\Query\SelectQuery<\App\Model\Entity\InfoSheet> $query */
-        $query->contain([
-            'Events',
-        ]);
+        $query = $this->find();
+        $query->innerJoinWith('Events.Workshops', function (SelectQuery $q): SelectQuery {
+            return $q->where([
+                'Workshops.status >' => APP_DELETED,
+            ]);
+        });
         $query->where([
             'InfoSheets.status' => APP_ON,
+            'Events.status >' => APP_DELETED,
         ]);
 
         if (!is_null($city) && $city !== '') {
