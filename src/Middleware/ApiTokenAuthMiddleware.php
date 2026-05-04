@@ -5,6 +5,7 @@ namespace App\Middleware;
 
 use App\Model\Entity\ApiToken;
 use App\Model\Table\ApiTokensTable;
+use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Http\Response;
 use Cake\Log\Log;
@@ -22,6 +23,9 @@ use Psr\Http\Server\RequestHandlerInterface;
 class ApiTokenAuthMiddleware implements MiddlewareInterface
 {
     use LocatorAwareTrait;
+
+    private const RATE_LIMIT_PER_MINUTE = 60;
+    private const RATE_LIMIT_WINDOW_SECONDS = 60;
 
     private function checkIsMiddlewareEnabledForApiType(ServerRequestInterface $request): bool
     {
@@ -94,6 +98,11 @@ class ApiTokenAuthMiddleware implements MiddlewareInterface
             return $this->createErrorResponse($request, 'Invalid or inactive API token', 401);
         }
 
+        $rateLimit = $this->consumeRateLimit($apiToken);
+        if ($rateLimit['limited']) {
+            return $this->createRateLimitResponse($request, $rateLimit);
+        }
+
         $queryParams = $request->getQueryParams();
         $searchTermErrorResponse = $this->validateAllowedSearchTerms($request, $apiToken, $queryParams);
         if ($searchTermErrorResponse !== null) {
@@ -150,6 +159,55 @@ class ApiTokenAuthMiddleware implements MiddlewareInterface
     }
 
     /**
+     * @return array{limited: bool, limit: int, remaining: int, reset: int, retryAfter: int}
+     */
+    private function consumeRateLimit(ApiToken $apiToken): array
+    {
+        $now = time();
+        $cacheKey = $this->getRateLimitCacheKey($apiToken);
+        $state = Cache::read($cacheKey);
+        $count = 0;
+        $reset = $now + self::RATE_LIMIT_WINDOW_SECONDS;
+
+        if (is_array($state) && isset($state['count'], $state['reset'])) {
+            $stateReset = (int)$state['reset'];
+            if ($stateReset > $now) {
+                $count = (int)$state['count'];
+                $reset = $stateReset;
+            }
+        }
+
+        if ($count >= self::RATE_LIMIT_PER_MINUTE) {
+            return [
+                'limited' => true,
+                'limit' => self::RATE_LIMIT_PER_MINUTE,
+                'remaining' => 0,
+                'reset' => $reset,
+                'retryAfter' => max(1, $reset - $now),
+            ];
+        }
+
+        $count++;
+        Cache::write($cacheKey, [
+            'count' => $count,
+            'reset' => $reset,
+        ]);
+
+        return [
+            'limited' => false,
+            'limit' => self::RATE_LIMIT_PER_MINUTE,
+            'remaining' => max(0, self::RATE_LIMIT_PER_MINUTE - $count),
+            'reset' => $reset,
+            'retryAfter' => max(1, $reset - $now),
+        ];
+    }
+
+    private function getRateLimitCacheKey(ApiToken $apiToken): string
+    {
+        return 'api_rate_limit_' . (int)$apiToken->type . '_' . (int)$apiToken->id;
+    }
+
+    /**
      * @param array<string, mixed> $queryParams
      */
     private function getStatisticsSearchTermQueryParam(array $queryParams): ?string
@@ -194,6 +252,18 @@ class ApiTokenAuthMiddleware implements MiddlewareInterface
             ->withHeader('Access-Control-Allow-Origin', '*')
             ->withHeader('Access-Control-Allow-Methods', 'GET')
             ->withHeader('Access-Control-Allow-Headers', 'Authorization, Content-Type');
+    }
+
+    /**
+     * @param array{limited: bool, limit: int, remaining: int, reset: int, retryAfter: int} $rateLimit
+     */
+    private function createRateLimitResponse(ServerRequestInterface $request, array $rateLimit): Response
+    {
+        return $this->createErrorResponse($request, 'rate limit exceeded', 429)
+            ->withHeader('Retry-After', (string)$rateLimit['retryAfter'])
+            ->withHeader('X-RateLimit-Limit', (string)$rateLimit['limit'])
+            ->withHeader('X-RateLimit-Remaining', (string)$rateLimit['remaining'])
+            ->withHeader('X-RateLimit-Reset', (string)$rateLimit['reset']);
     }
 
     /**

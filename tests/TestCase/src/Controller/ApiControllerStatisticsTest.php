@@ -3,8 +3,10 @@ declare(strict_types=1);
 
 namespace App\Test\TestCase\Controller;
 
+use App\Model\Entity\ApiToken;
 use App\Test\Fixture\ApiTokensFixture;
 use App\Test\TestCase\AppTestCase;
+use Cake\Cache\Cache;
 
 class ApiControllerStatisticsTest extends AppTestCase
 {
@@ -121,6 +123,45 @@ class ApiControllerStatisticsTest extends AppTestCase
         $this->assertResponseCode(404);
         $response = $this->getJsonResponseBody();
         $this->assertEquals('province not found', $response['error']);
+    }
+
+    public function testGetStatisticsRateLimitExceeded(): void
+    {
+        $cacheKey = 'api_rate_limit_' . ApiToken::TYPE_STATISTICS . '_7';
+        $cacheWasEnabled = Cache::enabled();
+        $reset = time() + 60;
+
+        Cache::enable();
+        Cache::delete($cacheKey);
+        $this->assertTrue(Cache::write($cacheKey, [
+            'count' => 60,
+            'reset' => $reset,
+        ]));
+
+        try {
+            $this->configRequest([
+                'headers' => [
+                    'Authorization' => 'Bearer ' . ApiTokensFixture::VALID_STATISTICS_TOKEN,
+                    'Origin' => 'http://localhost',
+                ],
+            ]);
+            $this->get('/api/v1/statistics?city=Berlin');
+            $this->assertResponseCode(429);
+            $response = $this->getJsonResponseBody();
+            $retryAfter = (int)$this->_response->getHeaderLine('Retry-After');
+
+            $this->assertEquals('rate limit exceeded', $response['error']);
+            $this->assertSame('60', $this->_response->getHeaderLine('X-RateLimit-Limit'));
+            $this->assertSame('0', $this->_response->getHeaderLine('X-RateLimit-Remaining'));
+            $this->assertSame((string)$reset, $this->_response->getHeaderLine('X-RateLimit-Reset'));
+            $this->assertGreaterThanOrEqual(1, $retryAfter);
+            $this->assertLessThanOrEqual(60, $retryAfter);
+        } finally {
+            Cache::delete($cacheKey);
+            if (!$cacheWasEnabled) {
+                Cache::disable();
+            }
+        }
     }
 
     private function prepareStatisticsInfoSheets(): void
