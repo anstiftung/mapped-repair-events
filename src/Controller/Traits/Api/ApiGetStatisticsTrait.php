@@ -27,6 +27,10 @@ trait ApiGetStatisticsTrait
 
         $provinceName = $this->getRequest()->getQuery('province');
         $provinceName = is_string($provinceName) && $provinceName !== '' ? $provinceName : null;
+        if ($city === null && $provinceName === null) {
+            return $this->getResponse()->withStatus(400)->withType('json')->withStringBody('{"error":"city or province must be provided"}');
+        }
+
         $province = $this->resolveProvince($provinceName);
         if ($provinceName !== null && $province === null) {
             return $this->getResponse()->withStatus(404)->withType('json')->withStringBody('{"error":"province not found"}');

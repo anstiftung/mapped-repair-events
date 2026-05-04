@@ -67,6 +67,20 @@ class ApiControllerStatisticsTest extends AppTestCase
         $this->assertEquals('Invalid or inactive API token', $response['error']);
     }
 
+    public function testGetStatisticsRequiresCityOrProvince(): void
+    {
+        $this->configRequest([
+            'headers' => [
+                'Authorization' => 'Bearer ' . ApiTokensFixture::VALID_STATISTICS_TOKEN,
+                'Origin' => 'http://localhost',
+            ],
+        ]);
+        $this->get('/api/v1/statistics');
+        $this->assertResponseCode(400);
+        $response = $this->getJsonResponseBody();
+        $this->assertEquals('city or province must be provided', $response['error']);
+    }
+
     public function testGetStatisticsDeniesDisallowedCity(): void
     {
         $this->configRequest([
