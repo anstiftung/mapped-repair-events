@@ -6,11 +6,13 @@ namespace App\Test\Fixture;
 class BrandsFixture extends AppFixture
 {
 
+    public const BRAND_ABACOM_ID = 1;
+
     public function init(): void
     {
         $this->records = [
             [
-                'id' => 1,
+                'id' => self::BRAND_ABACOM_ID,
                 'name' => 'Abacom',
                 'status' => 1
             ]

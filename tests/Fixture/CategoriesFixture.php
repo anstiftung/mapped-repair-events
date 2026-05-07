@@ -15,12 +15,16 @@ class CategoriesFixture extends AppFixture
                 'icon' => 'elektro',
                 'status' => APP_ON,
                 'parent_id' => 1,
+                'lft' => 2,
+                'rght' => 3,
             ],
             [
                 'id' => '630',
                 'name' => '3D-Reparatur',
                 'icon' => 'drei-d-reparatur',
                 'status' => APP_ON,
+                'lft' => 5,
+                'rght' => 6,
             ],
             [
                 'id' => '1',
@@ -28,6 +32,8 @@ class CategoriesFixture extends AppFixture
                 'icon' => 'elektro',
                 'status' => APP_ON,
                 'parent_id' => null,
+                'lft' => 1,
+                'rght' => 4,
             ]
         ];
         parent::init();

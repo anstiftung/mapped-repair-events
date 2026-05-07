@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Test\TestCase\Controller;
 
+use App\Test\Fixture\BrandsFixture;
 use App\Test\TestCase\AppTestCase;
 use App\Test\TestCase\Traits\LogFileAssertionsTrait;
 use App\Test\TestCase\Traits\LoginTrait;
@@ -89,6 +90,75 @@ class InfoSheetsControllerTest extends AppTestCase
 
         $expectedUid = $this->getTableLocator()->get('Roots')->find('all')->count();
         $this->assertFlashMessage('Laufzettel erfolgreich gespeichert. UID: ' . $expectedUid);
+    }
+
+    public function testAddInfoSheetWithDuplicateBrandUsesExistingBrand(): void
+    {
+        $this->loginAsOrga();
+        $this->newInfoSheetData['defect_description'] = 'Defect description';
+        $this->newInfoSheetData['device_name'] = 'Device name';
+        $this->newInfoSheetData['category_id'] = 87;
+        $this->newInfoSheetData['brand_id'] = -1;
+        $this->newInfoSheetData['new_brand_name'] = 'abacom';
+
+        $this->post(
+            Configure::read('AppConfig.htmlHelper')->urlInfoSheetNew(6),
+            [
+                'referer' => '/',
+                'InfoSheets' => $this->newInfoSheetData,
+            ],
+        );
+
+        $this->assertEquals(2, $this->getTableLocator()->get('InfoSheets')->find()->count());
+        $this->assertEquals(1, $this->getTableLocator()->get('Brands')->find()->count());
+        $infoSheet = $this->getTableLocator()->get('InfoSheets')->find()->orderByDesc('uid')->first();
+        $this->assertEquals(BrandsFixture::BRAND_ABACOM_ID, $infoSheet->brand_id);
+    }
+
+    public function testAddInfoSheetWithDuplicateSubcategoryUsesExistingCategory(): void
+    {
+        $this->loginAsOrga();
+        $this->newInfoSheetData['defect_description'] = 'Defect description';
+        $this->newInfoSheetData['device_name'] = 'Device name';
+        $this->newInfoSheetData['category_id'] = -1;
+        $this->newInfoSheetData['new_subcategory_parent_id'] = 1;
+        $this->newInfoSheetData['new_subcategory_name'] = 'elektro sonstiges';
+
+        $this->post(
+            Configure::read('AppConfig.htmlHelper')->urlInfoSheetNew(6),
+            [
+                'referer' => '/',
+                'InfoSheets' => $this->newInfoSheetData,
+            ],
+        );
+
+        $this->assertEquals(2, $this->getTableLocator()->get('InfoSheets')->find()->count());
+        $this->assertEquals(3, $this->getTableLocator()->get('Categories')->find()->count());
+        $infoSheet = $this->getTableLocator()->get('InfoSheets')->find()->orderByDesc('uid')->first();
+        $this->assertEquals(87, $infoSheet->category_id);
+    }
+
+    public function testAddInfoSheetWithSameSubcategoryNameInDifferentParentCategory(): void
+    {
+        $this->loginAsOrga();
+        $this->newInfoSheetData['defect_description'] = 'Defect description';
+        $this->newInfoSheetData['device_name'] = 'Device name';
+        $this->newInfoSheetData['category_id'] = -1;
+        $this->newInfoSheetData['new_subcategory_parent_id'] = 630;
+        $this->newInfoSheetData['new_subcategory_name'] = 'elektro sonstiges';
+
+        $this->post(
+            Configure::read('AppConfig.htmlHelper')->urlInfoSheetNew(6),
+            [
+                'referer' => '/',
+                'InfoSheets' => $this->newInfoSheetData,
+            ],
+        );
+
+        $this->assertEquals(2, $this->getTableLocator()->get('InfoSheets')->find()->count());
+        $this->assertEquals(4, $this->getTableLocator()->get('Categories')->find()->count());
+        $infoSheet = $this->getTableLocator()->get('InfoSheets')->find()->orderByDesc('uid')->first();
+        $this->assertNotEquals(87, $infoSheet->category_id);
     }
 
     public function testDeleteInfoSheetAsOrga(): void
