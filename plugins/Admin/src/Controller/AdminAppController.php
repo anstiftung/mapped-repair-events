@@ -143,9 +143,13 @@ class AdminAppController extends AppController
                     $this->conditions[$queryParams['key-' . $searchFieldKey]] = $searchValue;
                     break;
                 case 'search':
-                    $condition = $queryParams['key-' . $searchFieldKey] . " LIKE '%" . $queryParams['val-' . $searchFieldKey] . "%'";
+                    $condition = [
+                        $queryParams['key-' . $searchFieldKey] . ' LIKE' => '%' . $queryParams['val-' . $searchFieldKey] . '%',
+                    ];
                     if ($negate) {
-                        $condition = 'NOT (' . $condition . ')';
+                        $condition = [
+                            'NOT' => $condition,
+                        ];
                     }
                     $this->conditions[] = $condition;
                     break;
