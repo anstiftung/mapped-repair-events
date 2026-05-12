@@ -1053,19 +1053,23 @@ class WorkshopsController extends AppController
     {
         if (! empty($this->request->getData())) {
 
-            $workshopUid = $this->request->getData($relationTable.'.workshop_uid');
+            $workshopUid = (int) $this->request->getData($relationTable.'.workshop_uid');
 
-            $query = 'REPLACE INTO ' . $relationTable . ' (' . $foreignKey . ', workshop_uid, created) VALUES(' . $userUid . ', ' . $workshopUid . ', NOW());';
+            if ($workshopUid <= 0) {
+                throw new NotFoundException('wrong parameters');
+            }
+
+            $query = 'REPLACE INTO ' . $relationTable . ' (' . $foreignKey . ', workshop_uid, created) VALUES(:userUid, :workshopUid, NOW());';
+            $params = [
+                'workshopUid' => $workshopUid,
+                'userUid' => $userUid,
+            ];
             $workshopsTable = $this->getTableLocator()->get('Workshops');
-            $workshopsTable->getConnection()->getDriver()->prepare($query)->execute();
+            $workshopsTable->getConnection()->getDriver()->prepare($query)->execute($params);
 
             // immediately approve relation, if done by admin
             if ($this->isAdmin()) {
                 $query = 'UPDATE ' . $relationTable . ' SET approved = NOW() WHERE workshop_uid = :workshopUid AND user_uid = :userUid';
-                $params = [
-                  'workshopUid' => $workshopUid,
-                  'userUid' => $userUid
-                ];
                 $workshopsTable->getConnection()->getDriver()->prepare($query)->execute($params);
             }
 
