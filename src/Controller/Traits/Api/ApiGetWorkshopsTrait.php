@@ -46,7 +46,9 @@ trait ApiGetWorkshopsTrait
         ],
         order: ['Workshops.name' => 'asc']);
 
-        if ($workshops->count() == 0) {
+        $workshops = $workshops->all()->toArray();
+
+        if (empty($workshops)) {
             return $this->getResponse()->withStatus(404)->withType('json')->withStringBody('"no workshops found"');
         }
 
