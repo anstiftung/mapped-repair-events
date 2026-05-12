@@ -111,6 +111,48 @@ class ApiControllerStatisticsTest extends AppTestCase
         $this->assertEquals('Access to this province is not allowed with this API token. Allowed search terms: Berlin, Bayern, Niedersachsen', $response['error']);
     }
 
+    public function testGetStatisticsRejectsBothCityAndProvince(): void
+    {
+        $this->configRequest([
+            'headers' => [
+                'Authorization' => 'Bearer ' . ApiTokensFixture::VALID_STATISTICS_TOKEN,
+                'Origin' => 'http://localhost',
+            ],
+        ]);
+        $this->get('/api/v1/statistics?city=Berlin&province=Bayern');
+        $this->assertResponseCode(400);
+        $response = $this->getJsonResponseBody();
+        $this->assertEquals('Cannot specify both city and province parameters. Please specify only one.', $response['error']);
+    }
+
+    public function testGetStatisticsRejectsEmptyCity(): void
+    {
+        $this->configRequest([
+            'headers' => [
+                'Authorization' => 'Bearer ' . ApiTokensFixture::VALID_STATISTICS_TOKEN,
+                'Origin' => 'http://localhost',
+            ],
+        ]);
+        $this->get('/api/v1/statistics?city=');
+        $this->assertResponseCode(400);
+        $response = $this->getJsonResponseBody();
+        $this->assertEquals('city or province must be provided', $response['error']);
+    }
+
+    public function testGetStatisticsRejectsEmptyProvince(): void
+    {
+        $this->configRequest([
+            'headers' => [
+                'Authorization' => 'Bearer ' . ApiTokensFixture::VALID_STATISTICS_TOKEN,
+                'Origin' => 'http://localhost',
+            ],
+        ]);
+        $this->get('/api/v1/statistics?province=');
+        $this->assertResponseCode(400);
+        $response = $this->getJsonResponseBody();
+        $this->assertEquals('city or province must be provided', $response['error']);
+    }
+
     public function testGetStatisticsWithInvalidProvince(): void
     {
         $this->configRequest([

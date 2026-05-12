@@ -134,6 +134,17 @@ class ApiTokenAuthMiddleware implements MiddlewareInterface
      */
     private function validateAllowedSearchTerms(ServerRequestInterface $request, ApiToken $apiToken, array $queryParams): ?Response
     {
+        // For statistics API, reject requests with both city and province parameters
+        if ((int)$apiToken->type === ApiToken::TYPE_STATISTICS) {
+            if (isset($queryParams['city']) && isset($queryParams['province'])) {
+                return $this->createErrorResponse(
+                    $request,
+                    'Cannot specify both city and province parameters. Please specify only one.',
+                    400,
+                );
+            }
+        }
+
         $restrictedQueryParam = match ((int)$apiToken->type) {
             ApiToken::TYPE_WORKSHOPS => 'city',
             ApiToken::TYPE_STATISTICS => $this->getStatisticsSearchTermQueryParam($queryParams),
@@ -145,6 +156,11 @@ class ApiTokenAuthMiddleware implements MiddlewareInterface
         }
 
         $searchTerm = (string)$queryParams[$restrictedQueryParam];
+        
+        if ($searchTerm === '') {
+            return null;
+        }
+
         if ($apiToken->isSearchTermAllowed($searchTerm)) {
             return null;
         }
