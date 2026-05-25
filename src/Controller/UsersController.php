@@ -233,6 +233,9 @@ class UsersController extends AppController
                 $user = $usersTable->find('all', conditions: [
                     'Users.email' => $this->request->getData('Users.email')
                 ]) ->first();
+                if (!$user instanceof User) {
+                    throw new NotFoundException('user not found');
+                }
                 $user->revertPrivatizeData();
 
                 $newPassword = $usersTable->setNewPassword($user->uid);
@@ -416,11 +419,14 @@ class UsersController extends AppController
                 'Categories',
                 'Skills',
             ])->first();
-        $user->revertPrivatizeData();
 
         if (empty($user)) {
             throw new NotFoundException('user not found');
         }
+        if (!$user instanceof User) {
+            throw new NotFoundException('user not found');
+        }
+        $user->revertPrivatizeData();
         /** @var \App\Model\Table\SkillsTable */
         $skillsTable = $this->getTableLocator()->get('Skills');
         $skillsForDropdown = $skillsTable->getForDropdown(true);

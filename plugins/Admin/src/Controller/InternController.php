@@ -471,11 +471,9 @@ class InternController extends AdminAppController
 
             // eigene bearbeitungs-hinweise bei click auf cancel löschen
             if ($object->currently_updated_by == $this->isLoggedIn() ? $this->loggedUser->uid : 0) {
-                /** @phpstan-ignore-next-line */
                 $entity = $table->patchEntity($object, [
                     'currently_updated_by' => 0
                 ]);
-                /** @phpstan-ignore-next-line */
                 $table->save($entity);
             }
         }

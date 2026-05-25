@@ -128,12 +128,14 @@ class ApiTokensTable extends AppTable
      */
     public function findByToken(string $token): ?ApiToken
     {
-        return $this->find()
+        $apiToken = $this->find()
             ->where([
                 'token' => $token,
                 'status' => true,
             ])
             ->first();
+
+        return $apiToken instanceof ApiToken ? $apiToken : null;
     }
 
     /**

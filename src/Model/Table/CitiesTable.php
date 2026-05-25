@@ -18,7 +18,9 @@ class CitiesTable extends AppTable
         order: [
             'Cities.population' => 'DESC',
         ]);
-        return $query->first();
+        $city = $query->first();
+
+        return $city instanceof City ? $city : null;
     }
 
 

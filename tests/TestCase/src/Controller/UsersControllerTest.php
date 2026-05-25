@@ -3,19 +3,20 @@ declare(strict_types=1);
 
 namespace App\Test\TestCase\Controller;
 
-use App\Test\TestCase\AppTestCase;
-use App\Test\TestCase\Traits\LogFileAssertionsTrait;
-use App\Test\TestCase\Traits\UserAssertionsTrait;
 use Cake\Core\Configure;
-use Cake\TestSuite\EmailTrait;
-use Cake\TestSuite\IntegrationTestTrait;
-use App\Test\TestCase\Traits\LoginTrait;
 use App\Model\Entity\User;
-use App\Test\TestCase\Traits\QueueTrait;
-use Authentication\PasswordHasher\DefaultPasswordHasher;
 use Cake\Event\EventInterface;
+use Cake\TestSuite\EmailTrait;
+use App\Model\Table\UsersTable;
 use Cake\Controller\Controller;
 use App\Test\Mock\GeoServiceMock;
+use App\Test\TestCase\AppTestCase;
+use App\Test\TestCase\Traits\LoginTrait;
+use App\Test\TestCase\Traits\QueueTrait;
+use Cake\TestSuite\IntegrationTestTrait;
+use App\Test\TestCase\Traits\UserAssertionsTrait;
+use App\Test\TestCase\Traits\LogFileAssertionsTrait;
+use Authentication\PasswordHasher\DefaultPasswordHasher;
 
 class UsersControllerTest extends AppTestCase
 {
@@ -348,10 +349,12 @@ class UsersControllerTest extends AppTestCase
         }
     private function getRegisteredUser(): User
     {
+        /** @var UsersTable $usersTable */
         $usersTable = $this->getTableLocator()->get('Users');
+        /** @var User $user */
         $user = $usersTable->find('all',
         conditions: [
-            'Users.email' => $this->validUserData['email']
+            $usersTable->aliasField('email') => $this->validUserData['email']
         ],
         contain: [
             'Groups',

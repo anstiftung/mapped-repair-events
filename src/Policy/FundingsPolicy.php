@@ -3,25 +3,28 @@ declare(strict_types=1);
 
 namespace App\Policy;
 
-use Cake\Http\ServerRequest;
-use Authorization\Policy\RequestPolicyInterface;
-use Authorization\Policy\ResultInterface;
 use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
+use Cake\Http\ServerRequest;
 use App\Model\Entity\Funding;
+use App\Model\Table\FundingsTable;
 use Authorization\IdentityInterface;
+use Authorization\Policy\ResultInterface;
+use Authorization\Policy\RequestPolicyInterface;
 
 class FundingsPolicy implements RequestPolicyInterface
 {
 
     private function getOwnerEntity(int $fundingUid, ?IdentityInterface $identity): ?Funding
     {
+        /** @var FundingsTable $fundingsTable */
         $fundingsTable = TableRegistry::getTableLocator()->get('Fundings');
-        $entity = $fundingsTable->find()->where([
+        /** @var Funding|null $funding */
+        $funding = $fundingsTable->find()->where([
             $fundingsTable->aliasField('uid') => $fundingUid,
             $fundingsTable->aliasField('owner') => $identity->uid,
         ])->first();
-        return $entity;
+        return $funding;
     }
 
     public function canAccess(?IdentityInterface $identity, ServerRequest $request): bool|ResultInterface

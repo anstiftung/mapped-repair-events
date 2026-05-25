@@ -335,7 +335,8 @@ class WorkshopsTable extends AppRootTable
             'Users',
             'Users.Groups'
         ])->first();
-        return $workshop;
+
+        return $workshop instanceof Workshop ? $workshop : null;
     }
 
     public function isUserInOrgaTeam(IdentityInterface|User|null $identity, Workshop $workshop): bool
@@ -434,9 +435,11 @@ class WorkshopsTable extends AppRootTable
         if ($excludeUid !== null) {
             $conditions['Workshops.uid !='] = $excludeUid;
         }
-        return $this->find('all',
+        $workshop = $this->find('all',
             conditions: $conditions,
         )->first();
+
+        return $workshop instanceof Workshop ? $workshop : null;
     }
 
     /**

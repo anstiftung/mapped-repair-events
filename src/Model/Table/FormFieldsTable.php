@@ -33,6 +33,10 @@ class FormFieldsTable extends AppTable
             ]
         ])->first();
 
+        if (!$formField instanceof FormField) {
+            throw new \RuntimeException('Form field not found: ' . $formFieldId);
+        }
+
         $preparedFormFieldOptions = [];
         foreach($formField->form_field_options as $formFieldOption) {
             $preparedFormFieldOptions[$formFieldOption->value] = $formFieldOption->name;
