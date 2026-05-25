@@ -144,13 +144,19 @@ class CategoriesTable extends AppTable
 
     public function findSubcategoryByCaseInsensitiveNameAndParentId(string $name, int $parentId): ?Category
     {
-        return $this->find('all',
+        $category = $this->find('all',
             conditions: [
                 'LOWER(Categories.name)' => mb_strtolower($name),
                 'Categories.parent_id' => $parentId,
                 'Categories.status > ' . APP_DELETED,
             ],
         )->first();
+
+        if (!$category instanceof Category) {
+            return null;
+        }
+
+        return $category;
     }
 
     public function calculateMaterialFootprint(float $repairedCount, float $materialFootprintFactor): float

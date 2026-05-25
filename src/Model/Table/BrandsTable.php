@@ -63,12 +63,18 @@ class BrandsTable extends AppTable
 
     public function findByCaseInsensitiveName(string $name): ?Brand
     {
-        return $this->find('all',
+        $brand = $this->find('all',
             conditions: [
                 'LOWER(Brands.name)' => mb_strtolower($name),
                 'Brands.status > ' . APP_DELETED,
             ],
         )->first();
+
+        if (!$brand instanceof Brand) {
+            return null;
+        }
+
+        return $brand;
     }
 
 }
