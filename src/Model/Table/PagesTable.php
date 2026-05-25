@@ -35,7 +35,8 @@ class PagesTable extends AppRootTable
         $page = $this->find('all', conditions: [
             'Pages.name' => $name,
         ])->first();
-        return $page;
+
+        return $page instanceof Page ? $page : null;
     }
 
     public function validationAdmin(Validator $validator): Validator

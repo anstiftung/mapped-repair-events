@@ -88,6 +88,9 @@ class WorkshopsController extends AppController
         if (empty($workshop)) {
             throw new NotFoundException;
         }
+        if (!$workshop instanceof Workshop) {
+            throw new NotFoundException;
+        }
         $this->setIsCurrentlyUpdated($workshop->uid);
         $this->set('metaTags', ['title' => 'Initiative bearbeiten']);
         $this->_edit($workshop, true);
@@ -811,6 +814,9 @@ class WorkshopsController extends AppController
         if (empty($workshop)) {
             throw new NotFoundException('workshop not found');
         }
+        if (!$workshop instanceof Workshop) {
+            throw new NotFoundException('workshop not found');
+        }
 
         $this->doPreviewChecks($workshop->status, Configure::read('AppConfig.htmlHelper')->urlWorkshopDetail($workshop->url));
         $this->setContext($workshop);
@@ -970,11 +976,14 @@ class WorkshopsController extends AppController
             });
         }
         $workshop = $query->first();
+        if (!$workshop instanceof Workshop) {
+            throw new NotFoundException('workshopUid: ' . $workshopUid . ' no ' . $type . '-workshop relation with userUid ' . $userUid . ' or not logged in as admin');
+        }
         foreach($workshop->users as $user) {
             $user->revertPrivatizeData();
         }
 
-        if (empty($workshop) || empty($workshop->{$preparedType['pluralized']})) {
+        if (empty($workshop->{$preparedType['pluralized']})) {
             throw new NotFoundException('workshopUid: ' . $workshopUid . ' no ' . $type . '-workshop relation with userUid ' . $userUid . ' or not logged in as admin');
         }
 
@@ -1081,7 +1090,9 @@ class WorkshopsController extends AppController
                 $userModel . '.uid' => $userUid,
                 $userModel . '.status > ' => APP_DELETED,
             ])->first();
-            $user->revertPrivatizeData();
+            if ($user instanceof User) {
+                $user->revertPrivatizeData();
+            }
 
             /* START email-versand an alle initiativen-orgas */
             if (!$this->isAdmin()) {
@@ -1095,6 +1106,9 @@ class WorkshopsController extends AppController
                     'Users',
                     'Users.Groups'
                 ])->first();
+                if (!$workshop instanceof Workshop) {
+                    throw new NotFoundException('workshop not found');
+                }
 
                 $email = new AppMailer();
                 $email->viewBuilder()->setTemplate('workshop_application');

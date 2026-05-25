@@ -225,6 +225,9 @@ class FundingsController extends AdminAppController
         if (!empty($this->request->getData())) {
 
             $patchedEntity = $fundingsTable->patchEntity($funding, $this->request->getData());
+            if (!$patchedEntity instanceof Funding) {
+                throw new NotFoundException('Förderantrag konnte nicht verarbeitet werden.');
+            }
             if (!($patchedEntity->hasErrors())) {
 
                 if ($patchedEntity->isDirty('usageproof_status')) {
@@ -318,6 +321,9 @@ class FundingsController extends AdminAppController
             $associtions =  ['associated' => ['FundinguploadsActivityProofs', 'FundinguploadsFreistellungsbescheids']];
 
             $patchedEntity = $fundingsTable->patchEntity($funding, $this->request->getData(), $associtions);
+            if (!$patchedEntity instanceof Funding) {
+                throw new NotFoundException('Förderantrag konnte nicht verarbeitet werden.');
+            }
             if (!($patchedEntity->hasErrors())) {
 
                 $this->sendEmails($patchedEntity);

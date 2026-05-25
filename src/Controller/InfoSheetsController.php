@@ -198,6 +198,9 @@ class InfoSheetsController extends AppController
         if (empty($infoSheet)) {
             throw new NotFoundException;
         }
+        if (!$infoSheet instanceof InfoSheet) {
+            throw new NotFoundException;
+        }
 
         $this->setIsCurrentlyUpdated($infoSheet->uid);
         $this->set('metaTags', ['title' => 'Laufzettel bearbeiten']);

@@ -193,6 +193,9 @@ class FundingsTable extends AppRootTable
         ])->where([
             $this->aliasField('uid') => $fundingUid,
         ])->first();
+        if (!$funding instanceof Funding) {
+            throw new NotFoundException('funding (UID: ' . $fundingUid . ') was not found');
+        }
         $funding->owner_user->revertPrivatizeData();
         return $funding;
     }
@@ -240,6 +243,10 @@ class FundingsTable extends AppRootTable
         ])
         ->contain($associations)
         ->first();
+
+        if (!$funding instanceof Funding) {
+            throw new NotFoundException('funding (UID: ' . $fundingUid . ') was not found');
+        }
 
         return $funding;
     }
@@ -303,6 +310,9 @@ class FundingsTable extends AppRootTable
                 'fundingsupporter_id' => $fundingsupporterEntity->id,
             ]);
             $funding = $this->save($newEntity, ['associated' => $associations]);
+            if (!$funding instanceof Funding) {
+                throw new NotFoundException('funding for workshop (UID: ' . $workshopUid . ') could not be created');
+            }
         }
 
         $workshopsTable = TableRegistry::getTableLocator()->get('Workshops');
@@ -320,6 +330,10 @@ class FundingsTable extends AppRootTable
             'FundinguploadsZuwendungsbestaetigungs',
         ])->first();
 
+        if (!$funding instanceof Funding) {
+            throw new NotFoundException('funding for workshop (UID: ' . $workshopUid . ') was not found');
+        }
+
         if (empty($funding->fundingbudgetplans)) {
             $fundingbudgetplansTable = TableRegistry::getTableLocator()->get('Fundingbudgetplans');
             $fundingbudgetplanEntities = [];
@@ -332,9 +346,7 @@ class FundingsTable extends AppRootTable
             $funding->fundingbudgetplans = $fundingbudgetplanEntities;
         }
 
-        if (!empty($funding)) {
-            $funding->owner_user->revertPrivatizeData();
-        }
+        $funding->owner_user->revertPrivatizeData();
         return $funding;
     }
 
