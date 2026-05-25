@@ -392,6 +392,9 @@ class EventsController extends AppController
         if (empty($event)) {
             throw new NotFoundException;
         }
+        if (!$event instanceof Event) {
+            throw new NotFoundException;
+        }
         $this->setIsCurrentlyUpdated($event->uid);
         $this->set('metaTags', ['title' => 'Termin duplizieren']);
         $this->set('editFormUrl', Configure::read('AppConfig.htmlHelper')->urlEventNew($event->workshop_uid));
@@ -415,6 +418,9 @@ class EventsController extends AppController
         )->first();
 
         if (empty($event)) {
+            throw new NotFoundException;
+        }
+        if (!$event instanceof Event) {
             throw new NotFoundException;
         }
 

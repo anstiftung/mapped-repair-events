@@ -27,7 +27,8 @@ class ProvincesTable extends AppTable
         ])
         ->bind(':long_name', $name, 'string')
         ->first();
-        return $province;
+
+        return $province instanceof Province ? $province : null;
     }
 
     /**

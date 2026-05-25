@@ -229,6 +229,9 @@ class FundingsController extends AppController
         if (empty($funding)) {
             throw new NotFoundException;
         }
+        if (!$funding instanceof Funding) {
+            throw new NotFoundException;
+        }
 
         if (isset($pdfWriterService)) {
             $filename = $pdfWriterService->getFilenameCustom($funding, $funding->{$databaseField});

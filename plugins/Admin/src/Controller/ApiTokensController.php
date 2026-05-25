@@ -94,6 +94,9 @@ class ApiTokensController extends AdminAppController
             $data = $this->normalizeRequestData($this->request->getData());
 
             $apiToken = $this->ApiToken->patchEntity($apiToken, $data);
+            if (!$apiToken instanceof ApiToken) {
+                throw new NotFoundException('API Token konnte nicht verarbeitet werden.');
+            }
 
             $this->nullifyEmptyJsonFields($apiToken);
 

@@ -12,6 +12,7 @@ use Cake\Validation\Validator;
 use Authentication\PasswordHasher\DefaultPasswordHasher;
 use Cake\Datasource\EntityInterface;
 use App\Model\Rule\UserLinkToWorkshopRule;
+use App\Model\Entity\User;
 use App\Controller\Component\StringComponent;
 use Cake\ORM\TableRegistry;
 use Cake\ORM\Query\SelectQuery;
@@ -210,6 +211,9 @@ class UsersTable extends AppRootTable
                     contain: [
                         'Groups'
                     ])->first();
+                    if (!$user instanceof User) {
+                        return true;
+                    }
                     $groupsTable = TableRegistry::getTableLocator()->get('Groups');
                     if (!$groupsTable->isOrga($user)) {
                         return true;
