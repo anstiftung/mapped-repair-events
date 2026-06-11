@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace App\Model\Table;
 
 use Cake\Core\Configure;
+use App\Model\Entity\Category;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Hash;
 use Cake\Validation\Validator;
@@ -139,6 +140,24 @@ class CategoriesTable extends AppTable
 
         return $preparedCategories;
 
+    }
+
+    public function findSubcategoryByCaseInsensitiveNameAndParentId(string $name, int $parentId): ?Category
+    {
+        $name = trim($name);
+        $category = $this->find('all',
+            conditions: [
+                'LOWER(Categories.name)' => mb_strtolower($name),
+                'Categories.parent_id' => $parentId,
+                'Categories.status > ' . APP_DELETED,
+            ],
+        )->first();
+
+        if (!$category instanceof Category) {
+            return null;
+        }
+
+        return $category;
     }
 
     public function calculateMaterialFootprint(float $repairedCount, float $materialFootprintFactor): float

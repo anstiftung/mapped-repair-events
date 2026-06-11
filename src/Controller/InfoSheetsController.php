@@ -3,11 +3,13 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Controller\Component\StringComponent;
+use App\Model\Entity\Brand;
+use App\Model\Entity\Category;
+use App\Model\Entity\InfoSheet;
 use Cake\Core\Configure;
+use Cake\Http\Response;
 use Cake\Http\Exception\NotFoundException;
 use League\Csv\Writer;
-use Cake\Http\Response;
-use App\Model\Entity\InfoSheet;
 
 class InfoSheetsController extends AppController
 {
@@ -265,9 +267,12 @@ class InfoSheetsController extends AppController
 
             $infoSheetsTable = $this->getTableLocator()->get('InfoSheets');
             $patchedEntity = $infoSheetsTable->getPatchedEntityForAdminEdit($infoSheet, $this->request->getData());
+            /** @var InfoSheet $patchedEntity */
 
             $errors = $patchedEntity->getErrors();
             if (empty($errors)) {
+
+                $this->useExistingCreatedEntries($patchedEntity);
 
                 $patchedEntity = $this->patchEntityWithCurrentlyUpdatedFields($patchedEntity);
                 $entity = $this->stripTagsFromFields($patchedEntity, 'InfoSheet');
@@ -336,6 +341,41 @@ class InfoSheetsController extends AppController
 
         return null;
 
+    }
+
+    private function useExistingCreatedEntries(InfoSheet $patchedEntity): void
+    {
+        if ((int) $patchedEntity->get('brand_id') === -1) {
+            $newBrandName = (string) $patchedEntity->get('new_brand_name');
+            /** @var \App\Model\Table\BrandsTable $brandsTable */
+            $brandsTable = $this->getTableLocator()->get('Brands');
+            $existingBrand = $brandsTable->findByCaseInsensitiveName($newBrandName);
+            if ($existingBrand !== null) {
+                $this->useExistingCreatedEntry($patchedEntity, $existingBrand);
+            }
+        }
+
+        if ((int) $patchedEntity->get('category_id') === -1) {
+            $newSubcategoryName = (string) $patchedEntity->get('new_subcategory_name');
+            $newSubcategoryParentId = (int) $patchedEntity->get('new_subcategory_parent_id');
+            /** @var \App\Model\Table\CategoriesTable $categoriesTable */
+            $categoriesTable = $this->getTableLocator()->get('Categories');
+            $existingSubcategory = $categoriesTable->findSubcategoryByCaseInsensitiveNameAndParentId($newSubcategoryName, $newSubcategoryParentId);
+            if ($existingSubcategory !== null) {
+                $this->useExistingCreatedEntry($patchedEntity, $existingSubcategory);
+            }
+        }
+    }
+
+    private function useExistingCreatedEntry(InfoSheet $patchedEntity, Brand|Category $existingEntry): void
+    {
+        if ($existingEntry instanceof Brand) {
+            $patchedEntity->set('brand_id', $existingEntry->id);
+        }
+
+        if ($existingEntry instanceof Category) {
+            $patchedEntity->set('category_id', $existingEntry->id);
+        }
     }
 
 }

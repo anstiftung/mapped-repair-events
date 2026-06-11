@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace App\Model\Table;
 
+use App\Model\Entity\Brand;
 use App\Model\Traits\ApproveMultipleTrait;
 
 /**
@@ -58,6 +59,23 @@ class BrandsTable extends AppTable
         }
 
         return $preparedBrands;
+    }
+
+    public function findByCaseInsensitiveName(string $name): ?Brand
+    {
+        $name = trim($name);
+        $brand = $this->find('all',
+            conditions: [
+                'LOWER(Brands.name)' => mb_strtolower($name),
+                'Brands.status > ' . APP_DELETED,
+            ],
+        )->first();
+
+        if (!$brand instanceof Brand) {
+            return null;
+        }
+
+        return $brand;
     }
 
 }
