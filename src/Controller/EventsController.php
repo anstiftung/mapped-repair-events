@@ -484,33 +484,53 @@ class EventsController extends AppController
 
         if (!empty($this->request->getData())) {
             $patchedEvents = [];
-            foreach($this->request->getData() as $data) {
+            $requestData = $this->request->getData();
+            if (!is_array($requestData)) {
+                $requestData = [];
+            }
+
+            $baseData = $requestData[0] ?? [];
+            if (!is_array($baseData)) {
+                $baseData = [];
+            }
+            foreach($requestData as $data) {
                 if (!is_array($data)) {
                     continue; // skip referer
                 }
                 if (!array_key_exists('datumstart', $data)) {
                     continue; // skip metadata (fields / unlocked / debug)
                 }
-                $data = array_merge($this->request->getData()[0], $data);
-                if ($data['datumstart']) {
-                    $data['datumstart'] = new DateTime($data['datumstart']);
+                $data = array_merge($baseData, $data);
+
+                $datumstart = $data['datumstart'] ?? null;
+                if ($datumstart) {
+                    $data['datumstart'] = new DateTime($datumstart);
                 }
-                if ($data['uhrzeitstart']) {
-                    $data['uhrzeitstart'] = new DateTime($data['uhrzeitstart']);
+
+                $uhrzeitstart = $data['uhrzeitstart'] ?? null;
+                if ($uhrzeitstart) {
+                    $data['uhrzeitstart'] = new DateTime($uhrzeitstart);
                 }
-                if ($data['uhrzeitend']) {
-                    $data['uhrzeitend'] = new DateTime($data['uhrzeitend']);
+
+                $uhrzeitend = $data['uhrzeitend'] ?? null;
+                if ($uhrzeitend) {
+                    $data['uhrzeitend'] = new DateTime($uhrzeitend);
                 }
-                if (!$data['use_custom_coordinates']) {
-                    $addressString = $data['strasse'] . ', ' . $data['zip'] . ' ' . $data['ort'] . ', ' . $data['land'];
+
+                $useCustomCoordinates = !empty($data['use_custom_coordinates']);
+                if (!$useCustomCoordinates) {
+                    $addressString = (string)($data['strasse'] ?? '') . ', ' . (string)($data['zip'] ?? '') . ' ' . (string)($data['ort'] ?? '') . ', ' . (string)($data['land'] ?? '');
                     $geoData = $this->geoService->getGeoDataByAddress($addressString);
                     $data['lat'] = $geoData['lat'];
                     $data['lng'] = $geoData['lng'];
                 }
-                if (!empty($data['use_custom_coordinates'])) {
-                    $geoData = $this->geoService->getGeoDataByCoordinates($data['lat'], $data['lng']);
-                    $data['lat'] = str_replace(',', '.', $data['lat']);
-                    $data['lng'] = str_replace(',', '.', $data['lng']);
+
+                if ($useCustomCoordinates) {
+                    $lat = (string)($data['lat'] ?? '');
+                    $lng = (string)($data['lng'] ?? '');
+                    $geoData = $this->geoService->getGeoDataByCoordinates($lat, $lng);
+                    $data['lat'] = str_replace(',', '.', $lat);
+                    $data['lng'] = str_replace(',', '.', $lng);
                 }
                 $data['province_id'] = $geoData['provinceId'] ?? 0;
                 if ($isEditMode) {
