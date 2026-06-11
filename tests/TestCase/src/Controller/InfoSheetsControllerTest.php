@@ -83,10 +83,13 @@ class InfoSheetsControllerTest extends AppTestCase
         order: [
             'InfoSheets.uid' => 'DESC',
         ])->toArray();
-        $this->assertEquals(2, count($infoSheets));
-        $this->assertEquals($infoSheets[0]->device_name, $this->newInfoSheetData['device_name']);
-        $this->assertEquals($infoSheets[0]->defect_description, $this->newInfoSheetData['defect_description']);
-        $this->assertEquals($infoSheets[0]->owner, 1);
+        $this->assertEquals(9, count($infoSheets));
+        $newInfoSheet = array_values(array_filter($infoSheets, function($infoSheet): bool {
+            return $infoSheet->device_name === $this->newInfoSheetData['device_name'];
+        }))[0];
+        $this->assertEquals($newInfoSheet->device_name, $this->newInfoSheetData['device_name']);
+        $this->assertEquals($newInfoSheet->defect_description, $this->newInfoSheetData['defect_description']);
+        $this->assertEquals($newInfoSheet->owner, 1);
 
         $expectedUid = $this->getTableLocator()->get('Roots')->find('all')->count();
         $this->assertFlashMessage('Laufzettel erfolgreich gespeichert. UID: ' . $expectedUid);
@@ -94,9 +97,14 @@ class InfoSheetsControllerTest extends AppTestCase
 
     public function testAddInfoSheetWithDuplicateBrandUsesExistingBrand(): void
     {
+        $infoSheetsTable = $this->getTableLocator()->get('InfoSheets');
+        $brandsTable = $this->getTableLocator()->get('Brands');
+        $initialInfoSheetsCount = $infoSheetsTable->find()->count();
+        $initialBrandsCount = $brandsTable->find()->count();
+
         $this->loginAsOrga();
         $this->newInfoSheetData['defect_description'] = 'Defect description';
-        $this->newInfoSheetData['device_name'] = 'Device name';
+        $this->newInfoSheetData['device_name'] = 'Device name duplicate brand';
         $this->newInfoSheetData['category_id'] = 87;
         $this->newInfoSheetData['brand_id'] = -1;
         $this->newInfoSheetData['new_brand_name'] = 'abacom';
@@ -109,17 +117,24 @@ class InfoSheetsControllerTest extends AppTestCase
             ],
         );
 
-        $this->assertEquals(2, $this->getTableLocator()->get('InfoSheets')->find()->count());
-        $this->assertEquals(1, $this->getTableLocator()->get('Brands')->find()->count());
-        $infoSheet = $this->getTableLocator()->get('InfoSheets')->find()->orderByDesc('uid')->first();
+        $this->assertEquals($initialInfoSheetsCount + 1, $infoSheetsTable->find()->count());
+        $this->assertEquals($initialBrandsCount, $brandsTable->find()->count());
+        $infoSheet = $infoSheetsTable->find()->where([
+            'device_name' => $this->newInfoSheetData['device_name'],
+        ])->orderByDesc('uid')->first();
         $this->assertEquals(BrandsFixture::BRAND_ABACOM_ID, $infoSheet->brand_id);
     }
 
     public function testAddInfoSheetWithDuplicateSubcategoryUsesExistingCategory(): void
     {
+        $infoSheetsTable = $this->getTableLocator()->get('InfoSheets');
+        $categoriesTable = $this->getTableLocator()->get('Categories');
+        $initialInfoSheetsCount = $infoSheetsTable->find()->count();
+        $initialCategoriesCount = $categoriesTable->find()->count();
+
         $this->loginAsOrga();
         $this->newInfoSheetData['defect_description'] = 'Defect description';
-        $this->newInfoSheetData['device_name'] = 'Device name';
+        $this->newInfoSheetData['device_name'] = 'Device name duplicate subcategory';
         $this->newInfoSheetData['category_id'] = -1;
         $this->newInfoSheetData['new_subcategory_parent_id'] = 1;
         $this->newInfoSheetData['new_subcategory_name'] = 'elektro sonstiges';
@@ -132,17 +147,24 @@ class InfoSheetsControllerTest extends AppTestCase
             ],
         );
 
-        $this->assertEquals(2, $this->getTableLocator()->get('InfoSheets')->find()->count());
-        $this->assertEquals(3, $this->getTableLocator()->get('Categories')->find()->count());
-        $infoSheet = $this->getTableLocator()->get('InfoSheets')->find()->orderByDesc('uid')->first();
+        $this->assertEquals($initialInfoSheetsCount + 1, $infoSheetsTable->find()->count());
+        $this->assertEquals($initialCategoriesCount, $categoriesTable->find()->count());
+        $infoSheet = $infoSheetsTable->find()->where([
+            'device_name' => $this->newInfoSheetData['device_name'],
+        ])->orderByDesc('uid')->first();
         $this->assertEquals(87, $infoSheet->category_id);
     }
 
     public function testAddInfoSheetWithSameSubcategoryNameInDifferentParentCategory(): void
     {
+        $infoSheetsTable = $this->getTableLocator()->get('InfoSheets');
+        $categoriesTable = $this->getTableLocator()->get('Categories');
+        $initialInfoSheetsCount = $infoSheetsTable->find()->count();
+        $initialCategoriesCount = $categoriesTable->find()->count();
+
         $this->loginAsOrga();
         $this->newInfoSheetData['defect_description'] = 'Defect description';
-        $this->newInfoSheetData['device_name'] = 'Device name';
+        $this->newInfoSheetData['device_name'] = 'Device name same subcategory different parent';
         $this->newInfoSheetData['category_id'] = -1;
         $this->newInfoSheetData['new_subcategory_parent_id'] = 630;
         $this->newInfoSheetData['new_subcategory_name'] = 'elektro sonstiges';
@@ -155,9 +177,11 @@ class InfoSheetsControllerTest extends AppTestCase
             ],
         );
 
-        $this->assertEquals(2, $this->getTableLocator()->get('InfoSheets')->find()->count());
-        $this->assertEquals(4, $this->getTableLocator()->get('Categories')->find()->count());
-        $infoSheet = $this->getTableLocator()->get('InfoSheets')->find()->orderByDesc('uid')->first();
+        $this->assertEquals($initialInfoSheetsCount + 1, $infoSheetsTable->find()->count());
+        $this->assertEquals($initialCategoriesCount + 1, $categoriesTable->find()->count());
+        $infoSheet = $infoSheetsTable->find()->where([
+            'device_name' => $this->newInfoSheetData['device_name'],
+        ])->orderByDesc('uid')->first();
         $this->assertNotEquals(87, $infoSheet->category_id);
     }
 

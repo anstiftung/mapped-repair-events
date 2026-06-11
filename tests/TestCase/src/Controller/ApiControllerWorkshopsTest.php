@@ -5,11 +5,10 @@ namespace App\Test\TestCase\Controller;
 
 use App\Test\Fixture\ApiTokensFixture;
 use App\Test\TestCase\AppTestCase;
-use Cake\Core\Configure;
 use Cake\I18n\Date;
 
-class ApiControllerTest extends AppTestCase {
-
+class ApiControllerWorkshopsTest extends AppTestCase
+{
     public function testWorkshopsBerlin(): void
     {
         $this->configRequest([
@@ -54,6 +53,7 @@ class ApiControllerTest extends AppTestCase {
         $response = $this->getJsonResponseBody();
         $this->assertEquals('Access to this city is not allowed with this API token. Allowed search terms: Berlin, München', $response['error']);
     }
+
     public function testWorkshopsWithoutToken(): void
     {
         $this->get('/api/v1/workshops?city=berlin');
@@ -120,7 +120,7 @@ class ApiControllerTest extends AppTestCase {
         $this->assertResponseContains($expectedResult);
         $this->assertResponseOk();
     }
-    
+
     public function testWorkshopsWithEmptySearchTermsToken(): void
     {
         $this->configRequest([
@@ -173,26 +173,13 @@ class ApiControllerTest extends AppTestCase {
         $this->configRequest([
             'headers' => [
                 'Authorization' => 'Bearer ' . ApiTokensFixture::WRONG_DOMAIN_WORKSHOPS_TOKEN,
-                'Origin' => 'http://localhost',
+                'Origin' => 'http://www.example.com',
             ],
         ]);
         $this->get('/api/v1/workshops?city=berlin');
         $this->assertResponseCode(401);
         $response = $this->getJsonResponseBody();
         $this->assertEquals('Invalid or inactive API token', $response['error']);
-    }
-
-    public function testGetSplitterOk(): void
-    {
-        Configure::write('AppConfig.splitterPath', '/files'); // prevent errors on github actions
-        $this->configRequest([
-            'headers' => [
-                'Authorization' => 'Bearer ' . ApiTokensFixture::VALID_SPLITTER_TOKEN,
-                'Origin' => 'http://localhost',
-            ],
-        ]);
-        $this->get('/api/splitter');
-        $this->assertResponseOk();
     }
 
     public function testGetWorkshopsForHyperModeWebsite(): void
@@ -210,5 +197,4 @@ class ApiControllerTest extends AppTestCase {
         $this->assertIsArray($response['workshops']);
         $this->assertCount(1, $response['workshops']);
     }
-
 }

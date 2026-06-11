@@ -53,7 +53,7 @@ class ApiTokensControllerTest extends AppTestCase
         ]);
 
         $this->assertNoRedirect();
-        $this->assertResponseContains('Für den Typ Initiativen API muss mindestens ein erlaubter Suchbegriff angegeben werden.');
+        $this->assertResponseContains('Für die Typen &quot;Initiativen API&quot; und &quot;Statistik API&quot; muss mindestens ein erlaubter Suchbegriff angegeben werden.');
 
         $apiTokenAfter = $apiTokensTable->get(1);
         $this->assertSame($apiTokenBefore->name, $apiTokenAfter->name);
@@ -77,9 +77,33 @@ class ApiTokensControllerTest extends AppTestCase
         ]);
 
         $this->assertNoRedirect();
-        $this->assertResponseContains('Erlaubte Suchbegriffe sind nur für den Typ Initiativen API erlaubt und müssen für alle anderen Typen leer sein.');
+        $this->assertResponseContains('Erlaubte Suchbegriffe sind nur für die Typen &quot;Initiativen API&quot; und &quot;Statistik API&quot; erlaubt und müssen für alle anderen Typen leer sein.');
 
         $apiTokenAfter = $apiTokensTable->get(5);
+        $this->assertSame($apiTokenBefore->name, $apiTokenAfter->name);
+        $this->assertSame($apiTokenBefore->allowed_search_terms, $apiTokenAfter->allowed_search_terms);
+    }
+
+    public function testEditFormShowsValidationErrorWhenStatisticsSearchTermsAreEmpty(): void
+    {
+        $this->loginAsAdmin();
+
+        $apiTokensTable = $this->getTableLocator()->get('ApiTokens');
+        $apiTokenBefore = $apiTokensTable->get(7);
+
+        $this->post('/admin/apiTokens/edit/7', [
+            'referer' => '/admin/apiTokens',
+            'name' => 'Updated Statistics Token',
+            'type' => ApiToken::TYPE_STATISTICS,
+            'allowed_search_terms' => '',
+            'allowed_domains' => 'localhost',
+            'status' => 1,
+        ]);
+
+        $this->assertNoRedirect();
+        $this->assertResponseContains('Für die Typen &quot;Initiativen API&quot; und &quot;Statistik API&quot; muss mindestens ein erlaubter Suchbegriff angegeben werden.');
+
+        $apiTokenAfter = $apiTokensTable->get(7);
         $this->assertSame($apiTokenBefore->name, $apiTokenAfter->name);
         $this->assertSame($apiTokenBefore->allowed_search_terms, $apiTokenAfter->allowed_search_terms);
     }

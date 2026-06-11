@@ -315,7 +315,7 @@ class EventsControllerTest extends AppTestCase
         $this->get(Configure::read('AppConfig.htmlHelper')->urlMyEvents());
         $this->assertResponseOk();
         $this->assertResponseContains('Meine Termine');
-        $this->assertResponseContains('Test Workshop (2 Termine, 1 Laufzettel, 1 Termin-Abonnement)');
+        $this->assertResponseContains('Test Workshop (2 Termine, 8 Laufzettel, 1 Termin-Abonnement)');
         $this->assertResponseContains('Berlin, Müllerstraße 123');
         $this->assertResponseContains('01.01.2040');
         $this->assertResponseContains('09:00 - 18:00 Uhr');

@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
+use Cake\Core\Configure;
 use Cake\Utility\Security;
 
 class ApiToken extends Entity
@@ -96,6 +97,9 @@ class ApiToken extends Entity
     public function isDomainAllowed(string $domain): bool
     {
         $defaultAllowedDomains = ['anstiftung.github.io'];
+        if (Configure::read('debug')) {
+            $defaultAllowedDomains[] = 'localhost';
+        }
         foreach ($defaultAllowedDomains as $allowedDomain) {
             if (mb_strtolower($allowedDomain) === mb_strtolower($domain)) {
                 return true;

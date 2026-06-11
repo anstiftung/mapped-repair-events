@@ -5,6 +5,7 @@ namespace App\Middleware;
 
 use App\Model\Entity\ApiToken;
 use App\Model\Table\ApiTokensTable;
+use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Http\Response;
 use Cake\Log\Log;
@@ -23,6 +24,9 @@ class ApiTokenAuthMiddleware implements MiddlewareInterface
 {
     use LocatorAwareTrait;
 
+    private const RATE_LIMIT_PER_MINUTE = 60;
+    private const RATE_LIMIT_WINDOW_SECONDS = 60;
+
     private function checkIsMiddlewareEnabledForApiType(ServerRequestInterface $request): bool
     {
         $action = $request->getParam('action'); // @phpstan-ignore-line
@@ -31,6 +35,7 @@ class ApiTokenAuthMiddleware implements MiddlewareInterface
             'getWorkshopsWithCityFilter' => Configure::read('useApiTokenAuthMiddleware1'),
             'getSplitter' => Configure::read('useApiTokenAuthMiddleware2'),
             'getWorkshopsForHyperModeWebsite' => Configure::read('useApiTokenAuthMiddleware3'),
+            'getStatistics' => true,
             default => false,
         };
     }
@@ -93,19 +98,15 @@ class ApiTokenAuthMiddleware implements MiddlewareInterface
             return $this->createErrorResponse($request, 'Invalid or inactive API token', 401);
         }
 
-        // Validate allowed search terms if city parameter is present
+        $rateLimit = $this->consumeRateLimit($apiToken);
+        if ($rateLimit['limited']) {
+            return $this->createRateLimitResponse($request, $rateLimit);
+        }
+
         $queryParams = $request->getQueryParams();
-        if (isset($queryParams['city']) && (int)$apiToken->type === ApiToken::TYPE_WORKSHOPS) {
-            $city = (string) $queryParams['city'];
-            if (!$apiToken->isSearchTermAllowed($city)) {
-                $allowedTerms = json_decode($apiToken->allowed_search_terms, true) ?: [];
-                $allowedTermsList = !empty($allowedTerms) ? implode(', ', $allowedTerms) : 'none';
-                return $this->createErrorResponse(
-                    $request,
-                    'Access to this city is not allowed with this API token. Allowed search terms: ' . $allowedTermsList,
-                    401,
-                );
-            }
+        $searchTermErrorResponse = $this->validateAllowedSearchTerms($request, $apiToken, $queryParams);
+        if ($searchTermErrorResponse !== null) {
+            return $searchTermErrorResponse;
         }
 
         // Update last_used timestamp
@@ -128,14 +129,123 @@ class ApiTokenAuthMiddleware implements MiddlewareInterface
         return $response;
     }
 
+    /**
+     * @param array<string, mixed> $queryParams
+     */
+    private function validateAllowedSearchTerms(ServerRequestInterface $request, ApiToken $apiToken, array $queryParams): ?Response
+    {
+        // For statistics API, reject requests with both city and province parameters
+        if ((int)$apiToken->type === ApiToken::TYPE_STATISTICS) {
+            if (isset($queryParams['city']) && isset($queryParams['province'])) {
+                return $this->createErrorResponse(
+                    $request,
+                    'Cannot specify both city and province parameters. Please specify only one.',
+                    400,
+                );
+            }
+        }
+
+        $restrictedQueryParam = match ((int)$apiToken->type) {
+            ApiToken::TYPE_WORKSHOPS => 'city',
+            ApiToken::TYPE_STATISTICS => $this->getStatisticsSearchTermQueryParam($queryParams),
+            default => null,
+        };
+
+        if ($restrictedQueryParam === null || !isset($queryParams[$restrictedQueryParam])) {
+            return null;
+        }
+
+        $searchTerm = (string)$queryParams[$restrictedQueryParam];
+        
+        if ($searchTerm === '') {
+            return null;
+        }
+
+        if ($apiToken->isSearchTermAllowed($searchTerm)) {
+            return null;
+        }
+
+        $allowedTerms = json_decode($apiToken->allowed_search_terms, true) ?: [];
+        $allowedTermsList = !empty($allowedTerms) ? implode(', ', $allowedTerms) : 'none';
+        return $this->createErrorResponse(
+            $request,
+            'Access to this ' . $restrictedQueryParam . ' is not allowed with this API token. Allowed search terms: ' . $allowedTermsList,
+            401,
+        );
+    }
+
+    /**
+     * @return array{limited: bool, limit: int, remaining: int, reset: int, retryAfter: int}
+     */
+    private function consumeRateLimit(ApiToken $apiToken): array
+    {
+        $now = time();
+        $cacheKey = $this->getRateLimitCacheKey($apiToken);
+        $state = Cache::read($cacheKey);
+        $count = 0;
+        $reset = $now + self::RATE_LIMIT_WINDOW_SECONDS;
+
+        if (is_array($state) && isset($state['count'], $state['reset'])) {
+            $stateReset = (int)$state['reset'];
+            if ($stateReset > $now) {
+                $count = (int)$state['count'];
+                $reset = $stateReset;
+            }
+        }
+
+        if ($count >= self::RATE_LIMIT_PER_MINUTE) {
+            return [
+                'limited' => true,
+                'limit' => self::RATE_LIMIT_PER_MINUTE,
+                'remaining' => 0,
+                'reset' => $reset,
+                'retryAfter' => max(1, $reset - $now),
+            ];
+        }
+
+        $count++;
+        Cache::write($cacheKey, [
+            'count' => $count,
+            'reset' => $reset,
+        ]);
+
+        return [
+            'limited' => false,
+            'limit' => self::RATE_LIMIT_PER_MINUTE,
+            'remaining' => max(0, self::RATE_LIMIT_PER_MINUTE - $count),
+            'reset' => $reset,
+            'retryAfter' => max(1, $reset - $now),
+        ];
+    }
+
+    private function getRateLimitCacheKey(ApiToken $apiToken): string
+    {
+        return 'api_rate_limit_' . (int)$apiToken->type . '_' . (int)$apiToken->id;
+    }
+
+    /**
+     * @param array<string, mixed> $queryParams
+     */
+    private function getStatisticsSearchTermQueryParam(array $queryParams): ?string
+    {
+        if (isset($queryParams['city'])) {
+            return 'city';
+        }
+        if (isset($queryParams['province'])) {
+            return 'province';
+        }
+        return null;
+    }
+
     private function resolveRequiredType(ServerRequestInterface $request): ?int
     {
         $action = $request->getParam('action'); // @phpstan-ignore-line
 
         return match ($action) {
             'getWorkshopsForHyperModeWebsite' => ApiToken::TYPE_HYPERMODE_WEBSITE,
-            'getWorkshops' => ApiToken::TYPE_WORKSHOPS,
+            'getWorkshopsWithCityFilter' => ApiToken::TYPE_WORKSHOPS,
             'getSplitter' => ApiToken::TYPE_SPLITTER,
+            'getStatistics' => ApiToken::TYPE_STATISTICS,
             default => null,
         };
     }
@@ -158,6 +268,18 @@ class ApiTokenAuthMiddleware implements MiddlewareInterface
             ->withHeader('Access-Control-Allow-Origin', '*')
             ->withHeader('Access-Control-Allow-Methods', 'GET')
             ->withHeader('Access-Control-Allow-Headers', 'Authorization, Content-Type');
+    }
+
+    /**
+     * @param array{limited: bool, limit: int, remaining: int, reset: int, retryAfter: int} $rateLimit
+     */
+    private function createRateLimitResponse(ServerRequestInterface $request, array $rateLimit): Response
+    {
+        return $this->createErrorResponse($request, 'rate limit exceeded', 429)
+            ->withHeader('Retry-After', (string)$rateLimit['retryAfter'])
+            ->withHeader('X-RateLimit-Limit', (string)$rateLimit['limit'])
+            ->withHeader('X-RateLimit-Remaining', (string)$rateLimit['remaining'])
+            ->withHeader('X-RateLimit-Reset', (string)$rateLimit['reset']);
     }
 
     /**

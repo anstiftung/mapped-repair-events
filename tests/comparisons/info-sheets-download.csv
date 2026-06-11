@@ -1,2 +1,9 @@
 Laufzettel-UID,Oberkategorie,Unterkategorie,Marke,Gerät/Gegenstand,Baujahr,"Datum Reparaturveranstaltung",Fehlerbeschreibung,Reparaturerfolg,"Reparatur: vertagt","Reparatur: nicht erfolgt","Reparatur: Abbruch","Keine Reparatur, weil",Url
+106,3D-Reparatur,3D-Stifte,,,,01.01.2040,,,,,,,"https://www.reparatur-initiativen.de/test-workshop?event=6,2040-01-01"
+105,3D-Reparatur,3D-Drucker,,,,01.01.2040,,,,,,,"https://www.reparatur-initiativen.de/test-workshop?event=6,2040-01-01"
+104,3D-Reparatur,3D-Stifte,,,,01.01.2040,,,,,,,"https://www.reparatur-initiativen.de/test-workshop?event=6,2040-01-01"
+103,3D-Reparatur,3D-Drucker,,,,01.01.2040,,,,,,,"https://www.reparatur-initiativen.de/test-workshop?event=6,2040-01-01"
+102,Elektro,"Elektro Sonstiges",,,,01.01.2040,,,,,,,"https://www.reparatur-initiativen.de/test-workshop?event=6,2040-01-01"
+101,Elektro,"Elektro Audio",,,,01.01.2040,,,,,,,"https://www.reparatur-initiativen.de/test-workshop?event=6,2040-01-01"
+100,Elektro,"Elektro Kleingeräte",,,,01.01.2040,,,,,,,"https://www.reparatur-initiativen.de/test-workshop?event=6,2040-01-01"
 7,Elektro,"Elektro Sonstiges",,,,01.01.2040,,,,,,,"https://www.reparatur-initiativen.de/test-workshop?event=6,2040-01-01"

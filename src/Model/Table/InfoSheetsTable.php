@@ -119,11 +119,17 @@ class InfoSheetsTable extends AppRootTable
             ]);
         }
 
-        if (!is_null($dateFrom) && !is_null($dateTo)) {
+        if (!is_null($dateFrom)) {
             $dateFrom = new DateTime($dateFrom);
+            $query->where(function($exp) use ($dateFrom) {
+                return $exp->gte('Events.datumstart', $dateFrom, 'date');
+            });
+        }
+
+        if (!is_null($dateTo)) {
             $dateTo = new DateTime($dateTo);
-            $query->where(function($exp) use ($dateFrom, $dateTo) {
-                return $exp->between('Events.datumstart', $dateFrom, $dateTo, 'date');
+            $query->where(function($exp) use ($dateTo) {
+                return $exp->lte('Events.datumstart', $dateTo, 'date');
             });
         }
 
@@ -184,6 +190,14 @@ class InfoSheetsTable extends AppRootTable
     {
         $query = $this->prepareStatisticsDataGlobalByMainCategory($categoryId, $dateFrom, $dateTo, $city, $province);
         $query = $this->setNotRepairedConditions($query);
+        return $query->count();
+    }
+
+    public function getWorkshopCountGlobalByMainCategoryId(int $categoryId, ?string $dateFrom, ?string $dateTo, ?string $city, ?Province $province): int
+    {
+        $query = $this->prepareStatisticsDataGlobalByMainCategory($categoryId, $dateFrom, $dateTo, $city, $province);
+        $query->select(['Events.workshop_uid']);
+        $query->groupBy('Events.workshop_uid');
         return $query->count();
     }
 

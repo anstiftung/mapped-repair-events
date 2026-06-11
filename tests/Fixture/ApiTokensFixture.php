@@ -14,6 +14,7 @@ class ApiTokensFixture extends TestFixture
     public const string WRONG_DOMAIN_WORKSHOPS_TOKEN = 'wrong-domain-token-12345';
     public const string VALID_SPLITTER_TOKEN = 'valid-splitter-token-12345';
     public const string VALID_WORKSHOPS_HYPERMODE_TOKEN = 'valid-workshops-hypermode-token-12345';
+    public const string VALID_STATISTICS_TOKEN = 'valid-statistics-token-12345';
 
     public function init(): void
     {
@@ -89,6 +90,19 @@ class ApiTokensFixture extends TestFixture
                 'type' => ApiToken::TYPE_HYPERMODE_WEBSITE,
                 'token' => self::VALID_WORKSHOPS_HYPERMODE_TOKEN,
                 'allowed_search_terms' => '[]',
+                'allowed_domains' => '["localhost"]',
+                'status' => 1,
+                'last_used' => null,
+                'expires_at' => null,
+                'created' => '2026-01-01 00:00:00',
+                'modified' => '2026-01-01 00:00:00',
+            ],
+            [
+                'id' => 7,
+                'name' => 'Test Statistics Token',
+                'type' => ApiToken::TYPE_STATISTICS,
+                'token' => self::VALID_STATISTICS_TOKEN,
+                'allowed_search_terms' => '["Berlin", "Bayern", "Niedersachsen"]',
                 'allowed_domains' => '["localhost"]',
                 'status' => 1,
                 'last_used' => null,
