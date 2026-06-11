@@ -144,6 +144,7 @@ class CategoriesTable extends AppTable
 
     public function findSubcategoryByCaseInsensitiveNameAndParentId(string $name, int $parentId): ?Category
     {
+        $name = trim($name);
         $category = $this->find('all',
             conditions: [
                 'LOWER(Categories.name)' => mb_strtolower($name),
