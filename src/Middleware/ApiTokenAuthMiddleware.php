@@ -33,8 +33,8 @@ class ApiTokenAuthMiddleware implements MiddlewareInterface
 
         return match ($action) {
             'getWorkshopsWithCityFilter' => Configure::read('useApiTokenAuthMiddleware1'),
-            'getSplitter' => Configure::read('useApiTokenAuthMiddleware2'),
-            'getWorkshopsForHyperModeWebsite' => Configure::read('useApiTokenAuthMiddleware3'),
+            'getSplitter' => true,
+            'getWorkshopsForHyperModeWebsite' => true,
             'getStatistics' => true,
             default => false,
         };
