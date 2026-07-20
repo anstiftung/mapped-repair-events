@@ -11,10 +11,9 @@ MappedRepairEvents.Funding = {
     bindSubmitUsageproofButton: (uid) => {
         $('#submit-usageproof-button-' + uid).on('click', function() {
             Swal.fire({
-                animation: false,
+                ...MappedRepairEvents.Helper.getSwalDefaultProps(),
                 html: 'Möchtest du den Verwendungsnachweis wirklich einreichen?',
                 showCancelButton: true,
-                showCloseButton: true,
                 confirmButtonText: 'Ja, jetzt einreichen',
                 cancelButtonText: 'Abbrechen',
             }).then(function(result) {
@@ -114,10 +113,9 @@ MappedRepairEvents.Funding = {
     bindSubmitFundingButton: (uid) => {
         $('#submit-funding-button-' + uid).on('click', function() {
             Swal.fire({
-                animation: false,
+                ...MappedRepairEvents.Helper.getSwalDefaultProps(),
                 html: 'Möchtest du den Förderantrag wirklich einreichen?',
                 showCancelButton: true,
-                showCloseButton: true,
                 confirmButtonText: 'Ja, jetzt einreichen',
                 cancelButtonText: 'Abbrechen',
             }).then(function(result) {
@@ -180,10 +178,9 @@ MappedRepairEvents.Funding = {
         $('#funding-delete-button-' + uid).on('click', function() {
             const workshopName = $(this).closest('.workshop-wrapper').find('.heading').text();
             Swal.fire({
-                animation: false,
+                ...MappedRepairEvents.Helper.getSwalDefaultProps(),
                 html: 'Möchtest du den Förderantrag der Initiative <b>' + workshopName + '</b> wirklich löschen?',
                 showCancelButton: true,
-                showCloseButton: true,
                 confirmButtonText: 'Löschen',
                 cancelButtonText: 'Abbrechen',
             }).then(function(result) {

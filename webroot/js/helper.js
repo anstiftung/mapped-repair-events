@@ -15,6 +15,14 @@ MappedRepairEvents.Helper = {
         MappedRepairEvents.Detect.setIsMobile();
     },
 
+    getSwalDefaultProps : function() {
+        return {
+            animation: false,
+            draggable: true,
+            showCloseButton: true
+        };
+    },
+
     setFocusToSelect2Dropdown : function(container) {
         var dropdown = $(container);
         if (dropdown.length == 0) {
@@ -823,10 +831,9 @@ MappedRepairEvents.Helper = {
             var message = 'Soll dieser Termin wirklich gelöscht werden?<br />Dies kann nicht rückgängig gemacht werden!';
             var eventUid = $(this).data('event-uid');
             Swal.fire({
-                animation: false,
+                ...MappedRepairEvents.Helper.getSwalDefaultProps(),
                 html: message,
                 showCancelButton: true,
-                showCloseButton: true,
                 confirmButtonText: 'Ja',
                 cancelButtonText: 'Nein',
             }).then(function(result) {
@@ -847,10 +854,9 @@ MappedRepairEvents.Helper = {
             var eventUid = $(this).data('event-uid');
             var workshopUid = $(this).data('workshop-uid');
             Swal.fire({
-                animation: false,
+                ...MappedRepairEvents.Helper.getSwalDefaultProps(),
                 html: message,
                 showCancelButton: true,
-                showCloseButton: true,
                 confirmButtonText: 'Ja',
                 cancelButtonText: 'Nein',
             }).then(function(result) {
@@ -1335,10 +1341,9 @@ MappedRepairEvents.Helper = {
     bindNewObjectButton : function(selector, message, url) {
         $(selector).click(function() {
             Swal.fire({
-                animation: false,
+                ...MappedRepairEvents.Helper.getSwalDefaultProps(),
                 html: message,
                 showCancelButton: true,
-                showCloseButton: true,
                 confirmButtonText: 'Ja',
                 cancelButtonText: 'Abbrechen',
             }).then(function(result) {
@@ -1389,10 +1394,9 @@ MappedRepairEvents.Helper = {
                 infoText = 'Möchtest du wirklich <b>' + selectedUser+ '</b> der Initiative <b>' + selectedWorkshop + '</b> zuordnen?';
             }
             Swal.fire({
-                animation: false,
+                ...MappedRepairEvents.Helper.getSwalDefaultProps(),
                 html: infoText,
                 showCancelButton: true,
-                showCloseButton: true,
                 confirmButtonText: 'Ja',
                 cancelButtonText: 'Abbrechen',
             }).then(function(result) {
@@ -1413,18 +1417,16 @@ MappedRepairEvents.Helper = {
 
         $('a.resign-not-possible').on('click', function() {
             Swal.fire({
-                animation: false,
+                ...MappedRepairEvents.Helper.getSwalDefaultProps(),
                 html: 'Du bist der/die letzte aktive Organisator*in der Initiative, daher ist das Austreten nicht möglich. <br /><br />Bei Fragen wende dich bitte an ' + email,
-                showCloseButton: true,
             });
         });
 
         $('a.refuse-not-possible').on('click', function() {
             var name = $(this).closest('tr').find('td:first').html();
             Swal.fire({
-                animation: false,
+                ...MappedRepairEvents.Helper.getSwalDefaultProps(),
                 html: '<b>' + name + '</b> ist der/die letzte aktive Organisator*in der Initiative, daher ist das Beenden der Mitarbeit nicht möglich. <br /><br />Bei Fragen wende dich bitte an ' + email,
-                showCloseButton: true,
             });
         });
 
@@ -1476,10 +1478,9 @@ MappedRepairEvents.Helper = {
 
             var confirmButtonText = Object.keys(buttons)[0];
             Swal.fire({
-                animation: false,
+                ...MappedRepairEvents.Helper.getSwalDefaultProps(),
                 html: message,
                 showCancelButton: true,
-                showCloseButton: true,
                 confirmButtonText: confirmButtonText,
                 cancelButtonText: 'Abbrechen',
             }).then(function(result) {

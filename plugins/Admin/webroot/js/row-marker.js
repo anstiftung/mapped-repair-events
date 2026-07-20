@@ -64,10 +64,9 @@ class RowMarker {
 
         // Display confirmation prompt
         Swal.fire({
-            animation: false,
+            ...MappedRepairEvents.Helper.getSwalDefaultProps(),
             html: `Möchtest du die Aktion <b>${this.getOriginalButtonLabel(button)}</b> wirklich ausführen?<br />Ausgewählte Zeilen: ${selectedIds.length}`,
             showCancelButton: true,
-            showCloseButton: true,
             confirmButtonText: 'Ja',
             cancelButtonText: 'Abbrechen',
         }).then(function(result) {

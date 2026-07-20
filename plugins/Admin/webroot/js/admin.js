@@ -13,10 +13,9 @@ MappedRepairEvents.Admin = {
             var id = $(this).attr('id').replace('delete-link-', '');
             var objectType = $(this).attr('data-object-type');
             Swal.fire({
-                animation: false,
+                ...MappedRepairEvents.Helper.getSwalDefaultProps(),
                 html: 'Möchtest du dieses Objekt wirklich löschen? ID ' + id,
                 showCancelButton: true,
-                showCloseButton: true,
                 confirmButtonText: 'L\u00f6schen',
                 cancelButtonText: 'Abbrechen',
             }).then(function(result) {
