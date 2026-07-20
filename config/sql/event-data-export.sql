@@ -13,7 +13,7 @@ FROM
     events e
 JOIN workshops w ON e.workshop_uid = w.uid
 WHERE
-    (e.datumstart BETWEEN '2025-10-11' AND '2025-10-26')
+    (e.datumstart BETWEEN '2026-10-10' AND '2026-10-25')
 AND e.status = 1
 AND w.status = 1
 ORDER BY e.datumstart ASC
