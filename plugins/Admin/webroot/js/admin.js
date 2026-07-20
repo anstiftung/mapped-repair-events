@@ -12,17 +12,18 @@ MappedRepairEvents.Admin = {
             var linkedButton = $(this);
             var id = $(this).attr('id').replace('delete-link-', '');
             var objectType = $(this).attr('data-object-type');
-            $.prompt(
-                'Möchtest du dieses Objekt wirklich löschen? ID ' + id
-                ,{
-                    buttons: {L\u00f6schen: true, Abbrechen: false},
-                    submit: function(v,m,f) {
-                        if(m) {
-                            MappedRepairEvents.Admin.deleteAppObject(linkedButton, id, deleteMethod, objectType);
-                        }
-                    }
+            Swal.fire({
+                animation: false,
+                html: 'Möchtest du dieses Objekt wirklich löschen? ID ' + id,
+                showCancelButton: true,
+                showCloseButton: true,
+                confirmButtonText: 'L\u00f6schen',
+                cancelButtonText: 'Abbrechen',
+            }).then(function(result) {
+                if (result.isConfirmed) {
+                    MappedRepairEvents.Admin.deleteAppObject(linkedButton, id, deleteMethod, objectType);
                 }
-            );
+            });
         });
     },
 

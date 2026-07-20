@@ -63,17 +63,18 @@ class RowMarker {
         const newUrl = button.data('url') + '?selectedIds=' + selectedIds.join(',');
 
         // Display confirmation prompt
-        $.prompt(
-            `Möchtest du die Aktion <b>${this.getOriginalButtonLabel(button)}</b> wirklich ausführen?<br />Ausgewählte Zeilen: ${selectedIds.length}`,
-            {
-                buttons: {Ja: true, Abbrechen: false},
-                submit: function(v,m,f) {
-                    if(m) {
-                        window.location.href = newUrl;
-                    }
-                }
+        Swal.fire({
+            animation: false,
+            html: `Möchtest du die Aktion <b>${this.getOriginalButtonLabel(button)}</b> wirklich ausführen?<br />Ausgewählte Zeilen: ${selectedIds.length}`,
+            showCancelButton: true,
+            showCloseButton: true,
+            confirmButtonText: 'Ja',
+            cancelButtonText: 'Abbrechen',
+        }).then(function(result) {
+            if (result.isConfirmed) {
+                window.location.href = newUrl;
             }
-        );
+        });
     }
 
     /**

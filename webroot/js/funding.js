@@ -10,22 +10,24 @@ MappedRepairEvents.Funding = {
 
     bindSubmitUsageproofButton: (uid) => {
         $('#submit-usageproof-button-' + uid).on('click', function() {
-            $.prompt('Möchtest du den Verwendungsnachweis wirklich einreichen?',
-                {
-                    buttons: {'Ja, jetzt einreichen': true, Abbrechen: false},
-                    submit: function(v,m,f) {
-                        if(m) {
-                            const form = document.getElementById('fundingForm');
-                            const input = document.createElement('input');
-                            input.type = 'hidden';
-                            input.name = 'submit_usageproof';
-                            input.value = 1;
-                            form.appendChild(input);
-                            form.submit();
-                        }
-                    }
+            Swal.fire({
+                animation: false,
+                html: 'Möchtest du den Verwendungsnachweis wirklich einreichen?',
+                showCancelButton: true,
+                showCloseButton: true,
+                confirmButtonText: 'Ja, jetzt einreichen',
+                cancelButtonText: 'Abbrechen',
+            }).then(function(result) {
+                if (result.isConfirmed) {
+                    const form = document.getElementById('fundingForm');
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = 'submit_usageproof';
+                    input.value = 1;
+                    form.appendChild(input);
+                    form.submit();
                 }
-            );
+            });
         });
     },
 
@@ -111,22 +113,24 @@ MappedRepairEvents.Funding = {
 
     bindSubmitFundingButton: (uid) => {
         $('#submit-funding-button-' + uid).on('click', function() {
-            $.prompt('Möchtest du den Förderantrag wirklich einreichen?',
-                {
-                    buttons: {'Ja, jetzt einreichen': true, Abbrechen: false},
-                    submit: function(v,m,f) {
-                        if(m) {
-                            const form = document.getElementById('fundingForm');
-                            const input = document.createElement('input');
-                            input.type = 'hidden';
-                            input.name = 'submit_funding';
-                            input.value = 1;
-                            form.appendChild(input);
-                            form.submit();
-                        }
-                    }
+            Swal.fire({
+                animation: false,
+                html: 'Möchtest du den Förderantrag wirklich einreichen?',
+                showCancelButton: true,
+                showCloseButton: true,
+                confirmButtonText: 'Ja, jetzt einreichen',
+                cancelButtonText: 'Abbrechen',
+            }).then(function(result) {
+                if (result.isConfirmed) {
+                    const form = document.getElementById('fundingForm');
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = 'submit_funding';
+                    input.value = 1;
+                    form.appendChild(input);
+                    form.submit();
                 }
-            );
+            });
         });
     },
 
@@ -175,16 +179,18 @@ MappedRepairEvents.Funding = {
     bindDeleteButton: (uid) => {
         $('#funding-delete-button-' + uid).on('click', function() {
             const workshopName = $(this).closest('.workshop-wrapper').find('.heading').text();
-            $.prompt('Möchtest du den Förderantrag der Initiative <b>' + workshopName + '</b> wirklich löschen?',
-                {
-                    buttons: {L\u00f6schen: true, Abbrechen: false},
-                    submit: function(v,m,f) {
-                        if(m) {
-                            document.location.href = '/mein-foerderantrag/delete/' + uid;
-                        }
-                    }
+            Swal.fire({
+                animation: false,
+                html: 'Möchtest du den Förderantrag der Initiative <b>' + workshopName + '</b> wirklich löschen?',
+                showCancelButton: true,
+                showCloseButton: true,
+                confirmButtonText: 'Löschen',
+                cancelButtonText: 'Abbrechen',
+            }).then(function(result) {
+                if (result.isConfirmed) {
+                    document.location.href = '/mein-foerderantrag/delete/' + uid;
                 }
-            );
+            });
         });
     },
 

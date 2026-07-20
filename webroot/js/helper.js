@@ -822,16 +822,17 @@ MappedRepairEvents.Helper = {
         $('a.delete-event').on('click', function() {
             var message = 'Soll dieser Termin wirklich gelöscht werden?<br />Dies kann nicht rückgängig gemacht werden!';
             var eventUid = $(this).data('event-uid');
-            $.prompt(message, {
-                buttons : {
-                    Ja : true,
-                    Nein : false
-                },
-                submit : function(v, m, f) {
-                    if (m) {
-                        const url = '/termine/delete/' + eventUid;
-                        document.location.href = url;
-                    }
+            Swal.fire({
+                animation: false,
+                html: message,
+                showCancelButton: true,
+                showCloseButton: true,
+                confirmButtonText: 'Ja',
+                cancelButtonText: 'Nein',
+            }).then(function(result) {
+                if (result.isConfirmed) {
+                    const url = '/termine/delete/' + eventUid;
+                    document.location.href = url;
                 }
             });
         });
@@ -845,16 +846,17 @@ MappedRepairEvents.Helper = {
             var infoSheetUid = $(this).closest('tr').find('td.infoSheetUid').html();
             var eventUid = $(this).data('event-uid');
             var workshopUid = $(this).data('workshop-uid');
-            $.prompt(message, {
-                buttons : {
-                    Ja : true,
-                    Nein : false
-                },
-                submit : function(v, m, f) {
-                    if (m) {
-                        var url = '/laufzettel/delete/' + infoSheetUid + '?refererParams=workshop-uid=' + workshopUid + ';event-uid=' + eventUid;
-                        document.location.href = url;
-                    }
+            Swal.fire({
+                animation: false,
+                html: message,
+                showCancelButton: true,
+                showCloseButton: true,
+                confirmButtonText: 'Ja',
+                cancelButtonText: 'Nein',
+            }).then(function(result) {
+                if (result.isConfirmed) {
+                    var url = '/laufzettel/delete/' + infoSheetUid + '?refererParams=workshop-uid=' + workshopUid + ';event-uid=' + eventUid;
+                    document.location.href = url;
                 }
             });
         });
@@ -1332,23 +1334,24 @@ MappedRepairEvents.Helper = {
 
     bindNewObjectButton : function(selector, message, url) {
         $(selector).click(function() {
-            $.prompt(message, {
-                buttons : {
-                    Ja : true,
-                    Abbrechen : false
-                },
-                submit : function(v, m, f) {
-                    if (v) {
-                        MappedRepairEvents.Helper.ajaxCall(url, {}, {
-                            onOk : function(data) {
-                                document.location.href = data.redirectUrl;
-                            },
-                            onError : function(data) {
-                                alert(data.message);
-                            }
-                        });
+            Swal.fire({
+                animation: false,
+                html: message,
+                showCancelButton: true,
+                showCloseButton: true,
+                confirmButtonText: 'Ja',
+                cancelButtonText: 'Abbrechen',
+            }).then(function(result) {
+                if (result.isConfirmed) {
+                    MappedRepairEvents.Helper.ajaxCall(url, {}, {
+                        onOk : function(data) {
+                            document.location.href = data.redirectUrl;
+                        },
+                        onError : function(data) {
+                            alert(data.message);
+                        }
+                    });
 
-                    }
                 }
             });
         });
@@ -1385,15 +1388,16 @@ MappedRepairEvents.Helper = {
             if (selectedUser != '') {
                 infoText = 'Möchtest du wirklich <b>' + selectedUser+ '</b> der Initiative <b>' + selectedWorkshop + '</b> zuordnen?';
             }
-            $.prompt(infoText, {
-                buttons : {
-                    Ja : true,
-                    Abbrechen : false
-                },
-                submit : function(v, m, f) {
-                    if (v) {
-                        $('#workshopApply').submit();
-                    }
+            Swal.fire({
+                animation: false,
+                html: infoText,
+                showCancelButton: true,
+                showCloseButton: true,
+                confirmButtonText: 'Ja',
+                cancelButtonText: 'Abbrechen',
+            }).then(function(result) {
+                if (result.isConfirmed) {
+                    $('#workshopApply').submit();
                 }
             });
         });
@@ -1408,12 +1412,20 @@ MappedRepairEvents.Helper = {
     bindWorkshopUserActions : function(email) {
 
         $('a.resign-not-possible').on('click', function() {
-            $.prompt('Du bist der/die letzte aktive Organisator*in der Initiative, daher ist das Austreten nicht möglich. <br /><br />Bei Fragen wende dich bitte an ' + email);
+            Swal.fire({
+                animation: false,
+                html: 'Du bist der/die letzte aktive Organisator*in der Initiative, daher ist das Austreten nicht möglich. <br /><br />Bei Fragen wende dich bitte an ' + email,
+                showCloseButton: true,
+            });
         });
 
         $('a.refuse-not-possible').on('click', function() {
             var name = $(this).closest('tr').find('td:first').html();
-            $.prompt('<b>' + name + '</b> ist der/die letzte aktive Organisator*in der Initiative, daher ist das Beenden der Mitarbeit nicht möglich. <br /><br />Bei Fragen wende dich bitte an ' + email);
+            Swal.fire({
+                animation: false,
+                html: '<b>' + name + '</b> ist der/die letzte aktive Organisator*in der Initiative, daher ist das Beenden der Mitarbeit nicht möglich. <br /><br />Bei Fragen wende dich bitte an ' + email,
+                showCloseButton: true,
+            });
         });
 
         $('a.refuse, a.approve, a.resign').on('click', function() {
@@ -1462,12 +1474,17 @@ MappedRepairEvents.Helper = {
                 };
             }
 
-            $.prompt(message, {
-                buttons : buttons,
-                submit : function(v, m, f) {
-                    if (m) {
-                        document.location.href = url;
-                    }
+            var confirmButtonText = Object.keys(buttons)[0];
+            Swal.fire({
+                animation: false,
+                html: message,
+                showCancelButton: true,
+                showCloseButton: true,
+                confirmButtonText: confirmButtonText,
+                cancelButtonText: 'Abbrechen',
+            }).then(function(result) {
+                if (result.isConfirmed) {
+                    document.location.href = url;
                 }
             });
 
