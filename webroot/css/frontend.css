@@ -69,36 +69,28 @@ body.users.login #ViewsWrapper button[type="submit"] {
     float: right;
     margin-right: 28px;
 }
-div.jqibox {
-    margin-top: 10%;
-    z-index: 10000 ! important;
-}
-div.jqi .jqimessage{
-    padding: 10px;
-    line-height: 20px;
-    color: #444444;
-    font-size: 14px;
-}
-div.jqi .jqibuttons button,
-div.jqi .jqibuttons button:hover {
-    color: var(--default-font-color) ! important;
-}
-div.jqi{
-    width: 400px;
-    max-width:90%;
+.swal2-popup {
     font-family: var(--theme-font), arial, helvetica, sans-serif;
-    position: absolute;
-    background-color: #ffffff;
-    font-size: 11px;
-    text-align: left;
-    border: solid 1px #eeeeee;
+    border: 3px solid var(--theme-color-a);
     border-radius: 6px;
-    -moz-border-radius: 6px;
-    -webkit-border-radius: 6px;
-    padding: 7px;
-    z-index: 9910001;
-    border:3px solid var(--theme-color-a);
-    box-shadow: 0px 0px 7px 3px #000000; -moz-box-shadow: 0px 0px 7px 3px #000000; -webkit-box-shadow: 0px 0px 7px 3px #000000;
+}
+.swal2-styled.swal2-confirm {
+    background-color: var(--theme-color-a) ! important;
+}
+.swal2-popup .swal2-close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+}
+.swal2-popup .swal2-html-container {
+    padding-right: 2em;
+}
+.swal2-close:hover {
+    color: #999999;
+}
+div:where(.swal2-container) {
+    z-index: 10000 ! important;
 }
 h1 {
     margin: 5px 0px;
@@ -2492,13 +2484,6 @@ div.hint h1 {
   padding-top: 0.2em ! important;
   padding-bottom: 0.2em ! important;
 }
-/* jquery impromptu buttons */
-
-.jqibuttons button {
-    height: auto;
-    line-height: normal;
-}
-/* END rounded buttons */
 
 /* START pagination */
 div.pagination {

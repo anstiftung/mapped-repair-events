@@ -1,7 +1,7 @@
 FROM node:26-alpine AS node
 FROM webdevops/php-nginx:8.5-alpine
 
-#https://stackoverflow.com/questions/44447821/how-to-create-a-docker-image-for-php-and-node
+# https://stackoverflow.com/questions/44447821/how-to-create-a-docker-image-for-php-and-node
 COPY --from=node /usr/local/lib/node_modules /usr/local/lib/node_modules
 COPY --from=node /usr/local/bin/node /usr/local/bin/node
 
@@ -13,9 +13,7 @@ RUN apk update && \
 
 RUN npm install -g npm
 
-#avoid permission error on github actions:
-#Your cache folder contains root-owned files, due to a bug in
-#npm ERR! previous versions of npm which has since been addressed.
+# avoid permission error on github actions:
 RUN npm config set cache /app/tmp --global
 
 # install pcov on alpine requires some addtional packages
