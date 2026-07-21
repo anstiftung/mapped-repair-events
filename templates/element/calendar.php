@@ -11,7 +11,7 @@ use Cake\Core\Configure;
 
     if ($this->request->getSession()->read('isMobile')) {
         $this->element('addScript', ['script' =>
-            JS_NAMESPACE.".MobileFrontend.disableHoverOnSelector('td.fc-day');
+            JS_NAMESPACE.".MobileFrontend.disableHoverOnSelector('.fc-day');
         "]);
     }
 
@@ -27,6 +27,9 @@ var autoClicked = false;
 function initCal(){
 
     var calendarEl = document.getElementById('calendar');
+    // FullCalendar v7 no longer adds the ".fc" class to the root element,
+    // but the project's custom CSS relies on ".fc ..." descendant selectors.
+    calendarEl.classList.add('fc');
     var calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
         headerToolbar : {
@@ -36,7 +39,36 @@ function initCal(){
         },
         <?php if ( $event ): ?>initialDate : '<?php echo $event[1]; ?>',<?php endif; ?>
         locale: 'de',
-        contentHeight: 340
+        contentHeight: 340,
+        // FullCalendar v7 renders day cells as plain divs with hashed/atomic
+        // class names instead of the old <td class="fc-day"> markup. Re-add
+        // the class names/elements the rest of the app's JS and CSS rely on.
+        dayCellDidMount: function(arg) {
+            arg.el.classList.add('fc-day');
+            if (arg.isPast) {
+                arg.el.classList.add('fc-day-past');
+            }
+            if (arg.isToday) {
+                arg.el.classList.add('fc-today');
+                arg.el.classList.add('fc-day-today');
+            }
+            // old markup had a distinct ".fc-day-number" element for just the
+            // small date label; tag the equivalent element here so it doesn't
+            // collide with cell-level classes like ".fc-day-past". Also add
+            // ".fc-daygrid-day-number" so the existing color/weight/font-size CSS
+            // override (written for that v5/v6 class name) applies again — it needs
+            // to sit on the innermost text element, since v7 sets font-size directly
+            // on it (a directly-targeted rule always beats an inherited value, even
+            // an !important one set on an ancestor).
+            if (arg.el.firstElementChild) {
+                arg.el.firstElementChild.classList.add('fc-day-number');
+                var dayNumberTextEl = arg.el.firstElementChild.firstElementChild || arg.el.firstElementChild;
+                dayNumberTextEl.classList.add('fc-daygrid-day-number');
+            }
+            var eventCountEl = document.createElement('div');
+            eventCountEl.className = 'fc-daygrid-day-events';
+            arg.el.appendChild(eventCountEl);
+        }
     });
 
     calendar.setOption('datesSet', function(dateInfo) {
@@ -57,7 +89,7 @@ function initCal(){
 
             // add hover-effect for mouseover calendar day in right top corner
             $('.fc-day-number').hover(function() {
-                var date = $(this).data('date');
+                var date = $(this).closest('.fc-day').attr('data-date');
                 $('.fc-day').each(function() {
                     if ($(this).attr('data-date') == date) {
                         $(this).addClass('hover');
@@ -125,7 +157,7 @@ function initCal(){
 
             getEvents();
 
-            $('td.fc-day:not(.no-hover)').hover(
+            $('.fc-day:not(.no-hover)').hover(
                 function() {
                     $(this).addClass('hover');
                   }, function() {
@@ -154,7 +186,7 @@ function getEvents() {
             for (i in workshops[j].Workshop.Events) {
 
                 var ev = workshops[j].Workshop.Events[i];
-                $('td.fc-day[data-date='+ev.datumstart_formatted+']')
+                $('.fc-day[data-date='+ev.datumstart_formatted+']')
                     .addClass('fc-has-event '
                         + (ev.status == 1 ? 'active' : 'inactive')
                         + (ev.is_online_event == 1 ? ' fc-has-online-event' : '')
@@ -180,7 +212,7 @@ function getEvents() {
     $('#calEvents').html(calEvents.join(''));
 
     <?php if ($isHomeCalendar) { ?>
-        $('td.fc-day').each(function() {
+        $('.fc-day').each(function() {
             MappedRepairEvents.Helper.updateDayEventCount($(this));
         });
         MappedRepairEvents.Helper.bindCalEventClickHome();
