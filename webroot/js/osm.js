@@ -557,7 +557,7 @@ MappedRepairEvents.Map.prototype = {
             }
         });
 
-        var day = $('td.fc-day');
+        var day = $('.fc-day');
         day.removeClass('fc-has-online-event');
         day.each(function() {
             var visibleEventByDate = $('.calEvent.isInRadius[data-date='+$(this).attr('data-date')+']');

@@ -330,7 +330,7 @@
     .fc-basic-view tbody .fc-row {
         min-height: auto;
     }
-    td.fc-has-event span.event-count {
+    .fc-has-event span.event-count {
         margin-top: 16px;
     }
     .fc-row table,

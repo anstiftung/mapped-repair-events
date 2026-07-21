@@ -1,13 +1,28 @@
+:root {
+    /* re-theme the FullCalendar v7 "classic" theme to match the site's brand color */
+    --fc-classic-primary: var(--theme-color-a);
+    --fc-classic-button: var(--theme-color-a);
+    --fc-classic-button-border: var(--theme-color-a);
+    --fc-classic-button-strong: var(--theme-color-f);
+    --fc-classic-button-strong-border: var(--theme-color-f);
+}
+
+#calendar {
+    width: 100% ! important;
+}
+.fc button[aria-pressed] {
+    padding: 6px 8px ! important;
+}
 .fc-row .fc-content-skeleton td {
     border-color: #ddd ! important;
 }
-.fc td.fc-day.fc-has-event.hover,
-.fc td.fc-day.fc-has-event.selected {
+.fc .fc-day.fc-has-event.hover,
+.fc .fc-day.fc-has-event.selected {
     background-image: url(/img/gotdatedetail.png) ! important;
 }
 
-.fc td.fc-day.fc-has-online-event.hover,
-.fc td.fc-day.fc-has-online-event.selected {
+.fc .fc-day.fc-has-online-event.hover,
+.fc .fc-day.fc-has-online-event.selected {
     background-image: url(/img/gotdatedetail-online.png) ! important;
 }
 .fc-theme-standard td,
@@ -25,6 +40,7 @@
 }
 
 .fc-has-event {
+    position: relative;
     margin: 10%;
     background-position: center 55% ! important;
     background-image: url(/img/gotdate.png) ! important;
@@ -127,23 +143,12 @@ div#selectedDate {
 /* fullcalendar v5 */
 .fc .fc-daygrid-day-number {
     font-weight: normal;
+    font-size: 13px ! important;
     color: #666;
 }
-.fc .fc-daygrid-body-unbalanced .fc-daygrid-day-events {
+.fc .fc-daygrid-day-events {
     min-height: 0px;
-    height: 52px;
-}
-.fc .fc-button-primary {
-    background-color: var(--theme-color-a) ! important;
-    border-color: var(--theme-color-a) ! important;
-}
-.fc .fc-button-primary:focus {
-    box-shadow: inherit;
-}
-.fc .fc-button-primary:hover,
-.fc .fc-button-primary:active {
-    background-color: var(--theme-color-f) ! important;
-    border-color: var(--theme-color-f) ! important;
+    height: 0px;
 }
 .fc .fc-daygrid-day-top {
     position: absolute;
@@ -152,21 +157,52 @@ div#selectedDate {
 .fc .fc-toolbar-title {
     font-size: 18px ! important;
 }
+/* FullCalendar v7's toolbar title is no longer an actual <h2> (it's a
+   div[role="heading"]), so the site-wide "h2 { ... }" rule (and the
+   homepage-specific color override) no longer apply to it; restore the
+   same look via the stable ARIA role selector. */
+.fc [role="heading"] {
+    margin: 5px 0 ! important;
+    font-weight: bold ! important;
+    font-size: 18px ! important;
+    color: var(--theme-color-a) ! important;
+    line-height: 20px ! important;
+}
+body.workshops.home .fc [role="heading"] {
+    color: rgb(200, 210, 24) ! important;
+}
 .fc .fc-toolbar.fc-header-toolbar {
     margin-bottom: 7px ! important;
 }
-.fc td.fc-has-event span.event-count {
-    display: none;
+/* FullCalendar v7's root ".fc" element is a flex column with a 20px gap
+   between the toolbar and the day grid; tune it here so the toolbar and the
+   day grid don't sit flush against each other. */
+.fc {
+    row-gap: 8px ! important;
+    gap: 8px ! important;
+}
+.fc .fc-has-event span.event-count {
     display: block;
     color: #fff;
+    font-size: 13px;
     position: absolute;
     left: 50%;  /* positions p relative to container */
-    top: 50%;
+    /* matches .fc-has-event's "center 55%" background-position; background-position
+       resolves to (container - image) * 0.55 + image/2, which is offset from a plain
+       55% of the container by half the dot image's height (25px), hence the -1.25px */
+    top: calc(55% - 1.25px);
     transform: translate(-50%, -50%);  /* positions p relative to its height and width */
     margin: 0;
 }
 .fc .fc-col-header-cell {
     height: 17px;
+}
+/* FullCalendar v7's weekday header cells no longer carry the old
+   .fc-col-header-cell class; [role=columnheader] is the stable hook. */
+.fc [role="columnheader"] {
+    font-weight: bold;
+    color: #727374;
+    font-size: 13px;
 }
 .fc a:hover {
     text-decoration: none;
