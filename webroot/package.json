@@ -14,7 +14,7 @@
     "install": "bash ../devtools/npm-post-install.sh"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "7.3.0",
+    "@fortawesome/fontawesome-free": "7.3.1",
     "@sintef/prune-cluster": "^2.1.0",
     "blueimp-file-upload": "^10.32.0",
     "chart.js": "^4.5.1",
@@ -23,7 +23,7 @@
     "detect_swipe": "^2.1.4",
     "featherlight": "^1.7.14",
     "fullcalendar": "^6.1.21",
-    "jodit": "^4.12.32",
+    "jodit": "^4.13.5",
     "jquery": "^3.7.1",
     "jquery-knob": "^1.2.11",
     "jquery-slugify": "^1.2.5",
@@ -35,6 +35,6 @@
     "slidebars": "^2.0.2",
     "speakingurl": "^14.0.1",
     "sweetalert2": "^11.15.10",
-    "swiper": "^14.0.1"
+    "swiper": "^14.0.6"
   }
 }
