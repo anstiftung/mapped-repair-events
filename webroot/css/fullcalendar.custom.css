@@ -182,7 +182,6 @@ body.workshops.home .fc [role="heading"] {
     gap: 8px ! important;
 }
 .fc .fc-has-event span.event-count {
-    display: none;
     display: block;
     color: #fff;
     font-size: 13px;
