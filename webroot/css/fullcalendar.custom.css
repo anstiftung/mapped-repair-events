@@ -6,10 +6,10 @@
     --fc-classic-button-strong: var(--theme-color-f);
     --fc-classic-button-strong-border: var(--theme-color-f);
 }
-/* FullCalendar v7's prev/next buttons have no stable class name either;
-   aria-pressed is only present on FC's own toggle buttons. Match the height
-   of the "Suche" button next to the map (32px: 20px line-height + 6px/6px
-   padding), instead of the theme's default 36px (8px/8px padding). */
+
+#calendar {
+    width: 100% ! important;
+}
 .fc button[aria-pressed] {
     padding: 6px 8px ! important;
 }
