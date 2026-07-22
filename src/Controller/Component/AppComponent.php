@@ -15,7 +15,6 @@ class AppComponent extends Component
     protected Session $session;
 
     /**
-     * @param \Cake\Controller\ComponentRegistry<\Cake\Controller\Controller> $registry
      * @param array<string, mixed> $config
      */
     public function __construct(ComponentRegistry $registry, array $config = [])
