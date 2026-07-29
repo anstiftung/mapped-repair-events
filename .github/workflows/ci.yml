@@ -55,7 +55,7 @@ jobs:
         run: docker exec -w /app rep.php php ./vendor/bin/phpunit --coverage-clover ./coverage.xml
 
       - name: Codecov
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v7
         with:
           files: ./coverage.xml
         env:
