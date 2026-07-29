@@ -69,7 +69,7 @@ if ($showDeleteLink) {
         ?>
 
         <div class="top-right-wrapper">
-        
+
         <?php
         if (isset($selectableActions)) {
             foreach($selectableActions as $selectableAction) {
@@ -279,7 +279,7 @@ if ($showDeleteLink) {
                         if (!empty($linkParams)) {
                             echo $this->Html->link($value, $this->Html->$linkUrlMethod($linkParams[0])); // TODO wenn urlmethode mehrere parameter besitzt, muss nur noch hier angepasst werden
                         }
-                        
+
                     } elseif (! empty($field['values'])) {
                         if (isset($field['values']->$value)) {
                             echo $field['values']->$value;
@@ -386,7 +386,7 @@ if ($showDeleteLink) {
                 }
 
                 if ($showDeleteLink) {
-                    
+
                     $showDeleteLinkRow = true;
                     if (get_class($object) === Funding::class && $object->is_submitted) {
                         $showDeleteLinkRow = false;

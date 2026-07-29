@@ -5,10 +5,11 @@ namespace Admin\Controller;
 use Cake\Http\Exception\NotFoundException;
 use App\Model\Table\BrandsTable;
 use Cake\Http\Response;
+use Cake\Utility\Hash;
 
 class BrandsController extends AdminAppController
 {
-    
+
     public function insert(): Response
     {
         $brand = [
@@ -32,7 +33,7 @@ class BrandsController extends AdminAppController
         $this->AppFlash->setFlashMessage($affectedCount . ' Marken erfolgreich bestätigt.');
         return $this->redirect($this->getReferer());
     }
-    
+
     public function edit(int $id): ?Response
     {
         /** @var \App\Model\Table\BrandsTable */
@@ -95,10 +96,14 @@ class BrandsController extends AdminAppController
             ]
         ]);
 
+        $brandIds = Hash::extract($objects->toArray(), '{n}.id');
+        $infoSheetCountsMap = $brandsTable->getInfoSheetCounts($brandIds);
+
         foreach($objects as $object) {
             if ($object->owner_user) {
                 $object->owner_user->revertPrivatizeData();
             }
+            $object->info_sheet_count = $infoSheetCountsMap[$object->id] ?? 0;
         }
 
         $this->set('objects', $objects);

@@ -6,6 +6,7 @@ use Cake\Http\Exception\NotFoundException;
 use Cake\Event\EventInterface;
 use App\Model\Table\CategoriesTable;
 use Cake\Http\Response;
+use Cake\Utility\Hash;
 
 class CategoriesController extends AdminAppController
 {
@@ -119,11 +120,14 @@ class CategoriesController extends AdminAppController
 
         $objects = $this->paginate($query);
 
+        $categoryIds = Hash::extract($objects->toArray(), '{n}.id');
+        $infoSheetCountsMap = $categoriesTable->getInfoSheetCounts($categoryIds);
+
         foreach($objects as $object) {
             if ($object->owner_user) {
                 $object->owner_user->revertPrivatizeData();
             }
-            $object->info_sheet_count = $categoriesTable->getInfoSheetCount($object->id);
+            $object->info_sheet_count = $infoSheetCountsMap[$object->id] ?? 0;
         }
         $this->set('objects', $objects);
 

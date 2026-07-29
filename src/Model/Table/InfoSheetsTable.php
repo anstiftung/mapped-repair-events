@@ -282,6 +282,35 @@ class InfoSheetsTable extends AppRootTable
     }
 
     /**
+     * Returns the number of active info sheets per id of the given field, e.g. per category_id or brand_id.
+     *
+     * @param array<int> $ids
+     * @return array<int, int>
+     */
+    public function getCountsGroupedByField(string $field, array $ids): array
+    {
+        $query = $this->find('all')
+        ->select([
+            $field,
+            'count' => $this->find()->func()->count('*'),
+        ])
+        ->where([
+            $this->aliasField($field) . ' IN' => $ids,
+            $this->aliasField('status') => APP_ON,
+        ])
+        ->groupBy($this->aliasField($field));
+
+        $counts = $query->toArray();
+
+        $countsMap = [];
+        foreach($counts as $count) {
+            $countsMap[$count->{$field}] = $count->count;
+        }
+
+        return $countsMap;
+    }
+
+    /**
      * @param \Cake\ORM\Query\SelectQuery<\App\Model\Entity\InfoSheet> $query
      * @return \Cake\ORM\Query\SelectQuery<\App\Model\Entity\InfoSheet>
      */
