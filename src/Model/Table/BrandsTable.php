@@ -4,6 +4,7 @@ namespace App\Model\Table;
 
 use App\Model\Entity\Brand;
 use App\Model\Traits\ApproveMultipleTrait;
+use Cake\ORM\TableRegistry;
 
 /**
  * @extends \App\Model\Table\AppTable<\App\Model\Entity\Brand>
@@ -28,6 +29,17 @@ class BrandsTable extends AppTable
             'className' => 'Users',
             'foreignKey' => 'owner'
         ]);
+    }
+
+    /**
+     * @param array<int> $brandIds
+     * @return array<int, int>
+     */
+    public function getInfoSheetCounts(array $brandIds): array
+    {
+        $infoSheetTable = TableRegistry::getTableLocator()->get('InfoSheets');
+
+        return $infoSheetTable->getCountsGroupedByField('brand_id', $brandIds);
     }
 
     /**

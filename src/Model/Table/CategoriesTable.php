@@ -65,16 +65,15 @@ class CategoriesTable extends AppTable
         return $validator;
     }
 
-    public function getInfoSheetCount(int $categoryId): int
+    /**
+     * @param array<int> $categoryIds
+     * @return array<int, int>
+     */
+    public function getInfoSheetCounts(array $categoryIds): array
     {
         $infoSheetTable = TableRegistry::getTableLocator()->get('InfoSheets');
-        $result = $infoSheetTable->find('all',
-            conditions: [
-                $infoSheetTable->aliasField('category_id') => $categoryId,
-                $infoSheetTable->aliasField('status') => APP_ON,
-            ])->count();
 
-        return $result;
+        return $infoSheetTable->getCountsGroupedByField('category_id', $categoryIds);
     }
 
     public function getMaterialFootprintByParentCategoryId(int $parentCategoryId): float
