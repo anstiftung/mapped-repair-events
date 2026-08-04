@@ -66,6 +66,7 @@ class Application extends BaseApplication
         if (Configure::read('debug')) {
             Configure::write('DebugKit.ignoreAuthorization', true);
             $this->addPlugin('DebugKit', ['bootstrap' => true]);
+            $this->addPlugin('Bake');
         }
 
         $this->addPlugin('Migrations');
@@ -128,25 +129,6 @@ class Application extends BaseApplication
         ;
 
         return $middlewareQueue;
-    }
-
-    /**
-     * Bootrapping for CLI application.
-     *
-     * That is when running commands.
-     *
-     * @return void
-     */
-    protected function bootstrapCli(): void
-    {
-        try {
-            $this->addPlugin('Bake');
-        } catch (MissingPluginException) {
-            // Do not halt if the plugin is missing
-        }
-
-        $this->addPlugin('Migrations');
-
     }
 
     public function getAuthenticationService(ServerRequestInterface $request): AuthenticationServiceInterface

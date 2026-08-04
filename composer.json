@@ -40,7 +40,8 @@
         "friendsofcake/fixturize": "^3.0",
         "cakedc/cakephp-phpstan": "^4.0",
         "ergebnis/phpstan-rules": "^2.5",
-        "rector/rector": "^2.0"
+        "rector/rector": "^2.0",
+        "cakephp/bake": "^3.8"
     },
     "autoload": {
         "psr-4": {
