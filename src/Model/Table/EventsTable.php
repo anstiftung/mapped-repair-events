@@ -293,7 +293,11 @@ class EventsTable extends AppRootTable
     {
         return $query->formatResults(function (CollectionInterface $results): CollectionInterface {
 
-            return $results->map(function (EntityInterface $row): EntityInterface {
+            return $results->map(function (?EntityInterface $row): ?EntityInterface {
+
+                if ($row === null) {
+                    return null;
+                }
 
                 if ($row->datumstart) {
                     $row->datumstart_formatted = $row->datumstart->i18nFormat(Configure::read('DateFormat.Database'));

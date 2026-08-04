@@ -253,7 +253,9 @@ if ($showDeleteLink) {
                             }
                         } else {
                             // example: entity.association.name
-                            $value = $object->{$splittedField[0]}->{$splittedField[1]}->{$splittedField[2]};
+                            if (isset($object->{$splittedField[0]}->{$splittedField[1]})) {
+                                $value = $object->{$splittedField[0]}->{$splittedField[1]}->{$splittedField[2]};
+                            }
                         }
                     }
 
@@ -456,9 +458,12 @@ if ($showDeleteLink) {
                             $showMethodCall = $this->Html->$showMethodUrl($object['uid']);
                             break;
                         case 'urlWorkshopDetail':
-                            $showMethodCall = $this->Html->$showMethodUrl($object['url']);
                             if (preg_match('/Laufzettel/', $heading)) {
-                                $showMethodCall = $this->Html->$showMethodUrl($object->event->workshop->url);
+                                $showMethodCall = $object->event?->workshop !== null
+                                    ? $this->Html->$showMethodUrl($object->event->workshop->url)
+                                    : null;
+                            } else {
+                                $showMethodCall = $this->Html->$showMethodUrl($object['url']);
                             }
                             break;
                         default:
