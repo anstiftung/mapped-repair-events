@@ -2,9 +2,7 @@
 declare(strict_types=1);
 namespace Admin\Controller;
 
-use App\Model\Table\InfoSheetsTable;
 use Cake\Event\EventInterface;
-use App\Model\Table\UsersTable;
 
 class InfoSheetsController extends AdminAppController
 {
