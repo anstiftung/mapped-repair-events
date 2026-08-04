@@ -1,6 +1,5 @@
 <?php
 declare(strict_types=1);
-use Cake\Core\Configure;
 
 echo $this->element('list', [
       'objects' => $objects,
@@ -26,8 +25,8 @@ echo $this->element('list', [
         ['label' => 'Adresse', 'template' => 'list/workshops/address'],
         ['name' => 'users.name', 'type' => 'habtm', 'label' => 'Mitarbeiter'],
         ['name' => 'owner_user.name', 'label' => 'Owner', 'sortable' => false],
-        ['name' => 'workshop_info_sheets_count', 'label' => 'LZ'],
-        ['name' => 'worknews_count', 'label' => 'TA'],
+        ['label' => 'LZ', 'template' => 'list/workshops/infoSheetCount'],
+        ['label' => 'TA', 'template' => 'list/workshops/worknewsCount'],
         ['name' => 'created', 'type' => 'datetime', 'label' => 'erstellt'],
         ['name' => 'updated', 'type' => 'datetime', 'label' => 'geändert'],
         ['name' => 'email'],
