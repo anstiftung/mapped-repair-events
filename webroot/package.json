@@ -23,7 +23,7 @@
     "detect_swipe": "^2.1.4",
     "featherlight": "^1.7.14",
     "fullcalendar": "7.0.2",
-    "temporal-polyfill": "^1.0.2",
+    "temporal-polyfill": "^1.0.3",
     "jodit": "^4.13.10",
     "jquery": "^3.7.1",
     "jquery-knob": "^1.2.11",
