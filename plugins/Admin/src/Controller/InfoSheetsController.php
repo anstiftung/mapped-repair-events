@@ -13,6 +13,10 @@ class InfoSheetsController extends AdminAppController
     public function beforeFilter(EventInterface $event): void
     {
         $this->addSearchOptions([
+            'Events.workshop_uid' => [
+                'name' => 'Events.workshop_uid',
+                'searchType' => 'equal'
+            ],
             'Brands.name' => [
                 'name' => 'Marke',
                 'searchType' => 'equal'

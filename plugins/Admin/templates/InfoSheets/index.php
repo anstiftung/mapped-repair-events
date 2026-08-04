@@ -17,7 +17,7 @@ declare(strict_types=1);
           ['name' => 'category.status', 'label' => 'Kategorie-Status'],
           ['name' => 'brand.name', 'label' => 'Marke'],
           ['name' => 'brand.status', 'label' => 'Marken-Status'],
-          ['name' => 'event.workshop.name', 'label' => 'Initiative'],
+          ['label' => 'Initiative', 'template' => 'list/infoSheets/workshopName'],
           ['name' => 'event.uid', 'label' => 'Event-UID'],
           ['name' => 'owner_user.name', 'label' => 'Owner', 'sortable' => false],
           ['name' => 'created', 'type' => 'datetime', 'label' => 'erstellt'],
