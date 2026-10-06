@@ -75,7 +75,7 @@ if (count($workshop->{$objectMember}) > 0) {
       echo '</td>';
 
       echo '<td class="icon">';
-      if (in_array($workshop->uid, $workshopsWhereUserIsLastOrgaUserUids) && in_array(GROUPS_ORGA, $groupIds) && !is_null($user['_joinData']->approved)) {
+      if (in_array($workshop->uid, $workshopsWhereUserIsLastOrgaUserUids) && in_array(GROUPS_ORGA, $groupIds) && !is_null($user->_joinData->approved)) {
               $deleteClass = 'refuse-not-possible';
               $deleteIcon = '<i class="fas fa-times fa-border"></i>';
               $deleteTitle = 'Ablehnen nicht möglich';
