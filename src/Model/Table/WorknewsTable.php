@@ -24,6 +24,11 @@ class WorknewsTable extends AppTable
         $this->belongsTo('Workshops', [
             'foreignKey' => 'workshop_uid'
         ]);
+        $this->belongsTo('WorknewsEmailErrors', [
+            'foreignKey' => 'email',
+            'bindingKey' => 'email',
+            'joinType' => 'LEFT',
+        ]);
         $this->addBehavior('Timestamp');
     }
 

@@ -5,6 +5,7 @@ namespace App\Test\TestCase\Queue\Task;
 
 use App\Queue\Task\WorknewsEmailTask;
 use App\Test\TestCase\AppTestCase;
+use Cake\Datasource\Paging\NumericPaginator;
 use Cake\Mailer\Message;
 use Cake\Mailer\Transport\DebugTransport;
 use Cake\Mailer\TransportFactory;
@@ -19,7 +20,7 @@ class WorknewsEmailTaskTest extends AppTestCase
         parent::tearDown();
     }
 
-    public function testQuotaFailuresIncrementOnlyTheAffectedSubscription(): void
+    public function testQuotaFailuresAccumulateAcrossSubscriptionsWithTheSameEmail(): void
     {
         $messages = [
             'Mailbox is out of quota',
@@ -39,7 +40,7 @@ class WorknewsEmailTaskTest extends AppTestCase
             '550 Over-quota',
             '550 Mailbox storage limit exceeded',
         ];
-        $worknewsTable = $this->getTableLocator()->get('Worknews');
+        $errorsTable = $this->getTableLocator()->get('WorknewsEmailErrors');
         foreach ($messages as $index => $message) {
             $transport = $this->createMock(DebugTransport::class);
             $exception = new RuntimeException($message);
@@ -48,21 +49,24 @@ class WorknewsEmailTaskTest extends AppTestCase
             TransportFactory::setConfig('worknews-test', $transport);
 
             try {
-                (new WorknewsEmailTask())->run($this->mailData(), 1);
+                (new WorknewsEmailTask())->run($this->mailData($index % 2 === 0 ? 1 : 3), 1);
                 $this->fail('The delivery failure must be rethrown for queue retries.');
             } catch (RuntimeException $caught) {
                 $this->assertSame($exception, $caught);
             }
-            $this->assertSame($index + 1, $worknewsTable->get(1)->out_of_quota_count, $message);
+            $this->assertSame($index + 1, $errorsTable->get('worknews-test@mailinator.com')->out_of_quota_count, $message);
         }
 
-        $this->assertSame(0, $worknewsTable->get(2)->out_of_quota_count);
+        $this->assertSame(1, $errorsTable->find()->count());
     }
 
     public function testOtherFailuresLeaveTheCountUnchanged(): void
     {
-        $worknewsTable = $this->getTableLocator()->get('Worknews');
-        $worknewsTable->updateAll(['out_of_quota_count' => 3], ['id' => 1]);
+        $errorsTable = $this->getTableLocator()->get('WorknewsEmailErrors');
+        $errorsTable->saveOrFail($errorsTable->newEntity([
+            'email' => 'worknews-test@mailinator.com',
+            'out_of_quota_count' => 3,
+        ]));
         $messages = [
             'Connection timed out',
             '550 5.1.1 User unknown',
@@ -84,14 +88,36 @@ class WorknewsEmailTaskTest extends AppTestCase
             } catch (RuntimeException $caught) {
                 $this->assertSame($exception, $caught);
             }
-            $this->assertSame(3, $worknewsTable->get(1)->out_of_quota_count, $message);
+            $this->assertSame(3, $errorsTable->get('worknews-test@mailinator.com')->out_of_quota_count, $message);
         }
     }
 
     public function testSuccessfulDeliveryResetsTheCount(): void
     {
-        $worknewsTable = $this->getTableLocator()->get('Worknews');
-        $worknewsTable->updateAll(['out_of_quota_count' => 3], ['id' => 1]);
+        $errorsTable = $this->getTableLocator()->get('WorknewsEmailErrors');
+        $errorsTable->saveOrFail($errorsTable->newEntity([
+            'email' => 'worknews-test@mailinator.com',
+            'out_of_quota_count' => 3,
+        ]));
+        $errorsTable->saveOrFail($errorsTable->newEntity([
+            'email' => 'worknews-test-1@mailinator.com',
+            'out_of_quota_count' => 7,
+        ]));
+        $transport = $this->createMock(DebugTransport::class);
+        $transport->expects($this->once())->method('send')->willReturn([
+            'headers' => '',
+            'message' => '',
+        ]);
+        TransportFactory::setConfig('worknews-test', $transport);
+
+        (new WorknewsEmailTask())->run($this->mailData(3), 1);
+
+        $this->assertSame(0, $errorsTable->get('worknews-test@mailinator.com')->out_of_quota_count);
+        $this->assertSame(7, $errorsTable->get('worknews-test-1@mailinator.com')->out_of_quota_count);
+    }
+
+    public function testSuccessfulDeliveryWithoutErrorsDoesNotCreateACounter(): void
+    {
         $transport = $this->createMock(DebugTransport::class);
         $transport->expects($this->once())->method('send')->willReturn([
             'headers' => '',
@@ -101,11 +127,57 @@ class WorknewsEmailTaskTest extends AppTestCase
 
         (new WorknewsEmailTask())->run($this->mailData(), 1);
 
-        $this->assertSame(0, $worknewsTable->get(1)->out_of_quota_count);
+        $this->assertSame(0, $this->getTableLocator()->get('WorknewsEmailErrors')->find()->count());
+    }
+
+    public function testCountsAreSharedAndSortableAcrossSubscriptions(): void
+    {
+        $errorsTable = $this->getTableLocator()->get('WorknewsEmailErrors');
+        $errorsTable->incrementOutOfQuotaCount('worknews-test@mailinator.com');
+        $errorsTable->incrementOutOfQuotaCount('worknews-test@mailinator.com');
+        $worknewsTable = $this->getTableLocator()->get('Worknews');
+        $query = $worknewsTable->find()->contain(['WorknewsEmailErrors']);
+        $objects = (new NumericPaginator())->paginate($query, [
+            'sort' => 'WorknewsEmailErrors.out_of_quota_count',
+            'direction' => 'desc',
+        ], [
+            'sortableFields' => [
+                ...$worknewsTable->getSchema()->columns(),
+                'WorknewsEmailErrors.out_of_quota_count',
+            ],
+        ])->toArray();
+
+        $this->assertCount(3, $objects);
+        $this->assertSame('worknews-test@mailinator.com', $objects[0]->email);
+        $this->assertSame('worknews-test@mailinator.com', $objects[1]->email);
+        $this->assertSame(2, $objects[0]->worknews_email_error->out_of_quota_count);
+        $this->assertSame(2, $objects[1]->worknews_email_error->out_of_quota_count);
+        $this->assertSame('worknews-test-1@mailinator.com', $objects[2]->email);
+        $this->assertNull($objects[2]->worknews_email_error);
+    }
+
+    public function testFailureUsesQueuedRecipientAfterSubscriptionIsDeleted(): void
+    {
+        $worknewsTable = $this->getTableLocator()->get('Worknews');
+        $worknewsTable->deleteOrFail($worknewsTable->get(1));
+        $transport = $this->createMock(DebugTransport::class);
+        $exception = new RuntimeException('Mailbox is out of quota');
+        $transport->expects($this->once())->method('send')->willThrowException($exception);
+        TransportFactory::setConfig('worknews-test', $transport);
+
+        try {
+            (new WorknewsEmailTask())->run($this->mailData(), 1);
+            $this->fail('The delivery failure must be rethrown for queue retries.');
+        } catch (RuntimeException $caught) {
+            $this->assertSame($exception, $caught);
+        }
+
+        $errorsTable = $this->getTableLocator()->get('WorknewsEmailErrors');
+        $this->assertSame(1, $errorsTable->get('worknews-test@mailinator.com')->out_of_quota_count);
     }
 
     /** @return array<string, mixed> */
-    private function mailData(): array
+    private function mailData(int $worknewsId = 1): array
     {
         $message = new Message();
         $message->setFrom('sender@example.org')->setTo('worknews-test@mailinator.com');
@@ -115,7 +187,7 @@ class WorknewsEmailTaskTest extends AppTestCase
             'settings' => $message->__serialize(),
             'serialized' => true,
             'transport' => 'worknews-test',
-            'worknews_id' => 1,
+            'worknews_id' => $worknewsId,
         ];
     }
 

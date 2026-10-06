@@ -48,6 +48,7 @@ class AppTestCase extends TestCase
         'app.UsersSkills',
         'app.UsersWorkshops',
         'app.Worknews',
+        'app.WorknewsEmailErrors',
         'app.Workshops',
         'app.WorkshopsCategories',
     ];

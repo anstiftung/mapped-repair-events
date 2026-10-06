@@ -46,8 +46,13 @@ class WorknewsController extends AdminAppController
         conditions: $conditions,
         contain: [
             'Workshops',
+            'WorknewsEmailErrors',
         ]);
         $objects = $this->paginate($query, [
+            'sortableFields' => [
+                ...$worknewsTable->getSchema()->columns(),
+                'WorknewsEmailErrors.out_of_quota_count',
+            ],
             'order' => [
                 'Worknews.created' => 'DESC',
             ]
