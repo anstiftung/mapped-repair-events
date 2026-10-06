@@ -13,8 +13,6 @@ class SendWorknewsNotificationCommand extends Command
     public function execute(Arguments $args, ConsoleIo $io)
     {
 
-        // find all events that start in one week
-
         /** @var \App\Model\Table\EventsTable $eventsTable */
         $eventsTable = $this->getTableLocator()->get('Events');
         $events = $eventsTable->find('all',

@@ -75,7 +75,7 @@ class WorknewsTable extends AppTable
                 'dirtyFields' => $dirtyFields,
                 'originalValues' => $originalValues,
             ]);
-            $email->addToQueue();
+            $email->addToQueue($subscriber->id);
         }
     }
 

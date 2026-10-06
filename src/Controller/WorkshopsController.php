@@ -729,7 +729,7 @@ class WorkshopsController extends AppController
                         'unsubscribeCode' => $unsubscribeCode
                 ])->setTo($this->request->getData('Worknews.email'));
 
-                $email->addToQueue();
+                $email->addToQueue($worknews->id);
                 $this->AppFlash->setFlashMessage(__('Please activate your subscription using the activation link sent to') . ' ' . $this->request->getData('Worknews.email'));
 
             } else {

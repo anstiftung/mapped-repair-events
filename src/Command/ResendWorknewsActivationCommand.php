@@ -8,7 +8,6 @@ use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use App\Model\Entity\Worknews;
 use Cake\I18n\DateTime;
-use Cake\Mailer\Mailer;
 use App\Mailer\AppMailer;
 
 class ResendWorknewsActivationCommand extends Command
@@ -46,7 +45,7 @@ class ResendWorknewsActivationCommand extends Command
                     'confirmationCode' => $worknews->confirm,
                     'unsubscribeCode' => $worknews->unsub,
             ])->setTo($worknews->email);
-            $email->addToQueue();
+            $email->addToQueue($worknews->id);
 
             $i++;
         }

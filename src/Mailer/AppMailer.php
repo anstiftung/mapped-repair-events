@@ -10,7 +10,7 @@ use Cake\Mailer\Message;
 class AppMailer extends Mailer
 {
 
-    public function addToQueue(): void
+    public function addToQueue(?int $worknewsId = null): void
     {
 
         $this->render();
@@ -18,10 +18,11 @@ class AppMailer extends Mailer
         // due to queue_jobs.text field datatype "mediumtext" the limit of emails is 16MB (including attachments)
         $queuedJobs = FactoryLocator::get('Table')->get('Queue.QueuedJobs');
         /* @phpstan-ignore-next-line */
-        $queuedJobs->createJob('Queue.Email', [
+        $queuedJobs->createJob($worknewsId === null ? 'Queue.Email' : 'WorknewsEmail', [
             'class' => Message::class,
             'settings' => $this->getMessage()->__serialize(),
             'serialized' => true,
+            'worknews_id' => $worknewsId,
         ]);
 
     }
