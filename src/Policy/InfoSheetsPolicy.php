@@ -16,7 +16,7 @@ class InfoSheetsPolicy implements RequestPolicyInterface
     public function canAccess(?IdentityInterface $identity, ServerRequest $request): bool|ResultInterface
     {
 
-        if (!Configure::read('AppConfig.statisticsEnabled')) {
+        if (!Configure::read('AppConfig.statisticsEnabled') || $identity === null) {
             return false;
         }
 
@@ -80,7 +80,7 @@ class InfoSheetsPolicy implements RequestPolicyInterface
                 $infoSheet = $infoSheetsTable->find('all',
                     conditions: [
                         'InfoSheets.uid' => $infoSheetUid,
-                        'InfoSheets.owner' => $identity !== null ? $identity->uid : 0,
+                        'InfoSheets.owner' => $identity->uid,
                         'InfoSheets.status > ' . APP_DELETED,
                     ]
                 )->first();
@@ -93,7 +93,7 @@ class InfoSheetsPolicy implements RequestPolicyInterface
 
         }
 
-        return $identity !== null;
+        return true;
 
     }
 
