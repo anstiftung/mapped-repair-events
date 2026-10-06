@@ -22,9 +22,9 @@
     "clipboard": "^2.0.11",
     "detect_swipe": "^2.1.4",
     "featherlight": "^1.7.14",
-    "fullcalendar": "7.1.0",
-    "temporal-polyfill": "^1.0.3",
-    "jodit": "^4.15.3",
+    "fullcalendar": "7.1.1",
+    "temporal-polyfill": "^1.0.5",
+    "jodit": "^4.17.1",
     "jquery": "^3.7.1",
     "jquery-knob": "^1.2.11",
     "jquery-slugify": "^1.2.5",
@@ -36,6 +36,6 @@
     "slidebars": "^2.0.2",
     "speakingurl": "^14.0.1",
     "sweetalert2": "^11.26.25",
-    "swiper": "^14.2.0"
+    "swiper": "^14.3.0"
   }
 }
