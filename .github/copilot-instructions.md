@@ -10,3 +10,4 @@
 - Use trailing commas in arrays, function calls and function definitions where applicable
 - Ensure tests pass (call `composer test`)
 - Write unit tests for new functionality
+- Never write javascript tests

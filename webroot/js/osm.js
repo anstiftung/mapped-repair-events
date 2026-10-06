@@ -88,25 +88,41 @@ MappedRepairEvents.Map = function(objects, type, isWidget, customCenterCoordinat
 
 MappedRepairEvents.Map.prototype = {
 
-    setHeight : function() {
+    setHeight : function(fitBounds) {
         var containerWidth = $('#content .right').width();
+        if (this.fixedMapTop !== undefined) {
+            var mapBottom = $(window).height() - 20;
+            var footer = document.getElementById('footer');
+            if (footer) {
+                mapBottom = Math.min(mapBottom, footer.getBoundingClientRect().top - 20);
+            }
+            var mapHeight = Math.max(0, mapBottom - this.fixedMapTop);
+            $('#mapContainer').height(mapHeight).css('visibility', mapHeight > 0 ? 'visible' : 'hidden');
+        }
         $('#mapContainer').width(containerWidth);
         var newMapHeight = $('#mapContainer').height();
         $('#map').height(newMapHeight).width(containerWidth);
         this.map.invalidateSize();
-        this.zoomToMarkerLayerBounds();
+        if (fitBounds !== false) {
+            this.zoomToMarkerLayerBounds();
+        }
     },
 
     setMapAsFixed : function(marginTop) {
 
+        this.fixedMapTop = marginTop;
         $('#mapContainer').css({
             position: 'fixed',
             top: marginTop + 'px',
-            bottom: '20px',
+            bottom: 'auto',
             marginTop: '0',
         });
 
-         // for mobile landscape mode the height was not calculated properly
+        $(window).on('scroll', function() {
+            MappedRepairEvents.MapObject.setHeight(false);
+        });
+
+        // for mobile landscape mode the height was not calculated properly
         if (window.visualViewport) {
             window.visualViewport.addEventListener('resize', function() {
                 MappedRepairEvents.MapObject.setHeight();
