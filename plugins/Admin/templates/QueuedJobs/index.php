@@ -14,7 +14,7 @@ echo $this->element('list',
             ['name' => 'created', 'type' => 'datetimeWithSeconds', 'label' => 'erstellt'],
             ['name' => 'fetched', 'type' => 'datetimeWithSeconds', 'label' => 'fetched'],
             ['name' => 'completed', 'type' => 'datetimeWithSeconds', 'label' => 'completed'],
-            ['name' => 'failure_message', 'label' => 'Fehler'],
+            ['name' => 'failure_message', 'label' => 'Fehler', 'tooltip' => true],
         ],
     ]
 );

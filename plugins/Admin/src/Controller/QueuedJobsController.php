@@ -20,6 +20,10 @@ class QueuedJobsController extends AdminAppController
                 'name' => 'QueuedJobs.data',
                 'searchType' => 'search'
             ],
+            'QueuedJobs.failure_message' => [
+                'name' => 'QueuedJobs.failure_message',
+                'searchType' => 'search',
+            ],
         ]);
         
         parent::beforeFilter($event);
