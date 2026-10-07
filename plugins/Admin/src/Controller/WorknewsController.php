@@ -42,11 +42,10 @@ class WorknewsController extends AdminAppController
         $conditions = array_merge($this->conditions, $conditions);
 
         $worknewsTable = $this->getTableLocator()->get('Worknews');
-        $query = $worknewsTable->find('all',#
+        $query = $worknewsTable->find('withOutOfQuotaCount',#
         conditions: $conditions,
         contain: [
             'Workshops',
-            'WorknewsEmailErrors',
         ]);
         $objects = $this->paginate($query, [
             'sortableFields' => [

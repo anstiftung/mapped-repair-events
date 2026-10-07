@@ -8,6 +8,7 @@ use Cake\Validation\Validator;
 use App\Model\Entity\Worknews;
 use App\Mailer\AppMailer;
 use Cake\ORM\Query\SelectQuery;
+use Cake\ORM\TableRegistry;
 use App\Model\Entity\Workshop;
 use App\Model\Entity\Event;
 
@@ -24,12 +25,24 @@ class WorknewsTable extends AppTable
         $this->belongsTo('Workshops', [
             'foreignKey' => 'workshop_uid'
         ]);
-        $this->belongsTo('WorknewsEmailErrors', [
-            'foreignKey' => 'email',
-            'bindingKey' => 'email',
-            'joinType' => 'LEFT',
-        ]);
         $this->addBehavior('Timestamp');
+    }
+
+    /**
+     * @param \Cake\ORM\Query\SelectQuery<\App\Model\Entity\Worknews> $query
+     * @return \Cake\ORM\Query\SelectQuery<\App\Model\Entity\Worknews>
+     */
+    public function findWithOutOfQuotaCount(SelectQuery $query): SelectQuery
+    {
+        $totals = TableRegistry::getTableLocator()->get('WorknewsEmailErrors')->find('totals');
+        $query->getSelectTypeMap()->addDefaults(['out_of_quota_count' => 'integer']);
+
+        return $query->leftJoin(
+            ['WorknewsEmailErrors' => $totals],
+            ['WorknewsEmailErrors.email = Worknews.email'],
+        )->select([
+            'out_of_quota_count' => $query->expr('COALESCE(WorknewsEmailErrors.out_of_quota_count, 0)'),
+        ])->enableAutoFields();
     }
 
     public function validationDefault(Validator $validator): Validator

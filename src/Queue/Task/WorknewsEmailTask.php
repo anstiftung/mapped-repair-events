@@ -24,15 +24,15 @@ class WorknewsEmailTask extends EmailTask
             parent::run($data, $jobId);
         } catch (Throwable $exception) {
             if (preg_match(self::QUOTA_ERROR_PATTERN, $exception->getMessage()) === 1) {
-                $this->updateOutOfQuotaCount(true);
+                $this->updateOutOfQuotaCount(true, $jobId);
             }
             throw $exception;
         }
 
-        $this->updateOutOfQuotaCount(false);
+        $this->updateOutOfQuotaCount(false, $jobId);
     }
 
-    private function updateOutOfQuotaCount(bool $increment): void
+    private function updateOutOfQuotaCount(bool $increment, int $jobId): void
     {
         if (!isset($this->message)) {
             return;
@@ -41,7 +41,7 @@ class WorknewsEmailTask extends EmailTask
         $errorsTable = $this->getTableLocator()->get('WorknewsEmailErrors');
         foreach (array_keys($this->message->getTo()) as $email) {
             if ($increment) {
-                $errorsTable->incrementOutOfQuotaCount($email);
+                $errorsTable->incrementOutOfQuotaCount($email, $jobId);
             } else {
                 $errorsTable->resetOutOfQuotaCount($email);
             }

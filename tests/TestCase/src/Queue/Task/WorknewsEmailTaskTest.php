@@ -48,16 +48,59 @@ class WorknewsEmailTaskTest extends AppTestCase
             TransportFactory::drop('worknews-test');
             TransportFactory::setConfig('worknews-test', $transport);
 
+            $data = $this->mailData($index % 2 === 0 ? 1 : 3);
+            $job = $this->getTableLocator()->get('Queue.QueuedJobs')->createJob('WorknewsEmail', $data);
             try {
-                (new WorknewsEmailTask())->run($this->mailData($index % 2 === 0 ? 1 : 3), 1);
+                (new WorknewsEmailTask())->run($data, $job->id);
                 $this->fail('The delivery failure must be rethrown for queue retries.');
             } catch (RuntimeException $caught) {
                 $this->assertSame($exception, $caught);
             }
-            $this->assertSame($index + 1, $errorsTable->get('worknews-test@mailinator.com')->out_of_quota_count, $message);
+            $this->assertSame($index + 1, $errorsTable->getOutOfQuotaCount('worknews-test@mailinator.com'), $message);
+        }
+
+        $this->assertSame(count($messages), $errorsTable->find()->count());
+    }
+
+    public function testQuotaFailuresAreCountedOnlyOncePerQueuedJob(): void
+    {
+        $data = $this->mailData();
+        $job = $this->getTableLocator()->get('Queue.QueuedJobs')->createJob('WorknewsEmail', $data);
+        $errorsTable = $this->getTableLocator()->get('WorknewsEmailErrors');
+        $exception = new RuntimeException('Mailbox is out of quota');
+        $transport = $this->createMock(DebugTransport::class);
+        $transport->expects($this->exactly(3))->method('send')->willThrowException($exception);
+        TransportFactory::setConfig('worknews-test', $transport);
+
+        for ($attempt = 0; $attempt < 3; $attempt++) {
+            try {
+                (new WorknewsEmailTask())->run($data, $job->id);
+                $this->fail('The delivery failure must be rethrown for queue retries.');
+            } catch (RuntimeException $caught) {
+                $this->assertSame($exception, $caught);
+            }
+
+            $this->assertSame(1, $errorsTable->getOutOfQuotaCount('worknews-test@mailinator.com'));
         }
 
         $this->assertSame(1, $errorsTable->find()->count());
+    }
+
+    public function testResetPreservesDeduplicationAndAllowsNewJobs(): void
+    {
+        $errorsTable = $this->getTableLocator()->get('WorknewsEmailErrors');
+        $email = 'worknews-test@mailinator.com';
+        $errorsTable->incrementOutOfQuotaCount($email, 1);
+        $errorsTable->resetOutOfQuotaCount($email);
+        $errorsTable->incrementOutOfQuotaCount($email, 1);
+
+        $this->assertSame(0, $errorsTable->getOutOfQuotaCount($email));
+        $this->assertSame(1, $errorsTable->find()->count());
+
+        $errorsTable->incrementOutOfQuotaCount($email, 2);
+
+        $this->assertSame(1, $errorsTable->getOutOfQuotaCount($email));
+        $this->assertSame(2, $errorsTable->find()->count());
     }
 
     public function testOtherFailuresLeaveTheCountUnchanged(): void
@@ -65,6 +108,7 @@ class WorknewsEmailTaskTest extends AppTestCase
         $errorsTable = $this->getTableLocator()->get('WorknewsEmailErrors');
         $errorsTable->saveOrFail($errorsTable->newEntity([
             'email' => 'worknews-test@mailinator.com',
+            'queued_job_id' => 0,
             'out_of_quota_count' => 3,
         ]));
         $messages = [
@@ -88,7 +132,7 @@ class WorknewsEmailTaskTest extends AppTestCase
             } catch (RuntimeException $caught) {
                 $this->assertSame($exception, $caught);
             }
-            $this->assertSame(3, $errorsTable->get('worknews-test@mailinator.com')->out_of_quota_count, $message);
+            $this->assertSame(3, $errorsTable->getOutOfQuotaCount('worknews-test@mailinator.com'), $message);
         }
     }
 
@@ -97,10 +141,12 @@ class WorknewsEmailTaskTest extends AppTestCase
         $errorsTable = $this->getTableLocator()->get('WorknewsEmailErrors');
         $errorsTable->saveOrFail($errorsTable->newEntity([
             'email' => 'worknews-test@mailinator.com',
+            'queued_job_id' => 0,
             'out_of_quota_count' => 3,
         ]));
         $errorsTable->saveOrFail($errorsTable->newEntity([
             'email' => 'worknews-test-1@mailinator.com',
+            'queued_job_id' => 0,
             'out_of_quota_count' => 7,
         ]));
         $transport = $this->createMock(DebugTransport::class);
@@ -112,8 +158,8 @@ class WorknewsEmailTaskTest extends AppTestCase
 
         (new WorknewsEmailTask())->run($this->mailData(3), 1);
 
-        $this->assertSame(0, $errorsTable->get('worknews-test@mailinator.com')->out_of_quota_count);
-        $this->assertSame(7, $errorsTable->get('worknews-test-1@mailinator.com')->out_of_quota_count);
+        $this->assertSame(0, $errorsTable->getOutOfQuotaCount('worknews-test@mailinator.com'));
+        $this->assertSame(7, $errorsTable->getOutOfQuotaCount('worknews-test-1@mailinator.com'));
     }
 
     public function testSuccessfulDeliveryWithoutErrorsDoesNotCreateACounter(): void
@@ -133,10 +179,10 @@ class WorknewsEmailTaskTest extends AppTestCase
     public function testCountsAreSharedAndSortableAcrossSubscriptions(): void
     {
         $errorsTable = $this->getTableLocator()->get('WorknewsEmailErrors');
-        $errorsTable->incrementOutOfQuotaCount('worknews-test@mailinator.com');
-        $errorsTable->incrementOutOfQuotaCount('worknews-test@mailinator.com');
+        $errorsTable->incrementOutOfQuotaCount('worknews-test@mailinator.com', 1);
+        $errorsTable->incrementOutOfQuotaCount('worknews-test@mailinator.com', 2);
         $worknewsTable = $this->getTableLocator()->get('Worknews');
-        $query = $worknewsTable->find()->contain(['WorknewsEmailErrors']);
+        $query = $worknewsTable->find('withOutOfQuotaCount');
         $objects = (new NumericPaginator())->paginate($query, [
             'sort' => 'WorknewsEmailErrors.out_of_quota_count',
             'direction' => 'desc',
@@ -150,10 +196,10 @@ class WorknewsEmailTaskTest extends AppTestCase
         $this->assertCount(3, $objects);
         $this->assertSame('worknews-test@mailinator.com', $objects[0]->email);
         $this->assertSame('worknews-test@mailinator.com', $objects[1]->email);
-        $this->assertSame(2, $objects[0]->worknews_email_error->out_of_quota_count);
-        $this->assertSame(2, $objects[1]->worknews_email_error->out_of_quota_count);
+        $this->assertSame(2, $objects[0]->out_of_quota_count);
+        $this->assertSame(2, $objects[1]->out_of_quota_count);
         $this->assertSame('worknews-test-1@mailinator.com', $objects[2]->email);
-        $this->assertNull($objects[2]->worknews_email_error);
+        $this->assertSame(0, $objects[2]->out_of_quota_count);
     }
 
     public function testFailureUsesQueuedRecipientAfterSubscriptionIsDeleted(): void
@@ -165,15 +211,17 @@ class WorknewsEmailTaskTest extends AppTestCase
         $transport->expects($this->once())->method('send')->willThrowException($exception);
         TransportFactory::setConfig('worknews-test', $transport);
 
+        $data = $this->mailData();
+        $job = $this->getTableLocator()->get('Queue.QueuedJobs')->createJob('WorknewsEmail', $data);
         try {
-            (new WorknewsEmailTask())->run($this->mailData(), 1);
+            (new WorknewsEmailTask())->run($data, $job->id);
             $this->fail('The delivery failure must be rethrown for queue retries.');
         } catch (RuntimeException $caught) {
             $this->assertSame($exception, $caught);
         }
 
         $errorsTable = $this->getTableLocator()->get('WorknewsEmailErrors');
-        $this->assertSame(1, $errorsTable->get('worknews-test@mailinator.com')->out_of_quota_count);
+        $this->assertSame(1, $errorsTable->getOutOfQuotaCount('worknews-test@mailinator.com'));
     }
 
     /** @return array<string, mixed> */
