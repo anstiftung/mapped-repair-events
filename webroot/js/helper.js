@@ -364,17 +364,40 @@ MappedRepairEvents.Helper = {
     },
 
     initCookieBanner : function() {
-
-        $.CookiesMessage({
-            messageBg: '#c8d218',
-            messageText: 'Diese Seite verwendet Cookies. Durch die Nutzung unserer Seite erklären Sie sich damit einverstanden, dass wir Cookies setzen.',
-            messageLinkColor: '#fff',            // Message box links color
-            acceptText: 'Verstanden',                      // Accept button text
-            infoText: 'Datenschutzbestimmungen einsehen',  // More Info button text
-            infoUrl: '/seite/datenschutz',                 // More Info button URL
-            closeEnable: false
+        const cookieBanner = CookiesEuBanner.createCookiesBanner({
+            onAccept: function () {
+                MappedRepairEvents.Helper.initMatomo();
+            },
+            onReject: function () {
+                console.log('only technical cookies allowed');
+            }
         });
-        $('#band-cookies-ok').addClass('button');
+
+        const cookieSettingsLink = $('.cookie-settings');
+        cookieSettingsLink.closest('li').toggle(navigator.doNotTrack !== '1');
+        cookieSettingsLink.off('click.cookieSettings').on('click.cookieSettings', function(event) {
+            event.preventDefault();
+            cookieBanner.showBanner();
+        });
+    },
+
+    initMatomo : function() {
+        const matomoTemplate = document.querySelector('#matomo-template');
+        if (!matomoTemplate) {
+            return;
+        }
+
+        const matomoContent = matomoTemplate.content.cloneNode(true);
+        matomoContent.querySelectorAll('script').forEach(function (originalScript) {
+            const script = document.createElement('script');
+            Array.from(originalScript.attributes).forEach(function (attribute) {
+                script.setAttribute(attribute.name, attribute.value);
+            });
+            script.textContent = originalScript.textContent;
+            originalScript.replaceWith(script);
+        });
+        matomoTemplate.remove();
+        document.body.appendChild(matomoContent);
     },
 
     addNewTagsToSelect2Multidropdown : function(selector, newTags) {

@@ -1492,21 +1492,38 @@ div.map-detail #mapContainer.big {
     height: 538px;
     clear: left
 }
-#band-cookies {
+#cookies-eu-banner {
+    background-color: #c8d218;
     width: 400px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 10001;
+    box-sizing: border-box;
+    max-height: 100dvh;
+    overflow-y: auto;
+    padding: 16px;
     text-align: left;
     line-height: 20px;
+    color: #fff;
 }
-#band-cookies a {
-    margin-left: 0;
+#cookies-eu-banner p {
+    margin: 0 0 12px;
 }
-#band-cookies #band-cookies-ok {
-    color: #999 ! important;
-    background-color: #f2f2f2 ! important;
-    text-decoration: none;
-    margin-left: 100px;
-    margin-top: 10px;
-    margin-bottom: 10px;
+#cookies-eu-banner button {
+    float: none;
+    max-width: 100%;
+    height: auto;
+    margin: 4px 8px 4px 0;
+    white-space: normal;
+    line-height: 20px;
+    color: #727374;
+    background-color: #f2f2f2;
+}
+#cookies-eu-banner button:hover {
+    opacity: 0.8;
+    background-color: #f2f2f2 !important;
 }
 body.blogs.detail #content {
     width: 760px;
