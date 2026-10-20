@@ -155,7 +155,18 @@ use Cake\Utility\Inflector;
 
     </div><!--everything-->
 
-    <?php echo $this->element('core/matomo'); ?>
+    <template id="cookies-eu-banner-template">
+        <div id="cookies-eu-banner">
+            <p>Wir würden Ihren Besuch gern anonym in unserer Statistik erfassen. Dazu verwenden wir Cookies. Wenn Sie damit einverstanden sind, klicken Sie auf „Alle Cookies akzeptieren“. Wenn Sie nur die für den Betrieb der Seite notwendigen Cookies zulassen wollen, wählen Sie „Nur technisch notwendige Cookies akzeptieren“.
+            </p>
+            <button id="cookies-eu-accept">Alle Cookies akzeptieren</button>
+            <button id="cookies-eu-reject">Nur technisch notwendige Cookies akzeptieren</button>
+        </div>
+    </template>
+
+    <template id="matomo-template">
+        <?php echo $this->element('core/matomo'); ?>
+    </template>
 
 </body>
 </html>

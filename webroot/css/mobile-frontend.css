@@ -662,11 +662,11 @@
     button.blink {
         float: left;
     }
-    #band-cookies {
+    #cookies-eu-banner {
        width: 100%;
        text-align: center;
     }
-    #band-cookies a {
+    #cookies-eu-banner a {
         margin-left: 0 ! important;
         color: #999 ! important;
         background-color: #f2f2f2 ! important;

@@ -12,6 +12,13 @@ $menu = array_merge($menu, $this->Menu->buildPageMenu($pagesForFooter));
 
 $staticMenu = [
     [
+        'name' => 'Cookie-Einstellungen',
+        'slug' => '#cookies-eu-banner',
+        'options' => [
+            'class' => ['cookie-settings'],
+        ],
+    ],
+    [
         'name' => 'Termine',
         'slug' => '/termine'
     ],
