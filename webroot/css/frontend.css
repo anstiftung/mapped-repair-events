@@ -1513,9 +1513,11 @@ div.map-detail #mapContainer.big {
 }
 #cookies-eu-banner button {
     float: none;
+    width: 100%;
     max-width: 100%;
+    box-sizing: border-box;
     height: auto;
-    margin: 4px 8px 4px 0;
+    margin: 4px 0;
     white-space: normal;
     line-height: 20px;
     color: #727374;

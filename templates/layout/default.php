@@ -157,9 +157,11 @@ use Cake\Utility\Inflector;
 
     <template id="cookies-eu-banner-template">
         <div id="cookies-eu-banner">
-            <p>Wir würden Ihren Besuch gern anonym in unserer Statistik erfassen. Dazu verwenden wir Cookies. Wenn Sie damit einverstanden sind, klicken Sie auf „Alle Cookies akzeptieren“. Wenn Sie nur die für den Betrieb der Seite notwendigen Cookies zulassen wollen, wählen Sie „Nur technisch notwendige Cookies akzeptieren“.
+            <p>Wir würden Ihren Besuch gern anonym in unserer Statistik erfassen. Dazu verwenden wir Cookies. Wenn Sie damit einverstanden sind, klicken Sie auf „Alle Cookies akzeptieren“.
             </p>
             <button id="cookies-eu-accept">Alle Cookies akzeptieren</button>
+            <p style="margin-top: 10px;">Wenn Sie nur die für den Betrieb der Seite notwendigen Cookies zulassen wollen, wählen Sie „Nur technisch notwendige Cookies akzeptieren“.
+            </p>
             <button id="cookies-eu-reject">Nur technisch notwendige Cookies akzeptieren</button>
         </div>
     </template>
