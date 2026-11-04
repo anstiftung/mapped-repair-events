@@ -13,7 +13,7 @@ return [
         'maxworkers' => 3,
         'defaultJobRetries' => 2,
         'workerPhpTimeout' => 360, // cron starts new worker every 5 min (=300 sec), overlap
-        'workermaxruntime' => 360,
+        'workerLifetime' => 360,
         'sleeptime' => 5,
         'cleanuptimeout' => 60 * 60 * 24 * 10, // 10 days
         'gcprob' => 100,
