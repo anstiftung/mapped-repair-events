@@ -32,7 +32,7 @@ class ApiTokenAuthMiddleware implements MiddlewareInterface
         $action = $request->getParam('action'); // @phpstan-ignore-line
 
         return match ($action) {
-            'getWorkshopsWithCityFilter' => Configure::read('useApiTokenAuthMiddleware1'),
+            'getWorkshopsWithCityFilter' => true,
             'getSplitter' => true,
             'getWorkshopsForHyperModeWebsite' => true,
             'getStatistics' => true,
