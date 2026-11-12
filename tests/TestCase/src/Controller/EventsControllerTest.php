@@ -290,6 +290,8 @@ class EventsControllerTest extends AppTestCase
         $this->assertResponseContains('VERSION:2.0');
         $this->assertResponseContains('CALSCALE:GREGORIAN');
         $this->assertResponseContains('BEGIN:VEVENT');
+        $this->assertResponseContains("UID:6");
+        $this->assertResponseContains("UID:9");
         $this->assertResponseContains('SUMMARY:Test Workshop');
         $this->assertResponseContains('DESCRIPTION:description');
         $this->assertResponseContains('LOCATION:Müllerstraße 123 10115 Berlin Haus Drei');

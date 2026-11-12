@@ -16,6 +16,7 @@ use Eluceo\iCal\Domain\ValueObject\DateTime as iCalDateTime;
 use Eluceo\iCal\Domain\ValueObject\GeographicPosition;
 use Eluceo\iCal\Domain\ValueObject\Location;
 use Eluceo\iCal\Domain\ValueObject\TimeSpan;
+use Eluceo\iCal\Domain\ValueObject\UniqueIdentifier;
 use Eluceo\iCal\Presentation\Factory\CalendarFactory;
 use InvalidArgumentException;
 use Cake\View\JsonView;
@@ -93,7 +94,9 @@ class EventsController extends AppController
         /** @var Event $event */
         foreach($events as $event) {
 
-            $icalEvent = new \Eluceo\iCal\Domain\Entity\Event();
+            $icalEvent = new \Eluceo\iCal\Domain\Entity\Event(
+                new UniqueIdentifier((string) $event->uid),
+            );
 
             $location = $event->strasse . ' ' . $event->zip . ' ' . $event->ort;
             if ($event->veranstaltungsort != '') {
