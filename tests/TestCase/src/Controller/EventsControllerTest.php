@@ -518,7 +518,7 @@ class EventsControllerTest extends AppTestCase
         $this->get(Configure::read('AppConfig.htmlHelper')->urlEventDelete($event->uid));
         $this->assertResponseOk();
         $this->assertResponseContains('Nur diesen Termin löschen');
-        $this->assertResponseContains('Diesen und alle zukünftigen Termine löschen');
+        $this->assertResponseContains('Alle Termine dieser Serie löschen');
         $this->assertEquals(APP_ON, $table->get($event->uid)->status);
     }
 
@@ -534,31 +534,35 @@ class EventsControllerTest extends AppTestCase
         }
     }
 
-    public function testDeleteFollowingOccurrencesKeepsPastAndOtherEvents(): void
+    public function testDeleteAllOccurrencesIncludesPastAndPreservesSeries(): void
     {
         $this->createSeriesThroughForm();
         $table = $this->getTableLocator()->get('Events');
         $events = $table->find()->where(['series_uid IS NOT' => null])->orderBy(['datumstart' => 'ASC'])->all()->toList();
+        $series = $this->getTableLocator()->get('EventSeries')->get($events[0]->series_uid)->toArray();
         $table->updateAll(['datumstart' => '2020-01-01'], ['uid' => $events[0]->uid]);
-        $this->post(Configure::read('AppConfig.htmlHelper')->urlEventDelete($events[1]->uid), ['scope' => 'following']);
+        $this->post(Configure::read('AppConfig.htmlHelper')->urlEventDelete($events[1]->uid), ['scope' => 'all']);
         $this->assertResponseCode(302);
-        foreach ($events as $index => $event) {
-            $this->assertEquals($index === 0 ? APP_ON : APP_DELETED, $table->get($event->uid)->status);
+        foreach ($events as $event) {
+            $deletedEvent = $table->get($event->uid);
+            $this->assertEquals(APP_DELETED, $deletedEvent->status);
+            $this->assertSame($event->series_uid, $deletedEvent->series_uid);
         }
+        $this->assertEquals($series, $this->getTableLocator()->get('EventSeries')->get($events[0]->series_uid)->toArray());
         $this->assertEquals(APP_ON, $table->get(6)->status);
     }
 
-    public function testDeleteFollowingOccurrencesUsesCurrentDates(): void
+    public function testDeleteAllOccurrencesIncludesRescheduledEvents(): void
     {
         $this->createSeriesThroughForm();
         $table = $this->getTableLocator()->get('Events');
         $events = $table->find()->where(['series_uid IS NOT' => null])->orderBy(['datumstart' => 'ASC'])->all()->toList();
         $table->updateAll(['datumstart' => '2041-03-16'], ['uid' => $events[0]->uid]);
         $table->updateAll(['datumstart' => '2041-02-01'], ['uid' => $events[2]->uid]);
-        $this->post(Configure::read('AppConfig.htmlHelper')->urlEventDelete($events[1]->uid), ['scope' => 'following']);
+        $this->post(Configure::read('AppConfig.htmlHelper')->urlEventDelete($events[1]->uid), ['scope' => 'all']);
         $this->assertResponseCode(302);
-        foreach ($events as $index => $event) {
-            $this->assertEquals($index === 2 ? APP_ON : APP_DELETED, $table->get($event->uid)->status);
+        foreach ($events as $event) {
+            $this->assertEquals(APP_DELETED, $table->get($event->uid)->status);
         }
     }
 
@@ -568,7 +572,7 @@ class EventsControllerTest extends AppTestCase
         $table = $this->getTableLocator()->get('Events');
         $events = $table->find()->where(['series_uid IS NOT' => null])->orderBy(['datumstart' => 'ASC'])->all()->toList();
         $this->failSeriesSave = true;
-        $this->post(Configure::read('AppConfig.htmlHelper')->urlEventDelete($events[0]->uid), ['scope' => 'following']);
+        $this->post(Configure::read('AppConfig.htmlHelper')->urlEventDelete($events[0]->uid), ['scope' => 'all']);
         $this->assertResponseOk();
         foreach ($events as $event) {
             $this->assertEquals(APP_ON, $table->get($event->uid)->status);

@@ -12,7 +12,7 @@ declare(strict_types=1);
             'type' => 'radio', 'label' => 'Welche Termine möchtest du löschen?', 'default' => 'single',
             'options' => [
                 'single' => 'Nur diesen Termin löschen',
-                'following' => 'Diesen und alle zukünftigen Termine löschen',
+                'all' => 'Alle Termine dieser Serie löschen',
             ],
         ]) ?>
         <?= $this->Html->link('Abbrechen', $this->Html->urlMyEvents(), ['class' => 'button']) ?>

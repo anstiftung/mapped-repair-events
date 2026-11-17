@@ -371,7 +371,7 @@ class EventsController extends AppController
             return $this->render('delete');
         }
         $scope = (string)$this->request->getData('scope', 'single');
-        if (!in_array($scope, ['single', 'following'], true)) {
+        if (!in_array($scope, ['single', 'all'], true)) {
             $this->AppFlash->setFlashError('Bitte wähle, welche Termine gelöscht werden sollen.');
             return $this->render('delete');
         }
@@ -382,11 +382,6 @@ class EventsController extends AppController
         ];
         if ($scope === 'single') {
             $conditions['Events.uid'] = $event->uid;
-        } else {
-            $conditions['OR'] = [
-                ['Events.uid' => $event->uid],
-                ['Events.datumstart >=' => max($event->datumstart->format('Y-m-d'), \Cake\I18n\Date::now()->format('Y-m-d'))],
-            ];
         }
         /** @var list<Event> $events */
         $events = $this->Event->find()->where($conditions)->all()->toList();
