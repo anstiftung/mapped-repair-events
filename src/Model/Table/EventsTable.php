@@ -25,6 +25,9 @@ class EventsTable extends AppRootTable
 
     public string $name_de = 'Termin';
 
+    /** @var list<int> */
+    public array $seriesValidationUids = [];
+
     /**
      * @var string[]
      */
@@ -35,6 +38,7 @@ class EventsTable extends AppRootTable
     public function initialize(array $config): void
     {
         parent::initialize($config);
+        $this->getSchema()->setColumnType('series_overrides', 'json');
         $this->belongsTo('Workshops', [
             'foreignKey' => 'workshop_uid'
         ]);
@@ -108,6 +112,9 @@ class EventsTable extends AppRootTable
         $validator->add('datumstart', 'duplicateEventNotYetSaved', [
             'rule' => function($value, $context): bool {
 
+                if (($context['data']['status'] ?? null) == APP_DELETED) {
+                    return true;
+                }
                 $events = [];
                 $request = Router::getRequest() ?? null;
                 if ($request === null) {
@@ -118,6 +125,10 @@ class EventsTable extends AppRootTable
                     return true; // Let other validators handle empty fields
                 }
 
+                $baseData = $request->getData('0', []);
+                if (!is_array($baseData)) {
+                    $baseData = [];
+                }
                 foreach($request->getData() as $data) {
                     if (!is_array($data)) {
                        continue; // skip referer
@@ -126,7 +137,7 @@ class EventsTable extends AppRootTable
                         continue; // skip metadata (fields / unlocked / debug)
                     }
 
-                    $events[] = $data;
+                    $events[] = array_replace($baseData, $data);
                 }
 
                 $keys = array_map(function($event) {
@@ -134,7 +145,7 @@ class EventsTable extends AppRootTable
                     $ort = isset($event['ort']) ? trim($event['ort']) : '';
                     $zip = isset($event['zip']) ? trim($event['zip']) : '';
                     $strasse = isset($event['strasse']) ? trim($event['strasse']) : '';
-                    return $event['datumstart'] . '|' . $event['uhrzeitstart'] . '|' . $event['uhrzeitend'] . '|' . $ort . '|' . $zip . '|' . $strasse;
+                    return $event['datumstart'] . '|' . ($event['uhrzeitstart'] ?? '') . '|' . ($event['uhrzeitend'] ?? '') . '|' . $ort . '|' . $zip . '|' . $strasse;
                 }, $events);
 
                 // Trim values to match beforeMarshal trimming
@@ -155,6 +166,9 @@ class EventsTable extends AppRootTable
 
         $validator->add('datumstart', 'duplicateEventAlreadySaved', [
             'rule' => function($value, $context): bool {
+                if (($context['data']['status'] ?? null) == APP_DELETED) {
+                    return true;
+                }
                 // Skip validation if required fields are missing
                 if (empty($context['data']['workshop_uid']) ||
                     empty($context['data']['datumstart']) ||
@@ -177,6 +191,9 @@ class EventsTable extends AppRootTable
                 // When editing an existing event, exclude it from the duplicate check
                 if (!empty($context['data']['uid'])) {
                     $conditions[$this->aliasField('uid !=')] = $context['data']['uid'];
+                }
+                if ($this->seriesValidationUids !== []) {
+                    $conditions[$this->aliasField('uid NOT IN')] = $this->seriesValidationUids;
                 }
 
                 $duplicateCount = $this->find('all', conditions: $conditions)->count();

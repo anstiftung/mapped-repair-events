@@ -27,6 +27,9 @@ use App\Model\Table\EventsTable;
 use Cake\Datasource\Paging\PaginatedInterface;
 use Cake\Http\Response;
 use Cake\ORM\Query\SelectQuery;
+use App\Services\EventRecurrenceService;
+use App\Services\EventSeriesService;
+use Cake\ORM\Exception\PersistenceFailedException;
 
 class EventsController extends AppController
 {
@@ -289,8 +292,12 @@ class EventsController extends AppController
             ]
         )->first();
 
-        if (empty($event)) {
+        if (!$event instanceof Event) {
             throw new NotFoundException;
+        }
+
+        if ($event->series_uid) {
+            return $this->deleteSeriesOccurrence($event);
         }
 
         // keep this line here!!!
@@ -342,6 +349,56 @@ class EventsController extends AppController
 
         return $this->redirect($this->getReferer());
 
+    }
+
+    private function deleteSeriesOccurrence(Event $event): Response
+    {
+        $this->set('event', $event);
+        $this->set('metaTags', ['title' => 'Serientermin löschen']);
+        if (!$this->request->is('post')) {
+            return $this->render('delete');
+        }
+        $scope = (string)$this->request->getData('scope', 'single');
+        if (!in_array($scope, ['single', 'following'], true)) {
+            $this->AppFlash->setFlashError('Bitte wähle, welche Termine gelöscht werden sollen.');
+            return $this->render('delete');
+        }
+        $conditions = [
+            'Events.series_uid' => $event->series_uid,
+            'Events.workshop_uid' => $event->workshop_uid,
+            'Events.status >' => APP_DELETED,
+        ];
+        if ($scope === 'single') {
+            $conditions['Events.uid'] = $event->uid;
+        } else {
+            $conditions['OR'] = [
+                ['Events.uid' => $event->uid],
+                ['Events.series_position >=' => $event->series_position, 'Events.datumstart >=' => \Cake\I18n\Date::now()->format('Y-m-d')],
+            ];
+        }
+        /** @var list<Event> $events */
+        $events = $this->Event->find()->where($conditions)->all()->toList();
+        $changes = [];
+        foreach ($events as $member) {
+            if ((int)$member->status === APP_ON) {
+                $changes[(int)$member->uid] = ['fields' => ['status'], 'original' => $member->toArray()];
+            }
+            $member->status = APP_DELETED;
+        }
+        try {
+            $this->Event->getConnection()->transactional(function () use ($events): void {
+                foreach ($events as $member) {
+                    $this->Event->saveOrFail($member);
+                    $this->fetchTable('Fundingconfirmedevents')->deleteAll(['event_uid' => $member->uid]);
+                }
+            });
+        } catch (PersistenceFailedException) {
+            $this->AppFlash->setFlashError('Die Termine konnten nicht gelöscht werden. Es wurde kein Termin gelöscht.');
+            return $this->render('delete');
+        }
+        $this->notifySeriesChanges($event, $events, $changes);
+        $this->AppFlash->setFlashMessage(count($events) . ' Termine erfolgreich gelöscht.');
+        return $this->redirect(Configure::read('AppConfig.htmlHelper')->urlMyEvents());
     }
 
     public function add(int $preselectedWorkshopUid): ?Response
@@ -451,7 +508,7 @@ class EventsController extends AppController
         }
 
         // notify subscribers
-        if (isset($workshop) && $patchedEntity->renotify) {
+        if (isset($workshop) && $patchedEntity->renotify && !empty($patchedEntities['saved']) && empty($patchedEntities['seriesHandled'])) {
             $worknewsTable = $this->getTableLocator()->get('Worknews');
             $subscribers = $worknewsTable->getSubscribers($patchedEntity->workshop_uid);
             if ($subscribers->count() > 0) {
@@ -483,6 +540,18 @@ class EventsController extends AppController
 
         $this->set('uid', $events[0]->uid);
 
+        $seriesSettings = [];
+        if ($isEditMode && $events[0]->series_uid) {
+            $series = $this->fetchTable('EventSeries')->get($events[0]->series_uid);
+            $seriesSettings = $series->get('settings');
+            $seriesEvents = $this->Event->find()->where([
+                'series_uid' => $events[0]->series_uid,
+                'workshop_uid' => $events[0]->workshop_uid,
+            ])->orderBy(['series_position' => 'ASC'])->all()->toList();
+            $this->set('seriesEvents', $seriesEvents);
+        }
+        $this->set('seriesSettings', $seriesSettings);
+
         $this->setReferer();
 
         if (!empty($this->request->getData())) {
@@ -496,6 +565,15 @@ class EventsController extends AppController
             if (!is_array($baseData)) {
                 $baseData = [];
             }
+            $seriesData = $requestData['series'] ?? [];
+            if (!is_array($seriesData)) {
+                $seriesData = [];
+            }
+            $this->set('seriesSettings', $seriesData);
+            $repeat = array_key_exists('enabled', $seriesData) ? !empty($seriesData['enabled']) : ($seriesData['mode'] ?? '') === 'series';
+            if ((!$isEditMode && $repeat) || ($isEditMode && $events[0]->series_uid)) {
+                return $this->saveSeries($events[0], $baseData, $seriesData, $isEditMode);
+            }
             foreach($requestData as $data) {
                 if (!is_array($data)) {
                     continue; // skip referer
@@ -504,6 +582,11 @@ class EventsController extends AppController
                     continue; // skip metadata (fields / unlocked / debug)
                 }
                 $data = array_merge($baseData, $data);
+                $data['workshop_uid'] = $events[0]->workshop_uid;
+                unset($data['series_uid'], $data['series_date'], $data['series_position'], $data['series_overrides']);
+                if ($isEditMode && $patchedEvents !== []) {
+                    continue;
+                }
 
                 $datumstart = $data['datumstart'] ?? null;
                 if ($datumstart) {
@@ -565,7 +648,7 @@ class EventsController extends AppController
                 }
                 $eventsTable->getConnection()->transactional(function () use ($eventsTable, $events): void {
                     foreach ($events as $e) {
-                        $eventsTable->save($e, ['atomic' => true]);
+                        $eventsTable->saveOrFail($e);
                     }
                 });
 
@@ -580,6 +663,7 @@ class EventsController extends AppController
                     'events' => $events,
                     'dirtyFields' => $dirtyFields ?? [],
                     'originalValues' => $originalValues ?? [],
+                    'saved' => true,
                 ];
             }
 
@@ -593,6 +677,184 @@ class EventsController extends AppController
         ];
 
 
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     * @param array<string, mixed> $settings
+     * @return array<string, mixed>
+     */
+    private function saveSeries(Event $original, array $data, array $settings, bool $isEditMode): array
+    {
+        $eventSeriesTable = $this->fetchTable('EventSeries');
+        $service = new EventSeriesService($this->Event, $eventSeriesTable);
+        $events = [$original];
+        $error = null;
+        try {
+            $dates = [];
+            if (!$isEditMode && array_key_exists('enabled', $settings) && empty($data['datumstart'])) {
+                throw new InvalidArgumentException('Bitte trage ein Datum ein.');
+            }
+            if (!$isEditMode && !empty($data['datumstart'])) {
+                $settings['start'] = (new DateTime($data['datumstart']))->format('Y-m-d');
+            }
+            $seriesEnd = (string)($settings['end'] ?? '');
+            $seriesEndDate = \DateTimeImmutable::createFromFormat('!d.m.Y', $seriesEnd);
+            if ($seriesEndDate !== false && $seriesEndDate->format('d.m.Y') === $seriesEnd) {
+                $settings['end'] = $seriesEndDate->format('Y-m-d');
+            }
+            $this->set('seriesSettings', $settings);
+            if (!$isEditMode) {
+                $dates = (new EventRecurrenceService())->dates($settings, (string)Configure::read('App.defaultTimezone'));
+            }
+            if (!empty($settings['preview'])) {
+                if ($isEditMode) {
+                    $dates = (new EventRecurrenceService())->dates($settings, (string)Configure::read('App.defaultTimezone'));
+                    $cutoff = max(\Cake\I18n\Date::now()->format('Y-m-d'), $original->series_date->format('Y-m-d'));
+                    $dates = array_values(array_filter($dates, static fn(string $date): bool => $date >= $cutoff));
+                }
+                $this->set('seriesPreview', $dates);
+                $events = $this->seriesFormEvents($original, $data, $isEditMode);
+            } else {
+                $data = $this->normalizeSeriesData($data);
+                $plan = $service->prepare($original, $data, $settings, (string)Configure::read('App.defaultTimezone'));
+                if (!$isEditMode) {
+                    foreach ($this->request->getData() as $index => $extra) {
+                        if (!is_numeric($index) || (int)$index === 0 || !is_array($extra) || !array_key_exists('datumstart', $extra)) {
+                            continue;
+                        }
+                        $extra = $this->normalizeSeriesData(array_replace($data, $extra));
+                        unset($extra['uid'], $extra['series_uid'], $extra['series_date'], $extra['series_position'], $extra['series_overrides']);
+                        $extra['workshop_uid'] = $original->workshop_uid;
+                        $plan['events'][] = $this->Event->patchEntity(clone $original, $extra);
+                    }
+                    $keys = [];
+                    foreach ($plan['events'] as $member) {
+                        if ((int)$member->status === APP_DELETED || $member->hasErrors()) {
+                            continue;
+                        }
+                        $key = implode('|', [(string)$member->datumstart, (string)$member->uhrzeitstart, (string)$member->uhrzeitend, $member->ort, $member->zip, $member->strasse]);
+                        if (isset($keys[$key])) {
+                            $member->setError('datumstart', 'Dieser Termin ist bereits in der Terminserie enthalten.');
+                        }
+                        $keys[$key] = true;
+                    }
+                }
+                $invalidEvents = array_filter($plan['events'], static fn(Event $event): bool => $event->hasErrors());
+                if ($invalidEvents !== []) {
+                    $events = $this->seriesFormEvents($original, $data, $isEditMode);
+                    $events[0]->setErrors(reset($invalidEvents)->getErrors());
+                    $error = 'Bitte korrigiere die markierten Felder. Es wurde kein Termin gespeichert.';
+                } else {
+                    $this->Event->getConnection()->transactional(function () use ($plan, $eventSeriesTable): void {
+                        if ($plan['series'] !== null) {
+                            $eventSeriesTable->saveOrFail($plan['series']);
+                        }
+                        foreach ($plan['events'] as $event) {
+                            $this->Event->saveOrFail($event);
+                            if ((int)$event->status === APP_DELETED && $event->uid) {
+                                $this->fetchTable('Fundingconfirmedevents')->deleteAll(['event_uid' => $event->uid]);
+                            }
+                        }
+                    });
+                    $count = count(array_filter($plan['events'], static fn(Event $event): bool => (int)$event->status !== APP_DELETED));
+                    $this->AppFlash->setFlashMessage($count . ' Termine erfolgreich gespeichert.');
+                    $redirect = $this->redirect($this->getPreparedReferer());
+                    if ($isEditMode && !empty($data['renotify'])) {
+                        $this->notifySeriesChanges($original, $plan['events'], $plan['changes']);
+                    }
+                    return ['events' => $plan['events'], 'saved' => true, 'seriesHandled' => true];
+                }
+            }
+        } catch (InvalidArgumentException|PersistenceFailedException $exception) {
+            $error = $exception instanceof InvalidArgumentException
+                ? $exception->getMessage()
+                : 'Die Termine konnten nicht gespeichert werden. Es wurde kein Termin gespeichert.';
+            $events = $this->seriesFormEvents($original, $data, $isEditMode);
+            if (!$isEditMode && empty($data['datumstart']) && $error === 'Bitte trage ein Datum ein.') {
+                $events[0]->setError('datumstart', ['required' => $error]);
+                $error = null;
+            }
+        }
+        if ($error !== null) {
+            $this->AppFlash->setFlashError($error);
+            $this->set('seriesError', $error);
+        }
+        $this->set(compact('events', 'isEditMode'));
+        $render = $this->render('edit');
+        return ['events' => $events, 'saved' => false];
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     * @return array<string, mixed>
+     */
+    private function normalizeSeriesData(array $data): array
+    {
+        foreach (['datumstart', 'uhrzeitstart', 'uhrzeitend'] as $field) {
+            if (!empty($data[$field])) {
+                $data[$field] = new DateTime($data[$field]);
+            }
+        }
+        if (empty($data['use_custom_coordinates'])) {
+            $address = (string)($data['strasse'] ?? '') . ', ' . (string)($data['zip'] ?? '') . ' ' . (string)($data['ort'] ?? '') . ', ' . (string)($data['land'] ?? '');
+            $geo = $this->geoService->getGeoDataByAddress($address);
+            $data['lat'] = $geo['lat'];
+            $data['lng'] = $geo['lng'];
+        } else {
+            $data['lat'] = str_replace(',', '.', (string)($data['lat'] ?? ''));
+            $data['lng'] = str_replace(',', '.', (string)($data['lng'] ?? ''));
+            $geo = $this->geoService->getGeoDataByCoordinates($data['lat'], $data['lng']);
+        }
+        $data['province_id'] = $geo['provinceId'] ?? 0;
+        return $data;
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     * @return list<Event>
+     */
+    private function seriesFormEvents(Event $original, array $data, bool $isEditMode): array
+    {
+        $events = [$this->Event->patchEntity(clone $original, $data, ['validate' => false])];
+        if (!$isEditMode) {
+            foreach ($this->request->getData() as $index => $extra) {
+                if (is_numeric($index) && (int)$index > 0 && is_array($extra) && array_key_exists('datumstart', $extra)) {
+                    $events[] = $this->Event->patchEntity(clone $original, array_replace($data, $extra), ['validate' => false]);
+                }
+            }
+        }
+        return $events;
+    }
+
+    /**
+     * @param list<Event> $events
+     * @param array<int, array{fields: list<string>, original: array<string, mixed>}> $changes
+     */
+    private function notifySeriesChanges(Event $original, array $events, array $changes): void
+    {
+        $affected = [];
+        foreach ($events as $event) {
+            $change = $changes[(int)$event->uid] ?? null;
+            $oldDate = $change['original']['datumstart'] ?? null;
+            if ($change !== null && $change['fields'] !== [] && ($event->datumstart->isWithinNext('7 days') || ($oldDate !== null && $oldDate->isWithinNext('7 days')))) {
+                $affected[] = ['event' => $event, 'fields' => $change['fields'], 'original' => $change['original']];
+            }
+        }
+        if ($affected === []) {
+            return;
+        }
+        $worknews = $this->fetchTable('Worknews');
+        $subscribers = $worknews->getSubscribers($original->workshop_uid);
+        foreach ($subscribers as $subscriber) {
+            $email = new AppMailer();
+            $email->viewBuilder()->setTemplate('event_series_changed');
+            $email->setTo($subscriber->email)
+                ->setSubject('Terminserie geändert: ' . $original->workshop->name)
+                ->setReplyTo($original->workshop->email)
+                ->setViewVars(['affected' => $affected, 'workshop' => $original->workshop, 'unsub' => $subscriber->unsub]);
+            $email->addToQueue();
+        }
     }
 
     public function ajaxGetAllEventsForMap(): void

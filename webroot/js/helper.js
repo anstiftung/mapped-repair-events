@@ -115,14 +115,179 @@ MappedRepairEvents.Helper = {
         }
     },
 
+    initEventSeries: function() {
+        var form = document.getElementById('eventEditForm');
+        var section = form && form.querySelector('.event-series');
+        if (!section) {
+            return;
+        }
+        var existing = section.dataset.existingSeries === '1';
+        var request;
+        var value = function(name) {
+            var input = section.querySelector('[name="series[' + name + ']"]:checked') || section.querySelector('[name="series[' + name + ']"]');
+            return input ? input.value : '';
+        };
+        var checked = function(name) {
+            var input = section.querySelector('input[type="checkbox"][name="series[' + name + ']"]');
+            return input && input.checked;
+        };
+        var show = function(selector, visible) {
+            var element = section.querySelector(selector);
+            element.hidden = !visible;
+            element.querySelectorAll('input, select, button').forEach(function(input) {
+                input.disabled = !visible;
+            });
+        };
+        var updateTimes = function() {
+            var start = document.getElementById('0-uhrzeitstart');
+            var end = document.getElementById('0-uhrzeitend');
+            section.querySelectorAll('.series-preview-time').forEach(function(element) {
+                element.textContent = start.value && end.value ? start.value.slice(0, 5) + '–' + end.value.slice(0, 5) : '';
+            });
+        };
+        var updateExcluded = function() {
+            var container = section.querySelector('.series-excluded-dates');
+            container.replaceChildren();
+            section.querySelectorAll('.series-include-date:not(:checked)').forEach(function(input) {
+                var hidden = document.createElement('input');
+                hidden.type = 'hidden';
+                hidden.name = 'series[excluded][]';
+                hidden.value = input.dataset.date;
+                container.appendChild(hidden);
+            });
+            var count = section.querySelector('.series-preview-count');
+            if (count) {
+                count.textContent = section.querySelectorAll('.series-include-date:checked').length;
+            }
+        };
+        var update = function() {
+            var enabled = section.querySelector('input[type="checkbox"][name="series[enabled]"]');
+            var multipleDates = form.querySelectorAll('.date-time-wrapper .row').length > 1;
+            if (enabled) {
+                enabled.disabled = multipleDates;
+                if (multipleDates) {
+                    enabled.checked = false;
+                }
+                enabled.closest('.input').classList.toggle('is-disabled', multipleDates);
+                section.querySelector('.series-enabled-restriction').hidden = !multipleDates;
+            }
+            var active = existing || checked('enabled');
+            var bulk = existing && value('scope') !== 'single';
+            var rule = active && (!existing || (bulk && checked('change_rule')));
+            var addDate = form.querySelector('.add-date-button');
+            if (addDate) {
+                addDate.disabled = active;
+                addDate.title = active ? 'Zusätzliche Einzeltermine sind bei einer Terminserie nicht möglich.' : 'Termin hinzufügen';
+            }
+            if (existing) {
+                show('.series-bulk-options', bulk);
+            }
+            show('.series-rule-fields', rule);
+            show('.series-preview-area', active);
+            section.querySelector('.series-preview-button').hidden = !rule;
+            section.querySelector('.series-preview-button').disabled = !rule;
+            show('.series-monthly-rules', rule && value('rhythm').startsWith('monthly-'));
+            show('.series-weekly-days', rule && value('rhythm').startsWith('weekly-'));
+            form.querySelectorAll('.date-time-wrapper .row').forEach(function(row, index) {
+                row.hidden = false;
+                row.querySelectorAll('input').forEach(function(input) {
+                    input.disabled = input.name.indexOf('[datumstart]') !== -1 && bulk;
+                });
+                var dateField = row.querySelector('.input.text');
+                if (dateField) {
+                    dateField.hidden = false;
+                }
+            });
+        };
+        var preview = function() {
+            if (request) {
+                request.abort();
+            }
+            request = new AbortController();
+            var output = section.querySelector('#event-series-preview');
+            output.setAttribute('aria-busy', 'true');
+            var data = new FormData(form);
+            data.set('series[preview]', '1');
+            fetch(form.action, {method: 'POST', body: data, signal: request.signal})
+                .then(function(response) {
+                    if (!response.ok) {
+                        throw new Error('Die Terminvorschau konnte nicht geladen werden.');
+                    }
+                    return response.text();
+                })
+                .then(function(html) {
+                    var documentResult = new DOMParser().parseFromString(html, 'text/html');
+                    var result = documentResult.getElementById('event-series-preview');
+                    if (!result) {
+                        throw new Error('Die Terminvorschau konnte nicht geladen werden.');
+                    }
+                    var dateInput = document.getElementById('0-datumstart');
+                    var resultDateInput = documentResult.getElementById('0-datumstart');
+                    if (resultDateInput) {
+                        var dateField = dateInput.closest('.input');
+                        var resultDateField = resultDateInput.closest('.input');
+                        var previousError = dateField.querySelector('.error-message');
+                        if (previousError) {
+                            previousError.remove();
+                        }
+                        var dateError = resultDateField.querySelector('.error-message');
+                        if (dateError) {
+                            dateField.appendChild(dateError);
+                        }
+                        dateField.classList.toggle('error', resultDateField.classList.contains('error'));
+                        dateInput.classList.toggle('form-error', resultDateInput.classList.contains('form-error'));
+                        ['aria-invalid', 'aria-describedby'].forEach(function(attribute) {
+                            if (resultDateInput.hasAttribute(attribute)) {
+                                dateInput.setAttribute(attribute, resultDateInput.getAttribute(attribute));
+                            } else {
+                                dateInput.removeAttribute(attribute);
+                            }
+                        });
+                    }
+                    var weekdayError = documentResult.getElementById('series-weekdays-error');
+                    if (weekdayError) {
+                        section.querySelector('#series-weekdays-error').replaceWith(weekdayError);
+                        section.querySelector('.series-weekday-options').setAttribute('aria-invalid', weekdayError.hidden ? 'false' : 'true');
+                    }
+                    output.replaceWith(result);
+                    updateTimes();
+                    updateExcluded();
+                })
+                .catch(function(error) {
+                    if (error.name !== 'AbortError') {
+                        output.textContent = error.message;
+                        output.setAttribute('aria-busy', 'false');
+                    }
+                });
+        };
+        $(section).on('change', function(event) {
+            if (event.target.classList.contains('series-include-date')) {
+                updateExcluded();
+                return;
+            }
+            update();
+        });
+        section.querySelector('.series-preview-button').addEventListener('click', function(event) {
+            event.preventDefault();
+            preview();
+        });
+        $(form).on('event-dates-changed', update);
+        updateTimes();
+        update();
+    },
+
     bindAddDateButton : function(dateHtml) {
 
         // remove select2 which is already initialized - it causes problems when the html is copied and pasted
         $('.date-time-wrapper select').select2('destroy');
 
-        var addDateButton = $('a.add-date-button');
+        var addDateButton = $('.add-date-button');
 
-        addDateButton.on('click', function() {
+        addDateButton.on('click', function(event) {
+            event.preventDefault();
+            if (this.disabled || $(this).closest('form').find('input[name="series[enabled]"]').prop('checked')) {
+                return;
+            }
             var wrapper = $(this).closest('.date-time-wrapper');
             wrapper.append(dateHtml);
             MappedRepairEvents.Helper.bindRemoveDateButton();
@@ -177,6 +342,7 @@ MappedRepairEvents.Helper = {
         });
         row.find('.datepicker-input').datepicker('destroy');
         row.find('.datepicker-input').datepicker();
+        row.closest('form').trigger('event-dates-changed');
     },
 
     /**
@@ -853,6 +1019,10 @@ MappedRepairEvents.Helper = {
         $('a.delete-event').on('click', function() {
             var message = 'Soll dieser Termin wirklich gelöscht werden?<br />Dies kann nicht rückgängig gemacht werden!';
             var eventUid = $(this).data('event-uid');
+            if ($(this).data('event-series') === 1) {
+                document.location.href = '/termine/delete/' + eventUid;
+                return;
+            }
             Swal.fire({
                 ...MappedRepairEvents.Helper.getSwalDefaultProps(),
                 html: message,

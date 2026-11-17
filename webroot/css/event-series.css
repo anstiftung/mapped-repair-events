@@ -1,0 +1,192 @@
+#eventEditForm {
+    --event-label-width: 130px;
+    --event-label-gap: 6px;
+    --event-input-offset: calc(var(--event-label-width) + var(--event-label-gap));
+}
+#eventEditForm .input > label { width: var(--event-label-width); margin-right: var(--event-label-gap); }
+#eventEditForm > .event-form-group {
+    clear: both;
+    display: flow-root;
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 20px 0;
+    padding: 16px 0 0;
+    border: 0;
+    border-top: 1px solid #ccc;
+}
+#eventEditForm > .event-form-group > legend { font-size: 16px; font-weight: bold; padding: 0 12px 0 0; }
+#eventEditForm .event-location-row { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 8px; }
+#eventEditForm .event-location-row > .input { order: -1; flex: 1 1 auto; float: none; min-width: 0; width: auto; margin: 0; }
+#eventEditForm .event-location-actions { display: flex; flex: 0 0 auto; align-items: center; gap: 10px; max-width: 100%; margin: 0; }
+#eventEditForm .event-location-actions .apply-workshop-data-button { float: none; margin: 0; white-space: nowrap; }
+#eventEditForm .event-location-actions .ajaxLoader { flex: 0 0 auto; float: none; margin: 0; }
+#eventEditForm > .event-form-group > .date-time-wrapper { margin-bottom: 0; }
+#eventEditForm .date-time-wrapper .input.text > .error-message { clear: both; width: max-content; max-width: calc(100vw - 32px - var(--event-input-offset)); margin: 4px 0 0 var(--event-input-offset); }
+#eventEditForm .add-date-button,
+#eventEditForm .remove-date-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 35px;
+    box-sizing: border-box;
+    vertical-align: top;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--theme-color-a);
+    cursor: pointer;
+    font: inherit;
+    text-decoration: none;
+}
+#eventEditForm .date-time-wrapper .add-date-button > .fa,
+#eventEditForm .date-time-wrapper .remove-date-button > .fa { margin: 0; line-height: 1; }
+#eventEditForm .add-date-button:hover,
+#eventEditForm .remove-date-button:hover { background-color: transparent !important; opacity: .8; }
+#eventEditForm .add-date-button:focus { outline: none; box-shadow: none; }
+#eventEditForm .add-date-button:disabled { opacity: .4; cursor: not-allowed; }
+#eventEditForm .event-series .is-disabled { color: #777; }
+#eventEditForm .event-series {
+    clear: both;
+    display: flow-root;
+    margin: 0;
+    padding: 0;
+}
+#eventEditForm .event-series h3 { font-size: 16px; margin: 16px 0 10px; text-transform: none; }
+#eventEditForm .event-series .series-preview-description { margin: 0 0 10px; line-height: 1.5; }
+#eventEditForm .event-series fieldset {
+    clear: both;
+    width: 100%;
+    box-sizing: border-box;
+    border: 0;
+    padding: 0;
+    margin: 16px 0;
+    min-width: 0;
+}
+#eventEditForm .event-series legend { font-weight: bold; font-size: 16px; margin-bottom: 12px; }
+#eventEditForm .event-series .input {
+    display: grid;
+    grid-template-columns: var(--event-label-width) minmax(0, 1fr);
+    gap: 8px var(--event-label-gap);
+    float: none;
+    clear: both;
+    width: 100%;
+    margin: 0 0 12px;
+    max-width: 100%;
+}
+#eventEditForm .event-series label {
+    float: none;
+    width: auto !important;
+    padding: 0;
+    margin: 0;
+    line-height: 1.5;
+    white-space: normal;
+}
+#eventEditForm .event-series .radio > label:not(:first-child) { grid-column: 2; }
+#eventEditForm .event-series .radio > label:first-child { grid-column: 1; grid-row: 1; }
+#eventEditForm .event-series .checkbox > label { grid-column: 1 / -1; }
+#eventEditForm .event-series .checkbox { float: none; padding: 0; margin: 0; }
+#eventEditForm .event-series > .input.checkbox { box-sizing: border-box; margin: 12px 0; padding: 5px; }
+#eventEditForm .event-series .input.select > .checkbox { grid-column: 2; }
+#eventEditForm .event-series input[type="radio"],
+#eventEditForm .event-series input[type="checkbox"] {
+    float: none;
+    width: 16px;
+    height: 16px;
+    margin: 0 8px 0 0;
+    vertical-align: middle;
+}
+#eventEditForm .event-series > .input.checkbox input[type="checkbox"] { margin: 3px 10px 3px 4px; }
+#eventEditForm .event-series input[type="date"],
+#eventEditForm .event-series input[type="number"],
+#eventEditForm .event-series select { max-width: 100%; box-sizing: border-box; }
+#eventEditForm select[name="0[workshop_uid]"],
+#eventEditForm select[name="0[workshop_uid]"] + .select2-container,
+#eventEditForm .event-series select,
+#eventEditForm .event-series .select2-container { width: min(100%, 320px) !important; }
+#eventEditForm .event-series input[type="date"],
+#eventEditForm .event-series input[type="number"] { width: 160px; padding: 6px; border: 1px solid #aaa; }
+#eventEditForm .event-series #series-end { width: 85px; max-width: 100%; }
+#eventEditForm .event-series .series-preview-area { clear: both; }
+#eventEditForm .event-series .series-monthly-rule { min-width: 0; max-width: 100%; }
+#eventEditForm .event-series .series-add-rule,
+#eventEditForm .event-series .series-remove-rule { position: static; top: auto !important; float: none; margin: 0 0 12px; }
+#eventEditForm .event-series .series-remove-rule {
+    align-self: end;
+    width: 34px;
+    height: 34px;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    color: inherit;
+    border: 0;
+}
+#eventEditForm .event-series .series-weekday-options { display: flex; flex-wrap: wrap; gap: 4px; min-width: 0; }
+#eventEditForm .event-series .series-weekly-days > .input { row-gap: 4px; }
+#eventEditForm .event-series #series-weekdays-error { grid-column: 2; margin: 0; }
+#eventEditForm .event-series .series-weekly-days .checkbox { width: auto; flex: 0 0 auto; }
+#eventEditForm .event-series .series-weekly-days .checkbox label {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 5px;
+    line-height: 1.4;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+}
+#eventEditForm .event-series .series-weekly-days input[type="checkbox"] { width: 14px; height: 14px; margin-right: 4px; }
+#eventEditForm .event-series .series-weekly-days .checkbox label:has(input:checked) { background: #e9f1e9; border-color: #6d8b6d; }
+#eventEditForm .event-series .series-preview-list {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    gap: 8px;
+    max-height: 240px;
+    overflow-y: auto;
+    margin-block: 10px;
+    padding: 2px;
+}
+#eventEditForm .event-series .series-preview-row {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    min-height: 34px;
+    box-sizing: border-box;
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #f7f7f7;
+    float: none;
+    width: auto;
+    max-width: 100%;
+    margin: 0;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1.4;
+}
+#eventEditForm .event-series label.series-preview-row { cursor: pointer; }
+#eventEditForm .event-series label.series-preview-row:hover { border-color: #888; }
+#eventEditForm .event-series label.series-preview-row:focus-within { outline: 2px solid #555; outline-offset: 1px; }
+#eventEditForm .event-series .series-preview-row input { flex: 0 0 auto; margin: 0; }
+#eventEditForm .event-series .series-preview-row span { white-space: nowrap; }
+#eventEditForm .event-series .series-preview-count { font-weight: normal; }
+#eventEditForm .event-series [hidden] { display: none !important; }
+#eventEditForm .event-series .series-preview-button { float: none; margin-left: var(--event-input-offset); max-width: calc(100% - var(--event-input-offset)); white-space: normal; }
+@media (max-width: 600px) {
+    #eventEditForm .event-location-row { flex-wrap: wrap; }
+    #eventEditForm .event-location-row > .input { order: 0; flex-basis: 100%; }
+    #eventEditForm .event-location-actions .apply-workshop-data-button { min-width: 0; max-width: 100%; box-sizing: border-box; white-space: normal; }
+    #eventEditForm .event-series {
+        max-width: calc(100vw - 32px);
+        box-sizing: border-box;
+    }
+    #eventEditForm .event-series .input { grid-template-columns: minmax(0, 1fr); }
+    #eventEditForm .event-series .radio > label:not(:first-child),
+    #eventEditForm .event-series .input.select > .checkbox { grid-column: 1; }
+    #eventEditForm .event-series .input > label { max-width: 100%; }
+    #eventEditForm .event-series #series-weekdays-error { grid-column: 1; }
+    #eventEditForm .event-series .series-preview-button { margin-left: 0; max-width: 100%; }
+}

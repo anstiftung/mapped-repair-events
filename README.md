@@ -41,6 +41,15 @@
 * Node.js and npm ([installation](https://www.npmjs.com/get-npm)) developer packages
 * Composer ([installation](https://getcomposer.org/download/)) developer packages
 
+## Event series
+* Run `php bin/cake.php migrations migrate` after installing dependencies.
+* The existing manual date rows and plus button remain available. An optional checkbox below the form enables recurrence for the first date; additional manual rows remain separate events.
+* Weekly rules support multiple weekdays and intervals such as every two weeks. Monthly rules support up to ten independent position/weekday combinations, including the last weekday.
+* An end date is mandatory and cannot be more than two years from today. A series is limited to 750 occurrences, allowing daily repetition over the full period. Dates are calculated on the server using `rlanvin/php-rrule` in the configured application timezone.
+* Events remain independent records linked by a UUID in `series_uid`. Stable positions and excluded occurrences prevent deleted dates from returning when a series is extended.
+* Editing and deletion support one occurrence or this and following future occurrences. Past occurrences remain unchanged. Individual field exceptions are preserved unless explicitly reset.
+* Changing a recurrence rule starts a linked successor series while retaining existing event IDs. Series saves are transactional; subscriber notifications within seven days are bundled.
+
 ## Cronjobs
 * daily, 3:00 `bash ./bin/cake BackupDatabase`
 * daily, 8:00 `bash ./bin/cake SendWorknewsNotification`

@@ -2,6 +2,9 @@
 declare(strict_types=1);
 use Cake\Core\Configure;
 
+echo $this->Html->css('event-series');
+$this->element('addScript', ['script' => JS_NAMESPACE . '.Helper.initEventSeries();']);
+
 if ($this->request->getSession()->read('isMobile')) {
     $this->element('addScript', ['script' =>
         JS_NAMESPACE.".MobileFrontend.putSaveAndCancelButtonToEndOfForm();
@@ -43,6 +46,7 @@ $this->element('addScript', ['script' =>
             'id' => 'eventEditForm'
         ]);
         echo $this->Form->hidden('referer', ['value' => $referer]);
+        echo '<fieldset class="event-form-group"><legend>Initiative und Terminbild</legend>';
 
         $i = 0;
         foreach($events as $event) {
@@ -86,11 +90,8 @@ $this->element('addScript', ['script' =>
                 ,'label' => 'Terminbild'
             ]).'<br />';
 
-            if (!$isEditMode) {
-                echo $this->element('hint', [
-                    'content' => 'Durch Klicken auf das Plus-Zeichen rechts kannst du mehrere Termine auf einmal erstellen.<br />Nach dem Speichern kannst du sie wie gewohnt einzeln bearbeiten.'
-                ]);
-            }
+            echo '</fieldset>';
+            echo '<fieldset class="event-form-group"><legend>Datum und Uhrzeit</legend>';
 
             echo '<div class="date-time-wrapper">';
 
@@ -123,7 +124,14 @@ $this->element('addScript', ['script' =>
 
                 if (!$isEditMode) {
                     if ($i == 0) {
-                        echo '<a class="add-date-button" title="Termin hinzufügen" href="javascript:void(0);"><i class="fa fa-plus-circle"></i></a>';
+                        echo $this->Form->button('<i class="fa fa-plus-circle" aria-hidden="true"></i>', [
+                            'type' => 'button',
+                            'escapeTitle' => false,
+                            'class' => 'add-date-button',
+                            'title' => 'Termin hinzufügen',
+                            'aria-label' => 'Termin hinzufügen',
+                            'disabled' => count($events) === 1 && !empty($seriesSettings['enabled']),
+                        ]);
                     } else {
                         echo '<a class="remove-date-button" title="Termin löschen" href="javascript:void(0);"><i class="fa fa-minus-circle"></i></a>';
                     }
@@ -142,19 +150,33 @@ $this->element('addScript', ['script' =>
 
             echo '</div>';
             echo '<div class="sc"></div>';
+            echo $this->element('eventSeries', [
+                'event' => $events[0],
+                'isEditMode' => $isEditMode,
+                'seriesSettings' => $seriesSettings ?? [],
+                'seriesEvents' => $seriesEvents ?? [],
+                'seriesPreview' => $seriesPreview ?? null,
+                'seriesError' => $seriesError ?? null,
+                'hasMultipleDates' => count($events) > 1,
+            ]);
+            echo '</fieldset>';
+            echo '<fieldset class="event-form-group"><legend>Beschreibung</legend>';
 
             echo $this->Form->control($i.'.eventbeschreibung', ['label' => __('Add Event: event description')]).'<br />';
             
             if (Configure::read('AppConfig.onlineEventsEnabled')) {
                 echo $this->Form->control($i.'.is_online_event', ['type' => 'checkbox', 'label' => 'Termin findet nur als Online-Reparaturcafé über Videokonferenz statt']).'<br />';
             }
+            echo '</fieldset>';
+            echo '<fieldset class="event-form-group"><legend>Veranstaltungsort</legend>';
 
+            echo '<div class="event-location-row">';
             if (!$isEditMode && isset($preselectedWorkshopUid)) {
-                echo '<br /><br />';
-                echo '<a class="button apply-workshop-data-button" href="javascript:void(0);">Profildaten übernehmen</a><img class="ajaxLoader" src="/img/ajax-loader.gif" width="32" height="32" />';
+                echo '<div class="event-location-actions"><a class="button apply-workshop-data-button" href="javascript:void(0);">Profildaten übernehmen</a><img class="ajaxLoader" src="/img/ajax-loader.gif" width="32" height="32" /></div>';
             }
+            echo $this->Form->control($i.'.veranstaltungsort', ['div' => 'input text long', 'type' => 'text','label' => __('Add Event: Venue')]);
+            echo '</div>';
 
-            echo $this->Form->control($i.'.veranstaltungsort', ['div' => 'input text long', 'type' => 'text','label' => __('Add Event: Venue')]).'<br />';
             echo $this->Form->control($i.'.strasse', ['type' => 'text','label' => __('Add Event: Street and Number')]).'<br />';
 
             echo $this->Form->control($i.'.zip', ['type' => 'text','label' => __('Add Event: Zip Code')]).'<br />';
@@ -167,20 +189,24 @@ $this->element('addScript', ['script' =>
             echo $this->Form->control($i.'.lng', ['label' => 'Länge (Long)', 'type' => 'text']).'<br />';
             echo '</div>';
 
-            echo '<br />';
+            echo '</fieldset>';
+            echo '<fieldset class="event-form-group"><legend>' . h(Configure::read('AppConfig.categoriesNameWorkshops')) . '</legend>';
             echo '<div class="categories-checkbox-wrapper">';
-            echo '<b>' . Configure::read('AppConfig.categoriesNameWorkshops') . '</b>';
             echo $this->Form->control($i.'.categories._ids', [
                 'multiple' => 'checkbox',
                 'label' => false
             ]);
             echo '</div>';
             echo '<div class="sc"></div>';
+            echo '</fieldset>';
+            echo '<fieldset class="event-form-group"><legend>Veröffentlichung</legend>';
 
             echo $this->Form->control($i.'.status', ['type' => 'select', 'options' => $loggedUser?->isAdmin() ? Configure::read('AppConfig.status') : Configure::read('AppConfig.status2')]).'<br />';
 
             if ($isEditMode && $worknewsCount > 0) {
-                if (!$eventStartInLessThan7Days) {
+                if ($event->series_uid) {
+                    $worknewsString = 'Betroffene Termin-Abonnenten informieren (Termine innerhalb der nächsten 7 Tage).';
+                } elseif (!$eventStartInLessThan7Days) {
                     $worknewsString =  'Das Informieren der Termin-Abonennten (' . $worknewsCount . ') ist nicht möglich, da der Termin in mehr als 7 Tagen stattfindet.';
                 } else {
                     $worknewsString = 'Ich habe diesen Termin überarbeitet und möchte, dass alle ' . $worknewsCount . ' Termin-Abonnenten darüber nochmals informiert werden.';
@@ -188,8 +214,9 @@ $this->element('addScript', ['script' =>
                         $worknewsString = 'Ich habe diesen Termin überarbeitet und möchte, dass ' . $worknewsCount . ' Termin-Abonnent darüber nochmals informiert wird.';
                     }
                 }
-                echo $this->Form->control($i.'.renotify', ['type' => 'checkbox', 'label' => $worknewsString, 'disabled' => !$eventStartInLessThan7Days]).'<br />';
+                echo $this->Form->control($i.'.renotify', ['type' => 'checkbox', 'label' => $worknewsString, 'disabled' => !$eventStartInLessThan7Days && !$event->series_uid]).'<br />';
             }
+            echo '</fieldset>';
 
             $i++;
         }
@@ -197,12 +224,6 @@ $this->element('addScript', ['script' =>
     ?>
 
     <?php echo $this->element('cancelAndSaveButton', ['saveLabel' => 'Speichern']); ?>
-
-    <?php
-        if ($loggedUser?->isAdmin()) {
-            echo $this->element('metatagsFormfields', ['entity' => $i]);
-        }
-    ?>
 
     <div class="sc"></div>
 

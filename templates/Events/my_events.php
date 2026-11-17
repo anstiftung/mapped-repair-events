@@ -158,6 +158,9 @@ if (Configure::read('AppConfig.statisticsEnabled')) {
                                 <td><?php
                                    echo $event->datumstart->i18nFormat(Configure::read('DateFormat.de.DateLong2WithWeekday')) . ', ';
                                    echo $event->uhrzeitstart->i18nFormat(Configure::read('DateFormat.de.TimeShort')) . ' - ' . $event->uhrzeitend->i18nFormat(Configure::read('DateFormat.de.TimeShort')) . ' Uhr';
+                                                                     if (!empty($event->series_uid)) {
+                                                                           echo ' <i class="fa fa-repeat event-series-indicator" title="Teil einer Terminserie" aria-label="Terminserie"></i>';
+                                                                     }
                                  ?></td>
                                 <td><?php echo $event->ort . ', ' . $event->strasse; ?></td>
                                 <td><?php
@@ -181,6 +184,7 @@ if (Configure::read('AppConfig.statisticsEnabled')) {
                                                       'escape' => false,
                                                       'class' => 'delete-event',
                                                       'data-event-uid' => $event->uid,
+                                                      'data-event-series' => !empty($event->series_uid) ? '1' : '0',
                                                   ]
                                             );
                                         echo '</td>';

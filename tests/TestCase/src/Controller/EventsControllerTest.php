@@ -6,6 +6,7 @@ namespace App\Test\TestCase\Controller;
 use Cake\Log\Log;
 use Cake\I18n\Date;
 use Cake\I18n\Time;
+use Cake\I18n\DateTime;
 use Cake\Core\Configure;
 use App\Services\GeoService;
 use Cake\Event\EventInterface;
@@ -35,6 +36,14 @@ class EventsControllerTest extends AppTestCase
      */
     private array $newEventData;
 
+    private bool $failSeriesSave = false;
+
+    public function tearDown(): void
+    {
+        DateTime::setTestNow();
+        parent::tearDown();
+    }
+
     /**
      * @param \Cake\Event\EventInterface<\Cake\Controller\Controller> $event
      */
@@ -42,6 +51,17 @@ class EventsControllerTest extends AppTestCase
     {
 		parent::controllerSpy($event, $controller);
 		$this->_controller->geoService = new GeoServiceMock();
+
+        if ($this->failSeriesSave) {
+            $attempt = 0;
+            $this->getTableLocator()->get('Events')->getEventManager()->on('Model.beforeSave', function (EventInterface $saveEvent) use (&$attempt): void {
+                $attempt++;
+                if ($attempt === 2) {
+                    $saveEvent->stopPropagation();
+                    $saveEvent->setResult(false);
+                }
+            });
+        }
 	}
 
     public function loadNewEventData(): void
@@ -66,6 +86,415 @@ class EventsControllerTest extends AppTestCase
             'lng' => '',
             'province_id' => '1',
         ];
+    }
+
+    /** @return array<string, mixed> */
+    private function seriesSettings(): array
+    {
+        DateTime::setTestNow(new DateTime('2040-12-01'));
+        return [
+            'enabled' => '1', 'rhythm' => 'monthly-1',
+            'monthly_rules' => [['weekday' => 'SA', 'position' => '2']],
+            'end' => '31.03.2041',
+        ];
+    }
+
+    /** @return array<string, mixed> */
+    private function seriesEventData(): array
+    {
+        return [
+            'eventbeschreibung' => 'Serientermin', 'workshop_uid' => 2,
+            'datumstart' => '01.01.2041',
+            'uhrzeitstart' => '14:00', 'uhrzeitend' => '17:00',
+            'strasse' => 'Teststrasse 1', 'zip' => '10115', 'ort' => 'Berlin', 'land' => 'de',
+            'use_custom_coordinates' => '1', 'lat' => '52.520008', 'lng' => '13.404954',
+            'status' => APP_ON, 'categories' => ['_ids' => [87]],
+        ];
+    }
+
+    private function createSeriesThroughForm(): void
+    {
+        $this->loginAsOrga();
+        $this->post(Configure::read('AppConfig.htmlHelper')->urlEventNew(2), [
+            'referer' => '/', $this->seriesEventData(), 'series' => $this->seriesSettings(),
+        ]);
+        $this->assertResponseCode(302);
+    }
+
+    public function testCreateSeriesAndShowEditScope(): void
+    {
+        $this->createSeriesThroughForm();
+        $events = $this->getTableLocator()->get('Events')->find()->where(['series_uid IS NOT' => null])->all()->toList();
+        $this->assertCount(3, $events);
+        $this->assertSame($events[0]->series_uid, $events[2]->series_uid);
+        $settings = $this->getTableLocator()->get('EventSeries')->get($events[0]->series_uid)->get('settings');
+        $this->assertSame('monthly', $settings['frequency']);
+        $this->assertSame(1, $settings['interval']);
+        $this->assertSame('2041-03-31', $settings['end']);
+        $this->assertArrayNotHasKey('rhythm', $settings);
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlEventEdit($events[0]->uid));
+        $this->assertResponseOk();
+        $this->assertResponseContains('Nur diesen Termin');
+        $this->assertResponseContains('Diesen und alle zukünftigen Termine bearbeiten (3)');
+        $this->assertResponseContains('<div class="series-bulk-options" hidden>');
+        $this->assertResponseNotContains('auch vergangene');
+        $this->assertResponseContains('value="31.03.2041"');
+    }
+
+    public function testCompactSeriesForm(): void
+    {
+        $this->loginAsOrga();
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlEventNew(2));
+        $this->assertResponseOk();
+        $this->assertResponseContains('name="series[rhythm]"');
+        $this->assertResponseContains('<fieldset class="series-rule-fields" hidden>');
+        $this->assertResponseContains('<div class="series-weekly-days" hidden>');
+        $this->assertResponseContains('<div class="series-monthly-rules" hidden>');
+        $this->assertResponseContains('<div class="series-preview-area" hidden>');
+        $this->assertResponseContains('<option value="monthly-1" selected="selected">Jeden Monat</option>');
+        $this->assertResponseContains('<option value="1" selected="selected">1.</option>');
+        $this->assertResponseContains('<option value="SA" selected="selected">Samstag</option>');
+        $this->assertResponseContains('Jeden Monat');
+        $this->assertResponseContains('Jeden 2. Monat');
+        $this->assertResponseContains('Jeden 3. Monat (quartalsweise)');
+        $this->assertSame(3, substr_count((string)$this->_response->getBody(), '<option value="monthly-'));
+        $this->assertResponseContains('Jede Woche');
+        $this->assertResponseContains('Alle 2 Wochen');
+        $this->assertSame(2, substr_count((string)$this->_response->getBody(), '<option value="weekly-'));
+        $this->assertResponseContains('Diesen Termin wiederkehrend anlegen');
+        $this->assertResponseContains('name="series[enabled]"');
+        $this->assertResponseContains('name="series[monthly_rules][0][position]"');
+        $this->assertResponseContains('name="series[monthly_rules][0][weekday]"');
+        $this->assertResponseContains('Position im Monat');
+        $this->assertResponseNotContains('<legend>Wiederholung</legend>');
+        $this->assertResponseContains('class="series-weekday-options" role="group" aria-labelledby="series-weekdays-label"');
+        $this->assertResponseRegExp('/<input(?=[^>]*name="series\[end\]")(?=[^>]*type="text")(?=[^>]*class="datepicker-input")[^>]*>/');
+        $this->assertResponseNotContains('series-add-rule');
+        $this->assertResponseNotContains('series-remove-rule');
+        $this->assertSame(1, substr_count((string)$this->_response->getBody(), 'class="series-monthly-rule"'));
+        $this->assertResponseContains('name="series[weekdays][]"');
+        $this->assertResponseNotContains('name="series[end_mode]"');
+        $this->assertResponseNotContains('name="series[interval]"');
+        $this->assertLessThan(
+            strpos((string)$this->_response->getBody(), 'name="0[eventbeschreibung]"'),
+            strpos((string)$this->_response->getBody(), 'name="series[enabled]"'),
+        );
+        $this->assertResponseContains('<legend>Datum und Uhrzeit</legend>');
+        $this->assertResponseContains('<legend>Beschreibung</legend>');
+        $this->assertResponseContains('<legend>Veranstaltungsort</legend>');
+        $this->assertResponseContains('<legend>Veröffentlichung</legend>');
+        $this->assertResponseNotContains('event-date-mode-hint');
+        $this->assertResponseContains('<span class="series-enabled-restriction" hidden> (nur mit einem einzigen Ausgangstermin möglich)</span>');
+        $this->assertResponseRegExp('/<button(?=[^>]*type="button")(?=[^>]*class="add-date-button")[^>]*>/');
+        $this->assertResponseContains('<i class="fa fa-plus-circle" aria-hidden="true"></i></button>');
+        $this->assertResponseNotContains('<h2>Termin wiederholen?</h2>');
+        $formDocument = new \DOMDocument();
+        $formDocument->loadHTML((string)$this->_response->getBody(), LIBXML_NOERROR | LIBXML_NOWARNING);
+        $formXpath = new \DOMXPath($formDocument);
+        $seriesCheckbox = $formXpath->query('//fieldset[legend="Datum und Uhrzeit"]//input[@type="checkbox" and @name="series[enabled]"]');
+        $this->assertNotFalse($seriesCheckbox);
+        $this->assertSame(1, $seriesCheckbox->length);
+        $this->assertSame(3.0, $formXpath->evaluate('count(//section[contains(@class,"event-series")]//select)'));
+        $this->assertSame(3.0, $formXpath->evaluate('count(//section[contains(@class,"event-series")]//select[@data-minimum-results-for-search="-1" and not(contains(concat(" ",normalize-space(@class)," ")," no-select2 "))])'));
+        $this->assertSame(1.0, $formXpath->evaluate('count(//fieldset[legend="Veranstaltungsort"]/*[not(self::legend)][1][@class="event-location-row"]/*[1][@class="event-location-actions"]//a[contains(@class,"apply-workshop-data-button")])'));
+        $this->assertSame(1.0, $formXpath->evaluate('count(//div[@class="event-location-actions"]/following-sibling::*[1]//input[@name="0[veranstaltungsort]"])'));
+        $this->assertSame(0.0, $formXpath->evaluate('count(//fieldset[legend="Veranstaltungsort"]/br[not(preceding-sibling::div)])'));
+        $this->assertSame('SA', $formXpath->evaluate('string(//input[@name="series[weekdays][]" and @checked]/@value)'));
+        $this->assertSame(1.0, $formXpath->evaluate('count(//input[@name="series[weekdays][]" and @checked])'));
+        $this->assertSame(
+            \Cake\I18n\Date::now()->addYears(1)->format('d.m.Y'),
+            $formXpath->evaluate('string(//input[@name="series[end]"]/@value)'),
+        );
+    }
+
+    public function testMyEventsMarksOnlySeriesOccurrences(): void
+    {
+        $this->createSeriesThroughForm();
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlMyEvents());
+        $this->assertResponseOk();
+        $this->assertResponseContains('Teil einer Terminserie');
+        $this->assertSame(3, substr_count((string)$this->_response->getBody(), 'class="fa fa-repeat event-series-indicator"'));
+        $this->assertResponseContains(' Uhr <i class="fa fa-repeat event-series-indicator"');
+    }
+
+    public function testSeriesPreviewDoesNotSave(): void
+    {
+        $this->loginAsOrga();
+        $this->post(Configure::read('AppConfig.htmlHelper')->urlEventNew(2), [
+            'referer' => '/', $this->seriesEventData(), 'series' => $this->seriesSettings() + ['preview' => '1'],
+        ]);
+        $this->assertResponseOk();
+        $this->assertResponseContains('12.01.2041');
+        $this->assertResponseContains('<h3>Terminvorschau</h3>');
+        $this->assertResponseContains('Diese Terminserie enthält folgende <span class="series-preview-count">3</span> Termine. Du kannst vor dem Speichern einzelne Termine wegklicken.');
+        $this->assertSame(3, $this->getTableLocator()->get('Events')->find()->count());
+        $this->assertSame(0, $this->getTableLocator()->get('EventSeries')->find()->count());
+    }
+
+    public function testInvalidSeriesDoesNotPartiallySave(): void
+    {
+        $this->loginAsOrga();
+        $data = $this->seriesEventData();
+        $data['strasse'] = '';
+        $this->post(Configure::read('AppConfig.htmlHelper')->urlEventNew(2), [
+            'referer' => '/', $data, 'series' => $this->seriesSettings(),
+        ]);
+        $this->assertResponseOk();
+        $this->assertResponseContains('Bitte trage die Straße ein.');
+        $this->assertSame(3, $this->getTableLocator()->get('Events')->find()->count());
+        $this->assertSame(0, $this->getTableLocator()->get('EventSeries')->find()->count());
+    }
+
+    public function testOnlySelectedOccurrenceIsEdited(): void
+    {
+        $this->createSeriesThroughForm();
+        $table = $this->getTableLocator()->get('Events');
+        $events = $table->find()->where(['series_uid IS NOT' => null])->orderBy(['series_date' => 'ASC'])->all()->toList();
+        $data = $this->seriesEventData();
+        $data['datumstart'] = $events[1]->datumstart->format('d.m.Y');
+        $data['uhrzeitstart'] = '15:00';
+        $this->post(Configure::read('AppConfig.htmlHelper')->urlEventEdit($events[1]->uid), [
+            'referer' => '/', $data, 'series' => ['scope' => 'single'],
+        ]);
+        $this->assertResponseCode(302);
+        foreach ($events as $index => $event) {
+            $saved = $table->get($event->uid);
+            $this->assertSame($index === 1 ? '15:00:00' : '14:00:00', $saved->uhrzeitstart->format('H:i:s'));
+        }
+    }
+
+    public function testFollowingScopePreservesPastOccurrences(): void
+    {
+        $this->createSeriesThroughForm();
+        $table = $this->getTableLocator()->get('Events');
+        $events = $table->find()->where(['series_uid IS NOT' => null])->orderBy(['series_date' => 'ASC'])->all()->toList();
+        $table->updateAll(['datumstart' => '2020-01-01'], ['uid' => $events[0]->uid]);
+        $data = $this->seriesEventData();
+        unset($data['datumstart']);
+        $data['uhrzeitstart'] = '15:00';
+        $this->post(Configure::read('AppConfig.htmlHelper')->urlEventEdit($events[1]->uid), [
+            'referer' => '/', $data, 'series' => ['scope' => 'following'],
+        ]);
+        $this->assertResponseCode(302);
+        foreach ($events as $index => $event) {
+            $saved = $table->get($event->uid);
+            $this->assertSame($index === 0 ? '14:00:00' : '15:00:00', $saved->uhrzeitstart->format('H:i:s'));
+            $this->assertSame($event->series_uid, $saved->series_uid);
+        }
+        $this->assertSame('2020-01-01', $table->get($events[0]->uid)->datumstart->format('Y-m-d'));
+    }
+
+    public function testSeriesSaveFailureRollsBackEverything(): void
+    {
+        $this->loginAsOrga();
+        $this->failSeriesSave = true;
+        $this->post(Configure::read('AppConfig.htmlHelper')->urlEventNew(2), [
+            'referer' => '/', $this->seriesEventData(), 'series' => $this->seriesSettings(),
+        ]);
+        $this->assertResponseOk();
+        $this->assertResponseContains('Es wurde kein Termin gespeichert.');
+        $this->assertSame(3, $this->getTableLocator()->get('Events')->find()->count());
+        $this->assertSame(0, $this->getTableLocator()->get('EventSeries')->find()->count());
+    }
+
+    public function testExcludedOccurrenceIsNotPublished(): void
+    {
+        $this->loginAsOrga();
+        $this->post(Configure::read('AppConfig.htmlHelper')->urlEventNew(2), [
+            'referer' => '/', $this->seriesEventData(),
+            'series' => $this->seriesSettings() + ['excluded' => ['2041-02-09']],
+        ]);
+        $this->assertResponseCode(302);
+        $events = $this->getTableLocator()->get('Events');
+        $this->assertSame(2, $events->find()->where(['series_uid IS NOT' => null, 'status' => APP_ON])->count());
+        $this->assertSame(1, $events->find()->where(['series_uid IS NOT' => null, 'status' => APP_DELETED])->count());
+    }
+
+    public function testFollowingScopeDoesNotChangeEarlierOccurrences(): void
+    {
+        $this->createSeriesThroughForm();
+        $table = $this->getTableLocator()->get('Events');
+        $events = $table->find()->where(['series_uid IS NOT' => null])->orderBy(['series_date' => 'ASC'])->all()->toList();
+        $data = $this->seriesEventData();
+        unset($data['datumstart']);
+        $data['uhrzeitstart'] = '15:00';
+        $this->post(Configure::read('AppConfig.htmlHelper')->urlEventEdit($events[1]->uid), [
+            'referer' => '/', $data, 'series' => ['scope' => 'following'],
+        ]);
+        $this->assertResponseCode(302);
+        foreach ($events as $index => $event) {
+            $this->assertSame($index === 0 ? '14:00:00' : '15:00:00', $table->get($event->uid)->uhrzeitstart->format('H:i:s'));
+        }
+    }
+
+    public function testSeriesNotificationsAreBundled(): void
+    {
+        $this->createSeriesThroughForm();
+        $table = $this->getTableLocator()->get('Events');
+        $events = $table->find()->where(['series_uid IS NOT' => null])->orderBy(['series_date' => 'ASC'])->all()->toList();
+        foreach ($events as $index => $event) {
+            $table->updateAll(['datumstart' => Date::now()->addDays($index + 1)], ['uid' => $event->uid]);
+        }
+        $data = $this->seriesEventData();
+        unset($data['datumstart']);
+        $data['uhrzeitstart'] = '15:00';
+        $data['renotify'] = '1';
+        $this->post(Configure::read('AppConfig.htmlHelper')->urlEventEdit($events[0]->uid), [
+            'referer' => '/', $data, 'series' => ['scope' => 'following'],
+        ]);
+        $this->assertResponseCode(302);
+        $this->runAndAssertQueue();
+        $this->assertMailCount(1);
+        $this->assertMailSentToAt(0, 'worknews-test@mailinator.com');
+        $this->assertMailContainsAt(0, 'hat folgende Termine geändert');
+        $this->assertMailContainsAt(0, Date::now()->addDays(3)->format('d.m.Y'));
+    }
+
+    public function testUncheckedRecurrencePreservesManualMultiDateCreation(): void
+    {
+        $this->loginAsOrga();
+        $settings = $this->seriesSettings();
+        $settings['enabled'] = '0';
+        $settings['end'] = '';
+        $this->post(Configure::read('AppConfig.htmlHelper')->urlEventNew(2), [
+            'referer' => '/', $this->seriesEventData(), ['datumstart' => '02.01.2041'], 'series' => $settings,
+        ]);
+        $this->assertResponseCode(302);
+        $table = $this->getTableLocator()->get('Events');
+        $this->assertSame(5, $table->find()->count());
+        $this->assertSame(0, $table->find()->where(['series_uid IS NOT' => null])->count());
+    }
+
+    public function testAdditionalManualDatesAreKeptWhenRepeating(): void
+    {
+        $this->loginAsOrga();
+        $this->post(Configure::read('AppConfig.htmlHelper')->urlEventNew(2), [
+            'referer' => '/', $this->seriesEventData(), ['datumstart' => '10.02.2041', 'uhrzeitstart' => '12:00'],
+            'series' => $this->seriesSettings(),
+        ]);
+        $this->assertResponseCode(302);
+        $table = $this->getTableLocator()->get('Events');
+        $this->assertSame(3, $table->find()->where(['series_uid IS NOT' => null])->count());
+        $manual = $table->find()->where(['datumstart' => '2041-02-10', 'series_uid IS' => null])->firstOrFail();
+        $this->assertSame('12:00:00', $manual->uhrzeitstart->format('H:i:s'));
+    }
+
+    public function testSeriesEndIsRequired(): void
+    {
+        $this->loginAsOrga();
+        $settings = $this->seriesSettings();
+        $settings['end'] = '';
+        $this->post(Configure::read('AppConfig.htmlHelper')->urlEventNew(2), [
+            'referer' => '/', $this->seriesEventData(), 'series' => $settings,
+        ]);
+        $this->assertResponseOk();
+        $this->assertResponseContains('gültiges Start- und Enddatum');
+        $this->assertSame(3, $this->getTableLocator()->get('Events')->find()->count());
+    }
+
+    public function testInvalidSeriesPreservesAdditionalManualDates(): void
+    {
+        $this->loginAsOrga();
+        $settings = $this->seriesSettings();
+        $settings['end'] = '';
+        $this->post(Configure::read('AppConfig.htmlHelper')->urlEventNew(2), [
+            'referer' => '/', $this->seriesEventData(), ['datumstart' => '10.02.2041', 'uhrzeitstart' => '12:00'], 'series' => $settings,
+        ]);
+        $this->assertResponseOk();
+        $this->assertResponseContains('10.02.2041');
+        $this->assertResponseContains('name="1[uhrzeitstart]"');
+        $this->assertResponseRegExp('/<input(?=[^>]*type="checkbox")(?=[^>]*name="series\[enabled\]")(?=[^>]*disabled="disabled")[^>]*>/');
+        $this->assertResponseContains('<span class="series-enabled-restriction"> (nur mit einem einzigen Ausgangstermin möglich)</span>');
+        $this->assertResponseNotContains('event-date-mode-hint');
+        $this->assertSame(3, $this->getTableLocator()->get('Events')->find()->count());
+    }
+
+    public function testSeriesDateCannotBeOmitted(): void
+    {
+        $this->loginAsOrga();
+        $data = $this->seriesEventData();
+        $data['datumstart'] = '';
+        foreach ([[], ['preview' => '1']] as $preview) {
+            $this->post(Configure::read('AppConfig.htmlHelper')->urlEventNew(2), [
+                'referer' => '/', $data, 'series' => $this->seriesSettings() + $preview,
+            ]);
+            $this->assertResponseOk();
+            $formDocument = new \DOMDocument();
+            $formDocument->loadHTML((string)$this->_response->getBody(), LIBXML_NOERROR | LIBXML_NOWARNING);
+            $formXpath = new \DOMXPath($formDocument);
+            $this->assertSame(1.0, $formXpath->evaluate('count(//input[@id="0-datumstart"]/following-sibling::*[contains(@class,"error-message") and contains(.,"Bitte trage ein Datum ein.")])'));
+            $this->assertSame(0.0, $formXpath->evaluate('count(//*[@id="event-series-preview"]//*[contains(@class,"error-message")])'));
+            $this->assertSame(3, $this->getTableLocator()->get('Events')->find()->count());
+        }
+    }
+
+    public function testSeriesWeekdaysErrorAppearsBelowCheckboxes(): void
+    {
+        $this->loginAsOrga();
+        foreach ([[], ['preview' => '1']] as $preview) {
+            $settings = array_replace($this->seriesSettings(), ['rhythm' => 'weekly-1', 'weekdays' => []], $preview);
+            $this->post(Configure::read('AppConfig.htmlHelper')->urlEventNew(2), [
+                'referer' => '/', $this->seriesEventData(), 'series' => $settings,
+            ]);
+            $this->assertResponseOk();
+            $formDocument = new \DOMDocument();
+            $formDocument->loadHTML((string)$this->_response->getBody(), LIBXML_NOERROR | LIBXML_NOWARNING);
+            $formXpath = new \DOMXPath($formDocument);
+            $this->assertSame(1.0, $formXpath->evaluate('count(//*[@id="series-weekdays-error" and not(@hidden) and contains(.,"Bitte wähle mindestens einen gültigen Wochentag.")]/preceding-sibling::div[contains(@class,"series-weekday-options") and @aria-invalid="true"])'));
+            $this->assertSame(0.0, $formXpath->evaluate('count(//*[@id="event-series-preview"]//*[contains(@class,"error-message")])'));
+            $this->assertSame(3, $this->getTableLocator()->get('Events')->find()->count());
+        }
+    }
+
+    public function testSeriesDeleteRequiresConfirmation(): void
+    {
+        $this->createSeriesThroughForm();
+        $table = $this->getTableLocator()->get('Events');
+        $event = $table->find()->where(['series_uid IS NOT' => null])->firstOrFail();
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlEventDelete($event->uid));
+        $this->assertResponseOk();
+        $this->assertResponseContains('Nur diesen Termin löschen');
+        $this->assertResponseContains('Diesen und alle zukünftigen Termine löschen');
+        $this->assertEquals(APP_ON, $table->get($event->uid)->status);
+    }
+
+    public function testDeleteOnlySelectedSeriesOccurrence(): void
+    {
+        $this->createSeriesThroughForm();
+        $table = $this->getTableLocator()->get('Events');
+        $events = $table->find()->where(['series_uid IS NOT' => null])->orderBy(['series_position' => 'ASC'])->all()->toList();
+        $this->post(Configure::read('AppConfig.htmlHelper')->urlEventDelete($events[1]->uid), ['scope' => 'single']);
+        $this->assertResponseCode(302);
+        foreach ($events as $index => $event) {
+            $this->assertEquals($index === 1 ? APP_DELETED : APP_ON, $table->get($event->uid)->status);
+        }
+    }
+
+    public function testDeleteFollowingOccurrencesKeepsPastAndOtherEvents(): void
+    {
+        $this->createSeriesThroughForm();
+        $table = $this->getTableLocator()->get('Events');
+        $events = $table->find()->where(['series_uid IS NOT' => null])->orderBy(['series_position' => 'ASC'])->all()->toList();
+        $table->updateAll(['datumstart' => '2020-01-01'], ['uid' => $events[0]->uid]);
+        $this->post(Configure::read('AppConfig.htmlHelper')->urlEventDelete($events[1]->uid), ['scope' => 'following']);
+        $this->assertResponseCode(302);
+        foreach ($events as $index => $event) {
+            $this->assertEquals($index === 0 ? APP_ON : APP_DELETED, $table->get($event->uid)->status);
+        }
+        $this->assertEquals(APP_ON, $table->get(6)->status);
+    }
+
+    public function testSeriesDeleteFailureRollsBackEverything(): void
+    {
+        $this->createSeriesThroughForm();
+        $table = $this->getTableLocator()->get('Events');
+        $events = $table->find()->where(['series_uid IS NOT' => null])->orderBy(['series_position' => 'ASC'])->all()->toList();
+        $this->failSeriesSave = true;
+        $this->post(Configure::read('AppConfig.htmlHelper')->urlEventDelete($events[0]->uid), ['scope' => 'following']);
+        $this->assertResponseOk();
+        foreach ($events as $event) {
+            $this->assertEquals(APP_ON, $table->get($event->uid)->status);
+        }
     }
 
     public function testAddEventValidations(): void
@@ -323,6 +752,7 @@ class EventsControllerTest extends AppTestCase
         $this->assertResponseContains('09:00 - 18:00 Uhr');
         $this->assertResponseContains('<td class="eventUid">6</td>');
         $this->assertResponseContains('<td class="eventUid">9</td>');
+        $this->assertResponseNotContains('event-series-indicator');
     }
 
     public function testAddDuplicateEventValidation(): void
