@@ -18,8 +18,7 @@ class EventSeries extends BaseMigration
 
         $this->table('events')
             ->addColumn('series_uid', 'string', ['limit' => 36, 'null' => true])
-            ->addColumn('series_position', 'integer', ['null' => true, 'signed' => false])
-            ->addIndex(['series_uid', 'series_position'], ['unique' => true])
+            ->addIndex(['series_uid', 'datumstart'])
             ->update();
     }
 }

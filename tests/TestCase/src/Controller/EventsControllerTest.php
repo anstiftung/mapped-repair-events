@@ -152,7 +152,7 @@ class EventsControllerTest extends AppTestCase
         ]);
         $this->assertResponseCode(302);
         $table = $this->getTableLocator()->get('Events');
-        $events = $table->find()->where(['series_uid IS NOT' => null])->orderBy(['series_position' => 'ASC'])->all()->toList();
+        $events = $table->find()->where(['series_uid IS NOT' => null])->orderBy(['datumstart' => 'ASC'])->all()->toList();
         $this->get(Configure::read('AppConfig.htmlHelper')->urlEventEdit($events[0]->uid));
         $this->assertResponseOk();
         $formDocument = new \DOMDocument();
@@ -291,7 +291,7 @@ class EventsControllerTest extends AppTestCase
     {
         $this->createSeriesThroughForm();
         $table = $this->getTableLocator()->get('Events');
-        $events = $table->find()->where(['series_uid IS NOT' => null])->orderBy(['series_position' => 'ASC'])->all()->toList();
+        $events = $table->find()->where(['series_uid IS NOT' => null])->orderBy(['datumstart' => 'ASC'])->all()->toList();
         $data = $this->seriesEventData();
         $data['datumstart'] = $events[1]->datumstart->format('d.m.Y');
         $data['uhrzeitstart'] = '15:00';
@@ -309,7 +309,7 @@ class EventsControllerTest extends AppTestCase
     {
         $this->createSeriesThroughForm();
         $table = $this->getTableLocator()->get('Events');
-        $events = $table->find()->where(['series_uid IS NOT' => null])->orderBy(['series_position' => 'ASC'])->all()->toList();
+        $events = $table->find()->where(['series_uid IS NOT' => null])->orderBy(['datumstart' => 'ASC'])->all()->toList();
         $table->updateAll(['datumstart' => '2020-01-01'], ['uid' => $events[0]->uid]);
         $data = $this->seriesEventData();
         $data['datumstart'] = $events[1]->datumstart->format('d.m.Y');
@@ -356,14 +356,13 @@ class EventsControllerTest extends AppTestCase
     {
         $this->createSeriesThroughForm();
         $table = $this->getTableLocator()->get('Events');
-        $events = $table->find()->where(['series_uid IS NOT' => null])->orderBy(['series_position' => 'ASC'])->all()->toList();
+        $events = $table->find()->where(['series_uid IS NOT' => null])->orderBy(['datumstart' => 'ASC'])->all()->toList();
         $series = $this->getTableLocator()->get('EventSeries');
         $originalSettings = $series->get($events[1]->series_uid)->get('settings');
         $data = $this->seriesEventData();
         $data['datumstart'] = '15.02.2041';
         $data['uhrzeitstart'] = '15:00';
         $data['series_uid'] = 'changed';
-        $data['series_position'] = 99;
         $this->post(Configure::read('AppConfig.htmlHelper')->urlEventEdit($events[1]->uid), [
             'referer' => '/', $data, 'series' => [
                 'enabled' => '1', 'scope' => 'following', 'change_rule' => '1', 'reset_overrides' => '1',
@@ -376,7 +375,6 @@ class EventsControllerTest extends AppTestCase
             $this->assertSame($index === 1 ? '15:00:00' : '14:00:00', $saved->uhrzeitstart->format('H:i:s'));
             $this->assertSame($index === 1 ? '2041-02-15' : $event->datumstart->format('Y-m-d'), $saved->datumstart->format('Y-m-d'));
             $this->assertSame($event->series_uid, $saved->series_uid);
-            $this->assertSame($event->series_position, $saved->series_position);
         }
         $this->assertSame(1, $series->find()->count());
         $this->assertSame($originalSettings, $series->get($events[1]->series_uid)->get('settings'));
@@ -387,7 +385,7 @@ class EventsControllerTest extends AppTestCase
     {
         $this->createSeriesThroughForm();
         $table = $this->getTableLocator()->get('Events');
-        $events = $table->find()->where(['series_uid IS NOT' => null])->orderBy(['series_position' => 'ASC'])->all()->toList();
+        $events = $table->find()->where(['series_uid IS NOT' => null])->orderBy(['datumstart' => 'ASC'])->all()->toList();
         foreach ($events as $index => $event) {
             $table->updateAll(['datumstart' => Date::now()->addDays($index + 1)], ['uid' => $event->uid]);
         }
@@ -520,7 +518,7 @@ class EventsControllerTest extends AppTestCase
     {
         $this->createSeriesThroughForm();
         $table = $this->getTableLocator()->get('Events');
-        $events = $table->find()->where(['series_uid IS NOT' => null])->orderBy(['series_position' => 'ASC'])->all()->toList();
+        $events = $table->find()->where(['series_uid IS NOT' => null])->orderBy(['datumstart' => 'ASC'])->all()->toList();
         $this->post(Configure::read('AppConfig.htmlHelper')->urlEventDelete($events[1]->uid), ['scope' => 'single']);
         $this->assertResponseCode(302);
         foreach ($events as $index => $event) {
@@ -532,7 +530,7 @@ class EventsControllerTest extends AppTestCase
     {
         $this->createSeriesThroughForm();
         $table = $this->getTableLocator()->get('Events');
-        $events = $table->find()->where(['series_uid IS NOT' => null])->orderBy(['series_position' => 'ASC'])->all()->toList();
+        $events = $table->find()->where(['series_uid IS NOT' => null])->orderBy(['datumstart' => 'ASC'])->all()->toList();
         $table->updateAll(['datumstart' => '2020-01-01'], ['uid' => $events[0]->uid]);
         $this->post(Configure::read('AppConfig.htmlHelper')->urlEventDelete($events[1]->uid), ['scope' => 'following']);
         $this->assertResponseCode(302);
@@ -542,11 +540,25 @@ class EventsControllerTest extends AppTestCase
         $this->assertEquals(APP_ON, $table->get(6)->status);
     }
 
+    public function testDeleteFollowingOccurrencesUsesCurrentDates(): void
+    {
+        $this->createSeriesThroughForm();
+        $table = $this->getTableLocator()->get('Events');
+        $events = $table->find()->where(['series_uid IS NOT' => null])->orderBy(['datumstart' => 'ASC'])->all()->toList();
+        $table->updateAll(['datumstart' => '2041-03-16'], ['uid' => $events[0]->uid]);
+        $table->updateAll(['datumstart' => '2041-02-01'], ['uid' => $events[2]->uid]);
+        $this->post(Configure::read('AppConfig.htmlHelper')->urlEventDelete($events[1]->uid), ['scope' => 'following']);
+        $this->assertResponseCode(302);
+        foreach ($events as $index => $event) {
+            $this->assertEquals($index === 2 ? APP_ON : APP_DELETED, $table->get($event->uid)->status);
+        }
+    }
+
     public function testSeriesDeleteFailureRollsBackEverything(): void
     {
         $this->createSeriesThroughForm();
         $table = $this->getTableLocator()->get('Events');
-        $events = $table->find()->where(['series_uid IS NOT' => null])->orderBy(['series_position' => 'ASC'])->all()->toList();
+        $events = $table->find()->where(['series_uid IS NOT' => null])->orderBy(['datumstart' => 'ASC'])->all()->toList();
         $this->failSeriesSave = true;
         $this->post(Configure::read('AppConfig.htmlHelper')->urlEventDelete($events[0]->uid), ['scope' => 'following']);
         $this->assertResponseOk();

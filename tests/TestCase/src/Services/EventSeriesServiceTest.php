@@ -79,17 +79,15 @@ class EventSeriesServiceTest extends AppTestCase
         $service->prepare($created[0], $this->data(), $this->settings(), 'Europe/Berlin');
     }
 
-    public function testCreationKeepsSeriesPositionsWithoutEditingFields(): void
+    public function testCreationDoesNotNeedPositionOrEditingFields(): void
     {
-        $created = $this->createSeries();
+        $this->createSeries();
         /** @var EventsTable $events */
         $events = $this->getTableLocator()->get('Events');
         $series = $this->getTableLocator()->get('EventSeries');
         self::assertFalse($events->getSchema()->hasColumn('series_date'));
         self::assertFalse($events->getSchema()->hasColumn('series_overrides'));
+        self::assertFalse($events->getSchema()->hasColumn('series_position'));
         self::assertFalse($series->getSchema()->hasColumn('parent_uid'));
-        foreach ($created as $position => $event) {
-            self::assertSame($position, $events->get($event->uid)->series_position);
-        }
     }
 }

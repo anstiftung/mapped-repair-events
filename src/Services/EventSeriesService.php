@@ -53,14 +53,14 @@ class EventSeriesService
             throw new InvalidArgumentException('Bitte wähle mindestens einen Termin aus.');
         }
         $result = [];
-        foreach ($dates as $position => $date) {
+        foreach ($dates as $date) {
             $row = $data;
             $row['datumstart'] = new DateTime($date);
             if (in_array($date, $excluded, true)) {
                 $row['status'] = APP_DELETED;
             }
             $event = $this->events->patchEntity(clone $original, $row);
-            $event->patch(['series_uid' => $series->get('uid'), 'series_position' => $position]);
+            $event->series_uid = $series->get('uid');
             $result[] = $event;
         }
         return ['events' => $result, 'series' => $series];

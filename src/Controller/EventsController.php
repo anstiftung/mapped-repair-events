@@ -373,7 +373,7 @@ class EventsController extends AppController
         } else {
             $conditions['OR'] = [
                 ['Events.uid' => $event->uid],
-                ['Events.series_position >=' => $event->series_position, 'Events.datumstart >=' => \Cake\I18n\Date::now()->format('Y-m-d')],
+                ['Events.datumstart >=' => max($event->datumstart->format('Y-m-d'), \Cake\I18n\Date::now()->format('Y-m-d'))],
             ];
         }
         /** @var list<Event> $events */
@@ -578,7 +578,7 @@ class EventsController extends AppController
                 }
                 $data = array_merge($baseData, $data);
                 $data['workshop_uid'] = $events[0]->workshop_uid;
-                unset($data['series_uid'], $data['series_position']);
+                unset($data['series_uid']);
                 if ($isEditMode && $patchedEvents !== []) {
                     continue;
                 }
@@ -710,7 +710,7 @@ class EventsController extends AppController
                         continue;
                     }
                     $extra = $this->normalizeSeriesData(array_replace($data, $extra));
-                    unset($extra['uid'], $extra['series_uid'], $extra['series_position']);
+                    unset($extra['uid'], $extra['series_uid']);
                     $extra['workshop_uid'] = $original->workshop_uid;
                     $plan['events'][] = $this->Event->patchEntity(clone $original, $extra);
                 }
