@@ -13,7 +13,7 @@ declare(strict_types=1);
           ['name' => 'workshop.name', 'label' => 'Rep-Ini'],
           ['name' => 'eventbeschreibung', 'label' => 'Beschrei-bung', 'tooltip' => true],
           ['name' => 'datumstart', 'label' => 'Datum', 'template' => 'Events/date', 'sortable' => true],
-          ['name' => 'series_uid', 'label' => 'Terminserie', 'template' => 'Events/series'],
+          ['name' => 'series_uid', 'label' => 'TS', 'template' => 'Events/series', 'class' => 'icon'],
           ['name' => 'ort', 'label' => 'Ort'],
           ['name' => 'province.name', 'label' => 'Bundesland'],
           ['name' => 'owner_user.name', 'label' => 'Owner', 'sortable' => false],

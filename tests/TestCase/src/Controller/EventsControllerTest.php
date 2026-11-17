@@ -179,8 +179,10 @@ class EventsControllerTest extends AppTestCase
         $document = new \DOMDocument();
         $document->loadHTML((string)$this->_response->getBody(), LIBXML_NOERROR | LIBXML_NOWARNING);
         $xpath = new \DOMXPath($document);
-        $this->assertSame('Datum', trim($xpath->evaluate('string(//th[text()="Terminserie"]/preceding-sibling::th[1])')));
-        $this->assertStringContainsString('sort=datumstart', $xpath->evaluate('string(//th[text()="Terminserie"]/preceding-sibling::th[1]/a/@href)'));
+        $this->assertSame('Datum', trim($xpath->evaluate('string(//th[text()="TS"]/preceding-sibling::th[1])')));
+        $this->assertStringContainsString('sort=datumstart', $xpath->evaluate('string(//th[text()="TS"]/preceding-sibling::th[1]/a/@href)'));
+        $this->assertSame('icon', $xpath->evaluate('string(//th[text()="TS"]/@class)'));
+        $this->assertSame(3.0, $xpath->evaluate('count(//td[@class="icon"]/i[contains(@class,"event-series-indicator")])'));
         $event = $this->getTableLocator()->get('Events')->find()->where(['series_uid IS NOT' => null])->firstOrFail();
         $this->assertSame(
             $event->datumstart->i18nFormat(Configure::read('DateFormat.de.DateLong2WithWeekday')) . ', 14:00 - 17:00 Uhr',

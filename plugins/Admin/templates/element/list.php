@@ -131,7 +131,7 @@ if ($showDeleteLink) {
             foreach ($fields as $field) {
 
                 if (isset($field['template'])) {
-                    echo '<th>' . (!empty($field['sortable'])
+                    echo '<th' . (!empty($field['class']) ? ' class="' . h($field['class']) . '"' : '') . '>' . (!empty($field['sortable'])
                         ? $this->Paginator->sort($field['name'], $field['label'])
                         : $field['label']) . '</th>';
                     continue;
@@ -209,7 +209,7 @@ if ($showDeleteLink) {
                 foreach ($fields as $field) {
 
                     if (isset($field['template'])) {
-                        echo '<td>';
+                        echo '<td' . (!empty($field['class']) ? ' class="' . h($field['class']) . '"' : '') . '>';
                         echo $this->element($field['template'], ['object' => $object]);
                         echo '</td>';
                         continue;
