@@ -456,9 +456,6 @@ class EventsController extends AppController
             ]
         )->first();
 
-        if (empty($event)) {
-            throw new NotFoundException;
-        }
         if (!$event instanceof Event) {
             throw new NotFoundException;
         }
