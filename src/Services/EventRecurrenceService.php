@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\View\Helper\MyTimeHelper;
 use DateTimeImmutable;
 use DateTimeZone;
 use Cake\I18n\DateTime;
@@ -20,7 +21,7 @@ class EventRecurrenceService
     public function description(array $settings): string
     {
         $settings = $this->normalizeRhythm($settings);
-        $weekdays = ['MO' => 'Montag', 'TU' => 'Dienstag', 'WE' => 'Mittwoch', 'TH' => 'Donnerstag', 'FR' => 'Freitag', 'SA' => 'Samstag', 'SU' => 'Sonntag'];
+        $weekdays = MyTimeHelper::getWeekdays();
         $interval = (int)($settings['interval'] ?? 1);
         if (($settings['frequency'] ?? 'monthly') === 'weekly') {
             $rhythm = $interval === 1 ? 'jede Woche' : 'jede ' . $interval . '. Woche';
@@ -55,7 +56,7 @@ class EventRecurrenceService
         if (!in_array($frequency, ['monthly', 'weekly'], true) || $interval === false || $interval < 1 || $interval > 52) {
             throw new InvalidArgumentException('Bitte wähle eine gültige Wiederholung und ein Intervall zwischen 1 und 52.');
         }
-        $weekdays = ['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU'];
+        $weekdays = array_keys(MyTimeHelper::getWeekdays());
         $selectedWeekdays = $settings['weekdays'] ?? [$settings['weekday'] ?? 'SA'];
         $days = [];
         if ($frequency === 'monthly') {

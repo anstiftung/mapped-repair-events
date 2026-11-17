@@ -53,6 +53,22 @@ class MyTimeHelper extends TimeHelper {
         return $months;
     }
 
+    /**
+     * @return array<string, string>
+     */
+    public static function getWeekdays(): array
+    {
+        return [
+            'MO' => 'Montag',
+            'TU' => 'Dienstag',
+            'WE' => 'Mittwoch',
+            'TH' => 'Donnerstag',
+            'FR' => 'Freitag',
+            'SA' => 'Samstag',
+            'SU' => 'Sonntag',
+        ];
+    }
+
     public function getLastDayOfGivenMonth(string $date): string
     {
         $timestamp = strtotime($date);

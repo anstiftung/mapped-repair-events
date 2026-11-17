@@ -15,7 +15,7 @@ if ($isEditMode) {
     return;
 }
 $this->Form->unlockField('series');
-$weekdays = ['MO' => 'Montag', 'TU' => 'Dienstag', 'WE' => 'Mittwoch', 'TH' => 'Donnerstag', 'FR' => 'Freitag', 'SA' => 'Samstag', 'SU' => 'Sonntag'];
+$weekdays = $this->Time->getWeekdays();
 $seed = $event->datumstart ?? Date::now();
 $defaultWeekday = 'SA';
 $settings = $seriesSettings + [
