@@ -160,6 +160,9 @@ class EventsControllerTest extends AppTestCase
         $formXpath = new \DOMXPath($formDocument);
         $this->assertSame('Dieser Termin ist Teil einer Terminserie: jede 2. Woche (Mittwoch und Donnerstag), bis 31.03.2041', $formXpath->evaluate('string(//input[@id="0-datumstart"]/following-sibling::p[@class="series-membership-hint"])'));
         $this->assertResponseNotContains('weiteren Terminen');
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlMyEvents());
+        $this->assertResponseOk();
+        $this->assertResponseContains('title="Dieser Termin ist Teil einer Terminserie: jede 2. Woche (Mittwoch und Donnerstag), bis 31.03.2041"');
     }
 
     public function testCompactSeriesForm(): void
@@ -236,6 +239,10 @@ class EventsControllerTest extends AppTestCase
         $this->assertResponseContains('Teil einer Terminserie');
         $this->assertSame(3, substr_count((string)$this->_response->getBody(), 'class="fa fa-repeat event-series-indicator"'));
         $this->assertResponseContains(' Uhr <i class="fa fa-repeat event-series-indicator"');
+        $formDocument = new \DOMDocument();
+        $formDocument->loadHTML((string)$this->_response->getBody(), LIBXML_NOERROR | LIBXML_NOWARNING);
+        $formXpath = new \DOMXPath($formDocument);
+        $this->assertSame(3.0, $formXpath->evaluate('count(//td[contains(.," Uhr")]/i[@class="fa fa-repeat event-series-indicator" and @title="Dieser Termin ist Teil einer Terminserie: jeden Monat (2. Samstag), bis 31.03.2041" and @aria-label=@title])'));
     }
 
     public function testSeriesPreviewDoesNotSave(): void

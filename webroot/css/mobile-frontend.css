@@ -422,6 +422,12 @@
         margin-bottom: 0;
     }
 
+    body.events .event-series-indicator {
+        display: block;
+        float: none;
+        margin: 0;
+        text-align: left;
+    }
     body.events #eventEditForm {
         width: 100%;
     }

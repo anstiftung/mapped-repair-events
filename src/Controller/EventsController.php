@@ -237,15 +237,27 @@ class EventsController extends AppController
         ]);
 
         $worknewsTable = $this->getTableLocator()->get('Worknews');
+        $seriesUids = [];
         foreach($workshops as $workshop) {
             $workshop->infoSheetCount = 0;
             $workshop->worknewsCount = $worknewsTable->getSubscribers($workshop->uid)->count();
             if (!empty($workshop->events)) {
                 foreach($workshop->events as $event) {
                     $workshop->infoSheetCount += count($event->info_sheets);
+                    if ($event->series_uid) {
+                        $seriesUids[$event->series_uid] = true;
+                    }
                 }
             }
         }
+        $seriesDescriptions = [];
+        if ($seriesUids !== []) {
+            $recurrenceService = new EventRecurrenceService();
+            foreach ($this->fetchTable('EventSeries')->find()->where(['uid IN' => array_keys($seriesUids)]) as $series) {
+                $seriesDescriptions[$series->get('uid')] = $recurrenceService->description($series->get('settings'));
+            }
+        }
+        $this->set('seriesDescriptions', $seriesDescriptions);
         $this->set('workshops', $workshops);
 
         $metaTags = [

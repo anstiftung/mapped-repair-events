@@ -1024,6 +1024,13 @@ body.users .profile .input select {
   margin-top: -1px;
   margin-right: 5px;
 }
+body.events .event-series-indicator {
+    float: right;
+    margin: 0 0 0 12px;
+    padding: 0;
+    font-size: inherit;
+    line-height: inherit;
+}
 body.events .ajaxLoader {
     float: right;
     margin-left: 10px;

@@ -158,9 +158,13 @@ if (Configure::read('AppConfig.statisticsEnabled')) {
                                 <td><?php
                                    echo $event->datumstart->i18nFormat(Configure::read('DateFormat.de.DateLong2WithWeekday')) . ', ';
                                    echo $event->uhrzeitstart->i18nFormat(Configure::read('DateFormat.de.TimeShort')) . ' - ' . $event->uhrzeitend->i18nFormat(Configure::read('DateFormat.de.TimeShort')) . ' Uhr';
-                                                                     if (!empty($event->series_uid)) {
-                                                                           echo ' <i class="fa fa-repeat event-series-indicator" title="Teil einer Terminserie" aria-label="Terminserie"></i>';
-                                                                     }
+                                   if (!empty($event->series_uid)) {
+                                       $seriesHint = 'Dieser Termin ist Teil einer Terminserie';
+                                       if (isset($seriesDescriptions[$event->series_uid])) {
+                                           $seriesHint .= ': ' . $seriesDescriptions[$event->series_uid];
+                                       }
+                                       echo ' <i class="fa fa-repeat event-series-indicator" title="' . h($seriesHint) . '" aria-label="' . h($seriesHint) . '"></i>';
+                                   }
                                  ?></td>
                                 <td><?php echo $event->ort . ', ' . $event->strasse; ?></td>
                                 <td><?php
