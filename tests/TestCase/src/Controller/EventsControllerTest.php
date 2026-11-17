@@ -545,16 +545,40 @@ class EventsControllerTest extends AppTestCase
         }
     }
 
-    public function testSeriesDeleteRequiresConfirmation(): void
+    public function testSeriesDeleteGetRedirectsWithoutDeleting(): void
     {
         $this->createSeriesThroughForm();
         $table = $this->getTableLocator()->get('Events');
         $event = $table->find()->where(['series_uid IS NOT' => null])->firstOrFail();
         $this->get(Configure::read('AppConfig.htmlHelper')->urlEventDelete($event->uid));
-        $this->assertResponseOk();
-        $this->assertResponseContains('Nur diesen Termin löschen');
-        $this->assertResponseContains('Alle Termine dieser Serie löschen');
+        $this->assertRedirect(Configure::read('AppConfig.htmlHelper')->urlMyEvents());
         $this->assertEquals(APP_ON, $table->get($event->uid)->status);
+    }
+
+    public function testMyEventsRendersSeriesDeleteFormsForPopup(): void
+    {
+        $this->createSeriesThroughForm();
+        $this->get(Configure::read('AppConfig.htmlHelper')->urlMyEvents());
+        $this->assertResponseOk();
+        $document = new \DOMDocument();
+        $document->loadHTML((string)$this->_response->getBody(), LIBXML_NOERROR | LIBXML_NOWARNING);
+        $xpath = new \DOMXPath($document);
+        $this->assertSame(3.0, $xpath->evaluate('count(//form[@class="event-series-delete-form" and @method="post"])'));
+        $this->assertSame(3.0, $xpath->evaluate('count(//form[@class="event-series-delete-form"]/input[@name="scope" and @value="single"])'));
+        $this->assertSame(3.0, $xpath->evaluate('count(//form[@class="event-series-delete-form"]//a[@class="delete-event" and @data-event-series="1"])'));
+        $this->assertSame(0.0, $xpath->evaluate('count(//form[@class="event-series-delete-form"]//a[@data-event-series="0"])'));
+    }
+
+    public function testSeriesDeleteRequiresExplicitValidScope(): void
+    {
+        $this->createSeriesThroughForm();
+        $table = $this->getTableLocator()->get('Events');
+        $event = $table->find()->where(['series_uid IS NOT' => null])->firstOrFail();
+        foreach ([[], ['scope' => 'invalid'], ['scope' => ['all']]] as $data) {
+            $this->post(Configure::read('AppConfig.htmlHelper')->urlEventDelete($event->uid), $data);
+            $this->assertRedirect(Configure::read('AppConfig.htmlHelper')->urlMyEvents());
+            $this->assertSame(3, $table->find()->where(['series_uid IS NOT' => null, 'status' => APP_ON])->count());
+        }
     }
 
     public function testDeleteOnlySelectedSeriesOccurrence(): void
@@ -608,7 +632,7 @@ class EventsControllerTest extends AppTestCase
         $events = $table->find()->where(['series_uid IS NOT' => null])->orderBy(['datumstart' => 'ASC'])->all()->toList();
         $this->failSeriesSave = true;
         $this->post(Configure::read('AppConfig.htmlHelper')->urlEventDelete($events[0]->uid), ['scope' => 'all']);
-        $this->assertResponseOk();
+        $this->assertRedirect(Configure::read('AppConfig.htmlHelper')->urlMyEvents());
         foreach ($events as $event) {
             $this->assertEquals(APP_ON, $table->get($event->uid)->status);
         }

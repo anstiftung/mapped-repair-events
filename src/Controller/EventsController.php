@@ -363,15 +363,14 @@ class EventsController extends AppController
 
     private function deleteSeriesOccurrence(Event $event): Response
     {
-        $this->set('event', $event);
-        $this->set('metaTags', ['title' => 'Serientermin löschen']);
+        $redirectUrl = Configure::read('AppConfig.htmlHelper')->urlMyEvents();
         if (!$this->request->is('post')) {
-            return $this->render('delete');
+            return $this->redirect($redirectUrl);
         }
-        $scope = (string)$this->request->getData('scope', 'single');
+        $scope = $this->request->getData('scope');
         if (!in_array($scope, ['single', 'all'], true)) {
             $this->AppFlash->setFlashError('Bitte wähle, welche Termine gelöscht werden sollen.');
-            return $this->render('delete');
+            return $this->redirect($redirectUrl);
         }
         $conditions = [
             'Events.series_uid' => $event->series_uid,
@@ -399,11 +398,11 @@ class EventsController extends AppController
             });
         } catch (PersistenceFailedException) {
             $this->AppFlash->setFlashError('Die Termine konnten nicht gelöscht werden. Es wurde kein Termin gelöscht.');
-            return $this->render('delete');
+            return $this->redirect($redirectUrl);
         }
         $this->notifySeriesChanges($event, $events, $changes);
         $this->AppFlash->setFlashMessage(count($events) . ' Termine erfolgreich gelöscht.');
-        return $this->redirect(Configure::read('AppConfig.htmlHelper')->urlMyEvents());
+        return $this->redirect($redirectUrl);
     }
 
     public function add(int $preselectedWorkshopUid): ?Response

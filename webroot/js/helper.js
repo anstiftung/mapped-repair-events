@@ -989,11 +989,35 @@ MappedRepairEvents.Helper = {
 
     bindDeleteEventButton : function() {
 
-        $('a.delete-event').on('click', function() {
-            var message = 'Soll dieser Termin wirklich gelöscht werden?<br />Dies kann nicht rückgängig gemacht werden!';
+        $('a.delete-event').on('click', function(event) {
+            event.preventDefault();
+            var message = 'Soll dieser Termin wirklich gelöscht werden?<br />Achtung: Das Löschen kann nicht rückgängig gemacht werden!';
             var eventUid = $(this).data('event-uid');
             if ($(this).data('event-series') === 1) {
-                document.location.href = '/termine/delete/' + eventUid;
+                var form = $(this).closest('form')[0];
+                Swal.fire({
+                    ...MappedRepairEvents.Helper.getSwalDefaultProps(),
+                    title: 'Termin oder komplette Terminserie löschen?',
+                    text: 'Achtung: Das Löschen kann nicht rückgängig gemacht werden.',
+                    showDenyButton: true,
+                    showCancelButton: true,
+                    showCloseButton: false,
+                    confirmButtonText: 'Gesamte Terminserie löschen',
+                    denyButtonText: 'Nur diesen Termin löschen',
+                    cancelButtonText: 'Abbrechen',
+                    focusConfirm: false,
+                    focusCancel: true,
+                    customClass: {
+                        popup: 'event-series-delete-popup',
+                        confirmButton: 'event-delete-button',
+                        denyButton: 'event-delete-button',
+                    },
+                }).then(function(result) {
+                    if (result.isConfirmed || result.isDenied) {
+                        form.elements.scope.value = result.isConfirmed ? 'all' : 'single';
+                        form.requestSubmit();
+                    }
+                });
                 return;
             }
             Swal.fire({

@@ -77,6 +77,12 @@ body.users.login #ViewsWrapper button[type="submit"] {
 .swal2-styled.swal2-confirm {
     background-color: var(--theme-color-a) ! important;
 }
+.swal2-popup .swal2-styled.event-delete-button {
+    background-color: #b42318 !important;
+}
+.event-series-delete-popup .swal2-title {
+    line-height: 1.2;
+}
 .swal2-popup .swal2-close {
     position: absolute;
     top: 0;
