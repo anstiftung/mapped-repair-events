@@ -45,7 +45,7 @@ class EventSeriesService
         $rule = $this->rule($settings);
         $dates = (new EventRecurrenceService())->dates($rule, $timezone);
         $series = $this->series->newEntity([
-            'uid' => Text::uuid(), 'workshop_uid' => $original->workshop_uid,
+            'uid' => Text::uuid(),
             'settings' => $rule, 'timezone' => $timezone,
         ]);
         $excluded = $this->excluded($settings, $dates);

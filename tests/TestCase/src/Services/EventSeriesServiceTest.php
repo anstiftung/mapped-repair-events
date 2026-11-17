@@ -89,5 +89,6 @@ class EventSeriesServiceTest extends AppTestCase
         self::assertFalse($events->getSchema()->hasColumn('series_overrides'));
         self::assertFalse($events->getSchema()->hasColumn('series_position'));
         self::assertFalse($series->getSchema()->hasColumn('parent_uid'));
+        self::assertFalse($series->getSchema()->hasColumn('workshop_uid'));
     }
 }
