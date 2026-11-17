@@ -208,7 +208,7 @@ $this->element('addScript', ['script' =>
             echo '</fieldset>';
             echo '<fieldset class="event-form-group"><legend>Veröffentlichung</legend>';
 
-            echo $this->Form->control($i.'.status', ['type' => 'select', 'options' => $loggedUser?->isAdmin() ? Configure::read('AppConfig.status') : Configure::read('AppConfig.status2')]).'<br />';
+            echo $this->Form->control($i.'.status', ['type' => 'select', 'options' => Configure::read('AppConfig.status2')]).'<br />';
 
             if ($isEditMode && $worknewsCount > 0) {
                 if (!$eventStartInLessThan7Days) {
