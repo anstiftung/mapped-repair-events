@@ -23,6 +23,7 @@
 #eventEditForm .event-location-actions .ajaxLoader { flex: 0 0 auto; float: none; margin: 0; }
 #eventEditForm > .event-form-group > .date-time-wrapper { margin-bottom: 0; }
 #eventEditForm .date-time-wrapper .input.text > .error-message { clear: both; width: max-content; max-width: calc(100vw - 32px - var(--event-input-offset)); margin: 4px 0 0 var(--event-input-offset); }
+#eventEditForm .date-time-wrapper .series-membership-hint { clear: both; width: max-content; max-width: calc(100vw - 32px - var(--event-input-offset)); margin: 4px 0 8px var(--event-input-offset); font-size: 13px; line-height: 1.5; }
 #eventEditForm .add-date-button,
 #eventEditForm .remove-date-button {
     display: inline-flex;

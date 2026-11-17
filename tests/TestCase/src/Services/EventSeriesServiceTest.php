@@ -8,6 +8,7 @@ use App\Model\Table\EventsTable;
 use App\Services\EventSeriesService;
 use App\Test\TestCase\AppTestCase;
 use Cake\I18n\DateTime;
+use InvalidArgumentException;
 
 class EventSeriesServiceTest extends AppTestCase
 {
@@ -67,79 +68,28 @@ class EventSeriesServiceTest extends AppTestCase
         self::assertCount(1, array_unique(array_map(static fn(Event $event): string => $event->series_uid, $events)));
     }
 
-    public function testBulkEditPreservesIdsAndIndividualExceptions(): void
+    public function testRejectsEditingExistingSeries(): void
     {
         $created = $this->createSeries();
         /** @var EventsTable $events */
         $events = $this->getTableLocator()->get('Events');
         $service = new EventSeriesService($events, $this->getTableLocator()->get('EventSeries'));
-        $exception = $events->get($created[1]->uid, contain: ['Categories']);
-        $exceptionData = $this->data();
-        $exceptionData['datumstart'] = $exception->datumstart;
-        $exceptionData['uhrzeitstart'] = new DateTime('15:00');
-        $single = $service->prepare($exception, $exceptionData, ['scope' => 'single'], 'Europe/Berlin');
-        self::assertContains('uhrzeitstart', $single['events'][0]->series_overrides);
-        $events->saveOrFail($single['events'][0]);
-        $original = $events->get($created[0]->uid, contain: ['Categories']);
-        $data = $this->data();
-        $data['datumstart'] = $original->datumstart;
-        $data['uhrzeitstart'] = new DateTime('16:00');
-        $plan = $service->prepare($original, $data, ['scope' => 'following'], 'Europe/Berlin');
-        self::assertCount(3, $plan['events']);
-        foreach ($plan['events'] as $index => $event) {
-            self::assertFalse($event->hasErrors(), json_encode($event->getErrors(), JSON_THROW_ON_ERROR));
-            self::assertSame($created[$index]->uid, $event->uid);
-            self::assertSame($index === 1 ? '15:00:00' : '16:00:00', $event->uhrzeitstart->format('H:i:s'));
-        }
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Eine bestehende Terminserie kann nicht geändert werden.');
+        $service->prepare($created[0], $this->data(), $this->settings(), 'Europe/Berlin');
     }
 
-    public function testRuleChangePreservesIdsAndExcludedSlots(): void
-    {
-        $created = $this->createSeries();
-        /** @var EventsTable $events */
-        $events = $this->getTableLocator()->get('Events');
-        $events->updateAll(['status' => APP_DELETED], ['uid' => $created[1]->uid]);
-        $original = $events->get($created[0]->uid, contain: ['Categories']);
-        $settings = $this->settings();
-        $settings['positions'] = ['-1'];
-        $settings['scope'] = 'following';
-        $settings['change_rule'] = true;
-        $data = $this->data();
-        $data['datumstart'] = $original->datumstart;
-        $plan = (new EventSeriesService($events, $this->getTableLocator()->get('EventSeries')))
-            ->prepare($original, $data, $settings, 'Europe/Berlin');
-        self::assertNotSame($original->series_uid, $plan['series']->get('uid'));
-        foreach ($plan['events'] as $index => $event) {
-            self::assertFalse($event->hasErrors(), json_encode($event->getErrors(), JSON_THROW_ON_ERROR));
-            self::assertSame($created[$index]->uid, $event->uid);
-        }
-        self::assertEquals(APP_DELETED, $plan['events'][1]->status);
-        self::assertSame('2041-01-26', $plan['events'][0]->datumstart->format('Y-m-d'));
-    }
-
-    public function testShorteningAndExtendingDoesNotRestoreRemovedOccurrence(): void
+    public function testCreationKeepsSeriesPositionsWithoutEditingFields(): void
     {
         $created = $this->createSeries();
         /** @var EventsTable $events */
         $events = $this->getTableLocator()->get('Events');
         $series = $this->getTableLocator()->get('EventSeries');
-        $service = new EventSeriesService($events, $series);
-        $data = $this->data();
-        foreach (['2041-02-28', '2041-03-31'] as $end) {
-            $original = $events->get($created[0]->uid, contain: ['Categories']);
-            $data['datumstart'] = $original->datumstart;
-            $settings = $this->settings();
-            $settings['end'] = $end;
-            $settings['scope'] = 'following';
-            $settings['change_rule'] = true;
-            $plan = $service->prepare($original, $data, $settings, 'Europe/Berlin');
-            $series->saveOrFail($plan['series']);
-            foreach ($plan['events'] as $event) {
-                $events->saveOrFail($event);
-            }
-            self::assertCount(3, $plan['events']);
-            self::assertEquals(APP_DELETED, $events->get($created[2]->uid)->status);
-            self::assertSame($plan['series']->get('uid'), $events->get($created[2]->uid)->series_uid);
+        self::assertFalse($events->getSchema()->hasColumn('series_date'));
+        self::assertFalse($events->getSchema()->hasColumn('series_overrides'));
+        self::assertFalse($series->getSchema()->hasColumn('parent_uid'));
+        foreach ($created as $position => $event) {
+            self::assertSame($position, $events->get($event->uid)->series_position);
         }
     }
 }

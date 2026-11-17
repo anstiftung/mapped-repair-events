@@ -25,9 +25,6 @@ class EventsTable extends AppRootTable
 
     public string $name_de = 'Termin';
 
-    /** @var list<int> */
-    public array $seriesValidationUids = [];
-
     /**
      * @var string[]
      */
@@ -38,7 +35,6 @@ class EventsTable extends AppRootTable
     public function initialize(array $config): void
     {
         parent::initialize($config);
-        $this->getSchema()->setColumnType('series_overrides', 'json');
         $this->belongsTo('Workshops', [
             'foreignKey' => 'workshop_uid'
         ]);
@@ -192,10 +188,6 @@ class EventsTable extends AppRootTable
                 if (!empty($context['data']['uid'])) {
                     $conditions[$this->aliasField('uid !=')] = $context['data']['uid'];
                 }
-                if ($this->seriesValidationUids !== []) {
-                    $conditions[$this->aliasField('uid NOT IN')] = $this->seriesValidationUids;
-                }
-
                 $duplicateCount = $this->find('all', conditions: $conditions)->count();
 
                 return $duplicateCount === 0;

@@ -16,6 +16,33 @@ class EventRecurrenceService
 
     /**
      * @param array<string, mixed> $settings
+     */
+    public function description(array $settings): string
+    {
+        $settings = $this->normalizeRhythm($settings);
+        $weekdays = ['MO' => 'Montag', 'TU' => 'Dienstag', 'WE' => 'Mittwoch', 'TH' => 'Donnerstag', 'FR' => 'Freitag', 'SA' => 'Samstag', 'SU' => 'Sonntag'];
+        $interval = (int)($settings['interval'] ?? 1);
+        if (($settings['frequency'] ?? 'monthly') === 'weekly') {
+            $rhythm = $interval === 1 ? 'jede Woche' : 'jede ' . $interval . '. Woche';
+            $selectedWeekdays = $settings['weekdays'] ?? [$settings['weekday'] ?? 'SA'];
+            $days = array_values(array_intersect_key($weekdays, array_flip($selectedWeekdays)));
+            $lastDay = array_pop($days);
+            $detail = $days === [] ? $lastDay : implode(', ', $days) . ' und ' . $lastDay;
+        } else {
+            $rhythm = $interval === 1 ? 'jeden Monat' : 'jeden ' . $interval . '. Monat';
+            $rule = $settings['monthly_rules'][0] ?? [
+                'position' => $settings['positions'][0] ?? '1',
+                'weekday' => $settings['weekday'] ?? 'SA',
+            ];
+            $position = (int)$rule['position'] === -1 ? 'letzter' : $rule['position'] . '.';
+            $detail = $position . ' ' . $weekdays[$rule['weekday']];
+        }
+        $end = $this->date((string)$settings['end'], new DateTimeZone('UTC'));
+        return $rhythm . ' (' . $detail . '), bis ' . $end->format('d.m.Y');
+    }
+
+    /**
+     * @param array<string, mixed> $settings
      * @return list<string>
      */
     public function dates(array $settings, string $timezone): array

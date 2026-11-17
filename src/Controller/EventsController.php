@@ -489,6 +489,11 @@ class EventsController extends AppController
         $this->set('editFormUrl', Configure::read('AppConfig.htmlHelper')->urlEventEdit($event->uid));
         $this->set('isDuplicateMode', false);
 
+        if ($event->series_uid) {
+            $series = $this->fetchTable('EventSeries')->get($event->series_uid);
+            $this->set('seriesDescription', (new EventRecurrenceService())->description($series->get('settings')));
+        }
+
         $worknewsTable = $this->getTableLocator()->get('Worknews');
         $this->set('worknewsCount', $worknewsTable->getSubscribers($event->workshop_uid)->count());
 
@@ -508,7 +513,7 @@ class EventsController extends AppController
         }
 
         // notify subscribers
-        if (isset($workshop) && $patchedEntity->renotify && !empty($patchedEntities['saved']) && empty($patchedEntities['seriesHandled'])) {
+        if (isset($workshop) && $patchedEntity->renotify && !empty($patchedEntities['saved'])) {
             $worknewsTable = $this->getTableLocator()->get('Worknews');
             $subscribers = $worknewsTable->getSubscribers($patchedEntity->workshop_uid);
             if ($subscribers->count() > 0) {
@@ -540,17 +545,7 @@ class EventsController extends AppController
 
         $this->set('uid', $events[0]->uid);
 
-        $seriesSettings = [];
-        if ($isEditMode && $events[0]->series_uid) {
-            $series = $this->fetchTable('EventSeries')->get($events[0]->series_uid);
-            $seriesSettings = $series->get('settings');
-            $seriesEvents = $this->Event->find()->where([
-                'series_uid' => $events[0]->series_uid,
-                'workshop_uid' => $events[0]->workshop_uid,
-            ])->orderBy(['series_position' => 'ASC'])->all()->toList();
-            $this->set('seriesEvents', $seriesEvents);
-        }
-        $this->set('seriesSettings', $seriesSettings);
+        $this->set('seriesSettings', []);
 
         $this->setReferer();
 
@@ -571,8 +566,8 @@ class EventsController extends AppController
             }
             $this->set('seriesSettings', $seriesData);
             $repeat = array_key_exists('enabled', $seriesData) ? !empty($seriesData['enabled']) : ($seriesData['mode'] ?? '') === 'series';
-            if ((!$isEditMode && $repeat) || ($isEditMode && $events[0]->series_uid)) {
-                return $this->saveSeries($events[0], $baseData, $seriesData, $isEditMode);
+            if (!$isEditMode && $repeat) {
+                return $this->saveSeries($events[0], $baseData, $seriesData);
             }
             foreach($requestData as $data) {
                 if (!is_array($data)) {
@@ -583,7 +578,7 @@ class EventsController extends AppController
                 }
                 $data = array_merge($baseData, $data);
                 $data['workshop_uid'] = $events[0]->workshop_uid;
-                unset($data['series_uid'], $data['series_date'], $data['series_position'], $data['series_overrides']);
+                unset($data['series_uid'], $data['series_position']);
                 if ($isEditMode && $patchedEvents !== []) {
                     continue;
                 }
@@ -684,18 +679,17 @@ class EventsController extends AppController
      * @param array<string, mixed> $settings
      * @return array<string, mixed>
      */
-    private function saveSeries(Event $original, array $data, array $settings, bool $isEditMode): array
+    private function saveSeries(Event $original, array $data, array $settings): array
     {
         $eventSeriesTable = $this->fetchTable('EventSeries');
         $service = new EventSeriesService($this->Event, $eventSeriesTable);
         $events = [$original];
         $error = null;
         try {
-            $dates = [];
-            if (!$isEditMode && array_key_exists('enabled', $settings) && empty($data['datumstart'])) {
+            if (array_key_exists('enabled', $settings) && empty($data['datumstart'])) {
                 throw new InvalidArgumentException('Bitte trage ein Datum ein.');
             }
-            if (!$isEditMode && !empty($data['datumstart'])) {
+            if (!empty($data['datumstart'])) {
                 $settings['start'] = (new DateTime($data['datumstart']))->format('Y-m-d');
             }
             $seriesEnd = (string)($settings['end'] ?? '');
@@ -704,52 +698,41 @@ class EventsController extends AppController
                 $settings['end'] = $seriesEndDate->format('Y-m-d');
             }
             $this->set('seriesSettings', $settings);
-            if (!$isEditMode) {
-                $dates = (new EventRecurrenceService())->dates($settings, (string)Configure::read('App.defaultTimezone'));
-            }
+            $dates = (new EventRecurrenceService())->dates($settings, (string)Configure::read('App.defaultTimezone'));
             if (!empty($settings['preview'])) {
-                if ($isEditMode) {
-                    $dates = (new EventRecurrenceService())->dates($settings, (string)Configure::read('App.defaultTimezone'));
-                    $cutoff = max(\Cake\I18n\Date::now()->format('Y-m-d'), $original->series_date->format('Y-m-d'));
-                    $dates = array_values(array_filter($dates, static fn(string $date): bool => $date >= $cutoff));
-                }
                 $this->set('seriesPreview', $dates);
-                $events = $this->seriesFormEvents($original, $data, $isEditMode);
+                $events = $this->seriesFormEvents($original, $data);
             } else {
                 $data = $this->normalizeSeriesData($data);
                 $plan = $service->prepare($original, $data, $settings, (string)Configure::read('App.defaultTimezone'));
-                if (!$isEditMode) {
-                    foreach ($this->request->getData() as $index => $extra) {
-                        if (!is_numeric($index) || (int)$index === 0 || !is_array($extra) || !array_key_exists('datumstart', $extra)) {
-                            continue;
-                        }
-                        $extra = $this->normalizeSeriesData(array_replace($data, $extra));
-                        unset($extra['uid'], $extra['series_uid'], $extra['series_date'], $extra['series_position'], $extra['series_overrides']);
-                        $extra['workshop_uid'] = $original->workshop_uid;
-                        $plan['events'][] = $this->Event->patchEntity(clone $original, $extra);
+                foreach ($this->request->getData() as $index => $extra) {
+                    if (!is_numeric($index) || (int)$index === 0 || !is_array($extra) || !array_key_exists('datumstart', $extra)) {
+                        continue;
                     }
-                    $keys = [];
-                    foreach ($plan['events'] as $member) {
-                        if ((int)$member->status === APP_DELETED || $member->hasErrors()) {
-                            continue;
-                        }
-                        $key = implode('|', [(string)$member->datumstart, (string)$member->uhrzeitstart, (string)$member->uhrzeitend, $member->ort, $member->zip, $member->strasse]);
-                        if (isset($keys[$key])) {
-                            $member->setError('datumstart', 'Dieser Termin ist bereits in der Terminserie enthalten.');
-                        }
-                        $keys[$key] = true;
+                    $extra = $this->normalizeSeriesData(array_replace($data, $extra));
+                    unset($extra['uid'], $extra['series_uid'], $extra['series_position']);
+                    $extra['workshop_uid'] = $original->workshop_uid;
+                    $plan['events'][] = $this->Event->patchEntity(clone $original, $extra);
+                }
+                $keys = [];
+                foreach ($plan['events'] as $member) {
+                    if ((int)$member->status === APP_DELETED || $member->hasErrors()) {
+                        continue;
                     }
+                    $key = implode('|', [(string)$member->datumstart, (string)$member->uhrzeitstart, (string)$member->uhrzeitend, $member->ort, $member->zip, $member->strasse]);
+                    if (isset($keys[$key])) {
+                        $member->setError('datumstart', 'Dieser Termin ist bereits in der Terminserie enthalten.');
+                    }
+                    $keys[$key] = true;
                 }
                 $invalidEvents = array_filter($plan['events'], static fn(Event $event): bool => $event->hasErrors());
                 if ($invalidEvents !== []) {
-                    $events = $this->seriesFormEvents($original, $data, $isEditMode);
+                    $events = $this->seriesFormEvents($original, $data);
                     $events[0]->setErrors(reset($invalidEvents)->getErrors());
                     $error = 'Bitte korrigiere die markierten Felder. Es wurde kein Termin gespeichert.';
                 } else {
                     $this->Event->getConnection()->transactional(function () use ($plan, $eventSeriesTable): void {
-                        if ($plan['series'] !== null) {
-                            $eventSeriesTable->saveOrFail($plan['series']);
-                        }
+                        $eventSeriesTable->saveOrFail($plan['series']);
                         foreach ($plan['events'] as $event) {
                             $this->Event->saveOrFail($event);
                             if ((int)$event->status === APP_DELETED && $event->uid) {
@@ -760,18 +743,15 @@ class EventsController extends AppController
                     $count = count(array_filter($plan['events'], static fn(Event $event): bool => (int)$event->status !== APP_DELETED));
                     $this->AppFlash->setFlashMessage($count . ' Termine erfolgreich gespeichert.');
                     $redirect = $this->redirect($this->getPreparedReferer());
-                    if ($isEditMode && !empty($data['renotify'])) {
-                        $this->notifySeriesChanges($original, $plan['events'], $plan['changes']);
-                    }
-                    return ['events' => $plan['events'], 'saved' => true, 'seriesHandled' => true];
+                    return ['events' => $plan['events'], 'saved' => true];
                 }
             }
         } catch (InvalidArgumentException|PersistenceFailedException $exception) {
             $error = $exception instanceof InvalidArgumentException
                 ? $exception->getMessage()
                 : 'Die Termine konnten nicht gespeichert werden. Es wurde kein Termin gespeichert.';
-            $events = $this->seriesFormEvents($original, $data, $isEditMode);
-            if (!$isEditMode && empty($data['datumstart']) && $error === 'Bitte trage ein Datum ein.') {
+            $events = $this->seriesFormEvents($original, $data);
+            if (empty($data['datumstart']) && $error === 'Bitte trage ein Datum ein.') {
                 $events[0]->setError('datumstart', ['required' => $error]);
                 $error = null;
             }
@@ -780,7 +760,8 @@ class EventsController extends AppController
             $this->AppFlash->setFlashError($error);
             $this->set('seriesError', $error);
         }
-        $this->set(compact('events', 'isEditMode'));
+        $this->set('events', $events);
+        $this->set('isEditMode', false);
         $render = $this->render('edit');
         return ['events' => $events, 'saved' => false];
     }
@@ -814,14 +795,12 @@ class EventsController extends AppController
      * @param array<string, mixed> $data
      * @return list<Event>
      */
-    private function seriesFormEvents(Event $original, array $data, bool $isEditMode): array
+    private function seriesFormEvents(Event $original, array $data): array
     {
         $events = [$this->Event->patchEntity(clone $original, $data, ['validate' => false])];
-        if (!$isEditMode) {
-            foreach ($this->request->getData() as $index => $extra) {
-                if (is_numeric($index) && (int)$index > 0 && is_array($extra) && array_key_exists('datumstart', $extra)) {
-                    $events[] = $this->Event->patchEntity(clone $original, array_replace($data, $extra), ['validate' => false]);
-                }
+        foreach ($this->request->getData() as $index => $extra) {
+            if (is_numeric($index) && (int)$index > 0 && is_array($extra) && array_key_exists('datumstart', $extra)) {
+                $events[] = $this->Event->patchEntity(clone $original, array_replace($data, $extra), ['validate' => false]);
             }
         }
         return $events;

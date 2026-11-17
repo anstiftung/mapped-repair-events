@@ -110,12 +110,20 @@ $this->element('addScript', ['script' =>
                 $datumstartValue = ($postedDatumstart !== null && $postedDatumstart !== '')
                     ? $postedDatumstart
                     : (!empty($event->datumstart) ? $event->datumstart->i18nFormat(Configure::read('DateFormat.de.DateLong2')) : '');
-                echo $this->Form->control($i.'.datumstart',  [
+                $dateControlOptions = [
                     'class' => 'datepicker-input',
                     'type' => 'text',
                     'label' => __('Add Event: Start Date') . ' #' . $indexForLabel,
                     'value' => $datumstartValue,
-                ]);
+                ];
+                if ($isEditMode && $event->series_uid) {
+                    $seriesHint = '<p class="series-membership-hint">' . h('Dieser Termin gehört zu einer Terminserie: ' . $seriesDescription) . '</p>';
+                    $dateControlOptions['templates'] = [
+                        'inputContainer' => '<div class="input {{type}}{{required}}">{{content}}' . $seriesHint . '</div>',
+                        'inputContainerError' => '<div class="input {{type}}{{required}} error">{{content}}{{error}}' . $seriesHint . '</div>',
+                    ];
+                }
+                echo $this->Form->control($i.'.datumstart', $dateControlOptions);
 
                 echo '<div class="time-fields-wrapper">';
                     echo $this->Form->control($i.'.uhrzeitstart', ['label' => __('Add Event: Start Time'), 'step' => 0]);
@@ -154,7 +162,6 @@ $this->element('addScript', ['script' =>
                 'event' => $events[0],
                 'isEditMode' => $isEditMode,
                 'seriesSettings' => $seriesSettings ?? [],
-                'seriesEvents' => $seriesEvents ?? [],
                 'seriesPreview' => $seriesPreview ?? null,
                 'seriesError' => $seriesError ?? null,
                 'hasMultipleDates' => count($events) > 1,
@@ -204,9 +211,7 @@ $this->element('addScript', ['script' =>
             echo $this->Form->control($i.'.status', ['type' => 'select', 'options' => $loggedUser?->isAdmin() ? Configure::read('AppConfig.status') : Configure::read('AppConfig.status2')]).'<br />';
 
             if ($isEditMode && $worknewsCount > 0) {
-                if ($event->series_uid) {
-                    $worknewsString = 'Betroffene Termin-Abonnenten informieren (Termine innerhalb der nächsten 7 Tage).';
-                } elseif (!$eventStartInLessThan7Days) {
+                if (!$eventStartInLessThan7Days) {
                     $worknewsString =  'Das Informieren der Termin-Abonennten (' . $worknewsCount . ') ist nicht möglich, da der Termin in mehr als 7 Tagen stattfindet.';
                 } else {
                     $worknewsString = 'Ich habe diesen Termin überarbeitet und möchte, dass alle ' . $worknewsCount . ' Termin-Abonnenten darüber nochmals informiert werden.';
@@ -214,7 +219,7 @@ $this->element('addScript', ['script' =>
                         $worknewsString = 'Ich habe diesen Termin überarbeitet und möchte, dass ' . $worknewsCount . ' Termin-Abonnent darüber nochmals informiert wird.';
                     }
                 }
-                echo $this->Form->control($i.'.renotify', ['type' => 'checkbox', 'label' => $worknewsString, 'disabled' => !$eventStartInLessThan7Days && !$event->series_uid]).'<br />';
+                echo $this->Form->control($i.'.renotify', ['type' => 'checkbox', 'label' => $worknewsString, 'disabled' => !$eventStartInLessThan7Days]).'<br />';
             }
             echo '</fieldset>';
 

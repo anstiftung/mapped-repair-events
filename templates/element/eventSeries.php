@@ -7,17 +7,19 @@ use Cake\I18n\Date;
  * @var array<string, mixed> $seriesSettings
  * @var bool $isEditMode
  * @var \App\Model\Entity\Event $event
- * @var list<\App\Model\Entity\Event> $seriesEvents
  * @var list<string>|null $seriesPreview
  * @var string|null $seriesError
  * @var bool $hasMultipleDates
  */
+if ($isEditMode) {
+    return;
+}
 $this->Form->unlockField('series');
 $weekdays = ['MO' => 'Montag', 'TU' => 'Dienstag', 'WE' => 'Mittwoch', 'TH' => 'Donnerstag', 'FR' => 'Freitag', 'SA' => 'Samstag', 'SU' => 'Sonntag'];
 $seed = $event->datumstart ?? Date::now();
 $defaultWeekday = 'SA';
 $settings = $seriesSettings + [
-    'enabled' => ($seriesSettings['mode'] ?? '') === 'series', 'scope' => 'single', 'frequency' => 'monthly',
+    'enabled' => ($seriesSettings['mode'] ?? '') === 'series', 'frequency' => 'monthly',
     'interval' => 1, 'positions' => ['1'], 'weekday' => $defaultWeekday,
     'start' => $seed->format('Y-m-d'), 'end' => Date::now()->addYears(1)->format('Y-m-d'),
     'excluded' => [],
@@ -33,10 +35,6 @@ if (!is_array($monthlyRules) || $monthlyRules === []) {
 }
 $monthlyRule = array_values($monthlyRules)[0];
 $monthlyRule = is_array($monthlyRule) ? $monthlyRule : [];
-$isSeries = $isEditMode && !empty($event->series_uid);
-if ($isEditMode && !$isSeries) {
-    return;
-}
 $rhythms = [
     'Monatlich' => [
         'monthly-1' => 'Jeden Monat',
@@ -54,29 +52,8 @@ $seriesEndDate = \DateTimeImmutable::createFromFormat('!Y-m-d', $seriesEnd);
 if ($seriesEndDate !== false && $seriesEndDate->format('Y-m-d') === $seriesEnd) {
     $seriesEnd = $seriesEndDate->format('d.m.Y');
 }
-$counts = ['following' => 0];
-foreach ($seriesEvents as $member) {
-    if ((int)$member->status !== APP_DELETED) {
-        if ($member->series_position >= $event->series_position && $member->datumstart->format('Y-m-d') >= date('Y-m-d')) {
-            $counts['following']++;
-        }
-    }
-}
 ?>
-<section class="event-series" data-existing-series="<?= $isSeries ? '1' : '0' ?>" data-configured="<?= $seriesSettings !== [] ? '1' : '0' ?>">
-    <?php if ($isSeries): ?>
-        <?= $this->Form->control('series.scope', [
-            'type' => 'radio', 'label' => 'Wie möchtest du die Änderung übernehmen?', 'value' => $settings['scope'],
-            'options' => [
-                'single' => 'Nur diesen Termin bearbeiten',
-                'following' => 'Diesen und alle zukünftigen Termine bearbeiten (' . $counts['following'] . ')',
-            ],
-        ]) ?>
-        <div class="series-bulk-options" hidden>
-            <?= $this->Form->control('series.change_rule', ['type' => 'checkbox', 'label' => 'Wiederholung oder Zeitraum ändern', 'checked' => !empty($settings['change_rule'])]) ?>
-            <?= $this->Form->control('series.reset_overrides', ['type' => 'checkbox', 'label' => 'Individuelle Abweichungen für die geänderten Felder zurücksetzen', 'checked' => !empty($settings['reset_overrides'])]) ?>
-        </div>
-    <?php else: ?>
+<section class="event-series" data-configured="<?= $seriesSettings !== [] ? '1' : '0' ?>">
         <?= $this->Form->control('series.enabled', [
             'type' => 'checkbox',
             'label' => [
@@ -86,11 +63,7 @@ foreach ($seriesEvents as $member) {
             'checked' => !$hasMultipleDates && !empty($settings['enabled']),
             'disabled' => $hasMultipleDates,
         ]) ?>
-    <?php endif; ?>
     <fieldset class="series-rule-fields" hidden>
-        <?php if ($isSeries): ?>
-            <?= $this->Form->control('series.start', ['type' => 'date', 'label' => 'Beginn', 'value' => $settings['start']]) ?>
-        <?php endif; ?>
         <?= $this->Form->control('series.rhythm', [
             'type' => 'select', 'data-minimum-results-for-search' => -1, 'label' => 'Wiederholung', 'value' => $rhythm,
             'options' => $rhythms,
@@ -132,27 +105,19 @@ foreach ($seriesEvents as $member) {
         <div id="event-series-preview" aria-live="polite" aria-busy="false">
             <?php if ($seriesError && $weekdayError === null): ?><p class="error-message"><?= h($seriesError) ?></p><?php endif; ?>
             <?php if ($seriesPreview !== null): ?>
+                <?php
+                $today = Date::now()->format('Y-m-d');
+                $selectedPreviewDates = array_filter($seriesPreview, static fn(string $date): bool => $date >= $today && !in_array($date, $settings['excluded'], true));
+                ?>
                 <h3>Terminvorschau</h3>
-                <p class="series-preview-description">Diese Terminserie enthält folgende <span class="series-preview-count"><?= count($seriesPreview) ?></span> Termine. Du kannst vor dem Speichern einzelne Termine wegklicken.</p>
+                <p class="series-preview-description">Diese Terminserie enthält folgende <span class="series-preview-count"><?= count($selectedPreviewDates) ?></span> Termine. Du kannst vor dem Speichern einzelne Termine wegklicken.</p>
                 <div class="series-preview-list">
                     <?php foreach ($seriesPreview as $date): ?>
                         <label class="series-preview-row">
-                            <input type="checkbox" class="series-include-date" data-date="<?= h($date) ?>" <?= in_array($date, $settings['excluded'], true) ? '' : 'checked' ?>>
+                            <input type="checkbox" class="series-include-date" data-date="<?= h($date) ?>" <?= in_array($date, $selectedPreviewDates, true) ? 'checked' : '' ?>>
                             <?= h((new Date($date))->i18nFormat('EEEE, dd.MM.yyyy')) ?>
                             <span class="series-preview-time"></span>
                         </label>
-                    <?php endforeach; ?>
-                </div>
-            <?php elseif ($isSeries): ?>
-                <h3>Termine der Serie</h3>
-                <div class="series-preview-list">
-                    <?php foreach ($seriesEvents as $member): ?>
-                        <?php if ((int)$member->status === APP_DELETED) { continue; } ?>
-                        <div class="series-preview-row" data-slot="<?= h($member->series_date->format('Y-m-d')) ?>">
-                            <?= h($member->datumstart->i18nFormat('EEEE, dd.MM.yyyy')) ?>
-                            <span><?= h($member->uhrzeitstart->format('H:i')) ?>–<?= h($member->uhrzeitend->format('H:i')) ?></span>
-                            <?php if ($member->series_overrides): ?><i class="fa fa-pencil" title="Individuelle Abweichung" aria-label="Individuelle Abweichung"></i><?php endif; ?>
-                        </div>
                     <?php endforeach; ?>
                 </div>
             <?php endif; ?>

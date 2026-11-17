@@ -36,6 +36,30 @@ class EventRecurrenceServiceTest extends TestCase
         ], 'Europe/Berlin');
     }
 
+    public function testDescribesBiweeklyRecurrenceWithMultipleWeekdays(): void
+    {
+        self::assertSame('jede 2. Woche (Mittwoch und Donnerstag), bis 31.03.2027', (new EventRecurrenceService())->description([
+            'rhythm' => 'weekly-2', 'weekdays' => ['TH', 'WE'], 'end' => '2027-03-31',
+        ]));
+    }
+
+    public function testDescribesWeeklyRecurrenceWithOneWeekday(): void
+    {
+        self::assertSame('jede Woche (Samstag), bis 31.03.2027', (new EventRecurrenceService())->description([
+            'frequency' => 'weekly', 'weekday' => 'SA', 'end' => '2027-03-31',
+        ]));
+    }
+
+    public function testDescribesMonthlyRecurrence(): void
+    {
+        self::assertSame('jeden Monat (2. Samstag), bis 31.03.2027', (new EventRecurrenceService())->description([
+            'frequency' => 'monthly', 'monthly_rules' => [['position' => '2', 'weekday' => 'SA']], 'end' => '2027-03-31',
+        ]));
+        self::assertSame('jeden 3. Monat (letzter Montag), bis 31.03.2027', (new EventRecurrenceService())->description([
+            'frequency' => 'monthly', 'interval' => 3, 'positions' => ['-1'], 'weekday' => 'MO', 'end' => '2027-03-31',
+        ]));
+    }
+
     public function testSecondSaturday(): void
     {
         self::assertSame(['2027-01-09', '2027-02-13', '2027-03-13'], $this->dates());

@@ -121,7 +121,6 @@ MappedRepairEvents.Helper = {
         if (!section) {
             return;
         }
-        var existing = section.dataset.existingSeries === '1';
         var request;
         var value = function(name) {
             var input = section.querySelector('[name="series[' + name + ']"]:checked') || section.querySelector('[name="series[' + name + ']"]');
@@ -171,33 +170,16 @@ MappedRepairEvents.Helper = {
                 enabled.closest('.input').classList.toggle('is-disabled', multipleDates);
                 section.querySelector('.series-enabled-restriction').hidden = !multipleDates;
             }
-            var active = existing || checked('enabled');
-            var bulk = existing && value('scope') !== 'single';
-            var rule = active && (!existing || (bulk && checked('change_rule')));
+            var active = checked('enabled');
             var addDate = form.querySelector('.add-date-button');
             if (addDate) {
                 addDate.disabled = active;
                 addDate.title = active ? 'Zusätzliche Einzeltermine sind bei einer Terminserie nicht möglich.' : 'Termin hinzufügen';
             }
-            if (existing) {
-                show('.series-bulk-options', bulk);
-            }
-            show('.series-rule-fields', rule);
+            show('.series-rule-fields', active);
             show('.series-preview-area', active);
-            section.querySelector('.series-preview-button').hidden = !rule;
-            section.querySelector('.series-preview-button').disabled = !rule;
-            show('.series-monthly-rules', rule && value('rhythm').startsWith('monthly-'));
-            show('.series-weekly-days', rule && value('rhythm').startsWith('weekly-'));
-            form.querySelectorAll('.date-time-wrapper .row').forEach(function(row, index) {
-                row.hidden = false;
-                row.querySelectorAll('input').forEach(function(input) {
-                    input.disabled = input.name.indexOf('[datumstart]') !== -1 && bulk;
-                });
-                var dateField = row.querySelector('.input.text');
-                if (dateField) {
-                    dateField.hidden = false;
-                }
-            });
+            show('.series-monthly-rules', active && value('rhythm').startsWith('monthly-'));
+            show('.series-weekly-days', active && value('rhythm').startsWith('weekly-'));
         };
         var preview = function() {
             if (request) {
