@@ -165,6 +165,37 @@ class EventsControllerTest extends AppTestCase
         $this->assertResponseContains('title="Dieser Termin ist Teil einer Terminserie: jede 2. Woche (Mittwoch und Donnerstag), bis 31.03.2041"');
     }
 
+    public function testAdminEventListShowsSeriesColumnAfterDate(): void
+    {
+        $this->createSeriesThroughForm();
+        $this->getTableLocator()->get('Events')->updateAll(
+            ['datumstart' => new Date('2041-01-01')],
+            ['series_uid IS' => null],
+        );
+        $this->loginAsAdmin();
+        $this->get('/admin/events');
+        $this->assertResponseOk();
+        $document = new \DOMDocument();
+        $document->loadHTML((string)$this->_response->getBody(), LIBXML_NOERROR | LIBXML_NOWARNING);
+        $xpath = new \DOMXPath($document);
+        $this->assertSame('Datum', trim($xpath->evaluate('string(//th[text()="Terminserie"]/preceding-sibling::th[1])')));
+        $this->assertStringContainsString('sort=datumstart', $xpath->evaluate('string(//th[text()="Terminserie"]/preceding-sibling::th[1]/a/@href)'));
+        $event = $this->getTableLocator()->get('Events')->find()->where(['series_uid IS NOT' => null])->firstOrFail();
+        $this->assertSame(
+            $event->datumstart->i18nFormat(Configure::read('DateFormat.de.DateLong2WithWeekday')) . ', 14:00 - 17:00 Uhr',
+            trim($xpath->evaluate('string(//tr[td[@class="id"]="' . $event->uid . '"]/td[5])')),
+        );
+        $this->assertSame(0.0, $xpath->evaluate('count(//td[5]//i[contains(@class, "event-series-indicator")])'));
+        $this->assertSame('white-space: nowrap;', $xpath->evaluate('string(//tr[td[@class="id"]="' . $event->uid . '"]/td[5]/span/@style)'));
+        $this->assertResponseNotContains('Uhrzeit Start');
+        $this->assertResponseNotContains('Uhrzeit Ende');
+        $this->assertSame(
+            'Dieser Termin ist Teil einer Terminserie: jeden Monat (2. Samstag), bis 31.03.2041',
+            $xpath->evaluate('string(//td/i[contains(@class, "event-series-indicator")]/@title)'),
+        );
+        $this->assertGreaterThan(0, $xpath->evaluate('count(//tr/td[6][not(node())])'));
+    }
+
     public function testCompactSeriesForm(): void
     {
         $this->loginAsOrga();

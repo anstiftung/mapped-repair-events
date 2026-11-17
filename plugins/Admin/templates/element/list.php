@@ -131,7 +131,9 @@ if ($showDeleteLink) {
             foreach ($fields as $field) {
 
                 if (isset($field['template'])) {
-                    echo '<th>' . $field['label'] . '</th>';
+                    echo '<th>' . (!empty($field['sortable'])
+                        ? $this->Paginator->sort($field['name'], $field['label'])
+                        : $field['label']) . '</th>';
                     continue;
                 }
 
