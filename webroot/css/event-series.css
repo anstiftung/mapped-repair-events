@@ -90,6 +90,7 @@
 #eventEditForm .event-series .checkbox > label { grid-column: 1 / -1; }
 #eventEditForm .event-series .checkbox { float: none; padding: 0; margin: 0; }
 #eventEditForm .event-series > .input.checkbox { box-sizing: border-box; margin: 12px 0; padding: 5px; }
+#eventEditForm .event-series > .input.checkbox > label { justify-self: start; }
 #eventEditForm .event-series .input.select > .checkbox { grid-column: 2; }
 #eventEditForm .event-series input[type="radio"],
 #eventEditForm .event-series input[type="checkbox"] {
