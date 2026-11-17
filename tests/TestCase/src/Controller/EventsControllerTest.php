@@ -9,6 +9,7 @@ use Cake\I18n\Time;
 use Cake\I18n\DateTime;
 use Cake\Core\Configure;
 use App\Services\GeoService;
+use App\Model\Entity\EventSeries;
 use Cake\Event\EventInterface;
 use Cake\TestSuite\EmailTrait;
 use Cake\Controller\Controller;
@@ -536,7 +537,7 @@ class EventsControllerTest extends AppTestCase
             $formDocument = new \DOMDocument();
             $formDocument->loadHTML((string)$this->_response->getBody(), LIBXML_NOERROR | LIBXML_NOWARNING);
             $formXpath = new \DOMXPath($formDocument);
-            $this->assertSame(1.0, $formXpath->evaluate('count(//*[@id="series-weekdays-error" and not(@hidden) and contains(.,"Bitte wähle mindestens einen gültigen Wochentag.")]/preceding-sibling::div[contains(@class,"series-weekday-options") and @aria-invalid="true"])'));
+            $this->assertSame(1.0, $formXpath->evaluate('count(//*[@id="series-weekdays-error" and not(@hidden) and contains(.,"' . EventSeries::ERROR_WEEKDAYS_REQUIRED . '")]/preceding-sibling::div[contains(@class,"series-weekday-options") and @aria-invalid="true"])'));
             $this->assertSame(0.0, $formXpath->evaluate('count(//*[@id="event-series-preview"]//*[contains(@class,"error-message")])'));
             $this->assertSame(3, $this->getTableLocator()->get('Events')->find()->count());
         }

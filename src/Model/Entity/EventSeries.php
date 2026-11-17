@@ -1,40 +1,55 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Services;
+namespace App\Model\Entity;
 
 use App\View\Helper\MyTimeHelper;
+use Cake\Core\Configure;
+use Cake\I18n\DateTime;
+use Cake\ORM\Entity;
 use DateTimeImmutable;
 use DateTimeZone;
-use Cake\I18n\DateTime;
 use InvalidArgumentException;
 use RRule\RRule;
 
-class EventRecurrenceService
+/**
+ * @property string $uid
+ * @property array<string, mixed> $settings
+ * @property-read string $description
+ * @property-read list<string> $dates
+ */
+class EventSeries extends Entity
 {
-    public const int MAX_OCCURRENCES = 750;
-    public const int MAX_MONTHLY_RULES = 1;
+    public const string ERROR_WEEKDAYS_REQUIRED = 'Bitte wähle mindestens einen Wochentag.';
+
+    protected array $_virtual = ['description', 'dates'];
 
     /**
      * @param array<string, mixed> $settings
+     * @return array<string, mixed>
      */
-    public function description(array $settings): string
+    protected function _setSettings(array $settings): array
     {
-        $settings = $this->normalizeRhythm($settings);
+        return self::normalizeSettings($settings);
+    }
+
+    protected function _getDescription(): string
+    {
+        if ($this->hasErrors() || empty($this->get('settings'))) {
+            return '';
+        }
+        $settings = self::normalizeSettings($this->get('settings'));
         $weekdays = MyTimeHelper::getWeekdays();
         $interval = (int)($settings['interval'] ?? 1);
         if (($settings['frequency'] ?? 'monthly') === 'weekly') {
             $rhythm = $interval === 1 ? 'jede Woche' : 'jede ' . $interval . '. Woche';
-            $selectedWeekdays = $settings['weekdays'] ?? [$settings['weekday'] ?? 'SA'];
+            $selectedWeekdays = $settings['weekdays'];
             $days = array_values(array_intersect_key($weekdays, array_flip($selectedWeekdays)));
             $lastDay = array_pop($days);
             $detail = $days === [] ? $lastDay : implode(', ', $days) . ' und ' . $lastDay;
         } else {
             $rhythm = $interval === 1 ? 'jeden Monat' : 'jeden ' . $interval . '. Monat';
-            $rule = $settings['monthly_rules'][0] ?? [
-                'position' => $settings['positions'][0] ?? '1',
-                'weekday' => $settings['weekday'] ?? 'SA',
-            ];
+            $rule = $settings['monthly_rules'][0];
             $position = (int)$rule['position'] === -1 ? 'letzter' : $rule['position'] . '.';
             $detail = $position . ' ' . $weekdays[$rule['weekday']];
         }
@@ -42,13 +57,14 @@ class EventRecurrenceService
         return $rhythm . ' (' . $detail . '), bis ' . $end->format('d.m.Y');
     }
 
-    /**
-     * @param array<string, mixed> $settings
-     * @return list<string>
-     */
-    public function dates(array $settings, string $timezone): array
+    /** @return list<string> */
+    protected function _getDates(): array
     {
-        $settings = $this->normalizeRhythm($settings);
+        if ($this->hasErrors() || empty($this->get('settings'))) {
+            return [];
+        }
+        $settings = self::normalizeSettings($this->get('settings'));
+        $timezone = (string)Configure::read('App.defaultTimezone');
         $zone = new DateTimeZone($timezone);
         $start = $this->date((string)($settings['start'] ?? ''), $zone);
         $frequency = (string)($settings['frequency'] ?? 'monthly');
@@ -57,20 +73,10 @@ class EventRecurrenceService
             throw new InvalidArgumentException('Bitte wähle eine gültige Wiederholung und ein Intervall zwischen 1 und 52.');
         }
         $weekdays = array_keys(MyTimeHelper::getWeekdays());
-        $selectedWeekdays = $settings['weekdays'] ?? [$settings['weekday'] ?? 'SA'];
         $days = [];
         if ($frequency === 'monthly') {
             $rules = $settings['monthly_rules'] ?? null;
-            if ($rules === null) {
-                $positions = $settings['positions'] ?? [];
-                $rules = [];
-                if (is_array($positions)) {
-                    foreach ($positions as $position) {
-                        $rules[] = ['position' => $position, 'weekday' => $settings['weekday'] ?? 'SA'];
-                    }
-                }
-            }
-            if (!is_array($rules) || $rules === [] || count($rules) > self::MAX_MONTHLY_RULES) {
+            if (!is_array($rules) || count($rules) !== 1) {
                 throw new InvalidArgumentException('Bitte lege genau eine Monatsregel fest.');
             }
             foreach ($rules as $rule) {
@@ -81,12 +87,13 @@ class EventRecurrenceService
                 $days[] = (string)$rule['position'] . $rule['weekday'];
             }
         } else {
+            $selectedWeekdays = $settings['weekdays'] ?? [];
             if (!is_array($selectedWeekdays) || $selectedWeekdays === []) {
-                throw new InvalidArgumentException('Bitte wähle mindestens einen gültigen Wochentag.');
+                throw new InvalidArgumentException(self::ERROR_WEEKDAYS_REQUIRED);
             }
             foreach ($selectedWeekdays as $weekday) {
                 if (!is_string($weekday) || !in_array($weekday, $weekdays, true)) {
-                    throw new InvalidArgumentException('Bitte wähle mindestens einen gültigen Wochentag.');
+                    throw new InvalidArgumentException(self::ERROR_WEEKDAYS_REQUIRED);
                 }
             }
             $days = $selectedWeekdays;
@@ -95,9 +102,6 @@ class EventRecurrenceService
         $maximumEnd = DateTime::now($timezone)->startOfDay()->addYears(2);
         if ($end < $start || $end > $maximumEnd) {
             throw new InvalidArgumentException('Das Enddatum muss am oder nach dem Beginn und höchstens zwei Jahre in der Zukunft liegen.');
-        }
-        if (isset($settings['end_mode']) && $settings['end_mode'] !== 'date') {
-            throw new InvalidArgumentException('Für eine Terminserie ist ein Enddatum erforderlich.');
         }
         $options = [
             'FREQ' => strtoupper($frequency),
@@ -108,9 +112,6 @@ class EventRecurrenceService
         ];
         $dates = [];
         foreach (new RRule($options) as $occurrence) {
-            if (count($dates) >= self::MAX_OCCURRENCES || $occurrence > $maximumEnd) {
-                throw new InvalidArgumentException('Eine Serie darf höchstens 750 Termine innerhalb von zwei Jahren enthalten.');
-            }
             $dates[] = $occurrence->format('Y-m-d');
         }
         if ($dates === []) {
@@ -123,7 +124,7 @@ class EventRecurrenceService
      * @param array<string, mixed> $settings
      * @return array<string, mixed>
      */
-    public function normalizeRhythm(array $settings): array
+    private static function normalizeSettings(array $settings): array
     {
         if (array_key_exists('rhythm', $settings)) {
             if (!is_string($settings['rhythm']) || !preg_match('/\A(monthly|weekly)-([1-9][0-9]?)\z/', $settings['rhythm'], $matches)) {
@@ -133,7 +134,9 @@ class EventRecurrenceService
             $settings['interval'] = (int)$matches[2];
             unset($settings['rhythm']);
         }
-        return $settings;
+        return array_intersect_key($settings, array_flip([
+            'start', 'end', 'frequency', 'interval', 'weekdays', 'monthly_rules',
+        ]));
     }
 
     private function date(string $value, DateTimeZone $zone): DateTimeImmutable

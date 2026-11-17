@@ -10,7 +10,6 @@ class EventSeries extends BaseMigration
         $this->table('event_series', ['id' => false, 'primary_key' => ['uid']])
             ->addColumn('uid', 'string', ['limit' => 36])
             ->addColumn('settings', 'text')
-            ->addColumn('timezone', 'string', ['limit' => 64])
             ->addColumn('created', 'datetime', ['default' => 'CURRENT_TIMESTAMP'])
             ->create();
 

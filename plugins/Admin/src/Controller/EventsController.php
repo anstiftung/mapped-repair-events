@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Admin\Controller;
 
-use App\Services\EventRecurrenceService;
 use Cake\Event\EventInterface;
 
 class EventsController extends AdminAppController
@@ -83,9 +82,8 @@ class EventsController extends AdminAppController
         }
         $seriesDescriptions = [];
         if ($seriesUids !== []) {
-            $recurrenceService = new EventRecurrenceService();
             foreach ($this->fetchTable('EventSeries')->find()->where(['uid IN' => array_keys($seriesUids)]) as $series) {
-                $seriesDescriptions[$series->get('uid')] = $recurrenceService->description($series->get('settings'));
+                $seriesDescriptions[$series->uid] = $series->description;
             }
         }
         $this->set('seriesDescriptions', $seriesDescriptions);

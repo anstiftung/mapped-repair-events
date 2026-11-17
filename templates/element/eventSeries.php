@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+use App\Model\Entity\EventSeries;
 use Cake\I18n\Date;
 
 /**
@@ -19,17 +20,14 @@ $weekdays = $this->Time->getWeekdays();
 $seed = $event->datumstart ?? Date::now();
 $defaultWeekday = 'SA';
 $settings = $seriesSettings + [
-    'enabled' => ($seriesSettings['mode'] ?? '') === 'series', 'frequency' => 'monthly',
-    'interval' => 1, 'positions' => ['1'], 'weekday' => $defaultWeekday,
+    'enabled' => false, 'frequency' => 'monthly', 'interval' => 1,
+    'monthly_rules' => [['position' => '1', 'weekday' => $defaultWeekday]],
     'start' => $seed->format('Y-m-d'), 'end' => Date::now()->addYears(1)->format('Y-m-d'),
     'excluded' => [],
 ];
-$selectedWeekdays = $settings['weekdays'] ?? [$settings['weekday']];
-$weekdayError = $seriesError === 'Bitte wähle mindestens einen gültigen Wochentag.' ? $seriesError : null;
-$monthlyRules = $settings['monthly_rules'] ?? array_map(
-    static fn(mixed $position): array => ['position' => $position, 'weekday' => $settings['weekday']],
-    is_array($settings['positions']) ? $settings['positions'] : [],
-);
+$selectedWeekdays = $settings['weekdays'] ?? [$defaultWeekday];
+$weekdayError = $seriesError === EventSeries::ERROR_WEEKDAYS_REQUIRED ? $seriesError : null;
+$monthlyRules = $settings['monthly_rules'];
 if (!is_array($monthlyRules) || $monthlyRules === []) {
     $monthlyRules = [['position' => '1', 'weekday' => $defaultWeekday]];
 }

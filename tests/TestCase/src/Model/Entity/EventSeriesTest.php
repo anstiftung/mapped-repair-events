@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Test\TestCase\Services;
+namespace App\Test\TestCase\Model\Entity;
 
-use App\Services\EventRecurrenceService;
+use App\Model\Entity\EventSeries;
 use Cake\I18n\DateTime;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
-class EventRecurrenceServiceTest extends TestCase
+class EventSeriesTest extends TestCase
 {
     protected function setUp(): void
     {
@@ -21,43 +21,70 @@ class EventRecurrenceServiceTest extends TestCase
         DateTime::setTestNow();
         parent::tearDown();
     }
+
     /**
      * @param array<string, mixed> $settings
      * @return list<string>
      */
     private function dates(array $settings = []): array
     {
-        return (new EventRecurrenceService())->dates($settings + [
+        return (new EventSeries(['settings' => $settings + [
             'start' => '2027-01-01',
             'end' => '2027-03-31',
             'frequency' => 'monthly',
-            'weekday' => 'SA',
-            'positions' => ['2'],
-        ], 'Europe/Berlin');
+            'weekdays' => ['SA'],
+            'monthly_rules' => [['position' => '2', 'weekday' => 'SA']],
+        ]]))->dates;
     }
 
     public function testDescribesBiweeklyRecurrenceWithMultipleWeekdays(): void
     {
-        self::assertSame('jede 2. Woche (Mittwoch und Donnerstag), bis 31.03.2027', (new EventRecurrenceService())->description([
+        self::assertSame('jede 2. Woche (Mittwoch und Donnerstag), bis 31.03.2027', (new EventSeries(['settings' => [
             'rhythm' => 'weekly-2', 'weekdays' => ['TH', 'WE'], 'end' => '2027-03-31',
-        ]));
+        ]]))->description);
     }
 
     public function testDescribesWeeklyRecurrenceWithOneWeekday(): void
     {
-        self::assertSame('jede Woche (Samstag), bis 31.03.2027', (new EventRecurrenceService())->description([
-            'frequency' => 'weekly', 'weekday' => 'SA', 'end' => '2027-03-31',
-        ]));
+        self::assertSame('jede Woche (Samstag), bis 31.03.2027', (new EventSeries(['settings' => [
+            'frequency' => 'weekly', 'weekdays' => ['SA'], 'end' => '2027-03-31',
+        ]]))->description);
     }
 
     public function testDescribesMonthlyRecurrence(): void
     {
-        self::assertSame('jeden Monat (2. Samstag), bis 31.03.2027', (new EventRecurrenceService())->description([
+        self::assertSame('jeden Monat (2. Samstag), bis 31.03.2027', (new EventSeries(['settings' => [
             'frequency' => 'monthly', 'monthly_rules' => [['position' => '2', 'weekday' => 'SA']], 'end' => '2027-03-31',
-        ]));
-        self::assertSame('jeden 3. Monat (letzter Montag), bis 31.03.2027', (new EventRecurrenceService())->description([
-            'frequency' => 'monthly', 'interval' => 3, 'positions' => ['-1'], 'weekday' => 'MO', 'end' => '2027-03-31',
-        ]));
+        ]]))->description);
+        self::assertSame('jeden 3. Monat (letzter Montag), bis 31.03.2027', (new EventSeries(['settings' => [
+            'frequency' => 'monthly', 'interval' => 3, 'monthly_rules' => [['position' => '-1', 'weekday' => 'MO']], 'end' => '2027-03-31',
+        ]]))->description);
+    }
+
+    public function testDescriptionIsVirtualAndReflectsSettings(): void
+    {
+        $series = new EventSeries(['settings' => [
+            'rhythm' => 'weekly-1', 'weekdays' => ['SA'], 'start' => '2027-01-01', 'end' => '2027-03-31',
+        ]]);
+        self::assertContains('description', $series->getVirtual());
+        self::assertSame('jede Woche (Samstag), bis 31.03.2027', $series->toArray()['description']);
+        $series->settings = array_replace($series->settings, ['interval' => 2]);
+        self::assertSame('jede 2. Woche (Samstag), bis 31.03.2027', $series->description);
+        self::assertSame('', (new EventSeries())->toArray()['description']);
+    }
+
+    public function testDatesAreVirtualAndReflectSettings(): void
+    {
+        $series = new EventSeries(['settings' => [
+            'rhythm' => 'monthly-1', 'monthly_rules' => [['position' => '2', 'weekday' => 'SA']],
+            'start' => '2027-01-01', 'end' => '2027-03-31',
+        ]]);
+        self::assertContains('dates', $series->getVirtual());
+        self::assertSame(['2027-01-09', '2027-02-13', '2027-03-13'], $series->dates);
+        self::assertSame($series->dates, $series->toArray()['dates']);
+        $series->settings = array_replace($series->settings, ['interval' => 2]);
+        self::assertSame(['2027-01-09', '2027-03-13'], $series->dates);
+        self::assertSame([], (new EventSeries())->toArray()['dates']);
     }
 
     public function testSecondSaturday(): void
@@ -86,19 +113,11 @@ class EventRecurrenceServiceTest extends TestCase
     public function testLastIsNotFourth(): void
     {
         self::assertSame(['2027-01-23', '2027-02-27', '2027-03-27'], $this->dates([
-            'positions' => ['4'],
+            'monthly_rules' => [['position' => '4', 'weekday' => 'SA']],
         ]));
         self::assertSame(['2027-01-30', '2027-02-27', '2027-03-27'], $this->dates([
-            'positions' => ['-1'],
+            'monthly_rules' => [['position' => '-1', 'weekday' => 'SA']],
         ]));
-    }
-
-    public function testMultiplePositionsAreRejected(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->dates([
-            'positions' => ['1', '3'], 'interval' => 2,
-        ]);
     }
 
     public function testWeeklyCountAcrossDaylightSavingTime(): void
@@ -166,16 +185,10 @@ class EventRecurrenceServiceTest extends TestCase
         $this->dates(['start' => '2027-02-30']);
     }
 
-    public function testUnboundedSeriesIsRejected(): void
+    public function testMissingEndDateCannotBeReplacedByEndMode(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->dates(['end_mode' => 'forever']);
-    }
-
-    public function testTooManyOccurrencesAreRejected(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->dates(['frequency' => 'weekly', 'end' => '2032-01-01']);
+        $this->dates(['end' => '', 'end_mode' => 'forever']);
     }
 
     public function testNoOccurrencesIsRejected(): void

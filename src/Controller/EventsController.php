@@ -8,6 +8,7 @@ use Cake\Event\EventInterface;
 use Cake\Http\Exception\NotFoundException;
 use Eluceo\iCal\Domain\Entity\Calendar;
 use App\Model\Entity\Event;
+use App\Model\Entity\EventSeries;
 use Eluceo\iCal\Domain\Entity\TimeZone;
 use \DateTimeZone as PhpDateTimeZone;
 use \DateTime as PhpDateTime;
@@ -27,8 +28,6 @@ use App\Model\Table\EventsTable;
 use Cake\Datasource\Paging\PaginatedInterface;
 use Cake\Http\Response;
 use Cake\ORM\Query\SelectQuery;
-use App\Services\EventRecurrenceService;
-use App\Services\EventSeriesService;
 use Cake\ORM\Exception\PersistenceFailedException;
 
 class EventsController extends AppController
@@ -252,9 +251,8 @@ class EventsController extends AppController
         }
         $seriesDescriptions = [];
         if ($seriesUids !== []) {
-            $recurrenceService = new EventRecurrenceService();
             foreach ($this->fetchTable('EventSeries')->find()->where(['uid IN' => array_keys($seriesUids)]) as $series) {
-                $seriesDescriptions[$series->get('uid')] = $recurrenceService->description($series->get('settings'));
+                $seriesDescriptions[$series->uid] = $series->description;
             }
         }
         $this->set('seriesDescriptions', $seriesDescriptions);
@@ -495,7 +493,7 @@ class EventsController extends AppController
 
         if ($event->series_uid) {
             $series = $this->fetchTable('EventSeries')->get($event->series_uid);
-            $this->set('seriesDescription', (new EventRecurrenceService())->description($series->get('settings')));
+            $this->set('seriesDescription', $series->description);
         }
 
         $worknewsTable = $this->getTableLocator()->get('Worknews');
@@ -569,7 +567,7 @@ class EventsController extends AppController
                 $seriesData = [];
             }
             $this->set('seriesSettings', $seriesData);
-            $repeat = array_key_exists('enabled', $seriesData) ? !empty($seriesData['enabled']) : ($seriesData['mode'] ?? '') === 'series';
+            $repeat = !empty($seriesData['enabled']);
             if (!$isEditMode && $repeat) {
                 return $this->saveSeries($events[0], $baseData, $seriesData);
             }
@@ -686,29 +684,26 @@ class EventsController extends AppController
     private function saveSeries(Event $original, array $data, array $settings): array
     {
         $eventSeriesTable = $this->fetchTable('EventSeries');
-        $service = new EventSeriesService($this->Event, $eventSeriesTable);
         $events = [$original];
         $error = null;
         try {
-            if (array_key_exists('enabled', $settings) && empty($data['datumstart'])) {
+            if (empty($data['datumstart'])) {
                 throw new InvalidArgumentException('Bitte trage ein Datum ein.');
             }
-            if (!empty($data['datumstart'])) {
-                $settings['start'] = (new DateTime($data['datumstart']))->format('Y-m-d');
-            }
+            $settings['start'] = (new DateTime($data['datumstart']))->format('Y-m-d');
             $seriesEnd = (string)($settings['end'] ?? '');
             $seriesEndDate = \DateTimeImmutable::createFromFormat('!d.m.Y', $seriesEnd);
             if ($seriesEndDate !== false && $seriesEndDate->format('d.m.Y') === $seriesEnd) {
                 $settings['end'] = $seriesEndDate->format('Y-m-d');
             }
             $this->set('seriesSettings', $settings);
-            $dates = (new EventRecurrenceService())->dates($settings, (string)Configure::read('App.defaultTimezone'));
             if (!empty($settings['preview'])) {
-                $this->set('seriesPreview', $dates);
+                $series = new EventSeries(['settings' => $settings]);
+                $this->set('seriesPreview', $series->dates);
                 $events = $this->seriesFormEvents($original, $data);
             } else {
                 $data = $this->normalizeSeriesData($data);
-                $plan = $service->prepare($original, $data, $settings, (string)Configure::read('App.defaultTimezone'));
+                $plan = $eventSeriesTable->prepare($original, $data, $settings);
                 foreach ($this->request->getData() as $index => $extra) {
                     if (!is_numeric($index) || (int)$index === 0 || !is_array($extra) || !array_key_exists('datumstart', $extra)) {
                         continue;
@@ -739,9 +734,6 @@ class EventsController extends AppController
                         $eventSeriesTable->saveOrFail($plan['series']);
                         foreach ($plan['events'] as $event) {
                             $this->Event->saveOrFail($event);
-                            if ((int)$event->status === APP_DELETED && $event->uid) {
-                                $this->fetchTable('Fundingconfirmedevents')->deleteAll(['event_uid' => $event->uid]);
-                            }
                         }
                     });
                     $count = count(array_filter($plan['events'], static fn(Event $event): bool => (int)$event->status !== APP_DELETED));
