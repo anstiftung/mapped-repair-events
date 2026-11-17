@@ -100,7 +100,7 @@ if ($seriesEndDate !== false && $seriesEndDate->format('Y-m-d') === $seriesEnd) 
     </fieldset>
     <div class="series-preview-area" hidden>
         <button type="submit" name="series[preview]" value="1" class="button series-preview-button" formnovalidate>
-            <i class="fa fa-refresh" aria-hidden="true"></i> Terminvorschau
+            <i class="fa fa-refresh" aria-hidden="true"></i> Terminvorschau aktualisieren
         </button>
         <div id="event-series-preview" aria-live="polite" aria-busy="false">
             <?php if ($seriesError && $weekdayError === null): ?><p class="error-message"><?= h($seriesError) ?></p><?php endif; ?>

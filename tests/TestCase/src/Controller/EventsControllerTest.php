@@ -137,7 +137,7 @@ class EventsControllerTest extends AppTestCase
         $this->assertResponseNotContains('class="event-series"');
         $this->assertResponseNotContains('name="series[scope]"');
         $this->assertResponseNotContains('name="series[rhythm]"');
-        $this->assertResponseContains('Dieser Termin gehört zu einer Terminserie: jeden Monat (2. Samstag), bis 31.03.2041');
+        $this->assertResponseContains('Dieser Termin ist Teil einer Terminserie: jeden Monat (2. Samstag), bis 31.03.2041');
         $this->assertResponseNotContains('weiteren Terminen');
     }
 
@@ -158,7 +158,7 @@ class EventsControllerTest extends AppTestCase
         $formDocument = new \DOMDocument();
         $formDocument->loadHTML((string)$this->_response->getBody(), LIBXML_NOERROR | LIBXML_NOWARNING);
         $formXpath = new \DOMXPath($formDocument);
-        $this->assertSame('Dieser Termin gehört zu einer Terminserie: jede 2. Woche (Mittwoch und Donnerstag), bis 31.03.2041', $formXpath->evaluate('string(//input[@id="0-datumstart"]/following-sibling::p[@class="series-membership-hint"])'));
+        $this->assertSame('Dieser Termin ist Teil einer Terminserie: jede 2. Woche (Mittwoch und Donnerstag), bis 31.03.2041', $formXpath->evaluate('string(//input[@id="0-datumstart"]/following-sibling::p[@class="series-membership-hint"])'));
         $this->assertResponseNotContains('weiteren Terminen');
     }
 
@@ -247,6 +247,7 @@ class EventsControllerTest extends AppTestCase
         $this->assertResponseOk();
         $this->assertResponseContains('12.01.2041');
         $this->assertResponseContains('<h3>Terminvorschau</h3>');
+        $this->assertResponseContains('<i class="fa fa-refresh" aria-hidden="true"></i> Terminvorschau aktualisieren');
         $this->assertResponseContains('Diese Terminserie enthält folgende <span class="series-preview-count">3</span> Termine. Du kannst vor dem Speichern einzelne Termine wegklicken.');
         $this->assertSame(3, $this->getTableLocator()->get('Events')->find()->count());
         $this->assertSame(0, $this->getTableLocator()->get('EventSeries')->find()->count());

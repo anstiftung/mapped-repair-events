@@ -117,7 +117,7 @@ $this->element('addScript', ['script' =>
                     'value' => $datumstartValue,
                 ];
                 if ($isEditMode && $event->series_uid) {
-                    $seriesHint = '<p class="series-membership-hint">' . h('Dieser Termin gehört zu einer Terminserie: ' . $seriesDescription) . '</p>';
+                    $seriesHint = '<p class="series-membership-hint">' . h('Dieser Termin ist Teil einer Terminserie: ' . $seriesDescription) . '</p>';
                     $dateControlOptions['templates'] = [
                         'inputContainer' => '<div class="input {{type}}{{required}}">{{content}}' . $seriesHint . '</div>',
                         'inputContainerError' => '<div class="input {{type}}{{required}} error">{{content}}{{error}}' . $seriesHint . '</div>',
