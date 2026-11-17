@@ -140,8 +140,8 @@
 #eventEditForm .event-series .series-weekly-days input[type="checkbox"] { width: 14px; height: 14px; margin-right: 4px; }
 #eventEditForm .event-series .series-weekly-days .checkbox label:has(input:checked) { background: #e9f1e9; border-color: #6d8b6d; }
 #eventEditForm .event-series .series-preview-list {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     align-content: flex-start;
     gap: 8px;
     max-height: 240px;
@@ -189,5 +189,6 @@
     #eventEditForm .event-series .input.select > .checkbox { grid-column: 1; }
     #eventEditForm .event-series .input > label { max-width: 100%; }
     #eventEditForm .event-series #series-weekdays-error { grid-column: 1; }
+    #eventEditForm .event-series .series-preview-list { grid-template-columns: minmax(0, 1fr); }
     #eventEditForm .event-series .series-preview-button { margin-left: 0; max-width: 100%; }
 }
