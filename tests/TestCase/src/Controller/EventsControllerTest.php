@@ -252,7 +252,8 @@ class EventsControllerTest extends AppTestCase
             'referer' => '/', $this->seriesEventData(), 'series' => $this->seriesSettings() + ['preview' => '1'],
         ]);
         $this->assertResponseOk();
-        $this->assertResponseContains('12.01.2041');
+        $this->assertResponseContains('Samstag, 12.01.2041');
+        $this->assertResponseNotContains('series-preview-time');
         $this->assertResponseContains('<h3>Terminvorschau</h3>');
         $this->assertResponseContains('<i class="fa fa-refresh" aria-hidden="true"></i> Terminvorschau aktualisieren');
         $this->assertResponseContains('Diese Terminserie enthält folgende <span class="series-preview-count">3</span> Termine. Du kannst vor dem Speichern einzelne Termine wegklicken.');

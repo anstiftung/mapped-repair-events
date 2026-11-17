@@ -153,10 +153,10 @@
     display: inline-flex;
     align-items: center;
     flex-wrap: wrap;
-    gap: 6px;
+    gap: 4px;
     min-height: 34px;
     box-sizing: border-box;
-    padding: 6px 10px;
+    padding: 6px;
     border: 1px solid #ccc;
     border-radius: 4px;
     background: #f7f7f7;
@@ -171,7 +171,7 @@
 #eventEditForm .event-series label.series-preview-row { cursor: pointer; }
 #eventEditForm .event-series label.series-preview-row:hover { border-color: #888; }
 #eventEditForm .event-series label.series-preview-row:focus-within { outline: 2px solid #555; outline-offset: 1px; }
-#eventEditForm .event-series .series-preview-row input { flex: 0 0 auto; margin: 0; }
+#eventEditForm .event-series .series-preview-row input[type="checkbox"] { flex: 0 0 auto; width: 14px; height: 14px; margin: 0; }
 #eventEditForm .event-series .series-preview-row span { white-space: nowrap; }
 #eventEditForm .event-series .series-preview-count { font-weight: normal; }
 #eventEditForm .event-series [hidden] { display: none !important; }

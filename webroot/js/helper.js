@@ -137,13 +137,6 @@ MappedRepairEvents.Helper = {
                 input.disabled = !visible;
             });
         };
-        var updateTimes = function() {
-            var start = document.getElementById('0-uhrzeitstart');
-            var end = document.getElementById('0-uhrzeitend');
-            section.querySelectorAll('.series-preview-time').forEach(function(element) {
-                element.textContent = start.value && end.value ? start.value.slice(0, 5) + '–' + end.value.slice(0, 5) : '';
-            });
-        };
         var updateExcluded = function() {
             var container = section.querySelector('.series-excluded-dates');
             container.replaceChildren();
@@ -232,7 +225,6 @@ MappedRepairEvents.Helper = {
                         section.querySelector('.series-weekday-options').setAttribute('aria-invalid', weekdayError.hidden ? 'false' : 'true');
                     }
                     output.replaceWith(result);
-                    updateTimes();
                     updateExcluded();
                 })
                 .catch(function(error) {
@@ -254,7 +246,6 @@ MappedRepairEvents.Helper = {
             preview();
         });
         $(form).on('event-dates-changed', update);
-        updateTimes();
         update();
     },
 

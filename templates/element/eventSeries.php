@@ -116,7 +116,6 @@ if ($seriesEndDate !== false && $seriesEndDate->format('Y-m-d') === $seriesEnd) 
                         <label class="series-preview-row">
                             <input type="checkbox" class="series-include-date" data-date="<?= h($date) ?>" <?= in_array($date, $selectedPreviewDates, true) ? 'checked' : '' ?>>
                             <?= h((new Date($date))->i18nFormat('EEEE, dd.MM.yyyy')) ?>
-                            <span class="series-preview-time"></span>
                         </label>
                     <?php endforeach; ?>
                 </div>
