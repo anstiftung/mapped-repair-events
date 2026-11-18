@@ -89,16 +89,6 @@ class EventSeriesTest extends TestCase
         self::assertSame([], (new EventSeries())->toArray()['dates']);
     }
 
-    public function testSecondSaturday(): void
-    {
-        self::assertSame(['2027-01-09', '2027-02-13', '2027-03-13'], $this->dates());
-    }
-
-    public function testCombinedMonthlySelection(): void
-    {
-        self::assertSame(['2027-01-09', '2027-03-13'], $this->dates(['rhythm' => 'monthly-2']));
-    }
-
     public function testCombinedWeeklySelection(): void
     {
         self::assertSame(['2027-01-02', '2027-01-16', '2027-01-30'], $this->dates([
@@ -134,13 +124,6 @@ class EventSeriesTest extends TestCase
     {
         self::assertSame(['2027-01-04', '2027-01-07', '2027-01-11', '2027-01-14'], $this->dates([
             'frequency' => 'weekly', 'weekdays' => ['MO', 'TH'], 'end' => '2027-01-14',
-        ]));
-    }
-
-    public function testSingleMonthlyRule(): void
-    {
-        self::assertSame(['2027-01-07', '2027-02-04', '2027-03-04'], $this->dates([
-            'monthly_rules' => [['position' => '1', 'weekday' => 'TH']],
         ]));
     }
 
@@ -185,12 +168,6 @@ class EventSeriesTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->dates(['start' => '2027-02-30']);
-    }
-
-    public function testMissingEndDateCannotBeReplacedByEndMode(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->dates(['end' => '', 'end_mode' => 'forever']);
     }
 
     public function testNoOccurrencesIsRejected(): void

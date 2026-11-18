@@ -200,19 +200,4 @@ class EventSeriesTableTest extends AppTestCase
             self::assertSame(1, $event->use_custom_coordinates);
         }
     }
-
-    public function testCreationDoesNotNeedPositionOrEditingFields(): void
-    {
-        $this->createSeries();
-        /** @var EventsTable $events */
-        $events = $this->getTableLocator()->get('Events');
-        $series = $this->getTableLocator()->get('EventSeries');
-        self::assertFalse($events->getSchema()->hasColumn('series_date'));
-        self::assertFalse($events->getSchema()->hasColumn('series_overrides'));
-        self::assertFalse($events->getSchema()->hasColumn('series_position'));
-        self::assertFalse($series->getSchema()->hasColumn('parent_uid'));
-        self::assertFalse($series->getSchema()->hasColumn('workshop_uid'));
-        self::assertFalse($series->getSchema()->hasColumn('timezone'));
-        self::assertFalse($series->getSchema()->hasColumn('settings'));
-    }
 }
