@@ -771,12 +771,13 @@ class EventsController extends AppController
             }
             $this->set('seriesSettings', $settings);
             if (!empty($settings['preview'])) {
-                $series = new EventSeries(['settings' => $settings]);
+                $series = EventSeries::fromSettings($settings);
                 $this->set('seriesPreview', $series->dates);
                 $events = $this->seriesFormEvents($original, $data);
             } else {
                 $data = $this->normalizeSeriesData($data);
-                $plan = $eventSeriesTable->prepare($original, $data, $settings);
+                $series = $eventSeriesTable->prepare($original, $data, $settings);
+                $standaloneEvents = [];
                 foreach ($this->request->getData() as $index => $extra) {
                     if (!is_numeric($index) || (int)$index === 0 || !is_array($extra) || !array_key_exists('datumstart', $extra)) {
                         continue;
@@ -784,10 +785,11 @@ class EventsController extends AppController
                     $extra = $this->normalizeSeriesData(array_replace($data, $extra));
                     unset($extra['uid'], $extra['series_uid']);
                     $extra['workshop_uid'] = $original->workshop_uid;
-                    $plan['events'][] = $this->Event->patchEntity(clone $original, $extra);
+                    $standaloneEvents[] = $this->Event->patchEntity(clone $original, $extra);
                 }
+                $members = [...$series->events, ...$standaloneEvents];
                 $keys = [];
-                foreach ($plan['events'] as $member) {
+                foreach ($members as $member) {
                     if ((int)$member->status === APP_DELETED || $member->hasErrors()) {
                         continue;
                     }
@@ -797,22 +799,22 @@ class EventsController extends AppController
                     }
                     $keys[$key] = true;
                 }
-                $invalidEvents = array_filter($plan['events'], static fn(Event $event): bool => $event->hasErrors());
+                $invalidEvents = array_filter($members, static fn(Event $event): bool => $event->hasErrors());
                 if ($invalidEvents !== []) {
                     $events = $this->seriesFormEvents($original, $data);
                     $events[0]->setErrors(reset($invalidEvents)->getErrors());
                     $error = 'Bitte korrigiere die markierten Felder. Es wurde kein Termin gespeichert.';
                 } else {
-                    $this->Event->getConnection()->transactional(function () use ($plan, $eventSeriesTable): void {
-                        $eventSeriesTable->saveOrFail($plan['series']);
-                        foreach ($plan['events'] as $event) {
-                            $this->Event->saveOrFail($event);
+                    $this->Event->getConnection()->transactional(function () use ($series, $eventSeriesTable, $standaloneEvents): void {
+                        $eventSeriesTable->saveOrFail($series, ['associated' => ['Events.Categories']]);
+                        foreach ($standaloneEvents as $standaloneEvent) {
+                            $this->Event->saveOrFail($standaloneEvent);
                         }
                     });
-                    $count = count(array_filter($plan['events'], static fn(Event $event): bool => (int)$event->status !== APP_DELETED));
+                    $count = count(array_filter($members, static fn(Event $event): bool => (int)$event->status !== APP_DELETED));
                     $this->AppFlash->setFlashMessage($count . ' Termine erfolgreich gespeichert.');
                     $redirect = $this->redirect($this->getPreparedReferer());
-                    return ['events' => $plan['events'], 'saved' => true];
+                    return ['events' => $members, 'saved' => true];
                 }
             }
         } catch (InvalidArgumentException|PersistenceFailedException $exception) {

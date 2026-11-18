@@ -5,10 +5,10 @@ namespace App\Model\Table;
 
 use App\Model\Entity\Event;
 use App\Model\Entity\EventSeries;
+use Cake\Event\EventInterface;
 use Cake\I18n\DateTime;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
-use Cake\Utility\Hash;
 use Cake\Utility\Text;
 use Cake\Validation\Validator;
 use InvalidArgumentException;
@@ -30,53 +30,64 @@ class EventSeriesTable extends Table
         $this->setTable('event_series');
         $this->setPrimaryKey('uid');
         $this->setEntityClass(EventSeries::class);
-        $this->getSchema()->setColumnType('settings', 'json');
         $this->hasMany('Events', ['foreignKey' => 'series_uid']);
     }
 
     public function validationDefault(Validator $validator): Validator
     {
         $validator->uuid('uid');
-        $validator->requirePresence('settings', 'create')
-            ->notEmptyArray('settings', 'Bitte lege eine gültige Wiederholung fest.')
-            ->add('settings', 'validRecurrence', [
-                'rule' => fn(mixed $value): bool|string => $this->validateRecurrence($value),
-            ]);
+        foreach (['start_date', 'end_date'] as $field) {
+            $validator->requirePresence($field, 'create')->notEmptyDate($field)->date($field, ['ymd']);
+        }
+        $validator->requirePresence('frequency', 'create')->notEmptyString('frequency')
+            ->inList('frequency', EventSeries::FREQUENCIES);
+        $validator->requirePresence('repeat_interval', 'create')->notEmptyString('repeat_interval')
+            ->integer('repeat_interval')->range('repeat_interval', [1, 52]);
+        $validator->allowEmptyString('monthly_position')->integer('monthly_position')
+            ->inList('monthly_position', EventSeries::MONTHLY_POSITIONS);
+        $validator->allowEmptyString('monthly_weekday')->inList('monthly_weekday', array_keys(EventSeries::WEEKDAY_FIELDS));
+        foreach (EventSeries::WEEKDAY_FIELDS as $field) {
+            $validator->notEmptyString($field)->boolean($field);
+        }
         return $validator;
     }
 
     public function buildRules(RulesChecker $rules): RulesChecker
     {
         $rules->addCreate(
-            fn(EventSeries $series): bool|string => $this->validateRecurrence($series->settings),
+            $this->validateRecurrence(...),
             'validRecurrence',
-            ['errorField' => 'settings'],
+            ['errorField' => 'frequency'],
         );
         $rules->addUpdate(
-            static fn(EventSeries $series): bool => !$series->isDirty('settings'),
+            static fn(EventSeries $series): bool => array_intersect($series->getDirty(), [
+                'start_date', 'end_date', 'frequency', 'repeat_interval', 'monthly_position', 'monthly_weekday',
+                ...array_values(EventSeries::WEEKDAY_FIELDS),
+            ]) === [],
             'immutableRecurrence',
-            ['errorField' => 'settings', 'message' => 'Eine bestehende Terminserie kann nicht geändert werden.'],
+            ['errorField' => 'frequency', 'message' => 'Eine bestehende Terminserie kann nicht geändert werden.'],
         );
         return $rules;
+    }
+
+    /** @param \Cake\Event\EventInterface<\App\Model\Table\EventSeriesTable> $event */
+    public function beforeSave(EventInterface $event, EventSeries $series): void
+    {
+        if ($series->isNew() && $series->uid === null) {
+            $series->uid = Text::uuid();
+        }
     }
 
     /**
      * @param array<string, mixed> $data
      * @param array<string, mixed> $settings
-     * @return array{events: list<Event>, series: EventSeries}
      */
-    public function prepare(Event $original, array $data, array $settings): array
+    public function prepare(Event $original, array $data, array $settings): EventSeries
     {
         if (!$original->isNew()) {
             throw new InvalidArgumentException('Eine bestehende Terminserie kann nicht geändert werden.');
         }
-        $series = $this->newEntity([
-            'uid' => Text::uuid(), 'settings' => $settings,
-        ]);
-        if ($series->hasErrors()) {
-            $errors = Hash::flatten($series->getErrors());
-            throw new InvalidArgumentException((string)reset($errors));
-        }
+        $series = EventSeries::fromSettings($settings);
         $dates = $series->dates;
         $excluded = $settings['excluded'] ?? [];
         if (!is_array($excluded)) {
@@ -102,24 +113,18 @@ class EventSeriesTable extends Table
             if (in_array($date, $excluded, true)) {
                 $row['status'] = APP_DELETED;
             }
-            $event = $events->patchEntity(clone $original, $row);
-            $event->series_uid = $series->uid;
-            $result[] = $event;
+            $result[] = $events->patchEntity(clone $original, $row);
         }
-        return ['events' => $result, 'series' => $series];
+        $series->events = $result;
+        return $series;
     }
 
-    private function validateRecurrence(mixed $settings): bool|string
+    private function validateRecurrence(EventSeries $series): bool|string
     {
-        if (!is_array($settings) || $settings === []) {
-            return 'Bitte lege eine gültige Wiederholung fest.';
-        }
         try {
-            return (new EventSeries(['settings' => $settings]))->dates !== [];
+            return $series->calculateDates() !== [] ? true : 'Bitte lege eine gültige Wiederholung fest.';
         } catch (InvalidArgumentException $exception) {
             return $exception->getMessage();
-        } catch (\TypeError|\ValueError) {
-            return 'Bitte lege eine gültige Wiederholung fest.';
         }
     }
 }

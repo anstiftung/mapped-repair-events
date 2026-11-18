@@ -28,61 +28,63 @@ class EventSeriesTest extends TestCase
      */
     private function dates(array $settings = []): array
     {
-        return (new EventSeries(['settings' => $settings + [
+        return EventSeries::fromSettings($settings + [
             'start' => '2027-01-01',
             'end' => '2027-03-31',
             'frequency' => 'monthly',
             'weekdays' => ['SA'],
             'monthly_rules' => [['position' => '2', 'weekday' => 'SA']],
-        ]]))->dates;
+        ])->dates;
     }
 
     public function testDescribesBiweeklyRecurrenceWithMultipleWeekdays(): void
     {
-        self::assertSame('jede 2. Woche (Mittwoch und Donnerstag), bis 31.03.2027', (new EventSeries(['settings' => [
-            'rhythm' => 'weekly-2', 'weekdays' => ['TH', 'WE'], 'end' => '2027-03-31',
-        ]]))->description);
+        self::assertSame('jede 2. Woche (Mittwoch und Donnerstag), bis 31.03.2027', EventSeries::fromSettings([
+            'rhythm' => 'weekly-2', 'weekdays' => ['TH', 'WE'], 'start' => '2027-01-01', 'end' => '2027-03-31',
+        ])->description);
     }
 
     public function testDescribesWeeklyRecurrenceWithOneWeekday(): void
     {
-        self::assertSame('jede Woche (Samstag), bis 31.03.2027', (new EventSeries(['settings' => [
-            'frequency' => 'weekly', 'weekdays' => ['SA'], 'end' => '2027-03-31',
-        ]]))->description);
+        self::assertSame('jede Woche (Samstag), bis 31.03.2027', EventSeries::fromSettings([
+            'frequency' => 'weekly', 'weekdays' => ['SA'], 'start' => '2027-01-01', 'end' => '2027-03-31',
+        ])->description);
     }
 
     public function testDescribesMonthlyRecurrence(): void
     {
-        self::assertSame('jeden Monat (2. Samstag), bis 31.03.2027', (new EventSeries(['settings' => [
-            'frequency' => 'monthly', 'monthly_rules' => [['position' => '2', 'weekday' => 'SA']], 'end' => '2027-03-31',
-        ]]))->description);
-        self::assertSame('jeden 3. Monat (letzter Montag), bis 31.03.2027', (new EventSeries(['settings' => [
-            'frequency' => 'monthly', 'interval' => 3, 'monthly_rules' => [['position' => '-1', 'weekday' => 'MO']], 'end' => '2027-03-31',
-        ]]))->description);
+        self::assertSame('jeden Monat (2. Samstag), bis 31.03.2027', EventSeries::fromSettings([
+            'frequency' => 'monthly', 'monthly_rules' => [['position' => '2', 'weekday' => 'SA']],
+            'start' => '2027-01-01', 'end' => '2027-03-31',
+        ])->description);
+        self::assertSame('jeden 3. Monat (letzter Montag), bis 31.03.2027', EventSeries::fromSettings([
+            'frequency' => 'monthly', 'interval' => 3, 'monthly_rules' => [['position' => '-1', 'weekday' => 'MO']],
+            'start' => '2027-01-01', 'end' => '2027-03-31',
+        ])->description);
     }
 
-    public function testDescriptionIsVirtualAndReflectsSettings(): void
+    public function testDescriptionIsVirtualAndReflectsFields(): void
     {
-        $series = new EventSeries(['settings' => [
+        $series = EventSeries::fromSettings([
             'rhythm' => 'weekly-1', 'weekdays' => ['SA'], 'start' => '2027-01-01', 'end' => '2027-03-31',
-        ]]);
+        ]);
         self::assertContains('description', $series->getVirtual());
         self::assertSame('jede Woche (Samstag), bis 31.03.2027', $series->toArray()['description']);
-        $series->settings = array_replace($series->settings, ['interval' => 2]);
+        $series->repeat_interval = 2;
         self::assertSame('jede 2. Woche (Samstag), bis 31.03.2027', $series->description);
         self::assertSame('', (new EventSeries())->toArray()['description']);
     }
 
-    public function testDatesAreVirtualAndReflectSettings(): void
+    public function testDatesAreVirtualAndReflectFields(): void
     {
-        $series = new EventSeries(['settings' => [
+        $series = EventSeries::fromSettings([
             'rhythm' => 'monthly-1', 'monthly_rules' => [['position' => '2', 'weekday' => 'SA']],
             'start' => '2027-01-01', 'end' => '2027-03-31',
-        ]]);
+        ]);
         self::assertContains('dates', $series->getVirtual());
         self::assertSame(['2027-01-09', '2027-02-13', '2027-03-13'], $series->dates);
         self::assertSame($series->dates, $series->toArray()['dates']);
-        $series->settings = array_replace($series->settings, ['interval' => 2]);
+        $series->repeat_interval = 2;
         self::assertSame(['2027-01-09', '2027-03-13'], $series->dates);
         self::assertSame([], (new EventSeries())->toArray()['dates']);
     }

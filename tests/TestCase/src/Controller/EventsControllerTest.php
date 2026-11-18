@@ -128,11 +128,10 @@ class EventsControllerTest extends AppTestCase
         $events = $this->getTableLocator()->get('Events')->find()->where(['series_uid IS NOT' => null])->all()->toList();
         $this->assertCount(3, $events);
         $this->assertSame($events[0]->series_uid, $events[2]->series_uid);
-        $settings = $this->getTableLocator()->get('EventSeries')->get($events[0]->series_uid)->get('settings');
-        $this->assertSame('monthly', $settings['frequency']);
-        $this->assertSame(1, $settings['interval']);
-        $this->assertSame('2041-03-31', $settings['end']);
-        $this->assertArrayNotHasKey('rhythm', $settings);
+        $series = $this->getTableLocator()->get('EventSeries')->get($events[0]->series_uid);
+        $this->assertSame('monthly', $series->frequency);
+        $this->assertSame(1, $series->repeat_interval);
+        $this->assertSame('2041-03-31', $series->end_date?->format('Y-m-d'));
         $this->get(Configure::read('AppConfig.htmlHelper')->urlEventEdit($events[0]->uid));
         $this->assertResponseOk();
         $this->assertResponseNotContains('class="event-series"');
