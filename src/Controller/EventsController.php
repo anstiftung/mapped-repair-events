@@ -252,13 +252,9 @@ class EventsController extends AppController
                 }
             }
         }
-        $seriesDescriptions = [];
-        if ($seriesUids !== []) {
-            foreach ($this->fetchTable('EventSeries')->find()->where(['uid IN' => array_keys($seriesUids)]) as $series) {
-                $seriesDescriptions[$series->uid] = $series->description;
-            }
-        }
-        $this->set('seriesDescriptions', $seriesDescriptions);
+        /** @var \App\Model\Table\EventSeriesTable $eventSeriesTable */
+        $eventSeriesTable = $this->fetchTable('EventSeries');
+        $this->set('seriesDescriptions', $eventSeriesTable->getDescriptions(array_keys($seriesUids)));
         $this->set('workshops', $workshops);
 
         $metaTags = [
@@ -366,7 +362,7 @@ class EventsController extends AppController
 
     private function deleteSeriesOccurrence(Event $event): Response
     {
-        $redirectUrl = Configure::read('AppConfig.htmlHelper')->urlMyEvents();
+        $redirectUrl = $this->getReferer();
         if (!$this->request->is('post')) {
             return $this->redirect($redirectUrl);
         }
@@ -604,6 +600,10 @@ class EventsController extends AppController
                 if ($datumstart) {
                     $data['datumstart'] = new DateTime($datumstart);
                 }
+                if ($editFollowing) {
+                    // date can only be changed when editing a single event of a series
+                    $data['datumstart'] = $events[0]->datumstart;
+                }
 
                 $uhrzeitstart = $data['uhrzeitstart'] ?? null;
                 if ($uhrzeitstart) {
@@ -735,13 +735,11 @@ class EventsController extends AppController
             'Events.uid !=' => $original->uid,
         ];
         $validationFields = ['uid', 'workshop_uid', 'datumstart', 'uhrzeitstart', 'uhrzeitend', 'ort', 'zip', 'strasse', 'status'];
-        $dateShift = $original->datumstart->diff($edited->datumstart);
         $events = [$edited];
         /** @var \Cake\ORM\Query\SelectQuery<\App\Model\Entity\Event> $members */
         $members = $this->Event->find()->where($conditions);
         foreach ($members as $member) {
             $memberData = $changes + $member->extract($validationFields);
-            $memberData['datumstart'] = $member->datumstart->add($dateShift);
             $this->Event->patchEntity($member, $memberData);
             $events[] = $member;
         }

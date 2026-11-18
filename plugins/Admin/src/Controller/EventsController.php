@@ -80,13 +80,9 @@ class EventsController extends AdminAppController
                 $seriesUids[$object->series_uid] = true;
             }
         }
-        $seriesDescriptions = [];
-        if ($seriesUids !== []) {
-            foreach ($this->fetchTable('EventSeries')->find()->where(['uid IN' => array_keys($seriesUids)]) as $series) {
-                $seriesDescriptions[$series->uid] = $series->description;
-            }
-        }
-        $this->set('seriesDescriptions', $seriesDescriptions);
+        /** @var \App\Model\Table\EventSeriesTable $eventSeriesTable */
+        $eventSeriesTable = $this->fetchTable('EventSeries');
+        $this->set('seriesDescriptions', $eventSeriesTable->getDescriptions(array_keys($seriesUids)));
         $this->set('objects', $objects);
 
         /** @var \App\Model\Table\UsersTable */

@@ -81,13 +81,14 @@ body.users.login #ViewsWrapper button[type="submit"] {
 .swal2-popup .swal2-styled.event-delete-button {
     background-color: #b42318 !important;
 }
-.event-series-delete-popup .swal2-title {
-    line-height: 1.2;
-}
-.swal2-popup.event-series-edit-popup .swal2-title {
+.swal2-popup .swal2-title {
     margin: 5px 0;
     font-size: 16px;
     line-height: 20px;
+}
+.swal2-popup .swal2-html-container,
+.swal2-popup .swal2-actions button {
+    font-size: 14px;
 }
 .swal2-popup .swal2-close {
     position: absolute;
@@ -114,6 +115,9 @@ body.users.login #ViewsWrapper button[type="submit"] {
 }
 div:where(.swal2-container) {
     z-index: 10000 ! important;
+}
+div:where(.swal2-container).swal2-top {
+    padding-top: 15vh;
 }
 h1 {
     margin: 5px 0px;

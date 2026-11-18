@@ -219,3 +219,8 @@ ul.jquery-ui-icon {
 .url-edit-field {
   float: left;
 }
+
+/* html font-size is 13px in admin, sweetalert2 sizes popup (width: 32em) relative to rem => use browser default like in frontend */
+div:where(.swal2-container) div:where(.swal2-popup) {
+    font-size: 16px;
+}

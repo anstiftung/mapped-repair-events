@@ -200,7 +200,6 @@ function getEvents() {
                     '<?php echo __('This event is inactive'); ?>',
                     '<?php echo __('Edit this event'); ?>',
                     '<?php echo __('Duplicate this event'); ?>',
-                    '<?php echo __('Are you sure you want to delete this event?'); ?>',
                     '<?php echo __('Delete this event'); ?>',
                     '<?php echo __('{0} will be added shortly.', [Configure::read('AppConfig.categoriesNameWorkshops')]); ?>'
                 );

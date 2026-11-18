@@ -119,6 +119,22 @@ class EventSeriesTable extends Table
         return $series;
     }
 
+    /**
+     * @param list<string> $uids
+     * @return array<string, string>
+     */
+    public function getDescriptions(array $uids): array
+    {
+        if ($uids === []) {
+            return [];
+        }
+        $descriptions = [];
+        foreach ($this->find()->where(['uid IN' => $uids]) as $series) {
+            $descriptions[$series->uid] = $series->description;
+        }
+        return $descriptions;
+    }
+
     private function validateRecurrence(EventSeries $series): bool|string
     {
         try {

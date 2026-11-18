@@ -5,7 +5,7 @@ use Cake\Core\Configure;
 
 /** @var string $seriesEditScope */
 echo $this->Html->css('event-series');
-$this->element('addScript', ['script' => JS_NAMESPACE . '.Helper.initEventSeries();']);
+$this->element('addScript', ['script' => JS_NAMESPACE . '.Helper.initEventSeries();' . JS_NAMESPACE . '.Helper.initEventSeriesEditScope();']);
 
 if ($this->request->getSession()->read('isMobile')) {
     $this->element('addScript', ['script' =>
@@ -127,11 +127,23 @@ $this->element('addScript', ['script' =>
                     'value' => $datumstartValue,
                 ];
                 if ($isEditMode && $event->series_uid) {
+                    $dateControlOptions['data-original-value'] = $event->datumstart->i18nFormat(Configure::read('DateFormat.de.DateLong2'));
+                    $dateControlOptions['data-disabled-title'] = 'Das Datum kann nur beim Bearbeiten eines einzelnen Termins geändert werden.';
+                    if ($seriesEditScope === EventsController::EDIT_SCOPE_FUTURE_SERIES_EVENTS) {
+                        $dateControlOptions['class'] = '';
+                        $dateControlOptions['disabled'] = true;
+                        $dateControlOptions['value'] = $dateControlOptions['data-original-value'];
+                        $dateControlOptions['title'] = $dateControlOptions['data-disabled-title'];
+                    }
                     $seriesHint = '<p class="series-membership-hint">' . h('Dieser Termin ist Teil einer Terminserie: ' . $seriesDescription) . '</p>';
                     $dateControlOptions['templates'] = [
                         'inputContainer' => '<div class="input {{type}}{{required}}">{{content}}' . $seriesHint . '</div>',
                         'inputContainerError' => '<div class="input {{type}}{{required}} error">{{content}}{{error}}' . $seriesHint . '</div>',
                     ];
+                }
+                if (isset($dateControlOptions['data-original-value'])) {
+                    // disabled date field is not submitted: keep the row's date in request data (enabled date field overrides it)
+                    echo '<input type="hidden" name="' . $i . '[datumstart]" value="' . h($dateControlOptions['data-original-value']) . '">';
                 }
                 echo $this->Form->control($i.'.datumstart', $dateControlOptions);
 

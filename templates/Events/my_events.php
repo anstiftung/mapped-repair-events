@@ -8,8 +8,7 @@ echo $this->element('jqueryTabsWithoutAjax', [
 
 $this->element('addScript', ['script' =>
     JS_NAMESPACE.".Helper.bindToggleLinks(false, false);".
-    JS_NAMESPACE.".Helper.bindToggleLinksForSubtables();".
-    JS_NAMESPACE.".Helper.bindDeleteEventButton();"
+    JS_NAMESPACE.".Helper.bindToggleLinksForSubtables();"
 ]);
 
 $workshopUidToOpen = $this->Html->getKeyFromRefererParams('workshop-uid', $this->request->getQuery('refererParams', ''));
@@ -180,13 +179,6 @@ if (Configure::read('AppConfig.statisticsEnabled')) {
 
                                     <?php
                                         echo '<td class="icon">';
-                                        if ($event->series_uid) {
-                                            echo $this->Form->create(null, [
-                                                'url' => $this->Html->urlEventDelete($event->uid),
-                                                'class' => 'event-series-delete-form',
-                                            ]);
-                                            echo $this->Form->hidden('scope', ['value' => 'single', 'secure' => false]);
-                                        }
                                         echo $this->Html->link(
                                                '<i class="far fa-trash-alt fa-border"></i>',
                                                'javascript:void(0)',
@@ -198,9 +190,6 @@ if (Configure::read('AppConfig.statisticsEnabled')) {
                                                       'data-event-series' => !empty($event->series_uid) ? '1' : '0',
                                                   ]
                                             );
-                                        if ($event->series_uid) {
-                                            echo $this->Form->end();
-                                        }
                                         echo '</td>';
                                     ?>
                                     <?php

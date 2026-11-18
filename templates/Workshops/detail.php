@@ -132,7 +132,6 @@ if (!$this->request->getSession()->read('isMobile')) {
                             '".__('This event is inactive')."',
                             '".__('Edit this event')."',
                             '".__('Duplicate this event')."',
-                            '".__('Are you sure you want to delete this event?')."',
                             '".__('Delete this event')."',
                             '".__('{0} will be added shortly.', [Configure::read('AppConfig.categoriesNameWorkshops')])."'
                         );

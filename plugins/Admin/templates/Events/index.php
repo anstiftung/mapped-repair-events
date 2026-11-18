@@ -6,6 +6,7 @@ declare(strict_types=1);
       'heading' => 'Termine',
       'editMethod' => ['url' => 'urlEventEdit', 'seriesField' => 'series_uid'],
       'showMethod' => ['url' => 'urlEventDetail'],
+      'deleteLinkElement' => 'Events/deleteLink',
       'selectable' => false,
       'fields' => [
           ['name' => 'uid', 'label' => 'UID'],

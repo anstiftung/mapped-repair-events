@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-/** @var array<int, string> $seriesDescriptions */
+/** @var array<string, string> $seriesDescriptions */
 
 if (!empty($object->series_uid)) {
     $seriesHint = 'Dieser Termin ist Teil einer Terminserie';

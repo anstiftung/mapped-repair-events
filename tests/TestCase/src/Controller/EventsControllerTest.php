@@ -146,6 +146,8 @@ class EventsControllerTest extends AppTestCase
         $document->loadHTML((string)$this->_response->getBody(), LIBXML_NOERROR | LIBXML_NOWARNING);
         $xpath = new \DOMXPath($document);
         $this->assertSame('future_series_events', $xpath->evaluate('string(//input[@name="series[scope]" and @checked]/@value)'));
+        $this->assertSame(1.0, $xpath->evaluate('count(//input[@id="0-datumstart" and @disabled="disabled" and not(contains(@class,"datepicker-input"))])'));
+        $this->assertSame(1.0, $xpath->evaluate('count(//input[@type="hidden" and @name="0[datumstart]"]/following::input[@id="0-datumstart"])'));
 
         $table = $this->getTableLocator()->get('Events');
         $singleEvent = $table->find()->where(['series_uid IS' => null, 'workshop_uid' => 2])->firstOrFail();
@@ -363,7 +365,7 @@ class EventsControllerTest extends AppTestCase
         }
     }
 
-    public function testFollowingScopeUpdatesSelectedAndLaterOccurrences(): void
+    public function testFollowingScopeUpdatesSelectedAndLaterOccurrencesButKeepsDates(): void
     {
         $this->createSeriesThroughForm();
         $table = $this->getTableLocator()->get('Events');
@@ -381,7 +383,8 @@ class EventsControllerTest extends AppTestCase
             $saved = $table->get($event->uid);
             $this->assertSame($index >= 1 ? '15:00:00' : '14:00:00', $saved->uhrzeitstart->format('H:i:s'));
             if ($index >= 1) {
-                $this->assertSame($event->datumstart->addDays(1)->format('Y-m-d'), $saved->datumstart->format('Y-m-d'));
+                // date must not be changeable when editing future series events
+                $this->assertSame($event->datumstart->format('Y-m-d'), $saved->datumstart->format('Y-m-d'));
             }
             $this->assertSame($event->series_uid, $saved->series_uid);
         }
@@ -618,22 +621,47 @@ class EventsControllerTest extends AppTestCase
         $table = $this->getTableLocator()->get('Events');
         $event = $table->find()->where(['series_uid IS NOT' => null])->firstOrFail();
         $this->get(Configure::read('AppConfig.htmlHelper')->urlEventDelete($event->uid));
-        $this->assertRedirect(Configure::read('AppConfig.htmlHelper')->urlMyEvents());
+        $this->assertRedirect('/');
         $this->assertEquals(APP_ON, $table->get($event->uid)->status);
     }
 
-    public function testMyEventsRendersSeriesDeleteFormsForPopup(): void
+    public function testMyEventsRendersSeriesDeleteLinksForPopup(): void
     {
         $this->createSeriesThroughForm();
         $this->get(Configure::read('AppConfig.htmlHelper')->urlMyEvents());
         $this->assertResponseOk();
+        $xpath = $this->getResponseXpath();
+        $this->assertSame(3.0, $xpath->evaluate('count(//a[@class="delete-event" and @data-event-series="1"])'));
+        $this->assertSame(0.0, $xpath->evaluate('count(//form[@class="event-series-delete-form"])'));
+    }
+
+    public function testAdminEventListRendersSeriesDeleteAndEditLinksForPopup(): void
+    {
+        $this->createSeriesThroughForm();
+        $this->loginAsAdmin();
+        $this->get('/admin/events/index');
+        $this->assertResponseOk();
+        $xpath = $this->getResponseXpath();
+        $this->assertSame(3.0, $xpath->evaluate('count(//a[@class="delete-event" and @data-event-series="1"])'));
+        $this->assertSame(3.0, $xpath->evaluate('count(//a[@data-edit-event-series="1"])'));
+        $this->assertSame(0.0, $xpath->evaluate('count(//a[contains(@class,"delete-link")])'));
+    }
+
+    public function testSeriesDeleteRedirectsToReferer(): void
+    {
+        $this->createSeriesThroughForm();
+        $table = $this->getTableLocator()->get('Events');
+        $event = $table->find()->where(['series_uid IS NOT' => null])->firstOrFail();
+        $this->post(Configure::read('AppConfig.htmlHelper')->urlEventDelete($event->uid), ['scope' => 'single', 'referer' => '/admin/events/index']);
+        $this->assertRedirect('/admin/events/index');
+        $this->assertEquals(APP_DELETED, $table->get($event->uid)->status);
+    }
+
+    private function getResponseXpath(): \DOMXPath
+    {
         $document = new \DOMDocument();
         $document->loadHTML((string)$this->_response->getBody(), LIBXML_NOERROR | LIBXML_NOWARNING);
-        $xpath = new \DOMXPath($document);
-        $this->assertSame(3.0, $xpath->evaluate('count(//form[@class="event-series-delete-form" and @method="post"])'));
-        $this->assertSame(3.0, $xpath->evaluate('count(//form[@class="event-series-delete-form"]/input[@name="scope" and @value="single"])'));
-        $this->assertSame(3.0, $xpath->evaluate('count(//form[@class="event-series-delete-form"]//a[@class="delete-event" and @data-event-series="1"])'));
-        $this->assertSame(0.0, $xpath->evaluate('count(//form[@class="event-series-delete-form"]//a[@data-event-series="0"])'));
+        return new \DOMXPath($document);
     }
 
     public function testSeriesDeleteRequiresExplicitValidScope(): void
@@ -642,7 +670,7 @@ class EventsControllerTest extends AppTestCase
         $table = $this->getTableLocator()->get('Events');
         $event = $table->find()->where(['series_uid IS NOT' => null])->firstOrFail();
         foreach ([[], ['scope' => 'invalid'], ['scope' => ['all']]] as $data) {
-            $this->post(Configure::read('AppConfig.htmlHelper')->urlEventDelete($event->uid), $data);
+            $this->post(Configure::read('AppConfig.htmlHelper')->urlEventDelete($event->uid), $data + ['referer' => Configure::read('AppConfig.htmlHelper')->urlMyEvents()]);
             $this->assertRedirect(Configure::read('AppConfig.htmlHelper')->urlMyEvents());
             $this->assertSame(3, $table->find()->where(['series_uid IS NOT' => null, 'status' => APP_ON])->count());
         }
@@ -698,7 +726,7 @@ class EventsControllerTest extends AppTestCase
         $table = $this->getTableLocator()->get('Events');
         $events = $table->find()->where(['series_uid IS NOT' => null])->orderBy(['datumstart' => 'ASC'])->all()->toList();
         $this->failSeriesSave = true;
-        $this->post(Configure::read('AppConfig.htmlHelper')->urlEventDelete($events[0]->uid), ['scope' => 'all']);
+        $this->post(Configure::read('AppConfig.htmlHelper')->urlEventDelete($events[0]->uid), ['scope' => 'all', 'referer' => Configure::read('AppConfig.htmlHelper')->urlMyEvents()]);
         $this->assertRedirect(Configure::read('AppConfig.htmlHelper')->urlMyEvents());
         foreach ($events as $event) {
             $this->assertEquals(APP_ON, $table->get($event->uid)->status);

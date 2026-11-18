@@ -5,6 +5,7 @@ MappedRepairEvents.Helper = {
         this.checkUrlForLoginBoxOpen();
         this.bindFlashMessageCancelButton();
         this.bindEditEventSeriesLinks();
+        this.bindDeleteEventButton();
         this.beautifyDropdowns();
         this.initCookieBanner();
         if (MappedRepairEvents.Helper.isIphone()) {
@@ -20,6 +21,7 @@ MappedRepairEvents.Helper = {
         return {
             animation: false,
             draggable: true,
+            position: 'top',
             showCloseButton: true
         };
     },
@@ -248,6 +250,22 @@ MappedRepairEvents.Helper = {
         });
         $(form).on('event-dates-changed', update);
         update();
+    },
+
+    initEventSeriesEditScope : function() {
+        const dateInput = $('#0-datumstart');
+        $('input[name="series[scope]"]').on('change', function() {
+            const lockDate = this.value === 'future_series_events';
+            if (lockDate) {
+                dateInput.datepicker('destroy')
+                    .val(dateInput.data('original-value'))
+                    .prop('disabled', true)
+                    .attr('title', dateInput.data('disabled-title'));
+            } else {
+                dateInput.prop('disabled', false).removeAttr('title').datepicker();
+            }
+            dateInput.toggleClass('datepicker-input', !lockDate);
+        });
     },
 
     bindAddDateButton : function(dateHtml) {
@@ -888,7 +906,7 @@ MappedRepairEvents.Helper = {
             + '&amp;layers=H&amp;marker=' + latitude + '%2C' + longitude;
     },
 
-    getCalEventHtml : function(ev, wuid, showDate, stringEventIsActive, stringEventIsInactive, stringEditEvent, stringDuplicateEvent, stringConfirmDeleteEvent, stringDeleteEvent, stringNoCategories) {
+    getCalEventHtml : function(ev, wuid, showDate, stringEventIsActive, stringEventIsInactive, stringEditEvent, stringDuplicateEvent, stringDeleteEvent, stringNoCategories) {
 
         var calEvent = '<div itemscope itemtype="http://schema.org/Event" class="calEvent ';
         calEvent += ev.status == 1 ? 'active' : 'inactive';
@@ -933,13 +951,14 @@ MappedRepairEvents.Helper = {
 
             if (ev.hasModifyPermissions) {
                 calEvent += '<div class="deleteEvent">';
+                const isSeriesOccurrence = ev.isSeriesOccurrence || ev.series_uid;
                 if (ev.isPast == '0') {
-                    const seriesEditAttribute = ev.isSeriesOccurrence ? ' data-edit-event-series="1"' : '';
+                    const seriesEditAttribute = isSeriesOccurrence ? ' data-edit-event-series="1"' : '';
                     calEvent += '<a class="editEvent button" href="/termine/edit/'+ev.uid+'"'+seriesEditAttribute+'>'+stringEditEvent+'</a>';
                 }
                 calEvent += '<a class="dupEvent button" href="/termine/duplicate/'+ev.uid+'">'+stringDuplicateEvent+'</a>';
                 if (ev.isPast == '0') {
-                    calEvent += '<a class="delEvent button gray" href="/termine/delete/'+ev.uid+'" onclick="return confirm(\''+stringConfirmDeleteEvent+'\');">'+stringDeleteEvent+'</a>';
+                    calEvent += '<a class="delEvent delete-event button gray" href="/termine/delete/'+ev.uid+'" data-event-uid="'+ev.uid+'" data-event-series="'+(isSeriesOccurrence ? '1' : '0')+'">'+stringDeleteEvent+'</a>';
                 }
                 calEvent += '</div>';
                 calEvent += '<div class="sc"></div><br />';
@@ -1015,50 +1034,67 @@ MappedRepairEvents.Helper = {
     },
 
     bindDeleteEventButton : function() {
-
-        $('a.delete-event').on('click', function(event) {
+        $(document).off('click.deleteEvent').on('click.deleteEvent', 'a.delete-event', function(event) {
             event.preventDefault();
-            var message = 'Soll dieser Termin wirklich gelöscht werden?<br />Achtung: Das Löschen kann nicht rückgängig gemacht werden!';
-            var eventUid = $(this).data('event-uid');
-            if ($(this).data('event-series') === 1) {
-                var form = $(this).closest('form')[0];
-                Swal.fire({
-                    ...MappedRepairEvents.Helper.getSwalDefaultProps(),
-                    title: 'Termin oder komplette Terminserie löschen?',
-                    text: 'Achtung: Das Löschen kann nicht rückgängig gemacht werden.',
-                    showDenyButton: true,
-                    reverseButtons: true,
-                    confirmButtonText: 'Gesamte Terminserie löschen',
-                    denyButtonText: 'Nur diesen Termin löschen',
-                    closeButtonAriaLabel: 'Dialog schließen',
-                    focusConfirm: false,
-                    customClass: {
-                        popup: 'event-series-delete-popup',
-                        confirmButton: 'event-delete-button',
-                        denyButton: 'event-delete-button',
-                    },
-                }).then(function(result) {
-                    if (result.isConfirmed || result.isDenied) {
-                        form.elements.scope.value = result.isConfirmed ? 'all' : 'single';
-                        form.requestSubmit();
-                    }
-                });
-                return;
-            }
+            MappedRepairEvents.Helper.confirmDeleteEvent($(this).data('event-uid'), $(this).data('event-series') == 1);
+        });
+    },
+
+    confirmDeleteEvent : function(eventUid, isSeriesOccurrence) {
+        const url = '/termine/delete/' + eventUid;
+        if (isSeriesOccurrence) {
             Swal.fire({
                 ...MappedRepairEvents.Helper.getSwalDefaultProps(),
-                html: message,
-                confirmButtonText: 'Ja',
+                title: 'Termin oder komplette Terminserie löschen?',
+                text: 'Achtung: Das Löschen kann nicht rückgängig gemacht werden.',
+                showDenyButton: true,
+                reverseButtons: true,
+                confirmButtonText: 'Gesamte Terminserie löschen',
+                denyButtonText: 'Nur diesen Termin löschen',
                 closeButtonAriaLabel: 'Dialog schließen',
                 focusConfirm: false,
+                customClass: {
+                    popup: 'event-series-delete-popup',
+                    confirmButton: 'event-delete-button',
+                    denyButton: 'event-delete-button',
+                },
             }).then(function(result) {
-                if (result.isConfirmed) {
-                    const url = '/termine/delete/' + eventUid;
-                    document.location.href = url;
+                if (result.isConfirmed || result.isDenied) {
+                    MappedRepairEvents.Helper.submitDeleteEventSeriesForm(url, result.isConfirmed ? 'all' : 'single');
                 }
             });
+            return;
+        }
+        Swal.fire({
+            ...MappedRepairEvents.Helper.getSwalDefaultProps(),
+            html: 'Soll dieser Termin wirklich gelöscht werden?<br />Achtung: Das Löschen kann nicht rückgängig gemacht werden!',
+            confirmButtonText: 'Ja',
+            closeButtonAriaLabel: 'Dialog schließen',
+            focusConfirm: false,
+        }).then(function(result) {
+            if (result.isConfirmed) {
+                document.location.href = url;
+            }
         });
+    },
 
+    submitDeleteEventSeriesForm : function(url, scope) {
+        const form = document.createElement('form');
+        form.method = 'post';
+        form.action = url;
+        const fields = {
+            _csrfToken: $('meta[name="csrfToken"]').attr('content'),
+            scope: scope,
+        };
+        Object.keys(fields).forEach(function(name) {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = name;
+            input.value = fields[name];
+            form.appendChild(input);
+        });
+        document.body.appendChild(form);
+        form.submit();
     },
 
     bindDeleteInfoSheetButton : function() {

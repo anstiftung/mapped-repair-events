@@ -29,7 +29,7 @@ foreach($fields as $field) {
     }
 }
 
-if ($showDeleteLink) {
+if ($showDeleteLink && !isset($deleteLinkElement)) {
     if (!isset($deleteMethod)) {
         if ($hasUid) {
             $deleteMethod = '/admin/intern/ajaxSetObjectStatusToDeleted';
@@ -397,7 +397,9 @@ if ($showDeleteLink) {
                     }
 
                     echo '<td class="icon">';
-                        if ($showDeleteLinkRow) {
+                        if ($showDeleteLinkRow && isset($deleteLinkElement)) {
+                            echo $this->element($deleteLinkElement, ['object' => $object]);
+                        } elseif ($showDeleteLinkRow) {
                             echo $this->Html->link(
                                 '<i class="far fa-trash-alt fa-border"></i>',
                                 'javascript:void(0);',
