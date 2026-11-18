@@ -16,6 +16,8 @@ if ($isEditMode) {
     return;
 }
 $this->Form->unlockField('series');
+// same limit as in EventSeries::calculateDates()
+$this->element('addScript', ['script' => "$('#series-end').datepicker('option', 'maxDate', '+2y');"]);
 $weekdays = $this->Time->getWeekdays();
 $seed = $event->datumstart ?? Date::now();
 $defaultWeekday = 'SA';
@@ -97,9 +99,6 @@ if ($seriesEndDate !== false && $seriesEndDate->format('Y-m-d') === $seriesEnd) 
         <?= $this->Form->control('series.end', ['type' => 'text', 'class' => 'datepicker-input', 'label' => 'Wiederholen bis', 'value' => $seriesEnd, 'required' => true]) ?>
     </fieldset>
     <div class="series-preview-area" hidden>
-        <button type="submit" name="series[preview]" value="1" class="button series-preview-button" formnovalidate>
-            <i class="fa fa-refresh" aria-hidden="true"></i> Terminvorschau aktualisieren
-        </button>
         <div id="event-series-preview" aria-live="polite" aria-busy="false">
             <?php if ($seriesError && $weekdayError === null): ?><p class="error-message"><?= h($seriesError) ?></p><?php endif; ?>
             <?php if ($seriesPreview !== null): ?>

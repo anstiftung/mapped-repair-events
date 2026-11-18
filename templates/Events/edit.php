@@ -4,8 +4,9 @@ use App\Controller\EventsController;
 use Cake\Core\Configure;
 
 /** @var string $seriesEditScope */
+/** @var int $seriesFutureEventsCount */
 echo $this->Html->css('event-series');
-$this->element('addScript', ['script' => JS_NAMESPACE . '.Helper.initEventSeries();' . JS_NAMESPACE . '.Helper.initEventSeriesEditScope();']);
+$this->element('addScript', ['script' => JS_NAMESPACE . '.Helper.initEventSeries();']);
 
 if ($this->request->getSession()->read('isMobile')) {
     $this->element('addScript', ['script' =>
@@ -49,12 +50,16 @@ $this->element('addScript', ['script' =>
         ]);
         echo $this->Form->hidden('referer', ['value' => $referer]);
         if ($isEditMode && $events[0]->series_uid) {
-            echo '<fieldset class="event-form-group event-series-edit-scope"><legend>Welche Termine bearbeiten?</legend>';
-            echo $this->Form->radio('series.scope', [
-                EventsController::EDIT_SCOPE_EVENT => 'Nur diesen Termin bearbeiten',
-                EventsController::EDIT_SCOPE_FUTURE_SERIES_EVENTS => 'Alle zukünftigen Termine der Terminserie bearbeiten',
-            ], ['value' => $seriesEditScope]);
-            echo '</fieldset>';
+            echo $this->Form->hidden('series.scope', ['value' => $seriesEditScope]);
+            echo '<div class="event-series-edit-scope">';
+                echo '<p>' . h('Dieser Termin ist Teil einer Terminserie: ' . $seriesDescription) . '</p>';
+                if ($seriesEditScope === EventsController::EDIT_SCOPE_FUTURE_SERIES_EVENTS) {
+                    $futureEventsLabel = $seriesFutureEventsCount . ' ' . ($seriesFutureEventsCount === 1 ? 'Termin' : 'Termine');
+                    echo '<p>Du bearbeitest <b>diesen und alle zukünftigen Termine</b> der Terminserie (' . $futureEventsLabel . '). Das Datum kann dabei nicht geändert werden.</p>';
+                } else {
+                    echo '<p>Du bearbeitest <b>nur diesen Termin</b> der Terminserie.</p>';
+                }
+            echo '</div>';
         }
         echo '<fieldset class="event-form-group"><legend>Initiative und Terminbild</legend>';
 
@@ -126,24 +131,13 @@ $this->element('addScript', ['script' =>
                     'label' => __('Add Event: Start Date') . ' #' . $indexForLabel,
                     'value' => $datumstartValue,
                 ];
-                if ($isEditMode && $event->series_uid) {
-                    $dateControlOptions['data-original-value'] = $event->datumstart->i18nFormat(Configure::read('DateFormat.de.DateLong2'));
-                    $dateControlOptions['data-disabled-title'] = 'Das Datum kann nur beim Bearbeiten eines einzelnen Termins geändert werden.';
-                    if ($seriesEditScope === EventsController::EDIT_SCOPE_FUTURE_SERIES_EVENTS) {
-                        $dateControlOptions['class'] = '';
-                        $dateControlOptions['disabled'] = true;
-                        $dateControlOptions['value'] = $dateControlOptions['data-original-value'];
-                        $dateControlOptions['title'] = $dateControlOptions['data-disabled-title'];
-                    }
-                    $seriesHint = '<p class="series-membership-hint">' . h('Dieser Termin ist Teil einer Terminserie: ' . $seriesDescription) . '</p>';
-                    $dateControlOptions['templates'] = [
-                        'inputContainer' => '<div class="input {{type}}{{required}}">{{content}}' . $seriesHint . '</div>',
-                        'inputContainerError' => '<div class="input {{type}}{{required}} error">{{content}}{{error}}' . $seriesHint . '</div>',
-                    ];
-                }
-                if (isset($dateControlOptions['data-original-value'])) {
-                    // disabled date field is not submitted: keep the row's date in request data (enabled date field overrides it)
-                    echo '<input type="hidden" name="' . $i . '[datumstart]" value="' . h($dateControlOptions['data-original-value']) . '">';
+                if ($isEditMode && $event->series_uid && $seriesEditScope === EventsController::EDIT_SCOPE_FUTURE_SERIES_EVENTS) {
+                    $dateControlOptions['class'] = '';
+                    $dateControlOptions['disabled'] = true;
+                    $dateControlOptions['value'] = $event->datumstart->i18nFormat(Configure::read('DateFormat.de.DateLong2'));
+                    $dateControlOptions['title'] = 'Das Datum kann nur beim Bearbeiten eines einzelnen Termins geändert werden.';
+                    // disabled date field is not submitted: keep the row's date in request data
+                    echo '<input type="hidden" name="' . $i . '[datumstart]" value="' . h($dateControlOptions['value']) . '">';
                 }
                 echo $this->Form->control($i.'.datumstart', $dateControlOptions);
 

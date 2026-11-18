@@ -1051,6 +1051,9 @@ body.users .profile .input select {
   margin-top: -1px;
   margin-right: 5px;
 }
+.eventBox .event-series-info {
+    margin: 4px 0;
+}
 body.events .event-series-indicator {
     float: right;
     margin: 0 0 0 12px;

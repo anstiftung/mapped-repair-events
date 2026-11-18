@@ -59,6 +59,23 @@ trait ImageUploadTrait {
     }
 
     /**
+     * gives the object its own copy of the image if it references the image file of another object (e.g. duplicated events)
+     */
+    public function copyForeignImage(EntityInterface $entity): void
+    {
+        $image = (string) $entity->get('image');
+        $uid = (int) $entity->get('uid');
+        if ($image === '' || str_starts_with($image, $uid . '.')) {
+            return;
+        }
+        $ownImage = $this->getImageForUid($image, $uid);
+        $this->copyImage($image, $ownImage);
+        $this->updateAll(['image' => $ownImage], ['uid' => $uid]);
+        $entity->set('image', $ownImage);
+        $entity->setDirty('image', false);
+    }
+
+    /**
      * copies original image and all thumbs
      */
     public function copyImage(string $sourceImage, string $targetImage): void

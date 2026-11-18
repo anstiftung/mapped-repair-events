@@ -591,6 +591,21 @@ class WorkshopsController extends AppController
 
         $preparedWorkshops = [];
 
+        $seriesDescriptions = [];
+        if ($isWorkshopFilterSet) {
+            $seriesUids = [];
+            foreach ($workshops as $workshop) {
+                foreach ($workshop->events as $event) {
+                    if (!empty($event->series_uid)) {
+                        $seriesUids[$event->series_uid] = true;
+                    }
+                }
+            }
+            /** @var \App\Model\Table\EventSeriesTable $eventSeriesTable */
+            $eventSeriesTable = $this->fetchTable('EventSeries');
+            $seriesDescriptions = $eventSeriesTable->getDescriptions(array_keys($seriesUids));
+        }
+
         /** @var Workshop $workshop */
         foreach ($workshops as &$workshop) {
 
@@ -609,6 +624,9 @@ class WorkshopsController extends AppController
                 $event->hasModifyPermissions = $hasModifyPermissions;
                 if ($isWorkshopFilterSet && $hasModifyPermissions && !empty($event->series_uid)) {
                     $event->isSeriesOccurrence = true;
+                }
+                if (!empty($event->series_uid) && isset($seriesDescriptions[$event->series_uid])) {
+                    $event->seriesDescription = $seriesDescriptions[$event->series_uid];
                 }
                 $event->directurl = Configure::read('AppConfig.htmlHelper')->urlEventDetail($workshop->url, $event->uid, $event->datumstart);
 
@@ -827,9 +845,21 @@ class WorkshopsController extends AppController
         $this->setContext($workshop);
 
         $onlineEventsCount = 0;
+        $seriesUids = [];
         foreach($workshop->events as $event) {
             if ($event->status) {
                 $onlineEventsCount++;
+            }
+            if (!empty($event->series_uid)) {
+                $seriesUids[$event->series_uid] = true;
+            }
+        }
+        /** @var \App\Model\Table\EventSeriesTable $eventSeriesTable */
+        $eventSeriesTable = $this->fetchTable('EventSeries');
+        $seriesDescriptions = $eventSeriesTable->getDescriptions(array_keys($seriesUids));
+        foreach($workshop->events as $event) {
+            if (!empty($event->series_uid) && isset($seriesDescriptions[$event->series_uid])) {
+                $event->seriesDescription = $seriesDescriptions[$event->series_uid];
             }
         }
         $this->set('onlineEventsCount', $onlineEventsCount);

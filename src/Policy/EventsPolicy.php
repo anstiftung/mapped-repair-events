@@ -43,7 +43,7 @@ class EventsPolicy implements RequestPolicyInterface
 
         }
 
-        if (in_array($request->getParam('action'), ['edit', 'delete', 'duplicate'])) {
+        if (in_array($request->getParam('action'), ['edit', 'delete', 'duplicate', 'ajaxGetSeriesInfo'])) {
 
             if (is_null($identity)) {
                 return false;

@@ -16,16 +16,9 @@
     border-top: 1px solid #ccc;
 }
 #eventEditForm > .event-form-group > legend { font-size: 16px; font-weight: bold; padding: 0 12px 0 0; }
-#eventEditForm .event-series-edit-scope label {
-    display: flex;
-    align-items: baseline;
-    gap: 8px;
-    float: none;
-    width: auto;
-    margin: 0 0 8px;
-    white-space: normal;
-}
-#eventEditForm .event-series-edit-scope input[type="radio"] { flex: none; margin: 0; }
+#eventEditForm .event-series-edit-scope { margin: 16px 0; padding: 10px 12px; border-left: 4px solid var(--theme-color-a); background: #f5f5f5; line-height: 1.5; }
+#eventEditForm .event-series-edit-scope p { margin: 0; }
+#eventEditForm .event-series-edit-scope p + p { margin-top: 4px; }
 #eventEditForm .event-location-row { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 8px; }
 #eventEditForm .event-location-row > .input { order: -1; flex: 1 1 auto; float: none; min-width: 0; width: auto; margin: 0; }
 #eventEditForm .event-location-actions { display: flex; flex: 0 0 auto; align-items: center; gap: 10px; max-width: 100%; margin: 0; }
@@ -33,7 +26,6 @@
 #eventEditForm .event-location-actions .ajaxLoader { flex: 0 0 auto; float: none; margin: 0; }
 #eventEditForm > .event-form-group > .date-time-wrapper { margin-bottom: 0; }
 #eventEditForm .date-time-wrapper .input.text > .error-message { clear: both; width: max-content; max-width: calc(100vw - 32px - var(--event-input-offset)); margin: 4px 0 0 var(--event-input-offset); }
-#eventEditForm .date-time-wrapper .series-membership-hint { clear: both; width: max-content; max-width: calc(100vw - 32px - var(--event-input-offset)); margin: 4px 0 8px var(--event-input-offset); font-size: 13px; line-height: 1.5; }
 #eventEditForm .add-date-button,
 #eventEditForm .remove-date-button {
     display: inline-flex;
@@ -186,7 +178,7 @@
 #eventEditForm .event-series .series-preview-row span { white-space: nowrap; }
 #eventEditForm .event-series .series-preview-count { font-weight: normal; }
 #eventEditForm .event-series [hidden] { display: none !important; }
-#eventEditForm .event-series .series-preview-button { float: none; margin-left: var(--event-input-offset); max-width: calc(100% - var(--event-input-offset)); white-space: normal; }
+#eventEditForm .event-series #event-series-preview[aria-busy="true"] { opacity: .5; }
 @media (max-width: 600px) {
     #eventEditForm .event-location-row { flex-wrap: wrap; }
     #eventEditForm .event-location-row > .input { order: 0; flex-basis: 100%; }
@@ -201,5 +193,4 @@
     #eventEditForm .event-series .input > label { max-width: 100%; }
     #eventEditForm .event-series #series-weekdays-error { grid-column: 1; }
     #eventEditForm .event-series .series-preview-list { grid-template-columns: minmax(0, 1fr); }
-    #eventEditForm .event-series .series-preview-button { margin-left: 0; max-width: 100%; }
 }

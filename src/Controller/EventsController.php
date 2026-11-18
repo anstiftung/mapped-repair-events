@@ -34,6 +34,8 @@ class EventsController extends AppController
 
     public const string EDIT_SCOPE_EVENT = 'event';
     public const string EDIT_SCOPE_FUTURE_SERIES_EVENTS = 'future_series_events';
+    public const string DELETE_SCOPE_EVENT = 'single';
+    public const string DELETE_SCOPE_FUTURE_SERIES_EVENTS = 'future_series_events';
 
     public EventsTable $Event;
 
@@ -345,20 +347,16 @@ class EventsController extends AppController
             return $this->redirect($redirectUrl);
         }
         $scope = $this->request->getData('scope');
-        if (!in_array($scope, ['single', 'all'], true)) {
+        if (!in_array($scope, [self::DELETE_SCOPE_EVENT, self::DELETE_SCOPE_FUTURE_SERIES_EVENTS], true)) {
             $this->AppFlash->setFlashError('Bitte wähle, welche Termine gelöscht werden sollen.');
             return $this->redirect($redirectUrl);
         }
-        $conditions = [
-            'Events.series_uid' => $event->series_uid,
-            'Events.workshop_uid' => $event->workshop_uid,
-            'Events.status >' => APP_DELETED,
-        ];
-        if ($scope === 'single') {
-            $conditions['Events.uid'] = $event->uid;
+        $query = $this->Event->findFutureSeriesEvents($event);
+        if ($scope === self::DELETE_SCOPE_EVENT) {
+            $query->where(['Events.uid' => $event->uid]);
         }
         /** @var list<Event> $events */
-        $events = $this->Event->find()->where($conditions)->all()->toList();
+        $events = $query->all()->toList();
         $onlineEvents = array_filter($events, fn(Event $member): bool => (int)$member->status === APP_ON);
         foreach ($events as $member) {
             $member->status = APP_DELETED;
@@ -377,7 +375,7 @@ class EventsController extends AppController
         foreach ($onlineEvents as $member) {
             $this->notifySubscribersAboutDeletedEvent($member, $event->workshop);
         }
-        $this->AppFlash->setFlashMessage(count($events) . ' Termine erfolgreich gelöscht.');
+        $this->AppFlash->setFlashMessage(count($events) === 1 ? 'Der Termin wurde erfolgreich gelöscht.' : count($events) . ' Termine erfolgreich gelöscht.');
         return $this->redirect($redirectUrl);
     }
 
@@ -470,6 +468,7 @@ class EventsController extends AppController
         if ($event->series_uid) {
             $series = $this->fetchTable('EventSeries')->get($event->series_uid);
             $this->set('seriesDescription', $series->description);
+            $this->set('seriesFutureEventsCount', $this->Event->findFutureSeriesEvents($event)->count());
             $requestedScope = $this->request->is('get')
                 ? $this->request->getQuery('scope')
                 : $this->request->getData('series.scope');
@@ -659,12 +658,8 @@ class EventsController extends AppController
                             $eventsTable->saveOrFail($e);
                         }
                     });
-                    if ($editFollowing && !empty($events[0]->image)) {
-                        foreach (array_slice($events, 1) as $member) {
-                            if (in_array('image', $seriesChanges[$member->uid]['fields'], true)) {
-                                $this->Event->copyImage($events[0]->image, $member->image);
-                            }
-                        }
+                    foreach ($events as $e) {
+                        $this->Event->copyForeignImage($e);
                     }
                 } catch (PersistenceFailedException $exception) {
                     if (!$editFollowing) {
@@ -719,22 +714,11 @@ class EventsController extends AppController
             return [$edited];
         }
 
-        $conditions = [
-            'Events.series_uid' => $original->series_uid,
-            'Events.workshop_uid' => $original->workshop_uid,
-            'Events.status >' => APP_DELETED,
-            'Events.datumstart >=' => $original->datumstart,
-            'Events.uid !=' => $original->uid,
-        ];
         $validationFields = ['uid', 'workshop_uid', 'datumstart', 'uhrzeitstart', 'uhrzeitend', 'ort', 'zip', 'strasse', 'status'];
         $events = [$edited];
-        /** @var \Cake\ORM\Query\SelectQuery<\App\Model\Entity\Event> $members */
-        $members = $this->Event->find()->where($conditions);
+        $members = $this->Event->findFutureSeriesEvents($original)->where(['Events.uid !=' => $original->uid]);
         foreach ($members as $member) {
             $memberData = $changes + $member->extract($validationFields);
-            if (!empty($changes['image'])) {
-                $memberData['image'] = $this->Event->getImageForUid($changes['image'], $member->uid);
-            }
             $this->Event->patchEntity($member, $memberData);
             $events[] = $member;
         }
@@ -804,7 +788,18 @@ class EventsController extends AppController
                             $this->Event->saveOrFail($standaloneEvent);
                         }
                     });
-                    $count = count(array_filter($members, static fn(Event $event): bool => (int)$event->status !== APP_DELETED));
+                    // reload saved events: uids of associated series events are not set on the patched entities
+                    $savedEvents = $this->Event->find()->where([
+                        'Events.status >' => APP_DELETED,
+                        'OR' => [
+                            'Events.series_uid' => $series->uid,
+                            'Events.uid IN' => array_map(static fn(Event $event): int => (int)$event->uid, $standaloneEvents) ?: [0],
+                        ],
+                    ])->all();
+                    foreach ($savedEvents as $savedEvent) {
+                        $this->Event->copyForeignImage($savedEvent);
+                    }
+                    $count = $savedEvents->count();
                     $this->AppFlash->setFlashMessage($count . ' Termine erfolgreich gespeichert.');
                     $redirect = $this->redirect($this->getPreparedReferer());
                     return ['events' => $members, 'saved' => true];
@@ -878,6 +873,14 @@ class EventsController extends AppController
         /** @var \App\Model\Table\WorknewsTable $worknewsTable */
         $worknewsTable = $this->fetchTable('Worknews');
         $worknewsTable->sendNotifications($worknewsTable->getSubscribers($event->workshop_uid), 'Veranstaltung gelöscht', 'event_deleted', $workshop, $event);
+    }
+
+    public function ajaxGetSeriesInfo(int $eventUid): void
+    {
+        $this->request = $this->request->withParam('_ext', 'json');
+        $event = $this->Event->get($eventUid);
+        $this->set('futureSeriesEventsCount', $event->series_uid ? $this->Event->findFutureSeriesEvents($event)->count() : 0);
+        $this->viewBuilder()->setOption('serialize', ['futureSeriesEventsCount']);
     }
 
     public function ajaxGetAllEventsForMap(): void

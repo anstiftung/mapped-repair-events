@@ -135,7 +135,9 @@ class EventsControllerTest extends AppTestCase
         $this->get(Configure::read('AppConfig.htmlHelper')->urlEventEdit($events[0]->uid));
         $this->assertResponseOk();
         $this->assertResponseNotContains('class="event-series"');
-        $this->assertResponseContains('name="series[scope]"');
+        $this->assertResponseContains('<input type="hidden" name="series[scope]" value="event">');
+        $this->assertResponseContains('Du bearbeitest <b>nur diesen Termin</b> der Terminserie.');
+        $this->assertResponseNotContains('data-switch-scope');
         $this->assertResponseNotContains('name="series[rhythm]"');
         $this->assertResponseContains('Dieser Termin ist Teil einer Terminserie: jeden Monat (2. Samstag), bis 31.03.2041');
         $this->assertResponseNotContains('weiteren Terminen');
@@ -145,9 +147,12 @@ class EventsControllerTest extends AppTestCase
         $document = new \DOMDocument();
         $document->loadHTML((string)$this->_response->getBody(), LIBXML_NOERROR | LIBXML_NOWARNING);
         $xpath = new \DOMXPath($document);
-        $this->assertSame('future_series_events', $xpath->evaluate('string(//input[@name="series[scope]" and @checked]/@value)'));
+        $this->assertSame('future_series_events', $xpath->evaluate('string(//input[@name="series[scope]"]/@value)'));
+        $this->assertStringContainsString('diesen und alle zukünftigen Termine der Terminserie (3 Termine)', $xpath->evaluate('string(//div[@class="event-series-edit-scope"])'));
+        $this->assertResponseNotContains('nur diesen Termin');
         $this->assertSame(1.0, $xpath->evaluate('count(//input[@id="0-datumstart" and @disabled="disabled" and not(contains(@class,"datepicker-input"))])'));
         $this->assertSame(1.0, $xpath->evaluate('count(//input[@type="hidden" and @name="0[datumstart]"]/following::input[@id="0-datumstart"])'));
+        $this->assertSame(1.0, $xpath->evaluate('count(//input[@type="hidden" and @name="0[datumstart]"])'));
 
         $table = $this->getTableLocator()->get('Events');
         $singleEvent = $table->find()->where(['series_uid IS' => null, 'workshop_uid' => 2])->firstOrFail();
@@ -157,7 +162,7 @@ class EventsControllerTest extends AppTestCase
         $this->assertResponseNotContains('name="series[scope]"');
     }
 
-    public function testWeeklySeriesDescriptionAppearsBelowStartDate(): void
+    public function testWeeklySeriesDescriptionAppearsInEditScopeBox(): void
     {
         $this->loginAsOrga();
         $settings = $this->seriesSettings();
@@ -174,7 +179,7 @@ class EventsControllerTest extends AppTestCase
         $formDocument = new \DOMDocument();
         $formDocument->loadHTML((string)$this->_response->getBody(), LIBXML_NOERROR | LIBXML_NOWARNING);
         $formXpath = new \DOMXPath($formDocument);
-        $this->assertSame('Dieser Termin ist Teil einer Terminserie: jede 2. Woche (Mittwoch und Donnerstag), bis 31.03.2041', $formXpath->evaluate('string(//input[@id="0-datumstart"]/following-sibling::p[@class="series-membership-hint"])'));
+        $this->assertSame('Dieser Termin ist Teil einer Terminserie: jede 2. Woche (Mittwoch und Donnerstag), bis 31.03.2041', $formXpath->evaluate('string(//div[@class="event-series-edit-scope"]/p[1])'));
         $this->assertResponseNotContains('weiteren Terminen');
         $this->get(Configure::read('AppConfig.htmlHelper')->urlMyEvents());
         $this->assertResponseOk();
@@ -306,7 +311,6 @@ class EventsControllerTest extends AppTestCase
         $this->assertResponseContains('Samstag, 12.01.2041');
         $this->assertResponseNotContains('series-preview-time');
         $this->assertResponseContains('<h3>Terminvorschau</h3>');
-        $this->assertResponseContains('<i class="fa fa-refresh" aria-hidden="true"></i> Terminvorschau aktualisieren');
         $this->assertResponseContains('Diese Terminserie enthält folgende <span class="series-preview-count">3</span> Termine. Du kannst vor dem Speichern einzelne Termine wegklicken.');
         $this->assertSame(3, $this->getTableLocator()->get('Events')->find()->count());
         $this->assertSame(0, $this->getTableLocator()->get('EventSeries')->find()->count());
@@ -498,6 +502,47 @@ class EventsControllerTest extends AppTestCase
         }
     }
 
+    public function testSeriesCreatedFromDuplicatedEventGetsOwnImageForEachOccurrence(): void
+    {
+        /** @var \App\Model\Table\EventsTable $table */
+        $table = $this->getTableLocator()->get('Events');
+        $sourceFiles = $table->getImageFiles('6.jpg');
+        foreach ($sourceFiles as $file) {
+            if (file_exists($file)) {
+                $this->markTestSkipped('Existing image file must not be overwritten: ' . $file);
+            }
+        }
+        $files = $sourceFiles;
+        try {
+            foreach ($sourceFiles as $file) {
+                file_put_contents($file, 'image');
+            }
+            $this->loginAsOrga();
+            $data = $this->seriesEventData();
+            $data['image'] = '6.jpg?123';
+            $this->post(Configure::read('AppConfig.htmlHelper')->urlEventNew(2), [
+                'referer' => '/', $data, 'series' => $this->seriesSettings(),
+            ]);
+            $this->assertResponseCode(302);
+            $events = $table->find()->where(['series_uid IS NOT' => null])->all()->toList();
+            $this->assertCount(3, $events);
+            foreach ($events as $event) {
+                $this->assertMatchesRegularExpression('/^' . $event->uid . '\.jpg\?\d+$/', (string)$event->image);
+                $files = array_merge($files, $table->getImageFiles($event->image));
+                foreach ($table->getImageFiles($event->image) as $file) {
+                    $this->assertFileExists($file);
+                }
+            }
+            foreach ($sourceFiles as $file) {
+                $this->assertFileExists($file);
+            }
+        } finally {
+            foreach ($files as $file) {
+                @unlink($file);
+            }
+        }
+    }
+
     public function testFollowingScopeSkipsPastAndDeletedOccurrences(): void
     {
         $this->createSeriesThroughForm();
@@ -652,7 +697,7 @@ class EventsControllerTest extends AppTestCase
     {
         $events = $this->createSeriesWithDatesInDays(1, 3, 20);
         $this->getTableLocator()->get('Events')->updateAll(['status' => APP_OFF], ['uid' => $events[1]->uid]);
-        $this->post(Configure::read('AppConfig.htmlHelper')->urlEventDelete($events[0]->uid), ['scope' => 'all']);
+        $this->post(Configure::read('AppConfig.htmlHelper')->urlEventDelete($events[0]->uid), ['scope' => 'future_series_events']);
         $this->assertResponseCode(302);
         $this->runAndAssertQueue();
         $this->assertMailCount(1);
@@ -861,36 +906,65 @@ class EventsControllerTest extends AppTestCase
         }
     }
 
-    public function testDeleteAllOccurrencesIncludesPastAndPreservesSeries(): void
+    public function testDeleteFutureOccurrencesKeepsEarlierEventsAndSeries(): void
     {
         $this->createSeriesThroughForm();
         $table = $this->getTableLocator()->get('Events');
         $events = $table->find()->where(['series_uid IS NOT' => null])->orderBy(['datumstart' => 'ASC'])->all()->toList();
         $series = $this->getTableLocator()->get('EventSeries')->get($events[0]->series_uid)->toArray();
         $table->updateAll(['datumstart' => '2020-01-01'], ['uid' => $events[0]->uid]);
-        $this->post(Configure::read('AppConfig.htmlHelper')->urlEventDelete($events[1]->uid), ['scope' => 'all']);
+        $this->post(Configure::read('AppConfig.htmlHelper')->urlEventDelete($events[1]->uid), ['scope' => 'future_series_events']);
         $this->assertResponseCode(302);
-        foreach ($events as $event) {
-            $deletedEvent = $table->get($event->uid);
+        $this->assertFlashMessage('2 Termine erfolgreich gelöscht.');
+        $this->assertEquals(APP_ON, $table->get($events[0]->uid)->status);
+        foreach ([1, 2] as $index) {
+            $deletedEvent = $table->get($events[$index]->uid);
             $this->assertEquals(APP_DELETED, $deletedEvent->status);
-            $this->assertSame($event->series_uid, $deletedEvent->series_uid);
+            $this->assertSame($events[$index]->series_uid, $deletedEvent->series_uid);
         }
         $this->assertEquals($series, $this->getTableLocator()->get('EventSeries')->get($events[0]->series_uid)->toArray());
         $this->assertEquals(APP_ON, $table->get(6)->status);
     }
 
-    public function testDeleteAllOccurrencesIncludesRescheduledEvents(): void
+    public function testDeleteFutureOccurrencesUsesCurrentDatesOfRescheduledEvents(): void
     {
         $this->createSeriesThroughForm();
         $table = $this->getTableLocator()->get('Events');
         $events = $table->find()->where(['series_uid IS NOT' => null])->orderBy(['datumstart' => 'ASC'])->all()->toList();
         $table->updateAll(['datumstart' => '2041-03-16'], ['uid' => $events[0]->uid]);
         $table->updateAll(['datumstart' => '2041-02-01'], ['uid' => $events[2]->uid]);
-        $this->post(Configure::read('AppConfig.htmlHelper')->urlEventDelete($events[1]->uid), ['scope' => 'all']);
+        $this->post(Configure::read('AppConfig.htmlHelper')->urlEventDelete($events[1]->uid), ['scope' => 'future_series_events']);
         $this->assertResponseCode(302);
-        foreach ($events as $event) {
-            $this->assertEquals(APP_DELETED, $table->get($event->uid)->status);
-        }
+        $this->assertEquals(APP_DELETED, $table->get($events[0]->uid)->status);
+        $this->assertEquals(APP_DELETED, $table->get($events[1]->uid)->status);
+        $this->assertEquals(APP_ON, $table->get($events[2]->uid)->status);
+    }
+
+    public function testDeleteSingleSeriesOccurrenceShowsSingularFlashMessage(): void
+    {
+        $this->createSeriesThroughForm();
+        $event = $this->getTableLocator()->get('Events')->find()->where(['series_uid IS NOT' => null])->firstOrFail();
+        $this->post(Configure::read('AppConfig.htmlHelper')->urlEventDelete($event->uid), ['scope' => 'single']);
+        $this->assertFlashMessage('Der Termin wurde erfolgreich gelöscht.');
+    }
+
+    public function testAjaxGetSeriesInfoReturnsFutureEventsCount(): void
+    {
+        $this->createSeriesThroughForm();
+        $events = $this->getTableLocator()->get('Events')->find()->where(['series_uid IS NOT' => null])->orderBy(['datumstart' => 'ASC'])->all()->toList();
+        $this->configRequest(['headers' => ['Accept' => 'application/json', 'X-Requested-With' => 'XMLHttpRequest']]);
+        $this->get('/events/ajaxGetSeriesInfo/' . $events[1]->uid);
+        $this->assertResponseOk();
+        $this->assertSame(['futureSeriesEventsCount' => 2], json_decode((string)$this->_response->getBody(), true));
+    }
+
+    public function testAjaxGetSeriesInfoIsForbiddenForOtherUsers(): void
+    {
+        $this->createSeriesThroughForm();
+        $event = $this->getTableLocator()->get('Events')->find()->where(['series_uid IS NOT' => null])->firstOrFail();
+        $this->loginAsRepairhelper();
+        $this->get('/events/ajaxGetSeriesInfo/' . $event->uid);
+        $this->assertRedirectContains('/users/login');
     }
 
     public function testSeriesDeleteFailureRollsBackEverything(): void
@@ -899,7 +973,7 @@ class EventsControllerTest extends AppTestCase
         $table = $this->getTableLocator()->get('Events');
         $events = $table->find()->where(['series_uid IS NOT' => null])->orderBy(['datumstart' => 'ASC'])->all()->toList();
         $this->failSeriesSave = true;
-        $this->post(Configure::read('AppConfig.htmlHelper')->urlEventDelete($events[0]->uid), ['scope' => 'all', 'referer' => Configure::read('AppConfig.htmlHelper')->urlMyEvents()]);
+        $this->post(Configure::read('AppConfig.htmlHelper')->urlEventDelete($events[0]->uid), ['scope' => 'future_series_events', 'referer' => Configure::read('AppConfig.htmlHelper')->urlMyEvents()]);
         $this->assertRedirect(Configure::read('AppConfig.htmlHelper')->urlMyEvents());
         foreach ($events as $event) {
             $this->assertEquals(APP_ON, $table->get($event->uid)->status);

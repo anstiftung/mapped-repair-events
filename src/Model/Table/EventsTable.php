@@ -329,4 +329,20 @@ class EventsTable extends AppRootTable
         });
     }
 
+    /**
+     * the given event and all later events of its series
+     * @return \Cake\ORM\Query\SelectQuery<\App\Model\Entity\Event>
+     */
+    public function findFutureSeriesEvents(\App\Model\Entity\Event $event): SelectQuery
+    {
+        /** @var \Cake\ORM\Query\SelectQuery<\App\Model\Entity\Event> $query */
+        $query = $this->find()->where([
+            $this->aliasField('series_uid') => $event->series_uid,
+            $this->aliasField('workshop_uid') => $event->workshop_uid,
+            $this->aliasField('status >') => APP_DELETED,
+            $this->aliasField('datumstart >=') => $event->datumstart,
+        ]);
+        return $query;
+    }
+
 }

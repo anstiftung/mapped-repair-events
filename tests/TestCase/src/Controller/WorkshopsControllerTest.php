@@ -93,6 +93,29 @@ class WorkshopsControllerTest extends AppTestCase
         $this->assertArrayNotHasKey('isSeriesOccurrence', $events[6]);
     }
 
+    public function testWorkshopCalendarShowsSeriesDescriptionToVisitors(): void
+    {
+        $seriesTable = $this->getTableLocator()->get('EventSeries');
+        $series = $seriesTable->newEntity([
+            'uid' => '12025fb9-84dd-43c6-b2f6-d27001a5933a',
+            'start_date' => '2041-01-01', 'end_date' => '2041-03-31',
+            'frequency' => 'monthly', 'repeat_interval' => 1, 'monthly_position' => 2, 'monthly_weekday' => 'SA',
+        ]);
+        $seriesTable->saveOrFail($series, ['checkRules' => false]);
+        $this->getTableLocator()->get('Events')->updateAll(['series_uid' => $series->uid], ['uid' => 9]);
+        $this->configRequest([
+            'headers' => ['X_REQUESTED_WITH' => 'XMLHttpRequest'],
+        ]);
+        $this->get('/workshops/ajaxGetAllWorkshopsForMap?workshopUid=2');
+        $this->assertResponseOk();
+
+        $response = json_decode((string)$this->_response->getBody(), true, flags: JSON_THROW_ON_ERROR);
+        $events = array_column($response['workshops'][0]['Workshop']['Events'], null, 'uid');
+        $this->assertSame('jeden Monat (2. Samstag), bis 31.03.2041', $events[9]['seriesDescription']);
+        $this->assertArrayNotHasKey('isSeriesOccurrence', $events[9]);
+        $this->assertArrayNotHasKey('seriesDescription', $events[6]);
+    }
+
     public function testWorkshopDetail(): void
     {
         $this->get(Configure::read('AppConfig.htmlHelper')->urlWorkshopDetail('test-workshop'));
