@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace App\Model\Table;
 
+use App\Model\Traits\ImageUploadTrait;
 use ArrayObject;
 use Cake\Utility\Hash;
 use Cake\Core\Configure;
@@ -22,6 +23,8 @@ use Cake\ORM\Query\SelectQuery;
  */
 class UsersTable extends AppRootTable
 {
+
+    use ImageUploadTrait;
 
     public string  $name_de = 'User';
 
@@ -149,22 +152,7 @@ class UsersTable extends AppRootTable
 
         // 3. delete user profile image
         if ($entity->image != '') {
-
-            $fileName = explode('?', $entity->image);
-            $fileName = $fileName[0];
-
-            $thumbSizes = Configure::read('AppConfig.thumbSizes');
-            foreach ($thumbSizes as $thumbSize => $thumbSizeOptions) {
-                $thumbMethod = 'getThumbs' . $thumbSize . 'Image';
-                $thumbsFileName = Configure::read('AppConfig.htmlHelper')->$thumbMethod($fileName, 'users');
-                $targetFileAbsolute = str_replace('//', '/', $_SERVER['DOCUMENT_ROOT'] . $thumbsFileName);
-                unlink($targetFileAbsolute);
-            }
-
-            $originalFileName =  Configure::read('AppConfig.htmlHelper')->getOriginalImage($fileName, 'users');
-            $targetFileAbsolute = str_replace('//', '/', $_SERVER['DOCUMENT_ROOT'] . $originalFileName);
-            unlink($targetFileAbsolute);
-
+            $this->deleteImage($entity->image, $entity->uid);
         }
     }
 

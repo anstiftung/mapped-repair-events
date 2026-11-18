@@ -135,6 +135,10 @@ MappedRepairEvents.Upload = {
 
         container.find('a.img-delete').on('click', function(e) {
             e.preventDefault();
+            if (deleteImageText === null) {
+                onDelete();
+                return;
+            }
             $(dialogContainer).appendTo('body')
                 .html(deleteImageText)
                 .dialog({
@@ -231,18 +235,22 @@ MappedRepairEvents.Upload = {
             var isMultiple = $(this).attr('class').indexOf('multiple') > -1;
 
             var imageUploadForm = $('form.mini-upload-form.' + (isMultiple ? 'multiple' : 'single'));
-            var uidString = imageUploadForm.data('uid');
             var isAddButtonAvailable = $('.add-image-button.' + (isMultiple ? 'multiple' : 'single') + ' img').length > 0;
 
             if (!isMultiple && isAddButtonAvailable) {
+                // image is removed from form only, files are deleted when form is saved
                 MappedRepairEvents.Upload.addDeleteButton(
                     false,
                     imageUploadForm,
-                    '<p>Willst du das Bild wirklich löschen?</p><p><b>Achtung: Die Seite wird nach dem Löschen neu geladen und alle nicht gespeicherten Formular-Daten werden dadurch zurückgesetzt!</b></p>',
+                    null,
                     function() {
-                        document.location.href = '/admin/intern/ajaxMiniUploadFormDeleteImage/' + uidString;
+                        $('input.image-field').val('');
+                        $('a.add-image-button.single').find('i,img').remove().end().append('<i class="fa fa-camera fa-border"></i>');
+                        imageUploadForm.find('.drop img, .modify-icon').remove();
+                        imageUploadForm.find('.drop p').first().text('Neues Bild hochladen');
+                        MappedRepairEvents.AppFeatherlight.closeLightbox();
                     },
-                    '<div></div>'
+                    null
                 );
             }
 

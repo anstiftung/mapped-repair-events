@@ -436,6 +436,68 @@ class EventsControllerTest extends AppTestCase
         }
     }
 
+    public function testRemovedImageIsDeletedOnSaveForSingleAndFollowingScope(): void
+    {
+        $this->createSeriesThroughForm();
+        $table = $this->getTableLocator()->get('Events');
+        /** @var \App\Model\Table\EventsTable $table */
+        $events = $table->find()->where(['series_uid IS NOT' => null])->orderBy(['datumstart' => 'ASC'])->all()->toList();
+        $files = [];
+        foreach ($events as $event) {
+            $files[$event->uid] = $table->getImageFiles($event->uid . '.jpg');
+            foreach ($files[$event->uid] as $file) {
+                if (file_exists($file)) {
+                    $this->markTestSkipped('Existing image file must not be overwritten: ' . $file);
+                }
+            }
+        }
+        try {
+            foreach ($events as $event) {
+                $table->updateAll(['image' => $event->uid . '.jpg?123'], ['uid' => $event->uid]);
+                foreach ($files[$event->uid] as $file) {
+                    file_put_contents($file, 'image');
+                }
+            }
+            // image of another event (shared reference) must not be deleted
+            $table->updateAll(['image' => $events[0]->uid . '.jpg?123'], ['uid' => $events[2]->uid]);
+
+            $data = $this->seriesEventData();
+            $data['datumstart'] = $events[0]->datumstart->format('d.m.Y');
+            $data['image'] = '';
+            $this->post(Configure::read('AppConfig.htmlHelper')->urlEventEdit($events[0]->uid), [
+                'referer' => '/', $data, 'series' => ['scope' => 'event'],
+            ]);
+            $this->assertResponseCode(302);
+            $this->assertEmpty($table->get($events[0]->uid)->image);
+            foreach ($files[$events[0]->uid] as $file) {
+                $this->assertFileDoesNotExist($file);
+            }
+            $this->assertSame($events[1]->uid . '.jpg?123', $table->get($events[1]->uid)->image);
+            foreach ($files[$events[1]->uid] as $file) {
+                $this->assertFileExists($file);
+            }
+
+            $data['datumstart'] = $events[1]->datumstart->format('d.m.Y');
+            $this->post(Configure::read('AppConfig.htmlHelper')->urlEventEdit($events[1]->uid), [
+                'referer' => '/', $data, 'series' => ['scope' => 'future_series_events'],
+            ]);
+            $this->assertResponseCode(302);
+            foreach ([1, 2] as $index) {
+                $this->assertEmpty($table->get($events[$index]->uid)->image);
+            }
+            foreach ($files[$events[1]->uid] as $file) {
+                $this->assertFileDoesNotExist($file);
+            }
+            foreach ($files[$events[2]->uid] as $file) {
+                $this->assertFileExists($file);
+            }
+        } finally {
+            foreach (array_merge(...array_values($files)) as $file) {
+                @unlink($file);
+            }
+        }
+    }
+
     public function testFollowingScopeSkipsPastAndDeletedOccurrences(): void
     {
         $this->createSeriesThroughForm();

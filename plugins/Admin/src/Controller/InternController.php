@@ -299,53 +299,6 @@ class InternController extends AdminAppController
         ]));
     }
 
-    /**
-     * deletes both db entries and physical files (thumbs)
-     */
-    public function ajaxMiniUploadFormDeleteImage(int $uid): Response
-    {
-        $uid = (int) $uid;
-
-        if ($uid == 0) {
-            $message = '$uid nicht korrekt: ' . $uid;
-            $this->log($message);
-            die(json_encode([
-                'status' => 0,
-                'msg' => $message
-            ]));
-        }
-
-        $objectType = $this->Root->getType($uid);
-        $objectClass = Inflector::classify($objectType);
-        $pluralizedClass = Inflector::pluralize($objectClass);
-        $objectTable = $this->getTableLocator()->get($pluralizedClass);
-        $object = $objectTable->find('all', conditions: [
-            $pluralizedClass . '.uid' => $uid
-        ])->first();
-
-        $fileName = explode('?', $object->image);
-        $fileName = $fileName[0];
-
-        // delete physical files
-        foreach (Configure::read('AppConfig.thumbSizes') as $thumbSize => $thumbSizeOptions) {
-            $thumbMethod = 'getThumbs' . $thumbSize . 'Image';
-            $thumbsFileName = Configure::read('AppConfig.htmlHelper')->$thumbMethod($fileName, $objectType);
-            $targetFileAbsolute = str_replace('//', '/', $_SERVER['DOCUMENT_ROOT'] . $thumbsFileName);
-            unlink($targetFileAbsolute);
-        }
-
-        $object = $objectTable->get($object->uid);
-        if ($objectClass == 'User') {
-            /* @phpstan-ignore-next-line */
-            $object->revertPrivatizeData();
-        }
-        $entity = $objectTable->patchEntity($object, ['image' => ''], ['validate' => false]);
-        $objectTable->save($entity);
-
-        $this->AppFlash->setFlashMessage('Das Bild wurde erfolgreich gelöscht.');
-        return $this->redirect($this->referer());
-    }
-
     public function ajaxDeleteObject(): void
     {
         $this->request = $this->request->withParam('_ext', 'json');

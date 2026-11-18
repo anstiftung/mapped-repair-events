@@ -29,7 +29,6 @@ class AdminPolicy implements RequestPolicyInterface
         if ($request->getParam('controller') == 'Intern') {
             if (in_array($request->getParam('action'), [
                 'ajaxCancelAdminEditPage',
-                'ajaxMiniUploadFormDeleteImage',
                 'ajaxMiniUploadFormRotateImage',
                 'ajaxMiniUploadFormSaveUploadedImage',
                 'ajaxMiniUploadFormSaveUploadedImagesMultiple',

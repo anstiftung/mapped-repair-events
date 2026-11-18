@@ -202,14 +202,23 @@ form.mini-upload-form {
 .featherlight-content .mini-upload-form .modify-icon {
     position: absolute;
     top: 35px;
-    border: 1px solid transparent;
-    padding: 2px;
-    line-height: 10px;
+    line-height: 0;
 }
 
-.featherlight-content .mini-upload-form .modify-icon:hover {
-    border: 1px solid black;
-    background: white;
+.featherlight-content .mini-upload-form .modify-icon i.fa-border {
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border-radius: 5px;
+    font-size: 15px;
+}
+
+.featherlight-content .mini-upload-form .modify-icon:hover i.fa-border {
+    opacity: .7;
 }
 
 .featherlight-content .mini-upload-form .img-rotate-acw {
@@ -229,7 +238,7 @@ form.mini-upload-form {
     left: 2px;
 }
 .featherlight-content .mini-upload-form.multiple .img-rotate-cw {
-    left: 31px;
+    left: 34px;
 }
 .featherlight-content .mini-upload-form.multiple .img-delete {
     right: 2px;

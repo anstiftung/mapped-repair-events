@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace App\Model\Table;
 
+use App\Model\Traits\ImageUploadTrait;
 use App\Model\Traits\SearchExceptionsTrait;
 use Cake\Validation\Validator;
 use App\Services\GeoService;
@@ -20,6 +21,8 @@ use Authorization\IdentityInterface;
  */
 class WorkshopsTable extends AppRootTable
 {
+
+    use ImageUploadTrait;
 
     use SearchExceptionsTrait;
 

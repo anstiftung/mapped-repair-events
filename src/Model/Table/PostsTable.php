@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace App\Model\Table;
 
+use App\Model\Traits\ImageUploadTrait;
 use Cake\Validation\Validator;
 use Cake\ORM\Query\SelectQuery;
 
@@ -10,6 +11,8 @@ use Cake\ORM\Query\SelectQuery;
  */
 class PostsTable extends AppRootTable
 {
+
+    use ImageUploadTrait;
 
     public string $name_de = 'Post';
 
