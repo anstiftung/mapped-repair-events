@@ -22,8 +22,7 @@ use Eluceo\iCal\Presentation\Factory\CalendarFactory;
 use InvalidArgumentException;
 use Cake\View\JsonView;
 use Cake\I18n\DateTime;
-use App\Model\Entity\Worknews;
-use App\Mailer\AppMailer;
+use App\Model\Entity\Workshop;
 use App\Model\Table\EventsTable;
 use Cake\Datasource\Paging\PaginatedInterface;
 use Cake\Http\Response;
@@ -327,29 +326,8 @@ class EventsController extends AppController
 
             $this->AppFlash->setFlashMessage('Der Termin wurde erfolgreich gelöscht.');
 
-            if ($originalEventStatus && $event->datumstart->isWithinNext('7 days')) {
-                // START notify subscribers
-                $worknewsTable = $this->getTableLocator()->get('Worknews');
-                $subscribers = $worknewsTable->find('all', conditions: [
-                    'Worknews.workshop_uid' => $event->workshop_uid,
-                    'Worknews.confirm' => Worknews::STATUS_OK,
-                ]);
-
-                if ($subscribers->count() > 0) {
-                    $email = new AppMailer();
-                    $email->viewBuilder()->setTemplate('event_deleted');
-                    foreach ($subscribers as $subscriber) {
-                        $email->setTo($subscriber->email)
-                        ->setSubject('Veranstaltung gelöscht')
-                        ->setReplyTo($event->workshop->email)
-                        ->setViewVars([
-                            'unsub' => $subscriber->unsub,
-                            'event' => $event,
-                        ]);
-                        $email->addToQueue();
-                    }
-                }
-                // END notify subscribers
+            if ((int)$originalEventStatus === APP_ON) {
+                $this->notifySubscribersAboutDeletedEvent($event, $event->workshop);
             }
 
         } else {
@@ -381,11 +359,8 @@ class EventsController extends AppController
         }
         /** @var list<Event> $events */
         $events = $this->Event->find()->where($conditions)->all()->toList();
-        $changes = [];
+        $onlineEvents = array_filter($events, fn(Event $member): bool => (int)$member->status === APP_ON);
         foreach ($events as $member) {
-            if ((int)$member->status === APP_ON) {
-                $changes[(int)$member->uid] = ['fields' => ['status'], 'original' => $member->toArray()];
-            }
             $member->status = APP_DELETED;
         }
         try {
@@ -399,7 +374,9 @@ class EventsController extends AppController
             $this->AppFlash->setFlashError('Die Termine konnten nicht gelöscht werden. Es wurde kein Termin gelöscht.');
             return $this->redirect($redirectUrl);
         }
-        $this->notifySeriesChanges($event, $events, $changes);
+        foreach ($onlineEvents as $member) {
+            $this->notifySubscribersAboutDeletedEvent($member, $event->workshop);
+        }
         $this->AppFlash->setFlashMessage(count($events) . ' Termine erfolgreich gelöscht.');
         return $this->redirect($redirectUrl);
     }
@@ -522,15 +499,23 @@ class EventsController extends AppController
 
         // notify subscribers
         if (isset($workshop) && $patchedEntity->renotify && !empty($patchedEntities['saved'])) {
-            if ($seriesEditScope === self::EDIT_SCOPE_FUTURE_SERIES_EVENTS) {
-                $this->notifySeriesChanges($event, $patchedEntities['events'], $patchedEntities['seriesChanges']);
-                return;
-            }
             $worknewsTable = $this->getTableLocator()->get('Worknews');
             $subscribers = $worknewsTable->getSubscribers($patchedEntity->workshop_uid);
-            if ($subscribers->count() > 0) {
-                $worknewsTable->sendNotifications($subscribers, 'Veranstaltung geändert: ' . $workshop->name, 'event_changed', $workshop, $patchedEntity, $patchedEntities['dirtyFields'], $patchedEntities['originalValues']);
+            if ($subscribers->count() === 0) {
+                return;
             }
+            if ($seriesEditScope === self::EDIT_SCOPE_FUTURE_SERIES_EVENTS) {
+                // one mail per changed event within the next 7 days
+                foreach ($patchedEntities['events'] as $changedEvent) {
+                    $change = $patchedEntities['seriesChanges'][$changedEvent->uid] ?? null;
+                    if ($change === null || $change['fields'] === [] || !$changedEvent->datumstart->isWithinNext('7 days')) {
+                        continue;
+                    }
+                    $worknewsTable->sendNotifications($subscribers, 'Veranstaltung geändert: ' . $workshop->name, 'event_changed', $workshop, $changedEvent, $change['fields'], $change['original']);
+                }
+                return;
+            }
+            $worknewsTable->sendNotifications($subscribers, 'Veranstaltung geändert: ' . $workshop->name, 'event_changed', $workshop, $patchedEntity, $patchedEntities['dirtyFields'], $patchedEntities['originalValues']);
         }
     }
 
@@ -885,34 +870,14 @@ class EventsController extends AppController
         return $events;
     }
 
-    /**
-     * @param list<Event> $events
-     * @param array<int, array{fields: list<string>, original: array<string, mixed>}> $changes
-     */
-    private function notifySeriesChanges(Event $original, array $events, array $changes): void
+    private function notifySubscribersAboutDeletedEvent(Event $event, Workshop $workshop): void
     {
-        $affected = [];
-        foreach ($events as $event) {
-            $change = $changes[(int)$event->uid] ?? null;
-            $oldDate = $change['original']['datumstart'] ?? null;
-            if ($change !== null && $change['fields'] !== [] && ($event->datumstart->isWithinNext('7 days') || ($oldDate !== null && $oldDate->isWithinNext('7 days')))) {
-                $affected[] = ['event' => $event, 'fields' => $change['fields'], 'original' => $change['original']];
-            }
-        }
-        if ($affected === []) {
+        if (!$event->datumstart->isWithinNext('7 days')) {
             return;
         }
-        $worknews = $this->fetchTable('Worknews');
-        $subscribers = $worknews->getSubscribers($original->workshop_uid);
-        foreach ($subscribers as $subscriber) {
-            $email = new AppMailer();
-            $email->viewBuilder()->setTemplate('event_series_changed');
-            $email->setTo($subscriber->email)
-                ->setSubject('Terminserie geändert: ' . $original->workshop->name)
-                ->setReplyTo($original->workshop->email)
-                ->setViewVars(['affected' => $affected, 'workshop' => $original->workshop, 'unsub' => $subscriber->unsub]);
-            $email->addToQueue();
-        }
+        /** @var \App\Model\Table\WorknewsTable $worknewsTable */
+        $worknewsTable = $this->fetchTable('Worknews');
+        $worknewsTable->sendNotifications($worknewsTable->getSubscribers($event->workshop_uid), 'Veranstaltung gelöscht', 'event_deleted', $workshop, $event);
     }
 
     public function ajaxGetAllEventsForMap(): void

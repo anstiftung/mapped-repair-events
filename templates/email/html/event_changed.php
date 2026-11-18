@@ -7,7 +7,7 @@ use Cake\Core\Configure;
         <tr>
             <td>
                 <p>
-                    Die von dir abonnierte Initiative <b><?php echo $event->workshop->name; ?></b> hat folgende Veranstaltung geändert: <b><?php echo $event->datumstart->i18nFormat(Configure::read('DateFormat.de.DateLong2WithWeekday')); ?></b>.
+                    Die von dir abonnierte Initiative <b><?php echo $workshop->name; ?></b> hat folgende Veranstaltung geändert: <b><?php echo $event->datumstart->i18nFormat(Configure::read('DateFormat.de.DateLong2WithWeekday')); ?></b>.
                 </p>
                 <p>
                     <?php if (in_array('status', $dirtyFields)) { ?>

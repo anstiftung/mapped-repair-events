@@ -625,6 +625,73 @@ class EventsControllerTest extends AppTestCase
         $this->assertSame('14:00:00', $table->get($events[2]->uid)->uhrzeitstart->format('H:i:s'));
     }
 
+    /**
+     * @return list<\App\Model\Entity\Event>
+     */
+    private function createSeriesWithDatesInDays(int ...$days): array
+    {
+        $this->createSeriesThroughForm();
+        // dates are relative to today: real now is needed for the mail queue too
+        DateTime::setTestNow();
+        $table = $this->getTableLocator()->get('Events');
+        $events = $table->find()->where(['series_uid IS NOT' => null])->orderBy(['datumstart' => 'ASC'])->all()->toList();
+        foreach ($events as $index => $event) {
+            $table->updateAll(['datumstart' => Date::now()->addDays($days[$index])], ['uid' => $event->uid]);
+        }
+        /** @var list<\App\Model\Entity\Event> $events */
+        $events = $table->find()->where(['series_uid IS NOT' => null])->orderBy(['datumstart' => 'ASC'])->all()->toList();
+        return $events;
+    }
+
+    private function formatMailDate(Date $date): string
+    {
+        return (string) $date->i18nFormat(Configure::read('DateFormat.de.DateLong2WithWeekday'));
+    }
+
+    public function testDeleteAllSeriesOccurrencesSendsEventDeletedMailForOnlineEventsWithinSevenDays(): void
+    {
+        $events = $this->createSeriesWithDatesInDays(1, 3, 20);
+        $this->getTableLocator()->get('Events')->updateAll(['status' => APP_OFF], ['uid' => $events[1]->uid]);
+        $this->post(Configure::read('AppConfig.htmlHelper')->urlEventDelete($events[0]->uid), ['scope' => 'all']);
+        $this->assertResponseCode(302);
+        $this->runAndAssertQueue();
+        $this->assertMailCount(1);
+        $this->assertMailSentToAt(0, 'worknews-test@mailinator.com');
+        $this->assertMailSubjectContainsAt(0, 'Veranstaltung gelöscht');
+        $this->assertMailContainsAt(0, 'Die von dir abonnierte Initiative <b>Test Workshop</b> hat folgende Veranstaltung gelöscht: <b>' . $this->formatMailDate($events[0]->datumstart) . '</b>');
+    }
+
+    public function testDeleteSingleSeriesOccurrenceSendsEventDeletedMail(): void
+    {
+        $events = $this->createSeriesWithDatesInDays(1, 3, 20);
+        $this->post(Configure::read('AppConfig.htmlHelper')->urlEventDelete($events[1]->uid), ['scope' => 'single']);
+        $this->assertResponseCode(302);
+        $this->runAndAssertQueue();
+        $this->assertMailCount(1);
+        $this->assertMailSubjectContainsAt(0, 'Veranstaltung gelöscht');
+        $this->assertMailContainsAt(0, 'hat folgende Veranstaltung gelöscht: <b>' . $this->formatMailDate($events[1]->datumstart) . '</b>');
+    }
+
+    public function testEditFutureSeriesEventsSendsEventChangedMailPerEventWithinSevenDays(): void
+    {
+        $events = $this->createSeriesWithDatesInDays(1, 3, 20);
+        $data = $this->seriesEventData();
+        $data['datumstart'] = $events[0]->datumstart->format('d.m.Y');
+        $data['uhrzeitstart'] = '15:00';
+        $data['renotify'] = '1';
+        $this->post(Configure::read('AppConfig.htmlHelper')->urlEventEdit($events[0]->uid), [
+            'referer' => '/', $data, 'series' => ['scope' => 'future_series_events'],
+        ]);
+        $this->assertResponseCode(302);
+        $this->runAndAssertQueue();
+        $this->assertMailCount(2);
+        foreach ([0, 1] as $index) {
+            $this->assertMailSubjectContainsAt($index, 'Veranstaltung geändert: Test Workshop');
+            $this->assertMailContainsAt($index, 'hat folgende Veranstaltung geändert: <b>' . $this->formatMailDate($events[$index]->datumstart) . '</b>');
+            $this->assertMailContainsAt($index, '15:00');
+        }
+    }
+
     public function testUncheckedRecurrencePreservesManualMultiDateCreation(): void
     {
         $this->loginAsOrga();

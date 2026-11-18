@@ -7,10 +7,10 @@ use Cake\Core\Configure;
         <tr>
             <td>
                 <p>
-                    Die von dir abonnierte Initiative <b><?php echo $event->workshop->name; ?></b> hat folgende Veranstaltung gelöscht: <b><?php echo $event->datumstart->i18nFormat(Configure::read('DateFormat.de.DateLong2WithWeekday')); ?></b>.
+                    Die von dir abonnierte Initiative <b><?php echo $workshop->name; ?></b> hat folgende Veranstaltung gelöscht: <b><?php echo $event->datumstart->i18nFormat(Configure::read('DateFormat.de.DateLong2WithWeekday')); ?></b>.
                 </p>
                 <p>
-                    Hier kommst du <a href="<?php echo Configure::read('AppConfig.serverName') . $this->MyHtml->urlWorkshopDetail($event->workshop->url);?>">zum Profil von <?php echo $event->workshop->name; ?></a>.
+                    Hier kommst du <a href="<?php echo Configure::read('AppConfig.serverName') . $this->MyHtml->urlWorkshopDetail($workshop->url);?>">zum Profil von <?php echo $workshop->name; ?></a>.
                 </p>
                 <p>
                     Um deine E-Mail-Adresse aus der Abonnementliste für diese Initiative zu entfernen, klicke <?php echo $this->MyHtml->link('hier', Configure::read('AppConfig.serverName').'/initiativen/newsunsub/' . $unsub);?>.
