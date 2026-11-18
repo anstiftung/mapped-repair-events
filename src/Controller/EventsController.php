@@ -674,6 +674,13 @@ class EventsController extends AppController
                             $eventsTable->saveOrFail($e);
                         }
                     });
+                    if ($editFollowing && !empty($events[0]->image)) {
+                        foreach (array_slice($events, 1) as $member) {
+                            if (in_array('image', $seriesChanges[$member->uid]['fields'], true)) {
+                                $this->Event->copyImage($events[0]->image, $member->image);
+                            }
+                        }
+                    }
                 } catch (PersistenceFailedException $exception) {
                     if (!$editFollowing) {
                         throw $exception;
@@ -740,6 +747,9 @@ class EventsController extends AppController
         $members = $this->Event->find()->where($conditions);
         foreach ($members as $member) {
             $memberData = $changes + $member->extract($validationFields);
+            if (!empty($changes['image'])) {
+                $memberData['image'] = $this->Event->getImageForUid($changes['image'], $member->uid);
+            }
             $this->Event->patchEntity($member, $memberData);
             $events[] = $member;
         }

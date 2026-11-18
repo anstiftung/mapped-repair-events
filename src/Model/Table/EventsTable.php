@@ -326,6 +326,33 @@ class EventsTable extends AppRootTable
         });
     }
 
-}
+    /**
+     * every event has its own image file named by its uid (e.g. "123.jpg?1700000000")
+     */
+    public function getImageForUid(string $image, int $uid): string
+    {
+        $extension = pathinfo(explode('?', $image)[0], PATHINFO_EXTENSION);
+        return $uid . '.' . $extension . '?' . time();
+    }
 
-?>
+    /**
+     * copies original image and all thumbs
+     */
+    public function copyImage(string $sourceImage, string $targetImage): void
+    {
+        $htmlHelper = Configure::read('AppConfig.htmlHelper');
+        $sourceFileName = explode('?', $sourceImage)[0];
+        $targetFileName = explode('?', $targetImage)[0];
+        $methods = ['getOriginalImage'];
+        foreach (array_keys(Configure::read('AppConfig.thumbSizes')) as $thumbSize) {
+            $methods[] = 'getThumbs' . $thumbSize . 'Image';
+        }
+        foreach ($methods as $method) {
+            $sourceFile = WWW_ROOT . ltrim($htmlHelper->$method($sourceFileName, 'events'), '/');
+            if (is_file($sourceFile)) {
+                copy($sourceFile, WWW_ROOT . ltrim($htmlHelper->$method($targetFileName, 'events'), '/'));
+            }
+        }
+    }
+
+}

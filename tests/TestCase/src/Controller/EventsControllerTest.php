@@ -392,6 +392,50 @@ class EventsControllerTest extends AppTestCase
         $this->assertSame('Individuelle Beschreibung', $table->get($events[2]->uid)->eventbeschreibung);
     }
 
+    public function testFollowingScopeCopiesImageForEachOccurrence(): void
+    {
+        $this->createSeriesThroughForm();
+        $table = $this->getTableLocator()->get('Events');
+        $events = $table->find()->where(['series_uid IS NOT' => null])->orderBy(['datumstart' => 'ASC'])->all()->toList();
+        $htmlHelper = Configure::read('AppConfig.htmlHelper');
+        $methods = ['getOriginalImage', 'getThumbs50Image', 'getThumbs100Image', 'getThumbs150Image', 'getThumbs300Image'];
+        $files = [];
+        foreach ($events as $event) {
+            foreach ($methods as $method) {
+                $files[] = WWW_ROOT . ltrim($htmlHelper->$method($event->uid . '.jpg', 'events'), '/');
+            }
+        }
+        foreach ($files as $file) {
+            if (file_exists($file)) {
+                $this->markTestSkipped('Existing image file must not be overwritten: ' . $file);
+            }
+        }
+        try {
+            foreach ($methods as $method) {
+                file_put_contents(WWW_ROOT . ltrim($htmlHelper->$method($events[1]->uid . '.jpg', 'events'), '/'), $method);
+            }
+            $data = $this->seriesEventData();
+            $data['datumstart'] = $events[1]->datumstart->format('d.m.Y');
+            $data['image'] = $events[1]->uid . '.jpg?123';
+            $this->post($htmlHelper->urlEventEdit($events[1]->uid), [
+                'referer' => '/', $data, 'series' => ['scope' => 'future_series_events'],
+            ]);
+            $this->assertResponseCode(302);
+            $this->assertNull($table->get($events[0]->uid)->image);
+            $this->assertSame($events[1]->uid . '.jpg?123', $table->get($events[1]->uid)->image);
+            $saved = $table->get($events[2]->uid);
+            $this->assertMatchesRegularExpression('/^' . $events[2]->uid . '\.jpg\?\d+$/', $saved->image);
+            foreach ($methods as $method) {
+                $this->assertSame($method, file_get_contents(WWW_ROOT . ltrim($htmlHelper->$method($events[2]->uid . '.jpg', 'events'), '/')));
+            }
+            $this->assertFileDoesNotExist(WWW_ROOT . ltrim($htmlHelper->getOriginalImage($events[0]->uid . '.jpg', 'events'), '/'));
+        } finally {
+            foreach ($files as $file) {
+                @unlink($file);
+            }
+        }
+    }
+
     public function testFollowingScopeSkipsPastAndDeletedOccurrences(): void
     {
         $this->createSeriesThroughForm();
