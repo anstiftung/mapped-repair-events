@@ -16,6 +16,16 @@
     border-top: 1px solid #ccc;
 }
 #eventEditForm > .event-form-group > legend { font-size: 16px; font-weight: bold; padding: 0 12px 0 0; }
+#eventEditForm .event-series-edit-scope label {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    float: none;
+    width: auto;
+    margin: 0 0 8px;
+    white-space: normal;
+}
+#eventEditForm .event-series-edit-scope input[type="radio"] { flex: none; margin: 0; }
 #eventEditForm .event-location-row { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 8px; }
 #eventEditForm .event-location-row > .input { order: -1; flex: 1 1 auto; float: none; min-width: 0; width: auto; margin: 0; }
 #eventEditForm .event-location-actions { display: flex; flex: 0 0 auto; align-items: center; gap: 10px; max-width: 100%; margin: 0; }

@@ -433,10 +433,11 @@ if ($showDeleteLink) {
                         }
                     }
                     echo '<td class="icon">';
+                    $hasSeries = isset($editMethod['seriesField']) && !empty($object[$editMethod['seriesField']]);
                     echo $this->Html->link('<i class="far fa-edit fa-border"></i>', $this->Html->$editMethodUrl($editUid, $anchor), [
                         'title' => 'bearbeiten',
-                        'escape' => false
-                    ]);
+                        'escape' => false,
+                    ] + ($hasSeries ? ['data-edit-event-series' => '1'] : []));
                     echo '</td>';
                 }
 

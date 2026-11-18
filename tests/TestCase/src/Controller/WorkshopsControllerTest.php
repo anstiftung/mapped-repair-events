@@ -74,6 +74,25 @@ class WorkshopsControllerTest extends AppTestCase
 
     }
 
+    public function testWorkshopCalendarMarksEditableSeriesOccurrences(): void
+    {
+        $this->getTableLocator()->get('Events')->updateAll([
+            'series_uid' => '12025fb9-84dd-43c6-b2f6-d27001a5933a',
+        ], ['uid' => 9]);
+        $this->loginAsAdmin();
+        $this->configRequest([
+            'headers' => ['X_REQUESTED_WITH' => 'XMLHttpRequest'],
+        ]);
+        $this->get('/workshops/ajaxGetAllWorkshopsForMap?workshopUid=2');
+        $this->assertResponseOk();
+
+        $response = json_decode((string)$this->_response->getBody(), true, flags: JSON_THROW_ON_ERROR);
+        $events = array_column($response['workshops'][0]['Workshop']['Events'], null, 'uid');
+        $this->assertTrue($events[9]['isSeriesOccurrence']);
+        $this->assertArrayNotHasKey('series_uid', $events[9]);
+        $this->assertArrayNotHasKey('isSeriesOccurrence', $events[6]);
+    }
+
     public function testWorkshopDetail(): void
     {
         $this->get(Configure::read('AppConfig.htmlHelper')->urlWorkshopDetail('test-workshop'));

@@ -70,6 +70,7 @@ body.users.login #ViewsWrapper button[type="submit"] {
     margin-right: 28px;
 }
 .swal2-popup {
+    --dialog-close-size: 44px;
     font-family: var(--theme-font), arial, helvetica, sans-serif;
     border: 3px solid var(--theme-color-a);
     border-radius: 6px;
@@ -83,17 +84,33 @@ body.users.login #ViewsWrapper button[type="submit"] {
 .event-series-delete-popup .swal2-title {
     line-height: 1.2;
 }
+.swal2-popup.event-series-edit-popup .swal2-title {
+    margin: 5px 0;
+    font-size: 16px;
+    line-height: 20px;
+}
 .swal2-popup .swal2-close {
     position: absolute;
-    top: 0;
-    right: 0;
+    top: 4px;
+    right: 4px;
+    width: var(--dialog-close-size);
+    height: var(--dialog-close-size);
     margin: 0;
+    font-size: 32px;
 }
+.swal2-popup .swal2-close:focus {
+    border: 0;
+    outline: none;
+    box-shadow: none;
+}
+.swal2-popup .swal2-close:hover,
+.swal2-popup .swal2-close:focus-visible {
+    background: transparent;
+    color: var(--theme-color-a);
+}
+.swal2-popup .swal2-title,
 .swal2-popup .swal2-html-container {
-    padding-right: 2em;
-}
-.swal2-close:hover {
-    color: #999999;
+    padding-inline: calc(var(--dialog-close-size) + 8px);
 }
 div:where(.swal2-container) {
     z-index: 10000 ! important;
@@ -2107,7 +2124,7 @@ a.button,
     font-weight: 700 !important;
 }
 button.rounded:hover,
-button:not(.fc-button):hover,
+button:not(.fc-button, .swal2-close):hover,
 .button:hover,
 a.button:hover,
 input[type=submit]:hover {

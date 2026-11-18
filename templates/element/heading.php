@@ -17,9 +17,12 @@ use Cake\ORM\TableRegistry;
     )
   ) {
       $editMethod = 'url' . $context['className'] . 'Edit';
-      echo '<a title="bearbeiten" id="object-edit-icon" href="' . $this->Html->$editMethod($context['object']->uid).'">';
-      echo '<i class="far fa-edit fa-border"></i>';
-    echo '</a>';
+      $hasSeries = $context['className'] === 'Event' && !empty($context['object']->series_uid);
+      echo $this->Html->link('<i class="far fa-edit fa-border"></i>', $this->Html->$editMethod($context['object']->uid), [
+          'title' => 'bearbeiten',
+          'id' => 'object-edit-icon',
+          'escape' => false,
+      ] + ($hasSeries ? ['data-edit-event-series' => '1'] : []));
   }
 
 ?>

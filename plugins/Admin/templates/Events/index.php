@@ -4,7 +4,7 @@ declare(strict_types=1);
        [
       'objects' => $objects,
       'heading' => 'Termine',
-      'editMethod' => ['url' => 'urlEventEdit'],
+      'editMethod' => ['url' => 'urlEventEdit', 'seriesField' => 'series_uid'],
       'showMethod' => ['url' => 'urlEventDetail'],
       'selectable' => false,
       'fields' => [

@@ -4,6 +4,7 @@ MappedRepairEvents.Helper = {
         this.initPasswordToggle();
         this.checkUrlForLoginBoxOpen();
         this.bindFlashMessageCancelButton();
+        this.bindEditEventSeriesLinks();
         this.beautifyDropdowns();
         this.initCookieBanner();
         if (MappedRepairEvents.Helper.isIphone()) {
@@ -933,7 +934,8 @@ MappedRepairEvents.Helper = {
             if (ev.hasModifyPermissions) {
                 calEvent += '<div class="deleteEvent">';
                 if (ev.isPast == '0') {
-                    calEvent += '<a class="editEvent button" href="/termine/edit/'+ev.uid+'">'+stringEditEvent+'</a>';
+                    const seriesEditAttribute = ev.isSeriesOccurrence ? ' data-edit-event-series="1"' : '';
+                    calEvent += '<a class="editEvent button" href="/termine/edit/'+ev.uid+'"'+seriesEditAttribute+'>'+stringEditEvent+'</a>';
                 }
                 calEvent += '<a class="dupEvent button" href="/termine/duplicate/'+ev.uid+'">'+stringDuplicateEvent+'</a>';
                 if (ev.isPast == '0') {
@@ -987,6 +989,31 @@ MappedRepairEvents.Helper = {
         });
     },
 
+    bindEditEventSeriesLinks : function() {
+        $(document).on('click', 'a[data-edit-event-series]', function(event) {
+            event.preventDefault();
+            const url = new URL(this.href);
+            Swal.fire({
+                ...MappedRepairEvents.Helper.getSwalDefaultProps(),
+                title: 'Dieser Termin ist Teil einer Terminserie',
+                showDenyButton: true,
+                confirmButtonText: 'Nur diesen Termin bearbeiten',
+                denyButtonText: 'Alle zukünftigen Termine der Terminserie bearbeiten',
+                denyButtonColor: 'var(--theme-color-a)',
+                closeButtonAriaLabel: 'Dialog schließen',
+                focusConfirm: false,
+                customClass: {
+                    popup: 'event-series-edit-popup',
+                },
+            }).then(function(result) {
+                if (result.isConfirmed || result.isDenied) {
+                    url.searchParams.set('scope', result.isDenied ? 'future_series_events' : 'event');
+                    window.location.assign(url);
+                }
+            });
+        });
+    },
+
     bindDeleteEventButton : function() {
 
         $('a.delete-event').on('click', function(event) {
@@ -1000,13 +1027,11 @@ MappedRepairEvents.Helper = {
                     title: 'Termin oder komplette Terminserie löschen?',
                     text: 'Achtung: Das Löschen kann nicht rückgängig gemacht werden.',
                     showDenyButton: true,
-                    showCancelButton: true,
-                    showCloseButton: false,
+                    reverseButtons: true,
                     confirmButtonText: 'Gesamte Terminserie löschen',
                     denyButtonText: 'Nur diesen Termin löschen',
-                    cancelButtonText: 'Abbrechen',
+                    closeButtonAriaLabel: 'Dialog schließen',
                     focusConfirm: false,
-                    focusCancel: true,
                     customClass: {
                         popup: 'event-series-delete-popup',
                         confirmButton: 'event-delete-button',
@@ -1023,9 +1048,9 @@ MappedRepairEvents.Helper = {
             Swal.fire({
                 ...MappedRepairEvents.Helper.getSwalDefaultProps(),
                 html: message,
-                showCancelButton: true,
                 confirmButtonText: 'Ja',
-                cancelButtonText: 'Nein',
+                closeButtonAriaLabel: 'Dialog schließen',
+                focusConfirm: false,
             }).then(function(result) {
                 if (result.isConfirmed) {
                     const url = '/termine/delete/' + eventUid;

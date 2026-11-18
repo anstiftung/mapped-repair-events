@@ -70,7 +70,7 @@ echo $this->element('jqueryTabsWithoutAjax', [
                                     [
                                         'title' => 'Termin bearbeiten',
                                         'escape' => false,
-                                    ]
+                                    ] + ($event->series_uid ? ['data-edit-event-series' => '1'] : []),
                                 );
                             } else {
                                 $eventActions[] = $this->Html->link(

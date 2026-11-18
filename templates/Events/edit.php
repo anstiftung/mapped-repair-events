@@ -1,7 +1,9 @@
 <?php
 declare(strict_types=1);
+use App\Controller\EventsController;
 use Cake\Core\Configure;
 
+/** @var string $seriesEditScope */
 echo $this->Html->css('event-series');
 $this->element('addScript', ['script' => JS_NAMESPACE . '.Helper.initEventSeries();']);
 
@@ -46,6 +48,14 @@ $this->element('addScript', ['script' =>
             'id' => 'eventEditForm'
         ]);
         echo $this->Form->hidden('referer', ['value' => $referer]);
+        if ($isEditMode && $events[0]->series_uid) {
+            echo '<fieldset class="event-form-group event-series-edit-scope"><legend>Welche Termine bearbeiten?</legend>';
+            echo $this->Form->radio('series.scope', [
+                EventsController::EDIT_SCOPE_EVENT => 'Nur diesen Termin bearbeiten',
+                EventsController::EDIT_SCOPE_FUTURE_SERIES_EVENTS => 'Alle zukünftigen Termine der Terminserie bearbeiten',
+            ], ['value' => $seriesEditScope]);
+            echo '</fieldset>';
+        }
         echo '<fieldset class="event-form-group"><legend>Initiative und Terminbild</legend>';
 
         $i = 0;

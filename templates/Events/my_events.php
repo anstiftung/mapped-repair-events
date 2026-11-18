@@ -217,8 +217,9 @@ if (Configure::read('AppConfig.statisticsEnabled')) {
                                         if (!$event->datumstart->isPast()) {
                                             echo $this->Html->link(
                                                    '<i class="far fa-edit fa-border"></i>',
-                                                   $this->Html->urlEventEdit($event->uid, 'workshop-uid=' . $event->workshop_uid),
-                                                      ['title' => 'Termin bearbeiten', 'escape' => false]
+                                                                    $this->Html->urlEventEdit($event->uid),
+                                                                        ['title' => 'Termin bearbeiten', 'escape' => false]
+                                                                        + ($event->series_uid ? ['data-edit-event-series' => '1'] : [])
                                                 );
                                         }
                                         echo '</td>';

@@ -33,6 +33,9 @@ use Cake\ORM\Exception\PersistenceFailedException;
 class EventsController extends AppController
 {
 
+    public const string EDIT_SCOPE_EVENT = 'event';
+    public const string EDIT_SCOPE_FUTURE_SERIES_EVENTS = 'future_series_events';
+
     public EventsTable $Event;
 
     public function beforeFilter(EventInterface $event): void
@@ -490,10 +493,18 @@ class EventsController extends AppController
         $this->set('editFormUrl', Configure::read('AppConfig.htmlHelper')->urlEventEdit($event->uid));
         $this->set('isDuplicateMode', false);
 
+        $seriesEditScope = self::EDIT_SCOPE_EVENT;
         if ($event->series_uid) {
             $series = $this->fetchTable('EventSeries')->get($event->series_uid);
             $this->set('seriesDescription', $series->description);
+            $requestedScope = $this->request->is('get')
+                ? $this->request->getQuery('scope')
+                : $this->request->getData('series.scope');
+            if ($requestedScope === self::EDIT_SCOPE_FUTURE_SERIES_EVENTS) {
+                $seriesEditScope = self::EDIT_SCOPE_FUTURE_SERIES_EVENTS;
+            }
         }
+        $this->set('seriesEditScope', $seriesEditScope);
 
         $worknewsTable = $this->getTableLocator()->get('Worknews');
         $this->set('worknewsCount', $worknewsTable->getSubscribers($event->workshop_uid)->count());
@@ -501,7 +512,7 @@ class EventsController extends AppController
         $eventStartInLessThan7Days = $event->datumstart->isWithinNext('7 days');
         $this->set('eventStartInLessThan7Days', $eventStartInLessThan7Days);
         
-        $patchedEntities = $this->_edit([$event], true);
+        $patchedEntities = $this->_edit([$event], true, $seriesEditScope === self::EDIT_SCOPE_FUTURE_SERIES_EVENTS);
         $patchedEntity = $patchedEntities['events'][0] ?? null;
         if (!$patchedEntity instanceof Event) {
             return;
@@ -515,6 +526,10 @@ class EventsController extends AppController
 
         // notify subscribers
         if (isset($workshop) && $patchedEntity->renotify && !empty($patchedEntities['saved'])) {
+            if ($seriesEditScope === self::EDIT_SCOPE_FUTURE_SERIES_EVENTS) {
+                $this->notifySeriesChanges($event, $patchedEntities['events'], $patchedEntities['seriesChanges']);
+                return;
+            }
             $worknewsTable = $this->getTableLocator()->get('Worknews');
             $subscribers = $worknewsTable->getSubscribers($patchedEntity->workshop_uid);
             if ($subscribers->count() > 0) {
@@ -527,7 +542,7 @@ class EventsController extends AppController
      * @param \Cake\ORM\Query\SelectQuery<\App\Model\Entity\Event>|array<int, \App\Model\Entity\Event> $events
      * @return array<string, mixed>
      */
-    private function _edit(SelectQuery|array $events, bool $isEditMode): array
+    private function _edit(SelectQuery|array $events, bool $isEditMode, bool $editFollowing = false): array
     {
         if ($events instanceof SelectQuery) {
             $events = $events->toArray();
@@ -552,6 +567,7 @@ class EventsController extends AppController
 
         if (!empty($this->request->getData())) {
             $patchedEvents = [];
+            $editData = [];
             $requestData = $this->request->getData();
             if (!is_array($requestData)) {
                 $requestData = [];
@@ -617,12 +633,14 @@ class EventsController extends AppController
                 $data['province_id'] = $geoData['provinceId'] ?? 0;
                 if ($isEditMode) {
                     $data['uid'] = $events[0]->uid;
+                    $editData = $data;
                 }
                 $event = clone($events[0]);
                 $patchedEvents[] = $this->Event->patchEntity($event, $data);
             }
 
-            $events = $patchedEvents;
+            $original = $events[0];
+            $events = $patchedEvents ?: $events;
 
             $hasErrors = false;
             foreach($events as $e) {
@@ -636,17 +654,38 @@ class EventsController extends AppController
                 $this->AppFlash->setFlashError($errors['lat']['geoCoordinatesInBoundingBox']);
             }
 
-            if (!$hasErrors) {
+            if (!$hasErrors && $patchedEvents !== []) {
                 $eventsTable = $this->getTableLocator()->get('Events');
-                if (isset($event)) {
-                    $dirtyFields = $event->getDirty();
-                    $originalValues = $event->getOriginalValues();
-                }
-                $eventsTable->getConnection()->transactional(function () use ($eventsTable, $events): void {
-                    foreach ($events as $e) {
-                        $eventsTable->saveOrFail($e);
+                $dirtyFields = $events[0]->getDirty();
+                $originalValues = $events[0]->getOriginalValues();
+                $seriesChanges = [];
+                try {
+                    if ($editFollowing) {
+                        $events = $this->prepareFollowingEvents($original, $events[0], $editData);
+                        foreach ($events as $member) {
+                            $seriesChanges[$member->uid] = [
+                                'fields' => $member->getDirty(),
+                                'original' => $member->getOriginalValues(),
+                            ];
+                        }
                     }
-                });
+                    $eventsTable->getConnection()->transactional(function () use ($eventsTable, $events): void {
+                        foreach ($events as $e) {
+                            $eventsTable->saveOrFail($e);
+                        }
+                    });
+                } catch (PersistenceFailedException $exception) {
+                    if (!$editFollowing) {
+                        throw $exception;
+                    }
+                    $events = [$patchedEvents[0]];
+                    $events[0]->setErrors($exception->getEntity()->getErrors());
+                    $this->AppFlash->setFlashError('Die Termine konnten nicht gespeichert werden. Es wurde kein Termin gespeichert.');
+                    $this->set('events', $events);
+                    $this->set('isEditMode', $isEditMode);
+                    $render = $this->render('edit');
+                    return ['events' => $events, 'saved' => false];
+                }
 
                 $message = 'Termine';
                 if (count($events) == 1) {
@@ -657,8 +696,9 @@ class EventsController extends AppController
                 $redirect = $this->redirect($this->getPreparedReferer());
                 return [
                     'events' => $events,
-                    'dirtyFields' => $dirtyFields ?? [],
-                    'originalValues' => $originalValues ?? [],
+                    'dirtyFields' => $dirtyFields,
+                    'originalValues' => $originalValues,
+                    'seriesChanges' => $seriesChanges,
                     'saved' => true,
                 ];
             }
@@ -673,6 +713,40 @@ class EventsController extends AppController
         ];
 
 
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     * @return list<Event>
+     */
+    private function prepareFollowingEvents(Event $original, Event $edited, array $data): array
+    {
+        $changes = array_intersect_key($data, array_flip($edited->getDirty()));
+        unset($changes['uid'], $changes['workshop_uid'], $changes['renotify']);
+        if ($changes === []) {
+            return [$edited];
+        }
+
+        $conditions = [
+            'Events.series_uid' => $original->series_uid,
+            'Events.workshop_uid' => $original->workshop_uid,
+            'Events.status >' => APP_DELETED,
+            'Events.datumstart >=' => $original->datumstart,
+            'Events.uid !=' => $original->uid,
+        ];
+        $validationFields = ['uid', 'workshop_uid', 'datumstart', 'uhrzeitstart', 'uhrzeitend', 'ort', 'zip', 'strasse', 'status'];
+        $dateShift = $original->datumstart->diff($edited->datumstart);
+        $events = [$edited];
+        /** @var \Cake\ORM\Query\SelectQuery<\App\Model\Entity\Event> $members */
+        $members = $this->Event->find()->where($conditions);
+        foreach ($members as $member) {
+            $memberData = $changes + $member->extract($validationFields);
+            $memberData['datumstart'] = $member->datumstart->add($dateShift);
+            $this->Event->patchEntity($member, $memberData);
+            $events[] = $member;
+        }
+
+        return $events;
     }
 
     /**

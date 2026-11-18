@@ -504,6 +504,7 @@ class WorkshopsController extends AppController
                     'Events.veranstaltungsort',
                     'Events.land',
                     'Events.image',
+                    'Events.series_uid',
                 ]);
             $eventFields['isPast'] = 'DATE_FORMAT(Events.datumstart, \'%Y-%m-%d\') < DATE_FORMAT(NOW(), \'%Y-%m-%d\')';
         }
@@ -606,6 +607,9 @@ class WorkshopsController extends AppController
                 $event->wurl = $workshop->url;
                 $event->eventname = $workshop->name;
                 $event->hasModifyPermissions = $hasModifyPermissions;
+                if ($isWorkshopFilterSet && $hasModifyPermissions && !empty($event->series_uid)) {
+                    $event->isSeriesOccurrence = true;
+                }
                 $event->directurl = Configure::read('AppConfig.htmlHelper')->urlEventDetail($workshop->url, $event->uid, $event->datumstart);
 
                 // add category icons
@@ -628,6 +632,7 @@ class WorkshopsController extends AppController
                 unset($event->datumstart);
                 unset($event->uhrzeitstart);
                 unset($event->uhrzeitend);
+                unset($event->series_uid);
                 unset($workshop->users);
 
                 $i++;
