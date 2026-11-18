@@ -17,7 +17,12 @@ if ($isEditMode) {
 }
 $this->Form->unlockField('series');
 // same limit as in EventSeries::calculateDates()
-$this->element('addScript', ['script' => "$('#series-end').datepicker('option', 'maxDate', '+2y');"]);
+// setting an option re-parses the value - german date format is not yet set at this point, so the value has to be restored
+$this->element('addScript', ['script' => "
+    var seriesEndInput = $('#series-end');
+    var seriesEnd = seriesEndInput.val();
+    seriesEndInput.datepicker('option', 'maxDate', '+2y').val(seriesEnd);
+"]);
 $weekdays = $this->Time->getWeekdays();
 $seed = $event->datumstart ?? Date::now();
 $defaultWeekday = 'SA';
